@@ -1,5 +1,5 @@
-# KA-Computer-Vision-Courses
-This is the base repo for all computer vision courses for KAUST Academy.
+# KA-Artificial-Intelligence-Courses
+This is the base repo for all Artificial Intelligence courses for KAUST Academy.
 
 
 # LaTeX Project Build Script

@@ -1,0 +1,26 @@
+\begin{frame}{VAE: Summary}
+\begin{itemize}
+    \item Add a probabilistic spin to Autoencoders to make them generative models
+    \item Assume $Z$ to be from Gaussian Distribution.
+    \item But $p(z|x)$ is intractable.
+    \item \textbf{Solution}: Approximate $p(z|x)$ with Gaussian distribution $q(z)$.
+    \item To minimize the KL divergence between them maximize the Evidence lower bound 
+    $$L = \sum_z q(z) log \frac{p(x,z)}{q(z))}$$
+    \item But image produced by variational autoencoders are blurry.
+\end{itemize}
+    
+\end{frame}
+
+
+\begin{frame}{References}
+Reference Slides
+\begin{itemize}
+    \item Fei-Fei Li "Generative Deep Learning" CS231
+    \item Hao Dong "Deep Generative Models" 
+    \item Hung-Yi Lee "Machine Learning" 
+    \item Murtaza Taj "Deep Learning" CS437
+    \item Aykut Erdem, \href{https://aykuterdem.github.io/classes/comp547.s24/}{COMP547: Deep Unsupervised Learning, Koc University}
+
+\end{itemize}
+    
+\end{frame}

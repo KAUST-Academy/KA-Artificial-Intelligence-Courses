@@ -1,0 +1,39 @@
+\begin{frame}[allowframebreaks]{}
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://framerusercontent.com/images/BTYwexvG8pobxihJcbBy0Vp4aE.png}{images/contrastive/architecture.png}{height=0.9\textheight,width=1\textwidth,keepaspectratio}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Recap \& Contrastive Learning: Motivation}
+
+\textbf{Where We Are}
+\begin{itemize}
+    \item Pretext tasks enable self-supervised learning by creating artificial labels.
+    \item Instance discrimination treats each image as its own class, encouraging unique representations.
+    \item MoCo framework uses a dynamic dictionary with a queue and momentum encoder for contrastive learning.
+    \item \textbf{Limitations of MoCo:}
+    \begin{itemize}
+        \item Need for large memory banks
+        \item Complexity of momentum encoders
+        \item Sensitivity to negative sampling
+    \end{itemize}
+    \end{itemize}
+
+\framebreak
+
+\textbf{Why Evolve?}
+\begin{itemize}
+    \item Wouldn't it be great if we could get rid of all that extra memory and complicated tricks?
+    \item Can we squeeze even more out of the positive pairs we already have?
+    \item What if our models could focus on the big picture, not just tiny pixel details?
+\end{itemize}
+
+% \textbf{Learning Outcomes}
+% \begin{itemize}
+%     \item Understand the key drivers that led from MoCo $\rightarrow$ SimCLR $\rightarrow$ BYOL $\rightarrow$ DINO $\rightarrow$ iBOT
+%     \item Recognize trade-offs in design (memory vs. compute; negative sampling vs. Bayesian collapse)
+% \end{itemize}
+
+\end{frame}

@@ -1,0 +1,73 @@
+\begin{frame}{}
+    \centering
+    \LARGE Autoregressive Models: \textbf{Modern Models}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Autoregressive Models: Modern Models}
+    Modern autoregressive models are powerful tools for generating data like images, audio, and text. Let’s look at some popular ones and why they matter:
+
+    \begin{itemize}
+        \item \textbf{PixelCNN/PixelSNAIL:} Great for generating images, using special convolutions to look at pixels one by one.
+        \item \textbf{WaveNet:} Designed for audio, it can create realistic speech and music by looking at sound samples in order.
+        \item \textbf{Transformer-based Models:} Used in language models like GPT, these use attention to understand and generate sequences (text, images, etc.).
+    \end{itemize}
+
+    \framebreak
+
+    \textbf{PixelCNN/PixelSNAIL:}
+    \begin{itemize}
+        \item PixelCNN was introduced in 2016 to generate images pixel by pixel.
+        \item It uses masked convolutions so each pixel only depends on the ones before it.
+        \item PixelSNAIL improves on this by adding attention, helping the model see more of the image at once.
+        \item Both are good at making realistic images.
+    \end{itemize}
+
+    \framebreak
+
+    \textbf{WaveNet:}
+    \begin{itemize}
+        \item WaveNet was made for audio generation, like speech and music.
+        \item It uses dilated convolutions to look at long stretches of audio.
+        \item Each sound sample depends on the previous ones, making the output sound natural.
+        \item WaveNet set new standards for speech synthesis.
+    \end{itemize}
+
+    \framebreak
+
+    \textbf{Transformer-based Models:}
+    \begin{itemize}
+        \item Transformers were introduced in 2017 for language tasks.
+        \item They use self-attention to look at all parts of a sequence at once.
+        \item This makes them fast and good at handling long texts or sequences.
+        \item Famous models like GPT-3 and BERT use this idea.
+        \item Transformers can also be used for images and audio, not just text.
+    \end{itemize}
+
+    \framebreak
+
+    \textbf{Applications:}
+    \begin{itemize}
+        \item Making new images (PixelCNN, PixelSNAIL)
+        \item Generating speech and music (WaveNet)
+        \item Writing text and language modeling (Transformers)
+        \item Creating videos and working with multiple types of data
+    \end{itemize}
+
+    \framebreak
+
+    \textbf{Pros:}
+    \begin{itemize}
+        \item Can generate high-quality images, audio, and text
+        \item Good at learning complex patterns in data
+        \item Scalable to large datasets and tasks
+    \end{itemize}
+
+    \textbf{Cons:}
+    \begin{itemize}
+        \item Training and running these models can be expensive
+        \item Need lots of data to work well
+        \item Still challenging for very large or complex data
+    \end{itemize}
+\end{frame}
+\input{sections/autoregressive/modern_models/pixelcnn}
+\input{sections/autoregressive/modern_models/wavenet}

@@ -1,0 +1,25 @@
+\begin{frame}{Power transformations}
+    \begin{itemize}
+        \item Some features follow certain distributions
+        \begin{itemize}
+            \item E.g. number of twitter followers is log-normal distributed
+        \end{itemize}
+        \item Box-Cox transformations transform these to normal distributions ($\lambda$ is fitted)
+        \begin{itemize}
+            \item Only works for positive values, use Yeo-Johnson otherwise
+        \end{itemize}
+    \end{itemize}
+
+    \[
+        bc_\lambda(x) =
+        \begin{cases}
+            \log(x) & \lambda = 0 \\
+            \frac{x^\lambda - 1}{\lambda} & \lambda \neq 0
+        \end{cases}
+    \]
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth,keepaspectratio]{images/pre-processing/power_transformation.png}
+    \end{figure}
+\end{frame}

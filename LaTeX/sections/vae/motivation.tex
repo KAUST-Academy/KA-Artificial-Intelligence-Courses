@@ -1,0 +1,30 @@
+\begin{frame}[allowframebreaks]{}
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:4800/format:webp/1*r1R0cxCnErWgE0P4Q-hI0Q.jpeg}{images/vae/architecture-vae.png}{width=\textwidth,keepaspectratio}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Motivation}
+    \textbf{Why do we need VAEs?}
+    \begin{itemize}
+        \item Traditional autoencoders are:
+        \begin{itemize}
+            \item deterministic 
+            \item lack generative capabilities
+            \item do not model uncertainty in latent space
+        \end{itemize}
+        \item Need a compact, meaningful representation (latent space)
+        \item We want to learn a probabilistic model of the data
+        \item We want to generate new data samples similar to training data
+    \end{itemize}
+
+    \framebreak
+
+    \textbf{Applications}
+    \begin{itemize}
+        \item Image generation (e.g., generating new faces or handwritten digits).
+        \item Data compression and denoising.
+        \item Anomaly detection in various domains.
+    \end{itemize}
+\end{frame}

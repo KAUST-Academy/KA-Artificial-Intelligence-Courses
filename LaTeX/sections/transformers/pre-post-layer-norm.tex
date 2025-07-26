@@ -1,0 +1,24 @@
+\section{Pre-LayerNorm vs. Post-LayerNorm Architectures}
+\begin{frame}
+    \frametitle{Pre-LayerNorm vs. Post-LayerNorm Architectures}
+    \begin{table}[]
+        \centering
+        \renewcommand{\arraystretch}{1.8}
+        \begin{tabular}{lcc}
+            \hline
+            \textbf{Feature} & \textbf{Pre-LN} & \textbf{Post-LN} \\
+            \hline
+            Stability & \checkmark~More stable & \xmark~Less stable \\
+            Gradient flow & \checkmark~Better & \xmark~Can explode/vanish \\
+            Used in & GPT-3, T5 & Original Transformer \\
+            \hline
+        \end{tabular}
+        \caption{Comparison of Pre-LayerNorm and Post-LayerNorm Architectures}
+    \end{table}
+
+    \vspace{1em}
+
+    \textbf{Pre-LN:} LayerNorm applied \textit{before} sublayers
+
+    \textbf{Post-LN:} LayerNorm applied \textit{after} sublayers
+\end{frame}

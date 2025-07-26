@@ -1,0 +1,33 @@
+\begin{frame}[allowframebreaks]{Denoising}
+    \textbf{Key Idea:}
+    \begin{itemize}
+        \item Train the autoencoder to reconstruct the original, clean input from a corrupted (noisy) version.
+        \item The encoder learns robust features that capture the underlying structure of the data, ignoring noise.
+    \end{itemize}
+
+    \vspace{1em}
+    \textbf{Training Process:}
+    \begin{enumerate}
+        \item Add noise to the input data (e.g., Gaussian noise, salt-and-pepper noise).
+        \item Feed the noisy input to the autoencoder.
+        \item Compute the loss between the output and the original clean input.
+        \item Update the network weights to minimize this loss.
+    \end{enumerate}
+
+    \framebreak
+
+    \textbf{Use Cases:}
+    \begin{itemize}
+        \item Image denoising: Removing noise from photographs or medical images.
+        \item Speech enhancement: Improving audio quality by filtering out background noise.
+        \item Preprocessing step: Providing cleaner data for downstream tasks such as classification or segmentation.
+    \end{itemize}
+
+    \framebreak
+
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://wikidocs.net/images/page/193827/Autoencoders-to-Image-Denoising.png}{images/autoencoders/denoising.png}{width=\textwidth,keepaspectratio}
+        \caption*{Example of denoising using an autoencoder.}
+    \end{figure}
+\end{frame}

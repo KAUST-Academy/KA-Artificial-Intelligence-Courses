@@ -1,0 +1,54 @@
+\section{Token-Free LLMs}
+\begin{frame}[allowframebreaks]{Token-Free LLMs}
+    \begin{itemize}
+        \item \textbf{What are Token-Free LLMs?}
+        \begin{itemize}
+            \item Models that operate directly on raw text without tokenization.
+            \item Aim to eliminate the need for pre-defined tokens.
+        \end{itemize}
+        \item \textbf{Advantages:}
+        \begin{itemize}
+            \item Avoids tokenization errors and biases.
+            \item Can handle arbitrary text lengths and formats.
+            \item Potentially more efficient for certain tasks.
+        \end{itemize}
+        \item \textbf{Challenges:}
+        \begin{itemize}
+            \item Requires novel architectures to process raw text effectively.
+            \item May struggle with long-range dependencies without tokenization.
+        \end{itemize}
+    \end{itemize}
+\framebreak
+    \begin{itemize}
+        \item \textbf{Example: ByT5 (Xue et al., 2022)}
+        \begin{itemize}
+            \item Character-level variant of T5 that processes raw bytes instead of tokens.
+            \item Eliminates the need for a tokenizer, enabling better multilingual and low-resource language support.
+        \end{itemize}
+        \item \textbf{Pros:}
+        \begin{itemize}
+            \item No preprocessing or tokenization pipeline required.
+            \item Handles any language or script without modification.
+            \item Performs better on low-resource and unseen languages.
+        \end{itemize}
+        \item \textbf{Cons:}
+        \begin{itemize}
+            \item Training is slower due to longer input sequences.
+            \item Increased computational requirements.
+            \item May require more data to achieve comparable performance.
+        \end{itemize}
+    \end{itemize}
+\framebreak
+    \begin{itemize}
+        \item \textbf{Current Research:}
+        \begin{itemize}
+            \item Exploring architectures like \textit{Raw Transformer} and \textit{Text2Vec}.
+            \item Investigating how to maintain performance without tokenization.
+        \end{itemize}
+        \item \textbf{Future Directions:}
+        \begin{itemize}
+            \item Integrating token-free approaches with existing LLMs.
+            \item Enhancing efficiency and scalability of token-free models.
+        \end{itemize}
+    \end{itemize}
+\end{frame}

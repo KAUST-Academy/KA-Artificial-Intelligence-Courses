@@ -1,0 +1,51 @@
+\section{Motivation}
+
+\begin{frame}{Motivation for Self-Supervised Learning}
+    \begin{enumerate}
+        \setlength{\itemsep}{-0.5em}
+        \item \textbf{Imagine you have tons of data, but very few labels.}\\
+        Annotating data is expensive and slow, but unlabeled data is everywhere!\\[0.5em]
+        \item<2-> \textbf{What if you could learn useful features from all that unlabeled data?}\\
+        Self-supervised learning lets us pre-train models to extract general, reusable representations, reducing the need for labeled data later.\\[0.5em]
+        \item<3-> \textbf{Think beyond images:}\\
+        These techniques work not just for vision, but also for language, audio, and time-series data, enabling unified approaches across domains.\\[0.5em]
+        \item<4-> \textbf{Inspired by how humans learn:}\\
+        We learn patterns from the world around us without explicit labels—self-supervised learning mimics this natural process.\\[0.5em]
+        \item<5-> \textbf{A journey of methods:}\\
+        The field has evolved from generative models (like VAEs and GANs), to contrastive and predictive coding, and now to hybrid approaches combining reconstruction and discrimination.
+    \end{enumerate}
+    % \begin{itemize}
+    %     \item \textbf{Data Label Bottleneck}
+    %     \begin{itemize}
+    %         \item Annotating large datasets is time-consuming and expensive.
+    %         \item Vast amounts of unlabeled data (images, audio, text) are readily available but often underutilized.
+    %     \end{itemize}
+    %     \item \textbf{Reusable Representations}
+    %     \begin{itemize}
+    %         \item Pre-training on unlabeled data enables learning of general, transferable features.
+    %         \item Reduces the need for extensive task-specific labeled data.
+    %     \end{itemize}
+    %     \item \textbf{Cross-Modal and Multi-Task Learning}
+    %     \begin{itemize}
+    %         \item Self-supervised frameworks can be applied across different domains: vision, language, audio, and time-series.
+    %         \item Facilitates unified approaches to diverse tasks.
+    %     \end{itemize}
+    %     \item \textbf{Biological Inspiration}
+    %     \begin{itemize}
+    %         \item Humans learn patterns and structure from sensory input without explicit labels.
+    %         \item Self-supervised learning mimics this natural learning process.
+    %     \end{itemize}
+    %     \item \textbf{Evolution of Learning Paradigms}
+    %     \begin{itemize}
+    %         \item Progression from generative models (e.g., VAEs, GANs) to contrastive and predictive coding methods.
+    %         \item Modern self-supervised methods combine reconstructive and discriminative objectives.
+    %     \end{itemize}
+    % \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{}
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://framerusercontent.com/images/r0i6jmANAR5bsgzvqm0BJG9aas.png}{images/ssl/architecture.png}{height=0.9\textheight,width=1\textwidth,keepaspectratio}
+    \end{figure}
+\end{frame}

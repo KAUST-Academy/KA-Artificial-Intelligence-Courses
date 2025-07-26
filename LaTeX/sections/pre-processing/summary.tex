@@ -1,0 +1,22 @@
+\begin{frame}[fragile,allowframebreaks]{Summary}
+\begin{itemize}
+    \item Data preprocessing is a crucial part of machine learning
+    \begin{itemize}
+        \item Scaling is important for many distance-based methods (e.g. kNN, SVM, Neural Nets)
+        \item Categorical encoding is necessary for numeric methods (or implementations)
+        \item Selecting features can speed up models and reduce overfitting
+        \item Feature engineering is often useful for linear models
+        \item It is often better to impute missing data than to remove data
+        \item Imbalanced datasets require extra care to build useful models
+    \end{itemize}
+    \item Pipelines allow us to encapsulate multiple steps in a convenient way
+    \begin{itemize}
+        \item Avoids data leakage, crucial for proper evaluation
+    \end{itemize}
+    \item Choose the right preprocessing steps and models in your pipeline
+    \begin{itemize}
+        \item Cross-validation helps, but the search space is huge
+        \item Smarter techniques exist to automate this process (AutoML)
+    \end{itemize}
+\end{itemize}
+\end{frame}

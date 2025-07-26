@@ -1,0 +1,261 @@
+\section{Motivation}
+\begin{frame}{Motivation}
+    \textbf{Why Do We Need RNNs?}
+    \begin{itemize}
+        \item Traditional feedforward networks don’t handle \textbf{sequential data} effectively.
+        \item Many applications (\textbf{language modeling, time-series prediction, speech recognition}) require memory of past inputs.
+        \item RNNs enable \textbf{temporal dynamic behavior} by maintaining hidden states.
+    \end{itemize}
+
+    \textbf{Examples Where Order Matters:}
+    \begin{itemize}
+        \item Translating ``I am happy'' vs ``Happy I am''
+        \item Predicting next stock price based on past trends
+        \item Understanding a sentence word-by-word
+    \end{itemize}
+
+    \begin{block}{\textbf{Key Idea}}
+        Add a feedback loop to remember previous computations --- introducing memory into neural networks.
+    \end{block}
+\end{frame}
+
+\section{Learning Outcomes}
+\begin{frame}{Learning Outcomes}
+\textbf{By the end of this session, you should be able to:}
+\begin{itemize}
+    \item Understand the structure and working of Recurrent Neural Networks (RNNs)
+    \item Recognize various RNN architectures (One-to-Many, Many-to-One, Many-to-Many)
+    \item Explain the concept of shared parameters in RNNs
+    \item Evaluate RNN limitations and how advanced models improve them
+    \item Explore potential future directions of sequential models
+\end{itemize}
+\end{frame}
+
+
+\section{Introduction}
+\begin{frame}{}
+    \LARGE RNNs : \textbf{Introduction}
+\end{frame}
+
+% \subsection{Basics of RNNs}
+\begin{frame}{What is an RNN?}
+    \textbf{A neural network with loops — allowing information to persist.}
+
+    \vspace{0.5em}
+    \textbf{Core Elements:}
+    \begin{itemize}
+        \item \textbf{Hidden State} $h_t$: captures memory of previous inputs
+        \item \textbf{Input} $x_t$, \textbf{Output} $y_t$
+        \item Same weights used across time steps (parameter sharing)
+    \end{itemize}
+
+    \vspace{0.5em}
+    \textbf{Mathematical Formulation:}
+    \begin{align*}
+        h_t &= \tanh(W_{hh} h_{t-1} + W_{xh} x_t + b_h) \\
+        y_t &= W_{hy} h_t + b_y
+    \end{align*}
+
+    \vspace{0.5em}
+    \textbf{\faThumbTack\ This recurrence allows information to propagate through time.}
+\end{frame}
+
+
+% \subsection{RNN Architecture (Unrolled View)}
+\begin{frame}{RNN Architecture: Unrolled View}
+    \textbf{Unrolled RNN:} \\
+    An RNN is essentially a chain of repeating neural network modules, one for each time step.
+
+    % \vspace{1em}
+    % \begin{center}
+    %     % Unrolled RNN diagram
+    %     \begin{tikzpicture}[node distance=1.8cm,>=stealth,thick]
+    %         % Nodes
+    %         \node[draw, circle, minimum size=1cm] (h0) at (0,0) {$h_{t-1}$};
+    %         \node[draw, circle, minimum size=1cm, right=of h0] (h1) {$h_{t}$};
+    %         \node[draw, circle, minimum size=1cm, right=of h1] (h2) {$h_{t+1}$};
+
+    %         % Inputs
+    %         \node[below=0.9cm of h0] (x0) {$x_{t-1}$};
+    %         \node[below=0.9cm of h1] (x1) {$x_{t}$};
+    %         \node[below=0.9cm of h2] (x2) {$x_{t+1}$};
+
+    %         % Outputs
+    %         \node[above=0.9cm of h0] (y0) {$y_{t-1}$};
+    %         \node[above=0.9cm of h1] (y1) {$y_{t}$};
+    %         \node[above=0.9cm of h2] (y2) {$y_{t+1}$};
+
+    %         % Connections
+    %         \draw[->] (h0) -- (h1);
+    %         \draw[->] (h1) -- (h2);
+
+    %         \draw[->] (x0) -- (h0);
+    %         \draw[->] (x1) -- (h1);
+    %         \draw[->] (x2) -- (h2);
+
+    %         \draw[->] (h0) -- (y0);
+    %         \draw[->] (h1) -- (y1);
+    %         \draw[->] (h2) -- (y2);
+    %     \end{tikzpicture}
+    % \end{center}
+
+    \vspace{0.5em}
+    \textbf{Each time step shares the same parameters:}
+    \begin{itemize}
+        \item Input $x_t$
+        \item Hidden state $h_t$
+        \item Output $y_t$
+    \end{itemize}
+
+    \begin{block}{\textbf{Key Idea}}
+        Temporal representation without increasing parameter count!
+    \end{block}
+\end{frame}
+
+
+\section{RNN Architectures}
+\large
+\begin{frame}[allowframebreaks]{RNN Architectures}
+    \begin{itemize}
+        \item \textbf{One-to-One:} Standard feedforward network \\[2em]
+        \textit{Example:} Image classification
+    \framebreak
+        \item \textbf{One-to-Many:} Single input $\rightarrow$ Sequence output \\[2em]
+        \textit{Example:} Image Captioning \\[2em]
+        \texttt{$\rightarrow$ ``A dog is running''}
+    \framebreak
+        \item \textbf{Many-to-One:} Sequence input $\rightarrow$ Single output \\[2em]
+        \textit{Example:} Sentiment Analysis \\[2em]
+        \texttt{``Movie was great'' $\rightarrow$ Positive}
+    \framebreak
+        \item \textbf{Many-to-Many (Synchronized):} Input and output sequences of same length \\[2em]
+        \textit{Example:} POS tagging
+    \framebreak
+        \item \textbf{Many-to-Many (Unsynchronized):} Input and output sequences of different lengths \\[2em]
+        \textit{Example:} Machine Translation \\[2em]
+        \texttt{``Bonjour'' $\rightarrow$ ``Good morning''}
+    \end{itemize}
+\end{frame}
+
+
+\section{RNN Training Challenges}
+\begin{frame}[allowframebreaks]{RNN Training Challenges}
+    \textbf{Backpropagation Through Time (BPTT):}
+    \begin{itemize}
+        \item Training RNNs involves \textbf{unfolding} the network across time steps.
+        \item Standard backpropagation is applied through this unrolled structure.
+    \end{itemize}
+
+\framebreak
+    \textbf{Problems:}
+    \begin{itemize}
+        \item \textbf{Vanishing Gradients:} Gradients shrink as they are propagated back, making it hard to learn long-term dependencies.
+        \item \textbf{Exploding Gradients:} Gradients grow exponentially, leading to unstable updates.
+    \end{itemize}
+    \\[2em]
+    \textbf{Solutions Preview (covered in future modules):}
+    \begin{itemize}
+        \item Use of LSTM and GRU architectures
+        \item Gradient Clipping
+    \end{itemize}
+\end{frame}
+
+
+\section{Applications of RNNs}
+\begin{frame}[allowframebreaks]{Applications of RNNs}
+    \textbf{\faMobile\ Natural Language Processing}
+    \begin{itemize}
+        \item Language modeling
+        \item Named Entity Recognition
+        \item Machine Translation
+    \end{itemize}
+    \\[2em]
+    \textbf{\faBarChart\ Time-Series Forecasting}
+    \begin{itemize}
+        \item Stock prediction
+        \item Weather forecasting
+    \end{itemize}
+
+\framebreak
+
+    \textbf{\faMusic\ Audio Processing}
+    \begin{itemize}
+        \item Speech recognition
+        \item Music generation
+    \end{itemize}
+    \\[2em]
+    \textbf{\faBrain\ Cognitive Modeling}
+    \begin{itemize}
+        \item Simulating memory in brain-like systems
+    \end{itemize}
+\end{frame}
+
+
+\section{Limitations of RNNs}
+\begin{frame}{Limitations of RNNs}
+    \begin{itemize}
+        \item \textcolor{red}{Sequential computation --- hard to parallelize}
+        \item \textcolor{red}{Forget long-term dependencies}
+        \item \textcolor{red}{Slow training due to sequential nature}
+        \item \textcolor{red}{Struggle with varying-length sequences}
+    \end{itemize}
+    \\[2em]
+    \begin{block}{\textbf{Key Developments}}
+        \begin{itemize}
+            \item \textbf{LSTM and GRU:} Designed to address memory and gradient issues
+            \item \textbf{Transformers:} Non-recurrent, highly parallelizable models
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\section{Future Directions}
+\begin{frame}[allowframebreaks]{Future Directions: What's Beyond Vanilla RNNs?}
+    \begin{itemize}
+        \item \textbf{LSTM (Long Short-Term Memory):} Overcomes vanishing gradients
+        \item \textbf{GRU (Gated Recurrent Unit):} Simpler than LSTM, efficient gating
+        \item \textbf{Attention Mechanisms:} Focus on relevant parts of the input sequence
+        \item \textbf{Transformers \& Self-Attention:} Replace recurrence with parallelizable attention
+        \item \textbf{Neural ODEs:} Model continuously evolving hidden states
+    \end{itemize}
+
+\framebreak
+    \textbf{Hybrid Models:}
+    \begin{itemize}
+        \item Combine RNNs, CNNs, and Attention for complex tasks (e.g., video, multimodal text)
+    \end{itemize}
+\end{frame}
+
+
+\section{Summary}
+\begin{frame}{Summary}
+    \begin{itemize}
+        \item \textbf{RNNs introduce memory into neural nets for sequence modeling}
+        \item \textbf{Use shared weights across time steps}
+        \item \textbf{Architectures like One-to-Many, Many-to-One fit various tasks}
+        \item \textbf{RNNs face training and memory limitations}
+        \item \textbf{Advances like LSTM, GRU, and Transformers push beyond RNNs}
+    \end{itemize}
+\end{frame}
+
+\section{References}
+\begin{frame}[allowframebreaks]{References}
+    \textbf{Core Papers:}
+    \begin{itemize}
+        \item Elman, J. L. (1990). Finding structure in time. \textit{Cognitive Science}.
+        \item Hochreiter, S., \& Schmidhuber, J. (1997). Long Short-Term Memory. \textit{Neural Computation}.
+        \item Mikolov, T., Karafiát, M., Burget, L., Cernocký, J., \& Khudanpur, S. (2010). Recurrent neural network based language model. \textit{Interspeech}.
+        \item Bengio, Y., Simard, P., \& Frasconi, P. (1994). Learning long-term dependencies with gradient descent is difficult. \textit{IEEE Transactions on Neural Networks}.
+        \item Sutskever, I., Vinyals, O., \& Le, Q. V. (2014). Sequence to Sequence Learning with Neural Networks. \textit{NeurIPS}.
+        \item Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). Attention Is All You Need. \textit{NeurIPS}.
+    \end{itemize}
+
+    \framebreak
+
+    \textbf{Recommended Slides \& Tutorials:}
+    \begin{itemize}
+        \item Stanford CS231n: \url{http://cs231n.stanford.edu/}
+        \item MIT Deep Learning: \url{https://deeplearning.mit.edu}
+        \item Karpathy’s blog on RNNs: \url{http://karpathy.github.io/2015/05/21/rnn-effectiveness/}
+        \item Andrej Karpathy’s min-char-RNN GitHub: \url{https://github.com/karpathy/char-rnn}
+    \end{itemize}
+\end{frame}

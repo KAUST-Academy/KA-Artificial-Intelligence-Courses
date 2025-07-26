@@ -1,0 +1,76 @@
+\section{Large Language Diffusion Models (LLDMs)}
+\begin{frame}{}
+    \LARGE \textbf{Large Language Diffusion Models (LLDMs)}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{LLDMs: Diffusion for Text Generation}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/lldm-paper.png}
+    \end{figure}
+\framebreak
+    \begin{itemize}
+        \item \textbf{Emerging trend:} Use diffusion instead of autoregression for text generation
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Key Idea:}
+    \begin{itemize}
+        \item Generate latent text representation over diffusion steps
+        \item Use decoder to map latent $\rightarrow$ text
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Benefits:}
+    \begin{itemize}
+        \item Better global coherence
+        \item Parallel generation
+        \item Less repetition, hallucination
+    \end{itemize}
+\framebreak
+    \textbf{Related work:}
+    \begin{itemize}
+        \item Diffusion-LM (Li et al.)
+        \item Masked-Diffusion Transformers
+        \item UniDiffuser (Vision + Text)
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Note:} Still experimental, but promising for the future of text generation
+\framebreak
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/lldm-overview.png}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/lldm-scalability.png}
+    \end{figure}
+
+\framebreak
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/lldm-benchmark-result.png}
+    \end{figure}
+
+\framebreak
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/lldm-sampling.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{LLDMs: Algorithm Overview}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/lldm-pretraining.png}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/lldm-supervised-finetuning.png}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/lldm-log-likelihood.png}
+    \end{figure}
+\end{frame}

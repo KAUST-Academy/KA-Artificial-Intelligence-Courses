@@ -1,0 +1,15 @@
+\section{Layer Normalization vs RMSNorm}
+\begin{frame}
+    \frametitle{Layer Normalization vs RMSNorm}
+    \textbf{LayerNorm}: Normalizes across the feature dimension by subtracting the mean and dividing by the standard deviation.
+
+    \medskip
+
+    \textbf{RMSNorm}: Removes the mean and scales by the root mean square (RMS) of the features.
+
+    \begin{itemize}
+        \item Simpler
+        \item Faster
+        \item Slightly better in large-scale settings \cite{zhou2022rmsnorm}
+    \end{itemize}
+\end{frame}

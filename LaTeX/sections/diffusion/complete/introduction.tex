@@ -1,0 +1,28 @@
+\section{Introduction}
+\begin{frame}{}
+    \LARGE Diffusion Models: \textbf{Introduction}
+\end{frame}
+
+\begin{frame}{Introduction}
+
+Diffusion models are a class of probabilistic generative models that learn to reverse a gradual noising process applied to data. They have gained popularity due to their ability to generate samples with high fidelity and diversity.
+
+\begin{itemize}
+    \item<2-> \textbf{Inspiration:} Rooted in concepts from thermodynamics and stochastic processes.
+    \item<3-> \textbf{Key Idea:} 
+    \begin{itemize}
+        \item \textit{Forward process:} Progressively corrupt data by adding Gaussian noise.
+        \item \textit{Reverse process:} Learn to recover the original data by reversing the noising process.
+    \end{itemize}
+    \item<4-> \textbf{Popularity:} Known for producing high-quality and diverse generated samples.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Quick Overview}
+    \begin{itemize}
+        \item \textbf{Forward:} Clean $\rightarrow$ Noise (additive Gaussian steps)
+        \item \textbf{Reverse:} Learn \textbf{U-Net} to remove noise step by step
+        \item \textbf{Training:} Model predicts the noise added
+        \item \textbf{Sampling:} Roll back from pure noise to a data sample
+    \end{itemize}
+\end{frame}

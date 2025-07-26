@@ -1,0 +1,77 @@
+\section{Start and End Tokens}
+\begin{frame}{}
+    \LARGE N-gram Models: \textbf{Start and End Tokens}
+\end{frame}
+
+\begin{frame}{Why Use Special Tokens?}
+    \begin{itemize}
+        \item \textbf{Start:} \texttt{<s>} or \texttt{<start>}
+        \item \textbf{End:} \texttt{</s>} or \texttt{<end>}
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Benefits:}
+    \begin{itemize}
+        \item Helps model sentence boundaries
+        \item Enables generation and evaluation
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Start of sentence token \texttt{<s>}}
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/nlp-intro/sos-token.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Start of sentence token \texttt{<s>} for N-grams}
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/nlp-intro/sos-token-ngram.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{End of sentence token \texttt{<s>}  - motivation}
+    \foreach \i in {1,...,5} { % Integers from 1 to 5
+        \begin{figure}
+            \centering
+            \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/eos-token-\i.png}
+        \end{figure}
+
+        \framebreak
+    }
+\end{frame}
+
+\begin{frame}{End of sentence token \texttt{<s>}  - solution}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/eos-token-soln.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{End of sentence token \texttt{<s>} for N-grams}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/eos-token-ngram.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Example - bigram}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/eos-bigram.png}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Quiz}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/quiz-sos-eos.png}
+    \end{figure}
+\end{frame}
+
+% \begin{frame}{Language Model}
+%     \begin{figure}
+%         \centering
+%         \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/language-model.png}
+%     \end{figure}
+% \end{frame}

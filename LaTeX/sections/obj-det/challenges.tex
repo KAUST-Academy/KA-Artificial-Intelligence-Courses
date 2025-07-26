@@ -1,0 +1,29 @@
+\begin{frame}[allowframebreaks]{Object Detection: Challenges}
+\textbf{Object detection} is a complex task in computer vision that involves identifying and localizing objects within images.
+
+Unlike image classification, which assigns a single label to an entire image, object detection requires both identifying the objects present and determining their locations within the image.
+
+This task presents several challenges that make it more difficult than classification:
+\begin{itemize}
+    \item \textbf{Multiple outputs:} Need to output variable numbers of objects per image
+    \item \textbf{Multiple types of output:} Need to predict "what" (category label) as well as "where" (bounding box)
+    \item \textbf{Large images:} Classification works at 224x224; need higher resolution for detection, often $\sim 800 \times 600$
+\end{itemize}
+% \framebreak
+% \begin{itemize}
+%     \item \textbf{Complexity of Objects}: Objects can vary in size, shape, and appearance, making it difficult to create a one-size-fits-all detection model.
+%     \item \textbf{Occlusion}: Objects may be partially hidden by other objects, complicating detection.
+%     \item \textbf{Variability in Lighting and Background}: Changes in lighting conditions and complex backgrounds can affect detection accuracy.
+%     \item \textbf{Real-time Processing Requirements}: Many applications require real-time detection, which demands efficient algorithms.
+%     \item \textbf{Class Imbalance}: Some classes may have significantly more training examples than others, leading to biased models.
+% \end{itemize}
+% \framebreak
+% \textbf{Additional Challenges}:
+% \begin{itemize}
+%     \item \textbf{Annotation Challenges}: Creating accurate bounding box annotations for training data can be time-consuming and error-prone.
+%     \item \textbf{Generalization to New Environments}: Models trained on specific datasets may not perform well in different environments or with unseen object variations.
+%     \item \textbf{Scalability}: Scaling detection models to handle large datasets or multiple classes can be challenging.
+%     \item \textbf{Evaluation Metrics}: Choosing appropriate metrics for evaluating detection performance, such as Intersection over Union (IoU) and mean Average Precision (mAP), can be complex.
+%     \item \textbf{Adversarial Attacks}: Object detection models can be vulnerable to adversarial attacks, where small perturbations in input images lead to incorrect detections.
+% \end{itemize}
+\end{frame}

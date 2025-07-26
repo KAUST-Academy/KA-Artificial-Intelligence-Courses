@@ -1,0 +1,77 @@
+\begin{frame}[allowframebreaks]{}
+    \LARGE Normalizing Flow Models: \\[1.5ex] \textbf{Appendix}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Appendix}
+    \section{Jacobian Matrix (2D Case)}
+    \label{sec:appendix-jacobian-2d}
+
+    \textbf{Jacobian Matrix (2D Case)}
+
+    \textbf{Intuition Behind the Jacobian:} In multivariable calculus, the Jacobian matrix describes how a transformation function changes space locally. Think of it as a local linear approximation to a nonlinear transformation. In 2D, it tells us how small changes in the input $(x, y)$ affect the output $(u, v)$.
+
+    \vspace{0.5em}
+    \textbf{Formal Definition:} Let
+    \[
+    f(x, y) = (u(x, y), v(x, y))
+    \]
+    be a transformation from $\mathbb{R}^2 \to \mathbb{R}^2$. The Jacobian matrix is:
+    \[
+    J_f(x, y) =
+    \begin{bmatrix}
+    \frac{\partial u}{\partial x} & \frac{\partial u}{\partial y} \\
+    \frac{\partial v}{\partial x} & \frac{\partial v}{\partial y}
+    \end{bmatrix}
+    \]
+    Each entry measures how one output dimension changes with respect to one input dimension.
+
+    \framebreak
+
+    \subsection{Geometric Interpretation}
+    \label{subsec:appendix-jacobian-geometry}
+    \textbf{Geometric Interpretation:}
+
+    The determinant of the Jacobian, $|\det J_f(x, y)|$, tells us how much area is stretched or compressed by the transformation at a specific point.
+
+    \begin{itemize}
+        \item $|\det J| > 1$: area expands.
+        \item $|\det J| < 1$: area contracts.
+        \item $|\det J| = 0$: local collapse (not invertible).
+    \end{itemize}
+
+    \vspace{0.5em}
+    \textbf{Example (Rotation + Scaling):} Let
+    \[
+    f(x, y) = (2x + y,\, x + 3y)
+    \]
+    Then the Jacobian is:
+    \[
+    J_f(x, y) =
+    \begin{bmatrix}
+    2 & 1 \\
+    1 & 3
+    \end{bmatrix}
+    \]
+
+    \subsection{Determinant Example}
+    \label{subsec:appendix-jacobian-determinant}
+    Determinant:
+    \[
+    \det J = 2 \cdot 3 - 1 \cdot 1 = 6 - 1 = 5
+    \]
+    \textit{Interpretation:} Locally, this transformation scales area by a factor of 5.
+
+    \subsection{Relevance to Normalizing Flows}
+    \label{subsec:appendix-jacobian-flows}
+    In normalizing flows, we use:
+    \[
+    p_X(x) = p_Z(f^{-1}(x)) \cdot \left| \det \left( \frac{\partial f^{-1}}{\partial x} \right) \right|
+    \]
+    To compute the exact density after transformation, we must evaluate the Jacobian determinant. Hence, choosing transformations where the Jacobian (or its determinant) is easy to compute is critical (e.g., triangular matrices in coupling layers).
+
+    \vspace{0.5em}
+    \textbf{Visual Aid:} For an interactive visualization of how the Jacobian affects area in 2D transformations, visit the Wolfram Demonstrations Project:
+    \begin{center}
+      \href{https://demonstrations.wolfram.com/2DJacobian/}{\beamergotobutton{2D Jacobian Visualization}}
+    \end{center}    
+\end{frame}

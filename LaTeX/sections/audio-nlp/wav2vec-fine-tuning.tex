@@ -1,0 +1,74 @@
+\section{Fine-tuning for ASR with Wav2Vec 2.0}
+
+\begin{frame}{}
+    \LARGE \textbf{Fine-tuning for ASR with Wav2Vec 2.0}
+\end{frame}
+
+\begin{frame}{Fine-tuning Overview}
+    \begin{itemize}
+        \item \textbf{Self-Supervised Learning (SSL):} Pre-train Wav2Vec 2.0 on large unlabeled audio.
+        \item \textbf{Fine-tuning:} Use small labeled dataset for ASR.
+        \item \textbf{Loss Function:} Connectionist Temporal Classification (CTC) Loss.
+        \item \textbf{Goal:} Map audio features to text transcriptions.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Fine-tuning Results}
+    \begin{itemize}
+        \item \textbf{Small labeled data:} Only 10 minutes of transcribed speech.
+        \item \textbf{Performance:}
+        \begin{itemize}
+            \item Word Error Rate (WER): 4.8\% (clean) / 8.2\% (other)
+        \end{itemize}
+        \item \textbf{Efficient:} High accuracy with minimal supervision.
+    \end{itemize}
+\framebreak
+    \begin{center}
+        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/audio-nlp/wav2vec2-wer-results.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}[fragile]{PyTorch Fine-tuning Example}
+    \textbf{Wav2Vec 2.0 + CTC Loss (PyTorch)}
+    \begin{lstlisting}[language=Python]
+import torch
+import torchaudio
+from transformers import Wav2Vec2ForCTC, Wav2Vec2Processor
+
+processor = Wav2Vec2Processor.from_pretrained("facebook/wav2vec2-base-960h")
+model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-base-960h")
+
+input_audio, _ = torchaudio.load("audio.wav")
+inputs = processor(input_audio.squeeze(), sampling_rate=16000, return_tensors="pt")
+with torch.no_grad():
+    logits = model(**inputs).logits
+pred_ids = torch.argmax(logits, dim=-1)
+transcription = processor.decode(pred_ids[0])
+print(transcription)
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Decoding: Beam Search / Viterbi}
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.4\textwidth}
+            \begin{itemize}
+                \item \textbf{CTC Decoding:}
+                \begin{itemize}
+                    \setlength{\itemsep}{1em}
+                    \item Greedy decoding: Select most probable token at each timestep.
+                    \item Beam search: Explore multiple hypotheses for better accuracy.
+                    \item Viterbi algorithm: Find most likely sequence.
+                \end{itemize}
+                \item \textbf{Equation:}
+                \[
+                    \hat{y} = \arg\max_{y} P(y|x)
+                \]
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.75\textwidth}
+            \begin{center}
+                \includegraphics[width=\textwidth]{images/audio-nlp/ctc-decoding.png}
+            \end{center}
+        \end{column}
+    \end{columns}
+\end{frame}

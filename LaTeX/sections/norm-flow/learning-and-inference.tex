@@ -1,0 +1,21 @@
+\begin{frame}[allowframebreaks]{}
+    \LARGE Normalizing Flow Models: \\[1.5ex] \textbf{Learning and Inference}
+\end{frame}
+
+\begin{frame}{Learning and Inference}
+\begin{itemize}
+    \item Learning is performed via maximum likelihood estimation over the dataset $D$:
+    $$
+    \max_\theta \log p(D;\theta) = \sum_{x \in D} \left[ \log \pi(G_\theta^{-1}(x)) + \log \left| \det \left( \frac{\partial G_\theta^{-1}(x)}{\partial x} \right) \right| \right]
+    $$
+    \item Exact likelihood evaluation is achieved using the inverse transformation and the change of variables formula.
+    \item Sampling is performed via the forward transformation $G_\theta : Z \rightarrow X$:
+    $$
+    z \sim \pi(z), \quad x = G_\theta(z)
+    $$
+    \item Latent representations are inferred via the inverse transformation (no inference network required):
+    $$
+    z = G_\theta^{-1}(x)
+    $$
+\end{itemize}
+\end{frame}

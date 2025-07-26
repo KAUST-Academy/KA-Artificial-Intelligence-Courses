@@ -1,0 +1,22 @@
+\begin{frame}[allowframebreaks]{}
+    \LARGE Normalizing Flow Models: \\[1.5ex] \textbf{Requirements}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Requirements for Flow Models}
+\begin{itemize}
+    \item A simple prior $\pi(z)$ that allows for efficient sampling and tractable likelihood evaluation (e.g., Gaussian).
+    \item Invertible transformations.
+    \item Computing likelihoods also requires evaluating the determinants of $n \times n$ Jacobian matrices, where $n$ is the data dimensionality.
+    \begin{itemize}
+        \item Computing the determinant of an $n \times n$ matrix is $O(n^3)$, which is prohibitively expensive within a learning loop.
+        \item Key idea: Choose transformations so that the resulting Jacobian matrix has a special structure. For example, the determinant of a triangular matrix is the product of its diagonal entries, making it an $O(n)$ operation.
+    \end{itemize}
+\end{itemize}
+\framebreak
+
+\begin{itemize}
+    \item We need a fast and simple prior (e.g., Gaussian).
+    \item The big question: How do we obtain invertible transformations and efficiently compute the determinants of Jacobians?
+    \item \textbf{One solution}: Use coupling layers to design invertible functions and efficiently calculate the determinant of the Jacobian!
+\end{itemize}
+\end{frame}

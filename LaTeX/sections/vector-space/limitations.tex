@@ -1,0 +1,31 @@
+\section{Limitations of Vector Space Models}
+\begin{frame}[allowframebreaks]{Limitations of Vector Space Models}
+    \begin{itemize}
+        \item \textbf{High Dimensionality:}
+        \begin{itemize}
+            \item Vectors can become very high-dimensional, leading to computational inefficiency.
+            \item Curse of dimensionality: distance metrics become less meaningful.
+        \end{itemize}
+        \item \textbf{Sparsity:}
+        \begin{itemize}
+            \item One-hot vectors are sparse, leading to inefficiencies in storage and computation.
+            \item Dense vectors mitigate this but still require large datasets for effective training.
+        \end{itemize}
+        \item \textbf{Lack of Context:}
+        \begin{itemize}
+            \item Traditional VSMs do not capture word context effectively.
+            \item Same word can have different meanings in different contexts (polysemy).
+        \end{itemize}
+\framebreak
+        \item \textbf{Semantic Limitations:}
+        \begin{itemize}
+            \item Cannot capture complex relationships like negation or antonymy.
+            \item Similar words may not always be semantically related (e.g., "bank" vs. "river bank").
+        \end{itemize}
+        \item \textbf{Scalability:}
+        \begin{itemize}
+            \item As vocabulary size increases, the term-document matrix becomes larger and more sparse.
+            \item Requires significant computational resources for training and inference.
+        \end{itemize}
+    \end{itemize}
+\end{frame}

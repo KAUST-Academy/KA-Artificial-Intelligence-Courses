@@ -1,0 +1,118 @@
+\begin{frame}{Categorical feature encoding}
+    \begin{itemize}
+        \item Many algorithms can only handle numeric features, so we need to encode the categorical ones
+    \end{itemize}
+
+    \vspace{1em}
+
+    \begin{table}
+        \centering
+        \begin{tabular}{|c|l|r|c|}
+            \hline
+            & \textbf{boro} & \textbf{salary} & \textbf{vegan} \\
+            \hline
+            0 & Manhattan & 103 & 0 \\
+            1 & Queens    & 89  & 0 \\
+            2 & Manhattan & 142 & 0 \\
+            3 & Brooklyn  & 54  & 1 \\
+            4 & Brooklyn  & 63  & 1 \\
+            5 & Bronx     & 219 & 0 \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+
+
+\begin{frame}{Ordinal encoding}
+    \begin{itemize}
+        \item Simply assigns an integer value to each category in the order they are encountered
+        \item Only really useful if there exist a natural order in categories
+        \begin{itemize}
+            \item Model will consider one category to be 'higher' or 'closer' to another
+        \end{itemize}
+    \end{itemize}
+
+    \vspace{1em}
+
+    \begin{table}
+        \centering
+        \begin{tabular}{|c|l|c|r|}
+            \hline
+            & \textbf{boro} & \textbf{boro\_ordinal} & \textbf{salary} \\
+            \hline
+            0 & Manhattan & 2 & 103 \\
+            1 & Queens    & 3 & 89  \\
+            2 & Manhattan & 2 & 142 \\
+            3 & Brooklyn  & 1 & 54  \\
+            4 & Brooklyn  & 1 & 63  \\
+            5 & Bronx     & 0 & 219 \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+
+\begin{frame}{One-hot encoding (dummy encoding)}
+    \begin{itemize}
+        \item Simply adds a new 0/1 feature for every category, having 1 (hot) if the sample has that category
+        \item Can explode if a feature has lots of values, causing issues with high dimensionality
+        \item What if test set contains a new category not seen in training data?
+        \begin{itemize}
+            \item Either ignore it (just use all 0's in row), or handle manually (e.g. resample)
+        \end{itemize}
+    \end{itemize}
+
+    \vspace{1em}
+
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|c|l|c|c|c|c|r|}
+        \hline
+        & \textbf{boro} & \textbf{boro\_Bronx} & \textbf{boro\_Brooklyn} & \textbf{boro\_Manhattan} & \textbf{boro\_Queens} & \textbf{salary} \\
+        \hline
+        0 & Manhattan & 0 & 0 & 1 & 0 & 103 \\
+        1 & Queens    & 0 & 0 & 0 & 1 & 89  \\
+        2 & Manhattan & 0 & 0 & 1 & 0 & 142 \\
+        3 & Brooklyn  & 0 & 1 & 0 & 0 & 54  \\
+        4 & Brooklyn  & 0 & 1 & 0 & 0 & 63  \\
+        5 & Bronx     & 1 & 0 & 0 & 0 & 219 \\
+        \hline
+    \end{tabular}
+    }
+\end{frame}
+
+
+% \begin{frame}[allowframebreaks]{In practice (scikit-learn)}
+%     \begin{itemize}
+%         \item Ordinal encoding and one-hot encoding are implemented in scikit-learn
+%         \begin{itemize}
+%             \item \texttt{dtype} defines that the output should be an integer
+%         \end{itemize}
+
+%         \item[] \texttt{ordinal\_encoder = OrdinalEncoder(dtype=int)}  
+%         \texttt{one\_hot\_encoder = OneHotEncoder(dtype=int)}
+
+%         \framebreak
+
+%         \item Target encoding is available in \texttt{category\_encoders}
+%         \begin{itemize}
+%             \item scikit-learn compatible
+%             \item Also includes other, very specific encoders
+%         \end{itemize}
+
+%         \item[] \texttt{target\_encoder = TargetEncoder(return\_df=True)}
+
+%         \framebreak
+
+%         \item All encoders (and scalers) follow the \texttt{fit-transform} paradigm
+%         \begin{itemize}
+%             \item \texttt{fit} prepares the encoder, \texttt{transform} actually encodes the features
+%             \item We'll discuss this next
+%         \end{itemize}
+
+%         \item[] \texttt{encoder.fit(X, y)}  
+%         \texttt{X\_encoded = encoder.transform(X, y)}
+%     \end{itemize}
+% \end{frame}
+
+

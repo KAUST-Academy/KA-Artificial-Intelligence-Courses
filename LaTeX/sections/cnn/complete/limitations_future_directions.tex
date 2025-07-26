@@ -1,0 +1,24 @@
+\section{Limitations and Future Directions}
+\begin{frame}{}
+    \LARGE CNN: \textbf{Limitations and Future Directions}
+\end{frame}
+
+\begin{frame}{Limitations of CNNs}
+    \begin{itemize}
+        \item \textbf{Understanding global context:} CNNs are inherently local due to convolutional filters, making it hard to capture long-range dependencies.
+        \item \textbf{Variations outside training data:} Performance drops significantly when faced with data distributions not seen during training.
+        \item \textbf{Transfer learning limitations:} Pre-trained CNNs do not always generalize well to new tasks or domains.
+        \item \textbf{BatchNorm sensitivity:} Batch Normalization effectiveness depends on batch size, which can be problematic for small-batch or online learning.
+        \item \textbf{Compute constraints:} Deploying CNNs on mobile or edge devices remains challenging due to high computational and memory requirements.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Future Directions}
+    \begin{itemize}
+        \item \textbf{Vision Transformers (ViTs):} Leveraging self-attention mechanisms to capture global context and long-range dependencies.
+        \item \textbf{Self-supervised learning:} Reducing reliance on labeled data by learning useful representations from unlabeled data.
+        \item \textbf{More efficient models:} Architectures like EfficientNet optimize accuracy and efficiency for deployment on resource-constrained devices.
+        \item \textbf{Better augmentation:} Automated data augmentation techniques (e.g., AutoAugment, RandAugment) improve generalization.
+        \item \textbf{Low-power inference:} Techniques such as quantization and pruning enable CNNs to run efficiently on edge and mobile devices.
+    \end{itemize}
+\end{frame}

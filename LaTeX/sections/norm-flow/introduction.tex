@@ -1,0 +1,48 @@
+\begin{frame}[allowframebreaks]{}
+    \LARGE Normalizing Flow Models: \\[1.5ex] \textbf{Introduction}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Introduction}
+We continue on our quest for likelihood based generative model.
+
+So far, we have studied two different type of generative model:
+\begin{itemize}
+    \item \textbf{Autoregressive Models}: $p_\theta(x) = \prod^N_{i=1} p_\theta(x_i|x_{<i})$
+    \begin{itemize}
+        \item Provide tractable likelihoods
+        \item But have no direct mechanism for learning features
+        \item Slow generation process
+    \end{itemize}
+    \item \textbf{Variational Autoencoders}: $p_\theta(x) = \int_z p_\theta(x|z) p_\theta(z)$
+    \begin{itemize}
+        \item Has intractable marginal likelihood
+        \item Can learn feature representation
+        \item We optimize the lower bound instead of maximizing the likelihood ... we don't know the gap between them
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Introduction}
+\begin{itemize}
+    \item \textbf{Question}: Can we design a latent variable model with tractable likelihoods?
+
+    \item<2->\textbf{Answer}: Normalizing Flow Models
+        \begin{itemize} 
+            \item They combine the best of both worlds, allowing both feature learning and tractable marginal likelihood estimation.
+            \item \textbf{Key Idea}: we wish to map simple distributions (easy to sample and evaluate densities) to complex ones (learned via data) using \textbf{change of variables}.
+        \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Introduction}
+\begin{itemize}
+    \item A \textbf{normalizing flow} is a series of invertible transformations.
+    \item It maps simple distributions (e.g., Gaussian) into complex ones.
+    \item Let's say:
+    \begin{itemize}
+        \item Sample $z$ from a simple distribution.
+        \item Transform it to $x = f(z)$.
+        \item Want $p(x)$, i.e., how likely is $x$?
+    \end{itemize}
+\end{itemize}
+\end{frame}

@@ -1,0 +1,58 @@
+\begin{frame}{}
+	\LARGE VAE: \textbf{Reparameterization Trick (Pathwise Derivative Estimator)}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Reparameterization Trick}
+\textbf{Problem:} Cannot backpropagate through stochastic sampling.\\[1em]
+
+\textbf{Solution:} Reparameterize $z$ as:
+\[
+z = \mu + \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)
+\]
+
+\textbf{Benefit:} Enables gradient-based optimization by making the sampling operation differentiable.
+
+\framebreak
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/reparam_trick.png}
+	\caption*{Reparameterization trick to make back propagation possible}
+\end{figure}
+
+\framebreak
+
+\begin{figure}
+	\centering
+	\includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/reparam_trick_network.png}
+	\caption*{Variational Autoencoder with reparameterization trick}
+\end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Pathwise Derivative - Toy Problem}
+\begin{figure}
+		\centering
+		\includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/vae/toy-problem-1.png}
+\end{figure}
+
+\framebreak
+
+\begin{figure}
+		\centering
+		\includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/toy-problem-2.png}
+\end{figure}
+
+\framebreak
+
+\begin{figure}
+		\centering
+		\includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/toy-problem-3.png}
+\end{figure}
+
+\framebreak
+
+\begin{figure}
+		\centering
+		\includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/toy-problem-4.png}
+\end{figure}
+\end{frame}

@@ -1,0 +1,48 @@
+\begin{frame}[allowframebreaks]{Motivation for Transformers}
+    \begin{itemize}
+        \item \textbf{Limited Context:}
+        \begin{itemize}
+            \item RNNs process sequences step-by-step $\rightarrow$ Difficult to capture long-range dependencies.
+            \item CNNs are effective for local patterns $\rightarrow$ Struggle with global context in sequences.
+        \end{itemize}
+        \item \textbf{Sequential Bottlenecks:}
+        \begin{itemize}
+            \item RNNs process data sequentially.
+            \item Prevents efficient parallelization.
+            \item Leads to slow training and inference.
+        \end{itemize}
+        \item \textbf{Slow Training:}
+        \begin{itemize}
+            \item RNNs and CNNs are computationally intensive.
+            \item Especially challenging for long sequences or large images.
+            \item Results in increased training times.
+        \end{itemize}
+    \end{itemize}
+    \framebreak
+    \textbf{There is a need for models that:}
+    \begin{itemize}
+        \item Capture comprehensive, global context efficiently.
+        \item Allow for parallel computation.
+        \item Accelerate training and inference.
+    \end{itemize}
+    \textbf{Transformers} address these needs by:
+    \begin{itemize}
+        \item Leveraging self-attention mechanisms.
+        \item Modeling dependencies across entire sequences.
+        \item Enabling highly parallelizable computation.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Learning Outcomes}
+    After this lecture, you will be able to:
+    \begin{itemize}
+        \item Explain the motivation behind the development of Transformers.
+        \item Describe the architecture and key components of Transformer models.
+        \item Understand and implement attention and self-attention mechanisms.
+        \item Explain the role of positional encoding in Transformers.
+        \item Distinguish between general attention and self-attention.
+        \item Understand the concept and benefits of multi-head attention.
+        \item Compare CNNs with and without self-attention.
+        \item Summarize the advantages of Transformers over traditional sequence models.
+    \end{itemize}
+\end{frame}

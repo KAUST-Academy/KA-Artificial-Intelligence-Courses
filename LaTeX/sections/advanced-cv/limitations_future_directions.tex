@@ -1,0 +1,23 @@
+\section{Limitations and Future Directions}
+\begin{frame}{}
+    \LARGE Advanced Computer Vision: \textbf{Limitations and Future Directions}
+\end{frame}
+
+\begin{frame}{Limitations of Transformers in Computer Vision}
+    \begin{itemize}
+        \item \textbf{Data hungry}: Performance drops significantly on small datasets.
+        \item \textbf{Computationally expensive}: Quadratic complexity of self-attention.
+        \item \textbf{Lacks built-in locality bias}: Unlike CNNs; some variants (e.g., Swin Transformer) address this.
+        \item \textbf{Requires large-scale pretraining}: Needs datasets like JFT-300M, ImageNet-22K for strong performance.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Future Directions}
+    \begin{itemize}
+        \item \textbf{Efficient transformers}: Linformer, Performer, Longformer.
+        \item \textbf{Hybrid models}: Combining CNNs and Transformers (e.g., CoaT, CvT).
+        \item \textbf{Low-resource ViTs}: Data-efficient training (e.g., DeiT).
+        \item \textbf{Vision-language models}: CLIP, Flamingo, GPT-4V.
+        \item \textbf{Hardware acceleration}: Edge ViTs, quantized ViTs for deployment.
+    \end{itemize}
+\end{frame}

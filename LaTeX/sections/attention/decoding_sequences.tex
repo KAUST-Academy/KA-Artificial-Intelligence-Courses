@@ -1,0 +1,120 @@
+\section{Attention-based Decoding Sequences}
+\begin{frame}{Decoding Sequences with Attention}
+    \textbf{Attention-Based Decoding – Overview}
+
+    \begin{itemize}
+        \item The decoder uses attention to select relevant encoder hidden states at each decoding step.
+        \item \textbf{Combines:}
+        \begin{itemize}
+            \item Previous decoder state
+            \item Encoder hidden states
+            \item Attention context vector
+        \end{itemize}
+        \item The output at time $t$:
+        \[
+            y_t = \mathrm{Decoder}(y_{t-1}, \text{context}_t)
+        \]
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Decoding – Steps}
+    \begin{enumerate}
+        \item \textbf{Compute query:} Generate a query vector from the current decoder hidden state.
+        \item \textbf{Align with encoder outputs:} Compare the query with encoder outputs (keys) to measure relevance.
+        \item \textbf{Get attention weights:} Apply softmax to the alignment scores to obtain attention weights.
+        \item \textbf{Compute context:} Calculate the context vector as the weighted sum of encoder outputs using the attention weights.
+        \item \textbf{Feed into decoder:} Use the context vector and previous outputs as input for the next decoding step.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Decoding – Example: Translation}
+    \textbf{Example: English to French Translation}
+
+    \begin{block}{Source Sentence (English)}
+        \textit{The cat sat on the mat.}
+    \end{block}
+
+    \begin{block}{Target Sentence (French)}
+        \textit{Le chat s'est assis sur le tapis.}
+    \end{block}
+
+    \begin{itemize}
+        \item At each decoding step, the decoder generates a French word by:
+        \begin{enumerate}
+            \item Using the current decoder hidden state.
+            \item Attending to relevant English words via attention weights.
+            \item Computing a context vector as a weighted sum of encoder outputs.
+        \end{enumerate}
+        \item For example, when generating ``chat'', the attention focuses on ``cat''.
+        \item The process repeats for each word, dynamically shifting attention.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Limitations of Attention Mechanisms}
+    \begin{itemize}
+        \item \textbf{Quadratic Complexity:} Attention computation scales as $\mathcal{O}(n^2)$ with sequence length, making it expensive for long sequences.
+        \item \textbf{Shallow Reasoning:} Standard attention mechanisms typically consider only one step of interaction, limiting deep reasoning capabilities.
+        \item \textbf{Noisy Attention Maps:} Attention distributions can be diffuse or hard to interpret, making model decisions less transparent.
+        \item \textbf{Limited Long-Term Memory:} Attention alone may struggle to capture dependencies over very long contexts.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Future Directions in Attention Mechanisms}
+    \begin{itemize}
+        \item \textbf{Efficient Attention Variants:}
+        \begin{itemize}
+            \item \textit{Linformer, Performer, Longformer, FlashAttention} – Reduce memory and computation for long sequences.
+        \end{itemize}
+        \item \textbf{Structured Attention:}
+        \begin{itemize}
+            \item \textit{Sparsemax, Routing Attention} – Impose structure or sparsity for interpretability and efficiency.
+        \end{itemize}
+        \item \textbf{Cross-modal Attention:}
+        \begin{itemize}
+            \item \textit{Vision + Language (e.g., Flamingo, Gato)} – Integrate information across different modalities.
+        \end{itemize}
+        \item \textbf{Learnable Routing:}
+        \begin{itemize}
+            \item \textit{Mixture-of-Experts, Dynamic Attention} – Dynamically select computation paths for scalability.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{Summary}
+\begin{frame}{Summary}
+    \begin{table}[h!]
+        \centering
+        \renewcommand{\arraystretch}{1.8} 
+        \begin{tabular}{lp{0.7\textwidth}}
+            \hline
+            \textbf{Concept} & \textbf{Key Takeaway} \\
+            \hline
+            Alignment & Scores relevance between states \\
+            QKV & Core mechanism to compute attention \\
+            Decoding & Uses attention to generate outputs \\
+            Limitation & Costly, hard to scale to long seqs \\
+            Future & Efficient, structured, multimodal attention \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\section{References}
+\begin{frame}[allowframebreaks]{References}
+    \textbf{References}
+    \begin{itemize}
+        \item Bahdanau, D., Cho, K., \& Bengio, Y. (2015). \textit{Neural Machine Translation by Jointly Learning to Align and Translate}.
+        \item Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). \textit{Attention Is All You Need}.
+        \item Raffel, C., Shazeer, N., Roberts, A., et al. (2020). \textit{Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer}.
+        \item Choromanski, K., Likhosherstov, V., Dohan, D., et al. (2021). \textit{Rethinking Attention with Performers}.
+        \item Tay, Y., Dehghani, M., Bahri, D., \& Metzler, D. (2023). \textit{Efficient Transformers: A Survey}.
+        \item Google Research Slides: \textit{The Annotated Transformer}.
+    \end{itemize}
+    \begin{block}{Further Reading}
+        \begin{itemize}
+            \item Attention Mechanisms in NLP: A Comprehensive Survey
+            \item Advances in Transformer Architectures
+            \item Efficient Attention Mechanisms for Long Sequences
+        \end{itemize}
+    \end{block}
+\end{frame}

@@ -1,0 +1,22 @@
+\begin{frame}[allowframebreaks]{Variational Autoencoders: AE Recap}
+\textbf{Autoencoders}:
+\begin{itemize}
+    \item \textbf{Architecture}:
+        \begin{itemize}
+            \item \textbf{Encoder}: Compresses input \( x \) into a latent representation \( z \).
+            \item \textbf{Decoder}: Reconstructs the input \( x \) from the latent representation \( z \).
+        \end{itemize}
+    \item \textbf{Objective}: Minimize reconstruction error \( \lVert x - \hat{x} \rVert^2 \).
+    \
+    \item \textbf{Limitation}: Cannot generate new data; lacks a probabilistic foundation.
+\end{itemize}
+
+\framebreak
+
+\begin{itemize}
+    \item Autoencoders do not work as generative models because the latent space $Z$ is too discrete.
+    \item \textbf{Solution}: Let us rectify that.
+    \item \textbf{Variational Autoencoders}: Probabilistic spin on autoencders will let us sample from the model to generate data.
+\end{itemize}
+
+\end{frame}

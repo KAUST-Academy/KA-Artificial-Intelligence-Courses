@@ -1,0 +1,9 @@
+\section{Casual Masking}
+\begin{frame}
+    \frametitle{Casual Masking}
+    \begin{itemize}
+        \item \textbf{Purpose:} Prevents the model from attending to future tokens in the sequence.
+        \item \textbf{Implementation:} Uses a triangular mask in the self-attention mechanism.
+        \item \textbf{Effect:} Ensures that predictions for a token only depend on previous tokens, maintaining the autoregressive property.
+    \end{itemize}
+\end{frame}

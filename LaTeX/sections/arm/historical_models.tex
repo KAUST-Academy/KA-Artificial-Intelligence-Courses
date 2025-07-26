@@ -1,0 +1,32 @@
+\begin{frame}[allowframebreaks]{Autoregressive Models: Historical Models}
+    Before the advent of modern architectures such as Transformers and PixelCNN, several foundational neural autoregressive models established the basis for tractable density estimation using neural networks. Notable among these are:
+    \small
+    \begin{itemize}
+        \item \textbf{FVSBN (Fully Visible Sigmoid Belief Networks):} Introduced a factorized approach for modeling complex distributions, enabling efficient computation of likelihoods.
+        \item \textbf{NADE (Neural Autoregressive Distribution Estimator):} Extended the autoregressive framework by leveraging neural networks to model high-dimensional binary data, allowing for scalable and tractable density estimation.
+        \item \textbf{RNADE (Real-valued NADE):} Adapted the NADE model to handle real-valued data, broadening the applicability of autoregressive models to a wider range of tasks.
+    \end{itemize}
+    \normalsize
+    These early models not only demonstrated the feasibility of neural autoregressive density estimation but also inspired the development of more sophisticated architectures that followed.
+\end{frame}
+
+\input{sections/arm/historical_models/fvsbn}
+\input{sections/arm/historical_models/nade}
+
+\begin{frame}{Non-Binary Outputs}
+    \begin{itemize}
+        \item What if the output variable is not binary? For example, we have to predict pixel value between 0 and 255.
+        \item One solution: Let $\mathbf{\hat{x}}_i$ parameterize a categorical distribution
+        \begin{align}
+            h_i = \sigma(\mathbf{W}_{.,<i} x_{<i} + c)\\
+            \mathcal{P}(x_i | x_1, \cdots, x_{i-1}) = \text{Cat}(p_i^1, \cdots, p_i^K)\\
+            \mathbf{\hat{x}}_i = (p_i^1, \cdots, p_i^K) = \text{softmax} (A_i h_i + b_i)
+        \end{align}
+        \item Softmax generalizes the sigmoid function $\sigma(\cdot)$ and transforms a vector of K numbers into a vector of K probabilities (non-negative, sum to 1).
+
+    \end{itemize}
+\end{frame}
+
+\input{sections/arm/historical_models/rnade}
+\input{sections/arm/historical_models/learning-rnn}
+\input{sections/arm/historical_models/pixel-rnn}

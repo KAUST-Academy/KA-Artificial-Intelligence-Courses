@@ -1,0 +1,37 @@
+\begin{frame}{Full Training Workflow}
+\begin{itemize}
+    \item \textbf{Step 1: Initial Setup}
+    \begin{itemize}
+        \item Start with a pretrained model and just finetune when possible; it saves time and improves results.
+        \item Define an initial architecture without regularization (e.g., dropout) or augmentations.
+        \item Set up validation strategy and choose an appropriate evaluation loss and metric.
+        \item Train the model to get a \textbf{baseline score}.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Full Training Workflow}
+\begin{itemize}
+    \item \textbf{Step 2: Improvement Process}
+    \begin{itemize}
+        \item Overfitting is common at the start; use regularization techniques like:
+        \begin{itemize}
+            \item Dropout, batch normalization,...
+        \end{itemize}
+        \item Perform error analysis to identify weaknesses and choose appropriate augmentations or preprocessing.
+        \item Tune hyperparameters: layers, epochs, learning rate, batch size, etc.
+        \item Optionally, use ensembling to boost scores (requires more resources).
+    \end{itemize}
+    \item \textbf{Key Tip:} Track scores and improvements at every step to measure progress effectively.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Full Training Workflow}
+\begin{itemize}
+    \item \textbf{Step 3: Finalization}
+    \begin{itemize}
+        \item Save the optimized model for deployment.
+        \item Use the model for inference in real-world applications.
+    \end{itemize}
+\end{itemize}
+\end{frame} 

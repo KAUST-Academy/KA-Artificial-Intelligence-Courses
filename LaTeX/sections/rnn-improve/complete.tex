@@ -1,0 +1,232 @@
+\section{Motivation}
+\begin{frame}{Motivation}
+    \textbf{Why Do We Need to Improve RNNs?}
+
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Vanilla RNNs \textbf{fail at capturing long-term dependencies}
+        \item Gradients either \textbf{vanish or explode} over long sequences
+        \item This \textbf{limits learning} over time-based tasks like translation, conversation modeling, or video understanding
+    \end{itemize}
+
+    \textbf{\textcolor{blue}{Solution:}} Modify RNN architecture to retain important past information without instability.
+\end{frame}
+
+\section{Learning Outcomes}
+\begin{frame}{Learning Outcomes}
+    By the end of this session, you should be able to:
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Explain why RNNs suffer from vanishing and exploding gradients
+        \item Understand how LSTMs and GRUs solve these problems
+        \item Compare LSTMs and GRUs in terms of performance and complexity
+        \item Identify practical scenarios where each is preferred
+        \item Recognize limitations and future directions in sequence modeling
+    \end{itemize}
+\end{frame}
+
+
+\section{Vanishing and Exploding Gradients}
+\begin{frame}{Vanishing and Exploding Gradients}
+    \textbf{Backpropagation Through Time (BPTT)} spreads gradients across many time steps.
+
+    \vspace{1em}
+    \textcolor{red}{\textbf{Vanishing Gradients:}}
+    \[
+        \left\|\frac{\partial L}{\partial h_t}\right\| \rightarrow 0
+    \]
+    \begin{itemize}
+        \item Early layers barely learn
+        \item Forget long-term dependencies
+    \end{itemize}
+
+    \vspace{1em}
+    \textcolor{blue}{\textbf{Exploding Gradients:}}
+    \[
+        \left\|\frac{\partial L}{\partial h_t}\right\| \rightarrow \infty
+    \]
+    \begin{itemize}
+        \item Unstable updates, diverging weights
+    \end{itemize}
+
+    \vspace{1em}
+    \textbf{Problem:} Repeated multiplication of weight matrices during BPTT.
+\end{frame}
+
+
+\section{LSTM – Long Short-Term Memory}
+\begin{frame}[allowframebreaks]{LSTM – Long Short-Term Memory}
+    \textbf{Introduced by Hochreiter \& Schmidhuber (1997)}
+
+    \vspace{1em}
+    \textbf{Core Idea:} LSTM uses \textbf{gates} to control what to keep, forget, and output.
+
+    \vspace{1em}
+    \textbf{Key Components:}
+    \begin{itemize}
+        \item \textbf{Forget Gate} $f_t$
+        \item \textbf{Input Gate} $i_t$
+        \item \textbf{Cell State} $C_t$
+        \item \textbf{Output Gate} $o_t$
+    \end{itemize}
+
+\framebreak
+    \textbf{Equations:}
+    \begin{align*}
+        f_t &= \sigma(W_f[x_t, h_{t-1}] + b_f) \\
+        i_t &= \sigma(W_i[x_t, h_{t-1}] + b_i) \\
+        \tilde{C}_t &= \tanh(W_C[x_t, h_{t-1}] + b_C) \\
+        C_t &= f_t * C_{t-1} + i_t * \tilde{C}_t \\
+        o_t &= \sigma(W_o[x_t, h_{t-1}] + b_o) \\
+        h_t &= o_t * \tanh(C_t)
+    \end{align*}
+
+    \vspace{1em}
+    \textcolor{blue}{\textbf{Helps retain long-term dependencies}}
+\end{frame}
+
+
+\section{GRU – Gated Recurrent Unit}
+\begin{frame}[allowframebreaks]{GRU – Gated Recurrent Unit}
+    \textbf{Introduced by Cho et al., 2014}
+
+    \vspace{1em}
+    \textbf{Simpler than LSTM}, with fewer gates
+
+    \begin{itemize}
+        \item No separate memory cell
+        \item Combines forget and input into \textbf{update gate}
+    \end{itemize}
+
+    \vspace{1em}
+    \textbf{Key Components:}
+    \begin{itemize}
+        \item \textbf{Update Gate} $z_t$
+        \item \textbf{Reset Gate} $r_t$
+    \end{itemize}
+
+\framebreak
+    \textbf{Equations:}
+    \begin{align*}
+        z_t &= \sigma(W_z[x_t, h_{t-1}]) \\
+        r_t &= \sigma(W_r[x_t, h_{t-1}]) \\
+        \tilde{h}_t &= \tanh(W_h[x_t, r_t * h_{t-1}]) \\
+        h_t &= (1 - z_t) * h_{t-1} + z_t * \tilde{h}_t
+    \end{align*}
+
+    \vspace{1em}
+    \textcolor{blue}{\textbf{Comparable performance to LSTM}} \\
+    \textcolor{blue}{\textbf{Faster training, fewer parameters}}
+\end{frame}
+
+
+\section{LSTM vs GRU}
+\begin{frame}{LSTM vs GRU}
+    \begin{table}[]
+        \centering
+        \begin{tabular}{|l|l|l|}
+            \hline
+            \textbf{Feature}        & \textbf{LSTM}                     & \textbf{GRU}                              \\ \hline
+            Gates                   & 3 (i, f, o)                        & 2 (z, r)                                  \\ \hline
+            Memory Cell             & Yes                                & No                                        \\ \hline
+            Complexity              & Higher                             & Lower                                     \\ \hline
+            Training Speed          & Slower                             & Faster                                    \\ \hline
+            Performance             & Great for long sequences           & Similar or better on short tasks          \\ \hline
+        \end{tabular}
+    \end{table}
+
+    \vspace{1em}
+    \textbf{\textcolor{blue}{\faLightbulbO\enspace Tip:}} Try GRU first for faster results; switch to LSTM if performance suffers.
+\end{frame}
+
+
+\section{Use Cases for GRU/LSTM}
+\begin{frame}[allowframebreaks]{Use Cases for GRU/LSTM}
+    \textbf{\faMobile\enspace NLP Tasks}
+    \begin{itemize}
+        \item Language Modeling
+        \item Machine Translation
+        \item Sentiment Analysis
+        \item Chatbots
+    \end{itemize}
+
+\framebreak
+    \textbf{\faHeadphones\enspace Audio \& Time Series}
+    \begin{itemize}
+        \item Music Generation
+        \item Speech Recognition
+        \item Anomaly Detection
+    \end{itemize}
+
+\framebreak
+    \textbf{\faVideoCamera\enspace Video \& Sequential Vision}
+    \begin{itemize}
+        \item Action Recognition
+        \item Video Captioning
+    \end{itemize}
+\end{frame}
+
+
+\section{Limitations of GRU/LSTM}
+\begin{frame}{Limitations}
+    Even with GRU/LSTM:
+
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textcolor{red}{Still sequential} $\rightarrow$ Hard to parallelize
+        \item \textcolor{red}{Struggle with very long-range dependencies}
+        \item \textcolor{red}{Architectural complexity}
+        \item \textcolor{red}{Hard to interpret gate decisions}
+        \item \textcolor{red}{Require lots of training data}
+    \end{itemize}
+\end{frame}
+
+
+\section{Future Directions}
+\begin{frame}{Future Directions}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Transformers:} Fully parallelized sequence modeling using attention
+        \item \textbf{Efficient Attention:} Longformer, Linformer, etc.\ for long sequences
+        \item \textbf{Neural Memory Networks:} Explicit memory read/write
+        \item \textbf{Recurrent Attention Models}
+        \item \textbf{Hybrid Architectures:} RNN + CNN + Attention
+    \end{itemize}
+
+    \vspace{1em}
+    \textcolor{blue}{\faGlobe\enspace RNNs are still used in edge devices for efficient modeling}
+\end{frame}
+
+\section{Summary}
+\begin{frame}{Summary}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item RNNs struggle with long dependencies due to vanishing/exploding gradients
+        \item GRU and LSTM improve memory retention using gating mechanisms
+        \item GRU is simpler and faster; LSTM is more expressive
+        \item Attention and transformers now dominate, but RNNs remain relevant in many domains
+    \end{itemize}
+\end{frame}
+
+
+\section{References}
+\begin{frame}[allowframebreaks]{References}
+    \textbf{Foundational Papers:}
+    \begin{itemize}
+        \item Hochreiter, S., \& Schmidhuber, J. (1997). \textit{Long Short-Term Memory}. Neural Computation.
+        \item Cho, K., van Merriënboer, B., Gulcehre, C., Bahdanau, D., Bougares, F., Schwenk, H., \& Bengio, Y. (2014). \textit{Learning Phrase Representations using RNN Encoder–Decoder with GRU}. EMNLP.
+        \item Pascanu, R., Mikolov, T., \& Bengio, Y. (2013). \textit{On the difficulty of training RNNs}. ICML.
+        \item Bengio, Y., Simard, P., \& Frasconi, P. (1994). \textit{Learning long-term dependencies}. IEEE Transactions on Neural Networks.
+        \item Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., \& Polosukhin, I. (2017). \textit{Attention Is All You Need}. NeurIPS.
+    \end{itemize}
+
+    \framebreak
+
+    \textbf{Resources:}
+    \begin{itemize}
+        \item Karpathy’s RNN Blog: \url{https://karpathy.github.io/2015/05/21/rnn-effectiveness/}
+        \item CS231n Lecture Notes on RNNs and LSTM
+        \item DeepLearning.ai NLP Specialization – Coursera
+        \item MIT 6.S191 Deep Learning Lecture Slides
+    \end{itemize}
+\end{frame}

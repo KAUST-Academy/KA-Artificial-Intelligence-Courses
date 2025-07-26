@@ -1,0 +1,17 @@
+\begin{frame}[allowframebreaks]{Masked Self-Attention Layer}
+    \begin{columns}
+    \begin{column}{0.6\textwidth}
+        \begin{figure}
+            \flushleft
+            \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{images/transformers/slide_46_1_img.jpg}
+        \end{figure}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{itemize}
+            \item Prevents each position from attending to subsequent (future) positions.
+            \item Achieved by setting (manually) alignment scores of future tokens to $-\infty$ before softmax.
+            \item Ensures predictions for position $i$ depend only on positions $\leq i$.
+        \end{itemize}
+    \end{column}
+    \end{columns}
+\end{frame}

@@ -1,0 +1,32 @@
+\begin{frame}[allowframebreaks]{RNNs: Introduction}
+    \textbf{Definition:} Recurrent Neural Networks (RNNs) are neural networks with looping mechanisms that allow them to retain memory of previous inputs.
+
+    \vspace{0.5em}
+    \textbf{Core Components:}
+    \begin{itemize}
+        \item \textbf{Hidden state:} Represents context from prior time steps.
+        \item \textbf{Recurrence relation:} Updates the hidden state using the current input and the previous state:
+        \[
+            h_t = \sigma(W_h h_{t-1} + W_x x_t + b)
+        \]
+        where $h_t$ is the hidden state at time $t$, $x_t$ is the input at time $t$, $W_h$ and $W_x$ are weight matrices, $b$ is the bias, and $\sigma$ is an activation function.
+    \end{itemize}
+
+    \vspace{0.5em}
+    \textbf{Applications:} Sentiment analysis, speech recognition, DNA sequencing, and more.
+
+    \framebreak
+
+    \textbf{RNN Step-by-Step:}
+    \begin{itemize}
+        \item \textbf{Unfolding:} Processes sequences step-by-step, sharing weights across time.
+        \begin{itemize}
+            \item \textbf{Example:} Predicting the next word in ``Apple is \_\_'' using stored context.
+        \end{itemize}
+        \item \textbf{Training:}
+        \begin{itemize}
+            \item \textbf{Backpropagation Through Time (BPTT):} Adjusts weights by unrolling the network over time.
+            \item \textbf{Challenges:} Vanishing/exploding gradients due to long sequences.
+        \end{itemize}
+    \end{itemize}
+\end{frame}

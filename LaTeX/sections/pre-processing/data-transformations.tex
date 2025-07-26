@@ -1,0 +1,23 @@
+% Table of Contents
+\begin{frame}[allowframebreaks]{Data transformations}
+    \begin{itemize}
+        \item Machine learning models make a lot of assumptions about the data
+        \item In reality, these assumptions are often violated
+        \item We build pipelines that transform the data before feeding it to the learners
+              \begin{itemize}
+                  \item Scaling (or other numeric transformations)
+                  \item Encoding (convert categorical features into numerical ones)
+                  \item Automatic feature selection
+                  \item Feature engineering (e.g. binning, polynomial features,...)
+                  \item Handling missing data
+                  \item Handling imbalanced data
+                  \item Dimensionality reduction (e.g. PCA)
+                  \item Learned embeddings (e.g. for text)
+              \end{itemize}
+        \item Seek the best combinations of transformations and learning methods
+              \begin{itemize}
+                  \item Often done empirically, using cross-validation
+                  \item Make sure that there is no data leakage during this process!
+              \end{itemize}
+    \end{itemize}
+\end{frame}

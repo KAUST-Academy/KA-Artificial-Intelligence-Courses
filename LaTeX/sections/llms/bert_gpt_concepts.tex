@@ -1,0 +1,53 @@
+\section{BERT and GPT Concepts}
+\begin{frame}[allowframebreaks]{BERT and GPT Concepts}
+    \begin{itemize}
+        \item \textbf{BERT (Bidirectional Encoder Representations from Transformers)}
+        \begin{itemize}
+            \item Uses transformer encoder only.
+            \item Trained with Masked Language Modeling (MLM).
+            \item \textbf{Bidirectional:} Considers both left and right context.
+            \item Fine-tuned for tasks like QA, classification.
+            \item \textbf{Architecture:}
+            \begin{itemize}
+                \item Layers of encoder blocks.
+                \item Positional encodings added to embeddings.
+                \item Self-attention heads capture dependencies.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\framebreak
+
+    \begin{itemize}
+        \item \textbf{GPT (Generative Pre-trained Transformer)}
+        \begin{itemize}
+            \item Uses transformer decoder only.
+            \item Trained with next-token prediction.
+            \item \textbf{Unidirectional:} Considers left context only.
+            \item Fine-tuned for text generation, dialogue systems.
+            \item \textbf{Architecture:}
+            \begin{itemize}
+                \item Layers of decoder blocks.
+                \item Causal masking to prevent future token access.
+                \item Self-attention heads capture sequential dependencies.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\framebreak
+    \begin{itemize}
+        \item \textbf{Key Differences:}
+    \end{itemize}
+    \begin{table}[h!]
+        \centering
+        \renewcommand{\arraystretch}{1.8}
+        \begin{tabular}{@{} p{0.18\textwidth} p{0.4\textwidth} p{0.4\textwidth} @{}}
+            \hline
+            \textbf{Feature} & \textbf{BERT} & \textbf{GPT} \\
+            \hline
+            Directionality & Bidirectional & Unidirectional \\
+            Objective & Masked Language Modeling (MLM) & Causal Language Modeling (CLM) \\
+            Output & Contextual embeddings & Text generation \\
+            Usage & Downstream tasks (e.g., classification, QA) & Generation, few-shot learning \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}

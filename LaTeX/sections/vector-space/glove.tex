@@ -1,0 +1,40 @@
+\section{GloVe – Global Vectors}
+\begin{frame}{}
+    \LARGE GloVe – Global Vectors
+\end{frame}
+
+\begin{frame}[allowframebreaks]{GloVe – Global Vectors}
+    \textbf{Proposed by:} Pennington et al., 2014
+
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Combines global matrix factorization with local context windows.
+        \item Captures co-occurrence statistics of words across entire corpus.
+        \item Embeddings reflect ratios of co-occurrence probabilities.
+    \end{itemize}
+
+\framebreak
+    \textbf{Loss function:}
+    \[
+        J = \sum_{i,j=1}^{V} f(P_{ij}) \left( w_i^\top \tilde{w}_j + b_i + \tilde{b}_j - \log X_{ij} \right)^2
+    \]
+    where:
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item $X_{ij}$: number of times word $j$ occurs in the context of word $i$
+        \item $P_{ij}$: probability of word $j$ in the context of $i$
+        \item $w_i, \tilde{w}_j$: word and context word vectors
+        \item $b_i, \tilde{b}_j$: bias terms
+        \item $f$: weighting function
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1356/0*9Iv21BdqWLn54jIk.jpeg}{images/vector-space/glove-2.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://www.researchgate.net/publication/357321933/figure/fig1/AS:1156544456589312@1652753094091/Framework-for-constructing-Global-Vectors-for-Word-Representation-GloVe-models-and.png}{images/vector-space/glove-1.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\end{frame}

@@ -1,0 +1,33 @@
+\section{Query, Key, Value (QKV)}
+\begin{frame}{Query, Key, Value (QKV)}
+    \begin{itemize}
+        \item \textbf{Query:} What you want (the search)
+        \item \textbf{Key:} Index of content (where to look)
+        \item \textbf{Value:} Actual content (what you get)
+    \end{itemize}
+
+    \begin{block}{Intuition}
+    Think of QKV like a search engine:
+    \begin{itemize}
+        \item \textbf{Query (Q):} Comes from the current decoder state (or token)
+        \item \textbf{Key (K), Value (V):} Come from the encoder (or input sequence)
+    \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{QKV – Formulation}
+    \textbf{Given:}
+    \begin{itemize}
+        \item Input sequence $\mathbf{X}$
+    \end{itemize}
+    \textbf{Linear projections:}
+    \begin{align*}
+        \mathbf{Q} &= \mathbf{X} \mathbf{W}_Q \\
+        \mathbf{K} &= \mathbf{X} \mathbf{W}_K \\
+        \mathbf{V} &= \mathbf{X} \mathbf{W}_V
+    \end{align*}
+    \textbf{Attention:}
+    \begin{align*}
+        \text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \mathrm{softmax}\left( \frac{\mathbf{Q} \mathbf{K}^\top}{\sqrt{d_k}} \right) \mathbf{V}
+    \end{align*}
+\end{frame}

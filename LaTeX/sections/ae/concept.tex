@@ -1,0 +1,27 @@
+\begin{frame}[allowframebreaks]{Autoencoders}
+\begin{itemize}
+    \item Family of neural networks for which the input is the same as the output. They work by compressing the input into a latent-space representation, and then reconstructing the output from this representation.
+    \item The idea is to project the input into a latent space and then reconstruct the input from that latent space representation
+    \item Consist of two parts: Encoder and decode.
+    \begin{itemize}
+        \item \textbf{Encoder} projects the input to a latent space $Z$ (compresses the input into a lower-dimensional representation). 
+        \item \textbf{Decoder} takes the encoded embedding vector and reconstructs the input from it.
+    \item We also use altered versions of input as output which can be even more interesting.
+    \end{itemize}
+\end{itemize}
+
+\framebreak
+
+\begin{itemize}
+    \item \textbf{Bottleneck}
+    \begin{itemize}
+        \item The central, compressed layer that forces the network to learn the most important features.
+        \item Introduces a constraint to avoid learning a trivial identity function.
+    \end{itemize}
+    \item \textbf{Loss Function}
+    \begin{itemize}
+        \item Usually \textbf{Mean Squared Error (MSE)} between the input and the reconstructed output.
+        \item Other losses (e.g., binary cross-entropy, KL divergence) can be used depending on the application.
+    \end{itemize}
+\end{itemize}
+\end{frame}

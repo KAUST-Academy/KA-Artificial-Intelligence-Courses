@@ -1,0 +1,26 @@
+\subsection{YOLOv4}
+\begin{frame}{}
+    \LARGE Object Detection: \textbf{YOLOv4}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{YOLOv4}
+    \begin{figure}
+        \centering
+        \includegraphics[width=1.0\textwidth,height=0.9\textheight,keepaspectratio]{images/object-detect/yolo-v4.png}
+    \end{figure}
+\framebreak
+    \begin{itemize}
+        \item \textbf{YOLOv3 (2018):}
+        \begin{itemize}
+            \item Uses Darknet-53 backbone (deeper, more powerful CNN)
+            \item Multi-scale detection via Feature Pyramid Networks (FPN)
+            \item Achieves $\sim$80\% mAP on COCO dataset
+            \item Improved small-object detection compared to previous YOLO versions
+        \end{itemize}
+        \item \textbf{Limitations:}
+        \begin{itemize}
+            \item Still misses some overlapping objects
+            \item Less accurate than two-stage detectors (e.g., Faster R-CNN)
+        \end{itemize}
+    \end{itemize}
+\end{frame}

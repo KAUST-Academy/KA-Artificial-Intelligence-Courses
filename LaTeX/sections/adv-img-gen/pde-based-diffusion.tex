@@ -1,0 +1,39 @@
+\begin{frame}{}
+    \LARGE Advanced Diffusion Models: \textbf{PDE-based Diffusion Models}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{PDE-based Diffusion Models}
+    \begin{itemize}
+        \item Leverage diffusion models, originally for image generation, to solve and analyze PDEs.
+        \item Learn complex PDE relationships by adding noise to solutions and reversing the process.
+        \item Effective for handling incomplete or uncertain data.
+        \item Valuable in scientific and engineering applications.
+    \end{itemize}
+
+    \framebreak
+    % \textbf{Key Concepts}
+    % \begin{itemize}
+    %     \item \textbf{PDEs:} Partial Differential Equations, fundamental in modeling physical phenomena.
+    %     \item \textbf{Diffusion Process:} Gradually adds noise to PDE solutions, then learns to reverse this process.
+    %     \item \textbf{Data Handling:} Can work with incomplete or noisy data, making it robust for real-world applications.
+    % \end{itemize}
+
+    \textbf{Core Idea}
+    \begin{itemize}
+        \item Diffusion models transform data into a simple distribution (e.g., Gaussian noise) via a forward process.
+        \item A reverse process is learned to reconstruct the original data from noise.
+        \item For PDEs, the model maps input or boundary conditions to PDE solutions, capturing the equation's dynamics.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Why Use Diffusion Models for PDEs?}
+    \begin{itemize}
+        \item \textbf{Generative Solutions:} Can produce multiple plausible PDE solutions, useful under uncertainty or incomplete information.
+        \item \textbf{Uncertainty Modeling:} Capture a distribution of possible solutions, not just a single answer.
+        \item \textbf{Partial Data Learning:} Train effectively on datasets with missing or incomplete data, suitable for real-world scenarios.
+        \item \textbf{Flexibility:} Adaptable to both forward (solving PDEs) and inverse (parameter estimation) problems.
+    \end{itemize}
+\end{frame}
+
+\input{sections/adv-img-gen/pde-based/diffusion-pde}
+

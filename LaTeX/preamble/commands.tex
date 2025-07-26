@@ -10,6 +10,14 @@
 \newcommand{\empy}[1]{{\color{darkorange}\emph{#1}}}
 \newcommand{\empr}[1]{{\color{blue}\emph{#1}}}
 
+\newcommand{\convertimage}[3]{%
+  \IfFileExists{#2}{}{%
+    \immediate\write18{convert "#1" "#2"}%
+    \immediate\write18{rm -f temp_image_download}%
+  }%
+  \includegraphics[#3]{#2}%
+}
+
 % A command to fetch an image via curl if it doesn't yet exist
 \newcommand{\fetchimage}[2]{%
   \IfFileExists{#1}{}{%

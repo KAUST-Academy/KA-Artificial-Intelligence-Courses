@@ -1,0 +1,28 @@
+\section{Encoder-Decoder Architecture}
+\begin{frame}
+    \frametitle{Encoder-Decoder Architecture}
+    \begin{itemize}
+        \item \textbf{Encoder:} Stack of self-attention and feed-forward (FF) layers.
+        \item \textbf{Decoder:} Adds masked self-attention and encoder-decoder attention on top of FF layers.
+        \item \textbf{Applications:} Widely used in tasks like translation, summarization, and more.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Encoder-Only Transformers}
+    \begin{itemize}
+        \item \textbf{Example:} BERT
+        \item Only the encoder stack is used.
+        \item \textbf{Applications:} Classification, question answering, embeddings.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Decoder-Only Transformers}
+    \begin{itemize}
+        \item \textbf{Example:} GPT, LLaMA
+        \item Uses only the decoder block.
+        \item \textbf{Masked self-attention (causal):} Each token can only attend to previous tokens.
+        \item \textbf{Applications:} Language modeling, text generation.
+    \end{itemize}
+\end{frame}

@@ -1,0 +1,24 @@
+\section{Evidence Lower Bound (ELBO) \& Variational Inference}
+\begin{frame}{}
+    \LARGE Diffusion Models: \textbf{Evidence Lower Bound (ELBO) \& Variational Inference}
+\end{frame}
+
+\begin{frame}{ELBO \& Variational Inference}
+    \begin{itemize}
+        \item \textbf{Direct maximization of the marginal likelihood $p(\mathbf{x})$ is often intractable.}
+        \item<2-> \textbf{Solution:} Use the \textit{Evidence Lower Bound} (ELBO) as a tractable proxy objective:
+        \begin{equation*}
+            \log p(\mathbf{x}) \geq \mathbb{E}_{q(\mathbf{z}|\mathbf{x})} \left[ \log \frac{p(\mathbf{x}, \mathbf{z})}{q(\mathbf{z}|\mathbf{x})} \right] = \text{ELBO}
+        \end{equation*}
+        \item<3-> \textbf{ELBO Decomposition:}
+        \begin{itemize}
+            \item \textbf{Reconstruction term:} Measures how well the model can reconstruct the data $\mathbf{x}$ from the latent variables $\mathbf{z}$.
+            \item \textbf{KL divergence:} Penalizes the difference between the approximate posterior $q(\mathbf{z}|\mathbf{x})$ and the true/model prior $p(\mathbf{z})$.
+        \end{itemize}
+        \item<4-> The full training objective is derived from ELBO:
+
+        $\mathcal{L}\text{ELBO} = \sum_t \mathbb{E}[D_{KL}(q(x_{t-1}|x_t, x_0) \| p_\theta(x_{t-1}|x_t))]$
+
+        \item<5-> \textbf{Training:} Maximize the ELBO to train the model, which encourages both accurate reconstruction and regularization of the latent space.
+    \end{itemize}
+\end{frame}

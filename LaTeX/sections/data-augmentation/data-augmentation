@@ -1,0 +1,138 @@
+\begin{frame}{Data Augmentation}
+    \begin{itemize}
+        \item Technique to increase the diversity of training data without collecting new data
+        \item Commonly used in image, text, and audio processing
+        \item Helps reduce overfitting and improve generalization
+        \item Especially useful for deep learning models
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Data Augmentation}
+    \begin{center}
+        \includegraphics[width=\linewidth]{images/data-augmentation/data-augmentation-1.png}
+    \end{center}
+\end{frame}
+
+
+\begin{frame}{Data Augmentation}
+    \begin{center}
+        \includegraphics[width=0.9\linewidth]{images/data-augmentation/data-augmentation-2}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Data Augmentation}
+    \begin{columns}
+        \begin{column}{0.45\textwidth}
+            \begin{itemize}
+                \item Change the pixels without changing the label
+                \item Train on transformed data
+                \item \textbf{VERY} widely used
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.55\textwidth}
+            \includegraphics[width=\linewidth]{images/data-augmentation/data-augmentation-3}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Data Augmentation}
+    \begin{columns}
+        \column{0.4\textwidth}
+        \begin{itemize}
+            \item[] 1. Horizontal flips
+        \end{itemize}
+
+        \column{0.6\textwidth}
+        \includegraphics[width=\linewidth]{images/data-augmentation/data-augmentation-4}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Data Augmentation}
+    \begin{columns}
+        \column{0.6\textwidth}
+        \begin{itemize}
+            \item[] 2. Random crops/scales
+        \end{itemize}
+        \vspace{0.2cm}
+        \textbf{Training}: sample random crops / scales \\
+        ResNet:
+        \begin{enumerate}
+            \item Pick random L in range [256, 480]
+            \item Resize training image, short side = L
+            \item Sample random 224 × 224 patch
+        \end{enumerate}
+        \vspace{0.2cm}
+        \textbf{Testing}: average a fixed set of crops \\
+        ResNet:
+        \begin{enumerate}
+            \item Resize image at 5 scales: \{224, 256, 384, 480, 640\}
+            \item For each size, use 10 224 × 224 crops: 4 corners + center, + flips
+        \end{enumerate}
+
+        \column{0.4\textwidth}
+        \includegraphics[width=\linewidth]{images/data-augmentation/data-augmentation-5}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{Data Augmentation}
+    \begin{columns}
+        \column{0.5\textwidth}
+        3. Color jitter
+
+        \vspace{0.3cm}
+        \textbf{Simple}: \\
+        Randomly jitter contrast
+
+        \vspace{1cm}
+        \includegraphics[width=0.9\linewidth]{images/data-augmentation/data-augmentation-6}
+
+        \column{0.5\textwidth}
+        \textbf{Complex}:
+        \begin{enumerate}
+            \item Apply PCA to all [R, G, B] pixels in training set
+            \item Sample a “color offset” along principal component directions
+            \item Add offset to all pixels of a training image
+        \end{enumerate}
+        \vspace{0.2cm}
+        \scriptsize (As seen in \textit{[Krizhevsky et al. 2012]}, ResNet, etc)
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Data Augmentation}
+4. Get creative!
+
+\vspace{0.5cm}
+Random mix/combinations of:
+\begin{itemize}
+    \item translation
+    \item rotation
+    \item stretching
+    \item shearing,
+    \item lens distortions, \dots\ (go crazy)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Data Augmentation: Takeaway}
+\vspace{1cm}
+\begin{itemize}
+    \item Simple to implement, use it
+    \item Especially useful for small datasets
+    \item Fits into framework of noise / marginalization
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}[allowframebreaks]{References}
+\begin{thebibliography}{99}
+
+\bibitem{cs231n}
+Stanford University. \emph{CS231n: Convolutional Neural Networks for Visual Recognition.} 2024. \href{https://cs231n.stanford.edu/}{https://cs231n.stanford.edu/}.
+
+\end{thebibliography}
+\end{frame}
+

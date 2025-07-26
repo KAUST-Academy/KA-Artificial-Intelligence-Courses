@@ -1,0 +1,97 @@
+\section{Text-Conditioned Generation}
+\begin{frame}{}
+    \LARGE Text-Conditioned Generation
+\end{frame}
+
+\begin{frame}{Text-to-Image Generation}
+    \begin{itemize}
+        \item Text-to-image generation involves creating images from textual descriptions.
+        \item Applications include art generation, content creation, and visual storytelling.
+        \item Key challenges:
+        \begin{itemize}
+            \item Ensuring high fidelity to the text description.
+            \item Maintaining diversity in generated images.
+            \item Handling complex and abstract descriptions.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Overview of Text-Conditioned Generation}
+\begin{frame}[allowframebreaks]{Text Conditioning Strategies}
+    \begin{itemize}
+        \item \textbf{Concatenation of Embeddings:}
+        \begin{itemize}
+            \item Combine text and image embeddings before feeding them into the generative model.
+            \item Simple and effective for early fusion of modalities.
+        \end{itemize}
+        \item \textbf{Cross-Attention in Transformer Layers:}
+        \begin{itemize}
+            \item Use cross-attention mechanisms to allow the model to focus on relevant parts of the text while generating images.
+            \item Enables fine-grained alignment between text and image features.
+        \end{itemize}
+        \item \textbf{Classifier-Free Conditioning:}
+        \begin{itemize}
+            \item Train the model with and without conditioning information.
+            \item Allows flexible control over the influence of text during generation.
+        \end{itemize}
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://www.researchgate.net/publication/370338867/figure/fig2/AS:11431281154030538@1682653188871/A-visualization-of-our-conditioning-strategies-We-consider-three-conditioning-methods.png}{images/vision+text/text-conditioning-strategy.png}{width=1\textwidth,height=0.8\textheight,keepaspectratio}
+        \caption*{A visualization of text conditioning strategies in text-to-image generation.}
+    \end{figure}
+\end{frame}
+
+\subsection{Prompt Engineering}
+\begin{frame}[allowframebreaks]{Prompt Engineering}
+    \begin{itemize}
+        \item Crafting effective prompts is crucial for controlling the output of text-to-image models.
+        \item Well-designed prompts can improve image quality, relevance, and adherence to user intent.
+        \item Key aspects:
+        \begin{itemize}
+            \item \textbf{Style Control:} Specify artistic styles (e.g., ``in the style of Van Gogh'').
+            \item \textbf{Object Presence:} Clearly mention desired objects and their attributes.
+            \item \textbf{Layout:} Indicate spatial relationships (e.g., ``a cat sitting on a chair'').
+        \end{itemize}
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1400/1*GG8LmLk1vgxYW4QkivDE1w.png}{images/vision+text/prompt-engg-technique.png}{width=1\textwidth,height=0.8\textheight,keepaspectratio}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Prompt Engineering Examples}
+    \begin{itemize}
+        \item \textbf{Midjourney:} \texttt{``A futuristic cityscape at sunset, vibrant colors, ultra-detailed, digital art''}
+        \item \textbf{DALL-E:} \texttt{``An armchair in the shape of an avocado''}
+        \item \textbf{SDXL:} \texttt{``A portrait of a medieval knight, oil painting, dramatic lighting''}
+    \end{itemize}
+    \vspace{1em}
+    \begin{itemize}
+        \item Experimenting with prompt phrasing can lead to diverse and creative outputs.
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1400/1*4NmpCBpI8N3p1oYiknVZGA.jpeg}{images/vision+text/midjourney-prompt-engg.png}{width=1\textwidth,height=0.8\textheight,keepaspectratio}
+        \caption*{An advanced guide to writing prompts for Midjourney.}
+    \end{figure}
+\end{frame}
+
+\subsection{Challenges in Conditioning}
+\begin{frame}[allowframebreaks]{Challenges in Conditioning}
+    \begin{itemize}
+        \item \textbf{Ambiguity in Natural Language:} Text descriptions can be vague or open to multiple interpretations, making it difficult for models to generate the intended image.
+        \item \textbf{Alignment with Low-Level Image Details:} Ensuring that fine-grained details in the image match the textual description remains a significant challenge.
+        \item \textbf{Long Prompts and Hallucinations:} Handling lengthy or complex prompts can lead to hallucinated content or loss of important details in the generated images.
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://gsdcdata.s3.amazonaws.com/gsdc/image/challenges-occur-in-prompt-engineering.png}{images/vision+text/prompt-engg-challenge-solution.png}{width=1\textwidth,height=0.8\textheight,keepaspectratio}
+        \caption*{Some Prompt Engineering Challenges and Their Solutions.}
+    \end{figure}
+\end{frame}

@@ -1,0 +1,79 @@
+\subsection{Pix2Pix GANs}
+\begin{frame}{}
+    \LARGE GAN Variant: \\[1.5ex] \textbf{Pix2Pix GANs}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Pix2Pix GANs}
+    \textbf{Motivation:}
+
+    \begin{itemize}
+        \item Many computer vision tasks require translating one type of image to another:
+        \begin{itemize}
+            \item Sketch $\rightarrow$ Photo
+            \item Day $\rightarrow$ Night
+            \item Black \& white $\rightarrow$ Color
+            \item Aerial photo $\rightarrow$ Map
+        \end{itemize}
+        \item Traditional methods rely on paired datasets (input-output examples), manual labeling, or hand-crafted heuristics.
+        \item Generative Adversarial Networks (GANs) have shown great success in generating realistic images.
+        \item Conditional GANs (cGANs) extend GANs to perform image-to-image translation by conditioning on input images.
+    \end{itemize}
+\framebreak
+    \textbf{What is Pix2Pix?}
+
+    \begin{itemize}
+        \item Pix2Pix is a Conditional GAN (cGAN) framework for supervised image-to-image translation.
+        \item Introduced in the paper: \textit{Image-to-Image Translation with Conditional Adversarial Networks} by Isola et al., 2017.
+    \end{itemize}
+\framebreak
+    \textbf{Architecture:}
+    \begin{itemize}
+        \item \textbf{Generator (G):} U-Net (encoder-decoder with skip connections) that transforms the input image (e.g., sketch) into the target image (e.g., photo).
+        \item \textbf{Discriminator (D):} PatchGAN classifier that determines whether a patch of the image is real or fake, enforcing local realism.
+    \end{itemize}
+
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://www.researchgate.net/publication/383558465/figure/fig3/AS:11431281274620774@1725036289021/Schema-of-Pix2Pix-GAN-architecture.jpg}{images/gan/pix2pix-architecture.png}{width=1\textwidth,height=0.55\textheight,keepaspectratio}
+        % \caption*{Pix2Pix GAN architecture. The generator transforms an input image to a target image, while the discriminator evaluates the realism of the generated output.}
+    \end{figure}
+
+    \textbf{How It Works:}
+    \begin{itemize}
+        \item The generator learns to map an input image to a target image.
+        \item The discriminator distinguishes between:
+        \begin{itemize}
+            \item Real pairs: (input, real output)
+            \item Fake pairs: (input, generated output)
+        \end{itemize}
+        \item \textbf{Loss Function:}
+        \begin{itemize}
+            \item \textbf{Adversarial Loss:} Encourages the output to look realistic.
+            \item \textbf{L1 Loss:} Encourages the output to be close to the target image (pixel-wise similarity).
+        \end{itemize}
+        \item \textbf{Total Loss:} Adversarial Loss $+$ $\lambda$ $\times$ L1 Loss \\
+        ($\lambda$ is a weight to balance realism and similarity)
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://www.researchgate.net/publication/370213457/figure/fig3/AS:11431281153057998@1682322888544/a-Schematic-of-the-pix2pix-GAN-architecture-for-reconstructing-image-from-noisy-power.png}{images/gan/pix2pix-result-0.png}{width=1\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Pix2Pix GANs: Results}
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://phillipi.github.io/pix2pix/images/edges2cats.jpg}{images/gan/pix2pix-result-1.png}{width=1\textwidth,height=0.9\textheight,keepaspectratio,trim={0 {.5\textheight} 0 0},clip}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://www.tensorflow.org/images/gan/pix2pix_1.png}{images/gan/pix2pix-result-2.png}{width=1\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://machinelearningmastery.com/wp-content/uploads/2019/05/Pix2Pix-GAN-Translation-of-Semantic-Images-to-Photographs-of-a-Cityscape.png}{images/gan/pix2pix-result-3.png}{width=1\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\end{frame}

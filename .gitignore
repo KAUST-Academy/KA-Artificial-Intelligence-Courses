@@ -166,3 +166,6 @@ archived/
 # Local development files
 scripts/python/latex
 scripts/python/pptx
+
+# Lectures, comment it out after getting decent internet to push
+/Lectures

@@ -1,0 +1,31 @@
+\section{Multi-Head Attention}
+\begin{frame}
+  \frametitle{Multi-Head Attention}
+  \begin{itemize}
+    \item Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions.
+    \item It consists of multiple attention heads, each with its own set of parameters.
+    \item The outputs of all heads are concatenated and linearly transformed.
+  \end{itemize}
+  \textbf{Formula:}
+  \[
+  \text{MultiHead}(Q, K, V) = \text{Concat}\left(\text{head}_1, \ldots, \text{head}_h\right) W^O
+  \]
+  where each head is defined as:
+  \[
+  \text{head}_i = \text{Attention}(Q W_i^Q, K W_i^K, V W_i^V)
+  \]
+  \begin{itemize}
+    \item $W_i^Q$, $W_i^K$, and $W_i^V$ are learned projection matrices for each head.
+    \item $W^O$ is the output projection matrix that combines the outputs of all heads.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Benefits of Multi-Head Attention}
+    \begin{itemize}
+        \item Enables the model to jointly attend to information from different representation subspaces at different positions.
+        \item Captures various linguistic and syntactic patterns by using multiple attention heads.
+        \item Improves the model's ability to represent complex relationships in the data.
+        \item Provides richer and more diverse feature representations.
+    \end{itemize}
+\end{frame}

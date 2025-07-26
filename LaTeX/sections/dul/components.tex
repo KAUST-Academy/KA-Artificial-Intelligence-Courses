@@ -1,0 +1,42 @@
+% Components of Unsupervised Learning
+\begin{frame}[allowframebreaks]{Components of Unsupervised Learning}
+\begin{itemize}
+    \item \textbf{Data}: Unlabeled data, e.g., images, text, or sensor readings.
+    \item \textbf{Model}: A mathematical representation of the data, e.g., a mixture model or a neural network.
+    \item \textbf{Objective function}: A measure of how well the model fits the data, e.g., likelihood or reconstruction error.
+    \item \textbf{Optimization algorithm}: An algorithm to minimize the objective function, e.g., gradient descent or expectation-maximization.
+    \item \textbf{Evaluation metrics}: Measures to assess the quality of the learned model, e.g., silhouette score or clustering accuracy.
+\end{itemize}
+\vspace{1em}
+\textbf{Applications}: Use cases for unsupervised learning, e.g., clustering, dimensionality reduction, or anomaly detection.
+
+\framebreak
+
+\fetchconvertimage{https://media.geeksforgeeks.org/wp-content/uploads/20231124111325/Unsupervised-learning.png}{images/dul/unsupervised.png}{width=1.05\textwidth,keepaspectratio}
+{\small \textit{Source: geeksforgeeks.org}}
+\end{frame}
+
+% Comparison with Supervised Learning
+\begin{frame}[fragile]{Supervised vs Unsupervised Learning}
+  \scriptsize  % or \footnotesize, \small, even \tiny if absolutely necessary :contentReference[oaicite:0]{index=0}
+  \begin{table}[h!]
+    \centering
+    \begin{tabular}{|p{2cm}|p{3cm}|p{3cm}|}
+      \hline
+      \textbf{Aspect}        & \textbf{Supervised Learning}                                              & \textbf{Unsupervised Learning}                                                                  \\
+      \hline
+      \textbf{Objective}     & Learn a function \(f\) from labeled input–output pairs.                  & Discover structure or representations in unlabeled data.                                          \\
+      \hline
+      \textbf{Evaluation}    & Accuracy, precision/recall on held‑out labels.                           & Clustering validity indices (e.g.\ silhouette), reconstruction error.                             \\
+      \hline
+      \textbf{Cost}          & Methods range from \(\mathcal O(n)\) to \(\mathcal O(n^3)\) per fit.     & k‑means \(\mathcal O(nkd)\), hierarchical \(\mathcal O(n^2)\), PCA \(\mathcal O(nd^2)\).         \\
+      \hline
+      \textbf{Labels/Clusters} & Fixed, known set of classes.                                           & Number of clusters unknown; must be chosen or inferred.                                           \\
+      \hline
+      \textbf{Output}        & Classifier or regressor for new inputs.                                  & Cluster assignments, embeddings, density models, or generative samples.                           \\
+      \hline
+    \end{tabular}
+    \caption{Key differences between Supervised and Unsupervised Learning}
+  \end{table}
+\end{frame}
+

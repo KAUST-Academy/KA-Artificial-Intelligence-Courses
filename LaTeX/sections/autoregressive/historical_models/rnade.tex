@@ -1,0 +1,58 @@
+\begin{frame}[allowframebreaks]{}
+    \large
+    \begin{itemize}
+        \item How to model continuous random variables $X_i \in \mathbb{R}$?
+        \item Solution: Let $\mathbf{\hat{x}}_i$ parameterize a continuous distribution.
+        \item This was introduced in RNADE.
+        \item $\mathbf{\hat{x}}_i$ defines the mean and stddev of Gaussian Random Variable $(\mu^j_i, \sigma^j_i)$
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{RNADE – Real-valued NADE}
+
+    \textbf{Introduced by:} Uria et al. (2013)
+
+    \vspace{1em}
+    RNADE (Real-valued Neural Autoregressive Density Estimator) extends NADE to handle continuous data.
+
+    \begin{itemize}
+        \item \textbf{Extension:} Uses a mixture of Gaussians for each conditional distribution.
+        \item \textbf{Conditional Density:}
+        \[
+            p(x_i \mid x_{<i}) = \sum_{k=1}^K \pi_k \, \mathcal{N}(x_i \mid \mu_k, \sigma_k^2)
+        \]
+        \item The parameters of each mixture component (weights $\pi_k$, means $\mu_k$, variances $\sigma_k^2$) are produced by a neural network conditioned on $x_{<i}$.
+    \end{itemize}
+
+    \framebreak
+    \textbf{Formulation:}
+    \begin{itemize}
+        \item The joint probability is factorized as:
+        \[
+            p(\mathbf{x}) = \prod_{i=1}^n p(x_i \mid x_{<i})
+        \]
+        \item Each conditional is modeled as:
+        \[
+            p(x_i \mid x_{<i}) = \sum_{k=1}^K \pi_k(x_{<i}) \, \mathcal{N}(x_i \mid \mu_k(x_{<i}), \sigma_k^2(x_{<i}))
+        \]
+        where $\pi_k$, $\mu_k$, and $\sigma_k$ are outputs of a neural network conditioned on $x_{<i}$.
+    \end{itemize}
+
+    \textbf{Applications:}
+    \begin{itemize}
+        \item Density estimation for real-valued data (e.g., audio, speech).
+    \end{itemize}
+    
+    \framebreak
+    \textbf{Pros:}
+    \begin{itemize}
+        \item Powerful for modeling complex continuous distributions.
+        \item Influential precursor to more advanced autoregressive flows.
+    \end{itemize}
+
+    \textbf{Cons:}
+    \begin{itemize}
+        \item Still suffers from scalability issues with high-dimensional data.
+        \item Requires careful tuning of the number of mixture components.
+    \end{itemize}
+\end{frame}

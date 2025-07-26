@@ -1,0 +1,432 @@
+\section{Motivation}
+\begin{frame}{Motivation}
+    \begin{itemize}
+        \item Pre-trained LLMs are powerful but not aligned to specific use-cases or human preferences.
+        \item We need:
+        \begin{itemize}
+            \item Adaptability (domain tuning)
+            \item Alignment (user intention)
+            \item Efficiency (cost-effective methods)
+        \end{itemize}
+        \item Fine-tuning and RLHF bridge the gap between general intelligence and practical usability.
+    \end{itemize}
+
+    \textbf{Motivating Examples:}
+    \begin{itemize}
+        \item GPT-3 $\rightarrow$ InstructGPT
+        \item LLaMA $\rightarrow$ Alpaca, Vicuna
+        \item ChatGPT \& Claude $\rightarrow$ RLHF-tuned
+    \end{itemize}
+\end{frame}
+
+
+\section{Learning Outcomes}
+\begin{frame}{Learning Outcomes}
+    After this session, you will be able to:
+    \begin{itemize}
+        \item Explain and compare different fine-tuning methods for LLMs
+        \item Understand the pipeline of Supervised Fine-Tuning and RLHF
+        \item Describe PPO (Proximal Policy Optimization) and DPO (Direct Preference Optimization)
+        \item Apply Low-Rank Adaptation (LoRA) and Quantized LoRA for efficient tuning
+        \item Analyze trade-offs, limitations, and future directions of LLM adaptation
+    \end{itemize}
+\end{frame}
+
+\section{Fine-Tuning Methods for LLMs}
+\begin{frame}{}
+    \LARGE Fine-Tuning Methods for LLMs
+\end{frame}
+
+\subsection{Categories of Fine-Tuning}
+\begin{frame}{Categories of Fine-Tuning}
+    \begin{table}[]
+        \centering
+        \renewcommand{\arraystretch}{1.8}
+        \begin{tabular}{@{} p{0.2\textwidth} p{0.35\textwidth} p{0.2\textwidth}  p{0.25\textwidth} @{}}
+            \hline
+            \textbf{Method} & \textbf{Description} & \textbf{Parameters Updated} & \textbf{Efficiency} \\
+            \hline
+            Full Fine-Tuning & Retrain all model weights & All & ✗~Expensive \\
+            Adapter Tuning & Add small bottlenecks (e.g., Houlsby) & Few & ✓~Efficient \\
+            Prefix Tuning & Tune soft prompts & Few tokens & ✓~Efficient \\
+            LoRA / QLoRA & Low-rank decomposition of weight deltas & Very few & ✓✓~Very Efficient \\
+            Instruction Tuning & Fine-tune on instruction-following datasets & All or partial & ✓~ \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+
+\subsection{Full Fine-Tuning (FT)}
+\begin{frame}{Full Fine-Tuning (FT)}
+    \begin{itemize}
+        \item \textbf{Definition:} Fine-tune all parameters of the pre-trained model on downstream data.
+        \item \textbf{Historical Use:} Common in early GPT-2 and BERT applications.
+        \item \textbf{Pros:}
+        \begin{itemize}
+            \item Maximum flexibility and performance
+        \end{itemize}
+        \item \textbf{Cons:}
+        \begin{itemize}
+            \item Expensive (requires large compute resources)
+            \item Prone to catastrophic forgetting
+            \item Not efficient for large models
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Parameter-Efficient Fine-Tuning (PEFT)}
+\begin{frame}{Parameter-Efficient Fine-Tuning (PEFT)}
+    \begin{itemize}
+        \item \textbf{Key Idea:} Keep the base model frozen, tune only a small subset of parameters.
+        \item \textbf{Types:}
+        \begin{itemize}
+            \item Adapter Modules (Houlsby et al., 2019)
+            \item Prompt Tuning / Prefix Tuning
+            \item LoRA / QLoRA
+        \end{itemize}
+        \item \textbf{Benefits:}
+        \begin{itemize}
+            \item Enables multi-tasking and personalization
+            \item Suitable for low-resource adaptation
+            \item Reduces compute and memory requirements
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\section{Supervised Fine-Tuning (SFT)}
+\begin{frame}{}
+    \LARGE Supervised Fine-Tuning (SFT)
+\end{frame}
+
+
+\subsection{What is SFT?}
+\begin{frame}{What is Supervised Fine-Tuning (SFT)?}
+    \begin{itemize}
+        \item \textbf{Definition:} SFT is training on labeled instruction-response pairs.
+        \item \textbf{Example:}
+        \begin{itemize}
+            \item \textit{Prompt:} ``Explain black holes to a 5-year-old''
+            \item \textit{Response:} ``Black holes are like big vacuum cleaners in space\ldots''
+        \end{itemize}
+        \item \textbf{Objective:} Optimize the log-likelihood of the correct response given the prompt.
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Loss Function:}
+    \[
+        L_{\mathrm{SFT}} = -\sum_{t=1}^{T} \log p_{\theta}(y_t \mid y_{<t}, x)
+    \]
+    where $x$ is the prompt, $y$ is the response, and $T$ is the response length.
+\end{frame}
+
+
+\subsection{Datasets for SFT}
+\begin{frame}{Datasets for Supervised Fine-Tuning (SFT)}
+    \begin{itemize}
+        \item \textbf{Instructional datasets:}
+        \begin{itemize}
+            \item OpenAI: InstructGPT (Anthropic Helpfulness data)
+            \item Stanford Alpaca (52k GPT-3 generated instructions)
+            \item Dolly, ShareGPT, OASST, UltraChat
+        \end{itemize}
+        \item \textbf{Note:} Quality of supervision greatly affects model behavior.
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Limitations of SFT}
+\begin{frame}{Limitations of Supervised Fine-Tuning (SFT)}
+    \begin{itemize}
+        \item Cannot capture nuanced human preferences or values.
+        \item May reinforce existing biases or hallucinations present in the data.
+        \item Risk of overfitting, especially on synthetic or noisy datasets.
+        \item Often leads to safe but bland and generic responses.
+    \end{itemize}
+\end{frame}
+
+
+\section{RLHF — Reinforcement Learning with Human Feedback}
+\begin{frame}{}
+    \LARGE RLHF — Reinforcement Learning with Human Feedback
+\end{frame}
+
+
+\subsection{Why RLHF?}
+\begin{frame}{Why RLHF?}
+    \begin{itemize}
+        \item SFT doesn’t teach the model what humans prefer.
+        \item RLHF introduces reward learning and policy optimization.
+        \item Inspired by InstructGPT (Ouyang et al., 2022).
+    \end{itemize}
+\end{frame}
+
+\subsection{RLHF Pipeline}
+\begin{frame}{RLHF Pipeline Overview}
+    \begin{enumerate}
+        \item \textbf{Supervised Fine-Tuning (SFT):} Train the base model on instruction-response pairs.
+        \item \textbf{Reward Model (RM) Training:} Learn a reward function from human preference rankings.
+        \item \textbf{RL Optimization (e.g., PPO):} Optimize the language model to maximize the learned reward.
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{RLHF Pipeline}
+    \begin{itemize}
+        \item \textbf{Step 1: Collect Data}
+        \begin{itemize}
+            \item Collect human feedback on model outputs.
+            \item Use preference comparisons (A vs B) or ratings.
+        \end{itemize}
+        \item \textbf{Step 2: Train Reward Model}
+        \begin{itemize}
+            \item Train a reward model to predict human preferences.
+            \item Use supervised learning on feedback data.
+        \end{itemize}
+        \item \textbf{Step 3: Reinforcement Learning}
+        \begin{itemize}
+            \item Use the reward model to optimize the language model.
+            \item Apply policy optimization algorithms like PPO or DPO.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Reward Model (RM)}
+\begin{frame}{Reward Model (RM)}
+    \begin{itemize}
+        \item \textbf{Given:} Two responses $y_A$ and $y_B$ to the same prompt.
+        \item \textbf{Human Feedback:} Annotator selects which response is preferred.
+        \item \textbf{Learning:} The reward model $r_\phi$ is trained to assign higher scores to preferred responses.
+        \item \textbf{Pairwise Loss:}
+    \end{itemize}
+    \[
+        L_{\mathrm{RM}} = -\log \sigma\left(r_\phi(y_A) - r_\phi(y_B)\right)
+    \]
+    where $\sigma$ is the sigmoid function.
+    \begin{itemize}
+        \item The RM acts as a proxy for human judgment in downstream RL optimization.
+    \end{itemize}
+\end{frame}
+
+
+\subsection{RLHF Training (with PPO)}
+\begin{frame}{RLHF Training: Proximal Policy Optimization (PPO)}
+    \begin{itemize}
+        \item \textbf{Objective:} Maximize the reward given by the reward model (RM).
+        \item \textbf{Algorithm:} Proximal Policy Optimization (PPO) is used to update the language model.
+        \item \textbf{PPO Loss:}
+    \end{itemize}
+    \[
+        L_{\mathrm{PPO}} = \mathbb{E}\left[
+            \min \left(
+                r_t(\theta) \hat{A}_t,\;
+                \mathrm{clip}\left(r_t(\theta), 1 - \epsilon, 1 + \epsilon\right) \hat{A}_t
+            \right)
+        \right]
+    \]
+    where $r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{\mathrm{old}}}(a_t|s_t)}$ is the probability ratio, and $\hat{A}_t$ is the advantage estimate.
+    \begin{itemize}
+        \item \textbf{KL Penalty:} A KL-divergence penalty is added to keep the policy close to the base (SFT) model:
+    \end{itemize}
+    \[
+        L_{\mathrm{KL}} = \beta\, \mathrm{KL}\left(\pi_\theta \;\|\; \pi_{\mathrm{SFT}}\right)
+    \]
+    \begin{itemize}
+        \item This prevents the model from drifting too far from supervised behavior.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{PPO — Pros and Cons}
+    \begin{itemize}
+        \item[\checkmark] Stable optimization
+        \item[\checkmark] Encourages exploration
+        \item[\texttimes] Expensive (needs many rollouts)
+        \item[\texttimes] Sensitive to reward model errors
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Direct Preference Optimization (DPO)}
+\begin{frame}{Direct Preference Optimization (DPO)}
+    \begin{itemize}
+        \item \textbf{New method:} Bypasses RL and reward model training entirely.
+        \item \textbf{Key Idea:} Optimize the policy directly from human preference data.
+        \item \textbf{Reference:} Rafailov et al., 2023.
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{DPO Loss:}
+    \[
+        L_{\mathrm{DPO}} = \log \frac{
+            \exp\left(\beta \log \frac{\pi(y^+)}{\pi_0(y^+)}\right)
+        }{
+            \exp\left(\beta \log \frac{\pi(y^+)}{\pi_0(y^+)}\right) +
+            \exp\left(\beta \log \frac{\pi(y^-)}{\pi_0(y^-)}\right)
+        }
+    \]
+    where $y^+$ is the preferred response, $y^-$ is the dispreferred response, $\pi$ is the current policy, $\pi_0$ is the reference (SFT) policy, and $\beta$ is a temperature parameter.
+    \begin{itemize}
+        \item \textbf{Benefits:}
+        \begin{itemize}
+            \item Simpler and more stable than PPO
+            \item No need for reward model training or RL rollouts
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+
+\section{LoRA and Quantized LoRA}
+\begin{frame}{}
+    \LARGE LoRA and Quantized LoRA
+\end{frame}
+
+\subsection{What is LoRA?}
+\begin{frame}{What is LoRA?}
+    \begin{itemize}
+        \item \textbf{Key Idea:} Update low-rank matrices instead of full weights.
+        \item For a weight matrix $W \in \mathbb{R}^{d \times k}$:
+        \[
+            W' = W + \Delta W, \quad \Delta W = AB^T
+        \]
+        where $A \in \mathbb{R}^{d \times r}$, $B \in \mathbb{R}^{k \times r}$.
+        \item Only train $A, B$ $\rightarrow$ drastically reduces parameters.
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Benefits of LoRA}
+\begin{frame}{Benefits of LoRA}
+    \begin{itemize}
+        \item \textbf{Very lightweight:} Only 0.1\%--1\% of parameters are trainable.
+        \item \textbf{Hardware friendly:} Enables fine-tuning on consumer GPUs and even laptops.
+        \item \textbf{Modular:} Supports plug-and-play adapters for different tasks or users.
+        \item \textbf{Personalization:} Allows efficient user- or domain-specific adaptation.
+    \end{itemize}
+\end{frame}
+
+
+\subsection{What is QLoRA?}
+\begin{frame}{QLoRA — Quantized LoRA}
+    \begin{itemize}
+        \item \textbf{Key Idea:} Fine-tune large language models in 4-bit precision using LoRA adapters.
+        \item \textbf{Scalability:} Enables fine-tuning of 65B parameter models on a single 48GB GPU.
+        \item \textbf{Efficiency:} Highly memory-efficient with no significant performance loss (Dettmers et al., 2023).
+        \item \textbf{Techniques:}
+        \begin{itemize}
+            \item Double quantization
+            \item Paged optimizers
+            \item NF4 (NormalFloat 4-bit) quantization format
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Applications of LoRA / QLoRA}
+\begin{frame}{Applications of LoRA / QLoRA}
+    \begin{itemize}
+        \item \textbf{Instruction tuning for resource-constrained settings:}
+        \begin{itemize}
+            \item Enables fine-tuning large models on modest hardware (e.g., consumer GPUs, laptops).
+            \item Used for domain adaptation, personalization, and rapid prototyping.
+        \end{itemize}
+        \item \textbf{Popular fine-tuned models:}
+        \begin{itemize}
+            \item \textbf{Alpaca, Guanaco, Vicuna, Mistral:} All leverage LoRA/QLoRA for efficient instruction tuning.
+        \end{itemize}
+        \item \textbf{Model merging and compositionality:}
+        \begin{itemize}
+            \item Merge multiple LoRA adapters for multi-domain or multi-task capabilities.
+            \item Compose adapters for new tasks without retraining the base model.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\section{Limitations of Fine-Tuning and RLHF}
+\begin{frame}{}
+    \LARGE Limitations of Fine-Tuning and RLHF
+\end{frame}
+
+
+\begin{frame}{Limitations of Fine-Tuning and RLHF}
+    \begin{itemize}
+        \item \textbf{RLHF:}
+        \begin{itemize}
+            \item Reward models can be misaligned with true human preferences.
+            \item Training loops are computationally expensive and complex.
+        \end{itemize}
+        \item \textbf{DPO:}
+        \begin{itemize}
+            \item Still depends on high-quality human preference data.
+        \end{itemize}
+        \item \textbf{LoRA:}
+        \begin{itemize}
+            \item Only updates a small subset of parameters; may miss global interactions.
+        \end{itemize}
+        \item \textbf{Quantization:}
+        \begin{itemize}
+            \item Requires careful selection and tuning of quantization formats (e.g., NF4).
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\section{Future Directions}
+\begin{frame}{Future Directions}
+    \begin{itemize}
+        \item \textbf{RLAIF (RL with AI Feedback):} Automate human labelers using strong AI models for preference data.
+        \item \textbf{Constitutional AI:} Use rule-based alignment and self-critique to guide model behavior (e.g., Anthropic's approach).
+        \item \textbf{Open RLHF Datasets:} Promote better community sharing and reproducibility with open preference datasets.
+        \item \textbf{Multi-modal Alignment:} Extend alignment techniques to vision, audio, and code generation tasks.
+        \item \textbf{Reward Hacking Defense:} Develop robust reward functions to prevent models from exploiting reward loopholes.
+    \end{itemize}
+\end{frame}
+
+
+\section{Summary}
+\begin{frame}{Summary}
+    \begin{itemize}
+        \item Fine-tuning enables specialization and alignment of LLMs.
+        \item Supervised Fine-Tuning (SFT) is the foundational step.
+        \item RLHF incorporates human preference alignment using PPO.
+        \item DPO streamlines the process with a direct preference loss.
+        \item LoRA and QLoRA make adaptation efficient and accessible.
+        \item The field is rapidly evolving with ongoing innovation.
+    \end{itemize}
+\end{frame}
+
+
+\section*{References}
+\begin{frame}[allowframebreaks]{References}
+    \scriptsize
+    \begin{thebibliography}{99}
+        \bibitem{ouyang2022}
+        Ouyang, L., Wu, J., Jiang, X., et al. (2022). \emph{Training language models to follow instructions with human feedback}. InstructGPT. \url{https://arxiv.org/abs/2203.02155}
+
+        \bibitem{rafailov2023}
+        Rafailov, R., Metz, L., Ba, J., et al. (2023). \emph{Direct Preference Optimization: Your Language Model is Secretly a Reward Model}. \url{https://arxiv.org/abs/2305.18290}
+
+        \bibitem{dettmers2023}
+        Dettmers, T., Pagnoni, A., Holtzman, A., et al. (2023). \emph{QLoRA: Efficient Finetuning of Quantized LLMs}. \url{https://arxiv.org/abs/2305.14314}
+
+        \bibitem{bai2022}
+        Bai, Y., Kadavath, S., Kundu, S., et al. (2022). \emph{Training a Helpful and Harmless Assistant with RLHF}. \url{https://arxiv.org/abs/2204.05862}
+
+        \bibitem{zhang2022}
+        Zhang, S., Roller, S., Goyal, N., et al. (2022). \emph{OPT: Open Pre-trained Transformer Language Models}. \url{https://arxiv.org/abs/2205.01068}
+
+        \bibitem{hu2021}
+        Hu, E. J., Shen, Y., Wallis, P., et al. (2021). \emph{LoRA: Low-Rank Adaptation of Large Language Models}. \url{https://arxiv.org/abs/2106.09685}
+
+        \bibitem{anthropic2023}
+        Anthropic (2023). \emph{Constitutional AI: Harmlessness from AI Feedback}. \url{https://www.anthropic.com/}
+
+        \bibitem{hf-rlhf}
+        HuggingFace. \emph{RLHF Course}. \url{https://huggingface.co/learn/rlhf-course}
+
+        \bibitem{stanford-crfm}
+        Stanford CRFM. \emph{CRFM Slides}. \url{https://crfm.stanford.edu/}
+    \end{thebibliography}
+\end{frame}

@@ -1,0 +1,102 @@
+\section{Multimodal Models: Image and Video Captioning}
+\begin{frame}{}
+    \LARGE Image and Video Captioning: \textbf{Multimodal Models}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Multimodal Models}
+    \begin{itemize}
+        \item \textbf{Definition:} Multimodal models integrate visual and textual information to generate descriptive captions for images and videos.
+        \item \textbf{Challenges:}
+        \begin{itemize}
+            \item Ambiguity in visual content
+            \item Context understanding
+            \item Temporal dynamics in videos
+        \end{itemize}
+        \item \textbf{Applications:}
+        \begin{itemize}
+            \item Image captioning
+            \item Video captioning
+            \item Assistive technologies (e.g., for visually impaired)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection{Multimodal Representation Learning}
+\begin{frame}[allowframebreaks]{Multimodal Representation Learning}
+    \begin{itemize}
+        \item \textbf{Goal:} Learn shared representations for different modalities (e.g., images and text).
+        \item \textbf{Approach:} Map both images and text into a joint embedding space.
+        \item \textbf{Benefit:} Enables comparison and retrieval across modalities.
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1310/1*LEc2qQNO6Vumrv5lqSpuhA.png}{images/vision+text/multimodal.png}{width=\textwidth,height=0.78\textheight,keepaspectratio}
+        \caption*{Multimodal representation learning: mapping images and text into a joint embedding space.}
+    \end{figure}
+\end{frame}
+
+\subsection{Joint Embedding Spaces for Image-Text Pairs}
+\begin{frame}[allowframebreaks]{Joint Embedding Spaces for Image-Text Pairs}
+    \begin{itemize}
+        \item Images and their corresponding captions are projected into a common vector space.
+        \item Matching image-text pairs are close together; non-matching pairs are far apart.
+        \item Used in tasks like cross-modal retrieval and caption generation.
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://www.researchgate.net/publication/381470711/figure/fig2/AS:11431281252100467@1718596631792/Joint-embedding-space-of-text-and-image-representations-conceptually-similar-texts-and.png}{images/vision+text/joint_embedding.png}{width=\textwidth,height=0.78\textheight,keepaspectratio}
+        \caption*{Joint embedding space for image-text pairs: matching pairs are close, non-matching pairs are distant.}
+    \end{figure}
+\end{frame}
+
+\subsection{Contrastive Learning for Multimodal Models}
+\begin{frame}[allowframebreaks]{Contrastive Learning for Multimodal Models}
+    \begin{itemize}
+        \item \textbf{Contrastive Objective:} Pull matching image-text pairs together, push non-matching pairs apart.
+        \item \textbf{Popular Methods:} CLIP, ALIGN, etc.
+        \item \textbf{Loss Function:} Often uses InfoNCE or similar contrastive losses.
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://www.researchgate.net/publication/373488021/figure/fig1/AS:11431281184485352@1693365289660/Multimodal-Contrastive-Learning-Framework.ppm}{images/vision+text/contrastive_learning_multimodal.png}{width=\textwidth,height=0.78\textheight,keepaspectratio}
+        \caption*{Contrastive learning for multimodal models: aligning image-text pairs in a joint embedding space.}
+    \end{figure}
+\end{frame}
+
+\subsection{CLIP: Contrastive Language–Image Pretraining}
+\begin{frame}[allowframebreaks]{CLIP (Contrastive Language–Image Pretraining)}
+    \begin{itemize}
+        \item \textbf{Overview:} CLIP is a multimodal model trained to connect images and text using contrastive learning.
+        \item \textbf{Training Data:} 400 million image-text pairs collected from the internet.
+        \item \textbf{Architecture:}
+        \begin{itemize}
+            \item Separate Transformer encoders for images and text.
+            \item Both modalities are mapped into a shared embedding space.
+        \end{itemize}
+        \item \textbf{Contrastive Loss:} Uses dot-product similarity to align matching image-text pairs and separate non-matching pairs.
+        \item \textbf{Zero-shot Classification:} Enables classification of images without task-specific training by comparing image embeddings to text prompt embeddings.
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://production-media.paperswithcode.com/methods/3d5d1009-6e3d-4570-8fd9-ee8f588003e7.png}{images/vision+text/clip_architecture.png}{width=\textwidth,height=0.78\textheight,keepaspectratio}
+        \caption*{CLIP architecture: separate encoders for images and text, mapping both into a shared embedding space.}
+    \end{figure}
+\framebreak
+    \textbf{Why CLIP Matters:}
+        \begin{itemize}
+            \item \textbf{Open-vocabulary vision models:} CLIP can recognize and describe a wide range of concepts beyond fixed label sets.
+            \item \textbf{Robust to distribution shift:} Performs well on images from domains not seen during training.
+            \item \textbf{No task-specific training required:} Enables zero-shot learning for new tasks by leveraging text prompts.
+        \end{itemize}
+\framebreak
+    \textbf{Limitations of CLIP:}
+        \begin{itemize}
+            \item \textbf{Struggles with fine-grained details:} May fail to distinguish subtle differences between visually similar objects.
+            \item \textbf{Lacks true reasoning abilities:} Cannot perform complex reasoning or understand relationships beyond surface-level associations.
+            \item \textbf{Prone to dataset biases:} Inherits biases present in the large-scale web data used for training.
+        \end{itemize}
+\end{frame}

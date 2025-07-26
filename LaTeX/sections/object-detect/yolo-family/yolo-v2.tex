@@ -1,0 +1,20 @@
+\subsection{YOLOv2 / YOLO9000}
+\begin{frame}{}
+    \LARGE Object Detection: \textbf{YOLOv2 / YOLO9000}
+\end{frame}
+
+\begin{frame}{YOLOv2 / YOLO9000 (2017)}
+    \begin{itemize}
+        \setlength{\itemsep}{-0.5em}
+        \item Introduced \textbf{anchor boxes}, \textbf{batch normalization}, and higher input resolution (\textbf{416$\times$416})
+        \item Removed fully connected layers for a fully convolutional architecture
+        \item Each grid cell predicts class probabilities for each anchor box
+        \item Achieved a significant mAP improvement: $\sim$10\% increase to $\sim$73\% on PASCAL VOC
+        \item Still struggles with small objects—anchor boxes help, but not enough
+    \end{itemize}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/yolo_17.png}
+    \end{figure}    
+\end{frame}

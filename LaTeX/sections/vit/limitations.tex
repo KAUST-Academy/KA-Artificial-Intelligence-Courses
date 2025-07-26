@@ -1,0 +1,46 @@
+\begin{frame}[allowframebreaks]{Limitations and Considerations}
+    \begin{itemize}
+        \item \textbf{Data Requirements:}
+        \begin{itemize}
+            \item ViTs require large-scale datasets or knowledge distillation to achieve strong performance.
+            \item They lack the strong inductive biases of CNNs.
+        \end{itemize}
+
+        \item \textbf{Computational Cost:}
+        \begin{itemize}
+            \item The self-attention mechanism has quadratic complexity with respect to input size, making ViTs computationally expensive.
+            \item Techniques such as windowed or masked attention help reduce this cost.
+        \end{itemize}
+
+        \item \textbf{Inductive Bias vs. Flexibility:}
+        \begin{itemize}
+            \item ViTs offer greater flexibility and generality.
+            \item They may be less sample-efficient compared to CNNs, which have built-in spatial priors.
+        \end{itemize}
+
+        \framebreak
+
+        \item \textbf{Interpretability:}
+        \begin{itemize}
+            \item Attention maps can provide some interpretability.
+            \item They may also highlight irrelevant or noisy regions, limiting their usefulness.
+        \end{itemize}
+
+        \item \textbf{Deployment Challenges:}
+        \begin{itemize}
+            \item ViTs typically require more resources, making them less suitable for low-power or resource-constrained environments.
+            \item Research into lightweight variants, pruning, and quantization is ongoing to address this.
+        \end{itemize}
+    \end{itemize}
+
+    \framebreak
+
+    \begin{itemize}
+        \item \textbf{Future Directions:}
+        \begin{itemize}
+            \item Development of more efficient attention mechanisms to reduce computational demands.
+            \item Integration of CNN and transformer architectures to leverage the strengths of both.
+            \item Design of lightweight ViTs tailored for edge devices and real-time applications.
+        \end{itemize}
+    \end{itemize}
+\end{frame}

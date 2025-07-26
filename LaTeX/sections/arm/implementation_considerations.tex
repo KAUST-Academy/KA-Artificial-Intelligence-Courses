@@ -1,0 +1,36 @@
+\begin{frame}[allowframebreaks]{Practical Implementations and Considerations}
+    \begin{itemize}
+        \item \textbf{Key Architectures and Models}
+        \begin{itemize}
+            \item \textbf{Classic Approaches:}
+            \begin{itemize}
+                \item \textbf{Bayesian Networks:} Graphical models that encode conditional dependencies.
+                \item \textbf{Recurrent Neural Networks (RNNs):} Naturally suited for sequential data modeling.
+            \end{itemize}
+            \item \textbf{Modern Neural Approaches:}
+            \begin{itemize}
+                \item \textbf{Masked Autoencoder for Distribution Estimation (MADE):} A feed-forward neural network with masks to enforce the autoregressive property.
+                \item \textbf{Causal Masked Neural Models:} Neural networks designed for autoregressive generation by preventing information flow from future elements.
+                \begin{itemize}
+                    \item \textbf{Convolutional:} PixelCNN, WaveNet (use masked convolutions).
+                    \item \textbf{Attention-based:} \textbf{Transformers} with causal masks (enable flexible context modeling).
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \framebreak
+
+    \begin{itemize}
+        \item \textbf{Design Considerations}
+        \begin{itemize}
+            \item \textbf{Tokenization:} Discretizing continuous data (e.g., images into patches, audio into samples) or using natural discrete units (words, bytes) to form sequences for modeling.
+            \item \textbf{Caching:} Essential for efficient inference and generation in autoregressive models, by reusing previously computed states.
+            \item \textbf{Architecture Choices:}
+            \begin{itemize}
+                \item \textbf{Decoder-only vs. Encoder-Decoder:} Trade-offs exist for generation and conditioning capabilities.
+                \item \textbf{Newer Recurrent Models:} Evolution of RNNs and hybrid architectures continue to emerge.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{frame}

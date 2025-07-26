@@ -1,0 +1,63 @@
+\section{Video Understanding Models}
+\begin{frame}{}
+    \LARGE Video Learning \& Generation: \textbf{Video Understanding Models}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Video Understanding Models}
+    \begin{itemize}
+        \item Video understanding involves analyzing and interpreting video data to extract meaningful information.
+        \item Key tasks include:
+        \begin{itemize}
+            \item \textbf{Action recognition}: Identifying actions or activities in videos.
+            \item \textbf{Object detection}: Locating and classifying objects within video frames.
+            \item \textbf{Scene understanding}: Analyzing the context and environment in which actions occur.
+            \item \textbf{Temporal analysis}: Understanding how actions evolve over time.
+        \end{itemize}
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_4_1_img.jpg}
+    \end{figure}
+\framebreak
+    \begin{itemize}
+        \item To understand videos, models need to look at both:
+        \begin{itemize}
+            \item What’s in each frame (spatial info).
+            \item How things move or change (temporal info).
+        \end{itemize}
+        \item How do we do this?
+        \begin{itemize}
+            \item Use CNNs to spot patterns in images.
+            \item Use RNNs or LSTMs to follow changes over time.
+            \item Use 3D CNNs to look at several frames together.
+            \item Use Transformers to connect information across the whole video.
+        \end{itemize}
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_5_1_img.jpg}
+    \end{figure}
+\framebreak
+    \begin{itemize}
+        \item These models learn from lots of labeled videos.
+        \item We check how well they work using accuracy, precision, recall, and F1-score.
+        \item New research is making models faster, more reliable, and better at handling different types of videos.
+        \item Where is this useful?
+        \begin{itemize}
+            \item Security and surveillance.
+            \item Self-driving cars.
+            \item Sports analysis.
+            \item Healthcare monitoring.
+            \item Recommending videos online.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\input{sections/video/video-understanding/training_clips}
+\input{sections/video/video-understanding/single_frame_cnn}
+\input{sections/video/video-understanding/late_fusion}
+\input{sections/video/video-understanding/early_fusion}
+\input{sections/video/video-understanding/3d_cnn}
+\input{sections/video/video-understanding/c3d}

@@ -1,0 +1,24 @@
+\section{Level of Tokenization}
+\begin{frame}{Level of Tokenization}
+\begin{itemize}
+    \item \textbf{Character-level}
+    \begin{itemize}
+        \item Fine-grained, handles unknowns
+        \item Long sequences, slow training
+    \end{itemize}
+    \item \textbf{Word-level}
+    \begin{itemize}
+        \item Intuitive, natural boundaries
+        \item Large vocab, OOV (Out-of-Vocab) issues
+    \end{itemize}
+    \item \textbf{Subword-level}
+    \begin{itemize}
+        \item Balance of generalization \& compactness
+        \item Requires segmentation algorithm
+    \end{itemize}
+    \item \textbf{SentencePiece/Unigram LM}
+    \begin{itemize}
+        \item Learned from data, language-agnostic
+    \end{itemize}
+\end{itemize}
+\end{frame}

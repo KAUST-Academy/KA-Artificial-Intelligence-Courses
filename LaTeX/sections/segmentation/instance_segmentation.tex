@@ -1,0 +1,25 @@
+\section{Instance Segmentation}
+\begin{frame}{}
+    \LARGE Image Segmentation: \textbf{Instance Segmentation}
+\end{frame}
+
+\begin{frame}{Instance Segmentation}
+    \begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{itemize}
+            \item<1-> Detect all objects in the image, and identify the pixels that belong to each object (Only things!)
+            \item<2-> \textbf{Approach:} Perform object detection, then predict a segmentation mask for each object!
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \onslide<1->{
+        \begin{figure}
+        \centering
+        \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/segmentation/ins_4.png}
+        \end{figure}
+        }
+    \end{column}
+\end{columns}
+\end{frame}
+
+\input{sections/object-detect/r-cnn-family/mask-r-cnn}

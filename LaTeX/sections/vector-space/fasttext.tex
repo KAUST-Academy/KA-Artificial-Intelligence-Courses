@@ -1,0 +1,49 @@
+\section{fastText – Subword Embeddings}
+\begin{frame}{}
+    \LARGE fastText – Subword Embeddings
+\end{frame}
+
+\begin{frame}[allowframebreaks]{fastText – Key Ideas}
+    \begin{itemize}
+        \item Developed by Facebook AI (2016)
+        \item Builds on Word2Vec by incorporating character n-grams
+        \item Useful for morphologically rich languages and rare words
+        \item Better handling of OOV (out-of-vocabulary) words
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1200/1*AgrrRZ9DpUVb3srTWs0gzA.png}{images/vector-space/fasttext-1.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://pub.mdpi-res.com/information/information-10-00161/article_deploy/html/images/information-10-00161-g001.png?1571471085}{images/vector-space/fasttext-2.png}{width=\textwidth,height=0.8\textheight,keepaspectratio}
+        \caption*{FastText-Based Intent Detection for Inflected Languages}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{fastText – Example}
+    \begin{itemize}
+        \item Word: \texttt{playing}
+        \item Character n-grams (n=3): \texttt{["pla", "lay", "ayi", "yin", "ing"]}
+        \item Word vector = sum of n-gram vectors
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Comparison: Word2Vec vs. GloVe vs. fastText}
+    \begin{table}[h!]
+        \centering
+        \renewcommand{\arraystretch}{1.8}
+        \begin{tabular}{lccc}
+            \toprule
+            \textbf{Feature} & \textbf{Word2Vec} & \textbf{GloVe} & \textbf{fastText} \\
+            \midrule
+            Local Context   & \checkmark & -- & \checkmark \\
+            Global Info     & --         & \checkmark & \checkmark (partial) \\
+            Subword Info    & --         & -- & \checkmark \\
+            Handles OOV     & --         & -- & \checkmark \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+\end{frame}

@@ -1,0 +1,63 @@
+\section{Data Augmentation}
+\begin{frame}{}
+    \LARGE CNN: \textbf{Data Augmentation}
+\end{frame}
+
+\begin{frame}{What is Data Augmentation?}
+    \begin{itemize}
+        \item \textbf{Definition:} Create more training data by modifying existing data
+        \item \textbf{Examples:}
+        \begin{itemize}
+            \item Flipping, rotating, cropping
+            \item Color jittering
+            \item Adding noise
+        \end{itemize}
+        \item \textbf{Why:} Helps model generalize better
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Data Augmentation in Practice}
+    \begin{itemize}
+        \item \textbf{Popular Libraries:}
+        \begin{itemize}
+            \item \texttt{torchvision.transforms}
+            \item \texttt{imgaug}
+            \item \texttt{albumentations}
+        \end{itemize}
+        \item \textbf{Combine augmentations:} e.g., flip + rotate + brightness
+        \item \textbf{Apply randomly during training}
+        \item \textbf{Goal:} Make your data more realistic and diverse
+    \end{itemize}
+
+\framebreak
+    \begin{itemize}
+        \item Example of data augmentation techniques applied to images
+    \end{itemize}
+
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://nanonets.com/blog/content/images/2018/11/1_dJNlEc7yf93K4pjRJL55PA--1-.png}{images/cnn/data-augmentation.png}{width=\textwidth,height=0.8\textheight,keepaspectratio}
+    \end{figure}
+
+\framebreak
+
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:958/1*1FMKI3BuS-ZQFvF4FElxIQ.png}{images/cnn/data-augmentation-2.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+
+\framebreak
+
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://media.licdn.com/dms/image/v2/D4E12AQHLSSndj18dyQ/article-cover_image-shrink_600_2000/article-cover_image-shrink_600_2000/0/1681616110858?e=2147483647&v=beta&t=OyvaAczn4UWxazWLXIBTfVhjVlLyyuq7XMz4tsUHGfc}{images/cnn/data-augmentation-3.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+
+\framebreak
+
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:960/0*ttoU2HOnBI8cb9Y2.png}{images/cnn/data-augmentation-4.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+
+\end{frame}

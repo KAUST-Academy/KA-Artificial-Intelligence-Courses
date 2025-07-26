@@ -1,0 +1,36 @@
+\begin{frame}[fragile, allowframebreaks]{CNN - Transfer Learning}
+\begin{block}{Concept:}
+    \begin{itemize}
+        \item A technique where a pre-trained model is used as the starting point for a new task.
+        \item It leverages the knowledge gained from a previous task to improve performance on a new, often related task.
+        \item This is particularly useful when the new task has limited data.
+        \item Commonly used in computer vision tasks, where models like VGG, ResNet, and Inception are pre-trained on large datasets like ImageNet.
+        \item The pre-trained model can be fine-tuned on the new dataset by:
+            \begin{itemize}
+                \item Freezing some layers and training others.
+                \item Replacing the final classification layer with a new one specific to the new task.
+            \end{itemize}
+        \item Significantly reduce training time and improve model performance.
+    \end{itemize}
+\end{block}
+
+\framebreak
+
+\begin{block}{Use cases:}
+    \begin{itemize}
+        \item Image classification
+        \item Object detection
+        \item Semantic segmentation
+        \item Natural language processing
+    \end{itemize}
+\end{block}
+
+\begin{lstlisting}[language=Python, caption={Code snippet (PyTorch)}, basicstyle=\ttfamily\footnotesize]
+import torch.nn as nn
+from torchvision.models import resnet50
+
+base = resnet50(pretrained=True)
+for param in base.parameters(): param.requires_grad = False
+base.fc = nn.Linear(base.fc.in_features, num_classes)
+\end{lstlisting}
+\end{frame}  

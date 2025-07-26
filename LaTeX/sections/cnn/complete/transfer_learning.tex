@@ -1,0 +1,85 @@
+\section{Transfer Learning}
+\begin{frame}{}
+    \LARGE CNN: \textbf{Transfer Learning}
+\end{frame}
+
+\begin{frame}{What is Transfer Learning?}
+    \begin{itemize}
+        \item \textbf{Transfer Learning} is the process of reusing a model trained on one task (e.g., ImageNet classification) for a different but related task (e.g., medical image analysis).
+        \item \textbf{Why use it?}
+        \begin{itemize}
+            \item Saves training time and computational resources.
+            \item Achieves good performance with limited data.
+        \end{itemize}
+        \item \textbf{Types:}
+        \begin{itemize}
+            \item \textbf{Feature extraction:} Freeze convolutional layers and only train the final classifier.
+            \item \textbf{Fine-tuning:} Unfreeze some or all layers and retrain on the new task.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Transfer Learning Example}
+    \begin{itemize}
+        \item \textbf{Example:} Load a pretrained ResNet50 from PyTorch.
+        \item Replace the last (classification) layer to match your number of classes.
+        \item Optionally unfreeze the last few layers and retrain (fine-tuning).
+    \end{itemize}
+    \vspace{0.5cm}
+    \textbf{Use cases:}
+    \begin{itemize}
+        \item Medical imaging
+        \item Satellite imagery
+        \item Small business datasets with limited data
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{PyTorch Transfer Learning Code}
+    \begin{lstlisting}[language=Python]
+import torch
+import torchvision.models as models
+import torch.nn as nn
+
+# Load pretrained ResNet50
+model = models.resnet50(pretrained=True)
+
+# Freeze all layers
+for param in model.parameters():
+    param.requires_grad = False
+
+# Replace the final layer for 3 classes
+num_ftrs = model.fc.in_features
+model.fc = nn.Linear(num_ftrs, 3)
+
+# Optionally unfreeze last few layers for fine-tuning
+for param in list(model.parameters())[-10:]:
+    param.requires_grad = True
+    \end{lstlisting}
+\end{frame}
+
+
+\begin{frame}{Benefits of Transfer Learning}
+    \begin{itemize}
+        \item \textbf{Faster Training:} Pretrained models converge faster than training from scratch.
+        \item \textbf{Better Performance:} Leverages learned features from large datasets.
+        \item \textbf{Reduced Overfitting:} Especially useful when training data is limited.
+        \item \textbf{Flexibility:} Can adapt to various tasks with minimal changes.
+    \end{itemize}
+    \vspace{0.5cm}
+    \textbf{Considerations:}
+    \begin{itemize}
+        \item Ensure the pretrained model is suitable for your task.
+        \item Fine-tuning requires careful selection of layers to unfreeze.
+        \item Monitor for overfitting, especially with small datasets.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Putting it All Together}
+    \begin{itemize}
+        \item \textbf{Pick a solid architecture:} Start with proven models like ResNet, MobileNet, etc.
+        \item \textbf{Use data augmentation:} Enrich your dataset with transformations to improve generalization.
+        \item \textbf{Start with a pretrained model:} Leverage transfer learning for faster convergence and better performance.
+        \item \textbf{Normalize activations:} Use Batch Normalization to stabilize and speed up training.
+        \item \textbf{Regularize:} Apply Dropout and Early Stopping to prevent overfitting.
+    \end{itemize}
+\end{frame}

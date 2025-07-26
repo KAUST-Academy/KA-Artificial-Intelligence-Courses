@@ -1,0 +1,15 @@
+\begin{frame}{Data leakage}
+    \begin{itemize}
+        \item Cross-validation: training set is split into training and validation sets for model selection
+        \item Incorrect: Scaler is fit on whole training set before doing cross-validation
+        \begin{itemize}
+            \item Data leaks from validation folds into training folds, selected model may be optimistic
+        \end{itemize}
+        \item Right: Scaler is fit on training folds only
+    \end{itemize}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.95\textwidth,keepaspectratio]{images/pre-processing/infoleak.png}
+    \end{figure}
+\end{frame}

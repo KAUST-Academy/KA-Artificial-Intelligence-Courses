@@ -1,0 +1,30 @@
+\begin{frame}[allowframebreaks]{Anomaly Detection}
+    \begin{itemize}
+        \item Autoencoders are trained to reconstruct input data.
+        \item During training, the model learns to compress and decompress data that is similar to the training set (normal data).
+        \item When presented with anomalous (outlier) data, the reconstruction error increases, as the autoencoder cannot effectively reconstruct unseen patterns.
+    \end{itemize}
+
+    \textbf{Use Cases:}
+    \begin{itemize}
+        \item Fraud detection in financial transactions
+        \item Fault detection in industrial systems
+        \item Intrusion detection in cybersecurity
+        \item Medical anomaly detection (e.g., rare diseases in imaging)
+    \end{itemize}
+
+    \framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://www.mdpi.com/IoT/IoT-04-00016/article_deploy/html/images/IoT-04-00016-g002.png}{images/autoencoders/anomaly-detection.png}{width=0.8\textwidth,keepaspectratio}
+        \caption*{Structure of the deep autoencoder (AE) for anomaly detection and feature extraction for multi-classification of cyber-attacks.}
+    \end{figure}
+
+    \framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://www.researchgate.net/profile/Huaiqiang-Sun/publication/367509994/figure/fig1/AS:11431281115469461@1674921049910/Overview-of-the-proposed-autoencoder-based-anomaly-detection-framework-A-Training-the.png}{images/autoencoders/anomaly-detection-brain.png}{height=0.68\textheight,keepaspectratio}
+        \caption*{Autoencoder-based anomaly detection framework: A) Training the autoencoder for modeling the distribution of healthy brain anatomy. B) In the inference phase, anomaly maps reveal lesions by subtracting their reconstruction from the input image. C and D) Details of the proposed autoencoder.}
+    \end{figure}
+    
+\end{frame}

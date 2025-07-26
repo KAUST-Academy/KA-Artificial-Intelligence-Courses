@@ -1,0 +1,59 @@
+\section{Variants}
+\begin{frame}{}
+    \LARGE GANs: \textbf{Variants}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{GAN Variants}
+\begin{itemize}
+    \item Since the introduction of GANs, extensive research has led to many variants.
+    \item A comprehensive list of GAN variants can be found \href{https://github.com/hindupuravinash/the-gan-zoo}{here}.
+\end{itemize} 
+    \framebreak
+    
+    We will discuss the following variants:
+    \begin{itemize}
+        \item \textbf{Deep Convolutional GAN (DCGAN):}
+        \begin{itemize}
+            \item Uses convolutional and transposed convolutional layers.
+            \item Employs batch normalization and ReLU/LeakyReLU activations.
+            \item Improves training stability and image quality.
+        \end{itemize}
+        \item \textbf{Wasserstein GAN (WGAN):} 
+        \begin{itemize}
+            \item Introduces Wasserstein distance as the objective.
+            \item Replaces sigmoid with linear output.
+            \item Uses weight clipping or gradient penalty.
+            \item \textbf{Variants:}
+            \begin{itemize}
+                \item \textbf{WGAN-GP:} Uses gradient penalty instead of weight clipping for better stability.
+                \item \textbf{WGAN-LP:} Uses Lipschitz penalty as an alternative to gradient penalty.
+            \end{itemize}
+        \end{itemize}
+
+\framebreak
+
+        \item \textbf{Conditional GAN (cGAN):} 
+        \begin{itemize}
+            \item Conditions both the generator and discriminator on additional information (e.g., class labels).
+            \item Useful for targeted generation.
+        \end{itemize}
+        \item \textbf{CycleGAN:} 
+        \begin{itemize}
+            \item Enables unpaired image-to-image translation.
+            \item Uses cycle consistency loss to ensure invertibility.
+        \end{itemize}
+        \item \textbf{StyleGAN:} 
+        \begin{itemize}
+            \item Developed by NVIDIA for high-fidelity face generation.
+            \item Introduces style vectors at each generator layer.
+            \item Allows fine-grained control over image features.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\input{sections/gan/complete/variants/deep_convolutional_gans}
+\input{sections/gan/complete/variants/wasserstein_gans}
+\input{sections/gan/complete/variants/conditional_gans}
+\input{sections/gan/complete/variants/pix2pix}
+\input{sections/gan/complete/variants/cyclegans}
+\input{sections/gan/complete/variants/stylegans}

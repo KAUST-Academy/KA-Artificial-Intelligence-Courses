@@ -1,0 +1,27 @@
+\section*{Appendix}
+\begin{frame}[allowframebreaks]{Appendix}
+\begin{block}{GANs: Definition and Core Components:}
+    \begin{itemize}
+        \item \textbf{Definition}: Generative Adversarial Networks (GANs) consist of two neural networks trained in opposition to each other.
+        \item \textbf{Core Components:}
+        \begin{itemize}
+            \item \textbf{Generator (G):} Takes random noise (latent vector) and produces fake data samples.
+            \item \textbf{Discriminator (D):} Receives real or fake data and predicts whether the input is real.
+        \end{itemize}
+        \item \textbf{Mathematical Formulation:}
+    \end{itemize}
+    \begin{equation*}
+        \min_G \max_D \; \mathbb{E}_{x \sim p_{\text{data}}} [\log D(x)] + \mathbb{E}_{z \sim p_z} [\log(1 - D(G(z)))]
+    \end{equation*}
+    \begin{itemize}
+        \item[] Where:
+        \begin{itemize}
+            \item $x$: Real data sample
+            \item $z$: Noise vector sampled from prior $p_z$
+            \item $G(z)$: Generated sample
+        \end{itemize}
+    \end{itemize}
+\end{block}
+
+
+\end{frame}

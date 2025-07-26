@@ -1,0 +1,35 @@
+\begin{frame}{}
+	\LARGE VAE: \textbf{Limitations and Challenges}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Limitations and Challenges}
+\textbf{Limitations:}
+\begin{itemize}
+    \item \textbf{Gaussian Assumption:} The assumption that the latent variables follow a Gaussian distribution may not hold for all datasets.
+    \item \textbf{Over-smoothing:} The model may produce overly smooth reconstructions, losing fine details in the data.
+    \item \textbf{Sensitivity to Hyperparameters:} The performance of VAEs can be sensitive to the choice of hyperparameters, such as the weight of the KL divergence term.
+    \item \textbf{Computational Complexity:} Training VAEs can be computationally expensive, especially for large datasets or complex models.
+    \item \textbf{Evaluation Metrics:} Evaluating the quality of generated samples can be subjective and challenging, as traditional metrics may not capture the nuances of the data.
+\end{itemize}
+\framebreak
+
+\textbf{Challenges:}
+\begin{itemize}
+    \item \textbf{Training Instability:} VAEs can be difficult to train, especially with complex datasets.
+    \item \textbf{Mode Collapse:} The model may generate samples from only a subset of the latent space.
+    \item \textbf{Balancing Reconstruction and Regularization:} Finding the right balance between reconstruction loss and KL divergence can be tricky.
+    \item \textbf{Posterior Collapse:} In some cases, the model may ignore the latent variables, leading to poor representations.
+    \item \textbf{Limited Expressiveness:} The Gaussian assumption for the latent space may not capture complex data distributions.
+    \item \textbf{Disentanglement:} Achieving disentangled representations can be challenging, especially in high-dimensional spaces.
+\end{itemize}
+\framebreak
+
+\textbf{Future Directions:}
+\begin{itemize}
+    \item \textbf{Improved Training Techniques:} Developing better optimization methods to stabilize training.
+    \item \textbf{Advanced Architectures:} Exploring more complex latent variable models, such as Normalizing Flows or Hierarchical VAEs.
+    \item \textbf{Better Regularization Techniques:} Investigating alternative regularization methods to improve disentanglement and representation quality.
+    \item \textbf{Hybrid Models:} Combining VAEs with other generative models (e.g., GANs) to leverage their strengths.
+    \item \textbf{Application-Specific Variants:} Tailoring VAEs for specific applications, such as text or video generation.
+\end{itemize}
+\end{frame}

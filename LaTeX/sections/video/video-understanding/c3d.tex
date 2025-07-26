@@ -1,0 +1,43 @@
+\subsection{C3D}
+
+\begin{frame}[allowframebreaks]{C3D: Key Ideas}
+    \textbf{Introduced by Tran et al., ICCV 2015}
+
+    \begin{itemize}
+        \item Uses $3 \times 3 \times 3$ convolutions on 16-frame video clips.
+        \item Demonstrated strong performance on the UCF101 action recognition benchmark.
+    \end{itemize}
+    \begin{itemize}
+        \item \textbf{3D Convolutional Networks}: Apply 3D convolutional kernels to capture spatio-temporal features.
+        \item \textbf{Temporal Context}: C3D captures motion patterns by considering multiple frames simultaneously.
+        \item \textbf{Pooling and Normalization}: Use pooling layers to reduce dimensionality and normalize features.
+        \item \textbf{End-to-End Training}: Trained on large video datasets for tasks like action recognition.
+    \end{itemize}
+\framebreak
+    \begin{columns}[T,onlytextwidth]
+        \begin{column}{0.6\textwidth}
+            \begin{itemize}
+                \setlength{\itemsep}{1em}
+                \item 3D CNN that uses all $3 \times 3 \times 3$ convolutions and $2 \times 2 \times 2$ pooling (except Pool1, which is $1 \times 2 \times 2$).
+                \item Released model pretrained on Sports-1M: widely used as a video feature extractor.
+                \item \textbf{Problem:} $3 \times 3 \times 3$ convolutions are very expensive!
+                \begin{itemize}
+                    \item AlexNet: 0.7 GFLOP
+                    \item VGG-16: 13.6 GFLOP
+                    \item C3D: 39.5 GFLOP (2.9$\times$ VGG!)
+                \end{itemize}
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\linewidth,keepaspectratio]{images/video/slide_19_1_img.png}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\framebreak
+    \begin{figure}
+        \centering
+        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_20_1_img.jpg}
+    \end{figure}
+\end{frame}

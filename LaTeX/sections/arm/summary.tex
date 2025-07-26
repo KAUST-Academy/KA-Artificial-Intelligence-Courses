@@ -1,0 +1,28 @@
+\begin{frame}[allowframebreaks]{Autoregressive Models: Summary}
+    \begin{itemize}
+        \item Define a specific order for the variables in the data (e.g., $x_1, x_2, \ldots, x_n$).
+        \item Model the joint probability as a product of conditional probabilities: 
+        \[
+            \mathcal{P}(X = \overline{x}) = \prod_{i=1}^n \mathcal{P}(x_i \mid x_{<i})
+        \]
+        \item Sampling is performed recursively: generate $x_1$ first, then $x_2$ conditioned on $x_1$, and so on.
+        \item Efficient to compute likelihoods and log-likelihoods for both discrete and continuous variables.
+        \item Flexible: can be extended to multi-class, multi-dimensional, and structured data.
+        \framebreak
+        \item Limitations:
+        \begin{itemize}
+            \item No natural way to extract global features or representations.
+            \item Not inherently suited for clustering or unsupervised learning tasks.
+            \item The choice of variable ordering can significantly affect performance.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+Reference Slides
+\begin{itemize}
+    \item Fei-Fei Li "Generative Deep Learning" CS231
+    \item Hao Dong "Deep Generative Models"
+\end{itemize}
+    
+\end{frame}

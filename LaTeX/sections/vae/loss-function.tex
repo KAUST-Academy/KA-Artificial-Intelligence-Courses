@@ -1,0 +1,27 @@
+\begin{frame}{}
+	\LARGE VAE: \textbf{Loss Function}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Loss Function Breakdown}
+\textbf{Total Loss:}
+% This equation defines the loss function (L) for a Variational Autoencoder (VAE).
+% The loss L is composed of two terms:
+% 1. Reconstruction Loss: Measures how well the VAE reconstructs the input data.
+% 2. KL Divergence: Regularizes the learned latent distribution to be close to a prior (usually a standard normal distribution).
+% The symbol "L" here denotes the total VAE loss.
+\[
+L = \text{Reconstruction Loss} + \text{KL Divergence}
+\]
+
+\textbf{Reconstruction Loss:}
+\begin{itemize}
+    \item Measures how well $\hat{x}$ matches $x$.
+    \item Common choices: Mean Squared Error (MSE) or Binary Cross-Entropy.
+\end{itemize}
+
+\textbf{KL Divergence:}
+\begin{itemize}
+    \item Measures how much $q(z \mid x)$ diverges from the prior $p(z)$.
+    \item Encourages the latent space to follow a standard normal distribution.
+\end{itemize}
+\end{frame}

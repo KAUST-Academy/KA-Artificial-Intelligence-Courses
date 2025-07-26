@@ -1,0 +1,27 @@
+\section{R-CNN Family}
+\begin{frame}{}
+    \LARGE Object Detection: \textbf{R-CNN Family}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{R-CNN Family}
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://lilianweng.github.io/posts/2017-12-31-object-recognition-part-3/rcnn-family-summary.png}{images/object-detect/r-cnn-family.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+
+    \framebreak
+
+    \begin{enumerate}
+        \setlength{\itemsep}{1em}
+        \item \textbf{R-CNN}: Uses selective search to propose regions, then classifies each region using a CNN.
+        \item \textbf{Fast R-CNN}: Improves R-CNN by sharing computation across regions, using a single CNN for the entire image.
+        \item \textbf{Faster R-CNN}: Introduces a Region Proposal Network (RPN) to generate region proposals, making it faster and more efficient.
+        \item \textbf{Mask R-CNN}: Extends Faster R-CNN to also predict segmentation masks for each detected object.
+    \end{enumerate}
+\end{frame}
+
+
+\input{sections/object-detect/r-cnn-family/r-cnn}
+\input{sections/object-detect/r-cnn-family/fast-r-cnn}
+\input{sections/object-detect/r-cnn-family/faster-r-cnn}
+\input{sections/object-detect/r-cnn-family/mask-r-cnn}

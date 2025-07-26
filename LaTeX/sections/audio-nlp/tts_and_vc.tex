@@ -1,0 +1,84 @@
+\section{Text-to-Speech (TTS) \& Vocoders}
+
+\begin{frame}{}
+    \LARGE \textbf{Text-to-Speech (TTS) \& Vocoders}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Text-to-Speech (TTS) Overview}
+    \begin{itemize}
+        \item Converts text input into human-like speech
+        \item Applications: virtual assistants, accessibility, entertainment
+        \item Key components:
+        \begin{itemize}
+            \item Text analysis
+            \item Acoustic modeling
+            \item Vocoder synthesis
+        \end{itemize}
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width=0.8\textwidth,height=0.9\textheight,keepaspectratio]{images/audio-nlp/tts_pipeline.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{WaveNet (2016)}
+    \begin{itemize}
+        \item Deep generative model for raw audio
+        \item Autoregressive: predicts next sample given previous samples
+        \item High-quality, natural-sounding speech
+        \item Equation:
+        \[
+            p(x) = \prod_{t=1}^{T} p(x_t | x_{1}, ..., x_{t-1})
+        \]
+        \item Computationally expensive for real-time use
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/audio-nlp/wavenet_architecture.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Tacotron 2}
+    \begin{itemize}
+        \item End-to-end TTS system
+        \item Pipeline:
+        \begin{itemize}
+            \item Text $\rightarrow$ Mel-spectrogram (sequence-to-sequence model)
+            \item Mel-spectrogram $\rightarrow$ WaveNet/GAN vocoder (audio synthesis)
+        \end{itemize}
+        \item Improved prosody and pronunciation
+        \item Flexible for different voices and languages
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/audio-nlp/tacotron2_pipeline.png}
+    \end{center}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{FastSpeech, HiFi-GAN, Glow-TTS, Diffusion Models}
+    \begin{itemize}
+        \setlength{\itemsep}{1.5em}
+        \item Non-autoregressive models: faster inference
+        \item FastSpeech:
+        \begin{itemize}
+            \item Parallel generation of spectrograms
+            \item Duration prediction for alignment
+        \end{itemize}
+        \item HiFi-GAN:
+        \begin{itemize}
+            \item GAN-based vocoder
+            \item High-fidelity, real-time synthesis
+        \end{itemize}
+    \framebreak
+        \item Glow-TTS:
+        \begin{itemize}
+            \item Flow-based generative model
+            \item Efficient and expressive speech synthesis
+        \end{itemize}
+        \item Diffusion models:
+        \begin{itemize}
+            \item Iterative refinement of audio
+            \item State-of-the-art naturalness
+        \end{itemize}
+    \end{itemize}
+    \begin{center}
+        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/audio-nlp/fastspeech_hifigan.png}
+    \end{center}
+\end{frame}

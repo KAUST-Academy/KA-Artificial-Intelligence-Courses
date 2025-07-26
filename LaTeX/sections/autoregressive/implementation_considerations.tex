@@ -1,0 +1,43 @@
+\begin{frame}[allowframebreaks]{}
+    \centering
+    \LARGE Practical Implementations and Considerations
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Key Architectures and Models}
+    \textbf{\large Classic Approaches:}
+    \begin{itemize}
+        \item \textbf{Bayesian Networks:} Use graphs to show how variables depend on each other.
+        \item \textbf{Recurrent Neural Networks (RNNs):} Good for handling data that comes in a sequence, like text or time series.
+    \end{itemize}
+
+    \framebreak
+
+    \textbf{\large Modern Neural Approaches:}
+    \begin{itemize}
+        \item \textbf{Masked Autoencoder for Distribution Estimation (MADE):} A type of neural network that uses special masks to make sure each output only depends on earlier inputs (feed-forward).
+        \item \textbf{Causal Masked Neural Models:} Stop the model from "seeing the future" by blocking information from later parts of the sequence.
+        \begin{itemize}
+            \item \textbf{Convolutional:} \textbf{PixelCNN} and \textbf{WaveNet} use masked convolutions to handle images and audio step by step.
+            \item \textbf{Attention-based:} \textbf{Transformers} use masks to focus only on earlier parts of the sequence, making them flexible and powerful.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Design Considerations}
+    \textbf{Tokenization:}
+        \begin{itemize}
+            \item Break data into small pieces (like words, image patches, or audio samples).
+            \item Makes it easier for models to handle different types of data.
+        \end{itemize}
+    \textbf{Caching:}
+        \begin{itemize}
+            \item Save and reuse previous computations.
+            \item Speeds up generation and inference.
+        \end{itemize}
+    \textbf{Architecture Choices:}
+        \begin{itemize}
+            \item \textbf{Decoder-only:} Good for generating sequences from scratch.
+            \item \textbf{Encoder-Decoder:} Useful when you want to condition generation on some input.
+            \item New types of recurrent models are still being developed to improve performance.
+        \end{itemize}
+\end{frame}

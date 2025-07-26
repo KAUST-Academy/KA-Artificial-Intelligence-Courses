@@ -1,0 +1,47 @@
+\section{CNN Architectures}
+\begin{frame}{}
+    \LARGE CNN Architectures
+\end{frame}
+
+\begin{frame}{Most Notable CNN-based Architectures}
+    Over time, researchers built advanced CNN architectures to improve performance and efficiency. These architectures introduced key innovations:
+    {\small
+    \begin{itemize}
+        \item \textbf{LeNet \emph{[LeCun et al., 1998]}}: The first CNN architecture, designed for handwritten digit recognition.
+        \item \textbf{AlexNet \emph{[Krizhevsky et al. 2012]}}:  The first CNN to achieve breakthrough performance on image classification.
+        \item \textbf{VGGNet \emph{[Simonyan and Zisserman, 2014]}}: Used very deep networks (up to 19 layers).
+        \item \textbf{InceptionNet (GoogLeNet) \emph{[Szegedy et al., 2014]}}: Used multiple filter sizes per layer (Inception modules).
+        \item \textbf{ResNet \emph{[He et al., 2015]}}: Introduced skip connections for training very deep networks.
+        \item \textbf{EfficientNet \emph{[Tan and Le, 2019]}}: Found a scaling method that  simultaneously scales a CNN’s depth, width, and resolution optimally using a single scaling coefficient.
+        \item \textbf{MobileNet \emph{[Howard et al., 2017]}}: Designed for mobile and embedded vision applications, using depthwise separable convolutions.
+    \end{itemize}
+    }
+\end{frame}
+
+\input{sections/cnn/complete/architecture/lenet}
+\input{sections/cnn/complete/architecture/alexnet}
+\input{sections/cnn/complete/architecture/vgg}
+\input{sections/cnn/complete/architecture/inception}
+\input{sections/cnn/complete/architecture/resnet}
+\input{sections/cnn/complete/architecture/efficientnet}
+\input{sections/cnn/complete/architecture/mobilenet}
+
+\begin{frame}{Summary of CNN Architectures}
+    \begin{minipage}{0.8\linewidth}
+    \centering
+    \small
+    \begin{tabular}{|l|c|l|c|l|}
+        \hline
+        \textbf{Model} & \textbf{Year} & \textbf{Key Idea} & \textbf{\#Params} & \textbf{Strength} \\
+        \hline
+        LeNet-5 & 1998 & Early CNN for digit recognition & $\sim$60K & Pioneered CNNs \\
+        AlexNet & 2012 & Deeper + ReLU + Dropout & $\sim$60M & Started Deep Learning \\
+        VGG & 2014 & 3$\times$3 filters, uniform design & $\sim$138M & Simplicity \\
+        Inception & 2014 & Multi-scale filters & $\sim$6.8M & Efficient \\
+        ResNet & 2015 & Skip connections & $\sim$25M (50) & Very deep models \\
+        EfficientNet & 2019 & Compound scaling & $\sim$5M (B0) & Accuracy/efficiency trade-off \\
+        MobileNet & 2017 & Lightweight architecture & $\sim$4M & Mobile-ready \\
+        \hline
+    \end{tabular}
+    \end{minipage}
+\end{frame}

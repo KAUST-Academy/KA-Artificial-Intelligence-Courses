@@ -1,0 +1,48 @@
+\section{Alternative Features}
+
+\begin{frame}[allowframebreaks]{Alternative Features}
+\textbf{Linear Predictive Coding (LPC):}
+\begin{itemize}
+    \item Models the speech signal as a linear combination of past samples.
+    \item Useful for speech compression and speaker recognition.
+    \item Captures the spectral envelope efficiently.
+\end{itemize}
+
+\textbf{Perceptual Linear Prediction (PLP):}
+\begin{itemize}
+    \item Incorporates psychoacoustic models to mimic human hearing.
+    \item Reduces spectral information to perceptually relevant features.
+    \item Often used in robust speech recognition systems.
+\end{itemize}
+
+\textbf{Pitch:}
+\begin{itemize}
+    \item Represents the fundamental frequency of speech.
+    \item Important for prosody analysis, emotion detection, and speaker identification.
+    \item Extracted using autocorrelation or cepstral methods.
+\end{itemize}
+
+\textbf{Formants:}
+\begin{itemize}
+    \item Resonant frequencies of the vocal tract.
+    \item Key for phoneme classification and speech synthesis.
+    \item Estimated using LPC or spectral analysis.
+\end{itemize}
+
+\textbf{Spectrogram-based Learned Features:}
+\begin{itemize}
+    \item Deep learning models (CNNs, RNNs) extract features directly from spectrograms.
+    \item Capture complex patterns and temporal dependencies.
+    \item Widely used in modern end-to-end speech and audio systems.
+\end{itemize}
+
+\framebreak
+
+\textbf{When to Choose What:}
+\begin{itemize}
+    \item \textbf{LPC/PLP:} When computational efficiency and interpretability are important; suitable for traditional speech tasks.
+    \item \textbf{Pitch/Formants:} For tasks involving prosody, emotion, or phoneme-level analysis.
+    \item \textbf{Spectrogram-based Learned Features:} For large-scale, data-driven applications where deep learning models can leverage raw audio representations.
+    \item Consider the task requirements, available data, and computational resources when selecting features.
+\end{itemize}
+\end{frame}

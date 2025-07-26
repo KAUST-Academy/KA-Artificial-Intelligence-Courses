@@ -1,0 +1,61 @@
+\subsection{Variational Inference}
+\begin{frame}{}
+    \LARGE VAE: \textbf{Variational Inference}
+\end{frame}
+
+\begin{frame}{Variational Inference}
+\begin{itemize}
+    \item Now, how to train this model?
+    \item<2-> How about following the same strategy as in FVSBNs? Learn model parameters to maximize the likelihood of training data.
+    $$p_{\theta}(x) = \int p_{\theta}(z) p_{\theta}(x|z) dz$$
+    \item<3-> But there is a problem here. It is Intractible to compute $p(x|z)$ for every $z$!
+    \item<4-> Intuitively, need to figure out which $z$ corresponds to each $x$ in the dataset, but such mapping is unknown.
+    \item<5-> This also makes posterior density $p(z|x)$ intractable because it depends on $p_{\theta}(x)$
+    $$p(z|x) = \frac{p_{\theta}(x|z) p_{\theta}(z)}{p_{\theta}(x)}$$
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Variational Inference}
+
+    \textbf{\large Solution}
+    \begin{itemize}
+        \item Let's approximate $p(z|x)$ with another distribution by another distribution $q(z)$
+        \item If $q(z)$ is a tractable distribution e.g. Gaussian distribution
+        \item \textbf{Approach}: We can adjust parameters of $q(z)$ and make it as close to $p(z|x)$, i.e. $q(z) \approx p(z|x)$.
+        \item \textbf{Goal}: Minimize the Kullback-Leibler (KL) divergence $KL(q||p)$.
+    \end{itemize}
+
+\framebreak
+\begin{equation*}
+    \begin{split}
+        KL(q(z)||p(z|x) & = - \sum q(z) log \frac{ p(z|x)}{q(z)}\\
+        & = - \sum q(z) log \frac{\frac{p(x,z)}{p(x)}}{q(z)}\\
+        & = - \sum q(z) log \left ( \frac{p(x,z)}{q(z)}\frac{1}{p(x)} \right )\\
+        & = - \sum q(z) \left [log \frac{p(x,z)}{q(z)} + log\frac{1}{p(x)} \right ]\\
+        & = - \sum q(z) \left [log \frac{p(x,z)}{q(z)} - log \, p(x) \right ]\\
+        & = - \sum_z q(z) log \frac{p(x,z)}{q(z)} + log \, p(x) \sum_z q(z)\\
+        & = - \sum_z q(z) log \frac{p(x,z)}{q(z)} + log \, p(x) \,\,\,\, \because \sum_z q(z) = 1
+    \end{split}
+\end{equation*}
+
+\framebreak
+
+\begin{itemize}
+    \item $$KL(q(z)||p(z|x) = - \sum_z q(z) log \frac{p(x,z)}{q(z)} + log \, p(x) $$
+    \item We can also write above equation as:
+    $$log \, p(x) = KL(q(z)||p(z|x) + \sum_z q(z) log \frac{p(x,z)}{q(z)}$$
+\end{itemize}
+
+\framebreak
+    
+
+\begin{itemize}
+        \item Given $x$ , $log \, p(x)$ is a constant
+        \item $KL(q(z)||p(z|x)$ is the quantity we wanted to minimize
+        \item Assume $L = \sum_z q(z) log \frac{p(x,z)}{q(z)}$, then
+        $$\text{constant} = KL + L$$
+        $$L \leq log \, p(x) \,\,\,\, \because kl \geq 0$$
+
+    \item \textbf{Instead of minimizing} $\mathbf{KL}$ \textbf{we can maximise} $\mathbf{L}$
+\end{itemize}
+\end{frame}

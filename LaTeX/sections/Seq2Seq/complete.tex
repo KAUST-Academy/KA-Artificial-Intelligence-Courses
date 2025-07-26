@@ -1,0 +1,227 @@
+\section{Motivation}
+\begin{frame}{Motivation}
+    \textbf{Why Do We Need Seq2Seq and Attention?}
+
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Many real-world problems require transforming one sequence to another:
+        \begin{itemize}
+            \setlength{\itemsep}{0.5em}
+            \item Translation: ``Bonjour'' $\rightarrow$ ``Hello''
+            \item Dialogue systems: Question $\rightarrow$ Response
+            \item Speech: Audio $\rightarrow$ Text
+        \end{itemize}
+        \item[] \textcolor{red}{\textbf{Standard RNNs struggle with input/output sequences of \emph{different lengths} and \emph{long-term dependencies}.}}
+        \item[] \textcolor{green!50!black}{\textbf{Seq2Seq models + attention solve this with a powerful \emph{encoder-decoder} framework.}}
+    \end{itemize}
+\end{frame}
+
+\section{Learning Outcomes}
+\begin{frame}{Learning Outcomes}
+    By the end of this session, you should be able to:
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Explain the Seq2Seq architecture and encoder-decoder framework
+        \item Understand the bottleneck problem in fixed-size representations
+        \item Describe the motivation for and core idea behind attention mechanisms
+        \item Appreciate how attention improves performance in NLP tasks
+        \item Recognize future directions in attention-based modeling
+    \end{itemize}
+\end{frame}
+
+
+\section{Sequence-to-Sequence (Seq2Seq) Architecture}
+\begin{frame}{Seq2Seq Architecture}
+    \textbf{Key Idea:} Map input sequence $\rightarrow$ intermediate vector $\rightarrow$ output sequence.
+    \vspace{1em}
+    \begin{itemize}
+        \item \textbf{Encoder RNN:} Processes input sequence and compresses it into a \textbf{fixed-length vector} (context).
+        \item \textbf{Decoder RNN:} Generates output sequence from the context vector.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Applications:}
+    \begin{itemize}
+        \item Machine translation
+        \item Summarization
+        \item Dialogue systems
+        \item Speech recognition
+    \end{itemize}
+\end{frame}
+
+
+\section{The Bottleneck Problem}
+\begin{frame}{The Bottleneck Problem}
+    \textbf{\faArrowDown\ Fixed-length context vector = \emph{information bottleneck}}
+    \begin{itemize}
+        \item Encoder must \textbf{compress entire input sequence} into a single vector
+        \item Longer or more complex inputs $\rightarrow$ information loss
+        \item Decoder relies solely on that vector to produce outputs
+    \end{itemize}
+    \vspace{1em}
+    \textbf{\faFlask\ Leads to poor performance on long sentences or tasks requiring high context awareness}
+\end{frame}
+
+
+\section{Realization: We Need More Context!}
+\begin{frame}{Realization: We Need More Context!}
+    \textbf{Decoder should have \emph{access to all encoder states}, not just the final one.}
+    \begin{itemize}
+        \item[\faSearch] This inspired the development of the \textbf{attention mechanism}.
+        \item[\faLightbulbO] Instead of passing only the final state, allow the decoder to \emph{``look back''} at \textbf{all input positions}.
+    \end{itemize}
+\end{frame}
+
+
+\section{Introduction to Attention Mechanism}
+\begin{frame}{Introduction to Attention Mechanism}
+    \textbf{Core Idea:} Let the decoder \textbf{focus on different parts of the input} sequence at each step of decoding.
+    \vspace{1em}
+    \begin{itemize}
+        \item At each decoding step, compute a \textbf{weighted sum} over all encoder hidden states.
+        \item Weights reflect \textbf{relevance} of each input word to the current output word.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{\faBrain\ ``Soft search'' over inputs $\rightarrow$ more context-awareness.}
+\end{frame}
+
+
+\section{Mathematical Formulation of Attention}
+\begin{frame}{Mathematical Formulation of Attention}
+    \begin{enumerate}
+        \item \textbf{Alignment Score:}
+        \[
+            e_{t,s} = \text{score}(h_t^{\text{dec}}, h_s^{\text{enc}})
+        \]
+        \item \textbf{Attention Weights (Softmax):}
+        \[
+            \alpha_{t,s} = \frac{\exp(e_{t,s})}{\sum_{s'} \exp(e_{t,s'})}
+        \]
+        \item \textbf{Context Vector:}
+        \[
+            c_t = \sum_s \alpha_{t,s} h_s^{\text{enc}}
+        \]
+        \item \textbf{Decoder Input:}
+        \[
+            y_t = \text{Decoder}(y_{t-1}, h_{t-1}^{\text{dec}}, c_t)
+        \]
+    \end{enumerate}
+    \vspace{1em}
+    \textcolor{green!50!black}{\faCheckCircle\ The decoder dynamically adjusts its context based on each output word being generated.}
+\end{frame}
+
+
+\section{Impact of Attention}
+\begin{frame}{Impact of Attention}
+    \begin{itemize}
+        \item[\faCheckCircle] Improves translation accuracy
+        \item[\faCheckCircle] Helps handle \textbf{longer sequences}
+        \item[\faCheckCircle] Interpretable: shows what the model is focusing on
+        \item[\faCheckCircle] Forms the foundation of \textbf{Transformer models}
+    \end{itemize}
+    \vspace{1em}
+    \textbf{\faThumbTack\ Led to development of:}
+    \begin{itemize}
+        \item Bahdanau Attention (Additive, 2014)
+        \item Luong Attention (Multiplicative, 2015)
+        \item Self-Attention and Transformers (2017+)
+    \end{itemize}
+\end{frame}
+
+
+\section{Seq2Seq vs Seq2Seq + Attention}
+\begin{frame}{Seq2Seq vs Seq2Seq + Attention}
+    \begin{table}[]
+        \centering
+        \begin{tabular}{|l|l|l|}
+            \hline
+            \textbf{Aspect} & \textbf{Basic Seq2Seq} & \textbf{With Attention} \\
+            \hline
+            Memory & Single vector (fixed) & Multiple encoder states (dynamic) \\
+            \hline
+            Long Sequences & Poor performance & Good performance \\
+            \hline
+            Interpretability & Low & High (via attention weights) \\
+            \hline
+            Use Cases & Short/medium sequences & Longer, complex tasks \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+
+\section{Applications of Seq2Seq + Attention}
+\begin{frame}{Applications of Seq2Seq + Attention}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Machine Translation
+        \item Text Summarization
+        \item Chatbots and Dialog Systems
+        \item Speech Recognition
+        \item Question Answering
+        \item Video Captioning
+        \item DNA Sequence Modeling
+    \end{itemize}
+\end{frame}
+
+
+\section{Limitations of Seq2Seq + Attention}
+\begin{frame}{Limitations}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Still sequential --- \textbf{not fully parallelizable}
+        \item Attention adds computational cost
+        \item Hard to interpret in large-scale models
+        \item Might struggle with very long-range dependencies in huge contexts
+    \end{itemize}
+\end{frame}
+
+
+\section{Future Directions}
+\begin{frame}{Future Directions}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Transformers}: Fully attention-based, no recurrence
+        \item \textbf{Efficient Attention Models}: Longformer, Reformer, Linformer
+        \item \textbf{Multimodal Attention}: Vision + Text
+        \item \textbf{Memory-Augmented Models}
+        \item \textbf{Structured Attention}: Parses, syntax, and alignment bias
+    \end{itemize}
+    \vspace{1em}
+    \textbf{\textcolor{red}{\faBolt} Attention paved the way for \textbf{GPT, BERT, and LLMs}}
+\end{frame}
+
+
+\section{Summary}
+\begin{frame}{Summary}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Seq2Seq enables mapping input to output sequences of variable lengths
+        \item \textbf{Bottleneck:} Fixed-size context vector limits learning capacity
+        \item \textbf{Attention:} Improves performance by giving \textbf{adaptive access} to input states
+        \item Attention $\rightarrow$ Transformer $\rightarrow$ LLMs
+        \item Still evolving: From additive attention to self-attention and beyond
+    \end{itemize}
+\end{frame}
+
+
+\section{References}
+\begin{frame}[allowframebreaks]{References}
+    \textbf{Foundational Papers:}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Sutskever et al. (2014). \emph{Sequence to Sequence Learning with Neural Networks}. NeurIPS.
+        \item Bahdanau et al. (2014). \emph{Neural Machine Translation by Jointly Learning to Align and Translate}.
+        \item Luong et al. (2015). \emph{Effective Approaches to Attention-based Neural Machine Translation}.
+        \item Vaswani et al. (2017). \emph{Attention Is All You Need} (Transformer).
+        \item Chan et al. (2016). \emph{Listen, Attend and Spell} (Speech recognition).
+    \end{itemize}
+\framebreak
+    \textbf{Courses \& Tutorials:}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Stanford CS224n: Lecture 9 (Attention)
+        \item DeepLearning.ai NLP Specialization (Coursera)
+        \item Harvard NLP Annotated Transformer: \url{http://nlp.seas.harvard.edu/2018/04/03/attention.html}
+        \item Jay Alammar’s blog: ``The Illustrated Transformer''
+    \end{itemize}
+\end{frame}

@@ -1,0 +1,41 @@
+\begin{frame}[allowframebreaks]{}
+    \centering
+    \LARGE Introduction to Autoregressive Models
+\end{frame}
+
+\begin{frame}[allowframebreaks]{What are Autoregressive Models?}
+    \begin{itemize}
+        \item \textbf{Goal:} To model and generate complex, high-dimensional data distributions.
+        \item \textbf{Core Idea:} Factorise the joint distribution of data using the \textbf{chain rule}, expressing it as a product of conditional probabilities:
+        \[
+        p(x_1, x_2, \ldots, x_n) = \prod_{i=1}^n p(x_i \mid x_{<i})
+        \]
+        This allows us to model complex data one element (or "token") at a time, conditioned on previously generated elements.
+    \end{itemize}
+
+    \framebreak
+    
+    \textbf{Why not just model everything at once?}
+        \begin{itemize}
+            \item \textcolor{red}{Real-world data (like images or text) has lots of parts working together—modeling all of them at once is super hard.}
+            \item \textcolor[rgb]{0,0.5,0}{Autoregressive models break this big problem into smaller, easier steps.}
+        \end{itemize}
+    \vspace{2em}
+    \textbf{What can we do with them?}
+        \begin{itemize}
+            \item \textbf{Create new data:} Make new images, sounds, or sentences that look real.
+            \item \textbf{Compress data:} Store information more efficiently.
+            \item \textbf{Spot unusual things:} Find data that doesn’t fit the usual pattern.
+        \end{itemize}
+
+    \framebreak
+
+    \begin{itemize}
+        \item \textbf{Where are Autoregressive Models Used?}
+            \begin{itemize}
+                \item \textbf{Text:} Making chatbots and writing stories (like how GPT works).
+                \item \textbf{Images:} Drawing pictures one pixel at a time (PixelCNN, PixelRNN).
+                \item \textbf{Audio:} Creating realistic voices and music (WaveNet).
+            \end{itemize}
+    \end{itemize}
+\end{frame}

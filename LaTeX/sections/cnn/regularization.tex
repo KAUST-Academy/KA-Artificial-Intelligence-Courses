@@ -1,0 +1,28 @@
+\begin{frame}[fragile]{CNN - Regularization (Dropout)}
+\begin{block}{What:}
+    \begin{itemize}
+        \item Randomly drop units with probability p during training to prevent co‑adaptation.
+    \end{itemize}
+\end{block}
+
+\begin{block}{Where:}
+    \begin{itemize}
+        \item Often after FC layers, sometimes after conv layers.
+    \end{itemize}
+\end{block}
+
+\begin{block}{Effect on images:}
+    \begin{itemize}
+        \item Regularization does not alter the input images but modifies the training process to improve generalization. 
+    \end{itemize}
+\end{block}
+
+\begin{lstlisting}[language=Python, caption={Code snippet (PyTorch)}, basicstyle=\ttfamily\footnotesize]
+import torch.nn as nn
+
+drop = nn.Dropout(p=0.5)
+x = drop(x)
+\end{lstlisting}
+
+
+\end{frame}  

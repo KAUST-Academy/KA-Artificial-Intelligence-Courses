@@ -1,0 +1,144 @@
+\section{Text-to-Image Generation Techniques}
+\begin{frame}{}
+    \LARGE Text-to-Image Generation Techniques
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Text-to-Image Generation}
+    \begin{itemize}
+        \item Text-to-image generation involves creating images from textual descriptions.
+        \item Key techniques include:
+        \begin{itemize}
+            \item Diffusion models
+            \item Generative adversarial networks (GANs)
+            \item Variational autoencoders (VAEs)
+        \end{itemize}
+        \item Applications:
+        \begin{itemize}
+            \item Art generation
+            \item Content creation
+            \item Virtual environments
+        \end{itemize}
+    \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1028/0*26may-706_HoRFD7}{images/vision+text/text_to_image-1.png}{width=\textwidth,height=0.8\textheight,keepaspectratio}
+    \end{figure}
+\end{frame}
+
+\subsection{Overview}
+\begin{frame}{Text-to-Image Generation Overview}
+    \begin{itemize}
+        \item \textbf{Goal:} Generate realistic images conditioned on text prompts.
+        \item Requires alignment between vision and language features.
+        \item \textbf{Applications:}
+        \begin{itemize}
+            \item Design
+            \item Entertainment
+            \item Accessibility
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\subsection{GAN-based Approaches}
+\begin{frame}[allowframebreaks]{GAN-based Approaches}
+    \textbf{StackGAN}: Generates images in multiple stages, from coarse to fine details.
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://user-images.githubusercontent.com/31109495/94064358-32e02d00-fe07-11ea-8ae0-a53e443f9509.png}{images/vision+text/stack-gan-arch.png}{width=\textwidth,height=0.8\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:3356/1*g-0onhpbu6dU0aZbpfEUeA.jpeg}{images/vision+text/stack-gan-result-1.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://cdn-ak.f.st-hatena.com/images/fotolife/n/nogawanogawa/20180414/20180414150549.jpg}{images/vision+text/stack-gan-result-2.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \textbf{AttnGAN}: Incorporates attention mechanisms to better align image regions with words in the text.
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://raw.githubusercontent.com/taki0112/AttnGAN-Tensorflow/master/assets/teaser.png}{images/vision+text/attn-gan-arch.png}{width=\textwidth,height=0.8\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://cugtyt.github.io/blog/papers/2020/R/attngan-fig1.png}{images/vision+text/attn-gan-result-1.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\framebreak        
+    \textbf{Stage-wise Generation:}
+        \begin{itemize}
+            \item Images are generated progressively, refining details at each stage.
+        \end{itemize}
+    \textbf{Limitations:}
+        \begin{itemize}
+            \item Training instability
+            \item Mode collapse (lack of diversity in generated images)
+        \end{itemize}
+\end{frame}
+
+
+\subsection{Diffusion-based Approaches}
+\begin{frame}[allowframebreaks]{Diffusion-based Approaches}
+    \begin{itemize}
+        \item Diffusion models generate images by iteratively denoising random noise, conditioned on text prompts.
+        \item Notable models:
+        \begin{itemize}
+            \item \textbf{DALL\textbullet E 2}
+            \item \textbf{Imagen}
+            \item \textbf{Stable Diffusion}
+        \end{itemize}
+        \item \textbf{Key idea:} Learn to reverse a gradual noising process, producing high-quality images from pure noise.
+        \item \textbf{Advantages:}
+        \begin{itemize}
+            \item Superior image quality and diversity compared to GANs and VAEs
+            \item Better alignment with textual descriptions
+        \end{itemize}
+    \end{itemize}
+\framebreak
+    \textbf{DALL\textbullet E 2:} A diffusion model that generates images from text prompts, achieving high fidelity and diversity.
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://production-media.paperswithcode.com/methods/e29fa94b-dfbb-4d35-8fed-c25fdec1fc0c.png}{images/vision+text/dalle-2.png}{width=0.8\textwidth,height=0.8\textheight,keepaspectratio}
+        \caption*{DALL\textbullet E 2 architecture (source: OpenAI)}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1400/0*TUVPZ9ZCD4q8QdUB}{images/vision+text/dalle-2-result.png}{width=0.8\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \item \textbf{Imagen}: A diffusion model by Google that generates high-quality images from text, focusing on photorealism and fine details.
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://cdn.prod.website-files.com/67a1e6de2f2eab2e125f8b9a/67a4f1e8263932696a929f08_JHpEPJQ8DBsIvZvwA-bxquKNLVwi62sdTy94RgIx8sziWNZAwjVjVOV5bpZtmR8eNsM12inVIiiST9FSNUIGXeANw46jYQvOyx96WgmL8FL9lem_LNN-HgeqDuXAK1902Admo2fJEFuLz3x4DCYocUk.png}{images/vision+text/imagen.png}{width=1\textwidth,keepaspectratio}
+        \caption*{How Imagen works: from text to image generation (source: Google)}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://cdn.mos.cms.futurecdn.net/7zoGtryY2HfKDUg2pz8aZD.jpg}{images/vision+text/imagen-4-result.png}{width=1\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \textbf{Stable Diffusion}: An open-source diffusion model that generates high-quality images from text, designed for efficiency and accessibility.
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1400/1*vyzan-cdMVkpcRaVLkhQXA.png}{images/vision+text/stable-diffusion-arch.png}{width=1\textwidth,height=0.8\textheight,keepaspectratio}
+        \caption*{Stable Diffusion architecture (source: Stability AI)}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://stablediffusion-online.com/Astronaut_Riding_a_Horse_(SDXL).jpg}{images/vision+text/stable-diffusion-result.png}{width=1\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \textbf{Diffusion Model Architecture:}
+    \begin{itemize}
+        \item \textbf{U-Net backbone:} The core neural network used for denoising, featuring an encoder-decoder structure with skip connections.
+        \item \textbf{Text encoder:} Converts text prompts into embeddings. Common choices include T5 or CLIP Text Encoder.
+        \item \textbf{Cross-attention:} Mechanism to inject text conditioning into the image generation process, allowing the model to align image features with textual information.
+    \end{itemize}
+\end{frame}

@@ -1,0 +1,419 @@
+\section{Motivation}
+\begin{frame}{Motivation}
+        \begin{itemize}
+            \setlength{\itemsep}{1em}
+            \item Traditional NLP models are \textbf{unimodal} (text-only) and \textbf{reactive}.
+            \item Modern AI agents need to perceive, reason, and act in complex environments using \textbf{multiple modalities} (e.g., vision, text, speech).
+            \item \textbf{Multimodal systems} and \textbf{agentic AI} aim to build goal-directed, autonomous, and continuously learning agents.
+            \item Rise of agent frameworks (Auto-GPT, BabyAGI) and vision-language models enables new research frontiers in decision-making, robotics, and assistive AI.
+        \end{itemize}
+\end{frame}
+
+\section{Learning Outcomes}
+\begin{frame}{Learning Outcomes}
+\begin{itemize}
+    \setlength{\itemsep}{1em}
+    \item Explain core vision-language models (e.g., CLIP, VisualBERT, FLAVA).
+    \item Compare multimodal architectures and their integration mechanisms.
+    \item Understand the principles of agentic AI and agentic loops.
+    \item Differentiate between reactive and proactive agent behavior.
+    \item Describe continual learning challenges in agentic systems.
+    \item Critically evaluate frameworks like Auto-GPT and BabyAGI.
+    \item Reflect on safety, control, and ethical issues in agentic AI.
+\end{itemize}
+\end{frame}
+
+
+\section{Vision-Language Models}
+\begin{frame}{}
+    \LARGE Vision-Language Models
+\end{frame}
+
+\subsection{CLIP: Contrastive Language-Image Pretraining}
+\begin{frame}[allowframebreaks]{CLIP: Contrastive Language-Image Pretraining}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Developed by OpenAI (Radford et al., 2021)
+        \item Trained on 400M (image, text) pairs
+        \item Learns a joint embedding space using contrastive loss
+        \item Image and text encoders are trained to match correct pairs
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Use cases:}
+    \begin{itemize}
+        \item Zero-shot classification
+        \item Semantic similarity
+        \item Prompt-based image querying
+    \end{itemize}
+\framebreak
+    \textbf{Architecture:}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item ResNet / ViT for images
+        \item Transformer for text
+        \item Cosine similarity loss
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Paper:} \href{https://arxiv.org/abs/2103.00020}{CLIP: Learning Transferable Visual Models From Natural Language Supervision}
+\end{frame}
+
+
+\subsection{VisualBERT}
+\begin{frame}[allowframebreaks]{VisualBERT}
+    \begin{itemize}
+        \vspace{-0.5em}
+        \item Joint Transformer-based model: processes both image regions and text.
+        \item \textbf{Early fusion:} image embeddings are added as input tokens to the Transformer.
+        \item \textbf{Pretraining objectives:}
+        \begin{itemize}
+            \vspace{-0.5em}
+            \item Masked Language Modeling (MLM)
+            \item Next Sentence Prediction (NSP)
+            \item Image-Text Alignment
+        \end{itemize}
+    \end{itemize}
+    \textbf{Applications:}
+    \begin{itemize}
+        \vspace{-0.5em}
+        \item Visual Question Answering (VQA)
+        \item Image captioning
+        \item Visual commonsense reasoning
+    \end{itemize}
+    \textbf{Paper:} \href{https://arxiv.org/abs/1908.03557}{VisualBERT: A Simple and Performant Baseline for Vision and Language}
+\end{frame}
+
+
+\subsection{FLAVA: Fusion of Language And Vision Architecture}
+\begin{frame}[allowframebreaks]{FLAVA (Facebook AI)}
+    \begin{itemize}
+        \item FLAVA = \textbf{Fusion of Language And Vision Architecture}
+        \item Handles both unimodal and multimodal tasks
+        \item \textbf{Three towers:} vision, language, multimodal
+        \item Self-supervised objectives: masked modeling, contrastive learning
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Capabilities:}
+    \begin{itemize}
+        \item Text classification
+        \item Image classification
+        \item Visual Question Answering (VQA)
+        \item Image captioning
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Paper:} \href{https://arxiv.org/abs/2112.04482}{FLAVA: A Foundational Language And Vision Alignment Model}
+\end{frame}
+
+
+\section{Multimodal Architectures}
+\begin{frame}{}
+    \LARGE Multimodal Architectures
+\end{frame}
+
+
+\subsection{Categories of Multimodal Architectures}
+\begin{frame}[allowframebreaks]{Categories of Multimodal Architectures}
+    \begin{itemize}
+        \item \textbf{Early Fusion:} Combine raw modalities at the input level.\\
+        \textit{Example: VisualBERT adds image embeddings as tokens to the Transformer.}
+        \item \textbf{Late Fusion:} Process each modality separately, then merge representations.\\
+        \textit{Example: CLIP encodes images and text independently, then compares embeddings.}
+        \item \textbf{Hybrid / Cross-modal Attention:} Enable interactions between modalities at multiple stages using attention mechanisms.
+    \end{itemize}
+    \textbf{\faWrench\hspace{0.5em}Design Considerations:}
+    \begin{itemize}
+        \item \textbf{Alignment:} How to align representations across modalities.
+        \item \textbf{Modality Dropout:} Handling missing or noisy modalities during training or inference.
+        \item \textbf{Shared vs. Modality-Specific Layers:} Deciding which layers are shared and which are unique to each modality.
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Challenges in Multimodal Integration}
+\begin{frame}[allowframebreaks]{Challenges in Multimodal Integration}
+    \begin{itemize}
+        \vspace{-0.5em}
+        \item \textbf{Representation mismatch:} Different modalities (e.g., images, text, audio) have distinct statistical properties and structures, making joint representation learning challenging.
+        \item \textbf{Missing modalities:} Real-world data may lack one or more modalities at training or inference time, requiring robust models that can handle incomplete inputs.
+        \item \textbf{Synchronization and timing:} Temporal alignment is critical when modalities are sequential (e.g., video and audio), and misalignment can degrade performance.
+        \item \textbf{Data scarcity in aligned datasets:} Large-scale, high-quality datasets with well-aligned multimodal pairs are rare, limiting supervised learning approaches.
+        \item \textbf{Evaluation metrics:} Choosing appropriate metrics is difficult—should models be evaluated on task-specific performance or their ability to generalize across modalities?
+    \end{itemize}
+\end{frame}
+
+
+\section{Agentic AI}
+\begin{frame}{}
+    \LARGE Agentic AI
+\end{frame}
+
+\subsection{What is Agentic AI?}
+\begin{frame}{What is Agentic AI?}
+    \begin{itemize}
+        \item AI systems that \textbf{perceive}, \textbf{reason}, \textbf{plan}, and \textbf{act} to fulfill goals.
+        \item \textbf{Agent loop:} Observe $\rightarrow$ Plan $\rightarrow$ Act $\rightarrow$ Reflect $\rightarrow$ Learn
+        \item Inspired by cognitive science, robotics, and autonomous agents.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Core Components:}
+    \begin{itemize}
+        \item Memory
+        \item Planning
+        \item Tool-use (plugins, APIs)
+        \item Feedback-driven behavior
+    \end{itemize}
+\end{frame}
+
+\subsection{Reactive vs. Proactive Agents}
+\begin{frame}{Reactive vs. Proactive Agents}
+    \begin{table}[]
+        \centering
+        \renewcommand{\arraystretch}{1.8}
+        \begin{tabular}{lcc}
+            \hline
+            \textbf{Feature} & \textbf{Reactive} & \textbf{Proactive} \\
+            \hline
+            Response & Immediate & Goal-oriented \\
+            Planning & None & Yes \\
+            Learning & Event-triggered & Self-initiated \\
+            Example & Chatbots & Auto-GPT, Personal Assistants \\
+            \hline
+        \end{tabular}
+    \end{table}
+    \vspace{1em}
+    
+    \textbf{Proactive agents} generate goals, schedule actions, and evaluate results even without user prompts.
+\end{frame}
+
+\subsection{Agent Loop}
+\begin{frame}[allowframebreaks]{Agent Loop in Detail}
+    \begin{itemize}
+        \item \textbf{Perceive:} Multimodal input (text, vision, memory)
+        \item \textbf{Interpret:} NLP/vision models
+        \item \textbf{Plan:} Task decomposition (e.g., LangChain chains)
+        \item \textbf{Act:} API/tool calling
+        \item \textbf{Reflect \& Learn:} Refine memory or adjust goals
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Applications:}
+    \begin{itemize}
+        \item Personal AI assistants
+        \item Research co-pilots
+        \item Automated workflows
+    \end{itemize}
+\end{frame}
+
+
+\section{Open-Source Agentic Frameworks}
+\begin{frame}{}
+    \LARGE Open-Source Agentic Frameworks
+\end{frame}
+
+
+\subsection{Auto-GPT}
+\begin{frame}[allowframebreaks]{Auto-GPT}
+    \begin{itemize}
+        \item \textbf{Open-source project} that chains GPT calls to build autonomous agents.
+        \item Uses \textbf{long-term memory}, file storage, and self-generated tasks.
+        \item \textbf{Requirements:}
+        \begin{itemize}
+            \item Task input
+            \item Internet / API access
+            \item Feedback loop
+        \end{itemize}
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{GitHub:} \href{https://github.com/Torantulino/Auto-GPT}{https://github.com/Torantulino/Auto-GPT}
+\end{frame}
+
+
+\subsection{BabyAGI}
+\begin{frame}[allowframebreaks]{BabyAGI}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Lightweight Python agent loop}
+        \item Generates tasks from high-level objectives
+        \item Runs tasks, stores results, and generates new tasks iteratively
+        \item Emphasizes simplicity and minimalism
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{GitHub:} \href{https://github.com/yoheinakajima/babyagi}{https://github.com/yoheinakajima/babyagi}
+\end{frame}
+
+
+\subsection{Other Notable Frameworks}
+\begin{frame}[allowframebreaks]{Other Notable Frameworks}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{LangChain:} Framework for chaining LLMs with tools, APIs, and memory. Enables complex workflows and agentic behavior.
+        \item \textbf{CrewAI:} Multi-agent coordination platform for collaborative task execution.
+        \item \textbf{SuperAGI:} Production-grade agent platform supporting extensibility, monitoring, and deployment.
+        \item \textbf{OpenDevin:} Developer-oriented agentic IDE for automating software engineering tasks.
+    \end{itemize}
+\end{frame}
+
+
+\section{Continual Learning in Agents}
+\begin{frame}{}
+    \LARGE Continual Learning in Agents
+\end{frame}
+
+
+\subsection{Why Continual Learning?}
+\begin{frame}{Why Continual Learning?}
+    \begin{itemize}
+        \item Agentic AI should evolve with time:
+        \begin{itemize}
+            \item Learn from feedback
+            \item Adapt to new tasks
+            \item Retain useful knowledge
+        \end{itemize}
+    \end{itemize}
+    \vspace{1em}
+    \textbf{\faGlobe\hspace{0.5em}Real-world scenarios:}
+    \begin{itemize}
+        \item Personalization
+        \item Environment drift
+        \item Avoiding forgetting
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Challenges in Continual Learning}
+\begin{frame}[allowframebreaks]{Challenges in Continual Learning}
+    \begin{itemize}
+        \item \textbf{Catastrophic forgetting:} Agents may lose previously acquired knowledge when learning new tasks.
+        \item \textbf{Stability-plasticity dilemma:} Balancing the ability to learn new information (plasticity) with retaining old knowledge (stability).
+        \item \textbf{Modality drift:} Changes or shifts in the types or distributions of input modalities over time.
+        \item \textbf{Scaling memory:} Managing both semantic (general knowledge) and episodic (specific experiences) memory as agents interact with the world.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{\faWrench\hspace{0.5em}Solutions:}
+    \begin{itemize}
+        \item Replay memory (experience replay)
+        \item Progressive networks
+        \item Elastic weight consolidation (EWC)
+    \end{itemize}
+\end{frame}
+
+
+\section{Safety, Ethics & Control}
+\begin{frame}{}
+    \LARGE Safety, Ethics & Control
+\end{frame}
+
+
+\subsection{Safety in Agentic Systems}
+\begin{frame}[allowframebreaks]{Safety in Agentic Systems}
+    \begin{itemize}
+        \item \textbf{Risks:}
+        \begin{itemize}
+            \item Autonomous actions without human oversight
+            \item Errors in tool or API use
+            \item Prompt injection or goal hijacking
+            \item Recursive self-improvement without constraints
+        \end{itemize}
+    \end{itemize}
+    \vspace{1em}
+    \textbf{\faEye\hspace{0.5em}Mitigations:}
+    \begin{itemize}
+        \item Approval-based execution (human-in-the-loop)
+        \item Guardrails and policy enforcement
+        \item Explainability (XAI) for agent decisions
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Ethics and Control}
+\begin{frame}[allowframebreaks]{Ethics and Control}
+    \begin{itemize}
+        \item \textbf{Alignment:} Are agents acting in users’ interests?
+        \item \textbf{Accountability:} Who is responsible for AI actions?
+        \item \textbf{Control:} Can humans override or audit decisions?
+    \end{itemize}
+    \vspace{1em}
+    \textbf{\faLightbulbO\hspace{0.5em}Key Areas:}
+    \begin{itemize}
+        \item Fairness in multimodal data
+        \item Bias amplification (vision + language)
+        \item Transparency in decision-making
+    \end{itemize}
+\end{frame}
+
+
+\section{Future Directions}
+\begin{frame}{}
+    \LARGE Future Directions
+\end{frame}
+
+
+\subsection{Open Problems and Research Directions}
+\begin{frame}[allowframebreaks]{Open Problems and Research Directions}
+    \begin{itemize}
+        \item \textbf{Multimodal grounding in real-world environments:} How can agents robustly connect language, vision, and action in dynamic, noisy settings?
+        \item \textbf{World model integration:} Combining temporal and spatial memory for persistent, context-aware reasoning.
+        \item \textbf{Agent collaboration:} Enabling effective communication and coordination in multi-agent systems.
+        \item \textbf{Scaling memory-efficient agents:} Designing architectures that scale to long-term, large-scale memory without prohibitive costs.
+        \item \textbf{Robust reward models:} Developing reliable reward and feedback mechanisms for open-ended, real-world tasks.
+        \item \textbf{Meta-cognition:} Building agents that can introspect, self-monitor, and adapt their own reasoning processes.
+    \end{itemize}
+\end{frame}
+
+
+\section{Summary}
+\begin{frame}{Summary}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Multimodal models (CLIP, VisualBERT, FLAVA) integrate perception and language for richer AI understanding.
+        \item Agentic AI enables proactive, goal-driven, and autonomous behavior.
+        \item Open-source frameworks (Auto-GPT, BabyAGI) are accelerating research and applications.
+        \item Ethical, safe, and explainable deployment is essential for real-world impact.
+        \item The future of AI lies in continual learning and intelligent autonomy.
+    \end{itemize}
+\end{frame}
+
+
+\section*{References}
+\begin{frame}[allowframebreaks]{References}
+    \scriptsize
+    \begin{thebibliography}{99}
+        \bibitem{radford2021clip}
+        Radford, A., Kim, J. W., Hallacy, C., et al. (2021).
+        \newblock CLIP: Learning Transferable Visual Models From Natural Language Supervision.
+        \newblock \textit{arXiv:2103.00020}.
+
+        \bibitem{li2019visualbert}
+        Li, L. H., Yatskar, M., Yin, D., Hsieh, C. J., & Chang, K. W. (2019).
+        \newblock VisualBERT: A Simple and Performant Baseline for Vision and Language.
+        \newblock \textit{arXiv:1908.03557}.
+
+        \bibitem{singh2021flava}
+        Singh, A., Goyal, N., Goswami, V., et al. (2021).
+        \newblock FLAVA: A Foundational Language And Vision Alignment Model.
+        \newblock \textit{arXiv:2112.04482}.
+
+        \bibitem{yao2023react}
+        Yao, S., Zhao, J., Yu, D., et al. (2023).
+        \newblock ReAct: Synergizing Reasoning and Acting in Language Models.
+        \newblock \textit{arXiv:2210.03629}.
+
+        \bibitem{nakajima2023babyagi}
+        Nakajima, Y. (2023).
+        \newblock BabyAGI.
+        \newblock \url{https://github.com/yoheinakajima/babyagi}
+
+        \bibitem{torantulino2023autogpt}
+        Torantulino (2023).
+        \newblock Auto-GPT.
+        \newblock \url{https://github.com/Torantulino/Auto-GPT}
+
+        \bibitem{ahn2022saycan}
+        Ahn, M., Brohan, A., Chebotar, Y., et al. (2022).
+        \newblock Do As I Can, Not As I Say: Grounding Language in Robotic Affordances.
+        \newblock \textit{arXiv:2204.01691}.
+
+        \bibitem{openai2023agentsim}
+        OpenAI Blog.
+        \newblock Agent Simulations and Superalignment.
+        \newblock \url{https://openai.com/blog/}
+    \end{thebibliography}
+\end{frame}

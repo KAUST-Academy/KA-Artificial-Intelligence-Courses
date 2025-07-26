@@ -1,0 +1,37 @@
+\begin{frame}[fragile, allowframebreaks]{CNN - Loss Functions & Optimizers}
+\begin{block}{Loss:}
+    \begin{itemize}
+        \item Loss functions measure how well the model's predictions match the true labels.
+        \item Common loss functions include:
+            \begin{itemize}
+                \item Cross-Entropy Loss (for classification)
+                \item Mean Squared Error (for regression)
+            \end{itemize}
+        \item The choice of loss function depends on the task at hand.
+    \end{itemize}
+\end{block}
+
+\begin{block}{Optimizers:}
+    \begin{itemize}
+        \item Optimizers update the model's parameters based on the gradients computed during backpropagation.
+        \item Common optimizers include:
+            \begin{itemize}
+                \item Stochastic Gradient Descent (SGD)
+                \item Adam
+                \item RMSprop
+            \end{itemize}
+        \item The choice of optimizer can significantly affect the training speed and convergence.
+    \end{itemize}
+\end{block}
+
+\begin{lstlisting}[language=Python, caption={Code snippet (PyTorch)}, basicstyle=\ttfamily\footnotesize]
+import torch.nn as nn
+import torch
+
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+loss = criterion(preds, labels)
+loss.backward()
+optimizer.step()
+\end{lstlisting}
+\end{frame}  

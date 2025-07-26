@@ -1,0 +1,382 @@
+\section{Motivation}
+\begin{frame}{Why Prompting and RAG?}
+    LLMs (Large Language Models) are powerful but have limitations:
+    \begin{itemize}
+        \item Static knowledge (limited to training data)
+        \item Prone to hallucinations
+        \item Require careful input phrasing
+    \end{itemize}
+    \\[2em]
+    Prompting helps guide LLM behavior. \\[2em]
+
+    RAG (Retrieval-Augmented Generation) addresses knowledge limitations by combining LLMs with external retrieval.
+\end{frame}
+
+\begin{frame}{Real-World Motivation}
+    Chatbots, search engines, and coding assistants require:
+    \begin{itemize}
+        \item Accurate, real-time information
+        \item Robust language understanding
+    \end{itemize}
+    \vspace{1em}
+    Prompting combined with RAG enables systems that are:
+    \begin{itemize}
+        \item Customizable
+        \item Scalable
+        \item Easily updatable
+    \end{itemize}
+\end{frame}
+
+\section{Learning Outcomes}
+\begin{frame}{Learning Outcomes}
+    After this session, you will be able to:
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Design effective prompts for various tasks
+        \item Understand and apply few-shot and zero-shot prompting
+        \item Implement chain-of-thought prompting
+        \item Understand adversarial threats to LLMs
+        \item Build RAG-based systems for enhanced LLM capabilities
+    \end{itemize}
+\end{frame}
+
+
+\section{Prompt Engineering}
+\begin{frame}{}
+    \LARGE Prompt Engineering
+\end{frame}
+
+\subsection{What is Prompt Engineering?}
+\begin{frame}{What is Prompt Engineering?}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Crafting inputs that steer LLM behavior
+        \item Essential for performance, especially in zero-shot/few-shot settings
+        \item Prompt = ``Programming language'' of LLMs
+    \end{itemize}
+\end{frame}
+
+\subsection{Why is Prompt Engineering Important?}
+\begin{frame}{Basic Prompting Techniques}
+    \begin{itemize}
+        \item \textbf{Instruction-based prompts:} Directly tell the model what to do.\\
+        \textit{Example:} ``Summarize this text.''
+        \item \textbf{Input-output examples (Few-shot prompting):} Provide examples to guide the model's behavior.\\
+        \textit{Example:}
+        \begin{itemize}
+            \item \texttt{Input: Translate ``Hello'' to French.\\ Output: Bonjour}
+            \item \texttt{Input: Translate ``Goodbye'' to French.\\ Output: Au revoir}
+        \end{itemize}
+        \item \textbf{Delimiters for clarity:} Use symbols or formatting to separate instructions, context, and responses.\\
+        \textit{Example:} Use triple backticks (\texttt{```}) or quotes to enclose text.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Advanced Prompting Tools}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Prompt templates:} Predefined structures for consistent and reusable prompts.
+        \item \textbf{Role play:} Assign a persona or role to the model.\\
+        \textit{Example:} ``You are a helpful assistant.''
+        \item \textbf{Contextual priming:} Provide relevant background or context to guide responses.
+        \item \textbf{Stop tokens and format constraints:} Specify where the model should stop or enforce output formatting.\\
+        \textit{Example:} ``Respond in JSON format.''
+    \end{itemize}
+\end{frame}
+
+
+\section{Few-shot and Zero-shot Prompting}
+\begin{frame}{}
+    \LARGE Few-shot and Zero-shot Prompting
+\end{frame}
+
+
+\subsection{Zero-shot Prompting}
+\begin{frame}{Zero-shot Prompting}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item No examples are provided to the model.
+        \item Relies entirely on the model's pretraining and generalization abilities.
+        \item Useful for tasks where examples are unavailable or impractical.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Example:}
+    \begin{itemize}
+        \item \texttt{Translate to French: Hello}
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Few-shot Prompting}
+\begin{frame}{Few-shot Prompting}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Provides a few examples to guide the model's behavior.
+        \item Helps the model understand the task better.
+        \item Can significantly improve performance on specific tasks.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Example:}
+    \begin{itemize}
+        \item \texttt{Translate to French: Hello\\ Output: Bonjour}
+        \item \texttt{Translate to French: Goodbye\\ Output: Au revoir}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{When to Use Which?}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Zero-shot prompting:} Best for simpler tasks or when broad generalization is needed.
+        \begin{itemize}
+            \item Example: Basic translation, summarization, or classification.
+        \end{itemize}
+        \item \textbf{Few-shot prompting:} Useful for tasks that require learning specific patterns or when fine control over output is desired.
+        \begin{itemize}
+            \item Example: Style transfer, domain-specific tasks, or nuanced reasoning.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\section{Chain-of-Thought (CoT) and Zero-shot CoT}
+\begin{frame}{}
+    \LARGE Chain-of-Thought (CoT) and Zero-shot CoT
+\end{frame}
+
+
+\subsection{Chain-of-Thought Prompting}
+\begin{frame}{Chain-of-Thought Prompting}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Adds intermediate reasoning steps to the model's output.
+        \item Boosts performance on math, logic, and reasoning tasks.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Example:}
+    \begin{itemize}
+        \item Q: If a train travels 60 miles in 2 hours, what is the speed?\\[1em]
+        A: Let's think step by step...\\[0.5em]
+        The train travels 60 miles in 2 hours.\\[0.5em]
+        Speed = Distance / Time = 60 / 2 = 30 miles per hour.
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Zero-shot Chain-of-Thought (CoT) Prompting}
+\begin{frame}{Zero-shot CoT Prompting}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item A single example or instruction triggers reasoning behavior.
+        \item No explicit reasoning examples are provided.
+        \item Prompt typically includes: ``Answer the question. Think step-by-step.''
+        \item Works surprisingly well in GPT models.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Prompt Example:}
+    \begin{itemize}
+        \item Q: If a train travels 60 miles in 2 hours, what is the speed?\\
+        A: Let's think step by step.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Benefits and Applications}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Significant improvements on reasoning benchmarks (e.g., GSM8K, BIG-Bench)
+        \item Especially useful in coding, math, and science education
+    \end{itemize}
+\end{frame}
+
+
+\section{Adversarial Attacks on LLMs}
+\begin{frame}{}
+    \LARGE  Adversarial Attacks on LLMs
+\end{frame}
+
+
+\subsection{What are Adversarial Attacks?}
+\begin{frame}{What are Adversarial Attacks?}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Inputs crafted to cause incorrect or harmful outputs from LLMs
+        \item Can exploit model weaknesses or bypass safety mechanisms
+        \item Common types include:
+        \begin{itemize}
+            \setlength{\itemsep}{0.75em}
+            \item \textbf{Prompt injection:} Manipulating prompts to alter model behavior
+            \item \textbf{Jailbreaks:} Forcing the model to ignore restrictions or policies
+            \item \textbf{Prompt leeching:} Extracting sensitive or proprietary information from the model
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Common Attack Types}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Prompt Injection:} Adding adversarial instructions to manipulate model outputs.
+        \item \textbf{Jailbreaks:} Bypassing safety mechanisms to elicit restricted or harmful responses.
+        \item \textbf{Context Leaking:} Extracting hidden or sensitive prompt content from the model.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Defense Techniques}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Input sanitization:} Remove or neutralize potentially harmful input before passing it to the model.
+        \item \textbf{Output filtering:} Post-process model outputs to detect and block unsafe or undesired content.
+        \item \textbf{Prompt isolation:} Separate system and user prompts to prevent user input from interfering with system instructions.
+        \item \textbf{Adversarial training:} Expose models to adversarial examples during training to improve robustness.
+    \end{itemize}
+\end{frame}
+
+
+\section{Retrieval-Augmented Generation (RAG)}
+\begin{frame}{}
+    \LARGE Retrieval-Augmented Generation (RAG)
+\end{frame}
+
+
+\begin{frame}{Motivation for RAG}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item LLMs are fixed after training---their knowledge cannot be easily updated.
+        \item Updating facts or adding new information requires retraining or fine-tuning, which is costly and slow.
+        \item Retrieval-Augmented Generation (RAG) addresses this by combining:
+        \begin{itemize}
+            \item A \textbf{retriever} that fetches relevant documents or facts from an external knowledge base.
+            \item A \textbf{reader} (LLM) that generates answers conditioned on the retrieved information.
+        \end{itemize}
+        \item This enables up-to-date, accurate, and context-aware responses without retraining the LLM.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{RAG Architecture}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Retriever:} Fetches relevant documents from a corpus (e.g., via vector search).
+        \item \textbf{Reader:} LLM generates answers based on the retrieved documents.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Two main components:}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Dense retriever:} Learns to encode queries and documents into vectors for similarity search (e.g., DPR, ColBERT).
+        \item \textbf{Generator:} Produces final answers conditioned on retrieved context (e.g., GPT, BART).
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Example RAG Workflow}
+    \begin{enumerate}
+        \setlength{\itemsep}{1em}
+        \item \textbf{User asks a question.}
+        \item \textbf{Retriever:} Embedding and similarity search retrieves top-$k$ relevant documents from the knowledge base.
+        \item \textbf{Reader:} Retrieved documents and the user prompt are fed to the LLM.
+        \item \textbf{LLM generates a response} grounded in the retrieved documents.
+    \end{enumerate}
+\end{frame}
+
+
+\begin{frame}{RAG Tools and Libraries}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{LangChain:} Framework for building LLM-powered applications with retrieval, chaining, and orchestration.
+        \item \textbf{LlamaIndex:} Data framework for connecting LLMs with external data sources and knowledge bases.
+        \item \textbf{Haystack:} Open-source framework for building production-ready RAG pipelines.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Popular Vector Databases:}
+    \begin{itemize}
+        \item \textbf{FAISS:} Facebook AI Similarity Search, efficient vector search library.
+        \item \textbf{Weaviate:} Scalable, cloud-native vector database with RESTful APIs.
+        \item \textbf{Qdrant:} Open-source vector search engine with filtering and payload support.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Benefits of RAG}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Factual accuracy:} Answers are grounded in retrieved documents, reducing hallucinations.
+        \item \textbf{Real-time updates:} Knowledge can be updated instantly by modifying the underlying corpus, without retraining the LLM.
+        \item \textbf{Scalable with large corpora:} Efficient retrieval enables handling vast and dynamic knowledge bases.
+    \end{itemize}
+\end{frame}
+
+
+\section{Limitations \& Future Directions}
+\begin{frame}{}
+    \LARGE Limitations \& Future Directions
+\end{frame}
+
+\subsection{Limitations of Prompting}
+\begin{frame}{Prompting Limitations}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Brittleness to phrasing:} Small changes in prompt wording can lead to very different outputs.
+        \item \textbf{Lack of reasoning in zero-shot:} Zero-shot prompts often fail on tasks requiring multi-step reasoning or logic.
+        \item \textbf{Prompt leakage/security issues:} Sensitive system prompts or instructions can be inadvertently revealed or manipulated by users.
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Limitations of RAG}
+\begin{frame}{RAG Limitations}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Requires good retrieval quality:} Poor retrieval leads to irrelevant or incomplete context for the LLM.
+        \item \textbf{Latency overhead:} Retrieval and reranking steps add to response time.
+        \item \textbf{Domain-specific retrievers may require tuning:} Customization and fine-tuning are often needed for specialized domains.
+        \item \textbf{Context length limits in LLMs:} Only a limited amount of retrieved content can be passed to the LLM at once.
+    \end{itemize}
+\end{frame}
+
+
+\subsection{Emerging Trends}
+\begin{frame}{Emerging Trends}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Self-Improving Prompts:} Techniques like AutoPrompt and prompt optimization automatically refine prompts for better performance.
+        \item \textbf{Adaptive Retrieval:} Learned retrievers and rerankers dynamically improve retrieval quality based on feedback or downstream task performance.
+        \item \textbf{Hybrid CoT + RAG Models:} Combining chain-of-thought prompting with retrieval-augmented generation for enhanced reasoning and factual accuracy.
+        \item \textbf{Open-domain QA Benchmarks:} New benchmarks evaluate the effectiveness of RAG and prompting methods in open-domain question answering.
+    \end{itemize}
+\end{frame}
+
+
+\section{Summary}
+\begin{frame}{Key Takeaways}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item Prompting guides LLM behavior and enables customization.
+        \item Few-shot, zero-shot, and chain-of-thought (CoT) prompt styles have different strengths.
+        \item Adversarial robustness is critical for safe deployment.
+        \item RAG extends LLMs with external knowledge.
+        \item Future lies in adaptive, robust, compositional systems.
+    \end{itemize}
+\end{frame}
+
+
+\section{References}
+\begin{frame}{References}
+    \textbf{Key Papers and Resources}
+    \begin{itemize}
+        \item Brown et al., 2020. \textit{Language Models are Few-Shot Learners (GPT-3)}
+        \item Wei et al., 2022. \textit{Chain-of-Thought Prompting Elicits Reasoning in LLMs}
+        \item Zhang et al., 2021. \textit{DPR: Dense Passage Retrieval for Open-Domain QA}
+        \item Lewis et al., 2020. \textit{Retrieval-Augmented Generation for Knowledge-Intensive NLP}
+        \item Schick \& Schütze, 2021. \textit{It's Not Just Size That Matters: Small Language Models Are Also Few-Shot Learners}
+    \end{itemize}
+    \vspace{0.5em}
+    \textbf{Online Resources}
+    \begin{itemize}
+        \item \href{https://platform.openai.com/docs/guides/prompting}{OpenAI Prompt Engineering Guide}
+        \item \href{https://docs.langchain.com}{LangChain Documentation}
+        \item \href{https://www.llamaindex.ai}{LlamaIndex Documentation}
+    \end{itemize}
+\end{frame}

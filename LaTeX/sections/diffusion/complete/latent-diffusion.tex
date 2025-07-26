@@ -1,0 +1,55 @@
+\section{Latent Diffusion Models (LDMs)}
+\begin{frame}{}
+    \LARGE Diffusion Models: \textbf{Latent Diffusion Models (LDMs)}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{What is a Latent Space?}
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://nvlabs.github.io/LSGM/assets/pipelinefig.png}{images/diffusion/latent-space-diffusion.png}{width=\textwidth,height=0.5\textheight,keepaspectratio}
+    \end{figure}
+    \begin{itemize}
+        \setlength{\itemsep}{-0.5em}
+        \item A \textbf{latent space} is an abstract, compressed space where high-dimensional data (like images) is represented in a lower-dimensional form.
+        \item Think of it as a hidden layer of meaning—each point in this space represents a potential image or concept.
+        \item In classical models like GANs or VAEs, the latent space is directly sampled from (e.g., a vector $\mathbf{z}$), and the generator turns it into an image.
+        \item \textbf{Latent} space = ``Hidden space of ideas or features''
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Where is the Latent Space in Diffusion?}
+    \textbf{Two main ways latent spaces are used in diffusion:}
+        \begin{itemize}
+            \item \textbf{1. Latent Diffusion Models (LDMs):}
+            \begin{itemize}
+                \item Diffusion is performed in a compressed latent space, not directly on high-dimensional images.
+                \item \textbf{Pipeline:} Compress image $\rightarrow$ Denoise in latent space $\rightarrow$ Decode back to image.
+                \item Enables faster, cheaper training and inference, and allows for semantic control (e.g., text prompts, masks).
+            \end{itemize}
+            \item \textbf{2. Latent Representations in Noise Vectors:}
+            \begin{itemize}
+                \item Even in standard diffusion models, the initial noise vector acts as a latent code.
+                \item Changing the noise vector generates different images or morphs between them.
+            \end{itemize}
+        \end{itemize}
+\framebreak
+    \begin{figure}
+        \centering
+        \fetchconvertimage{https://towardsdatascience.com/wp-content/uploads/2022/09/1WTe5olMSFC-T6No0Y_gKWg.png}{images/diffusion/latent-space-diffusion-explained.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+    \end{figure}
+\framebreak
+    \textbf{Why Latent Diffusion?}
+    \begin{itemize}
+        \item Reduces computational cost by operating in a lower-dimensional space.
+        \item Maintains high-quality image generation while being more efficient.
+        \item Allows for more complex operations like text-guided generation and image editing.
+    \end{itemize}
+\framebreak
+    \textbf{Applications:}
+        \begin{itemize}
+            \item Text-to-image generation (e.g., Stable Diffusion) uses text embeddings in latent space.
+            \item Image editing by modifying specific parts of the latent.
+            \item Inversion: map a real image to latent, edit, then decode back.
+        \end{itemize}
+    \end{itemize}
+\end{frame}

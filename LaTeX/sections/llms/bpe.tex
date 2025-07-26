@@ -1,0 +1,21 @@
+\section{Byte-Pair Encoding (BPE)}
+\begin{frame}{Byte-Pair Encoding (BPE)}
+    \begin{itemize}
+        \item \textbf{How BPE works:}
+        \begin{itemize}
+            \item Start with characters.
+            \item Merge most frequent pair (e.g., ``t'', ``h'' $\rightarrow$ ``th'').
+            \item Repeat until vocab size reached.
+        \end{itemize}
+        \item \textbf{Advantages:}
+        \begin{itemize}
+            \item Handles unknown words well (e.g., \texttt{unbelievably} $\rightarrow$ \texttt{un} + \texttt{believ} + \texttt{ably})
+            \item Reduces sequence length
+        \end{itemize}
+        \item \textbf{Limitations:}
+        \begin{itemize}
+            \item Not optimal for all scripts (e.g., Chinese)
+            \item Word boundaries may be unclear
+        \end{itemize}
+    \end{itemize}
+\end{frame}

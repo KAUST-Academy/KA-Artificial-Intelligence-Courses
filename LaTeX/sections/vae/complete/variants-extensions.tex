@@ -1,0 +1,45 @@
+\subsection{Variants}
+\begin{frame}{}
+	\LARGE VAE: \textbf{Variants}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Variants and Extensions}
+\textbf{$\beta$-VAE:}
+\begin{itemize}
+    \item Introduces a hyperparameter $\beta$ to control the trade-off between reconstruction and regularization.
+    \item Encourages disentangled representations.
+\end{itemize}
+
+\textbf{Conditional VAE (CVAE):}
+\begin{itemize}
+    \item Incorporates additional information $y$ (e.g., class labels) into the encoder and decoder.
+    \item Enables generation of data conditioned on $y$.
+\end{itemize}
+
+\textbf{Discrete VAE:}
+\begin{itemize}
+    \item Utilizes discrete latent variables.
+    \item Techniques like Gumbel-Softmax are used for differentiable sampling.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Disentangled Variational Autoencoders ($\beta$-VAEs)}
+\begin{itemize}
+    \item \textbf{Basic Idea}: Different neurons in latent space should be uncorrelated, i.e. they all try to learn something different about input data.
+    \item \textbf{Implementation}:
+    $$\mathcal{L}(\theta, \phi; x, z, \beta) = E_{q_\phi(z|x)}(log \, p_\theta(x|z)) - \textcolor{red}{\beta} \, KL(q_\phi(z|x)||p(z))$$
+    \item Increasing the $\textcolor{red}{\beta}$ is forcing variational autoencoder to encode the information in only few latent variables
+\end{itemize}
+
+\framebreak
+
+\begin{figure}
+        \centering
+        \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/beta-vae.png}
+        \caption{Azimuthal rotation in $\beta$-VAEs and simple VAEs. $\beta$-VAEs produce more disentangled rotation, whereas some other features also change in simple VAEs.}
+\end{figure}
+
+\end{frame}
+
+\input{sections/vae/complete/vq-vae.tex}

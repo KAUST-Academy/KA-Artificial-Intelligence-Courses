@@ -1,0 +1,153 @@
+% \begin{frame}[allowframebreaks]{Autoregressive Models: Motivation}
+% \begin{itemize}
+%     \item \textbf{Motivation:}
+%     \begin{itemize}
+%         \item How can we model and generate complex data distributions?
+%         \item What are the challenges in moving from simple to high-dimensional data?
+%     \end{itemize}
+%     \item \textbf{1-Dimensional Distributions:}
+%     \begin{itemize}
+%         \item \textit{Simplest generative model:} Histogram-based modeling.
+%         \item \textit{Parameterized distributions:} Fit data with known distributions (e.g., Gaussian, Bernoulli).
+%         \item \textit{Maximum likelihood:} Learn parameters by maximizing the likelihood of observed data.
+%     \end{itemize}
+%     \item \textbf{High-Dimensional Distributions:}
+%     \begin{itemize}
+%         \item Curse of dimensionality: Direct modeling becomes infeasible.
+%         \item \textit{Chain rule:} Factorize joint distribution as a product of conditionals:
+%         \[
+%             p(x_1, x_2, \ldots, x_n) = \prod_{i=1}^n p(x_i \mid x_{<i})
+%         \]
+%     \end{itemize}
+%     \item \textbf{“Practical” Incarnations:}
+%     \begin{itemize}
+%         \item \textit{Bayesian Networks:} Graphical models encoding conditional dependencies.
+%         \item \textit{MADE:} Masked Autoencoder for Distribution Estimation.
+%         \item \textit{Causal Masked Neural Models:} Neural networks with causal masking (e.g., PixelCNN, Transformer decoders).
+%         \item \textit{RNNs:} Recurrent Neural Networks for sequential data modeling.
+%     \end{itemize}
+%     \item \textbf{Deeper Dive into Causal Masked Neural Models:}
+%     \begin{itemize}
+%         \item \textit{Convolutional:} PixelCNN, WaveNet use masked convolutions for autoregressive modeling.
+%         \item \textit{Attention:} Transformers with causal masks for flexible context modeling.
+%         \item \textit{Tokenization:} Discretizing data (e.g., bytes, words, image patches) for sequence modeling.
+%         \item \textit{Caching:} Efficient inference and generation by reusing computed states.
+%     \end{itemize}
+%     \item \textbf{Other Considerations:}
+%     \begin{itemize}
+%         \item \textit{Decoder-only vs. Encoder-Decoder:} Trade-offs in architecture for generation and conditioning.
+%         \item \textit{New incarnations of recurrent models:} Modern RNN variants and hybrids.
+%         \item \textit{Alternative/complementary tokenization:} Exploring new ways to represent and process data sequences.
+%     \end{itemize}
+% \end{itemize}
+
+% \framebreak
+
+% \begin{itemize}
+%     \item \textbf{Problems we’d like to solve:}
+%     \begin{itemize}
+%         \item \textit{Generate data:} Synthesize images, videos, speech, and text.
+%         \item \textit{Compress data:} Construct efficient codes for storage and transmission.
+%         \item \textit{Detect anomalies:} Identify data that is out of distribution.
+%     \end{itemize}
+%     \item \textbf{Likelihood-based models:}
+%     \begin{itemize}
+%         \item Estimate the data distribution $p_{\text{data}}$ from samples $x^{(1)}, \ldots, x^{(n)} \sim p_{\text{data}}(x)$.
+%         \item Learn a distribution $p$ that enables:
+%         \begin{itemize}
+%             \item Computing $p(x)$ for arbitrary $x$.
+%             \item Sampling $x \sim p(x)$.
+%         \end{itemize}
+%     \end{itemize}
+%     \item \textbf{Focus for today:} Discrete data.
+% \end{itemize}
+
+% \framebreak
+
+% \begin{itemize}
+%     \item \textbf{Why model the joint distribution of data?}
+%     \begin{itemize}
+%         \item To understand, generate, and manipulate complex data such as text, images, and audio.
+%         \item Enables probabilistic reasoning and sampling from the data distribution.
+%     \end{itemize}
+%     \item \textbf{Goal:}
+%     \begin{itemize}
+%         \item Build tractable probabilistic models with explicit likelihoods.
+%         \item Facilitate tasks like generation, completion, and denoising.
+%     \end{itemize}
+%     \item \textbf{Examples:}
+%     \begin{itemize}
+%         \item \textbf{Text generation:} Language models (e.g., GPT, RNN-based models)
+%         \item \textbf{Image generation:} PixelCNN, PixelRNN
+%         \item \textbf{Audio synthesis:} WaveNet
+%     \end{itemize}
+% \end{itemize}
+% \end{frame}
+
+\begin{frame}[allowframebreaks]{Motivation: The Challenge of High-Dimensional Data}
+    \begin{itemize}
+        \item \textbf{The Core Problem:} We aim to estimate distributions of complex, high-dimensional data.
+        \begin{itemize}
+            \item \textit{Example:} A 128x128x3 RGB image has $128 \times 128 \times 3 = 49,152$ dimensions. Directly modeling such a high-dimensional space is practically impossible due to the "curse of dimensionality."
+        \end{itemize}
+        \item \textbf{Desired Properties for our Models:}
+        \begin{itemize}
+            \item \textbf{Computational Efficiency:}
+            \begin{itemize}
+                \setlength{\itemsep}{-0.6em}
+                \item Efficient training (fast convergence, reasonable resource usage).
+                \item Efficient model representation (compact size).
+            \end{itemize}
+            \item \textbf{Statistical Efficiency:}
+            \begin{itemize}
+                \setlength{\itemsep}{-0.6em}
+                \item Expressiveness (ability to capture complex data relationships).
+                \item Generalization (performing well on unseen data from the same distribution).
+            \end{itemize}
+            \item \textbf{Performance Metrics:}
+            \begin{itemize}
+                \setlength{\itemsep}{-0.6em}
+                \item High sampling quality and speed (for generating new data).
+                \item Good compression rate and speed (for data storage and transmission).
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Fundamentals and Motivation}
+    \begin{itemize}
+        \item \textbf{What are Autoregressive Models?}
+        \begin{itemize}
+            \item \textbf{Goal:} To model and generate complex, high-dimensional data distributions.
+            \item \textbf{Core Idea:} Factorise the joint distribution of data using the \textbf{chain rule}, expressing it as a product of conditional probabilities:
+            \[
+            p(x_1, x_2, \ldots, x_n) = \prod_{i=1}^n p(x_i \mid x_{<i})
+            \]
+            This allows us to model complex data one element (or "token") at a time, conditioned on previously generated elements.
+        \end{itemize}
+    \end{itemize}
+
+    \framebreak
+    
+    \begin{itemize}
+        \item \textbf{Why do we need them?}
+        \begin{itemize}
+            \item \textbf{Curse of Dimensionality:} Directly modeling high-dimensional data distributions is computationally infeasible. Autoregressive models overcome this by breaking down the problem.
+            \item \textbf{Solving Key Problems:}
+            \begin{itemize}
+                \item \textbf{Data Generation:} Synthesize realistic images, audio, video, and text.
+                \item \textbf{Data Compression:} Create efficient representations for storage and transmission.
+                \item \textbf{Anomaly Detection:} Identify data points that deviate from the learned distribution.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+
+    \begin{itemize}
+        \item \textbf{Applications}
+        \begin{itemize}
+            \item \textbf{Text Generation:} Large Language Models (e.g., GPT), RNNs.
+            \item \textbf{Image Generation:} PixelCNN, PixelRNN.
+            \item \textbf{Audio Synthesis:} WaveNet.
+        \end{itemize}
+    \end{itemize}
+\end{frame}

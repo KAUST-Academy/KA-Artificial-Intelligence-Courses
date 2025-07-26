@@ -1,0 +1,35 @@
+\section{Instance Discrimination \& Contrastive Learning}
+\begin{frame}{}
+    \LARGE SSL: \textbf{Instance Discrimination \& Contrastive Learning}
+\end{frame}
+
+\begin{frame}[t,allowframebreaks]{Instance Discrimination \& Contrastive Learning }
+    \textbf{Pretext Task Evolution:}
+    \begin{itemize}
+        \item Earlier: handcrafted tasks (e.g., jigsaw, colorization).
+        \item Now: contrastive learning directly optimizes for invariance and discrimination.
+        \item Leads to better, more transferable features and narrows the gap with supervised learning.
+    \end{itemize}
+
+    \framebreak
+
+    \textbf{Instance Discrimination:}
+    \begin{itemize}
+        \item Treats each image as its own class.
+        \item Positive pairs: augmented views of the same image.
+        \item Negative pairs: views from different images.
+        \item Promotes invariance to augmentations and discrimination between instances.
+    \end{itemize}
+
+    \vspace{0.5em}
+
+    \textbf{Contrastive Learning:}
+    \begin{itemize}
+        \item Self-supervised approach for learning representations, especially in vision.
+        \item Uses data structure instead of labels.
+        \item Learns by pulling together similar (positive) pairs and pushing apart dissimilar (negative) pairs using a contrastive loss (e.g., InfoNCE).
+    \end{itemize}
+\end{frame}
+
+\input{sections/ssl/instance_discrimination}
+\input{sections/ssl/moco}

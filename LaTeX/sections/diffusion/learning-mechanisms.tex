@@ -1,0 +1,65 @@
+\begin{frame}{}
+    \LARGE Diffusion Models: \textbf{Learning Denoising Models}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Learning Denoising Models}
+In diffusion models, we learn a denoising function that can reverse the noise addition process. The training objective is to minimize the difference between the predicted noise and the actual noise added at each step.
+% \begin{itemize}
+%     \item The denoising function is typically a neural network $\mathbf{\epsilon}_\theta(\mathbf{x}_t, t)$ that predicts the noise added to the image at time step $t$.
+%     \item The training objective is to minimize the expected squared error between the predicted noise and the actual noise:
+%     $$
+%     L_t = \mathbb{E}_{\mathbf{x}_0, \mathbf{\epsilon}, t} \left[ \left\| \mathbf{\epsilon} - \mathbf{\epsilon}_\theta(\sqrt{\bar{\alpha}_t} \mathbf{x}_0 + \sqrt{1- \bar{\alpha}_t} \, \mathbf{\epsilon}, t) \right\|^2 \right]
+%     $$
+%     where $\mathbf{x}_0$ is the original image, $\mathbf{\epsilon}$ is the noise, and $\bar{\alpha}_t$ is the cumulative product of $\alpha_t$ values.
+% \end{itemize}
+% \framebreak
+% \begin{itemize}
+%     \item The training process involves sampling pairs of images and noise, and optimizing the neural network to predict the noise added to the image at each time step.
+%     \item The loss function can be expressed as:
+%     $$
+%     L = \mathbb{E}_{\mathbf{x}_0, \mathbf{\epsilon}, t} \left[ \left\| \mathbf{\epsilon} - \mathbf{\epsilon}_\theta(\sqrt{\bar{\alpha}_t} \mathbf{x}_0 + \sqrt{1- \bar{\alpha}_t} \, \mathbf{\epsilon}, t) \right\|^2 \right]
+%     $$
+%     \item This loss function can be interpreted as a variational lower bound on the log-likelihood of the data, similar to the ELBO used in variational autoencoders.
+% \end{itemize}
+% \framebreak
+% \begin{itemize}
+%     \item The training process can be viewed as a form of variational inference, where we approximate the true posterior distribution over the latent variables (the noise) given the observed data (the images).
+%     \item The learned denoising function can then be used to generate new images by sampling from the noise distribution and applying the reverse denoising process.
+%     \item This approach has been shown to produce high-quality samples and is robust to various forms of noise.
+% \end{itemize}
+% \framebreak
+% \begin{itemize}
+%     \item The training objective can be derived from the variational inference framework, where we want to maximize the evidence lower bound (ELBO) on the log-likelihood of the data.
+%     \item The ELBO can be expressed as:
+%     $$
+%     \log p_\theta(\mathbf{x}_0) \geq \mathbb{E}_{q(x_0)q(\mathbf{x}_{1:T}|x_0)} \left[ \log p_\theta(\mathbf{x}_{0:T}) - \log q(\mathbf{x}_{1:T}|x_0) \right]
+%     $$
+%     \item This can be interpreted as minimizing the Kullback-Leibler divergence between the true posterior distribution and the learned distribution.
+% \end{itemize}
+% \framebreak
+\begin{itemize}
+    \item For training, we can form a variational upper bound, commonly used for training variational autoencoders:
+    $$
+    \mathbb{E}_{q(x_0)} \left[-\log p_\theta(\mathbf{x}_0)\right] \leq \mathbb{E}_{q(x_0)q(\mathbf{x}_{1:T}|x_0)} \left[ -\log\frac{p_\theta(\mathbf{x}_{0:T})}{q(\mathbf{x}_{1:T}|x_0)} \right]
+    $$
+    \item The ELBO for this process can be expressed as a sum of losses at each time step $t$:
+    $$
+    L = L_0 + L_1 + \dots + L_T
+    $$
+\end{itemize}
+
+\framebreak
+
+\begin{itemize}
+    \item We can reparametrize the mean so that the neural network learns to predict the added noise (using a network $\mathbf{\epsilon}_\theta(\mathbf{x}_t, t)$ for noise level $t$ in the KL terms that constitute the losses). This means our neural network becomes a noise predictor, rather than a direct mean predictor. The mean can be computed as:
+    $$
+    \mathbf{\mu}_\theta(\mathbf{x}_t, t) = \frac{1}{\sqrt{\alpha_t}} \left(  \mathbf{x}_t - \frac{\beta_t}{\sqrt{1- \bar{\alpha}_t}} \mathbf{\epsilon}_\theta(\mathbf{x}_t, t) \right)
+    $$
+    \item The final objective function $L_t$ (for a random time step $t$ and $\mathbf{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$) is:
+    $$
+    \left\| \mathbf{\epsilon} - \mathbf{\epsilon}_\theta(\mathbf{x}_t, t) \right\|^2 = \left\| \mathbf{\epsilon} - \mathbf{\epsilon}_\theta\left( \sqrt{\bar{\alpha}_t} \mathbf{x}_0 + \sqrt{1- \bar{\alpha}_t} \, \mathbf{\epsilon}, t \right) \right\|^2
+    $$
+    \item For a complete derivation, see \href{https://lilianweng.github.io/posts/2021-07-11-diffusion-models/}{here}.
+\end{itemize}
+\end{frame}

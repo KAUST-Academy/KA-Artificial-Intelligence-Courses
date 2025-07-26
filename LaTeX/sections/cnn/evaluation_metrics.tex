@@ -1,0 +1,133 @@
+\begin{frame}[fragile, allowframebreaks]{CNN - Evaluation Metrics}
+\begin{block}{Accuracy:}
+    \begin{itemize}
+        \item The ratio of correctly predicted instances to the total instances.
+        \item It is a common metric for classification tasks.
+        \item Formula: 
+            \[
+            \text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}
+            \]
+        \item Where:
+            \begin{itemize}
+                \item TP: True Positives
+                \item TN: True Negatives
+                \item FP: False Positives
+                \item FN: False Negatives
+            \end{itemize}
+        \item Limitations:
+            \begin{itemize}
+                \item It can be misleading in imbalanced datasets.
+                \item It does not provide information about the types of errors made.
+            \end{itemize}
+    \end{itemize}
+\end{block}
+\framebreak
+\begin{block}{Precision:}
+    \begin{itemize}
+        \item The ratio of correctly predicted positive instances to the total predicted positive instances.
+        \item Formula: 
+            \[
+            \text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}
+            \]
+        \item It indicates how many of the predicted positive instances were actually positive.
+        \item High precision means fewer false positives.
+        \item Limitations:
+            \begin{itemize}
+                \item It does not consider false negatives.
+                \item It can be misleading in imbalanced datasets.
+            \end{itemize}
+    \end{itemize}
+\end{block}
+\framebreak
+\begin{block}{Recall:}
+    \begin{itemize}
+        \item The ratio of correctly predicted positive instances to the total actual positive instances.
+        \item Formula: 
+            \[
+            \text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}
+            \]
+        \item It indicates how many of the actual positive instances were predicted correctly.
+        \item High recall means fewer false negatives.
+        \item Limitations:
+            \begin{itemize}
+                \item It does not consider false positives.
+                \item It can be misleading in imbalanced datasets.
+            \end{itemize}
+    \end{itemize}
+\end{block}
+\framebreak
+\begin{block}{F1 Score:}
+    \begin{itemize}
+        \item The harmonic mean of precision and recall.
+        \item Formula: 
+            \[
+            \text{F1 Score} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+            \]
+        \item It provides a balance between precision and recall.
+        \item Useful for imbalanced datasets where one class is more important than the other.
+        \item Limitations:
+            \begin{itemize}
+                \item It can be misleading if the precision and recall are very different.
+                \item It does not provide information about the types of errors made.
+            \end{itemize}
+    \end{itemize}
+\end{block}
+\framebreak
+\begin{block}{Confusion Matrix:}
+    \begin{itemize}
+        \item A table that summarizes the performance of a classification model.
+        \item It shows the true positive, true negative, false positive, and false negative counts.
+        \item It provides a detailed breakdown of the model's performance.
+        \item Useful for understanding the types of errors made by the model.
+        \item Can be used to calculate other metrics like accuracy, precision, recall, and F1 score.
+        \item Example:
+            \[
+            \begin{array}{|c|c|c|}
+            \hline
+            & \text{Predicted Positive} & \text{Predicted Negative} \\
+            \hline
+            \text{Actual Positive} & \text{TP} & \text{FN} \\
+            \hline
+            \text{Actual Negative} & \text{FP} & \text{TN} \\
+            \hline
+            \end{array}
+            \]
+        \item Where:
+            \begin{itemize}
+                \item TP: True Positives
+                \item TN: True Negatives
+                \item FP: False Positives
+                \item FN: False Negatives
+            \end{itemize}
+    \end{itemize}
+\end{block}
+\framebreak
+
+\begin{block}{mAP:}
+    \begin{itemize}
+        \item mAP is calculated by averaging the average precision (AP) across all classes.
+        \item AP is calculated by plotting the precision-recall curve and computing the area under the curve.
+        \item mAP is particularly useful for evaluating models on datasets with multiple classes.
+        \item It provides a comprehensive measure of the model's performance across all classes.
+        \item Example:
+            \[
+            \text{mAP} = \frac{1}{N} \sum_{i=1}^{N} \text{AP}_i
+            \]
+            \item Where:
+                \begin{itemize}
+                    \item \(N\) is the number of classes.
+                    \item \(\text{AP}_i\) is the average precision for class \(i\).
+                \end{itemize}
+        \item mAP can be calculated at different IoU thresholds (e.g., 0.5, 0.75) to evaluate the model's performance at different levels of overlap.
+    \end{itemize}
+\end{block}
+\framebreak
+
+\begin{lstlisting}[language=Python, caption={Code snippet (PyTorch)}, basicstyle=\ttfamily\footnotesize]
+from torcheval.metrics.functional import multiclass_precision, multiclass_recall, multiclass_f1_score
+
+p = multiclass_precision(preds, labels)
+r = multiclass_recall(preds, labels)
+f1= multiclass_f1_score(preds, labels)
+\end{lstlisting}
+\end{frame} 

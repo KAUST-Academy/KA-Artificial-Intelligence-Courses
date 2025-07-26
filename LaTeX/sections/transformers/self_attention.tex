@@ -1,0 +1,30 @@
+\section{Self-Attention Mechanism}
+\begin{frame}
+\frametitle{Self-Attention Mechanism}
+\begin{itemize}
+    \item Computes contextual representation of a word using all other words
+    \item \textbf{Inputs:} Query (Q), Key (K), Value (V)
+    \item \textbf{Output:} Weighted sum of values
+\end{itemize}
+
+\textbf{Attention formula:}
+\[
+\text{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+\]
+
+\begin{itemize}
+    \item Enables each word to attend to all others
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Self-Attention Intuition: The "Bank" Analogy}
+\begin{itemize}
+    \item \textbf{Query:} What we’re looking for (e.g., the meaning of "bank" in context)
+    \item \textbf{Keys:} Tags or features associated with each word/sentence (e.g., "river", "money")
+    \item \textbf{Values:} Information linked to each key (e.g., context-specific meaning)
+    \item Uses dot-product similarity between Query and Keys to assign attention weights
+    \item Weighted sum of Values produces the contextual representation
+\end{itemize}
+\end{frame}
+

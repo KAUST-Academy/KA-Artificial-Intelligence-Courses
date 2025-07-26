@@ -1,0 +1,56 @@
+\begin{frame}[allowframebreaks]{Where are we heading?}
+\begin{columns}
+    \begin{column}{0.7\textwidth}
+       \begin{figure}
+            \centering
+            \includegraphics[width=1.05\textwidth,keepaspectratio]{images/dul/gene-datapoints.png}
+            \caption{Original Points}
+        \end{figure}
+        \vspace{1em}
+        \begin{itemize}
+            \item Each dot is a cell.
+            \item Groups of dots are similar cells.
+            \item Separation of groups could be interesting biology.
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.3\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/gene-datapoints-plot.png}
+            \caption{Clusters identified by DBSCAN}
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Too much data!}
+    \begin{itemize}
+        \item 5000 cells and 2500 measured genes
+        \item Realistically only 2 dimensions we can plot (x, y)
+    \end{itemize}
+\begin{columns}
+    \begin{column}{0.33\textwidth}
+       \begin{figure}
+            \centering
+            \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/gene-AB.png}
+        \end{figure}
+    \end{column}
+    \begin{column}{0.33\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/genes-mean.png}
+        \end{figure}
+    \end{column}
+    \begin{column}{0.33\textwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/genes-separations.png}
+        \end{figure}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\input{sections/dul/dim-reduce/pca}
+\input{sections/dul/dim-reduce/tsne}
+\input{sections/dul/dim-reduce/umap}

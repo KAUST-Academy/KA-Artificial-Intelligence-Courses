@@ -1,0 +1,52 @@
+\begin{frame}{}
+    \LARGE Advanced Diffusion Models: \textbf{Fine-Tuning}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Fine-Tuning Diffusion Models}
+
+\vspace{1em}
+\begin{itemize}
+    \item Fine-tuning lets you teach a diffusion model new things using your own images.
+    \item You can make the model generate pictures in your style or for your special needs.
+    \item Just use a few of your own photos—like products, anime, or anything unique to you.
+    \item This way, the model becomes more useful and personal for your projects.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Why Fine-Tune?}
+\begin{itemize}
+    \item \textbf{Customization:} Generate images that reflect your brand, style, or unique requirements.
+    \item \textbf{Personalization:} Learn your own visual style, such as custom portraits, branding elements, or new characters.
+    \item \textbf{Domain Adaptation:} Improve performance on niche or underrepresented domains.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Popular Fine-Tuning Methods}
+\begin{itemize}
+    \item \textbf{DreamBooth:}
+    \begin{itemize}
+        \item Enables the model to learn new concepts from a small set of images.
+        \item Useful for injecting specific subjects or styles into the model.
+        \item Lightweight and efficient—requires only a few images and limited compute.
+    \end{itemize}
+    \item \textbf{LoRA (Low-Rank Adaptation):}
+    \begin{itemize}
+        \item Introduces trainable low-rank matrices into the model.
+        \item Allows efficient fine-tuning with minimal changes to the original weights.
+        \item Reduces memory and compute requirements.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\input{sections/adv-img-gen/finetuning/dreambooth}
+\input{sections/adv-img-gen/finetuning/lora}
+
+\begin{frame}[allowframebreaks]{Applications of Fine-Tuning}
+\begin{itemize}
+    \item \textbf{Portrait Generation:} Create personalized avatars or stylized portraits.
+    \item \textbf{Branding:} Generate images consistent with your brand's visual identity.
+    \item \textbf{Character Design:} Develop new characters for games, comics, or animation.
+    \item \textbf{Product Imagery:} Produce custom product images for marketing or e-commerce.
+\end{itemize}
+\end{frame}

@@ -1,0 +1,64 @@
+% Package imports
+\usepackage{media9}
+\usepackage{amssymb,amsmath,amsthm,enumerate}
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+\usepackage[parfill]{parskip}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{bm}
+\usepackage{amsfonts,amscd}
+\usepackage[]{units}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{tcolorbox}
+\usepackage{physics}
+\usepackage{algorithm2e}
+\usepackage{lastpage}
+\usepackage{pifont}
+\usepackage{animate}
+\usepackage{ifthen}
+\usepackage{hyperref}
+\usepackage{pgffor}
+\usepackage[margin=1in]{geometry}
+\usepackage[acronym]{glossaries}
+\usepackage[style=ieee]{biblatex}
+% \lstset{basicstyle=\ttfamily\small} % optional settings
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  breaklines=true
+}
+
+% Enable colored hyperlinks
+\hypersetup{colorlinks=true}
+
+% Numbered captions of tables, pictures, etc.
+\setbeamertemplate{caption}[numbered]
+
+% Bibliography settings
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+\addbibresource{references.bib} 
+
+% --- Customization for enumerated ToC ---
+% Set templates for sections and subsections in the ToC to be numbered
+% Even vertical spacing and top alignment for ToC items, with top/bottom padding
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{toc item}{\vspace{0.7em}} % Adjust spacing as needed
+\addtobeamertemplate{frametitle}{}{\vspace*{-\baselineskip}} % Remove extra space above ToC
+\setbeamertemplate{toc}{%
+  \vbox{%
+    \vspace*{1.5em} % Top padding
+    \insertbeamertoc
+    \vspace*{1.5em} % Bottom padding
+  }
+}
+% Indent subsections in ToC by 4 spaces and put each on a new line
+\setbeamertemplate{subsection in toc}{%
+  \par\hspace*{1em}\inserttocsubsectionnumber.\;\inserttocsubsection%
+}
+% --- End Customization ---

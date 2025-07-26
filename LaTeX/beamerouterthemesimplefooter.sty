@@ -1,0 +1,132 @@
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Public License.
+%
+% See the file doc/licenses/LICENSE for more details.
+
+\ProvidesPackageRCS $Header: /cvsroot/latex-beamer/latex-beamer/themes/outer/beamerouterthemesimplefooter.sty,v 1.9 2007/01/28 20:48:30 tantau Exp $
+
+
+\newdimen\beamer@sidebarwidth
+\newdimen\beamer@headheight
+\usebeamerfont{frametitle}
+\beamer@sidebarwidth=0\paperwidth
+\beamer@headheight=0.4in
+\reset@font
+
+\def\beamer@lefttext{left}
+
+\DeclareOptionBeamer{hideothersubsections}[]{\beamer@nav@subsectionstyle{show/show/hide}}
+\DeclareOptionBeamer{hideallsubsections}[]{\beamer@nav@subsectionstyle{hide}}
+
+\DeclareOptionBeamer{width}{\beamer@sidebarwidth=#1}
+\DeclareOptionBeamer{height}{\beamer@headheight=#1}
+\DeclareOptionBeamer{left}{\def\beamer@sidebarside{left}}
+\DeclareOptionBeamer{right}{\def\beamer@sidebarside{right}}
+\ExecuteOptionsBeamer{left}
+\ProcessOptionsBeamer
+
+
+\mode<presentation>
+
+\setbeamercolor{section in head/foot}{parent=palette primary}
+\setbeamercolor{subsection in head/foot}{parent=palette primary}
+
+\setbeamercolor{author in head/foot}{parent=footer}
+\setbeamercolor{title in head/foot}{parent=subsection in head/foot}
+
+
+
+% Foot
+\defbeamertemplate*{footline}{simplefooter theme}
+{%
+  \leavevmode%
+%  \hbox{\begin{beamercolorbox}[wd=\paperwidth,ht=2.4ex,dp=1.125ex,leftskip=.3cm plus1fill,rightskip=.3cm]{author in head/foot} \usebeamerfont{author in head/foot}\begin{tabular*}{0.973\paperwidth}{@{\extracolsep{\fill}}c c c c}\insertshorttitle&\insertshortauthor&\insertshortdate & \insertframenumber/\inserttotalframenumber\end{tabular*}
+%  \end{beamercolorbox}%
+%}  
+
+\hbox{%
+	\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+		\usebeamerfont{author in head/foot}\insertshortauthor
+	\end{beamercolorbox}%
+	\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+		\usebeamerfont{title in head/foot}\insertshorttitle
+	\end{beamercolorbox}%
+	\begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+		\hspace*{4em}
+        \insertpagenumber{} \hspace*{4ex} 
+		% \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+		% \insertpagenumber{} / \pageref{LastPage}\hspace*{2ex} 
+\end{beamercolorbox}}%
+
+\vskip0pt%
+}
+
+
+
+
+\ifdim\beamer@headheight>0pt
+% if head height is 0pt, use default frame title
+
+  \setbeamercolor*{frametitle}{parent=sidebar}
+
+  \defbeamertemplate*{frametitle}{sidebar theme}
+  {%
+    \nointerlineskip%
+    \vskip-\beamer@headheight%
+    \vbox to \beamer@headheight{%
+      \vfil
+      \leftskip=-\beamer@leftmargin%
+      \advance\leftskip by0.3cm%
+      \rightskip=-\beamer@rightmargin%
+      \advance\rightskip by0.3cm plus1fil%
+      {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle\par}%
+      {\usebeamercolor[fg]{framesubtitle}\usebeamerfont{framesubtitle}\insertframesubtitle\par}%
+      \vbox{}%
+      \vskip-1em%
+      \vfil
+    }%
+  }
+
+  \defbeamertemplate*{headline}{sidebar theme}
+  {%
+
+    \begin{beamercolorbox}[wd=\paperwidth]{frametitle}
+      \ifx\beamer@sidebarside\beamer@lefttt%
+      \else%
+        \hfill%
+      \fi%
+
+        \hfill
+        \usebeamercolor{logo}%
+        \vrule width\beamer@sidebarwidth height \beamer@headheight
+        \hskip-\beamer@sidebarwidth%
+        \rightskip=0.\beamer@rightmargin%
+        \hbox to \beamer@sidebarwidth{\hss\vbox to
+          \beamer@headheight{\vss\hbox{\color{fg}\insertlogo}\vss}}%
+        \vrule width0pt height \beamer@headheight%  
+    \end{beamercolorbox}
+  }
+\fi
+
+\makeatletter
+\newenvironment{noheadline}{
+	\setbeamertemplate{headline}{}
+	\addtobeamertemplate{frametitle}{\vspace*{-0.9\baselineskip}}{}
+}{}
+
+
+   
+  
+    \defbeamertemplate*{sidebar right}{sidebar theme}
+    {%
+      \vfill%
+      \llap{\usebeamertemplate***{navigation symbols}\hskip0.1cm}%
+      \vskip2pt}
+
+
+\mode
+<all>
+
+%%% Local Variables: 
+%%% TeX-master: "~/texmf/tex/latex/beamer/test/test.tex"
+%%% End: 

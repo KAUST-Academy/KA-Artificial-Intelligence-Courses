@@ -1,0 +1,58 @@
+\section{Summary}
+\begin{frame}{}
+    \LARGE Reinforcement Learning: \textbf{Summary}
+\end{frame}
+
+\begin{frame}{Comparison of Methods}
+    \begin{table}[]
+        \centering
+        \renewcommand{\arraystretch}{2.5}
+        \begin{tabular}{lllll}
+            \hline
+            \textbf{Method} & \textbf{Policy Type} & \textbf{Gradient Source} & \textbf{Stability} & \textbf{Efficiency} \\
+            \hline
+            Q-learning    & Deterministic & Value gradients         & Medium & High \\
+            REINFORCE     & Stochastic    & Monte Carlo returns     & Low    & Low  \\
+            Actor-Critic  & Stochastic    & TD-based advantage      & High   & High \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Limitations}
+    \begin{itemize}
+        \item \textbf{REINFORCE:}
+        \begin{itemize}
+            \item High variance in gradient estimates.
+            \item Slow convergence.
+        \end{itemize}
+        \item \textbf{Actor-Critic:}
+        \begin{itemize}
+            \item Sensitive to hyperparameters.
+            \item Actor and critic updates may interfere.
+            \item Requires careful tuning and exploration strategies.
+            \item Can struggle in sparse-reward environments.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Future Directions}
+    \begin{itemize}
+        \item \textbf{Trust Region Policy Optimization (TRPO):} Improves stability by constraining policy updates.
+        \item \textbf{Proximal Policy Optimization (PPO):} Balances exploration and stability with clipped objective functions.
+        \item \textbf{Soft Actor-Critic (SAC):} Uses entropy regularization for improved robustness and exploration.
+        \item \textbf{Meta-Reinforcement Learning (Meta-RL):} Enables agents to adapt quickly to new tasks.
+        \item \textbf{Multi-agent Actor-Critic:} Facilitates decentralized coordination among multiple agents.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{itemize}
+    \item It can be hard to learn the exact Q-value for every (state, action) pair in high-dimensional state and action spaces.
+    \item However, we can just learn a policy that maximizes the reward.
+    \item We can use gradient ascent on policy parameters.
+    \item However, this can suffer from high variance. Various strategies exist to tackle this.
+    \item Actor-Critic methods combine Policy Gradients and Q-learning by training both an actor (the policy) and a critic (the Q-network).
+    \item The actor decides which action to take, and the critic tells the actor how good its action was and how it should adjust.
+\end{itemize}
+\end{frame}

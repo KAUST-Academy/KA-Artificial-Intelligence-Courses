@@ -1,0 +1,118 @@
+% Custom commands
+\newcommand{\R}{\mathbb{R}}
+\renewcommand{\thealgocf}{}
+
+% Crossmarks & checkmarks
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+% Colored emphasis
+\newcommand{\empy}[1]{{\color{darkorange}\emph{#1}}}
+\newcommand{\empr}[1]{{\color{blue}\emph{#1}}}
+
+% A command to fetch an image via curl if it doesn't yet exist
+\newcommand{\fetchimage}[2]{%
+  \IfFileExists{#1}{}{%
+    \immediate\write18{curl -sL "#2" -o "#1"}%
+  }%
+}
+
+% Robust macro to fetch and convert web image to PNG for LaTeX
+% Requires shell-escape, curl, and ImageMagick (convert)
+\newcommand{\fetchconvertimageonly}[2]{%
+  \IfFileExists{#2}{}{%
+    \immediate\write18{curl -sL "#1" -o "temp_image_download"}%
+    \immediate\write18{convert temp_image_download "#2"}%
+    \immediate\write18{rm -f temp_image_download}%
+  }%
+}
+
+% Robust macro to fetch and convert web image to PNG for LaTeX
+% Requires shell-escape, curl, and ImageMagick (convert)
+\newcommand{\fetchconvertimage}[3]{%
+  \IfFileExists{#2}{}{%
+    \immediate\write18{curl -sL "#1" -o "temp_image_download"}%
+    \immediate\write18{convert temp_image_download "#2"}%
+    \immediate\write18{rm -f temp_image_download}%
+  }%
+  \includegraphics[#3]{#2}%
+}
+
+% Adaptive macro to convert a GIF into frames and animate it
+% Usage: \includeGIF{your.gif}{basename}{width}{fps}
+\newcommand{\includeGIF}[4]{%
+  % % Frame path prefix
+  % \def\gifpath{gif_frames}%
+  % \def\frameprefix{\gifpath/#2_}%
+
+  % % If frames don't exist, extract them
+  % \IfFileExists{\frameprefix000.png}{}{%
+  %   \immediate\write18{mkdir -p \gifpath}%
+  %   \immediate\write18{convert "#1" "\frameprefix%03d.png"}%
+  %   % Count frames using identify
+  %   \immediate\write18{identify -format \%n "#1" > \gifpath/#2_framecount.txt}%
+  % }%
+
+  % % Read frame count
+  % \newread\framecountfile%
+  % \openin\framecountfile=\gifpath/#2_framecount.txt%
+  % \read\framecountfile to \totalframes%
+  % \closein\framecountfile%
+
+  % % Decrement for zero-based indexing (e.g., 10 frames = 000 to 009)
+  % \newcount\lastframe
+  % \lastframe=\totalframes
+  % \advance\lastframe by -1
+
+  % % Pad last frame (e.g., 9 becomes 009)
+  % \edef\lastframepad{\ifnum\lastframe<10 00\the\lastframe\else\ifnum\lastframe<100 0\the\lastframe\else\the\lastframe\fi\fi}%
+
+  % % Animate using detected frame range
+  % \animategraphics[loop,controls,width=#3]{#4}{\frameprefix}{000}{\lastframepad}%
+
+  \begingroup
+  \def\giffile{#1}%
+  \def\basename{#2}%
+  \def\widthval{#3}%
+  \def\fpsval{#4}%
+  \def\gifpath{gif_frames}%
+  \def\frameprefix{\gifpath/\basename\_}%
+
+  \IfFileExists{\frameprefix000.png}{}{%
+    \immediate\write18{mkdir -p \gifpath}%
+    \immediate\write18{convert "\giffile" "\frameprefix%03d.png"}%
+    \immediate\write18{identify -format %%n "\giffile" > "\gifpath/\basename\_framecount.txt"}%
+  }%
+
+  \newread\framecountfile%
+  \openin\framecountfile=\gifpath/\basename\_framecount.txt%
+  \read\framecountfile to \totalframes%
+  \closein\framecountfile%
+
+  \newcount\lastframe
+  \lastframe=\totalframes
+  \advance\lastframe by -1
+
+  % Format last frame number as zero-padded (e.g., 9 -> 009)
+  \def\lastframepad{\ifnum\lastframe<10 00\the\lastframe\else%
+    \ifnum\lastframe<100 0\the\lastframe\else%
+    \the\lastframe\fi\fi}%
+
+  \animategraphics[loop,controls,width=\widthval]{\fpsval}{\frameprefix}{000}{\lastframepad}%
+  \endgroup
+}
+
+
+% Example box
+\newcommand{\examplebox}[2]{
+\begin{tcolorbox}[colframe=darkcardinal,colback=boxgray,title=#1]
+#2
+\end{tcolorbox}}
+
+% Theorem environments
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\theoremstyle{definition}
+
+% Glossary entries
+\newacronym{ML}{ML}{machine learning} 

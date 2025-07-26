@@ -1,0 +1,47 @@
+\section{Summary}
+\begin{frame}{}
+    \LARGE DDQN \& SARSA: \textbf{Summary}
+\end{frame}
+
+\begin{frame}{When to Use Which Algorithm?}
+    \begin{table}[]
+        \centering
+        \renewcommand{\arraystretch}{2.5}
+        \begin{tabular}{lcc}
+            \hline
+            \textbf{Scenario} & \textbf{Recommended Algorithm} \\ \hline
+            Environment is stochastic & SARSA (conservative) \\ 
+            Maximizing reward is the priority & Q-Learning or DQN \\ 
+            Large state space (e.g., images) & DQN \\ 
+            Limited computational resources & SARSA (simpler model) \\ \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Future Directions}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Dueling DQN}: Separates value and advantage estimation.
+        \item \textbf{Double DQN}: Reduces overestimation bias.
+        \item \textbf{Prioritized Replay}: Samples important experiences more frequently.
+        \item \textbf{Distributional RL}: Models the full return distribution, not just the expectation.
+        \item \textbf{Safe RL}: Ensures safety in high-stakes environments (e.g., medical, robotics).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Summary}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item A Markov Decision Process (MDP) is the mathematical formulation of the reinforcement learning problem, defined by $\left ( \mathcal{S},\mathcal{A},\mathcal{R}, \mathbb{P}, \gamma \right )$.
+        \item Each state satisfies the Markov property, i.e., the future is independent of the past given the present.
+        \item The agent and the environment interact in a sequential loop. The policy $\pi$ determines how the agent chooses actions.
+        \item The value function estimates how good a state is, while the Q-value function estimates the quality of a state-action pair.
+        \item The Bellman equation is a recursive formula for the Q-value function.
+        \item Q-learning is an algorithm that repeatedly adjusts Q-values to minimize the Bellman error.
+        \item When the Q-value function approximator is a deep neural network, we obtain Deep Q-Learning.
+        \item DQN is powerful for complex, high-dimensional inputs but sensitive and data-hungry.
+        \item SARSA is an on-policy variation of Q-learning.
+        \item SARSA offers a safer, on-policy alternative, better suited for uncertain environments.
+        \item Choice depends on task risk, dimensionality, and training stability.
+    \end{itemize}
+\end{frame}

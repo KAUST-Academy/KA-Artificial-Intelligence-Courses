@@ -1,0 +1,68 @@
+% Copyright 2007 by Till Tantau
+%
+% This file may be distributed and/or modified
+%
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Public License.
+%
+% See the file doc/licenses/LICENSE for more details.
+
+\ProvidesPackageRCS $Header: /cvsroot/latex-beamer/latex-beamer/themes/color/beamercolorthemestanford.sty,v 1.4 2007/01/28 20:48:24 tantau Exp $
+
+\definecolor{cardinalred}{RGB}{140,21,21}
+\definecolor{coolgray}{RGB}{77,79,83}
+\definecolor{black}{RGB}{0,0,0}
+\definecolor{beige}{RGB}{210,194,149}
+\definecolor{darkbeige}{RGB}{179,153,93}
+\definecolor{darkcardinal}{RGB}{94,48,50}
+\definecolor{lightcardinal}{RGB}{141,60,30}
+\definecolor{darkpurple}{RGB}{83,40,79}
+\definecolor{darkcyan}{RGB}{0,124,146}
+\definecolor{skyblue}{RGB}{0,152,219}
+\definecolor{treegreen}{RGB}{0,155,118}
+\definecolor{darkorange}{RGB}{168,101,12}
+\definecolor{beigegray}{RGB}{95,87,79}
+\definecolor{boxgray}{RGB}{238,235,233}
+\definecolor{footergray}{RGB}{199,209,197}
+\definecolor{Blue}{RGB}{0,51,102}
+
+
+\mode<presentation>
+
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg= Blue}
+\setbeamercolor*{palette secondary}{use=structure,fg=white,bg= coolgray}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg= darkcardinal}
+\setbeamercolor*{palette quaternary}{fg=white,bg= darkbeige}
+
+\setbeamercolor*{sidebar}{use=structure,bg= beige}
+\setbeamercolor*{footer}{use=structure,bg= footergray,fg=darkcardinal}
+  
+\setbeamercolor*{palette sidebar primary}{use=structure,fg=structure.fg!10}
+\setbeamercolor*{palette sidebar secondary}{fg=white}
+\setbeamercolor*{palette sidebar tertiary}{use=structure,fg=structure.fg!50}
+\setbeamercolor*{palette sidebar quaternary}{fg=white}
+
+\setbeamercolor*{titlelike}{parent=palette primary}
+\setbeamercolor*{foot line}{parent=palette secondary}
+
+\setbeamercolor*{separation line}{}
+\setbeamercolor*{fine separation line}{}
+
+\setbeamercolor{itemize item}{fg=cardinalred}
+\setbeamercolor{itemize subitem}{fg=cardinalred}
+\setbeamercolor{itemize subsubitem}{fg=cardinalred}
+\setbeamercolor{enumerate item}{fg=cardinalred}
+\setbeamercolor{enumerate subitem}{fg=cardinalred}
+\setbeamercolor{enumerate subsubitem}{fg=cardinalred}
+\setbeamercolor{description item}{fg=cardinalred}
+
+\setbeamertemplate{bibliography item}[text]
+\setbeamertemplate{frametitle continuation}[from second]
+\setbeamercolor{bibliography entry title}{fg=black}
+\setbeamercolor{bibliography entry author}{fg=black}
+\setbeamercolor*{bibliography entry location}{fg=black}
+\setbeamercolor*{bibliography entry note}{fg=black}
+
+
+\mode
+<all>

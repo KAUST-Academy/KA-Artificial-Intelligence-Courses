@@ -1,0 +1,124 @@
+name: Update Version and Tag Release 
+on:
+  push:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  
+  update-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to fetch all history for changelog generation
+
+      - name: Check if commit is a merge commit
+        id: check_merge
+        run: |
+          PARENTS_COUNT=$(git rev-list --parents -n 1 HEAD | wc -w)
+          if [ "$PARENTS_COUNT" -gt 2 ]; then
+            echo "is_merge=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_merge=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Determine if Release is Needed
+        id: check-release
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Commit message: $COMMIT_MSG"
+          if echo "$COMMIT_MSG" | grep -iqE 'tag-release'; then
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          elif echo "$COMMIT_MSG" | grep -iqE 'tag-release|tag-repo'; then
+            echo "tagging=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "release=false" >> "$GITHUB_OUTPUT"
+            echo "tagging=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Determine version bump type from commit message
+        id: get-bump-type
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Commit message: $COMMIT_MSG"
+          
+          if echo "$COMMIT_MSG" | grep -iq '\[major\]'; then
+            echo "bump=major" >> "$GITHUB_OUTPUT"
+          elif echo "$COMMIT_MSG" | grep -iq '\[minor\]'; then
+            echo "bump=minor" >> "$GITHUB_OUTPUT"
+          elif echo "$COMMIT_MSG" | grep -iq '\[patch\]'; then
+            echo "bump=patch" >> "$GITHUB_OUTPUT"
+          else
+            echo "bump=patch" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update Version
+        if: steps.check_merge.outputs.is_merge == 'false'
+        run: |
+          chmod +x ./update_version.sh
+          ./update_version.sh ${{ steps.get-bump-type.outputs.bump }}
+
+      - name: Generate Changelog
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          preset: conventionalcommits
+          # config-file-path: ./.changelog-config.js
+          version-file: VERSION
+          skip-bump: true
+          skip-version-file: true
+          skip-commit: true
+          skip-tag: true
+          output-file: CHANGELOG.md
+          skip-on-empty: true
+          release-count: 0  # <-- This enables inclusion of all version records
+
+      - name: Commit and Push VERSION_UPDATE Changes
+        if: steps.check_merge.outputs.is_merge == 'false'
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
+          git add VERSION
+          git add CHANGELOG.md
+          git commit -m "chore: update changelog and version [skip ci]"
+          git push origin HEAD:${GITHUB_REF#refs/heads/}
+
+      - name: Tag the New Version
+        if: steps.check-release.outputs.tagging == 'true' && github.ref == 'refs/heads/main' && steps.check_merge.outputs.is_merge == 'false'
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
+          VERSION=$(cat VERSION)
+          git tag -a "v$VERSION" -m "Release version $VERSION"
+          git push origin "v$VERSION"
+      
+      - name: Create GitHub Release
+        if: steps.check-release.outputs.release == 'true' && github.ref == 'refs/heads/main' && steps.check_merge.outputs.is_merge == 'false'
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(cat VERSION)
+          curl -X POST \
+            -H "Authorization: token ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "tag_name": "v'${VERSION}'",
+              "target_commitish": "main",
+              "name": "Release '${VERSION}'",
+              "body": "Auto-generated release for version '${VERSION}'.",
+              "draft": false,
+              "prerelease": false
+            }' \
+            https://api.github.com/repos/${{ github.repository }}/releases

@@ -1,0 +1,20 @@
+\section{Training the Q-network}
+\begin{frame}{}
+    \LARGE Reinforcement Learning: \textbf{Training the Q-network}
+\end{frame}
+
+\begin{frame}{Training the Q-network: Experience Replay}
+    \begin{itemize}
+        \item Learning from batches of consecutive samples is problematic:
+        \begin{itemize}
+            \item Samples are correlated $\Rightarrow$ inefficient learning.
+            \item The current Q-network parameters determine the next training samples (e.g., if the maximizing action is to move left, training samples will be dominated by transitions from the left-hand side), which can lead to bad feedback loops.
+        \end{itemize}
+        \pause
+        \item These problems can be addressed using experience replay:
+        \begin{itemize}
+            \item Maintain a replay memory buffer of transitions $(s_t, a_t, r_t, s_{t+1})$ as episodes are played.
+            \item Train the Q-network on random minibatches of transitions sampled from the replay memory, instead of using consecutive samples.
+        \end{itemize}
+    \end{itemize}
+\end{frame}

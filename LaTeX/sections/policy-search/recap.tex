@@ -1,0 +1,15 @@
+\section{Recap: Policy Gradient}
+\begin{frame}{}
+    \LARGE Policy Gradient: \textbf{Recap}
+\end{frame}
+
+\begin{frame}{Recap}
+    \begin{itemize}
+        \item Learning the exact Q-value for every (state, action) pair is challenging in high-dimensional spaces.
+        \item Instead, we can directly learn a policy that maximizes expected reward.
+        \item Policy parameters can be optimized using gradient ascent.
+        \item However, policy gradients can suffer from high variance; various strategies exist to address this.
+        \item Actor-Critic methods combine policy gradients and value-based methods by training both an actor (the policy) and a critic (the value function).
+        \item The actor selects actions, while the critic evaluates the actions and guides the actor's learning.
+    \end{itemize}
+\end{frame}

@@ -1,0 +1,27 @@
+\section{Limitations of policy gradients}
+\begin{frame}{}
+    \LARGE Policy Search: \textbf{Limitations of policy gradients}
+\end{frame}
+
+\begin{frame}{Limitations of policy gradients}
+    \begin{itemize}
+        \item Sample efficiency is poor
+        \begin{itemize}
+            \item We throw out each batch of data immediately after just one gradient step
+            \item Why? PG is an on-policy expectation.
+            \pause
+            \item Recycling old data to estimate policy gradients is hard
+            \item Potential Solution: Use trajectories from other policies with importance sampling.
+        \end{itemize}
+        \pause
+        \item Distance in parameter space $\ne$ distance in policy space!
+        \pause
+        \begin{itemize}
+            \item What is policy space? For tabular case, set of matrices
+            $$\Pi = \left \{ \pi : \pi \in \mathbb{R}^{|S| \times |A|}, \pi_{sa} \geq 0 \right  \}$$
+            \pause
+            \item Policy gradients take steps in parameter space
+            \item Step size is hard to get right as a result
+        \end{itemize}
+    \end{itemize}
+\end{frame}

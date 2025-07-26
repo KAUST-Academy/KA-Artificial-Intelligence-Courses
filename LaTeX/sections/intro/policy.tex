@@ -1,0 +1,25 @@
+\section{Policy}
+\begin{frame}{}
+    \LARGE Reinforcement Learning: \textbf{Policy}
+\end{frame}
+
+\begin{frame}{Policy}
+\begin{itemize}
+    \item Policy $\pi$ determines how the agent chooses actions
+    \item $\pi : S \rightarrow A$, mapping from states to actions
+    \item Deterministic Policy: $$\pi(s) = a$$
+    \item Stochastic Policy: $$\pi(a|s) = Pr(a_t = a | s_t = s)$$
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{The Optimal Policy}
+\begin{itemize}
+    \item We want to find optimal policy $\bm{\pi^{\star}}$ that maximizes the sum of reward
+    \item But, how do we handle the randomness (initial state, transition probability…)?
+    \pause
+    \item \textbf{Solution}: Maximize the expected sum of rewards!
+    \item Formally,
+\end{itemize}
+    $$\pi^{\star} = \arg \max_{\pi} \mathbb{E} \left [ \sum_{t \geq 0} \gamma^t r_t | \pi \right ] \:\:\: \text{with } \:\:\: s_0 \sim p(s_0), a_t \sim \pi(.|s_t), s_{t+1} \sim p(.|s_t, a_t)$$
+\end{frame}

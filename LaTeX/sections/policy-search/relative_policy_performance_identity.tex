@@ -1,0 +1,31 @@
+\section{Relative Policy Performance Identity}
+\begin{frame}{Relative Policy Performance Identity}
+\begin{itemize}
+    \item But, recall that for $\gradient_{\theta'} \mathcal{J}({\theta'})$ we will still have to compute $\text{log } \pi_{\theta'} (a_t|s_t) A^{\pi_{\theta'}}(s_t,a_t)$ based on current policy.
+    \item This is not desirable.
+    \pause
+    \item So, we make use of Relative Policy Performance Identity. This states that for two policies, $\pi_{\theta'}$ and $\pi_{\theta}$
+    $$\mathcal{J}(\pi_{\theta'}) - \mathcal{J}(\pi_{\theta}) = E_{\tau \sim \pi_{\theta'}} \left [ \sum^{T}_{t=0} \gamma^t A^{\pi_{\theta}}(s_t, a_t) \right ]$$
+    \pause
+    \item Using importance sampling, we get
+    $$\mathcal{J}(\pi_{\theta'}) - \mathcal{J}(\pi_{\theta}) = E_{\tau \sim \pi_{\theta}} \left [ \sum^{T}_{t=0} \frac{\pi_{\theta'} (s_{t}, a_{t})}{\pi_{\theta} (s_{t}, a_{t})} \gamma^t A^{\pi_{\theta}}(s_t, a_t) \right ]$$
+    
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Relative Policy Performance Identity}
+\begin{itemize}
+    \item Can we use this for policy improvement?
+    \pause
+    \item Recall that our objective is to have policy with maximum return.
+    \item Basically, we want to
+    $$\max_{\theta'} \mathcal{J}(\pi_{\theta'})$$
+    \pause
+    \item But, this is essentially the same as
+    $$\max_{\theta'} ( \mathcal{J}(\pi_{\theta'}) - \mathcal{J}(\pi_{\theta}))$$
+    \pause
+    \item Therefore, we can use this as our loss function
+    $$\mathcal{L}_{\theta'}(\pi_{\theta'}) = \mathcal{J}(\pi_{\theta'}) - \mathcal{J}(\pi_{\theta})$$
+\end{itemize}
+\end{frame}

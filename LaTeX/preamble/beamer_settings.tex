@@ -1,0 +1,13 @@
+% Beamer settings
+\usetheme{Stanford} 
+\input{style_files/my_beamer_defs.sty}
+\logo{\includegraphics[height=0.4in]{style_files/kaust_academy_logo.png}}
+
+% Commands to relax beamer and subfig conflicts
+\makeatletter
+\let\@@magyar@captionfix\relax
+\makeatother
+
+% Set itemize styles
+\setbeamertemplate{itemize items}[default]
+\setbeamertemplate{itemize subitem}[circle] 

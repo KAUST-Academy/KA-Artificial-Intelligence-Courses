@@ -1,0 +1,74 @@
+\section{Importance Sampling}
+\begin{frame}{}
+    \LARGE Policy Search: \textbf{Importance Sampling}
+\end{frame}
+
+\begin{frame}{Importance Sampling}
+\begin{itemize}
+    \item Importance sampling is a technique for estimating expectations using samples drawn from a different distribution.
+    \begin{equation*}
+    \begin{split}
+        E_{x \sim P}[f(x)] & = \int P(x)f(x) dx \\
+        & = \int P(x)\frac{Q(x)}{Q(x)}f(x) dx \\
+        & = \int Q(x)\frac{P(x)}{Q(x)}f(x) dx \\
+        & = E_{x \sim Q} \left [\frac{P(x)}{Q(x)}f(x) \right ]
+    \end{split}
+    \end{equation*}
+    
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Importance Sampling}
+    $$\therefore \: \: \: E_{x \sim P}[f(x)] = E_{x \sim Q}\left [ \frac{P(x)}{Q(x)}f(x) \right ] \approx \frac{1}{|D|}\sum_{x \in D} \frac{P(x)}{Q(x)}f(x)$$
+\begin{itemize}
+    \item The ratio P(x)/Q(x) is the importance sampling weight for x
+    \pause
+    \item What is the variance of an importance sampling estimator?
+    \begin{equation*}
+    \begin{split}
+        var(\hat{\mu}_Q) & = \frac{1}{N} var \left ( \frac{P(x)}{Q(x)}f(x) \right )  \\
+        & = \frac{1}{N} \left ( E_{x \sim Q} \left [\left ( \frac{P(x)}{Q(x)}f(x) \right )^2 \right ]  - E_{x \sim Q} \left [\frac{P(x)}{Q(x)}f(x) \right ]^2 \right ) \\
+        & = \frac{1}{N} \left ( \textcolor{red}{ E_{x \sim P} \left [ \frac{P(x)}{Q(x)} f(x)^2 \right ] }  - E_{x \sim P} \left [f(x) \right ]^2 \right ) \\
+    \end{split}
+    \end{equation*}
+    \pause
+    \item The term in red is problematic - if $\frac{P(x)}{Q(x)}$ is large in the wrong places, the variance of the estimator explodes.
+    
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Importance Sampling for Policy Gradients}
+\begin{itemize}
+    \item Now, let's put this in policy gradient. $\pi_{\theta'}$ represents new policy.
+    \begin{equation*}
+    \begin{split}
+        \gradient_{\theta'} \mathcal{J}({\theta'}) & = E_{\tau \sim \pi_{\theta'}} \left [ \sum_{t \geq 0} \gamma^t \gradient_{\theta'} \text{log } \pi_{\theta'} (a_t|s_t) A^{\pi_{\theta'}}(s_t,a_t) \right ] \\
+        & = E_{\tau \sim \textcolor{red}{\pi_{\theta}}} \left [ \sum_{t \geq 0} \textcolor{red}{\frac{P(\tau_t|\pi_{\theta'})}{P(\tau_t|\pi_{\theta})}} \gamma^t \gradient_{\theta'} \text{log } \pi_{\theta'} (a_t|s_t) A^{\pi_{\theta'}}(s_t,a_t) \right ] \\
+    \end{split}
+    \end{equation*}
+    \pause
+    $$\frac{P(\tau_t|\pi_{\theta'})}{P(\tau_t|\pi_{\theta})} = \frac{\mu(s_0)\prod_{t'=0}^{t}P(s_{t'+1}|s_{t'}, a_{t'})\pi_\theta (s_{t'}, a_{t'})}{\mu(s_0)\prod_{t'=0}^{t}P(s_{t'+1}|s_{t'}, a_{t'})\pi_{\theta'} (s_{t'}, a_{t'})} = \prod_{t'=0}^{t} \frac{\pi_{\theta'} (s_{t'}, a_{t'})}{\pi_{\theta} (s_{t'}, a_{t'})}$$
+    \pause
+    \item Looks useful - what’s the issue? \pause
+    \item Exploding or vanishing importance sampling weights. Even for policies only slightly different from each other, many small differences multiply to become a big difference.
+
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Importance Sampling for Policy Gradients}
+    \begin{itemize}
+        \item Solution?
+        \pause
+        \item Stay close to the previous policy!
+        \item We can use KL divergence for that. 
+        \item What is KL-divergence between policies?
+        $$D_{KL}(\pi' || \pi)[s] = \sum_{a \in A} \pi'(a|s) \text{log } \frac{\pi'(a|s)}{\pi(a|s)}$$
+        \pause
+        \item Now, we have
+        $$\gradient_{\theta'} \mathcal{J}({\theta'}) \: \text{ s.t. } D_{KL}(\pi' || \pi) \leq \epsilon$$
+    \end{itemize}
+    
+\end{frame}

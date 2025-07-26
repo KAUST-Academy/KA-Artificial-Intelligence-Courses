@@ -1,0 +1,23 @@
+\section{Recap}
+\begin{frame}[allowframebreaks]{Recap}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item A Markov Decision Process (MDP) defines the RL problem using:
+        \begin{itemize}
+            \item States $\mathcal{S}$
+            \item Actions $\mathcal{A}$
+            \item Rewards $\mathcal{R}$
+            \item Transition probabilities $\mathbb{P}$
+            \item Discount factor $\gamma$
+        \end{itemize}
+        \item Markov property: The future depends only on the present state, not the past.
+        \item Agent and environment interact in a loop.
+        \item Policy $\pi$ decides the agent's actions.
+        \item Value function: Measures how good a state is.
+        \item Q-value function: Measures how good a state-action pair is.
+        \item Bellman equation: Recursively defines value and Q-value functions.
+        \item Q-learning: Updates Q-values to reduce Bellman error.
+        \item Deep Q-Learning: Uses neural networks to approximate Q-values.
+        \item SARSA: On-policy version of Q-learning.
+    \end{itemize}
+\end{frame}

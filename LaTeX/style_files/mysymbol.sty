@@ -1,0 +1,1125 @@
+
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%theorem environments
+%\newtheorem{assumption}{\hspace{0pt}\bf AS\hspace{-0.15cm}}
+%\newtheorem{lemma}{\hspace{0pt}\bf Lemma}
+%\newtheorem{proposition}{\hspace{0pt}\bf Proposition}
+%\newtheorem{observation}{\hspace{0pt}\bf Observation}
+%\newtheorem{theorem}{\hspace{0pt}\bf Theorem}
+%\newtheorem{corollary}{\hspace{0pt}\bf Corollary}
+%\newtheorem{fact}{\hspace{0pt}\bf Fact}
+%\newtheorem{remark}{\hspace{0pt}\bf Remark}
+%\newtheorem{test}{\hspace{0pt}\it Test Case}
+%\newtheorem{definition}{\hspace{0pt}\bf Definition}
+%\newtheorem{property}{\hspace{0pt}\bf Property}
+%\newcommand {\mysubsubsection} [1] {\vspace{0.4cm}\noindent{\bf #1.}\addcontentsline{toc}{subsubsection}{\hspace{0pt}#1}}
+%\newcommand {\mysubsection} [1]    {\vspace{0.4cm}\noindent{\bf #1.}\addcontentsline{toc}{subsection}{\hspace{0pt}#1}}
+
+
+
+\newenvironment{myproof}[1][$\!\!$]{{\noindent\bf Proof #1: }}
+                         {\hfill\QED\medskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%list environment
+\newenvironment{mylist}{\begin{list}{}{  \setlength{\itemsep  }{2pt} \setlength{\parsep    }{0in}
+                                         \setlength{\parskip  }{0in} \setlength{\topsep    }{5pt}
+                                         \setlength{\partopsep}{0in} \setlength{\leftmargin}{2pt}
+                                         \setlength{\labelsep }{5pt} \setlength{\labelwidth}{-5pt}}}
+                          {\end{list}\medskip}
+
+\newcounter{excercise}
+\newcounter{excercisepart}
+\newcommand \excercise[1]{\addtocounter{excercise}{1} \setcounter{excercisepart}{0} \medskip
+						  \noindent {\bf \theexcercise\ \, #1}}
+\newcommand \excercisepart[1]{\addtocounter{excercisepart}{1} \medskip
+						      \noindent {\it \Alph{excercisepart}\ \, #1}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%list environment
+%\newcounter{example}
+%\newenvironment{example}[1]{\addtocounter{example}{1}\medskip \noindent{\it Example \theexample. #1.}}
+%                           {\hfill\QED}%\newline\vspace{-2mm}\newline}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%slide equation environment
+\newenvironment{slideeq} {              \begin{equation*}} {\end{equation*}            }
+\newenvironment{nslideeq}{              \begin{equation*}} {\end{equation*}            }
+\newenvironment{sslideeq}{\small        \begin{equation*}} {\end{equation*} \normalfont}
+\newenvironment{fslideeq}{\footnotesize \begin{equation*}} {\end{equation*} \normalfont}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%slide equation environment
+\newenvironment{slidealign} {              \begin{align*}} {\end{align*}            }
+\newenvironment{nslidealign}{              \begin{align*}} {\end{align*}            }
+\newenvironment{sslidealign}{\small        \begin{align*}} {\end{align*} \normalfont}
+\newenvironment{fslidealign}{\footnotesize \begin{align*}} {\end{align*} \normalfont}
+
+% Color definitions used in presentations
+\definecolor{pennblue}{cmyk}{1,0.65,0,0.30}
+\definecolor{pennred}{cmyk}{0,1,0.65,0.34}
+\definecolor{mygreen}{rgb}{0.10,0.50,0.10}
+\newcommand \red[1]         {{\color{red}#1}}
+\newcommand \black[1]         {{\color{black}#1}}
+\newcommand \blue[1]        {{\color{blue}#1}}
+\newcommand \grey[1]        {{\color[rgb]{0.80,0.80,0.80}#1}}
+\newcommand \gray[1]        {{\color[rgb]{0.80,0.80,0.80}#1}}
+\newcommand \green[1]       {{\color[rgb]{0.10,0.50,0.10}#1}}
+\newcommand \bulletcolor[1] {{\color{pennblue}#1}}
+\def \arrowbullet {\bulletcolor{$\ \Rightarrow\ $}}
+\def \arrbullet   {\bulletcolor{$\ \Rightarrow\ $}}
+\def \ab          {\bulletcolor{$\ \Rightarrow\ $}}
+\def \arritem     {\item[] \quad \arrowbullet}
+\def \ai          {\item[] \quad \arrowbullet}
+\def \doublearrow {\bulletcolor{$\ \Leftrightarrow\ $}}
+\def \darrbullet  {\bulletcolor{$\ \Leftrightarrow\ $}}
+
+
+%Always used
+\def \defQfunction 
+        {Q(u):=(1/\sqrt{2\pi})\int_u^\infty e^{-u^2/2} du}
+\def \intinfty  { \int_{-\infty}^{\infty} }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Overline
+%
+\def \ovP {\overline{P}}
+\def \ovl {\overline{l}}
+\def \ovbbl {\overline{\bbl}}
+\def \ovX {\overline{X}}
+\def \ovbbX {\overline{\bbX}}
+\def \ovp {\overline{p}}
+\def \ovbbp {\overline{\bbp}}
+\def \ovr {\overline{r}}
+\def \ova {\overline{a}}
+\def \ovc {\overline{c}}
+\def \ovalpha {\overline{\alpha}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Underline
+%
+\def \undP {\underline{P}}
+\def \undl {\underline{l}}
+\def \undbbl {\underline{\bbl}}
+\def \undX {\underline{X}}
+\def \undbbX {\underline{\bbX}}
+\def \undp {\underline{p}}
+\def \undbbp {\underline{\bbp}}
+\def \undr {\underline{r}}
+\def \unda {\underline{a}}
+\def \undc {\underline{c}}
+\def \undalpha {\underline{\alpha}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Overline and Underline
+%
+\def \undovP     {\underline{\ovP}}
+\def \undovX     {\underline{\ovX}}
+\def \undovbbX   {\underline{\ovbbX}}
+\def \undovp     {\underline{\ovp}}
+\def \undovbbp   {\underline{\ovbbp}}
+\def \undovr     {\underline{\ovr}}
+\def \undova     {\underline{\ova}}
+\def \undovc     {\underline{\ovc}}
+\def \undovalpha {\underline{\ovalpha}}
+
+%roman symbols
+\def \SNR     {\text{\normalfont SNR}   }
+\def \ap      {\text{\normalfont ap}   }
+\def \best    {\text{\normalfont best} }
+\def \Co      {\text{\normalfont Co}   }
+\def \Cov     {\text{\normalfont Cov}  }
+\def \cov     {\text{\normalfont cov}  }
+\def \dest    {\text{\normalfont dest} }
+\def \diag    {\text{\normalfont diag} }
+\def \eig     {\text{\normalfont eig}  }
+\def \for     {\text{\normalfont for}  }
+\def \forall  {\text{\normalfont for all}  }
+\def \forsome {\text{\normalfont for some}  }
+\def \ML      {\text{\normalfont ML}   }
+\def \MLE     {\text{\normalfont MLE}  }
+\def \ml      {\text{\normalfont ml}   }
+\def \mse     {\text{\normalfont mse}  }
+\def \rank    {\text{\normalfont rank} }
+\def \sign    {\text{\normalfont sign} }
+\def \tr      {\text{\normalfont tr}   }
+
+%units
+\def \dB      {\, \text{\normalfont dB} }
+\def \ms      {\, \text{\normalfont m}/ \text{\normalfont s}}
+\def \kmh     {\, \text{\normalfont km}/ \text{\normalfont h}}
+\def \m       {\, \text{\normalfont m} }
+\def \s       {\, \text{\normalfont s} }
+\def \sec     {\, \text{\normalfont sec.} }
+\def \msec    {\, \text{\normalfont msec.} }
+\def \cm      {\, \text{\normalfont cm} }
+\def \km      {\, \text{\normalfont km} }
+\def \GHz     {\, \text{\normalfont GHz} }
+\def \Hz      {\, \text{\normalfont Hz} }
+\def \MHZ     {\, \text{\normalfont MHz} }
+\def \kHZ     {\, \text{\normalfont kHz} }
+
+
+%Probability operators
+\newcommand   \E     [1] {{\mathbb E}\left[#1\right]}
+\newcommand   \Ec    [1] {{\mathbb E}\left(#1\right)}
+\newcommand   \ind   [1] {{\mathbb I \left\{#1\right\}  } }
+\renewcommand \Pr    [1] {\text{\normalfont Pr}  \left[#1\right]}
+\newcommand   \Prc   [1] {\text{\normalfont Pr}  \left(#1\right)}
+\renewcommand \P     [1] {\text{\normalfont P}   \left(#1\right)}
+\newcommand   \Pc    [1] {\text{\normalfont P}   \left(#1\right)}
+\newcommand   \Pcbig [1] {\text{\normalfont P}   \big(#1 \big)}
+\newcommand   \PcBig [1] {\text{\normalfont P}   \Big(#1 \Big)}
+\newcommand   \var   [1] {\text{\normalfont var} \left[#1\right]}
+\newcommand   \varc  [1] {\text{\normalfont var} \left(#1\right)}
+\renewcommand \Re    [1] {\text{\normalfont Re} \left(#1\right)}
+\renewcommand \Im    [1] {\text{\normalfont Im} \left(#1\right)}
+\newcommand   \der         [2] {\frac{\partial#1}{\partial#2}}
+\newcommand   \inlineder   [2] {\partial#1/\partial#2}
+
+
+%miscellaneous
+\def \integers {{\mathbb Z}}
+\def \naturals {{\mathbb N}}
+\def \reals    {{\mathbb R}}
+\def \blog { {\bf \log   } }
+\def \given{ {\,\big|\,  } }
+\newcommand{\st}{\operatornamewithlimits{s.t.}}
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%bar version
+%capital alphabet
+\def\bbarA{{\ensuremath{\bar A}}}
+\def\bbarB{{\ensuremath{\bar B}}}
+\def\bbarC{{\ensuremath{\bar C}}}
+\def\bbarD{{\ensuremath{\bar D}}}
+\def\bbarE{{\ensuremath{\bar E}}}
+\def\bbarF{{\ensuremath{\bar F}}}
+\def\bbarG{{\ensuremath{\bar G}}}
+\def\bbarH{{\ensuremath{\bar H}}}
+\def\bbarI{{\ensuremath{\bar I}}}
+\def\bbarJ{{\ensuremath{\bar J}}}
+\def\bbarK{{\ensuremath{\bar K}}}
+\def\bbarL{{\ensuremath{\bar L}}}
+\def\bbarM{{\ensuremath{\bar M}}}
+\def\bbarN{{\ensuremath{\bar N}}}
+\def\bbarO{{\ensuremath{\bar O}}}
+\def\bbarP{{\ensuremath{\bar P}}}
+\def\bbarQ{{\ensuremath{\bar Q}}}
+\def\bbarR{{\ensuremath{\bar R}}}
+\def\bbarW{{\ensuremath{\bar W}}}
+\def\bbarU{{\ensuremath{\bar U}}}
+\def\bbarV{{\ensuremath{\bar V}}}
+\def\bbarS{{\ensuremath{\bar S}}}
+\def\bbarT{{\ensuremath{\bar T}}}
+\def\bbarX{{\ensuremath{\bar X}}}
+\def\bbarY{{\ensuremath{\bar Y}}}
+\def\bbarZ{{\ensuremath{\bar Z}}}
+%lower case alphabet
+\def\bbara{{\ensuremath{\bar a}}}
+\def\bbarb{{\ensuremath{\bar b}}}
+\def\bbarc{{\ensuremath{\bar c}}}
+\def\bbard{{\ensuremath{\bar d}}}
+\def\bbare{{\ensuremath{\bar e}}}
+\def\bbarf{{\ensuremath{\bar f}}}
+\def\bbarg{{\ensuremath{\bar g}}}
+\def\bbarh{{\ensuremath{\bar h}}}
+\def\bbari{{\ensuremath{\bar i}}}
+\def\bbarj{{\ensuremath{\bar j}}}
+\def\bbark{{\ensuremath{\bar k}}}
+\def\bbarl{{\ensuremath{\bar l}}}
+\def\bbarm{{\ensuremath{\bar m}}}
+\def\bbarn{{\ensuremath{\bar n}}}
+\def\bbaro{{\ensuremath{\bar o}}}
+\def\bbarp{{\ensuremath{\bar p}}}
+\def\bbarq{{\ensuremath{\bar q}}}
+\def\bbarr{{\ensuremath{\bar r}}}
+\def\bbarw{{\ensuremath{\bar w}}}
+\def\bbaru{{\ensuremath{\bar u}}}
+\def\bbarv{{\ensuremath{\bar v}}}
+\def\bbars{{\ensuremath{\bar s}}}
+\def\bbart{{\ensuremath{\bar t}}}
+\def\bbarx{{\ensuremath{\bar x}}}
+\def\bbary{{\ensuremath{\bar y}}}
+\def\bbarz{{\ensuremath{\bar z}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of bar version
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   B   L   A   C   K   B   O   A   R   D         B   O   L   D   %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\mbA{{\ensuremath{\mathbb A}}}
+\def\mbB{{\ensuremath{\mathbb B}}}
+\def\mbC{{\ensuremath{\mathbb C}}}
+\def\mbD{{\ensuremath{\mathbb D}}}
+\def\mbE{{\ensuremath{\mathbb E}}}
+\def\mbF{{\ensuremath{\mathbb F}}}
+\def\mbG{{\ensuremath{\mathbb G}}}
+\def\mbH{{\ensuremath{\mathbb H}}}
+\def\mbI{{\ensuremath{\mathbb I}}}
+\def\mbJ{{\ensuremath{\mathbb J}}}
+\def\mbK{{\ensuremath{\mathbb K}}}
+\def\mbL{{\ensuremath{\mathbb L}}}
+\def\mbM{{\ensuremath{\mathbb M}}}
+\def\mbN{{\ensuremath{\mathbb N}}}
+\def\mbO{{\ensuremath{\mathbb O}}}
+\def\mbP{{\ensuremath{\mathbb P}}}
+\def\mbQ{{\ensuremath{\mathbb Q}}}
+\def\mbR{{\ensuremath{\mathbb R}}}
+\def\mbS{{\ensuremath{\mathbb S}}}
+\def\mbT{{\ensuremath{\mathbb T}}}
+\def\mbU{{\ensuremath{\mathbb U}}}
+\def\mbV{{\ensuremath{\mathbb V}}}
+\def\mbW{{\ensuremath{\mathbb W}}}
+\def\mbX{{\ensuremath{\mathbb X}}}
+\def\mbY{{\ensuremath{\mathbb Y}}}
+\def\mbZ{{\ensuremath{\mathbb Z}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   C   A   L   I   G   R   A   P   H   I   C   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\ccalA{{\ensuremath{\mathcal A}}}
+\def\ccalB{{\ensuremath{\mathcal B}}}
+\def\ccalC{{\ensuremath{\mathcal C}}}
+\def\ccalD{{\ensuremath{\mathcal D}}}
+\def\ccalE{{\ensuremath{\mathcal E}}}
+\def\ccalF{{\ensuremath{\mathcal F}}}
+\def\ccalG{{\ensuremath{\mathcal G}}}
+\def\ccalH{{\ensuremath{\mathcal H}}}
+\def\ccalI{{\ensuremath{\mathcal I}}}
+\def\ccalJ{{\ensuremath{\mathcal J}}}
+\def\ccalK{{\ensuremath{\mathcal K}}}
+\def\ccalL{{\ensuremath{\mathcal L}}}
+\def\ccalM{{\ensuremath{\mathcal M}}}
+\def\ccalN{{\ensuremath{\mathcal N}}}
+\def\ccalO{{\ensuremath{\mathcal O}}}
+\def\ccalP{{\ensuremath{\mathcal P}}}
+\def\ccalQ{{\ensuremath{\mathcal Q}}}
+\def\ccalR{{\ensuremath{\mathcal R}}}
+\def\ccalW{{\ensuremath{\mathcal W}}}
+\def\ccalU{{\ensuremath{\mathcal U}}}
+\def\ccalV{{\ensuremath{\mathcal V}}}
+\def\ccalS{{\ensuremath{\mathcal S}}}
+\def\ccalT{{\ensuremath{\mathcal T}}}
+\def\ccalX{{\ensuremath{\mathcal X}}}
+\def\ccalY{{\ensuremath{\mathcal Y}}}
+\def\ccalZ{{\ensuremath{\mathcal Z}}}
+%lower case alphabet
+\def\ccala{{\ensuremath{\mathcal a}}}
+\def\ccalb{{\ensuremath{\mathcal b}}}
+\def\ccalc{{\ensuremath{\mathcal c}}}
+\def\ccald{{\ensuremath{\mathcal d}}}
+\def\ccale{{\ensuremath{\mathcal e}}}
+\def\ccalf{{\ensuremath{\mathcal f}}}
+\def\ccalg{{\ensuremath{\mathcal g}}}
+\def\ccalh{{\ensuremath{\mathcal h}}}
+\def\ccali{{\ensuremath{\mathcal i}}}
+\def\ccalj{{\ensuremath{\mathcal j}}}
+\def\ccalk{{\ensuremath{\mathcal k}}}
+\def\ccall{{\ensuremath{\mathcal l}}}
+\def\ccalm{{\ensuremath{\mathcal m}}}
+\def\ccaln{{\ensuremath{\mathcal n}}}
+\def\ccalo{{\ensuremath{\mathcal o}}}
+\def\ccalp{{\ensuremath{\mathcal p}}}
+\def\ccalq{{\ensuremath{\mathcal q}}}
+\def\ccalr{{\ensuremath{\mathcal r}}}
+\def\ccalw{{\ensuremath{\mathcal w}}}
+\def\ccalu{{\ensuremath{\mathcal u}}}
+\def\ccalv{{\ensuremath{\mathcal v}}}
+\def\ccals{{\ensuremath{\mathcal s}}}
+\def\ccalt{{\ensuremath{\mathcal t}}}
+\def\ccalx{{\ensuremath{\mathcal x}}}
+\def\ccaly{{\ensuremath{\mathcal y}}}
+\def\ccalz{{\ensuremath{\mathcal z}}}
+\def\ccal0{{\ensuremath{\mathcal 0}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of caligraph version
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%hat version
+%capital alphabet
+\def\hhatA{{\ensuremath{\hat A}}}
+\def\hhatB{{\ensuremath{\hat B}}}
+\def\hhatC{{\ensuremath{\hat C}}}
+\def\hhatD{{\ensuremath{\hat D}}}
+\def\hhatE{{\ensuremath{\hat E}}}
+\def\hhatF{{\ensuremath{\hat F}}}
+\def\hhatG{{\ensuremath{\hat G}}}
+\def\hhatH{{\ensuremath{\hat H}}}
+\def\hhatI{{\ensuremath{\hat I}}}
+\def\hhatJ{{\ensuremath{\hat J}}}
+\def\hhatK{{\ensuremath{\hat K}}}
+\def\hhatL{{\ensuremath{\hat L}}}
+\def\hhatM{{\ensuremath{\hat M}}}
+\def\hhatN{{\ensuremath{\hat N}}}
+\def\hhatO{{\ensuremath{\hat O}}}
+\def\hhatP{{\ensuremath{\hat P}}}
+\def\hhatQ{{\ensuremath{\hat Q}}}
+\def\hhatR{{\ensuremath{\hat R}}}
+\def\hhatW{{\ensuremath{\hat W}}}
+\def\hhatU{{\ensuremath{\hat U}}}
+\def\hhatV{{\ensuremath{\hat V}}}
+\def\hhatS{{\ensuremath{\hat S}}}
+\def\hhatT{{\ensuremath{\hat T}}}
+\def\hhatX{{\ensuremath{\hat X}}}
+\def\hhatY{{\ensuremath{\hat Y}}}
+\def\hhatZ{{\ensuremath{\hat Z}}}
+%lower case alphabet
+\def\hhata{{\ensuremath{\hat a}}}
+\def\hhatb{{\ensuremath{\hat b}}}
+\def\hhatc{{\ensuremath{\hat c}}}
+\def\hhatd{{\ensuremath{\hat d}}}
+\def\hhate{{\ensuremath{\hat e}}}
+\def\hhatf{{\ensuremath{\hat f}}}
+\def\hhatg{{\ensuremath{\hat g}}}
+\def\hhath{{\ensuremath{\hat h}}}
+\def\hhati{{\ensuremath{\hat i}}}
+\def\hhatj{{\ensuremath{\hat j}}}
+\def\hhatk{{\ensuremath{\hat k}}}
+\def\hhatl{{\ensuremath{\hat l}}}
+\def\hhatm{{\ensuremath{\hat m}}}
+\def\hhatn{{\ensuremath{\hat n}}}
+\def\hhato{{\ensuremath{\hat o}}}
+\def\hhatp{{\ensuremath{\hat p}}}
+\def\hhatq{{\ensuremath{\hat q}}}
+\def\hhatr{{\ensuremath{\hat r}}}
+\def\hhatw{{\ensuremath{\hat w}}}
+\def\hhatu{{\ensuremath{\hat u}}}
+\def\hhatv{{\ensuremath{\hat v}}}
+\def\hhats{{\ensuremath{\hat s}}}
+\def\hhatt{{\ensuremath{\hat t}}}
+\def\hhatx{{\ensuremath{\hat x}}}
+\def\hhaty{{\ensuremath{\hat y}}}
+\def\hhatz{{\ensuremath{\hat z}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of hat version
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%tilde version
+%capital alphabet
+\def\tdA{{\ensuremath{\tilde A}}}
+\def\tdB{{\ensuremath{\tilde B}}}
+\def\tdC{{\ensuremath{\tilde C}}}
+\def\tdD{{\ensuremath{\tilde D}}}
+\def\tdE{{\ensuremath{\tilde E}}}
+\def\tdF{{\ensuremath{\tilde F}}}
+\def\tdG{{\ensuremath{\tilde G}}}
+\def\tdH{{\ensuremath{\tilde H}}}
+\def\tdI{{\ensuremath{\tilde I}}}
+\def\tdJ{{\ensuremath{\tilde J}}}
+\def\tdK{{\ensuremath{\tilde K}}}
+\def\tdL{{\ensuremath{\tilde L}}}
+\def\tdM{{\ensuremath{\tilde M}}}
+\def\tdN{{\ensuremath{\tilde N}}}
+\def\tdO{{\ensuremath{\tilde O}}}
+\def\tdP{{\ensuremath{\tilde P}}}
+\def\tdQ{{\ensuremath{\tilde Q}}}
+\def\tdR{{\ensuremath{\tilde R}}}
+\def\tdW{{\ensuremath{\tilde W}}}
+\def\tdU{{\ensuremath{\tilde U}}}
+\def\tdV{{\ensuremath{\tilde V}}}
+\def\tdS{{\ensuremath{\tilde S}}}
+\def\tdT{{\ensuremath{\tilde T}}}
+\def\tdX{{\ensuremath{\tilde X}}}
+\def\tdY{{\ensuremath{\tilde Y}}}
+\def\tdZ{{\ensuremath{\tilde Z}}}
+%lower case alphabet
+\def\tda{{\ensuremath{\tilde a}}}
+\def\tdb{{\ensuremath{\tilde b}}}
+\def\tdc{{\ensuremath{\tilde c}}}
+\def\tdd{{\ensuremath{\tilde d}}}
+\def\tde{{\ensuremath{\tilde e}}}
+\def\tdf{{\ensuremath{\tilde f}}}
+\def\tdg{{\ensuremath{\tilde g}}}
+\def\tdh{{\ensuremath{\tilde h}}}
+\def\tdi{{\ensuremath{\tilde i}}}
+\def\tdj{{\ensuremath{\tilde j}}}
+\def\tdk{{\ensuremath{\tilde k}}}
+\def\tdl{{\ensuremath{\tilde l}}}
+\def\tdm{{\ensuremath{\tilde m}}}
+\def\tdn{{\ensuremath{\tilde n}}}
+\def\tdo{{\ensuremath{\tilde o}}}
+\def\tdp{{\ensuremath{\tilde p}}}
+\def\tdq{{\ensuremath{\tilde q}}}
+\def\tdr{{\ensuremath{\tilde r}}}
+\def\tdw{{\ensuremath{\tilde w}}}
+\def\tdu{{\ensuremath{\tilde u}}}
+\def\tdv{{\ensuremath{\tilde r}}}
+\def\tds{{\ensuremath{\tilde s}}}
+\def\tdt{{\ensuremath{\tilde t}}}
+\def\tdx{{\ensuremath{\tilde x}}}
+\def\tdy{{\ensuremath{\tilde y}}}
+\def\tdz{{\ensuremath{\tilde z}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of tilde version
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%check version
+%lower case alphabet
+\def\chka{{\ensuremath{\check a}}}
+\def\chkb{{\ensuremath{\check b}}}
+\def\chkc{{\ensuremath{\check c}}}
+\def\chkd{{\ensuremath{\check d}}}
+\def\chke{{\ensuremath{\check e}}}
+\def\chkf{{\ensuremath{\check f}}}
+\def\chkg{{\ensuremath{\check g}}}
+\def\chkh{{\ensuremath{\check h}}}
+\def\chki{{\ensuremath{\check i}}}
+\def\chkj{{\ensuremath{\check j}}}
+\def\chkk{{\ensuremath{\check k}}}
+\def\chkl{{\ensuremath{\check l}}}
+\def\chkm{{\ensuremath{\check m}}}
+\def\chkn{{\ensuremath{\check n}}}
+\def\chko{{\ensuremath{\check o}}}
+\def\chkp{{\ensuremath{\check p}}}
+\def\chkq{{\ensuremath{\check q}}}
+\def\chkr{{\ensuremath{\check r}}}
+\def\chkw{{\ensuremath{\check w}}}
+\def\chku{{\ensuremath{\check u}}}
+\def\chkv{{\ensuremath{\check v}}}
+\def\chks{{\ensuremath{\check s}}}
+\def\chkt{{\ensuremath{\check t}}}
+\def\chkx{{\ensuremath{\check x}}}
+\def\chky{{\ensuremath{\check y}}}
+\def\chkz{{\ensuremath{\check z}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of check version
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Bold version
+% upper case bold
+\def\bbone{{\ensuremath{\mathbf 1}}}
+\def\bbzero{{\ensuremath{\mathbf 0}}}
+\def\bbA{{\ensuremath{\mathbf A}}}
+\def\bbB{{\ensuremath{\mathbf B}}}
+\def\bbC{{\ensuremath{\mathbf C}}}
+\def\bbD{{\ensuremath{\mathbf D}}}
+\def\bbE{{\ensuremath{\mathbf E}}}
+\def\bbF{{\ensuremath{\mathbf F}}}
+\def\bbG{{\ensuremath{\mathbf G}}}
+\def\bbH{{\ensuremath{\mathbf H}}}
+\def\bbI{{\ensuremath{\mathbf I}}}
+\def\bbJ{{\ensuremath{\mathbf J}}}
+\def\bbK{{\ensuremath{\mathbf K}}}
+\def\bbL{{\ensuremath{\mathbf L}}}
+\def\bbM{{\ensuremath{\mathbf M}}}
+\def\bbN{{\ensuremath{\mathbf N}}}
+\def\bbO{{\ensuremath{\mathbf O}}}
+\def\bbP{{\ensuremath{\mathbf P}}}
+\def\bbQ{{\ensuremath{\mathbf Q}}}
+\def\bbR{{\ensuremath{\mathbf R}}}
+\def\bbW{{\ensuremath{\mathbf W}}}
+\def\bbU{{\ensuremath{\mathbf U}}}
+\def\bbV{{\ensuremath{\mathbf V}}}
+\def\bbS{{\ensuremath{\mathbf S}}}
+\def\bbT{{\ensuremath{\mathbf T}}}
+\def\bbX{{\ensuremath{\mathbf X}}}
+\def\bbY{{\ensuremath{\mathbf Y}}}
+\def\bbZ{{\ensuremath{\mathbf Z}}}
+%lower case bold
+\def\bba{{\ensuremath{\mathbf a}}}
+\def\bbb{{\ensuremath{\mathbf b}}}
+\def\bbc{{\ensuremath{\mathbf c}}}
+\def\bbd{{\ensuremath{\mathbf d}}}
+\def\bbe{{\ensuremath{\mathbf e}}}
+\def\bbf{{\ensuremath{\mathbf f}}}
+\def\bbg{{\ensuremath{\mathbf g}}}
+\def\bbh{{\ensuremath{\mathbf h}}}
+\def\bbi{{\ensuremath{\mathbf i}}}
+\def\bbj{{\ensuremath{\mathbf j}}}
+\def\bbk{{\ensuremath{\mathbf k}}}
+\def\bbl{{\ensuremath{\mathbf l}}}
+\def\bbm{{\ensuremath{\mathbf m}}}
+\def\bbn{{\ensuremath{\mathbf n}}}
+\def\bbo{{\ensuremath{\mathbf o}}}
+\def\bbp{{\ensuremath{\mathbf p}}}
+\def\bbq{{\ensuremath{\mathbf q}}}
+\def\bbr{{\ensuremath{\mathbf r}}}
+\def\bbw{{\ensuremath{\mathbf w}}}
+\def\bbu{{\ensuremath{\mathbf u}}}
+\def\bbv{{\ensuremath{\mathbf v}}}
+\def\bbs{{\ensuremath{\mathbf s}}}
+\def\bbt{{\ensuremath{\mathbf t}}}
+\def\bbx{{\ensuremath{\mathbf x}}}
+\def\bby{{\ensuremath{\mathbf y}}}
+\def\bbz{{\ensuremath{\mathbf z}}}
+\def\bb0{{\ensuremath{\mathbf 0}}}
+%
+
+% roman 
+\def\rmA{{\ensuremath\text{A}}}
+\def\rmB{{\ensuremath\text{B}}}
+\def\rmC{{\ensuremath\text{C}}}
+\def\rmD{{\ensuremath\text{D}}}
+\def\rmE{{\ensuremath\text{E}}}
+\def\rmF{{\ensuremath\text{F}}}
+\def\rmG{{\ensuremath\text{G}}}
+\def\rmH{{\ensuremath\text{H}}}
+\def\rmI{{\ensuremath\text{I}}}
+\def\rmJ{{\ensuremath\text{J}}}
+\def\rmK{{\ensuremath\text{K}}}
+\def\rmL{{\ensuremath\text{L}}}
+\def\rmM{{\ensuremath\text{M}}}
+\def\rmN{{\ensuremath\text{N}}}
+\def\rmO{{\ensuremath\text{O}}}
+\def\rmP{{\ensuremath\text{P}}}
+\def\rmQ{{\ensuremath\text{Q}}}
+\def\rmR{{\ensuremath\text{R}}}
+\def\rmW{{\ensuremath\text{W}}}
+\def\rmU{{\ensuremath\text{U}}}
+\def\rmV{{\ensuremath\text{V}}}
+\def\rmS{{\ensuremath\text{S}}}
+\def\rmT{{\ensuremath\text{T}}}
+\def\rmX{{\ensuremath\text{X}}}
+\def\rmY{{\ensuremath\text{Y}}}
+\def\rmZ{{\ensuremath\text{Z}}}
+%lower case bold
+\def\rma{{\ensuremath\text{a}}}
+\def\rmb{{\ensuremath\text{b}}}
+\def\rmc{{\ensuremath\text{c}}}
+\def\rmd{{\ensuremath\text{d}}}
+\def\rme{{\ensuremath\text{e}}}
+\def\rmf{{\ensuremath\text{f}}}
+\def\rmg{{\ensuremath\text{g}}}
+\def\rmh{{\ensuremath\text{h}}}
+\def\rmi{{\ensuremath\text{i}}}
+\def\rmj{{\ensuremath\text{j}}}
+\def\rmk{{\ensuremath\text{k}}}
+\def\rml{{\ensuremath\text{l}}}
+\def\rmm{{\ensuremath\text{m}}}
+\def\rmn{{\ensuremath\text{n}}}
+\def\rmo{{\ensuremath\text{o}}}
+\def\rmp{{\ensuremath\text{p}}}
+\def\rmq{{\ensuremath\text{q}}}
+\def\rmr{{\ensuremath\text{r}}}
+\def\rmw{{\ensuremath\text{w}}}
+\def\rmu{{\ensuremath\text{u}}}
+\def\rmv{{\ensuremath\text{v}}}
+\def\rms{{\ensuremath\text{s}}}
+\def\rmt{{\ensuremath\text{t}}}
+\def\rmx{{\ensuremath\text{x}}}
+\def\rmy{{\ensuremath\text{y}}}
+\def\rmz{{\ensuremath\text{z}}}
+%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%bar bold version
+%upper case
+%
+\def\barbA{{\bar{\ensuremath{\mathbf A}} }}
+\def\barbB{{\bar{\ensuremath{\mathbf B}} }}
+\def\barbC{{\bar{\ensuremath{\mathbf C}} }}
+\def\barbD{{\bar{\ensuremath{\mathbf D}} }}
+\def\barbE{{\bar{\ensuremath{\mathbf E}} }}
+\def\barbF{{\bar{\ensuremath{\mathbf F}} }}
+\def\barbG{{\bar{\ensuremath{\mathbf G}} }}
+\def\barbH{{\bar{\ensuremath{\mathbf H}} }}
+\def\barbI{{\bar{\ensuremath{\mathbf I}} }}
+\def\barbJ{{\bar{\ensuremath{\mathbf J}} }}
+\def\barbK{{\bar{\ensuremath{\mathbf K}} }}
+\def\barbL{{\bar{\ensuremath{\mathbf L}} }}
+\def\barbM{{\bar{\ensuremath{\mathbf M}} }}
+\def\barbN{{\bar{\ensuremath{\mathbf N}} }}
+\def\barbO{{\bar{\ensuremath{\mathbf O}} }}
+\def\barbP{{\bar{\ensuremath{\mathbf P}} }}
+\def\barbQ{{\bar{\ensuremath{\mathbf Q}} }}
+\def\barbR{{\bar{\ensuremath{\mathbf R}} }}
+\def\barbS{{\bar{\ensuremath{\mathbf S}} }}
+\def\barbT{{\bar{\ensuremath{\mathbf T}} }}
+\def\barbU{{\bar{\ensuremath{\mathbf U}} }}
+\def\barbV{{\bar{\ensuremath{\mathbf V}} }}
+\def\barbW{{\bar{\ensuremath{\mathbf W}} }}
+\def\barbX{{\overline{\bbX}}}
+\def\barbY{{\bar{\ensuremath{\mathbf Y}} }}
+\def\barbZ{{\bar{\ensuremath{\mathbf Z}} }}
+%
+%lower case
+%
+\def\barba{{\bar{\ensuremath{\mathbf a}} }}
+\def\barbb{{\bar{\ensuremath{\mathbf b}} }}
+\def\barbc{{\bar{\ensuremath{\mathbf c}} }}
+\def\barbd{{\bar{\ensuremath{\mathbf d}} }}
+\def\barbe{{\bar{\ensuremath{\mathbf e}} }}
+\def\barbf{{\bar{\ensuremath{\mathbf f}} }}
+\def\barbg{{\bar{\ensuremath{\mathbf g}} }}
+\def\barbh{{\bar{\ensuremath{\mathbf h}} }}
+\def\barbi{{\bar{\ensuremath{\mathbf i}} }}
+\def\barbj{{\bar{\ensuremath{\mathbf j}} }}
+\def\barbk{{\bar{\ensuremath{\mathbf k}} }}
+\def\barbl{{\bar{\ensuremath{\mathbf l}} }}
+\def\barbm{{\bar{\ensuremath{\mathbf m}} }}
+\def\barbn{{\bar{\ensuremath{\mathbf n}} }}
+\def\barbo{{\bar{\ensuremath{\mathbf o}} }}
+\def\barbp{{\bar{\ensuremath{\mathbf p}} }}
+\def\barbq{{\bar{\ensuremath{\mathbf q}} }}
+\def\barbr{{\bar{\ensuremath{\mathbf r}} }}
+\def\barbs{{\bar{\ensuremath{\mathbf s}} }}
+\def\barbt{{\bar{\ensuremath{\mathbf t}} }}
+\def\barbu{{\bar{\ensuremath{\mathbf u}} }}
+\def\barbv{{\bar{\ensuremath{\mathbf v}} }}
+\def\barbw{{\bar{\ensuremath{\mathbf w}} }}
+\def\barbx{{\bar{\ensuremath{\mathbf x}} }}
+\def\barby{{\bar{\ensuremath{\mathbf y}} }}
+\def\barbz{{\bar{\ensuremath{\mathbf z}} }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of bar bold bersion
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%hat bold version
+%upper case
+%
+\def\hbA{{\hat{\ensuremath{\mathbf A}} }}
+\def\hbB{{\hat{\ensuremath{\mathbf B}} }}
+\def\hbC{{\hat{\ensuremath{\mathbf C}} }}
+\def\hbD{{\hat{\ensuremath{\mathbf D}} }}
+\def\hbE{{\hat{\ensuremath{\mathbf E}} }}
+\def\hbF{{\hat{\ensuremath{\mathbf F}} }}
+\def\hbG{{\hat{\ensuremath{\mathbf G}} }}
+\def\hbH{{\hat{\ensuremath{\mathbf H}} }}
+\def\hbI{{\hat{\ensuremath{\mathbf I}} }}
+\def\hbJ{{\hat{\ensuremath{\mathbf J}} }}
+\def\hbK{{\hat{\ensuremath{\mathbf K}} }}
+\def\hbL{{\hat{\ensuremath{\mathbf L}} }}
+\def\hbM{{\hat{\ensuremath{\mathbf M}} }}
+\def\hbN{{\hat{\ensuremath{\mathbf N}} }}
+\def\hbO{{\hat{\ensuremath{\mathbf O}} }}
+\def\hbP{{\hat{\ensuremath{\mathbf P}} }}
+\def\hbQ{{\hat{\ensuremath{\mathbf Q}} }}
+\def\hbR{{\hat{\ensuremath{\mathbf R}} }}
+\def\hbS{{\hat{\ensuremath{\mathbf S}} }}
+\def\hbT{{\hat{\ensuremath{\mathbf T}} }}
+\def\hbU{{\hat{\ensuremath{\mathbf U}} }}
+\def\hbV{{\hat{\ensuremath{\mathbf V}} }}
+\def\hbW{{\hat{\ensuremath{\mathbf W}} }}
+\def\hbX{{\hat{\ensuremath{\mathbf X}} }}
+\def\hbY{{\hat{\ensuremath{\mathbf Y}} }}
+\def\hbZ{{\hat{\ensuremath{\mathbf Z}} }}
+%
+%lower case
+%
+\def\hba{{\hat{\ensuremath{\mathbf a}} }}
+\def\hbb{{\hat{\ensuremath{\mathbf b}} }}
+\def\hbc{{\hat{\ensuremath{\mathbf c}} }}
+\def\hbd{{\hat{\ensuremath{\mathbf d}} }}
+\def\hbe{{\hat{\ensuremath{\mathbf e}} }}
+\def\hbf{{\hat{\ensuremath{\mathbf f}} }}
+\def\hbg{{\hat{\ensuremath{\mathbf g}} }}
+\def\hbh{{\hat{\ensuremath{\mathbf h}} }}
+\def\hbi{{\hat{\ensuremath{\mathbf i}} }}
+\def\hbj{{\hat{\ensuremath{\mathbf j}} }}
+\def\hbk{{\hat{\ensuremath{\mathbf k}} }}
+\def\hbl{{\hat{\ensuremath{\mathbf l}} }}
+\def\hbm{{\hat{\ensuremath{\mathbf m}} }}
+\def\hbn{{\hat{\ensuremath{\mathbf n}} }}
+\def\hbo{{\hat{\ensuremath{\mathbf o}} }}
+\def\hbp{{\hat{\ensuremath{\mathbf p}} }}
+\def\hbq{{\hat{\ensuremath{\mathbf q}} }}
+\def\hbr{{\hat{\ensuremath{\mathbf r}} }}
+\def\hbs{{\hat{\ensuremath{\mathbf s}} }}
+\def\hbt{{\hat{\ensuremath{\mathbf t}} }}
+\def\hbu{{\hat{\ensuremath{\mathbf u}} }}
+\def\hbv{{\hat{\ensuremath{\mathbf v}} }}
+\def\hbw{{\hat{\ensuremath{\mathbf w}} }}
+\def\hbx{{\hat{\ensuremath{\mathbf x}} }}
+\def\hby{{\hat{\ensuremath{\mathbf y}} }}
+\def\hbz{{\hat{\ensuremath{\mathbf z}} }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of hat bold  bersion
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%tilde bold version
+%upper case
+%
+\def\tbA{{\tilde{\ensuremath{\mathbf A}} }}
+\def\tbB{{\tilde{\ensuremath{\mathbf B}} }}
+\def\tbC{{\tilde{\ensuremath{\mathbf C}} }}
+\def\tbD{{\tilde{\ensuremath{\mathbf D}} }}
+\def\tbE{{\tilde{\ensuremath{\mathbf E}} }}
+\def\tbF{{\tilde{\ensuremath{\mathbf F}} }}
+\def\tbG{{\tilde{\ensuremath{\mathbf G}} }}
+\def\tbH{{\tilde{\ensuremath{\mathbf H}} }}
+\def\tbI{{\tilde{\ensuremath{\mathbf I}} }}
+\def\tbJ{{\tilde{\ensuremath{\mathbf J}} }}
+\def\tbK{{\tilde{\ensuremath{\mathbf K}} }}
+\def\tbL{{\tilde{\ensuremath{\mathbf L}} }}
+\def\tbM{{\tilde{\ensuremath{\mathbf M}} }}
+\def\tbN{{\tilde{\ensuremath{\mathbf N}} }}
+\def\tbO{{\tilde{\ensuremath{\mathbf O}} }}
+\def\tbP{{\tilde{\ensuremath{\mathbf P}} }}
+\def\tbQ{{\tilde{\ensuremath{\mathbf Q}} }}
+\def\tbR{{\tilde{\ensuremath{\mathbf R}} }}
+\def\tbS{{\tilde{\ensuremath{\mathbf S}} }}
+\def\tbT{{\tilde{\ensuremath{\mathbf T}} }}
+\def\tbU{{\tilde{\ensuremath{\mathbf U}} }}
+\def\tbV{{\tilde{\ensuremath{\mathbf V}} }}
+\def\tbW{{\tilde{\ensuremath{\mathbf W}} }}
+\def\tbX{{\tilde{\ensuremath{\mathbf X}} }}
+\def\tbY{{\tilde{\ensuremath{\mathbf Y}} }}
+\def\tbZ{{\tilde{\ensuremath{\mathbf Z}} }}
+%
+%lower case
+%
+\def\tba{{\tilde{\ensuremath{\mathbf a}} }}
+\def\tbb{{\tilde{\ensuremath{\mathbf b}} }}
+\def\tbc{{\tilde{\ensuremath{\mathbf c}} }}
+\def\tbd{{\tilde{\ensuremath{\mathbf d}} }}
+\def\tbe{{\tilde{\ensuremath{\mathbf e}} }}
+\def\tbf{{\tilde{\ensuremath{\mathbf f}} }}
+\def\tbg{{\tilde{\ensuremath{\mathbf g}} }}
+\def\tbh{{\tilde{\ensuremath{\mathbf h}} }}
+\def\tbi{{\tilde{\ensuremath{\mathbf i}} }}
+\def\tbj{{\tilde{\ensuremath{\mathbf j}} }}
+\def\tbk{{\tilde{\ensuremath{\mathbf k}} }}
+\def\tbl{{\tilde{\ensuremath{\mathbf l}} }}
+\def\tbm{{\tilde{\ensuremath{\mathbf m}} }}
+\def\tbn{{\tilde{\ensuremath{\mathbf n}} }}
+\def\tbo{{\tilde{\ensuremath{\mathbf o}} }}
+\def\tbp{{\tilde{\ensuremath{\mathbf p}} }}
+\def\tbq{{\tilde{\ensuremath{\mathbf q}} }}
+\def\tbr{{\tilde{\ensuremath{\mathbf r}} }}
+\def\tbs{{\tilde{\ensuremath{\mathbf s}} }}
+\def\tbt{{\tilde{\ensuremath{\mathbf t}} }}
+\def\tbu{{\tilde{\ensuremath{\mathbf u}} }}
+\def\tbv{{\tilde{\ensuremath{\mathbf v}} }}
+\def\tbw{{\tilde{\ensuremath{\mathbf w}} }}
+\def\tbx{{\tilde{\ensuremath{\mathbf x}} }}
+\def\tby{{\tilde{\ensuremath{\mathbf y}} }}
+\def\tbz{{\tilde{\ensuremath{\mathbf z}} }}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of tilde bold  bersion
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%bold caligraph
+%
+\def\bbcalA{\mbox{\boldmath $\mathcal{A}$}}
+\def\bbcalB{\mbox{\boldmath $\mathcal{B}$}}
+\def\bbcalC{\mbox{\boldmath $\mathcal{C}$}}
+\def\bbcalD{\mbox{\boldmath $\mathcal{D}$}}
+\def\bbcalE{\mbox{\boldmath $\mathcal{E}$}}
+\def\bbcalF{\mbox{\boldmath $\mathcal{F}$}}
+\def\bbcalG{\mbox{\boldmath $\mathcal{G}$}}
+\def\bbcalH{\mbox{\boldmath $\mathcal{H}$}}
+\def\bbcalI{\mbox{\boldmath $\mathcal{I}$}}
+\def\bbcalJ{\mbox{\boldmath $\mathcal{J}$}}
+\def\bbcalK{\mbox{\boldmath $\mathcal{K}$}}
+\def\bbcalL{\mbox{\boldmath $\mathcal{L}$}}
+\def\bbcalM{\mbox{\boldmath $\mathcal{M}$}}
+\def\bbcalN{\mbox{\boldmath $\mathcal{N}$}}
+\def\bbcalO{\mbox{\boldmath $\mathcal{O}$}}
+\def\bbcalP{\mbox{\boldmath $\mathcal{P}$}}
+\def\bbcalQ{\mbox{\boldmath $\mathcal{Q}$}}
+\def\bbcalR{\mbox{\boldmath $\mathcal{R}$}}
+\def\bbcalW{\mbox{\boldmath $\mathcal{W}$}}
+\def\bbcalU{\mbox{\boldmath $\mathcal{U}$}}
+\def\bbcalV{\mbox{\boldmath $\mathcal{V}$}}
+\def\bbcalS{\mbox{\boldmath $\mathcal{S}$}}
+\def\bbcalT{\mbox{\boldmath $\mathcal{T}$}}
+\def\bbcalX{\mbox{\boldmath $\mathcal{X}$}}
+\def\bbcalY{\mbox{\boldmath $\mathcal{Y}$}}
+\def\bbcalZ{\mbox{\boldmath $\mathcal{Z}$}}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of caligraph
+%
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%tilde Greek
+%
+\def\tdupsilon{\tilde\upsilon}
+\def\tdalpha{\tilde\alpha}
+\def\tbeta{\tilde\beta}
+\def\tdgamma{\tilde\gamma}
+\def\tddelta{\tilde\delta}
+\def\tdepsilon{\tilde\epsilon}
+\def\tdvarepsilon{\tilde\varepsilon}
+\def\tdzeta{\tilde\zeta}
+\def\tdeta{\tilde\eta}
+\def\tdtheta{\tilde\theta}
+\def\tdvartheta{\tilde\vartheta}
+
+\def\tdiota{\tilde\iota}
+\def\tdkappa{\tilde\kappa}
+\def\tdlambda{\tilde\lambda}
+\def\tdmu{\tilde\mu}
+\def\tdnu{\tilde\nu}
+\def\tdxi{\tilde\xi}
+\def\tdpi{\tilde\pi}
+\def\tdrho{\tilde\rho}
+\def\tdvarrho{\tilde\varrho}
+\def\tdsigma{\tilde\sigma}
+\def\tdvarsigma{\tilde\varsigma}
+\def\tdtau{\tilde\tau}
+\def\tdupsilon{\tilde\upsilon}
+\def\tdphi{\tilde\phi}
+\def\tdvarphi{\tilde\varphi}
+\def\tdchi{\tilde\chi}
+\def\tdpsi{\tilde\psi}
+\def\tdomega{\tilde\omega}
+
+\def\tdGamma{\tilde\Gamma}
+\def\tdDelta{\tilde\Delta}
+\def\tdTheta{\tilde\Theta}
+\def\tdLambda{\tilde\Lambda}
+\def\tdXi{\tilde\Xi}
+\def\tdPi{\tilde\Pi}
+\def\tdSigma{\tilde\Sigma}
+\def\tdUpsilon{\tilde\Upsilon}
+\def\tdPhi{\tilde\Phi}
+\def\tdPsi{\tilde\Psi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of title  Greek
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%bar Greek
+%
+\def\bbarupsilon{\bar\upsilon}
+\def\bbaralpha{\bar\alpha}
+\def\bbarbeta{\bar\beta}
+\def\bbargamma{\bar\gamma}
+\def\bbardelta{\bar\delta}
+\def\bbarepsilon{\bar\epsilon}
+\def\bbarvarepsilon{\bar\varepsilon}
+\def\bbarzeta{\bar\zeta}
+\def\bbareta{\bar\eta}
+\def\bbartheta{\bar\theta}
+\def\bbarvartheta{\bar\vartheta}
+
+\def\bbariota{\bar\iota}
+\def\bbarkappa{\bar\kappa}
+\def\bbarlambda{\bar\lambda}
+\def\bbarmu{\bar\mu}
+\def\bbarnu{\bar\nu}
+\def\bbarxi{\bar\xi}
+\def\bbarpi{\bar\pi}
+\def\bbarrho{\bar\rho}
+\def\bbarvarrho{\bar\varrho}
+\def\bbarvarsigma{\bar\varsigma}
+\def\bbarphi{\bar\phi}
+\def\bbarvarphi{\bar\varphi}
+\def\bbarchi{\bar\chi}
+\def\bbarpsi{\bar\psi}
+\def\bbaromega{\bar\omega}
+
+\def\bbarGamma{\bar\Gamma}
+\def\bbarDelta{\bar\Delta}
+\def\bbarTheta{\bar\Theta}
+\def\bbarLambda{\bar\Lambda}
+\def\bbarXi{\bar\Xi}
+\def\bbarPi{\bar\Pi}
+\def\bbarSigma{\bar\Sigma}
+\def\bbarUpsilon{\bar\Upsilon}
+\def\bbarPhi{\bar\Phi}
+\def\bbarPsi{\bar\Psi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of bar  Greek
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%begion of check Greek
+%
+\def\chkupsilon{\check\upsilon}
+\def\chkalpha{\check\alpha}
+\def\chkbeta{\check\beta}
+\def\chkgamma{\check\gamma}
+\def\chkdelta{\check\delta}
+\def\chkepsilon{\check\epsilon}
+\def\chkvarepsilon{\check\varepsilon}
+\def\chkzeta{\check\zeta}
+\def\chketa{\check\eta}
+\def\chktheta{\check\theta}
+\def\chkvartheta{\check\vartheta}
+
+\def\chkiota{\check\iota}
+\def\chkkappa{\check\kappa}
+\def\chklambda{\check\lambda}
+\def\chkmu{\check\mu}
+\def\chknu{\check\nu}
+\def\chkxi{\check\xi}
+\def\chkpi{\check\pi}
+\def\chkrho{\check\rho}
+\def\chkvarrho{\check\varrho}
+\def\chksigma{\check\sigma}
+\def\chkvarsigma{\check\varsigma}
+\def\chktau{\check\tau}
+\def\chkupsilon{\check\upsilon}
+\def\chkphi{\check\phi}
+\def\chkvarphi{\check\varphi}
+\def\chkchi{\check\chi}
+\def\chkpsi{\check\psi}
+\def\chkomega{\check\omega}
+
+\def\chkGamma{\check\Gamma}
+\def\chkDelta{\check\Delta}
+\def\chkTheta{\check\Theta}
+\def\chkLambda{\check\Lambda}
+\def\chkXi{\check\Xi}
+\def\chkPi{\check\Pi}
+\def\chkSigma{\check\Sigma}
+\def\chkUpsilon{\check\Upsilon}
+\def\chkPhi{\check\Phi}
+\def\chkPsi{\check\Psi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of check Greek
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%Bold Greek letter
+%
+
+\def\bbalpha{\boldsymbol{\alpha}}
+\def\bbbeta{\boldsymbol{\beta}}
+\def\bbgamma{\boldsymbol{\gamma}}
+\def\bbdelta{\boldsymbol{\delta}}
+\def\bbepsilon{\boldsymbol{\epsilon}}
+\def\bbvarepsilon{\boldsymbol{\varepsilon}}
+\def\bbzeta{\boldsymbol{\zeta}}
+\def\bbeta{\boldsymbol{\eta}}
+\def\bbtheta{\boldsymbol{\theta}}
+\def\bbvartheta{\boldsymbol{\vartheta}}
+\def \bbtau {\boldsymbol{\tau}}
+\def\bbupsilon{\boldsymbol{\upsilon}}
+\def\bbiota{\boldsymbol{\iota}}
+\def\bbkappa{\boldsymbol{\kappa}}
+\def\bblambda{\boldsymbol{\lambda}}
+\def\bblam{\boldsymbol{\lambda}}
+\def\bbmu{\boldsymbol{\mu}}
+\def\bbnu{\boldsymbol{\nu}}
+\def\bbxi{\boldsymbol{\xi}}
+\def\bbpi{\boldsymbol{\pi}}
+\def\bbrho{\boldsymbol{\rho}}
+\def\bbvarrho{\boldsymbol{\varrho}}
+\def\bbvarsigma{\boldsymbol{\varsigma}}
+\def\bbphi{\boldsymbol{\phi}}
+\def\bbvarphi{\boldsymbol{\varphi}}
+\def\bbchi{\boldsymbol{\chi}}
+\def\bbpsi{\boldsymbol{\psi}}
+\def\bbomega{\boldsymbol{\omega}}
+\def\bbGamma{\boldsymbol{\Gamma}}
+\def\bbDelta{\boldsymbol{\Delta}}
+\def\bbTheta{\boldsymbol{\Theta}}
+\def\bbLambda{\boldsymbol{\Lambda}}
+\def\bbXi{\boldsymbol{\Xi}}
+\def\bbPi{\boldsymbol{\Pi}}
+\def\bbSigma{\boldsymbol{\Sigma}}
+\def\bbUpsilon{\boldsymbol{\Upsilon}}
+\def\bbPhi{\boldsymbol{\Phi}}
+\def\bbPsi{\boldsymbol{\Psi}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of Bold Greek
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%bar Bold Greek
+%
+\def\barbupsilon{\bar\bbupsilon}
+\def\barbalpha{\bar\bbalpha}
+\def\barbbeta{\bar\bbbeta}
+\def\barbgamma{\bar\bbgamma}
+\def\barbdelta{\bar\bbdelta}
+\def\barbepsilon{\bar\bbepsilon}
+\def\barbvarepsilon{\bar\bbvarepsilon}
+\def\barbzeta{\bar\bbzeta}
+\def\barbeta{\bar\bbeta}
+\def\barbtheta{\bar\bbtheta}
+\def\barbvartheta{\bar\bbvartheta}
+
+\def\barbiota{\bar\bbiota}
+\def\barbkappa{\bar\bbkappa}
+\def\barblambda{\bar\bblambda}
+\def\barbmu{\bar\bbmu}
+\def\barbnu{\bar\bbnu}
+\def\barbxi{\bar\bbxi}
+\def\barbpi{\bar\bbpi}
+\def\barbrho{\bar\bbrho}
+\def\barbvarrho{\bar\bbvarrho}
+\def\barbvarsigma{\bar\bbvarsigma}
+\def\barbphi{\bar\bbphi}
+\def\barbvarphi{\bar\bbvarphi}
+\def\barbchi{\bar\bbchi}
+\def\barbpsi{\bar\bbpsi}
+\def\barbomega{\bar\bbomega}
+
+\def\barbGamma{\bar\bbGamma}
+\def\barbDelta{\bar\bbDelta}
+\def\barbTheta{\bar\bbTheta}
+\def\barbLambda{\bar\bbLambda}
+\def\barbXi{\bar\bbXi}
+\def\barbPi{\bar\bbPi}
+\def\barbSigma{\bar\bbSigma}
+\def\barbUpsilon{\bar\bbUpsilon}
+\def\barbPhi{\bar\bbPhi}
+\def\barbPsi{\bar\bbPsi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of bar Bold Greek
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%hat Bold Greek
+%
+\def\hbupsilon{\hat\bbupsilon}
+\def\hbalpha{\hat\bbalpha}
+\def\hbbeta{\hat\bbbeta}
+\def\hbgamma{\hat\bbgamma}
+\def\hbdelta{\hat\bbdelta}
+\def\hbepsilon{\hat\bbepsilon}
+\def\hbvarepsilon{\hat\bbvarepsilon}
+\def\hbzeta{\hat\bbzeta}
+\def\hbeta{\hat\bbeta}
+\def\hbtheta{\hat\bbtheta}
+\def\hbvartheta{\hat\bbvartheta}
+
+\def\hbiota{\hat\bbiota}
+\def\hbkappa{\hat\bbkappa}
+\def\hblambda{\hat\bblambda}
+\def\hbmu{\hat\bbmu}
+\def\hbnu{\hat\bbnu}
+\def\hbxi{\hat\bbxi}
+\def\hbpi{\hat\bbpi}
+\def\hbrho{\hat\bbrho}
+\def\hbvarrho{\hat\bbvarrho}
+\def\hbvarsigma{\hat\bbvarsigma}
+\def\hbphi{\hat\bbphi}
+\def\hbvarphi{\hat\bbvarphi}
+\def\hbchi{\hat\bbchi}
+\def\hbpsi{\hat\bbpsi}
+\def\hbomega{\hat\bbomega}
+
+\def\hbGamma{\hat\bbGamma}
+\def\hbDelta{\hat\bbDelta}
+\def\hbTheta{\hat\bbTheta}
+\def\hbLambda{\hat\bbLambda}
+\def\hbXi{\hat\bbXi}
+\def\hbPi{\hat\bbPi}
+\def\hbSigma{\hat\bbSigma}
+\def\hbUpsilon{\hat\bbUpsilon}
+\def\hbPhi{\hat\bbPhi}
+\def\hbPsi{\hat\bbPsi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of hat Bold Greek
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%tilde Bold Greek
+%
+\def\tbupsilon{\tilde\bbupsilon}
+\def\tbalpha{\tilde\bbalpha}
+\def\tbbeta{\tilde\bbbeta}
+\def\tbgamma{\tilde\bbgamma}
+\def\tbdelta{\tilde\bbdelta}
+\def\tbepsilon{\tilde\bbepsilon}
+\def\tbvarepsilon{\tilde\bbvarepsilon}
+\def\tbzeta{\tilde\bbzeta}
+\def\tbeta{\tilde\bbeta}
+\def\tbtheta{\tilde\bbtheta}
+\def\tbvartheta{\tilde\bbvartheta}
+
+\def\tbiota{\tilde\bbiota}
+\def\tbkappa{\tilde\bbkappa}
+\def\tblambda{\tilde\bblambda}
+\def\tbmu{\tilde\bbmu}
+\def\tbnu{\tilde\bbnu}
+\def\tbxi{\tilde\bbxi}
+\def\tbpi{\tilde\bbpi}
+\def\tbrho{\tilde\bbrho}
+\def\tbvarrho{\tilde\bbvarrho}
+\def\tbvarsigma{\tilde\bbvarsigma}
+\def\tbphi{\tilde\bbphi}
+\def\tbvarphi{\tilde\bbvarphi}
+\def\tbchi{\tilde\bbchi}
+\def\tbpsi{\tilde\bbpsi}
+\def\tbomega{\tilde\bbomega}
+
+\def\tbGamma{\tilde\bbGamma}
+\def\tbDelta{\tilde\bbDelta}
+\def\tbTheta{\tilde\bbTheta}
+\def\tbLambda{\tilde\bbLambda}
+\def\tbXi{\tilde\bbXi}
+\def\tbPi{\tilde\bbPi}
+\def\tbSigma{\tilde\bbSigma}
+\def\tbUpsilon{\tilde\bbUpsilon}
+\def\tbPhi{\tilde\bbPhi}
+\def\tbPsi{\tilde\bbPsi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of tilde Bold Greek
+\def \deltat {\triangle t}
+\def \eps    {\epsilon}
+\def \lam    {\lambda}
+\def \bblam  {\bblambda}
+\def \Lam    {\Lambda}
+\def \bbLam  {\bbLambda}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%hat greek
+%
+\def\hhattheta{\hat\theta}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%end of hat greek

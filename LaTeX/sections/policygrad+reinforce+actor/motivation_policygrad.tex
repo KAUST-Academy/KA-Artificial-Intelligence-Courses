@@ -1,0 +1,19 @@
+\section{Motivation for Policy Gradient Methods}
+\begin{frame}{Motivation for Policy Gradient Methods}
+    \begin{itemize}
+        \item Value-based methods learn Q-values and derive the policy indirectly.
+        \begin{itemize}
+            \item Inefficient in continuous or large action spaces
+            \item Can’t represent stochastic policies
+            \item May lead to high variance and instability
+        \end{itemize}
+        \vspace{2em}
+        \item[]\textbf{Policy Gradient Methods:}
+        \begin{itemize}
+            \item Learn policy parameters directly to maximize expected return:
+            \[
+                J(\theta) = \mathbb{E}_{\pi_\theta}[R]
+            \]
+        \end{itemize}
+    \end{itemize}
+\end{frame}

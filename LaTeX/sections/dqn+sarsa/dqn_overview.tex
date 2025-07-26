@@ -1,0 +1,37 @@
+\section{Deep Q-Network (DQN) Overview}
+\begin{frame}{}
+    \LARGE Reinforcement Learning: \textbf{Deep Q-Network (DQN) Overview}
+\end{frame}
+
+\begin{frame}{Deep Q-Learning (DQN)}
+    \begin{itemize}
+        \item So far, we’ve been assuming a tabular representation of $Q$: one entry for every state/action pair
+        \item What’s the problem with this?
+        \pause
+        \item Not scalable. Must compute $Q(s,a)$ for every state-action pair. If state is e.g. current game state pixels, computationally infeasible to compute for entire state space!
+        \pause
+        \item \textbf{Solution}: use a function approximator to estimate $Q(s,a)$. E.g. a neural network!
+        $$Q(s,a,; \theta) \approx Q^{\star}(s,a)$$
+        \pause
+        \item If the function approximator is a deep neural network $\Rightarrow$ Deep Q-Learning (DQN)
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Deep Q-Learning (DQN)}
+    \begin{itemize}
+        \item Remember: want to find a Q-function that satisfies the Bellman Equation:
+            $$Q^{\star}(s,a) =  \mathbb{E}_{p(s'|s, a)}\left [r(s,a) + \gamma \max_{a'} Q^{\star}(s',a') | s, a \right ]$$
+        \item Forward Pass:
+            $$ \mathcal{L}(\theta) = \mathbb{E}_{s,a \sim p(.)}\left[ (y - Q(s,a;\theta))^2 \right ]$$
+            $$ \text{where } \:\: y = \mathbb{E}_{p(s'|s, a)}\left [r(s,a) + \gamma \max_{a'} Q(s',a';\theta) | s, a \right ]$$
+        \item Backward Pass:
+        \begin{itemize}
+            \item Gradient update (with respect to $Q$-function parameters $\theta$):
+        \end{itemize}
+    \end{itemize}
+
+    \begin{changemargin}{-2cm}{-2cm}
+        $$\gradient_\theta \mathcal{L}(\theta) = \mathbb{E}_{s,a \sim p(.),p(s'|s, a)}\left [(r(s,a) + \gamma \max_{a'} Q(s',a';\theta) - Q(s,a;\theta)) \gradient_\theta Q(s,a;\theta) \right ]$$
+    \end{changemargin}
+\end{frame}

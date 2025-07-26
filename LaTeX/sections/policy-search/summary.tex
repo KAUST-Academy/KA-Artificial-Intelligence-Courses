@@ -1,0 +1,43 @@
+\section{Summary}
+\begin{frame}{}
+    \LARGE Policy Search: \textbf{Summary}
+\end{frame}
+
+\begin{frame}{PPO vs TRPO}
+    \begin{table}[]
+        \centering
+        \renewcommand{\arraystretch}{2.5}
+        \begin{tabular}{lcc}
+            \hline
+            \textbf{Feature} & \textbf{TRPO} & \textbf{PPO} \\
+            \hline
+            Optimization & Constrained (KL) & Unconstrained (clipped) \\
+            Implementation & Complex & Simple \\
+            Performance & Strong & Comparable \\
+            Speed & Slower & Faster (SGD-friendly) \\
+            Used in & Robotics, theory & Industry, games \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Limitations of TRPO \& PPO}
+\begin{itemize}
+    \item Both methods remain sensitive to reward scaling, exploration strategies, and advantage estimation quality.
+    \item PPO's clipping mechanism is heuristic and may under- or over-constrain policy updates.
+    \item Both can struggle in environments with very sparse rewards.
+    \item Stability and convergence are not guaranteed in general MDPs.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{itemize}
+    \item In some cases, learning a stochastic policy is preferable to a deterministic policy.
+    \item Policy gradient methods often suffer from poor sample efficiency.
+    \item Importance sampling can help improve sample efficiency.
+    \item However, it is important to ensure that the current policy is not too different from the policy used to collect trajectories.
+    \item Small changes in policy parameters can sometimes lead to large, unexpected changes in the policy.
+    \item TRPO uses importance sampling to take multiple gradient steps and constrains the optimization objective in policy space.
+    \item PPO achieves similar goals by approximately enforcing a KL-divergence constraint without computing natural gradients.
+\end{itemize}
+\end{frame}

@@ -1,0 +1,259 @@
+\begin{frame}{Gradient of the loss function}
+\begin{itemize}
+    \item Let’s get back to the gradients\ldots
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Issues with the Approach}
+\begin{itemize}
+    \item Assume we have 100 variables instead of 2.
+    \item Calculating gradients like this can quickly become tedious.
+    \item \textbf{Notice:} Each term on either side of the expression can be written as a dot product of two vectors (maybe we can calculate it more efficiently)?
+\end{itemize}
+
+\vspace{1em}
+
+\begin{itemize}
+    \item Let’s explore if we can do something better through \textbf{vectorization} (\underline{Writing equations as matrices}).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Vectorization}
+\begin{itemize}
+    \item To truly appreciate the power of vectorization, let’s make the problem a little more complex. The hypothesis function is now
+\end{itemize}
+
+\[
+\hat{y}_i = w_0 + w_1 x_i^1 + w_2 x_i^2 + \cdots + w_M x_i^M
+\]
+
+\begin{itemize}
+    \item Where $w_j$ ($j = 0, 1, \ldots, M$) are the unknown weights of the data, and $x_i^j$ is the $j$th feature of the $i$th input.
+    \item Next, we denote the discrepancy between $y_i$ and $\hat{y}_i$ as $\epsilon_i$
+\end{itemize}
+
+\[
+y_i = \hat{y}_i + \epsilon_i
+\]
+\end{frame}
+
+\begin{frame}{Vectorization}
+\begin{itemize}
+    \item Now let’s collect the above equation for all $N$ datapoints:
+\end{itemize}
+
+\[
+\begin{aligned}
+    y_1 &= \hat{y}_1 + \epsilon_1 \\
+    y_2 &= \hat{y}_2 + \epsilon_2 \\
+        &\vdots \\
+    y_N &= \hat{y}_N + \epsilon_N
+\end{aligned}
+\]
+\end{frame}
+
+\begin{frame}{Vectorization}
+\begin{itemize}
+    \item Replacing the values of $\hat{y}$, we get:
+\end{itemize}
+
+\[
+\begin{aligned}
+    y_1 &= w_0 + w_1 x_1^1 + w_2 x_1^2 + \cdots + w_M x_1^M + \epsilon_1 \\
+    y_2 &= w_0 + w_1 x_2^1 + w_2 x_2^2 + \cdots + w_M x_2^M + \epsilon_2 \\
+        &\vdots \\
+    y_N &= w_0 + w_1 x_N^1 + w_2 x_N^2 + \cdots + w_M x_N^M + \epsilon_N
+\end{aligned}
+\]
+\end{frame}
+
+
+\begin{frame}{Vectorization}
+\begin{itemize}
+    \item Collecting the equations in matrix form:
+\end{itemize}
+
+\[
+\begin{bmatrix}
+    y_1 \\
+    y_2 \\
+    y_3 \\
+    \vdots \\
+    y_N
+\end{bmatrix}
+=
+\begin{bmatrix}
+    1 & x_1^1 & x_1^2 & \cdots & x_1^M \\
+    1 & x_2^1 & x_2^2 & \cdots & x_2^M \\
+    1 & x_3^1 & x_3^2 & \cdots & x_3^M \\
+    \vdots & \vdots & \vdots & \ddots & \vdots \\
+    1 & x_N^1 & x_N^2 & \cdots & x_N^M
+\end{bmatrix}
+\begin{bmatrix}
+    w_0 \\
+    w_1 \\
+    \vdots \\
+    w_M
+\end{bmatrix}
++
+\begin{bmatrix}
+    \epsilon_1 \\
+    \epsilon_2 \\
+    \epsilon_3 \\
+    \vdots \\
+    \epsilon_N
+\end{bmatrix}
+\]
+\end{frame}
+
+
+\begin{frame}{Vectorization}
+\begin{itemize}
+    \item Notice the rows of the matrix on the right are data samples:
+\end{itemize}
+
+\[
+\begin{bmatrix}
+    y_1 \\
+    y_2 \\
+    y_3 \\
+    \vdots \\
+    y_N
+\end{bmatrix}
+=
+\begin{bmatrix}
+    \cdots & \mathbf{x}_1 & \cdots \\
+    \cdots & \mathbf{x}_2 & \cdots \\
+    \cdots & \mathbf{x}_3 & \cdots \\
+    \vdots & \vdots & \vdots \\
+    \cdots & \mathbf{x}_N & \cdots
+\end{bmatrix}
+\begin{bmatrix}
+    w_0 \\
+    w_1 \\
+    \vdots \\
+    w_M
+\end{bmatrix}
++
+\begin{bmatrix}
+    \epsilon_1 \\
+    \epsilon_2 \\
+    \epsilon_3 \\
+    \vdots \\
+    \epsilon_N
+\end{bmatrix}
+\]
+
+\end{frame}
+
+
+\begin{frame}{Vectorization}
+\[
+\mathcal{D} = \left\{(\mathbf{x}_i, y_i)\right\}_{i=1}^{N}
+\]
+
+\begin{itemize}
+    \item Let’s formalize some notations:
+\end{itemize}
+
+\[
+\mathbf{y} =
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+y_3 \\
+\vdots \\
+y_N
+\end{bmatrix}
+\quad
+\mathbf{X} =
+\begin{bmatrix}
+\cdots & \mathbf{x}_1 & \cdots \\
+\cdots & \mathbf{x}_2 & \cdots \\
+\cdots & \mathbf{x}_3 & \cdots \\
+\vdots & \vdots & \vdots \\
+\cdots & \mathbf{x}_N & \cdots
+\end{bmatrix}
+\quad
+\boldsymbol{\theta} =
+\begin{bmatrix}
+w_0 \\
+w_1 \\
+\vdots \\
+w_M
+\end{bmatrix}
+\quad
+\boldsymbol{\epsilon} =
+\begin{bmatrix}
+\epsilon_1 \\
+\epsilon_2 \\
+\epsilon_3 \\
+\vdots \\
+\epsilon_N
+\end{bmatrix}
+\]
+
+\[
+\mathbf{y} = \mathbf{X} \boldsymbol{\theta} + \boldsymbol{\epsilon}
+\]
+
+\end{frame}
+
+
+\begin{frame}{Cost function for the Vectorized form}
+\begin{itemize}
+    \item Notice that we are using the MSE cost function:
+\end{itemize}
+
+\[
+J = \frac{1}{N} \sum_i (y_i - \hat{y}_i)^2
+\]
+
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item Using the definition of epsilon we can write the above as:
+\end{itemize}
+
+\[
+J = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2 = \frac{1}{N} \sum_{i=1}^{N} (\epsilon_i)^2
+\]
+
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item Using the definition of dot product the above can be written as:
+\end{itemize}
+
+\[
+J = \frac{1}{N} \sum_{i=1}^{N} (\epsilon_i)^2 = \frac{1}{N} \boldsymbol{\epsilon}^T \boldsymbol{\epsilon}
+\]
+
+\end{frame}
+
+
+\begin{frame}{Linear Least Squares}
+\begin{itemize}
+    \item We get:
+\end{itemize}
+
+\[
+\frac{\partial J}{\partial \boldsymbol{\theta}} = \mathbf{X}^T 2(\mathbf{y} - \mathbf{X} \boldsymbol{\theta})
+\]
+
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item Setting it equal to zero we can solve for $\boldsymbol{\theta}$:
+\end{itemize}
+
+\[
+\boxed{\boldsymbol{\theta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}}
+\]
+
+\begin{center}
+\textbf{Closed-form solution for Linear Regression}
+\end{center}
+
+\end{frame}

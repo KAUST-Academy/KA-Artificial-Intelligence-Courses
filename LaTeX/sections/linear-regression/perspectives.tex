@@ -1,0 +1,107 @@
+\begin{frame}{Perspectives on ML Algorithms}
+
+\begin{itemize}
+    \item We can look at ML algorithms from two perspectives:
+    \begin{itemize}
+        \item \textbf{Loss Minimization} Problem (like what we did).
+        \item \textbf{Probability Maximization} Problem (using Maximum Likelihood Estimation).
+    \end{itemize}
+    
+    \item For linear regression, under particular assumptions, these two approaches yield equivalent solutions.
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Probabilistic Interpretation of Linear Regression and MLE}
+
+\begin{itemize}
+    \item We can also look at the probabilistic interpretation of Linear Regression.
+    \item Keeping everything else same as the previous formulation
+\[
+y_i = \mathbf{x}_i^T \boldsymbol{\theta} + \epsilon_i
+\]
+    \item Now assume that $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$, then 
+\[
+y_i \mid \mathbf{x}_i \sim \mathcal{N}(\mathbf{x}_i^T \boldsymbol{\theta}, \sigma^2)
+\]
+    \item We can write the conditional distribution as:
+\[
+\mathbb{P}(y_i \mid \mathbf{x}_i) \sim \mathcal{N}(\mathbf{x}_i^T \boldsymbol{\theta}, \sigma^2)
+\]
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Probabilistic Interpretation of LR}
+
+\begin{itemize}
+    \item Let’s assume that all data point in the dataset are i.i.d. (independent identically distributed). Then we have:
+\[
+\mathbb{P}(\mathcal{D}) = \prod_{i=1}^{N} \mathbb{P}(\mathbf{x}_i, y_i)
+\]
+
+    \item Using Bayes Theorem we can write:
+\[
+\prod_{i=1}^{N} \mathbb{P}(\mathbf{x}_i, y_i) = \prod_{i=1}^{N} \mathbb{P}(\mathbf{x}_i) \mathbb{P}(y_i \mid \mathbf{x}_i)
+\]
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Maximum Likelihood Estimator}
+
+\begin{itemize}
+    \item In simple words, given the dataset, we want to find the values of the unknown parameters which maximize the probability of the dataset.
+    
+    \item Using the definition of the conditional distribution we have:
+\[
+\mathbb{P}(y_i \mid \mathbf{x}_i) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left( - (y_i - \mathbf{x}_i^T \boldsymbol{\theta})^2 \right)
+\]
+
+    \item Using the definition we get:
+\[
+\prod_{i=1}^{N} \mathbb{P}(\mathbf{x}_i, y_i) = \prod_{i=1}^{N} \mathbb{P}(\mathbf{x}_i) \prod_{i=1}^{N} \frac{1}{\sigma \sqrt{2\pi}} \exp\left( - (y_i - \mathbf{x}_i^T \boldsymbol{\theta})^2 \right)
+\]
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Maximum Likelihood Estimator}
+
+\begin{itemize}
+    \item Let’s try to maximize:
+\[
+\prod_{i=1}^{N} \mathbb{P}(\mathbf{x}_i, y_i) 
+= \prod_{i=1}^{N} \mathbb{P}(\mathbf{x}_i) \prod_{i=1}^{N} \frac{1}{\sigma \sqrt{2\pi}} \exp\left( - (y_i - \mathbf{x}_i^T \boldsymbol{\theta})^2 \right)
+\]
+
+    \item Note that:
+\[
+\arg \max_{\boldsymbol{\theta}} \prod_{i=1}^{N} \mathbb{P}(\mathbf{x}_i, y_i)
+= \arg \max_{\boldsymbol{\theta}} \prod_{i=1}^{N} \exp\left( - (y_i - \mathbf{x}_i^T \boldsymbol{\theta})^2 \right)
+\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Maximum Likelihood Estimator}
+
+\begin{itemize}
+    \item Furthermore, since the right-hand side of the above equation is monotonic in $\boldsymbol{\theta}$, the $\arg \max$ will not change if we take the logarithm of the expression.
+\end{itemize}
+
+\[
+\arg \max_{\boldsymbol{\theta}} \prod_{i=1}^{N} \exp \left( - (y_i - \mathbf{x}_i^T \boldsymbol{\theta})^2 \right)
+= \arg \max_{\boldsymbol{\theta}} \sum_{i=1}^{N} \left( - (y_i - \mathbf{x}_i^T \boldsymbol{\theta})^2 \right)
+\]
+
+\begin{itemize}
+    \item Notice that the right-hand side is minimizing the MSE.
+    \item Hence, the solution of minimizing the MSE is equivalent to Maximum Likelihood Estimation for linear regression.
+\end{itemize}
+
+\end{frame}

@@ -5,6 +5,7 @@
 
 * **Homeworks:** All ML Homeworks done ([b853257](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/b853257c5eb1ad82def3b713b6c54300deea3482))
 * **Homeworks:** CLIP from Scratch. ([0857159](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/0857159bb999d347c70d1b46e1ff86d65d66ec17))
+* **Homeworks:** ViT Swin Sliding Window Cells Classification ([1a8161b](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/1a8161b0284039bf7e67530bdfa37a5ceb29992f))
 * **Labs:** SVM, R^2, Logistic Regression Basics and Advanced, Linear Regression Basics and Advanced, and Decision Trees ([21b42b6](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/21b42b61cf20d391bc64018b4695067fcb37e34c))
 * **Lectures:** Bulk Upload Lectures ([d8db6b3](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/d8db6b355a25a3de66a1c367ce6ede506571957c))
 * **Linear Regression:** Feature Engineering and Vectorization ([51fac41](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/51fac41c3fdde08540bfcedbd897c9a137e83ee0))

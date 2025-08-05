@@ -1,4 +1,4 @@
-##  (2025-08-04)
+##  (2025-08-05)
 
 
 ### Features
@@ -7,6 +7,7 @@
 * **Homeworks:** CLIP from Scratch. ([0857159](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/0857159bb999d347c70d1b46e1ff86d65d66ec17))
 * **Homeworks:** Video Classification FineTuning ([eacff11](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/eacff1157409498933b23ffacc5490f010bf085e))
 * **Homeworks:** ViT Swin Sliding Window Cells Classification ([1a8161b](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/1a8161b0284039bf7e67530bdfa37a5ceb29992f))
+* **Labs:** 1D CNN and Audio classification labs ([72f7ac3](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/72f7ac373186963d76d03b8f516c59b919e18d9a))
 * **Labs:** Bulk upload NLP Labs. ([d3d3c97](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/d3d3c97be89cb65e56e94e28d8dda24a2e99d85c))
 * **Labs:** SVM, R^2, Logistic Regression Basics and Advanced, Linear Regression Basics and Advanced, and Decision Trees ([21b42b6](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/21b42b61cf20d391bc64018b4695067fcb37e34c))
 * **Lectures:** Bulk Upload Lectures ([d8db6b3](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/d8db6b355a25a3de66a1c367ce6ede506571957c))

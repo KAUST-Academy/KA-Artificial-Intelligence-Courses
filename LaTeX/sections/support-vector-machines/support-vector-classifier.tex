@@ -120,29 +120,33 @@
 \end{frame}
 
 
-\begin{frame}{Bias, Variance and $C$}
-    \begin{columns}
-        \begin{column}{0.45\textwidth}
-            \begin{itemize}
-                \item \textbf{Large $C$}
-                \begin{itemize}
-                    \item High bias
-                    \item Low variance
-                \end{itemize}
-                \vspace{0.5cm}
-                \item \textbf{Small $C$}
-                \begin{itemize}
-                    \item Low bias
-                    \item High variance
-                \end{itemize}
-            \end{itemize}
-        \end{column}
-        \begin{column}{0.55\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{images/support-vector-machines/support-vector-machines-15.png}
-        \end{column}
+\begin{frame}{Bias, Variance and $C$}     
+    \begin{columns}         
+        \begin{column}{0.45\textwidth}             
+            \begin{itemize}                 
+                \item \textbf{Large $C$}                 
+                \begin{itemize}                     
+                    \item High bias                     
+                    \item Low variance                 
+                \end{itemize}                 
+                \vspace{0.5cm}                 
+                \item \textbf{Small $C$}                 
+                \begin{itemize}                     
+                    \item Low bias                     
+                    \item High variance                 
+                \end{itemize}             
+            \end{itemize}         
+        \end{column}         
+        \begin{column}{0.55\textwidth}             
+            \centering             
+            \includegraphics[width=\textwidth]{images/support-vector-machines/support-vector-machines-15.png}         
+        \end{column}     
     \end{columns}
+    \begin{center}
+        \small\itshape Applicable to budget-style constraint form we defined. In practice, a regularized objective form is used, where $C$ is a soft penalty.
+    \end{center}
 \end{frame}
+
 
 
 \begin{frame}{Support Vector Classifier}

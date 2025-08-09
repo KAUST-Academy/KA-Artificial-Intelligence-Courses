@@ -1,4 +1,4 @@
-##  (2025-08-08)
+##  (2025-08-09)
 
 
 ### Features
@@ -6,6 +6,7 @@
 * **Homeworks:** All ML Homeworks done ([b853257](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/b853257c5eb1ad82def3b713b6c54300deea3482))
 * **Homeworks:** CLIP from Scratch. ([0857159](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/0857159bb999d347c70d1b46e1ff86d65d66ec17))
 * **Homeworks:** N-Gram Probabilistic Language Models ([8d2407b](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/8d2407b50b4cb2f656b0081b02beef10bf5033a8))
+* **Homeworks:** Text Classification with Neural Network ([ce950cc](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/ce950ccd489c7bba195a115c599ff741195a9eff))
 * **Homeworks:** Video Classification FineTuning ([eacff11](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/eacff1157409498933b23ffacc5490f010bf085e))
 * **Homeworks:** ViT Swin Sliding Window Cells Classification ([1a8161b](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/1a8161b0284039bf7e67530bdfa37a5ceb29992f))
 * **Labs:** 1D CNN and Audio classification labs ([72f7ac3](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/72f7ac373186963d76d03b8f516c59b919e18d9a))

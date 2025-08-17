@@ -1,4 +1,4 @@
-##  (2025-08-13)
+##  (2025-08-17)
 
 
 ### Features
@@ -6,6 +6,7 @@
 * **Homeworks:** All ML Homeworks done ([b853257](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/b853257c5eb1ad82def3b713b6c54300deea3482))
 * **Homeworks:** CLIP from Scratch. ([0857159](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/0857159bb999d347c70d1b46e1ff86d65d66ec17))
 * **Homeworks:** N-Gram Probabilistic Language Models ([8d2407b](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/8d2407b50b4cb2f656b0081b02beef10bf5033a8))
+* **Homeworks:** RAG System Implementation Baseline ([b355146](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/b355146e1030d8d0e036b820d6e7bc07e3dc4b98))
 * **Homeworks:** Text Classification with Neural Network ([ce950cc](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/ce950ccd489c7bba195a115c599ff741195a9eff))
 * **Homeworks:** Text Summarization From Scratch and BART ([75a61a2](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/75a61a25c49123be392cd2df166ffdbe10080f73))
 * **Homeworks:** Video Classification FineTuning ([eacff11](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/eacff1157409498933b23ffacc5490f010bf085e))

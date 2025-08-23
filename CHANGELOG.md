@@ -1,9 +1,10 @@
-##  (2025-08-17)
+##  (2025-08-23)
 
 
 ### Features
 
 * **Homeworks:** All ML Homeworks done ([b853257](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/b853257c5eb1ad82def3b713b6c54300deea3482))
+* **Homeworks:** Asthma_Detection_with_WaveNet_Homework_Assignment ([518b6be](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/518b6be87a7efe901b67bfb032710ad843639185))
 * **Homeworks:** CLIP from Scratch. ([0857159](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/0857159bb999d347c70d1b46e1ff86d65d66ec17))
 * **Homeworks:** N-Gram Probabilistic Language Models ([8d2407b](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/8d2407b50b4cb2f656b0081b02beef10bf5033a8))
 * **Homeworks:** RAG System Implementation Baseline ([b355146](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/b355146e1030d8d0e036b820d6e7bc07e3dc4b98))

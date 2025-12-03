@@ -1,4 +1,4 @@
-##  (2025-11-24)
+##  (2025-12-03)
 
 
 ### Features
@@ -20,6 +20,7 @@
 * **Labs:** Simple NN Labs ([5d01f1c](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/5d01f1c351d8456544a79a282df4e2f3eeb6730e))
 * **Labs:** SVM, R^2, Logistic Regression Basics and Advanced, Linear Regression Basics and Advanced, and Decision Trees ([21b42b6](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/21b42b61cf20d391bc64018b4695067fcb37e34c))
 * **Labs:** Transformers_with_BERT_English ([b5a44ab](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/b5a44ab05c8fa87fa5913a0a199b60bcefef88e8))
+* **Labs:** yolo_fire_and_smoke_seg.ipynb ([1f1002a](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/1f1002af4237b5aecf8f8286bca4e48641f92cba))
 * **Lectures:** Bulk Upload Lectures ([d8db6b3](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/d8db6b355a25a3de66a1c367ce6ede506571957c))
 * **Linear Regression:** Feature Engineering and Vectorization ([51fac41](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/51fac41c3fdde08540bfcedbd897c9a137e83ee0))
 * **Linear Regression:** Outline, Intro, Motivation, Simple RL and Optimization review ([8c72e40](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/8c72e40327c0bd2eed7e631cb38de7b02761acee))

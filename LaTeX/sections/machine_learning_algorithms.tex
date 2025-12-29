@@ -1,0 +1,2576 @@
+
+% --- Slide: Learning Outcomes ---
+\begin{frame}{Learning Outcomes}
+    By the end of this session, you will be able to:
+    
+    \vspace{0.5em}
+    \begin{enumerate}
+        \item Navigate the ML Toolbox and distinguish between Linear, Distance-based, Kernel-based, and Tree-based models.
+        \item Understand Model Intuition and explain how these algorithms learn (e.g., Maximizing Margin in SVM, Greedy Splits in Trees).
+        \item Understand Ensembling and contrast Bagging (Random Forest) vs. Boosting (Gradient Boosting) and why they reduce error.
+        \item Understand the advantages and disadvantages of each algorithm.
+    \end{enumerate}
+    
+\end{frame}
+
+
+
+\begin{frame}{Table of Contents}
+    \tableofcontents
+\end{frame}
+
+
+\begin{frame}{The Three Pillars of Learning}
+    \centering
+    % Scaled down to 85% to fit better
+    \begin{tikzpicture}[
+        scale=0.85, transform shape, 
+        node distance=1.0cm and 0.3cm,
+        box/.style={
+            rectangle, rounded corners, draw=none, 
+            text width=4.0cm, minimum height=1.8cm, 
+            align=center, font=\small
+        },
+        title/.style={font=\bfseries\large},
+        % Arrow style removed
+    ]
+
+        % --- Column 1: The Model ---
+        \node[title, blue] (h_title) at (0,0) {1. The Model ($f_\theta$)};
+        \node[box, fill=blue!10, below=0.2cm of h_title] (h_box) {
+            \textbf{Design Choice:}\\
+            ML (Linear, Kernel, Trees) \\ \& DL (MLP, CNN)
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            Data Type (Tabular, image) \\ \& Complexity
+        };
+
+        % --- Column 2: Loss Function ---
+        \node[title, red] (l_title) at (4.5,0) {2. Loss Function ($J$)};
+        \node[box, fill=red!10, below=0.2cm of l_title] (l_box) {
+            \textbf{Design Choice:}\\
+            MSE vs. Cross-Entropy
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            The Task\\
+            (Regression vs. Classification)
+        };
+
+        % --- Column 3: Optimizer (Dimmed) ---
+        \node[title, green!60!black] (o_title) at (9.0,0) {3. Optimizer};
+        \node[box, fill=green!10, below=0.2cm of o_title] (o_box) {
+            \textbf{Design Choice:}\\
+            Gradient Descent, Adam
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            Stability \& Convergence Speed\\
+            \footnotesize{(Covered later in Deep Learning)}
+        };
+
+        % Arrows removed as requested
+
+    \end{tikzpicture}
+
+    \vspace{1em}
+
+    \begin{block}{}
+        Today we focus on \textbf{1 \& 2}. \\
+        % Let's start by discussing the loss functions first.
+    \end{block}
+\end{frame}
+
+
+\begin{frame}{The Three Pillars of Learning}
+    \centering
+    % Scaled down to 85% to fit better
+    \begin{tikzpicture}[
+        scale=0.85, transform shape, 
+        node distance=1.0cm and 0.3cm,
+        box/.style={
+            rectangle, rounded corners, draw=none, 
+            text width=4.0cm, minimum height=1.8cm, 
+            align=center, font=\small
+        },
+        title/.style={font=\bfseries\large},
+        % Arrow style removed
+    ]
+
+        % --- Column 1: The Model (Dimmed) ---
+        \node[title, blue, opacity=0.4] (h_title) at (0,0) {1. The Model ($f_\theta$)};
+        \node[box, fill=blue!10, text=gray, opacity=0.5, below=0.2cm of h_title] (h_box) {
+            \textbf{Design Choice:}\\
+            ML (Linear, Kernel, Trees) \\ \& DL (MLP, CNN)
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            Data Type (Tabular, image) \\ \& Complexity
+        };
+
+        % --- Column 2: Loss Function (Active) ---
+        \node[title, red] (l_title) at (4.5,0) {2. Loss Function ($J$)};
+        \node[box, fill=red!10, below=0.2cm of l_title] (l_box) {
+            \textbf{Design Choice:}\\
+            MSE vs. Cross-Entropy
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            The Task\\
+            (Regression vs. Classification)
+        };
+
+        % --- Column 3: Optimizer (Dimmed) ---
+        \node[title, green!60!black, opacity=0.4] (o_title) at (9.0,0) {3. Optimizer};
+        \node[box, fill=green!10, text=gray, opacity=0.5, below=0.2cm of o_title] (o_box) {
+            \textbf{Design Choice:}\\
+            Gradient Descent, Adam
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            Stability \& Convergence Speed\\
+            \footnotesize{(Covered later in Deep Learning)}
+        };
+
+        % Arrows removed as requested
+
+    \end{tikzpicture}
+
+    \vspace{1em}
+
+    \begin{block}{}
+        Today we focus on \textbf{1 \& 2}. \\
+        Let's start by discussing the loss functions first.
+    \end{block}
+\end{frame}
+
+
+% =========================
+% 2. Supervised Learning
+% =========================
+
+% \section{Supervised Learning Algorithms}
+
+% \subsection{Problem Formulation}
+
+% \begin{frame}{Supervised Learning: Problem Setup}
+%     In supervised learning, we are provided with a labeled dataset $\{(x_i, y_i)\}_{i=1}^{n}$, where each input $x_i \in \mathbb{R}^d$ is paired with a target $y_i$. The objective is to learn a function $f: \mathbb{R}^d \to \mathbb{R}$ (or discrete space) that generalizes well to unseen data, such that $f(x_i) \approx y_i$ for all $i$.
+    
+%     \vspace{1em}
+    
+%     Supervised tasks divide into two primary categories based on the nature of $y_i$:
+    
+%     \begin{columns}[T]
+%         \begin{column}{0.48\textwidth}
+%             \textbf{Regression Tasks}
+%             \begin{itemize}
+%                 \item $y_i$ is continuous ($y_i \in \mathbb{R}$)
+%                 \item Examples: Predicting house prices or temperatures
+%                 \item Common loss: Mean Squared Error (MSE), which measures average squared deviation
+%             \end{itemize}
+%         \end{column}
+        
+%         \begin{column}{0.48\textwidth}
+%             \textbf{Classification Tasks}
+%             \begin{itemize}
+%                 \item $y_i$ is categorical ($y_i \in \{1, \dots, K\}$)
+%                 \item Examples: Identifying spam emails or medical diagnoses
+%                 \item Common loss: Cross-Entropy, which quantifies probabilistic mismatch
+%             \end{itemize}
+%         \end{column}
+%     \end{columns}
+% \end{frame}
+
+% =================================================================
+% SECTION 1: SUPERVISED LEARNING FRAMEWORK
+% =================================================================
+
+\section{Supervised Learning}
+
+
+
+\begin{frame}{Supervised Learning: The Setup}
+    \begin{block}{The Objective}
+        Given a labeled dataset $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^{n}$, we aim to learn a mapping function $f$ that generalizes to unseen data:
+        \begin{equation*}
+            \hat{y} = f(x; \theta) \approx y
+        \end{equation*}
+        \small where $\theta$ represents the learnable model parameters.
+    \end{block}
+
+    \vspace{1.5em}
+
+    \centering
+    \begin{tikzpicture}[node distance=2cm, auto, thick, >=stealth]
+        % Nodes
+        \node[draw, circle, fill=gray!10, minimum size=1cm] (input) {$x_i$};
+        \node[draw, rectangle, rounded corners, fill=blue!10, minimum width=2.5cm, minimum height=1.2cm, right=of input] (model) {Model $f_\theta$};
+        \node[draw, circle, fill=green!10, minimum size=1cm, right=of model] (output) {$\hat{y}_i$};
+        \node[draw, circle, fill=gray!10, minimum size=1cm, below=0.8cm of output] (target) {$y_i$};
+        
+        % Edges
+        \draw[->] (input) -- node[above, font=\scriptsize] {Features} (model);
+        \draw[->] (model) -- node[above, font=\scriptsize] {Prediction} (output);
+        \draw[<->, dashed, red] (output) -- node[right, font=\scriptsize] {Error / Loss} (target);
+        
+        % Annotation
+        \node[below=0.5cm of model, text width=5cm, align=center, font=\itshape\small] 
+            {Learning involves adjusting $\theta$ to minimize this error across all $i$.};
+    \end{tikzpicture}
+\end{frame}
+
+
+
+% % --- SLIDE 1: THE MATHEMATICAL SETUP ---
+% \begin{frame}{1.1 Supervised Learning: The Setup}
+%     \begin{block}{The Objective}
+%         Given a training set $\mathcal{D} = \{(\bx^{(i)}, y^{(i)})\}_{i=1}^N$, learn a mapping function $f_\theta$ such that:
+%         $$ f_\theta(\bx^{(i)}) \approx y^{(i)} $$
+%         for unseen data (Generalization).
+%     \end{block}
+
+%     \vspace{1.5em}
+%     \centering
+%     % Visualizing the Function Mapping
+%     \begin{tikzpicture}[node distance=2cm, auto, thick]
+%         % Nodes
+%         \node[draw, circle, fill=gray!10, minimum size=1cm] (input) {$\bx$};
+%         \node[draw, rectangle, fill=blue!10, minimum width=2.5cm, minimum height=1.2cm, right=of input] (model) {Model $f_\theta$};
+%         \node[draw, circle, fill=green!10, minimum size=1cm, right=of model] (output) {$\hat{y}$};
+%         \node[draw, circle, fill=gray!10, minimum size=1cm, below=0.8cm of output] (target) {$y$};
+        
+%         % Edges
+%         \draw[->] (input) -- node[above] {Features} (model);
+%         \draw[->] (model) -- node[above] {Prediction} (output);
+%         \draw[<->, dashed, red] (output) -- node[right] {Error (Loss)} (target);
+%     \end{tikzpicture}
+% \end{frame}
+
+\subsection{Regression}
+
+% --- SLIDE 2: REGRESSION TASKS ---
+\begin{frame}{Task Type A: Regression}
+    \begin{columns}[c]
+        % Left: Concept & Math
+        \begin{column}{0.53\textwidth}
+            \textbf{Definition:}
+            The target $y$ is \textbf{Continuous} ($y \in \mathbb{R}$).
+            
+            \vspace{1em}
+            \textbf{Examples:}
+            \begin{itemize}
+                \item House Prices ($\$300k, \$500k$)
+                \item Temperature ($24.5^\circ C$)
+                \item Stock Value
+            \end{itemize}
+
+            \vspace{1em}
+            \begin{tcolorbox}[colback=blue!5, title=The Loss: Mean Squared Error]
+                Measures the squared distance between points and the line.
+                $$ \text{MSE} = \frac{1}{N} \sum (y - \hat{y})^2 $$
+            \end{tcolorbox}
+        \end{column}
+
+        % Right: Visual
+        \begin{column}{0.5\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8]
+                \draw[->] (0,0) -- (5,0) node[right] {$x$};
+                \draw[->] (0,0) -- (0,4) node[above] {$y$};
+                
+                % Regression Line
+                \draw[blue, thick] (0,0.5) -- (4.5,3.5);
+                
+                % Points and Residuals
+                \foreach \x/\y in {1/1.5, 2/1.4, 3/2.8, 3.5/2.5, 4/3.8} {
+                    \filldraw[black] (\x,\y) circle (2pt);
+                    % Calculate point on line y = 0.66x + 0.5
+                    \pgfmathsetmacro{\yhat}{0.66*\x + 0.5}
+                    \draw[red, dashed] (\x,\y) -- (\x,\yhat);
+                }
+                \node[red, right] at (3,1.5) {Residuals};
+            \end{tikzpicture}
+            \vspace{0.5em}
+            \small \textit{Goal: Minimize the sum of red lines.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Why Squared Error?}
+    \begin{columns}[T]
+        % Left: Step-by-step logic
+        \begin{column}{0.55\textwidth}
+            \textbf{The 3 Steps to MSE Loss:}
+            
+            \vspace{0.8em}
+            \begin{enumerate}
+                \item \textbf{Residuals ($y - \hat{y}$):} measures the raw distance. Points below the line give \textcolor{red}{negative} distances.
+                \item \textbf{The Square $(\dots)^2$:} Squaring ensures all distances are positive so they don't cancel out. It also heavily penalizes \textbf{outliers}.
+                \item \textbf{The Average ($\frac{1}{N} \sum$):} We aggregate errors from all $N$ samples to get a single performance score.
+            \end{enumerate}
+        \end{column}
+
+        % Right: Visual Intuition of Squares
+        \begin{column}{0.45\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.7]
+                \draw[->] (0,0) -- (5,0) node[right] {$x$};
+                \draw[->] (0,0) -- (0,5) node[above] {$y$};
+                \draw[blue, thick] (0,1) -- (4,4);
+                
+                % Example of a 'Square' error
+                \filldraw[black] (3,1.5) circle (2pt) node[below] {$(x_i, y_i)$};
+                \draw[red, thick] (3,1.5) -- (3,3.25) node[midway, right] {dist};
+                
+                % Draw a literal square to show "Squared" error
+                \draw[fill=red!20, opacity=0.5] (3,1.5) rectangle (1.25, 3.25);
+                \node[red, font=\tiny, align=center] at (2.1, 2.4) {Error\\Area};
+            \end{tikzpicture}
+            \vspace{0.5em}
+            \small \textit{Each "error" acts as a square area we want to shrink to zero.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Why Squared Error?}
+    \begin{columns}[T]
+        % Left: Step-by-step logic
+        \begin{column}{0.55\textwidth}
+            \begin{tcolorbox}[colback=blue!5, title=Note]
+                If we use the \textbf{Absolute} difference $|y - \hat{y}|$ instead of the square, we get \textbf{MAE}. It is more robust to outliers, but \textbf{not differentiable} at 0. \\
+                Mathematically, you can still optimize functions with \textbf{finitely} many non-differentiable points using subgradients, though this adds some complexity.
+            \end{tcolorbox}
+        \end{column}
+
+        % Right: Visual Comparison (U vs V)
+        \begin{column}{0.45\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8]
+                % Axes
+                \draw[->, thick] (-2.2,0) -- (2.2,0) node[right] {Error};
+                \draw[->, thick] (0,0) -- (0,3.5) node[above] {Loss};
+
+                % MSE (Parabola) - Blue U-Shape
+                \draw[blue, very thick, domain=-1.7:1.7, samples=100] plot (\x, {\x*\x});
+                \node[blue, right] at (1.6, 2.5) {MSE ($e^2$)};
+
+                % MAE (Absolute) - Red V-Shape
+                \draw[red, very thick] (-1.7, 1.7) -- (0,0) -- (1.7, 1.7);
+                \node[red, right] at (1.7, 1.7) {MAE ($|e|$)};
+
+                % Annotations
+
+                \node[right, blue!70, font=\tiny, align=left] at (0.8, 0.5) {\textbf{Smooth bottom}\\(Easy to optimize)};
+
+
+                \node[left, red!70, font=\tiny, align=right] at (-0.8, 0.5) {\textbf{Sharp point}\\(Non-differentiable)};
+            \end{tikzpicture}
+            \vspace{0.5em}
+            \small \textit{MSE (Blue) is smooth. MAE (Red) is sharp.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Slide 1: Binary Classification Introduction
+\begin{frame}{Task Type B: Binary Classification}
+    \begin{columns}[c]
+        % Left: Concept & Math
+        \begin{column}{0.5\textwidth}
+            \textbf{Definition:}\\
+            Target $y$ is \textbf{discrete}: $y \in \{0, 1\}$ (e.g., spam/not spam)
+            
+            \vspace{1.2em}
+            \textbf{How It Works:}
+            \begin{enumerate}
+                \item Model outputs \textbf{probability}: $\hat{y} \in [0, 1]$
+                \item Apply \textbf{threshold} (usually 0.5) to classify
+                \item If $\hat{y} \geq 0.5 \to$ Class 1, else Class 0
+            \end{enumerate}
+            
+            \vspace{0.8em}
+            \begin{exampleblock}{Example}
+                \centering
+                $\hat{y}=0.87 \xrightarrow{\text{threshold } 0.5}$ \textbf{Class 1} (Spam)
+            \end{exampleblock}
+        \end{column}
+
+        % Right: Visual
+        \begin{column}{0.5\textwidth}
+            \centering
+            \textbf{Decision Boundary Visualization}
+            \vspace{0.5em}
+            
+            \begin{tikzpicture}[scale=0.85]
+
+            % Shaded regions (draw FIRST) - consistent with boundary (0,0) -- (4.8,3.8)
+            \fill[red!10, opacity=0.3] (0,0) -- (5,0) -- (5,4) -- (5.0526,4) -- cycle; % above/left side
+            \fill[blue!10,  opacity=0.3] (0,0) -- (5.0526,4) -- (0,4) -- cycle;          % below/right side
+
+        
+            % Axes
+            \draw[->] (0,0) -- (5,0) node[right] {$x_1$};
+            \draw[->] (0,0) -- (0,4) node[above] {$x_2$};
+        
+            % Decision Boundary (now full)
+            \draw[green!60!black, ultra thick] (0,0) -- (4.8,3.8);
+            \node[green!60!black, font=\bfseries, fill=white, inner sep=2pt] at (2.6,2.1) {Boundary};
+        
+            % Classes
+            \foreach \x/\y in {0.8/3.2, 1.2/3.5, 1.5/2.8, 0.5/2.5, 1/3, 1.3/3.3}
+                \filldraw[blue] (\x, \y) circle (2pt);
+        
+            \foreach \x/\y in {3/1.2, 3.5/1.5, 4/1, 3.2/0.8, 3.8/0.5, 4.2/1.3}
+                \filldraw[red] (\x, \y) circle (2pt);
+        
+            % Probability labels
+            \node[blue, font=\small\bfseries] at (1.6, 4) {$\hat{y} > 0.5$};
+            \node[red,  font=\small\bfseries] at (4.8, 1.8) {$\hat{y} <= 0.5$};
+        
+        \end{tikzpicture}
+
+            
+            \vspace{0.5em}
+            \small \textit{Goal: Find optimal boundary that maximizes class separation}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+
+% Slide 2: Motivation - Why Not MSE?
+\begin{frame}{Can We Use MSE Loss for Classification?}
+    \begin{alertblock}{Problem with MSE}
+        MSE measures \textbf{numeric distance}, but in classification, we care about \textbf{probability confidence}, not distance!
+    \end{alertblock}
+
+\end{frame}
+
+% Slide 2: Motivation - Why Not MSE?
+\begin{frame}{Can We Use MSE Loss for Classification?}
+    \begin{alertblock}{Problem with MSE}
+        MSE measures \textbf{numeric distance}, but in classification, we care about \textbf{probability confidence}, not distance!
+    \end{alertblock}
+    
+    \vspace{1em}
+    
+    \begin{alertblock}{What We Really Want}
+        A loss function that \textbf{heavily penalizes confident wrong predictions}
+        
+        \vspace{0.5em}
+        \textbf{Example:} Classifying an image as a dog with 98\% confidence when it's actually a cat should incur massive penalty!
+    \end{alertblock}
+\end{frame}
+
+\subsection{Classification}
+
+% Slide 2: Motivation - Why Not MSE?
+\begin{frame}{Can We Use MSE Loss for Classification?}
+    \begin{alertblock}{Problem with MSE}
+        MSE measures \textbf{numeric distance}, but in classification, we care about \textbf{probability confidence}, not distance!
+    \end{alertblock}
+    
+    \vspace{1em}
+    
+    \begin{alertblock}{What We Really Want}
+        A loss function that \textbf{heavily penalizes confident wrong predictions}
+        
+        \vspace{0.5em}
+        \textbf{Example:} Classifying an image as a dog with 98\% confidence when it's actually a cat should incur massive penalty!
+    \end{alertblock}
+    
+    \vspace{1.5em}
+    
+    \begin{block}{Solution: The Logarithm!}
+        The logarithm function has exactly the property we need:\\
+        it grows exponentially as confidence in the \textbf{wrong} class increases
+    \end{block}
+\end{frame}
+
+% Slide 3: How Logarithm Works
+\begin{frame}{The Power of the Logarithm}
+    \begin{columns}[T]
+        % Left: Intuition
+        \begin{column}{0.50\textwidth}
+            \textbf{Intuition (True Label $y=1$):}
+            \vspace{0.5em}
+            
+            Model outputs probability $\hat{y}$ for class 1
+            
+            \vspace{0.5em}
+            \textbf{Log Penalty} $= -\log(\hat{y})$ behaves as:
+            \begin{itemize}
+                \item $\hat{y} = 0.99 \to$ Loss $\approx 0.01$ \textcolor{green!60!black}{\textbf{✓ Great!}}
+                \vspace{0.3em}
+                \item $\hat{y} = 0.50 \to$ Loss $\approx 0.69$ \textcolor{orange}{\textbf{⚠️ Uncertain}}
+                \vspace{0.3em}
+                \item $\hat{y} = 0.01 \to$ Loss $\approx 4.6$ \textcolor{red}{\textbf{✗ Disaster!}}
+            \end{itemize}
+            
+            \vspace{1em}
+            \begin{tcolorbox}[colback=yellow!10, colframe=orange, boxsep=4pt]
+                The same concept applies when the true label is 0.
+            \end{tcolorbox}
+        \end{column}
+
+        % Right: Visual Curve
+        \begin{column}{0.50\textwidth}
+            \centering
+            \textbf{Loss vs. Predicted Probability}\\
+            \vspace{-0.2em}
+            \small (when true label = 1)
+            \vspace{0.3em}
+            
+            \begin{tikzpicture}[scale=0.9]
+                % Axes
+                \draw[->] (0,0) -- (5.2,0) node[right, font=\small] {$\hat{y}$};
+                \draw[->] (0,0) -- (0,4.2) node[above, font=\small] {Loss};
+
+                % Log Loss Curve
+                \draw[red!70!black, ultra thick, domain=0.55:5, samples=150] 
+                    plot (\x, {-ln(\x/5)*2});
+                
+                % Grid lines
+                \draw[dashed, gray!30] (0,0) grid[step=1] (5,4);
+                
+                % Key points
+                \filldraw[green!60!black] (4.5, 0.22) circle (1.5pt);
+                \node[below, green!60!black, font=\footnotesize] at (4.5, -0.1) {0.9};
+                
+                \filldraw[orange] (2.5, 1.39) circle (1.5pt);
+                \node[below, orange, font=\footnotesize] at (2.5, -0.1) {0.5};
+                
+                \filldraw[red] (0.7, 3.85) circle (1.5pt);
+                \node[above right, red, font=\footnotesize] at (0.65, -0.55) {0.1};
+                
+                % Annotations with arrows
+                \draw[->, red, thick] (1.5, 3.3) -- (0.75, 3.7);
+                \node[red, font=\footnotesize] at (2.4, 3.1) {\textbf{Huge penalty!}};
+                
+                \draw[->, green!60!black, thick] (4.0, 0.8) -- (4.3, 0.35);
+                \node[green!60!black, font=\footnotesize] at (3.9, 1.0) {\textbf{Minimal}};
+                
+                % Axis labels
+                \node[below, font=\footnotesize] at (0, -0.1) {0};
+                \node[below, font=\footnotesize] at (5, -0.1) {1};
+            \end{tikzpicture}
+            
+            \begin{block}{}
+                \centering
+                \small Curve explodes as $\hat{y} \to 0$\\
+                \textbf{Forces model to be cautious!}
+            \end{block}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% Slide 4: Binary Cross-Entropy Formula
+\begin{frame}{Binary Cross-Entropy Loss (Log Loss)}
+    \begin{tcolorbox}[colback=blue!5, colframe=blue!60, title=\textbf{Loss Function: Binary Cross-Entropy (Log Loss)}]
+        $$ J(\mathbf{w}) = - \frac{1}{n}\sum_{i=1}^{n} \Big[y_i \log(\hat{y}_i) + (1-y_i)\log(1-\hat{y}_i)\Big] $$
+        {\footnotesize
+    \textbf{where:} $y_i\in\{0,1\}$ = true label,\; $\hat{y}_i\in(0,1)$ = predicted probability,\; $\mathbf{w}$ = model weights.}
+    \end{tcolorbox}
+    
+
+    
+    \vspace{1em}
+    \begin{itemize}
+        \item When $y_i = 1$: Loss $= -\log(\hat{y}_i)$ (penalizes low probability for class 1)
+        \item When $y_i = 0$: Loss $= -\log(1-\hat{y}_i)$ (penalizes high probability for class 1)
+        \item Both terms encourage the model to predict probabilities close to the true labels.
+    \end{itemize}
+\end{frame}
+
+% Slide 5: Generalization to Multiclass
+\begin{frame}{But What If We Have More Than Two Classes?}
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            \textbf{Binary Classification:}
+            \begin{itemize}
+                \item $y \in \{0, 1\}$
+                \item Two classes only
+                \item Example: Spam / Not Spam
+            \end{itemize}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \textbf{Multiclass Classification:}
+            \begin{itemize}
+                \item $y \in \{0, 1, 2, \ldots, K-1\}$
+                \item $K$ classes ($K > 2$)
+                \item Example: Dog / Cat / Bird
+            \end{itemize}
+        \end{column}
+    \end{columns}
+    
+    \vspace{1.5em}
+    \begin{exampleblock}{Example: Image Classification}
+        \centering
+        Input: Image $\rightarrow$ Output: $\hat{\mathbf{y}} = [0.1, 0.7, 0.2]$ for 3 classes\\
+        \small Class probabilities: Dog (10\%), Cat (70\%), Bird (20\%)
+    \end{exampleblock}
+    
+    \vspace{1em}
+    \begin{tcolorbox}[colback=green!5, colframe=green!60]
+        Model now outputs a \textbf{probability distribution} over all $K$ classes instead of a single probability
+    \end{tcolorbox}
+\end{frame}
+
+% Slide 6: Multiclass Cross-Entropy
+\begin{frame}{Cross-Entropy (Categorical Cross-Entropy)}
+    \begin{tcolorbox}[colback=blue!5, colframe=blue!60, title=\textbf{Loss Function: Cross-Entropy}]
+        Generalization of binary cross-entropy to $K$ classes
+        \vspace{0.5em}
+        $$
+        J(\mathbf{w}) = - \frac{1}{n}\underbrace{\sum_{i=1}^{n}}_{\text{samples}}
+        \underbrace{\sum_{k=1}^{K}}_{\text{classes}}
+        y_{i,k}\log(\hat{y}_{i,k})
+        $$
+
+        \vspace{0.3em}
+        \small where $y_{i,k} \in \{0,1\}$ is 1 if sample $i$ belongs to class $k$, 0 otherwise
+    \end{tcolorbox}
+    
+    \textbf{How It Works:}
+    \begin{itemize}
+        \item Model outputs probabilities for all $K$ classes: $\hat{\mathbf{y}}_i = [\hat{y}_{i,1}, \hat{y}_{i,2}, \ldots, \hat{y}_{i,K}]$
+        \item True label is one-hot encoded: $\mathbf{y}_i = [0, 1, 0, \ldots, 0]$ if class 2
+        \item Loss penalizes the probability assigned to the \textbf{true class}
+    \end{itemize}
+\end{frame}
+
+
+% Slide 6: Multiclass Cross-Entropy
+\begin{frame}{Cross-Entropy (Categorical Cross-Entropy)}
+    \begin{tcolorbox}[colback=blue!5, colframe=blue!60, title=\textbf{Loss Function: Cross-Entropy}]
+        Generalization of binary cross-entropy to $K$ classes
+        \vspace{0.5em}
+        $$
+        J(\mathbf{w}) = - \frac{1}{n}\underbrace{\sum_{i=1}^{n}}_{\text{samples}}
+        \underbrace{\sum_{k=1}^{K}}_{\text{classes}}
+        y_{i,k}\log(\hat{y}_{i,k})
+        $$
+
+        \vspace{0.3em}
+        \small where $y_{i,k} \in \{0,1\}$ is 1 if sample $i$ belongs to class $k$, 0 otherwise
+    \end{tcolorbox}
+    
+    \vspace{0.5em}
+    \begin{exampleblock}{Example}
+        True class: Cat (class 2), Prediction: $[0.1, 0.7, 0.2]$\\
+        Loss $= -\log(0.7) \approx 0.36$ (only the true class matters!)
+    \end{exampleblock}
+\end{frame}
+
+
+\begin{frame}{The Three Pillars of Learning}
+    \centering
+    % Scaled down to 85% to fit better
+    \begin{tikzpicture}[
+        scale=0.85, transform shape, 
+        node distance=1.0cm and 0.3cm,
+        box/.style={
+            rectangle, rounded corners, draw=none, 
+            text width=4.0cm, minimum height=1.8cm, 
+            align=center, font=\small
+        },
+        title/.style={font=\bfseries\large},
+        % Arrow style removed
+    ]
+
+        % --- Column 1: The Model (Active) ---
+        \node[title, blue] (h_title) at (0,0) {1. The Model ($f_\theta$)};
+        \node[box, fill=blue!10, below=0.2cm of h_title] (h_box) {
+            \textbf{Design Choice:}\\
+            ML (Linear, Kernel, Trees) \\ \& DL (MLP, CNN)
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            Data Type (Tabular, image) \\ \& Complexity
+        };
+
+        % --- Column 2: Loss Function (Dimmed) ---
+        \node[title, red, opacity=0.4] (l_title) at (4.5,0) {2. Loss Function ($J$)};
+        \node[box, fill=red!10, text=gray, opacity=0.5, below=0.2cm of l_title] (l_box) {
+            \textbf{Design Choice:}\\
+            MSE vs. Cross-Entropy
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            The Task\\
+            (Regression vs. Classification)
+        };
+
+        % --- Column 3: Optimizer (Dimmed) ---
+        \node[title, green!60!black, opacity=0.4] (o_title) at (9.0,0) {3. Optimizer};
+        \node[box, fill=green!10, text=gray, opacity=0.5, below=0.2cm of o_title] (o_box) {
+            \textbf{Design Choice:}\\
+            Gradient Descent, Adam
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            Resources \& Scale\\
+            \footnotesize{(Covered later in Deep Learning)}
+        };
+
+        % Arrows removed as requested
+
+    \end{tikzpicture}
+
+    \vspace{1em}
+
+    \begin{block}{}
+        We have covered the \textbf{Loss Functions}. \\
+        Now, let's move on to the \textbf{Models} themselves ($f_\theta$).
+    \end{block}
+\end{frame}
+
+% =================================================================
+% INTRODUCTION TO MODELS (FIXED & OPTIMIZED)
+% =================================================================
+% =================================================================
+% INTRODUCTION TO MODELS
+% =================================================================
+\section{Machine Learning Models}
+
+\begin{frame}{What is a Model?}
+    \begin{columns}[c]
+        % Left: Concept
+        \begin{column}{0.5\textwidth}
+            \begin{tcolorbox}[colback=blue!5, title=\textbf{Definition}]
+                A \textbf{Model} ($f_\theta$) is a simplified mathematical representation of reality.
+                It maps inputs ($x$) to outputs ($\hat{y}$) using learned parameters ($\theta$).
+            \end{tcolorbox}
+
+            \vspace{1em}
+            \textbf{The Goal:}
+            Find the "best" function $f$ that minimizes the error between prediction $\hat{y}$ and reality $y$. 
+            % \\ The relation between $x$ and $y$ could be very complex (non-linear) or very simple (linear). Choosing the correct model matter in getting best results and not over or under fit.
+            
+
+        \end{column}
+
+        % Right: Vertical Visual Flow
+        \begin{column}{0.5\textwidth}
+            \centering
+            % \resizebox{0.7\linewidth}{!}{ % Resize width to 70% of column to stay centered
+            \begin{tikzpicture}[node distance=1.8cm, thick, auto]
+                % 1. Input (Top)
+                \node[draw, circle, fill=gray!10, minimum size=1cm] (x) {$x$};
+                \node[left=0.5cm of x, font=\small, gray] {Input};
+
+                % 2. Model (Middle)
+                \node[draw, rectangle, fill=blue!10, minimum width=2.5cm, minimum height=1.5cm,
+                      below of=x, align=center] (model) {\textbf{Model}\\$f_\theta(\cdot)$};
+                \node[right=0.2cm of model, font=\small, align=left] {Parameters\\$\theta$};
+
+                % 3. Prediction (Bottom)
+                \node[draw, circle, fill=green!10, minimum size=1cm, below of=model] (yhat) {$\hat{y}$};
+                \node[left=0.5cm of yhat, font=\small, green!60!black] {Pred};
+
+                % 4. Reality (Next to Prediction)
+                \node[draw, circle, fill=red!10, minimum size=1cm, right=2cm of yhat] (real) {$y$};
+                \node[right=0.5cm of real, font=\small, red] {Truth};
+
+                % Arrows
+                \draw[->] (x) -- (model);
+                \draw[->] (model) -- (yhat);
+                \draw[<->, dashed, red] (yhat) -- node[above] {Error} (real);
+            \end{tikzpicture}
+            % }
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Models Complexity}
+    
+    % 1. Top Text (Full Width)
+    The relationship between inputs $\bx$ and target $y$ varies wildly.
+    Choosing the correct model family matters to avoid \textbf{Underfitting} (too simple) or \textbf{Overfitting} (too complex).
+
+    \begin{itemize}
+                \item \textbf{Simple:} Linear. \\ \textit{(e.g., House Size $\to$ Price)}
+                \item \textbf{Complex:} Non-linear. \\ \textit{(e.g., Image Pixels $\to$ "Cat")}
+            \end{itemize}
+
+    \vspace{1em}
+
+    % 2. Centered & Enlarged Plot
+    \centering
+    \resizebox{0.5\linewidth}{!}{ % Scales the plot to 70% of the slide width
+    \begin{tikzpicture}[scale=1.0, thick]
+        % Axes
+        \draw[->] (0,0) -- (6,0) node[right] {Input $x$};
+        \draw[->] (0,0) -- (0,5) node[above] {Target $y$};
+
+        % Data Points
+        \foreach \x/\y in {0.5/0.8, 1/1.2, 1.5/1.1, 2/2.5, 2.5/2.1, 3/3.0, 3.5/2.8, 4/3.8, 4.5/3.5, 5/4.5}
+            \filldraw[black] (\x,\y) circle (3pt);
+
+        % Linear Fit (Blue)
+        \draw[blue, very thick] (0,0.5) -- (5.5,4.5) node[right] {\textbf{Linear Model}};
+
+        % Non-Linear Fit (Red)
+        \draw[red, very thick, dashed] plot [smooth, tension=1] coordinates {
+            (0.5,0.8) (1,1.2) (1.5,1.1) (2,2.5) (2.5,2.1) (3,3.0) (3.5,2.8) (4,3.8) (4.5,3.5) (5,4.5)
+        };
+        \node[red, above left] at (2.5,3.0) {\textbf{Non-Linear Model}};
+    \end{tikzpicture}
+    }
+\end{frame}
+
+% --- SLIDE 2: TYPES OF MODELS (ML vs DL) ---
+\begin{frame}{Machine Learning vs. Deep Learning}
+    \centering
+    \begin{columns}[T]
+        % Left: Traditional ML
+        \begin{column}{0.50\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{1. Machine Learning (ML)}]
+                Algorithms that parse data, learn patterns from it, and apply learned decisions.
+            \end{tcolorbox}
+            
+            \vspace{0.5em}
+            \textbf{Characteristics:}
+            \begin{itemize}
+                \item Best for \textbf{Structured Data} (Tables).
+                \item Require \textbf{Feature Engineering}.
+                \item Lightweight \& Interpretable (mostly).
+            \end{itemize}
+            
+            \vspace{0.5em}
+            \centering
+            \textbf{Examples:}
+            \footnotesize \textit{Linear Reg, SVM, Trees}
+        \end{column}
+
+        % Right: Deep Learning
+        \begin{column}{0.50\textwidth}
+            \begin{tcolorbox}[colback=blue!5, title=\textbf{2. Deep Learning (DL)}]
+                A subset of Machine Learning based on artificial neural networks.
+            \end{tcolorbox}
+            
+            \vspace{0.5em}
+            \textbf{Characteristics:}
+            \begin{itemize}
+                \item Best for \textbf{Unstructured Data} (Images, Text, Audio).
+                \item \textbf{Automated} Feature Extraction.
+                \item Data \& Compute Hungry.
+            \end{itemize}
+            
+            \vspace{0.5em}
+            \centering
+            \textbf{Examples:}
+            \footnotesize \textit{MLPs, CNNs, Transformers}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- SLIDE 2: MACHINE LEARNING FOCUS ---
+\begin{frame}{Machine Learning vs. Deep Learning}
+    \centering
+    \begin{columns}[T]
+        % Left: Traditional ML
+        \begin{column}{0.50\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{1. Machine Learning (ML)}]
+                Algorithms that parse data, learn patterns from it, and apply learned decisions.
+            \end{tcolorbox}
+            
+            \vspace{0.5em}
+            \textbf{Characteristics:}
+            \begin{itemize}
+                \item Best for \textbf{Structured Data} (Tables).
+                \item Require \textbf{Feature Engineering}.
+                \item Lightweight \& Interpretable (mostly).
+            \end{itemize}
+            
+            \vspace{0.5em}
+            \centering
+            \textbf{Examples:}
+            \footnotesize \textit{Linear Reg, SVM, Trees}
+        \end{column}
+
+        % Right: Transition Message
+        \begin{column}{0.48\textwidth}
+            \vspace{1.5cm} % Add some vertical space to center the text
+            \centering
+            \begin{tcolorbox}[colback=green!5, colframe=green!50, width=0.9\linewidth, arc=10pt]
+                \centering
+                \large
+                \textbf{Let's start with \\ Machine Learning first.}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =================================================================
+% THE ML LANDSCAPE (FIXED SIZE)
+% =================================================================
+
+% --- SLIDE 4: THE COMPLEXITY SPECTRUM (UPDATED) ---
+% =================================================================
+% THE ML LANDSCAPE (ENLARGED & CENTERED)
+% =================================================================
+
+\subsection{Linear Models}
+
+\begin{frame}{The ML Toolbox: Types of Models}
+    \centering
+    % Vertical space to center vertically
+    \vspace*{\fill}
+    \hspace*{-0.6cm}
+    % Scaled up to fill the width of the slide
+    \resizebox{1.1\linewidth}{!}{
+    \begin{tikzpicture}[
+        node distance=0.5cm,
+        box/.style={
+            scale=1.25, rectangle, draw=gray!40, fill=gray!5, 
+            rounded corners, minimum width=2.8cm, minimum height=1.8cm, 
+            align=center, font=\small
+        },
+        active/.style={
+            draw=blue!80, fill=blue!10, line width=1.2pt
+        },
+        arrow/.style={-latex, thick, gray!60}
+    ]
+        % Top Node
+        \node[font=\bfseries\Large] (root) at (0, 3) {Machine Learning Models ($f_\theta$)};
+
+        % 1. Linear (Far Left)
+        \node[box, active] (linear) at (-6, 0) {
+            \textbf{1. Linear Models}\\
+            % \vspace{0.3em}
+            Linear Regression\\
+            Logistic Regression        };
+
+        % 2. Distance (Mid Left)
+        \node[box] (distance) at (-2, 0) {
+            \textbf{2. Distance-Based}\\
+            KNN\\
+            (Non-Parametric)        };
+
+        % 3. Kernel (Mid Right)
+        \node[box] (kernel) at (2, 0) {
+            \textbf{3. Kernel-Based}\\
+            SVM        };
+
+        % 4. Trees (Far Right)
+        \node[box] (trees) at (6, 0) {
+            \textbf{4. Tree-Based}\\
+            Decision Trees\\
+            Random Forest\\
+            Gradient Boosting        };
+
+        % Connecting Arrows
+        \draw[arrow] (root) -- (linear);
+        \draw[arrow] (root) -- (distance);
+        \draw[arrow] (root) -- (kernel);
+        \draw[arrow] (root) -- (trees);
+
+        % "Start Here" Annotation
+        \node[blue, below=0.3cm of linear, font=\bfseries] {$\uparrow$ We Start Here!};
+
+    \end{tikzpicture}
+    }
+    
+    \vspace*{\fill}
+\end{frame}
+
+
+% =================================================================
+% 1. LINEAR MODELS
+% =================================================================
+% =================================================================
+% 1. LINEAR MODELS
+% =================================================================
+% =================================================================
+% 1. LINEAR MODELS (Revised Section)
+% =================================================================
+
+% =================================================================
+% 1. LINEAR MODELS
+% =================================================================
+
+% --- Slide 1: The Intuition (Scalar) ---
+\begin{frame}{Linear Regression}
+    \begin{columns}[c]
+        \begin{column}{0.55\textwidth}
+            We start with the simplest assumption: \\
+            The target $y$ is a \textbf{linear combination} of the input features.
+            
+            % \vspace{1em}
+            $$ \hat{y} = w_0 + w_1 x_1 + w_2 x_2 + \dots + w_d x_d $$
+            
+            \vspace{1em}
+            \textbf{The Components:}
+            \begin{itemize}
+                \item $\hat{y}$: predicted value
+                \item $x_1, \dots, x_d$: the input features.
+                \item $w_1, \dots, w_d$: the weights. How much each feature matters.
+                \item $w_0$: the bias (Intercept). 
+                
+            \end{itemize}
+        \end{column}
+
+       \begin{column}{0.45\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.7]
+                \draw[->] (0,0) -- (5,0) node[right] {$x$};
+                \draw[->] (0,0) -- (0,4) node[above] {$y$};
+                % Points
+                \foreach \x/\y in {1/1, 2/1.5, 3/3, 4/3.5} \filldraw[black] (\x,\y) circle (2pt);
+                % Line
+                \draw[blue, thick] (0,0.5) -- (5,4) node[right] {$\mathbf{X}\mathbf{w}$};
+                % Residuals
+                \draw[dashed, red] (3,3) -- (3,2.6);
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Linear Regression}
+    \begin{columns}[c]
+        \begin{column}{0.55\textwidth}
+            We start with the simplest assumption: \\
+            The target $y$ is a \textbf{linear combination} of the input features.
+            
+            % \vspace{1em}
+            $$ \hat{y} = w_0 + w_1 x_1 + w_2 x_2 + \dots + w_d x_d $$
+            
+            \vspace{1em}
+            \textbf{The Components:}
+            \begin{itemize}
+                \item $\hat{y}$: predicted value
+                \item $x_1, \dots, x_d$: the input features.
+                \item $w_1, \dots, w_d$: the weights. How much each feature matters.
+                \item $w_0$: the bias (Intercept). 
+                
+            \end{itemize}
+            
+        \end{column}
+
+       \begin{column}{0.45\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.7]
+                \draw[->] (0,0) -- (5,0) node[right] {$x$};
+                \draw[->] (0,0) -- (0,4) node[above] {$y$};
+                % Points
+                \foreach \x/\y in {1/1, 2/1.5, 3/3, 4/3.5} \filldraw[black] (\x,\y) circle (2pt);
+                % Line
+                \draw[blue, thick] (0,0.5) -- (5,4) node[right] {$\mathbf{X}\mathbf{w}$};
+                % Residuals
+                \draw[dashed, red] (3,3) -- (3,2.6);
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+    Writing long sums ($\sum$) is tedious. We use Linear Algebra to represent Linear Regression in matrices notation.
+\end{frame}
+
+% --- Slide 2: Vectorization ---
+\begin{frame}{Translating to Vectors (Vectorization)}
+    % \vspace{1em}
+    \textbf{Step 1: The Bias Trick:}
+    We add a "dummy" feature $x_0 = 1$ to the input so we have each weight multiplied by a $x$ feature.
+    $$ \hat{y} = w_0(1) + w_1 x_1 + \dots + w_d x_d $$
+    
+    % \vspace{1em}
+    \textbf{Step 2: Vector Notation (For one sample):} We rewrite this equation in a vector dot product form:
+    $$ \hat{y} = \begin{bmatrix} w_0 & w_1 & \dots & w_d \end{bmatrix} \cdot \begin{bmatrix} 1 \\ x_1 \\ \vdots \\ x_d \end{bmatrix} = \mathbf{w}^T \mathbf{x} $$
+
+    \textbf{Step 3: Matrix Notation (For all data):} For $N$ samples, prediction becomes a simple Matrix-Vector multiplication:
+        $$ \mathbf{\hat{y}} = \mathbf{X}\mathbf{w} $$
+
+\end{frame}
+
+% --- Slide 3: The Objective ---
+\begin{frame}{Finding the Best Line}
+    Now we have the equation. But how do we choose the best $\mathbf{w}$?
+    \pause
+    \\ We need the loss and the optimizer!
+    \pause
+    
+    \vspace{1em}
+    Let's wrap our model in the Mean Squared Error:
+        $$ J(\mathbf{w}) = \frac{1}{N} ||\mathbf{X}\mathbf{w} - \mathbf{y}||^2_2 $$
+
+    \pause
+    \vspace{1em}
+    \centering
+    Now, how do we find the $\mathbf{w}$ that minimizes this $J(\mathbf{w})$?
+    \pause
+    
+    \vspace{1em}
+    \begin{columns}[c]
+        \begin{column}{0.45\textwidth}
+            \centering
+            \textbf{Option A: Analytical}\\
+            (Solve for zero gradient)
+        \end{column}
+        \begin{column}{0.1\textwidth}
+            \centering \textbf{OR}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \centering
+            \textbf{Option B: Iterative}\\
+            (Gradient Descent)
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide 4: Normal Equation ---
+\begin{frame}{Method A: The Normal Equation}
+    For linear models, MSE is \textbf{convex}. \textbf{Q:} What does that tell you? \pause \textit{Guaranteed Global Minimum!}. \\
+    \pause
+    \textbf{Step 1: The Gradient} Derived via Chain Rule:
+    $$ \nabla J(\mathbf{w}) = \frac{2}{N} \mathbf{X}^T(\mathbf{X}\mathbf{w} - \mathbf{y}) $$ 
+    \pause    
+    \textbf{Step 2: Set to Zero}
+    $$ \mathbf{X}^T\mathbf{X}\mathbf{w} - \mathbf{X}^T\mathbf{y} = 0 $$
+    $$ \mathbf{X}^T\mathbf{X}\mathbf{w} = \mathbf{X}^T\mathbf{y} $$
+
+    \pause
+    
+    \textbf{Step 3: Solve for $\mathbf{w}$}
+    Multiply both sides by inverse $(\mathbf{X}^T\mathbf{X})^{-1}$:
+    \begin{tcolorbox}[colback=blue!5, width=0.45\linewidth, center]
+        \centering\textbf{The Normal Equation}
+        $$\mathbf{w} = (\mathbf{X}^T\mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}$$
+    \end{tcolorbox}
+    \small \textit{Cons: Inverting large matrices is very slow $(O(d^3))$. Doesn't work if $X$ is singular.}
+\end{frame}
+
+% --- Slide 5: Gradient Descent ---
+\begin{frame}{Method B: Gradient Descent}
+    Instead of jumping to the solution, we take small steps.
+    
+    \textbf{Step 1: Calculate Gradient}
+    Derived via Chain Rule:
+    $$ \nabla J(\mathbf{w}) = \frac{2}{N} \mathbf{X}^T(\mathbf{X}\mathbf{w} - \mathbf{y}) $$ 
+    
+    \textbf{Step 2: Update Rule}
+    Move opposite to the gradient to reduce error.
+    
+    \begin{tcolorbox}[colback=green!5, title=\textbf{Iterative Update}]
+        $$ \mathbf{w}_{new} = \mathbf{w}_{old} - \alpha \nabla J $$
+        \small $\alpha$: Learning Rate (Step size)
+    \end{tcolorbox}
+    
+    \small \textit{Pros: Very efficient for large datasets.}
+\end{frame}
+
+% =================================================================
+% 2. REGULARIZATION
+% =================================================================
+% \section{2. Regularization}
+
+% --- Slide 6: Motivation ---
+\begin{frame}{Revisiting Overfitting}
+    Imagine we train two linear models on the same data. Both achieve \textbf{Training MSE = 0.10}.
+    Which one is better?
+    
+    \vspace{1em}
+    \begin{columns}[c]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=Model A, center]
+                $y = 0.5 x_1 + 0.3 x_2$
+            \end{tcolorbox}
+        \end{column}
+        
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=Model B, center]
+                $y = 500.5 x_1 - 429.7 x_2$
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Revisiting Overfitting}
+    Imagine we train two linear models on the same data. Both achieve \textbf{Training MSE = 0.10}.
+    Which one is better?
+    
+    \vspace{1em}
+    \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+        \begin{tcolorbox}[colback=green!5, title=Model A (Small Weights)]
+            $y = 0.5 x_1 + 0.3 x_2$
+            \vspace{0.5em}
+            
+            \textbf{Val MSE: 0.12}
+            \vspace{0.5em}
+            
+            Stable. Why? 
+            
+            $\rightarrow$ Small changes in $x$ cause \textbf{Small} changes in $y$.
+        \end{tcolorbox}
+    \end{column}
+    
+    \begin{column}{0.48\textwidth}
+        \begin{tcolorbox}[colback=red!5, title=Model B (Huge Weights)]
+            $y = 500.5 x_1 - 429.7 x_2$
+            \vspace{0.5em}
+            
+            \textbf{Val MSE: 15.0} (!!!)
+            \vspace{0.5em}
+            
+            Unstable. Why? 
+            
+            $\rightarrow$ Small changes in $x$ cause \textbf{Massive} changes in $y$.
+        \end{tcolorbox}
+    \end{column}
+\end{columns}
+\pause
+\textbf{Observation:} Large weights are often a symptom of \textbf{Overfitting}. The model is trying too hard to wiggle through every training point.
+\end{frame}
+
+
+% --- Slide 7: The Solution ---
+% --- Slide 2.2: The Fix ---
+\begin{frame}{The Fix: Constraining the Weights}
+    We must force the model to keep weights small. We do this by adding a \textbf{Constraint} (Penalty) to the loss function.
+    
+    \centering
+    % Block Diagram
+    \begin{tikzpicture}
+        \node[draw, rectangle, rounded corners, fill=blue!10, minimum width=3.5cm, minimum height=1cm, scale=0.7] (mse) {Minimize Error};
+        \node[draw, rectangle, rounded corners, fill=red!10, minimum width=3.5cm, minimum height=1cm, right=1cm of mse, scale=0.7] (reg) {Minimize Weights};
+        \node[font=\bfseries\Large, scale=0.7] at ($(mse)!0.5!(reg)$) {+};
+    \end{tikzpicture}
+
+    \vspace{-2em}
+    % Annotated Equation
+    \large
+    $$ J_{final} = \overbrace{J_{MSE}}^{\text{Fit the Data}} + \overbrace{\lambda \cdot R(\mathbf{w})}^{\text{Keep Weights Small}} $$
+    \normalsize
+    
+    \begin{tcolorbox}[colback=yellow!10, colframe=orange!60, scale=0.75, title=\textbf{What is $\lambda$ (Lambda)?}]
+        \textbf{Regularization Strength (Hyperparameter):}
+        \begin{itemize}
+            \item \textbf{High $\lambda$:} Huge penalty $\to$ Tiny weights (Model becomes simple) $\to$ Increases underfitting.
+            \item \textbf{Low $\lambda$:} Small penalty $\to$ Weights can grow (Model fits data closely) $\to$ Increases overfitting.
+            \item \textbf{$\lambda = 0$:} Standard Linear Regression (No penalty).
+        \end{itemize}
+    \end{tcolorbox}
+\end{frame}
+
+% --- Slide 2.3: Regularization Example ---
+\begin{frame}{Regularization Example}
+    Let's set $\lambda = 1$ and Penalty $R(\mathbf{w}) = w^2$.
+    Compare two models that have similar error, but different weights.
+    
+    \vspace{1em}
+    \begin{columns}[c]
+        % Model A: Big Weights
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=\textbf{Model A (Overfit)}]
+                Weight $w = 100$ \\
+                MSE Error $= 0$ (Perfect fit)
+                
+                \vspace{0.5em}
+                \textbf{Total Loss:}
+                $$ J = 0 + 1 \cdot (100)^2 $$
+                $$ \mathbf{J = 10,000} $$
+                \vspace{0.2em}
+                \centering \textcolor{red}{\textbf{HUGE LOSS!}}
+            \end{tcolorbox}
+        \end{column}
+        
+        % Model B: Small Weights
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{Model B (Balanced)}]
+                Weight $w = 2$ \\
+                MSE Error $= 5$ (Some error)
+                
+                \vspace{0.5em}
+                \textbf{Total Loss:}
+                $$ J = 5 + 1 \cdot (2)^2 $$
+                $$ \mathbf{J = 9} $$
+                \vspace{0.2em}
+                \centering \textcolor{green!60!black}{\textbf{WINNER!}}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide 2.3: Regularization Example ---
+\begin{frame}{Regularization Types}
+        \textbf{How do we define the penalty $R(\mathbf{w})$?}
+    We have two main flavors:
+    \begin{itemize}
+        \item \textbf{Ridge (L2):} $R(\mathbf{w}) = \sum w^2$ (Squared)
+        \item \textbf{Lasso (L1):} $R(\mathbf{w}) = \sum |w|$ (Absolute)
+    \end{itemize}
+\end{frame}
+
+% --- Slide 8: Ridge ---
+\begin{frame}{Ridge Regression (L2)}
+    We penalize the \textbf{Squared Magnitude} of the weights.
+    
+    \begin{tcolorbox}[colback=blue!5, title=\textbf{Objective Function}]
+        $$ J(\mathbf{w}) = \text{MSE} + \lambda \sum w^2 $$
+    \end{tcolorbox}
+    
+    \textbf{Effect: "Weight Decay"}
+    \begin{itemize}
+        \item Shrinks weights smoothly toward 0 (stability).
+        \item Usually does not make weights exactly 0 (not sparse).
+        \item Works well with correlated features.
+    \end{itemize}
+\end{frame}
+
+% --- Slide 9: Lasso ---
+\begin{frame}{Lasso Regression (L1)}
+    We penalize the \textbf{Absolute Value} of the weights.
+    
+    \begin{tcolorbox}[colback=red!5, title=\textbf{Objective Function}]
+        $$ J(\mathbf{w}) = \text{MSE} + \lambda \sum |w| $$
+    \end{tcolorbox}
+    
+    \textbf{Effect: "Sparsity"}
+    \begin{itemize}
+        \item Encourages \textbf{sparsity}: many weights become exactly 0.
+        \item Acts as \textbf{feature selection}.
+        \item Good when we believe \textbf{only a few features matter}.
+    \end{itemize}
+\end{frame}
+
+% --- Slide 10: Solving Regularized Models ---
+\begin{frame}{Solving Regularized Models}
+    \textbf{How do we find the optimal weights $\mathbf{w}$?}
+
+    \vspace{1em}
+    \textbf{1. Ridge (L2): Has a Closed-Form Solution}
+    \begin{tcolorbox}[colback=blue!5, colframe=blue!60!black, title=\textbf{Ridge Normal Equation}]
+        $$ \mathbf{w} = (\mathbf{X}^T\mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^T\mathbf{y} $$
+    \end{tcolorbox}
+    \small
+    \textit{*Note: Adding $\lambda \mathbf{I}$ ensures the matrix is always invertible.}
+
+    \vspace{1.5em}
+    \textbf{2. Lasso (L1): No Closed-Form Solution}
+    \begin{itemize}
+        \item Because the absolute value function $|w|$ is not differentiable at 0, we cannot derive a simple formula.
+        \item We must use \textbf{Iterative Algorithms} to find the minimum.
+    \end{itemize}
+\end{frame}
+
+% --- New Slide: Geometric Intuition ---
+\begin{frame}{L1 vs L2: Geometric Intuition}
+    \begin{columns}[c]
+        \begin{column}{0.50\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8]
+                \draw[->] (-2.5,0) -- (2.5,0) node[right] {$w_1$}; 
+                \draw[->] (0,-2.5) -- (0,2.5) node[above] {$w_2$};
+                \draw[blue, thick, fill=blue!10] (0,0) circle (1.8);
+                \node[blue, font=\small] at (0,-3.0) {\textcolor{gray}{Loss Contour} + L2 Constraint};
+
+                % (fix) make dashed line pass through the red point
+                \draw[gray, thick, dashed] (-2.2,2.5) -- (2.5,-2.2);
+
+                \filldraw[red] (-1.1, 1.4) circle (3pt);
+            \end{tikzpicture}
+            
+            \vspace{0.5em}
+            \small Ridge: Smooth solution, rarely hits axis \\ $w_1=-1.5, w_2=2.0$
+        \end{column}
+         
+        \begin{column}{0.50\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8]
+                \draw[->] (-2.5,0) -- (2.5,0) node[right] {$w_1$}; 
+                \draw[->] (0,-2.5) -- (0,2.5) node[above] {$w_2$};
+                \draw[blue, thick, fill=blue!10] (0,1.8) -- (1.8,0) -- (0,-1.8) -- (-1.8,0) -- cycle;
+                \node[blue, font=\small] at (0,-3.0) {\textcolor{gray}{Loss Contour} + L1 Constraint};
+
+                % (fix) make dashed line pass through the corner (red point)
+                \draw[gray, thick, dashed] (-0.7,2.5) -- (2.3,-0.7);
+
+                \filldraw[red] (0, 1.8) circle (3pt);
+                \node[right, red, font=\small] at (0.1, 1.8) {$w_1=0$};
+            \end{tikzpicture}
+            
+            \vspace{0.5em}
+            \small Lasso: Sharp corners promote sparsity \\ $w_1=0, w_2=2.5$
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% =================================================================
+% 3. LOGISTIC REGRESSION
+% =================================================================
+% \section{3. Logistic Regression}
+
+% --- Slide 1: The Challenge ---
+\begin{frame}{Adapting Linear Regression for Classification}
+    \begin{columns}[c]
+        \begin{column}{1.0\textwidth}
+            \textbf{The Challenge:}
+            We want to classify data (e.g., Spam vs Not Spam).
+            
+            \vspace{1em}
+            However, our Linear Model $f(x) = \mathbf{w}^T\mathbf{x}$ outputs numbers in $(-\infty, \infty)$.
+            
+            \vspace{1em}
+            \begin{exampleblock}{Problem}
+                If model outputs $500$ or $-20$, how do we interpret that as a probability?
+            \end{exampleblock}
+            
+            \vspace{1em}
+            We need a mechanism to map these raw "scores" into a valid probability range $[0, 1]$.
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide 2: The Workflow Visualization (New) --
+% Define some nicer colors
+\definecolor{myblue}{RGB}{70,130,180}
+\definecolor{myred}{RGB}{220,50,50}
+\definecolor{myorange}{RGB}{255,140,0}
+\definecolor{mygreen}{RGB}{60,179,113}
+
+\begin{frame}{The Classification Pipeline}
+
+\centering
+\resizebox{1.0\linewidth}{!}{
+\begin{tikzpicture}[
+    node distance=1.8cm,
+    every node/.style={font=\sffamily},
+    % --- Clean, Professional Box Style (Grayscale) ---
+    vectorBox/.style={
+        rectangle, 
+        rounded corners=3pt, 
+        draw=gray!40, 
+        line width=1pt, 
+        top color=white, 
+        bottom color=gray!5, 
+        align=center,
+        drop shadow={opacity=0.15, shadow xshift=1pt, shadow yshift=-1pt},
+        inner sep=6pt, 
+        minimum height=3.2cm, 
+        minimum width=1.5cm
+    },
+    % --- Output Circle Style ---
+    circleBox/.style={
+        circle, 
+        draw=gray!40, 
+        line width=1pt, 
+        top color=white, 
+        bottom color=gray!5, 
+        align=center,
+        drop shadow={opacity=0.15}, 
+        minimum size=2.2cm, 
+        font=\sffamily\bfseries\large
+    },
+    % --- Arrow Styles ---
+    % 1. Boring gray arrows for normal flow
+    stdArrow/.style={-{Latex[length=2.5mm, width=1.5mm]}, thick, gray!50},
+    % 2. HIGHLIGHT arrow (Orange) - Pops out but looks pro
+    highlightArrow/.style={-{Latex[length=3mm, width=2mm]}, line width=2pt, orange!80!red},
+    % --- Label Styles ---
+    arrowLbl/.style={font=\footnotesize\sffamily, text=gray!80, align=center, inner sep=3pt},
+    highlightLbl/.style={font=\footnotesize\sffamily\bfseries, text=orange!80!red, align=center, inner sep=3pt}
+]
+
+    % --- 1. Inputs ---
+    \node[vectorBox] (input) {
+        \textbf{Inputs}\\[0.5em]
+        $x_1$\\$x_2$\\$\vdots$\\$x_d$
+    };
+
+    % --- 2. Scores ---
+    \node[vectorBox, right=of input] (logits) {
+        \textbf{Scores}\\[0.5em]
+        $0.5$\\$12.2$\\$-3.1$\\$\vdots$
+    };
+
+    % Arrow 1 (Standard)
+    \draw[stdArrow] (input) -- 
+        node[above, arrowLbl] {Linear Model} 
+        node[below=1pt, arrowLbl] {$\mathbf{w}^T\mathbf{x}$} 
+        (logits);
+
+    % --- 3. Probs ---
+    \node[vectorBox, right=of logits] (probs) {
+        \textbf{Probs}\\[0.5em]
+        $0.62$\\$0.99$\\$0.04$\\$\vdots$
+    };
+
+    % Arrow 2 (THE HIGHLIGHT)
+    \draw[highlightArrow] (logits) -- 
+        node[above, highlightLbl] {Special\\Function} 
+        node[below=1pt, highlightLbl, font=\footnotesize\itshape] {$\sigma(\mathbf{w}^T\mathbf{x})$} 
+        (probs);
+
+    % --- 4. Output ---
+    \node[circleBox, right=of probs] (output) {
+        Class\\0 or 1
+    };
+
+    % Arrow 3 (Standard)
+    \draw[stdArrow] (probs) -- 
+        node[above, arrowLbl] {Threshold} 
+        node[below=1pt, arrowLbl] {$> 0.5?$} 
+        (output);
+
+\end{tikzpicture}
+}
+\end{frame}
+
+
+% --- Slide 3: The Solution (Sigmoid) ---
+\begin{frame}{The Solution: The Sigmoid Function}
+    The "Special Function" we need is the \textbf{Sigmoid} (Logistic Function).
+    
+    \begin{columns}[c]
+        \begin{column}{0.45\textwidth}
+            \begin{tcolorbox}[colback=blue!5, title=\textbf{Sigmoid Function}]
+                \vspace{-1em}
+                $$ \hat{y} = \sigma(z) = \frac{1}{1 + e^{-z}} $$
+            \end{tcolorbox}
+            
+            \textbf{Properties:}
+            \begin{itemize}
+                \item Squashes any $z$ into $(0, 1)$.
+                \item $z=0 \implies \hat{y}=0.5$.
+                \item Differentiable everywhere (Smooth).
+            \end{itemize}
+        \end{column}
+        
+        \begin{column}{0.55\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8]
+                \draw[->] (-3,0) -- (3,0) node[right] {$z$};
+                \draw[->] (0,0) -- (0,1.2) node[above] {$\sigma(z)$};
+                % Sigmoid
+                \draw[blue, ultra thick, domain=-3:3, samples=50] plot (\x, {1/(1+exp(-\x*2))});
+                % Limits
+                \draw[dashed, gray] (-3,1) -- (3,1) node[right, black] {1.0};
+                \draw[dashed, gray] (-3,0.5) -- (3,0.5) node[right, black] {0.5};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide 4: Gradient Derivation Part 1 ---
+\begin{frame}{The Gradient: Chain Rule Breakdown}
+    To train, we need to minimize the Binary Cross-Entropy Loss:
+    $$ J = - [y \log(\hat{y}) + (1-y) \log(1-\hat{y})] $$
+
+    Let's compute $\frac{\partial J}{\partial w}$ using the Chain Rule:
+    $$ \frac{\partial J}{\partial w} = \textcolor{red}{\frac{\partial J}{\partial \hat{y}}} \cdot \textcolor{blue}{\frac{\partial \hat{y}}{\partial z}} \cdot \textcolor{green!60!black}{\frac{\partial z}{\partial w}} $$
+
+    \vspace{1em}
+    \textbf{The Three Components:}
+    \begin{enumerate}
+        \item \textcolor{red}{\textbf{Loss Derivative:}} $\frac{\hat{y} - y}{\hat{y}(1-\hat{y})}$
+        \item \textcolor{blue}{\textbf{Sigmoid Derivative:}} $\hat{y}(1-\hat{y})$ \hfill \textit{(Can you derive this?)}
+        \item \textcolor{green!60!black}{\textbf{Linear Derivative:}} $x$
+    \end{enumerate}
+\end{frame}
+
+% --- Slide 5: Gradient Derivation Part 2 ---
+\begin{frame}{The Gradient "Magic"}
+    Now, multiply them together:
+    
+    $$ \frac{\partial J}{\partial w} = \left( \frac{\hat{y} - y}{\cancel{\hat{y}(1-\hat{y})}} \right) \cdot \cancel{\hat{y}(1-\hat{y})} \cdot x $$
+    
+    The complicated Sigmoid derivative perfectly cancels the denominator of the Log Loss!
+
+    \begin{tcolorbox}[colback=green!5, title=\textbf{Final Gradient Update}]
+        $$ \nabla J(\mathbf{w}) = \frac{1}{N} \mathbf{X}^T (\mathbf{\hat{y}} - \mathbf{y}) $$
+    \end{tcolorbox}
+    
+    \begin{tcolorbox}[colback=yellow!10, colframe=orange!50, title=\textbf{Observation}]
+        This formula is \textbf{identical} to Linear Regression (ignore constants)!
+        The only difference is how we calculate $\hat{y}$ (Sigmoid vs. Identity).
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}{Generalization: Multiclass (Softmax)}
+    What if we have $K > 2$ classes? (e.g., Cat, Dog, Bird).
+    We generalize Sigmoid to \textbf{Softmax}.
+
+    \vspace{0.5em}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{tcolorbox}[colback=blue!5, colframe=blue!50!black, title=\textbf{Softmax Function}]
+            \vspace{-1em}
+                $$ P(y=k) = \frac{e^{z_k}}{\sum_{j=1}^{K} e^{z_j}} $$
+            \end{tcolorbox}
+            
+            \small
+            \begin{itemize}
+                \item \textbf{Exponent ($e^z$):} Forces all scores to be positive.
+                \item \textbf{Sum ($\sum$):} Normalizes so all probabilities sum to $1.0$.
+                \item \textbf{Loss:} Cross-Entropy.
+                $$
+                J = - \frac{1}{n}\sum_{i=1}^{n}
+                \sum_{k=1}^{K}
+                y_{i,k}\log(\hat{y}_{i,k})
+                $$
+            \end{itemize}
+        \end{column}
+        
+        \begin{column}{0.45\textwidth}
+    \centering
+    \scalebox{0.9}{ 
+    \begin{tikzpicture}[
+        % Tighter vertical spacing
+        node distance=0.6cm and 0.5cm, 
+        every node/.style={font=\sffamily},
+        % Styles for the boxes
+        box/.style={
+            rectangle, 
+            rounded corners=3pt, 
+            draw=gray!30, 
+            line width=0.8pt,
+            top color=white, 
+            bottom color=gray!5, 
+            align=center,
+            drop shadow={opacity=0.1, shadow xshift=1pt, shadow yshift=-1pt},
+            inner sep=5pt % Reduced padding
+        },
+        % Style for the function box
+        func/.style={
+            rectangle, 
+            rounded corners=3pt, 
+            draw=blue!30, 
+            fill=blue!5, 
+            thick, 
+            align=center, 
+            inner sep=6pt, % Reduced padding
+            drop shadow={opacity=0.1, shadow xshift=1pt, shadow yshift=-1pt}
+        },
+        arrow/.style={-{Latex[length=2.5mm, width=1.5mm]}, thick, gray!60},
+        lbl/.style={font=\scriptsize\itshape, text=gray!80, anchor=west}
+    ]
+
+        % --- 1. Logits Node ---
+        \node[box] (z) {
+            \textbf{\small Scores ($z$)} \\[0.2em]
+            \begin{tabular}{r l}
+                \textcolor{red!80!black}{\textbf{2.0}} & \scriptsize (Cat) \\
+                1.0 & \scriptsize (Dog) \\
+                0.1 & \scriptsize (Bird)
+            \end{tabular}
+        };
+        \node[lbl, right=0.1cm of z.east] {Raw Logits};
+
+        % --- 2. Softmax Function Node ---
+        \node[func, below=of z] (softmax) {
+            $\displaystyle \sigma(z)_i = \frac{e^{z_i}}{\sum_{j} e^{z_j}}$
+        };
+
+        % --- 3. Probabilities Node ---
+        \node[box, below=of softmax] (p) {
+            \textbf{\small Probs ($P$)} \\[0.2em]
+            \begin{tabular}{r l}
+                \textcolor{blue!80!black}{\textbf{0.66}} & \scriptsize (Cat) \\
+                0.24 & \scriptsize (Dog) \\
+                0.10 & \scriptsize (Bird)
+            \end{tabular}
+        };
+        \node[lbl, right=0.1cm of p.east] {$\sum = 1.0$};
+
+        % --- Arrows ---
+        \draw[arrow] (z) -- (softmax);
+        \draw[arrow] (softmax) -- (p);
+
+    \end{tikzpicture}
+    } % End of scalebox
+\end{column}
+    \end{columns}
+\end{frame}
+
+
+% --- Slide: Pros & Cons of Linear Models ---
+\begin{frame}{Linear Models: Advantages \& Disadvantages}
+    \begin{columns}[T]
+        % PROS
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=Advantages]
+                \begin{itemize}
+                    \item \textbf{Interpretable:} The weights $\mathbf{w}$ directly tell us feature importance.
+                    \item \textbf{Fast \& Efficient:} Training is simple matrix math. Inference is just a dot product.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+
+        % CONS
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=Disadvantages]
+                \begin{itemize}
+                    \item \textbf{High Bias (Underfitting):} Cannot model complex, non-linear relationships.
+                    \item \textbf{Sensitive to Outliers.} Especially when using MSE.
+                    \item \textbf{Scaling Required:} Sensitive to feature magnitude (Requires Standardization).
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+
+% --- Custom Colors ---
+\definecolor{myblue}{RGB}{70,130,180}
+\definecolor{mygreen}{RGB}{60,179,113}
+\definecolor{myred}{RGB}{220,50,50}
+\definecolor{myorange}{RGB}{255,140,0}
+
+% ==============================================================================
+% SECTION 2: DISTANCE-BASED (K-NN)
+% ==============================================================================
+
+\subsection{Distance-Based Models}
+
+% --- Roadmap: Moving to Distance-Based ---
+\begin{frame}{The ML Toolbox: Roadmap Update}
+    \centering \vspace*{\fill} \hspace*{-0.6cm}
+    \resizebox{1.1\linewidth}{!}{
+    \begin{tikzpicture}[node distance=0.5cm, box/.style={scale=1.25, rectangle, draw=gray!40, fill=gray!5, rounded corners, minimum width=2.8cm, minimum height=1.8cm, align=center, font=\small}, active/.style={draw=myblue, fill=blue!10, line width=1.5pt}, completed/.style={draw=mygreen, fill=green!10, line width=1pt, dashed}, arrow/.style={-latex, thick, gray!60}]
+        \node[font=\bfseries\Large] (root) at (0, 3) {Machine Learning Models ($f_\theta$)};
+        
+        \node[box, completed] (linear) at (-6, 0) {\textbf{1. Linear Models}};
+        \node[box, active] (distance) at (-2, 0) {\textbf{2. Distance-Based}\\KNN\\(Non-Parametric)};
+        \node[box] (kernel) at (2, 0) {\textbf{3. Kernel-Based}\\SVM};
+        \node[box] (trees) at (6, 0) {\textbf{4. Tree-Based}\\Trees \& Ensembles};
+
+        \draw[arrow] (root) -- (linear); \draw[arrow] (root) -- (distance);
+        \draw[arrow] (root) -- (kernel); \draw[arrow] (root) -- (trees);
+        
+        \node[myblue, below=0.3cm of distance, font=\bfseries] {$\uparrow$ We Are Here};
+    \end{tikzpicture}
+    }
+    \vspace*{\fill}
+\end{frame}
+
+% --- Slide 1: KNN Concept ---
+\begin{frame}{k-Nearest Neighbors (k-NN): Concept}
+    Linear models try to learn a global formula ($\mathbf{w}^T\mathbf{x}$). 
+    \textbf{k-NN} is different: it is a \textbf{Lazy Learner}. It memorizes the training data and makes predictions based on local similarity. So, it has \textbf{no parameters}.
+
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            \textbf{The Algorithm:}
+            \begin{enumerate}
+                \item Choose a distance metric $d(\cdot, \cdot)$ and an integer $k$.
+                \item For a new point $x_{new}$, find the $k$ training points closest to it.
+                \item \textbf{Classification:} Take the majority vote.
+                \item \textbf{Regression:} Take the average.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \centering
+            % Simple TikZ for KNN
+            \begin{tikzpicture}[scale=1.0]
+                \draw[help lines, color=gray!30] (0,0) grid (5,5);
+                % Data points Class A
+                \foreach \p in {(1,1), (1.5,2), (2,1), (0.5,1.5)} \fill[red] \p circle (3pt);
+                % Data points Class B
+                \foreach \p in {(3,4), (4,3), (4,4.5), (3.5, 3.5)} \fill[blue] \p circle (3pt);
+                
+                % Query point
+                \node[star, star points=5, star point height=0.3cm, fill=green, draw=black, label=above:$?$, inner sep=2pt] (q) at (2.5, 2.5) {};
+                
+                % Circle for k=3
+                \draw[dashed, thick, black] (2.5, 2.5) circle (1.8cm);
+                \node at (2.5, 0.5) {\small Neighborhood ($k=5$)};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide 2: KNN Math ---
+\begin{frame}{k-NN: Mathematics of Distance}
+    The performance of k-NN depends heavily on how we define "closeness."
+    
+    \vspace{1em}
+    \textbf{1. Euclidean Distance ($L_2$ Norm)}: Most common
+    $$ d(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_{i=1}^d (x_i - y_i)^2} = ||\mathbf{x} - \mathbf{y}||_2 $$
+    
+    \textbf{2. Manhattan Distance ($L_1$ Norm)}: Good for high dimensions
+    $$ d(\mathbf{x}, \mathbf{y}) = \sum_{i=1}^d |x_i - y_i| = ||\mathbf{x} - \mathbf{y}||_1 $$
+
+\end{frame}
+
+% --- Slide 3: KNN Pros/Cons ---
+\begin{frame}{k-NN: Advantages and Disadvantages}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{Advantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Simple:} Easy to understand and implement.
+                    \item \textbf{No Training:} Training time is effectively zero ($O(1)$).
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.50\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=\textbf{Disadvantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Slow Inference:} Prediction is $O(N)$ (must scan all data).
+                    \item \textbf{Memory Intensive:} Must store the entire dataset.
+                    \item \textbf{Scaling Required:} Sensitive to feature magnitude (Requires Standardization).
+                    \item \textbf{Curse of Dimensionality:} Performance degrades noticeably in high dimensions.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+% ==============================================================================
+% SECTION 3: KERNEL-BASED (SVM)
+% ==============================================================================
+
+\subsection{Kernel-Based Models}
+
+% --- Roadmap Update ---
+\begin{frame}{The ML Toolbox: Roadmap Update}
+    \centering \vspace*{\fill} \hspace*{-0.6cm}
+    \resizebox{1.1\linewidth}{!}{
+    \begin{tikzpicture}[node distance=0.5cm, box/.style={scale=1.25, rectangle, draw=gray!40, fill=gray!5, rounded corners, minimum width=2.8cm, minimum height=1.8cm, align=center, font=\small}, active/.style={draw=myblue, fill=blue!10, line width=1.5pt}, completed/.style={draw=mygreen, fill=green!10, line width=1pt, dashed}, arrow/.style={-latex, thick, gray!60}]
+        \node[font=\bfseries\Large] (root) at (0, 3) {Machine Learning Models ($f_\theta$)};
+        \node[box, completed] (linear) at (-6, 0) {\textbf{1. Linear Models}};
+        \node[box, completed] (distance) at (-2, 0) {\textbf{2. Distance-Based}};
+        \node[box, active] (kernel) at (2, 0) {\textbf{3. Kernel-Based}\\SVM};
+        \node[box] (trees) at (6, 0) {\textbf{4. Tree-Based}\\Trees \& Ensembles};
+        \draw[arrow] (root) -- (linear); \draw[arrow] (root) -- (distance); \draw[arrow] (root) -- (kernel); \draw[arrow] (root) -- (trees);
+        \node[myblue, below=0.3cm of kernel, font=\bfseries] {$\uparrow$ We Are Here};
+    \end{tikzpicture}
+    } \vspace*{\fill}
+\end{frame}
+
+% --- Slide 4: SVM Concept ---
+\begin{frame}{Support Vector Machines (SVM)}
+    \textit{"Success isn't about barely crossing the line. It's about having some room to spare."}
+
+    \vspace{0.4em}
+    Logistic Regression learns a boundary that fits probabilities.
+    SVM chooses the boundary with the \textbf{largest safety gap (Margin)}.
+
+    \vspace{0.6em}
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.82]
+    \clip (-0.2,-0.6) rectangle (5.4,4.4);
+
+    % ----- Points (now correctly separated) -----
+    % Red class (+1): above the upper margin
+    \foreach \p in {(1.4,3.9), (1.6,3.7), (1.6,3.95)} \fill[red] \p circle (3pt);
+    % Blue class (-1): below the lower margin
+    \foreach \p in {(2.3,0.7), (2.4,0.6), (3.0,0.4)} \fill[blue] \p circle (3pt);
+
+    % ----- Decision boundary and margins (all parallel & consistent) -----
+    % Boundary: 0.8x + y = 3.8   -> y = -0.8x + 3.8
+    \draw[ultra thick] (0,3.8) -- (5,-0.2);
+
+    % Margins: 0.8x + y = 4.4 and 0.8x + y = 3.2
+    \draw[dashed, gray!70, thick] (0,4.4) -- (5,0.4);
+    \draw[dashed, gray!70, thick] (0,3.2) -- (5,-0.8);
+
+    % ----- Support vectors (on the margins) -----
+    \fill[red]  (1.5,3.2) circle (3pt);  % on upper margin (0.8*1.5 + 3.2 = 4.4)
+    \draw[red, very thick] (1.5,3.2) circle (6pt);
+
+    \fill[blue] (2.5,1.2) circle (3pt);  % on lower margin (0.8*2.5 + 1.2 = 3.2)
+    \draw[blue, very thick] (2.5,1.2) circle (6pt);
+
+    % ----- Margin arrow (between the two dashed lines, along the normal) -----
+    \draw[<->, thick, green!60!black]
+        (2.2,1.44) -- (3.0,2.0)
+        node[(4.0,2.4), above, font=\scriptsize] {Margin};
+
+    % Tiny legend (optional, same as your style)
+    \node[font=\scriptsize, align=left] at (3.55,3.75) {
+        \textbf{Boundary} (solid)\\
+        \textbf{Margins} (dashed)
+    };
+\end{tikzpicture}
+
+        \end{column}
+
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item \textbf{Hyperplane:} boundary ($\mathbf{w}^T\mathbf{x} + b = 0$).
+                \item \textbf{Margin:} “safety gap” to the closest points.
+                \item \textbf{Support Vectors:} closest points that \textbf{define} the boundary.
+            \end{itemize}
+
+            \vspace{0.4em}
+            \begin{tcolorbox}[colback=yellow!10, colframe=orange!70, boxsep=3pt]
+                \small Bigger margin $\Rightarrow$ more robust to noise.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide: The Math (Hard Margin) ---
+\begin{frame}{Hard Margin SVM}
+    We established that we want the \textbf{widest possible margin}.
+    Mathematically, maximizing width $\Longleftrightarrow$ minimizing weights $||\mathbf{w}||$.
+
+    \vspace{0.5em}
+    \begin{tcolorbox}[colback=white, colframe=black, title=\textbf{The "Hard Margin" Objective}]
+        $$ \min_{\mathbf{w}, b} \frac{1}{2} ||\mathbf{w}||^2 $$
+        $$ \text{Subject to: } y_i (\mathbf{w}^T \mathbf{x}_i + b) \geq 1 $$
+    \end{tcolorbox}
+
+    \vspace{0.5em}
+    \begin{tcolorbox}[colback=blue!5, colframe=blue!60, boxsep=4pt]
+        \textbf{What does this mean?}
+        \begin{itemize}
+            \item \textbf{Minimize Objective:} Keep the weights small.
+            \item \textbf{Subject to Constraint:} Strictly forbid ANY data point from touching the margin (i.e., being misclassified).
+        \end{itemize}
+    \end{tcolorbox}
+    \centering \footnotesize \textit{*Note: This assumes data is perfectly linearly separable (Hard Margin).}
+\end{frame}
+
+% --- Slide: The Reality (Soft Margin) ---
+\begin{frame}{Soft Margin: When Perfection is Impossible}
+    Real data is noisy (never perfectly linearly separable). A "Hard Margin" would crash if just one outlier existed in the data.
+    
+    \textbf{Solution:} We relax the rules. We allow some "violations" ($\xi_i$) but penalize them using a hyperparameter \textbf{C}.
+
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=\textbf{The Hyperparameter C}]
+                \textbf{Large C (Strict)}
+                \begin{itemize}
+                    \item Penalizes errors heavily.
+                    \item Result: Narrow margin, risk of overfitting.
+                \end{itemize}
+                
+                \vspace{0.5em}
+                \textbf{Small C (More Violations)}
+                \begin{itemize}
+                    \item Ignores small errors.
+                    \item Result: Wider margin, better generalization.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \centering
+            % Simple visual of outliers
+            \begin{tikzpicture}[scale=0.7]
+                \draw[thick] (0,0) -- (4,4) node[right] {Hyperplane};
+                \draw[dashed, gray] (-0.5,0.5) -- (3.5,4.5);
+                \draw[dashed, gray] (0.5,-0.5) -- (4.5,3.5);
+                
+                % Outlier
+                \fill[red] (3.9, 1.5) circle (3pt) node[right] {$\xi_i$ (Violation)};
+                
+                % Normal points
+                \fill[blue] (4, 1) circle (3pt);
+                \fill[blue] (4.2, 0.9) circle (3pt);
+                \fill[blue] (4.3, 1.1) circle (3pt);
+                \fill[blue] (3.6, 0.8) circle (3pt);
+                \fill[red] (1.5, 4) circle (3pt);
+                \fill[red] (1.2, 3.6) circle (3pt);
+                \fill[red] (1.3, 4.1) circle (3pt);
+                \fill[red] (1, 4) circle (3pt);
+            \end{tikzpicture}
+            
+            \vspace{0.5em}
+            \small "Ideally, separate perfectly. If not, minimize the sum of violations."
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+% --- Slide: The Kernel Trick ---
+\begin{frame}{Handling Non-Linearity: The Kernel Trick}
+    \textbf{Problem:} Standard SVM finds a linear boundary. What if data is not linearly separable (e.g., a donut)?
+    \pause
+    
+    \vspace{0.5em}
+    \begin{columns}[c]
+        \begin{column}{1.0\textwidth}
+            \textbf{The Solution (Feature Engineering)}:
+            We map inputs to a higher-dimensional space where they \textit{become} separable.
+            $$ \mathbf{x} \rightarrow \phi(\mathbf{x}) $$
+            (e.g., adding $x^2$ as a new feature).
+            \pause
+            \vspace{0.3em}
+
+            \textbf{Issue:} Computing $\phi(\mathbf{x})$ explicitly is computationally expensive.
+            \pause
+            \vspace{0.3em}
+            
+            \textbf{The "Trick" (Implicit Computation)}:
+             We use special type of functions called \textbf{Kernel Functions} which compute the high-dim \textbf{similarity directly} without explicitly building them!
+            
+            \begin{tcolorbox}[colback=blue!5, colframe=blue!60, boxsep=4pt]
+                $$ K(\mathbf{x}_i, \mathbf{x}_j) = \phi(\mathbf{x}_i)^T \phi(\mathbf{x}_j) $$
+            \end{tcolorbox}
+            \small
+            This is called the \textbf{Kernel Trick}.
+        \end{column}
+
+        
+    \end{columns}
+\end{frame}
+
+% --- Slide: Common Kernels ---
+\begin{frame}{Common SVM Kernels: A Menu of Similarity}
+    The choice of Kernel tells the SVM "how to measure similarity."
+    
+    \vspace{0.5em}
+    \begin{itemize}
+        % 1. Linear Kernel
+        \item \textbf{1. Linear Kernel} \hfill \textcolor{gray}{\small (Good for Linear Problems)}
+        \begin{itemize}
+            \item \small $K(\mathbf{x}, \mathbf{y}) = \mathbf{x}^T \mathbf{y}$
+            \item \textbf{What it finds:} Straight lines/planes. 
+        \end{itemize}
+        \vspace{0.5em}
+
+        % 2. Polynomial Kernel
+        \item \textbf{2. Polynomial Kernel} \hfill \textcolor{gray}{}
+        \begin{itemize}
+            \item \small $K(\mathbf{x}, \mathbf{y}) = (\mathbf{x}^T \mathbf{y} + c)^d$
+            \item \textbf{What it finds:} Curved boundaries and feature interactions.
+        \end{itemize}
+        \vspace{0.5em}
+
+        % 3. RBF Kernel
+        \item \textbf{3. Radial Basis Function (RBF)} \hfill \textcolor{myblue}{\small (The Default)}
+        \begin{itemize}
+            \item \small $K(\mathbf{x}, \mathbf{y}) = \exp(-\gamma ||\mathbf{x} - \mathbf{y}||^2)$
+            \item \textbf{What it finds:} "Local" similarity. Points are similar only if they are close in distance.
+        \end{itemize}
+    \end{itemize}
+
+    % Summary Box
+    \begin{tcolorbox}[colback=green!5, colframe=green!50!black, boxsep=2pt, left=4pt]
+        \textbf{Rule of Thumb:} Start with \textbf{RBF} if you don't know the structure. 
+    \end{tcolorbox}
+\end{frame}
+
+% % --- Slide 5: SVM Math ---
+% \begin{frame}{SVM: The Mathematical Objective}
+%     \textbf{Goal: maximize margin} $\;\Longleftrightarrow\;$ Turns out mathematically this is equivalent to \textbf{minimize} $||\mathbf{w}||$!
+%     \small (smaller $||\mathbf{w}||$ means a wider margin!).
+
+%     \begin{tcolorbox}[title=\textbf{Hard-Margin SVM (Linearly Separable)}]
+%         $$ \min_{\mathbf{w}, b} \frac{1}{2} ||\mathbf{w}||^2 $$
+%         $$ \text{Subject to: } y_i (\mathbf{w}^T \mathbf{x}_i + b) \geq 1 \quad \forall i $$
+%     \end{tcolorbox}
+
+%     \vspace{0.6em}
+%     \begin{tcolorbox}[colback=blue!5, colframe=blue!60, boxsep=3pt]
+%     \begin{itemize}
+%         \item This is a \textbf{Constrained Optimization} problem: we must minimize an \textbf{objective} (the weights) while satisfying a \textbf{constraint} (the rules).
+        
+%         \item The constraint here ensures the correct class \textbf{and} enforces a margin of at least one.
+        
+%         \item Solving this type of optimization problem requires \textbf{Lagrange Multipliers}, which is out of scope for this program.
+%     \end{itemize}
+% \end{tcolorbox}
+% \end{frame}
+
+% % --- Slide 5: SVM Math ---
+% \begin{frame}{SVM: The Mathematical Objective}
+%     \textbf{Goal: maximize margin} $\;\Longleftrightarrow\;$ Turns out mathematically this is equivalent to \textbf{minimize} $||\mathbf{w}||$!
+%     \small (smaller $||\mathbf{w}||$ means a wider margin!).
+
+%     \begin{tcolorbox}[title=\textbf{Hard-Margin SVM (Linearly Separable)}]
+%         $$ \min_{\mathbf{w}, b} \frac{1}{2} ||\mathbf{w}||^2 $$
+%         $$ \text{Subject to: } y_i (\mathbf{w}^T \mathbf{x}_i + b) \geq 1 \quad \forall i $$
+%     \end{tcolorbox}
+
+%     \vspace{0.6em}
+%     \begin{tcolorbox}[colback=blue!5, colframe=blue!60, boxsep=3pt]
+%     \begin{itemize}
+%     \item This is called \textbf{Hard-Margin SVM}, which assumes perfect separation between classes.
+%     \item The variant \textbf{Soft-Margin SVM} allows a few "rule breaks" (misclassifications) to improve generalization.
+%     \item In practice, this is controlled by the hyperparameter $C$:
+%     \begin{itemize}
+%         \item \textbf{Small $C$:} Allows more violations (Wider Margin).
+%         \item \textbf{Large $C$:} Allows fewer violations (Harder Margin).
+%     \end{itemize}
+% \end{itemize}
+% \end{tcolorbox}
+% \end{frame}
+
+
+% --- Slide 6: SVM Pros/Cons ---
+\begin{frame}{SVM: Strengths and Weaknesses}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{Advantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{High Dimensionality:} Works very well when $features \gg samples$.
+                    \item \textbf{Powerful:} Different kernels allow for modeling complex non-linear relationships.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=\textbf{Disadvantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Noise Sensitivity:} Sensitive to noise and outliers (if C is large).
+                    \item \textbf{Scalability:} Slow for large datasets ($>10k$ samples).
+                    \item \textbf{Preprocessing:} Requires feature scaling.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+% ==============================================================================
+% SECTION 4: TREE-BASED
+% ==============================================================================
+
+\subsection{Tree-Based Models}
+
+% --- Roadmap Update ---
+\begin{frame}{The ML Toolbox: Roadmap Update}
+    \centering \vspace*{\fill} \hspace*{-0.6cm}
+    \resizebox{1.1\linewidth}{!}{
+    \begin{tikzpicture}[node distance=0.5cm, box/.style={scale=1.25, rectangle, draw=gray!40, fill=gray!5, rounded corners, minimum width=2.8cm, minimum height=1.8cm, align=center, font=\small}, active/.style={draw=myblue, fill=blue!10, line width=1.5pt}, completed/.style={draw=mygreen, fill=green!10, line width=1pt, dashed}, arrow/.style={-latex, thick, gray!60}]
+        \node[font=\bfseries\Large] (root) at (0, 3) {Machine Learning Models ($f_\theta$)};
+        \node[box, completed] (linear) at (-6, 0) {\textbf{1. Linear Models}};
+        \node[box, completed] (distance) at (-2, 0) {\textbf{2. Distance-Based}};
+        \node[box, completed] (kernel) at (2, 0) {\textbf{3. Kernel-Based}};
+        \node[box, active] (trees) at (6, 0) {\textbf{4. Tree-Based}\\Decision Trees,\\Forests \& GBM};
+        \draw[arrow] (root) -- (linear); \draw[arrow] (root) -- (distance); \draw[arrow] (root) -- (kernel); \draw[arrow] (root) -- (trees);
+        \node[myblue, below=0.3cm of trees, font=\bfseries] {$\uparrow$ We Are Here};
+    \end{tikzpicture}
+    } \vspace*{\fill}
+\end{frame}
+
+% --- Slide 1: Decision Tree Intuition (Fixed & Titanic Theme) ---
+\begin{frame}{Decision Trees}
+    \textbf{Intuition:} We split data by asking a sequence of Yes/No questions to separate classes.
+    \vspace{0.5em}
+
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            \centering
+            % Tree Visual - Fixed sibling distance to prevent overlap
+            \begin{tikzpicture}[
+            scale=0.75,
+                level distance=1.5cm,
+                level 1/.style={sibling distance=4.5cm}, % Increased width
+                level 2/.style={sibling distance=2.2cm}, % Increased width
+                node/.style={rectangle, draw=gray!60, rounded corners, fill=white, font=\footnotesize, align=center, thick},
+                leaf_survived/.style={rectangle, draw=none, fill=green!20, font=\bfseries\footnotesize},
+                leaf_died/.style={rectangle, draw=none, fill=red!20, font=\bfseries\footnotesize},
+                edge from parent/.style={draw, -latex}
+            ]
+              
+              \node[node, fill=blue!5] {\textbf{Is First Class?}}
+                child {node[leaf_survived] {Survived} 
+                    edge from parent node[left, font=\scriptsize] {Yes}
+                }
+                child {node[node] {\textbf{Age $>$ 18?}} 
+                    child {node[leaf_survived] {Survived} 
+                        edge from parent node[left, font=\scriptsize] {No}
+                    }
+                    child {node[leaf_died] {Died} 
+                        edge from parent node[right, font=\scriptsize] {Yes}
+                    }
+                    edge from parent node[right, font=\scriptsize] {No}
+                };
+            \end{tikzpicture}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \textbf{Example: Titanic Survival}
+            \begin{itemize}
+                \item \textbf{Goal:} Predict who survived.
+                \item \textbf{Root Question:} "Was the passenger in First Class?" (Best separator).
+                \item \textbf{Next Question:} If not, "Were they a child?"
+            \end{itemize}
+
+            \pause
+            \vspace{1em}
+            \begin{alertblock}{\centering The Core Question}
+                \centering
+                We have many features (Age, Ticket, Gender...). \\
+                \textbf{How do we decide which question to ask first?}
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide 2: Impurity Metrics (Added p_i definition) ---
+\begin{frame}{How to Choose the Best Split? (Purity)}
+    We want questions that lead to \textbf{"Pure" nodes} (containing only one class).
+    We measure "disorder" using \textbf{Impurity Metrics}.
+
+    \vspace{0.5em}
+    \begin{columns}[T]
+        \begin{column}{0.45\textwidth}
+            \centering
+            \textbf{Visualizing Impurity}
+            \vspace{0.5em}
+            
+            \begin{tikzpicture}[scale=1.0]
+                % Impure Node
+                \node[circle, draw, minimum size=1.5cm, fill=gray!10, align=center] at (0,0) {
+                    \textcolor{red}{$\bullet$}\textcolor{red}{$\bullet$}\textcolor{blue}{$\bullet$}\\
+                    \textcolor{blue}{$\bullet$}\textcolor{red}{$\bullet$}\textcolor{blue}{$\bullet$}
+                };
+                \node[font=\footnotesize, red, align=center] at (0, -1.4) {High Impurity\\(Mixed)};
+
+                % Pure Node
+                \node[circle, draw, minimum size=1.5cm, fill=green!10, align=center] at (2,0) {
+                    \textcolor{blue}{$\bullet$}\textcolor{blue}{$\bullet$}\textcolor{blue}{$\bullet$}\\
+                    \textcolor{blue}{$\bullet$}\textcolor{blue}{$\bullet$}\textcolor{blue}{$\bullet$}
+                };
+                \node[font=\footnotesize, green!50!black, align=center] at (2, -1.4) {Zero Impurity\\(Pure)};
+            \end{tikzpicture}
+
+            \vspace{1em}
+    \centering
+    \small \textbf{The Algorithm's Goal:} Pick the split that maximizes the drop in Impurity (Information Gain).
+    
+        \end{column}
+        
+        \begin{column}{0.55\textwidth}
+            \textbf{The "Impurity Metrics":}
+            \small
+            \begin{enumerate}
+                \item \textbf{Gini Impurity (Default):}
+                $$ G = 1 - \sum p_i^2 $$
+                \vspace{-3mm}
+                \small
+                \begin{itemize}
+                    \item $G=0.5$: Max chaos (50/50).
+                    \item $G=0.0$: Pure (One class).
+                \end{itemize}
+                \item \textbf{Entropy (Information):}
+                $$ H = - \sum p_i \log_2(p_i) $$
+            \end{enumerate}
+            
+            % \vspace{0.5em}
+            \begin{tcolorbox}[colback=yellow!10, colframe=orange!40, boxsep=2pt, left=2pt, right=2pt, top=2pt, bottom=2pt]
+                \centering
+                \textbf{What is $p_i$?} \\
+                $p_i$ is the \textbf{proportion} of samples belonging to class $i$ in the current node.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+% --- Slide: Optimization Method (Trees vs Linear) ---
+\begin{frame}{Wait... Where is Gradient Descent?}
+    \textbf{Q:} Do Decision Trees use Gradient Descent to find the best split?
+    \pause
+    
+    \begin{alertblock}{The Answer: NO!}
+        Standard Decision Trees are \textbf{Non-Differentiable}.
+        You cannot calculate a gradient $\nabla J$ because splits are discrete "hard" choices (Left vs. Right).
+    \end{alertblock}
+    
+\end{frame}
+
+\begin{frame}{Wait... Where is Gradient Descent?}
+    \textbf{Comparison of Learning Algorithms:}
+
+    \begin{columns}[T]
+        \begin{column}{0.50\textwidth}
+            \begin{tcolorbox}[colback=blue!5, title=\textbf{Non-Trees Models}]
+                \textbf{Method:} Gradient Descent
+                \begin{itemize}
+                    \item Loss surface is smooth (convex).
+                    \item We slide down the curve.
+                    \item Update weights $\mathbf{w}$ iteratively.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        
+        \begin{column}{0.55\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{Decision Trees}]
+                \textbf{Method:} Greedy Search
+                \begin{itemize}
+                    \item Try \textbf{every possible split} for every feature.
+                    \item Pick the one with max Information Gain.
+                    \item {\textbf{Repeat recursively until:}
+            \begin{itemize}
+                \item The node is \textbf{Pure} (100\% one class).
+                \item Or we hit a \textbf{Stop Condition} (e.g., Max Depth).
+            \end{itemize}}
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+    
+\end{frame}
+
+% --- Slide 8: Decision Trees Pros/Cons ---
+\begin{frame}{Decision Trees: Advantages and Disadvantages}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{The Advantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Simple:} Easy to understand.
+                    \item \textbf{Interpretable:} Easy to explain to non-experts ("If X $>$ 5, then Y").
+                    \item \textbf{No Preprocessing Required:} No feature scaling or encoding required.
+                
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=\textbf{The Disadvantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{High Variance:} A small change in data = completely different tree.
+                    \item \textbf{Overfitting:} Not setting the stop conditions (e.g., Max Depth) guarantees overfitting.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide 9: Random Forest (Bagging) ---
+\begin{frame}{Random Forest}
+    \textbf{Problem:} Single trees are unstable (High Variance). \\
+    \vspace{0.5em}
+    \pause
+    \textbf{Solution:} Train many trees on random subsets and average them (\textbf{Bagging}).
+
+    \vspace{0.5em}
+    \centering
+    \resizebox{1.0\linewidth}{!}{
+    \begin{tikzpicture}[
+        node distance=1.5cm,
+        data/.style={draw, cylinder, shape border rotate=90, aspect=0.25, fill=gray!20, minimum height=1cm, minimum width=0.8cm, font=\scriptsize},
+        tree/.style={isosceles triangle, isosceles triangle apex angle=60, draw, fill=green!10, shape border rotate=90, minimum height=1cm, font=\tiny, align=center},
+        arrow/.style={->, thick, gray}
+    ]
+        % Dataset
+        \node[data, label=below:Dataset] (D) {Data};
+
+        % Subsets
+        \node[data, right=2cm of D, yshift=1.5cm] (S1) {Sub 1};
+        \node[data, right=2cm of D] (S2) {Sub 2};
+        \node[data, right=2cm of D, yshift=-1.5cm] (S3) {Sub 3};
+
+        % Trees
+        \node[tree, right=1cm of S1] (T1) {Tree 1};
+        \node[tree, right=1cm of S2] (T2) {Tree 2};
+        \node[tree, right=1cm of S3] (T3) {Tree 3};
+
+        % Aggregation
+        \node[draw, rectangle, rounded corners, fill=blue!10, right=2cm of T2, minimum height=3cm, align=center] (Agg) {\textbf{Majority}\\\textbf{Vote}};
+
+        % Output
+        \node[right=1cm of Agg, font=\bfseries] (Out) {Final Pred};
+
+        % Arrows
+        \draw[arrow] (D) -- (S1); \draw[arrow] (D) -- (S2); \draw[arrow] (D) -- (S3);
+        \draw[arrow] (S1) -- (T1); \draw[arrow] (S2) -- (T2); \draw[arrow] (S3) -- (T3);
+        \draw[arrow] (T1) -- (Agg.west |- T1);
+        \draw[arrow] (T2) -- (Agg);
+        \draw[arrow] (T3) -- (Agg.west |- T3);
+        \draw[arrow] (Agg) -- (Out);
+
+    \end{tikzpicture}
+    }
+    \\
+    \vspace{0.5em}
+    \small "Many uncorrelated weak models $\to$ One strong model."
+\end{frame}
+
+% --- Slide 10: Random Forest Pros/Cons ---
+\begin{frame}{Random Forest: Advantages and Disadvantages}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{Advantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Robust:} Very hard to overfit.
+                    \item \textbf{High Performance:} Very good baseline.
+                    \item \textbf{Low Hyperparameters Sensitivity:} Works well with default hyperparameters.
+                    \item \textbf{Interpretability:} Tells you which features matter most (Feature Importance).
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=\textbf{Disadvantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Slow Inference:} Must run data through every single tree.
+                    \item \textbf{Memory Intensive:} Stores all trees in RAM.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide 11: Gradient Boosting Concept ---
+\begin{frame}{Gradient Boosting: Correcting Mistakes}
+    \textbf{Problem:} Random Forest just averages opinions. It doesn't learn from mistakes. \\
+    \vspace{0.5em}
+    \pause
+    \textbf{Solution:} Train trees \textbf{sequentially}. Each tree fixes the errors of the previous one.
+    
+    \vspace{1em}
+    \centering
+    \resizebox{0.9\linewidth}{!}{
+    \begin{tikzpicture}[node distance=1.5cm, auto,
+        model/.style={draw, rectangle, rounded corners, fill=orange!10, minimum width=1.5cm, minimum height=1cm, align=center, font=\footnotesize},
+        error/.style={draw, circle, fill=red!10, inner sep=2pt, font=\scriptsize},
+        arrow/.style={->, thick, >=latex}
+    ]
+        % Model 1
+        \node[model] (M1) {Tree 1};
+        \node[below=0.2cm of M1] {Learns Data};
+
+        % Residual 1
+        \node[error, right=1cm of M1] (R1) {Err 1};
+        
+        % Model 2
+        \node[model, right=1cm of R1] (M2) {Tree 2};
+        \node[below=0.2cm of M2] {Learns Err 1};
+
+        % Residual 2
+        \node[error, right=1cm of M2] (R2) {Err 2};
+
+        % Model 3
+        \node[model, right=1cm of R2] (M3) {Tree 3};
+        \node[below=0.2cm of M3] {Learns Err 2};
+
+        % Arrows
+        \draw[arrow] (M1) -- node[above] {} (R1);
+        \draw[arrow] (R1) -- (M2);
+        \draw[arrow] (M2) -- node[above] {} (R2);
+        \draw[arrow] (R2) -- (M3);
+
+    \end{tikzpicture}
+    }
+    \pause
+    \begin{itemize}
+    Common Implementations:
+    \vspace{-1.0em}
+        \item \textbf{XGBoost:} Best Default
+        \item \textbf{LightGBM:} Lightweight
+        \item \textbf{CatBoost:} Requires minimal hyperparamters tuning.
+    \end{itemize}
+\end{frame}
+
+% --- Slide: The "Gradient" Connection ---
+\begin{frame}{Why is it called \textit{Gradient} Boosting?}
+    We are not just "fixing errors." We are performing \textbf{Gradient Descent}, but in a different way.
+
+    \vspace{-1.0em}
+    \begin{columns}[T]
+        % Left: Standard GD (Analogy)
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=gray!10, title=\textbf{1. Gradient Descent}]
+                \small
+                In Linear Regression, we update \textbf{parameters} ($w$) to minimize Loss.
+                \vspace{-2mm}
+                $$ \mathbf{w}_{new} = \mathbf{w}_{old} \underbrace{- \alpha \cdot \nabla Loss}_{\text{Step down the hill}} $$
+            \end{tcolorbox}
+        \end{column}
+
+        % Right: Gradient Boosting
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=blue!5, colframe=blue!60, title=\textbf{2. Gradient Boosting}]
+                \small
+                Here, we update the \textbf{function} ($F$) by adding new trees.
+                \vspace{-1mm}
+                $$ F_{new}(x) = F_{old}(x) + \underbrace{\alpha \cdot \text{Tree}(x)}_{\text{Step down the hill}} $$
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    % \vspace{1em}
+    \begin{itemize}
+        \item If we use \textbf{Squared Error} Loss: $L = \frac{1}{2}(y - \hat{y})^2$
+        \item The Gradient (derivative) is: $\nabla L = -(y - \hat{y})$
+        \item Therefore: \textbf{The Residual (which we fit trees on) $(y - \hat{y})$ is effectively the Negative Gradient!}
+        \item Final Model = Base Tree + $\sum$ (Error-Correcting Trees). 
+    \end{itemize}
+\end{frame}
+
+% --- Slide 12: Gradient Boosting Pros/Cons ---
+\begin{frame}{Gradient Boosting}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{Advantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{SOTA Performance:} Best accuracy for tabular data.
+                    \item \textbf{Flexibility:} Customizable Loss functions.
+                    \item \textbf{No Preprocessing Required:} Handles Missing Values natively. No need for scaling.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=\textbf{Disadvantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Sensitive:} Harder to tune (learning rate, depth).
+                    \item \textbf{Overfitting:} Easy to overfit if not careful (too many trees).
+                    \item \textbf{Serial:} Slow training (hard to parallelize).
+                    \item \textbf{Data Hungry:} Can overfit easily if data is small.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+% --- Slide: No Free Lunch Theorem ---
+\begin{frame}{The "No Free Lunch" Theorem}
+    \centering
+    \textit{"Is there one Master Algorithm to rule them all?"}
+    \normalsize
+    % \vspace{-1em}
+    
+    \begin{columns}[c]
+        \begin{column}{0.6\textwidth}
+            \begin{tcolorbox}[colback=yellow!10, colframe=orange!80!black, title=\textbf{The Theorem (Wolpert, 1996)}]
+                Averaged over all possible data generating distributions, every classification algorithm has the same error rate when classifying previously unobserved points.
+                \vspace{-1mm}
+                $$ \mathbb{E}[Error(\text{Model}_A)] = \mathbb{E}[Error(\text{Model}_B)] $$
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \centering
+            \textbf{In Plain English:}
+            \vspace{0.5em}
+            \begin{itemize}
+                \item No model works best for \textit{every} problem.
+                \item A model that is great at Image Recognition might be terrible at Spam Classification.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    % \vspace{-1em}
+    \begin{alertblock}{The Implication for us}
+        Since we cannot mathematically prove which model will work best beforehand:
+        \begin{enumerate}
+            \item We must make \textbf{assumptions} about our data (e.g., "it looks linear").
+            \item We must \textbf{experiment} with multiple models from our toolbox.
+        \end{enumerate}
+    \end{alertblock}
+\end{frame}
+
+% --- PART 6: SUMMARY ---
+\section{References}
+
+
+\begin{frame}{References}
+    \begin{itemize}
+        \item Aurélien Géron, \textit{Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow}
+        \item Andrew Ng, \textit{Machine Learning Specialization} (Coursera/DeepLearning.AI)
+    \end{itemize}
+
+    \vspace{2em}
+    
+    \begin{flushleft}
+        \small\textit{Slides contributed by Mohamed Eltayeb}
+    \end{flushleft}
+    
+\end{frame}

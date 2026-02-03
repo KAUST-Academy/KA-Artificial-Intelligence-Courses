@@ -1,4 +1,4 @@
-##  (2025-12-29)
+##  (2026-02-03)
 
 
 ### Features
@@ -28,4 +28,9 @@
 * **Release:** Combine all courses into one Repository ([605b754](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/605b7548b76afb4d968c7c488edc8f927c207ed7))
 * **Slides:** Add Stage 2 ML lecture LaTeX source and images ([1ef30cc](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/1ef30ccefb075515e4b0eb10d53fe7f6845a5e36))
 * **Test:** Create new test file ([d6733cc](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/d6733cc684c7239783440d5e5647144be66d501f))
+
+
+### Bug Fixes
+
+* **path:** fixed a path for one of the images in the cifar lab ([c876999](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/c876999da623b8e7d6bf12b3c8e88d62cbeeaef7))
 

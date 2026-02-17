@@ -1,4 +1,4 @@
-##  (2026-02-03)
+##  (2026-02-17)
 
 
 ### Features
@@ -16,6 +16,7 @@
 * **Labs:** Attention_Mechanism_Japanese_English ([23cbd41](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/23cbd4191038fe2e472ece30d85845973fb22187))
 * **Labs:** Bulk upload NLP Labs. ([d3d3c97](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/d3d3c97be89cb65e56e94e28d8dda24a2e99d85c))
 * **Labs:** English-Japanese_Seq2Seq_Translation ([edb4b42](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/edb4b42823db60af822ef030efa9de5fa3345be5))
+* **Labs:** Prompt_Engineering_Ollama_local.ipynb ([55e8f31](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/55e8f31f5ab0b83114d17f2c28b45c76f7f1b330))
 * **Labs:** RAGs lab ([368b35e](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/368b35ef4a9d6472649bcefc8b8ddf658056161e))
 * **Labs:** Simple NN Labs ([5d01f1c](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/5d01f1c351d8456544a79a282df4e2f3eeb6730e))
 * **Labs:** SVM, R^2, Logistic Regression Basics and Advanced, Linear Regression Basics and Advanced, and Decision Trees ([21b42b6](https://github.com/KAUST-Academy/KA-Artificial-Intelligence-Courses/commit/21b42b61cf20d391bc64018b4695067fcb37e34c))

@@ -1,35 +1,991 @@
-% Adjust the aspect ratio and font size as needed
+% Frames extracted from the source PDF
 \documentclass[10pt, aspectratio=149]{beamer}
 
-% Include preamble files
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
+
+% Include project preamble files for consistency
 \input{preamble/packages}
 \input{preamble/commands}
-\input{preamble/beamer_settings-KA-LMH}
+\input{preamble/beamer_settings}
 
 \title[Large Language Models]{Large Language Models}
 
 \begin{document}
 
-% Include sections
-\input{sections/cover-KA+LMH}
-\input{sections/llms/cover}
-\input{sections/toc}
-\input{sections/llms/motivation}
-\input{sections/llms/learning_outcomes}
-\input{sections/llms/bert_gpt_concepts}
-\input{sections/llms/scaling_laws}
-\input{sections/llms/pre_training_overview}
-\input{sections/llms/tokenization}
-\input{sections/llms/level_of_tokenization}
-\input{sections/llms/bpe}
-\input{sections/llms/token_free_llms}
-\input{sections/llms/context_window_problems}
-\input{sections/llms/moving_towards_larger_context_windows}
+\title[Large Language Models]{Large Language Models}
 
-\input{sections/llms/limitations}
-\input{sections/llms/summary}
-\input{sections/llms/references}
+\input{sections/cover}
 
-\input{sections/credits}
 
-\end{document} 
+\begin{frame}[plain]
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_002.png}
+\end{frame}
+
+\begin{frame}[t]{Table of Contents}
+  \begin{enumerate}
+    \item Motivation
+    \item Learning Outcomes
+    \item BERT and GPT Concepts
+    \item Scaling Laws for LLMs
+    \item Pre-training Overview
+    \item Tokenization: Why It Matters?
+    \item Level of Tokenization
+    \item Byte-Pair Encoding (BPE)
+    \item Token-Free LLMs
+    \item Context Window Problems
+    \item Moving Towards Larger Context Windows
+    \item Limitations of LLMs
+    \item Future Directions
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Motivation}
+  \begin{itemize}
+    \item \textbf{Why LLMs?}
+    \begin{itemize}
+      \item Transforming NLP: ChatGPT, Claude, Gemini, etc.
+      \item Achieving human-like generation and comprehension.
+      \item Pivotal for tasks like summarization, translation, reasoning.
+    \end{itemize}
+    \vspace{1em}
+    \item \textbf{Need for deeper understanding:}
+    \begin{itemize}
+      \item LLMs are expensive to train and operate.
+      \item Design decisions impact performance significantly (e.g., tokenization, scaling laws).
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Learning Outcomes}
+  By the end of this session, you should be able to:
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] Explain core architectures like BERT and GPT.
+    \item[\textcolor{red}{$\blacktriangleright$}] Understand scaling laws for LLM development.
+    \item[\textcolor{red}{$\blacktriangleright$}] Describe tokenization strategies and their impact.
+    \item[\textcolor{red}{$\blacktriangleright$}] Discuss limitations of current models (e.g., context window).
+    \item[\textcolor{red}{$\blacktriangleright$}] Explore emerging directions like token-free LLMs.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{BERT and GPT Concepts}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{BERT (Bidirectional Encoder Representations from Transformers)}
+    \begin{itemize}
+      \item Uses transformer encoder only.
+      \item Trained with Masked Language Modeling (MLM).
+      \item \textbf{Bidirectional:} Considers both left and right context.
+      \item Fine-tuned for tasks like QA, classification.
+      \item \textbf{Architecture:}
+      \begin{itemize}
+        \item Layers of encoder blocks.
+        \item Positional encodings added to embeddings.
+        \item Self-attention heads capture dependencies.
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{BERT -- Bidirectional Encoder Representations}
+  \begin{columns}
+    \begin{column}{0.58\textwidth}
+      \begin{itemize}
+        \item One of the biggest challenges in LM-building used to be the lack of task-specific training data.
+        \vspace{1em}
+        \item What if we learn an effective representation that can be applied to a variety of downstream tasks?
+        \begin{itemize}
+          \item Word2vec (2013)
+          \item GloVe (2014)
+        \end{itemize}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      % Placeholder for corresponding schematic/diagram
+      \vspace{1em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_008.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{BERT -- Bidirectional Encoder Representations}
+  \begin{columns}
+    \begin{column}{0.56\textwidth}
+      \textbf{BERT Pre-Training Corpus:}
+      \begin{itemize}
+        \item English Wikipedia -- 2,500 million words
+        \item Book Corpus -- 800 million words
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      % Placeholder for corresponding schematic/diagram
+      \vspace{1em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_008.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{BERT -- Bidirectional Encoder Representations}
+  \begin{columns}
+    \begin{column}{0.62\textwidth}
+      \textbf{BERT Pre-Training Corpus:}
+      \begin{itemize}
+        \item English Wikipedia -- 2,500 million words
+        \item Book Corpus -- 800 million words
+      \end{itemize}
+      \vspace{0.7em}
+      \textbf{BERT Pre-Training Tasks:}
+      \begin{itemize}
+        \item MLM (Masked Language Modeling)
+        \item NSP (Next Sentence Prediction)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      % Placeholder for BERT architecture diagram
+      \vspace{1em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_008.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{BERT -- Bidirectional Encoder Representations}
+  \begin{columns}
+    \begin{column}{0.62\textwidth}
+      \textbf{BERT Pre-Training Corpus:}
+      \begin{itemize}
+        \item English Wikipedia -- 2,500 million words
+        \item Book Corpus -- 800 million words
+      \end{itemize}
+      \vspace{0.7em}
+      \textbf{BERT Pre-Training Tasks:}
+      \begin{itemize}
+        \item MLM (Masked Language Modeling)
+        \item NSP (Next Sentence Prediction)
+      \end{itemize}
+      \vspace{0.7em}
+      \textbf{BERT Pre-Training Results:}
+      \begin{itemize}
+        \item BERT-Base -- 110M Params
+        \item BERT-Large -- 340M Params
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      % Placeholder for BERT architecture diagram
+      \vspace{0.5em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_008.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{BERT -- Bidirectional Encoder Representations}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_011.png}
+\end{frame}
+
+\begin{frame}{BERT -- Bidirectional Encoder Representations}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_012.png}
+\end{frame}
+
+\begin{frame}{BERT -- Bidirectional Encoder Representations}
+  \begin{columns}
+    \begin{column}{0.62\textwidth}
+      \textbf{BERT Fine-Tuning:}
+      \begin{itemize}
+        \item Simply add a task-specific module after the last encoder layer to map it to the desired dimension.
+        \item[] % extra space
+        \item \textbf{\textit{Classification Tasks:}}
+        \begin{itemize}
+          \item Add a feed-forward layer on top of the encoder output for the [CLS] token.
+        \end{itemize}
+        \item[] % extra space
+        \item \textbf{\textit{Question Answering Tasks:}}
+        \begin{itemize}
+          \item Train two extra vectors to mark the beginning and end of the answer from the paragraph.
+        \end{itemize}
+        \item[] 
+        \item \textit{...}
+      \end{itemize}
+ 
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      % Placeholder for BERT architecture diagram
+      \vspace{0.5em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_008.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% Slide 14
+\begin{frame}{BERT -- Bidirectional Encoder Representations}
+  \begin{columns}
+    \begin{column}{0.62\textwidth}
+      \textbf{BERT Evaluation:}
+      \begin{itemize}
+        \item \textbf{General Language Understanding Evaluation (GLUE):}
+        \begin{itemize}
+          \item Sentence pair tasks
+          \item Single sentence classification
+        \end{itemize}
+        \item \textbf{Stanford Question Answering Dataset (SQuAD)}
+      \end{itemize} 
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      % Placeholder for BERT architecture diagram
+      \vspace{0.5em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_008.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{BERT -- Bidirectional Encoder Representations}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_015.png}
+\end{frame}
+
+\begin{frame}{BERT -- Bidirectional Encoder Representations}
+  \begin{columns}
+    \begin{column}{0.62\textwidth}
+      \textbf{What is our takeaway from BERT?}
+      \begin{itemize}[<+->]
+        \item \textbf{Pre-training tasks can be invented flexibly{\ldots}}
+        \begin{itemize}
+          \item Effective representations can be derived from a flexible regime of pre-training tasks.
+        \end{itemize}
+        \item \textbf{Different NLP tasks seem to be highly transferable with each other{\ldots}}
+        \begin{itemize}
+          \item As long as we have effective representations, that seems to form a general model which can serve as the backbone for many specialized models.
+        \end{itemize}
+        \item \textcolor{red}{\textbf{And scaling works!!!}}
+        \begin{itemize}
+          \item 340M was considered large in 2018
+        \end{itemize}
+      \end{itemize}
+ 
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      % Placeholder for BERT architecture diagram
+      \vspace{0.5em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_008.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[t]{BERT and GPT Concepts}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{GPT (Generative Pre-trained Transformer)}
+    \begin{itemize}
+      \item Uses transformer \textbf{decoder only}.
+      \item Trained with next-token prediction.
+      \item \textbf{Unidirectional:} Considers left context only.
+      \item Fine-tuned for text generation, dialogue systems.
+      \item \textbf{Architecture:}
+      \begin{itemize}
+        \item Layers of decoder blocks.
+        \item Causal masking to prevent future token access.
+        \item Self-attention heads capture sequential dependencies.
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{GPT -- Generative Pre-trained Transformer}
+  \begin{columns}
+    \begin{column}{0.62\textwidth}
+      \begin{itemize}
+        \item Similarly motivated as BERT, though differently designed
+        \item Can we leverage large amounts of unlabeled data to pretrain an LM that understands general patterns?
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      % Placeholder for BERT architecture diagram
+      \vspace{0.5em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_020.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% Slide 21
+\begin{frame}{GPT -- Generative Pre-trained Transformer}
+  \begin{columns}
+    \begin{column}{0.62\textwidth}
+      \vspace{0.5em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_022.png}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      % Placeholder for BERT architecture diagram
+      \vspace{0.5em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_020.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{GPT -- Generative Pre-trained Transformer}
+  \begin{columns}
+    \begin{column}{0.62\textwidth}
+      \textbf{What is our takeaway from GPT?}
+      \begin{itemize}
+        \item<1-> \textbf{The Effectiveness of Self-Supervised Learning}
+        \begin{itemize}
+          \item<2-> Specifically, the model seems to be able to learn from generating the language \textit{itself}, rather than from any specific task we might cook up.
+        \end{itemize}
+        \item<3-> \textbf{Language Model as a Knowledge Base}
+        \begin{itemize}
+          \item<4-> Specifically, a generatively pre-trained model seems to have a decent zero-shot performance on a range of NLP tasks.
+        \end{itemize}
+        \item<5-> \textcolor{red}{\textbf{And scaling works!!!}}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      % Placeholder for BERT architecture diagram
+      \vspace{0.5em}
+      \centering
+      \includegraphics[width=\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_020.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{BERT and GPT Concepts}
+  \textcolor{red}{\large$\blacktriangleright$~Key Differences:}\\[1em]
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{|l|p{3cm}|p{3cm}|}
+    \hline
+    \textbf{Feature}      & \textbf{BERT}                                    & \textbf{GPT}                       \\
+    \hline
+    Directionality        & Bidirectional                                    & Unidirectional                     \\
+    \hline
+    Objective             & Masked Language Modeling (MLM)                   & Causal Language Modeling (CLM)     \\
+    \hline
+    Output                & Contextual embeddings                            & Text generation                    \\
+    \hline
+    Usage                 & Downstream tasks (e.g., classification, QA)      & Generation, few-shot learning      \\
+    \hline
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Scaling Laws for LLMs}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Kaplan et al. (2020):} ``Scaling Laws for Neural Language Models''
+    \item[\textcolor{red}{$\blacktriangleright$}] Performance improves predictably with:
+      \begin{itemize}
+        \item More parameters
+        \item More compute
+        \item Larger datasets
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Optimal allocation of compute:} Train bigger models with less data, rather than small models with lots of data.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Implication:} LLMs like GPT-3 (175B), GPT-4 (est.\ $>$500B) are products of scaling laws.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Scaling in GPT-2}
+  \begin{itemize}
+    \item Scaling improves the perplexity of the LM and improves performance
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=0.45\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_021.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Why is this interesting? Look at data scaling}
+  \begin{itemize}
+    \item We know that typical scaling effects look like this when we increase the amount of training data
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=0.45\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_022.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Why is this interesting? Look at data scaling}
+  \begin{itemize}
+    \item Loss and dataset size is linear on a log-log plot
+    \item This is ``power-law scaling''
+  \end{itemize}
+  \begin{center}
+    \includegraphics[width=0.45\linewidth]{assets/Lecture-7_Large_Language_Models/pdf_page_030.png}
+  \end{center}
+  \vspace{0.5em}
+  \begin{itemize}
+    \item A straight line on a log-log plot indicates a power-law: $\text{Loss} = a \cdot (\text{Dataset Size})^{-b} + c$
+    \item Enables prediction of performance gains from scaling up data.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Scaling -- \textnormal{(Kaplan, 2020)}}
+  \begin{itemize}
+    \item Can we understand scaling by positing scaling laws?
+    \item With scaling laws, we can make decisions on architecture, data,\\ and hyperparameters by training smaller models.
+    \item \textbf{OpenAI Study:} \href{https://arxiv.org/abs/2001.08361}{\textcolor{red}{Scaling Laws for Neural Language Models}} (\href{https://arxiv.org/abs/2001.08361}{Kaplan et al., 2020})
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Scaling -- \textnormal{(Kaplan, 2020)}}
+  \begin{itemize}
+    \item \textbf{OpenAI Study:} \href{https://arxiv.org/abs/2001.08361}{\textcolor{red}{Scaling Laws for Neural Language Models}} (\href{https://arxiv.org/abs/2001.08361}{Kaplan et al., 2020})
+  \end{itemize}
+  \vspace{0.6em}
+  \textbf{Key Findings:}
+  \begin{itemize}
+    \item Performance depends strongly on scale, and only weakly on the model shape.
+    \item Larger models are more sample-efficient.
+    \item Smooth power laws $(y = ax^b)$ observed between empirical performance and:
+      \begin{itemize}
+        \item $N$ -- number of parameters
+        \item $D$ -- dataset size
+        \item $C$ -- compute
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Scaling Effects}
+  \begin{itemize}
+    \item The effect of some hyperparameters on large language models (LMs) can be predicted before full training---such as optimizer choice (Adam vs.\ SGD), model depth, and architecture (LSTM vs.\ Transformer).
+  \end{itemize}
+  \vspace{0.9em}
+  Idea:
+  \begin{itemize}
+    \item[] \begin{itemize}
+      \item Train a few smaller models
+      \item Establish a scaling law (e.g., Adam vs.\ SGD scaling law)
+      \item Select optimal hyperparameters based on the scaling law prediction
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Model Scaling: GPT-3}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_034.png}
+\end{frame}
+
+\begin{frame}{Emergent Abilities with GPT-3 -- \textnormal{Wei et al., 2022}}
+  \begin{itemize}
+    \item \textbf{Emergent abilities:}
+      \begin{itemize}
+        \item Not present in smaller models but is present in larger models
+        \item Do LLMs like GPT-3 have these?
+      \end{itemize}
+    \vspace{1em}
+    \item \textbf{Findings:}
+      \begin{itemize}
+        \item GPT-3 trained on text can do arithmetic problems like addition and subtraction
+        \item Different abilities ``emerge'' at different scales
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Emergent Abilities with GPT-3 -- \textnormal{Wei et al., 2022}}
+  \begin{itemize}
+    \item \textbf{Emergent abilities:}
+      \begin{itemize}
+        \item Not present in smaller models but is present in larger models
+        \item Do LLMs like GPT-3 have these?
+      \end{itemize}
+    \vspace{1em}
+    \item \textbf{Findings:}
+      \begin{itemize}
+        \item GPT-3 trained on text can do arithmetic problems like addition and subtraction
+        \item Different abilities ``emerge'' at different scales
+        \item \textcolor{red}{Model scale is \textbf{not} the only contributor to emergence} -- for 14 BIG-Bench tasks, LaMDA 137B and GPT-3 175B models perform at near-random, but PaLM 62B achieves above-random performance
+        \item Problems LLMs can’t solve today may be emergent for future LLMs
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Pre-training Overview}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Pre-training Phase:}
+      \begin{itemize}
+        \item Large-scale unsupervised training on corpus (e.g., Common Crawl, Books)
+        \item Objective: learn general-purpose language representations
+      \end{itemize}
+    \vspace{0.6em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Why Pre-train?}
+      \begin{itemize}
+        \item Data-efficient fine-tuning
+        \item Enables zero-shot and few-shot capabilities
+        \item Foundation for instruction tuning, alignment
+      \end{itemize}
+    \vspace{0.6em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Challenges:}
+      \begin{itemize}
+        \item Massive compute costs
+        \item Environmental concerns (carbon footprint)
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Pre-training Overview}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_038.png}
+\end{frame}
+
+\begin{frame}[t]{Training of Decoder-only LLMs --- Llama 2}
+  \begin{itemize}
+    \item \textbf{Auto-regressive Pre-training} \\
+      \textcolor{blue}{Train to predict the next token on very large scale corpora ($\sim$3 trillion tokens)}
+    \item \textbf{Instruction Fine-tuning / Supervised Fine-tuning (SFT)} \\
+      \textcolor{blue}{Fine-tune the pre-trained model with pairs of (instruction + input, output) using a large dataset, then further with a small high-quality dataset}
+  \end{itemize}
+  \vspace{1em}
+  Instruction fine-tuning provides, as a prefix, a natural language description of the task along with the input.
+  \begin{itemize}
+    \item \textbf{Example:} Translate into French this sentence: \texttt{my name is} $\rightarrow$ \texttt{je m'appelle}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Supervised Fine-tuning versus Pre-training}
+  \begin{itemize}
+    \item \textbf{Objective function}
+      \begin{itemize}
+        \item Loss computed only for target tokens in SFT, all tokens are targets in pre-training
+      \end{itemize}
+    \item \textbf{Input and Target}
+      \begin{itemize}
+        \item Instruction + input as input with the target in SFT and only input as input with shifted input as target
+      \end{itemize}
+    \item \textbf{Purpose}
+      \begin{itemize}
+        \item Pre-training makes good generalist auto-completes but good SFT builds models that can do many unseen tasks
+        \item SFT can also guide nature of outputs in terms of safety and helpfulness
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Instruction Tuning (Wei et. al. 2021)}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_042.png}
+\end{frame}
+
+\begin{frame}{Unsafe Outputs -- Alignment Problem}
+  \begin{itemize}
+    \item LLMs may produce
+      \begin{itemize}
+        \item Harmful text -- unparliamentary language, bias and discrimination
+        \item Text that can cause direct harm -- allowing easy access to dangerous information
+      \end{itemize}
+    \item Therefore, LLMs should be trained to produce outputs that align with human preferences and values
+    \item Modern LLMs do so by using SFT and by using human preference directly in model training
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Tokenization: Why It Matters?}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Language $\neq$ Input}
+    \begin{itemize}
+      \item Text must be converted to numbers $\rightarrow$ tokens.
+    \end{itemize}
+    \vspace{0.7em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Tokenization:}
+    \begin{itemize}
+      \item Splits text into manageable units.
+      \item Balances granularity and vocabulary size.
+    \end{itemize}
+    \vspace{0.7em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Good tokenizer =}
+    \begin{itemize}
+      \item Efficient sequence length
+      \item High vocabulary coverage
+      \item Robust across domains (code, multilingual, etc.)
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Machine Translation}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_045.png}
+\end{frame}
+
+
+\begin{frame}{Inputs}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_046.png}
+\end{frame}
+
+\begin{frame}{Tokenization}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_047.png}
+\end{frame}
+
+\begin{frame}{Tokenization}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_048.png}
+\end{frame}
+
+\begin{frame}{Different Levels of Tokenization}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Character-level}
+    \begin{itemize}
+      \item Fine-grained, handles unknowns
+      \item Long sequences, slow training
+    \end{itemize}
+    \vspace{0.7em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Word-level}
+    \begin{itemize}
+      \item Intuitive, natural boundaries
+      \item Large vocab, OOV (Out-of-Vocab) issues
+    \end{itemize}
+    \vspace{0.7em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Subword-level}
+    \begin{itemize}
+      \item Balance of generalization \& compactness
+      \item Requires segmentation algorithm
+    \end{itemize}
+    \vspace{0.7em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{SentencePiece/Unigram LM}
+    \begin{itemize}
+      \item Learned from data, language-agnostic
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Different Levels of Tokenization}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_050.png}
+\end{frame}
+
+\begin{frame}{Different Levels of Tokenization}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_051.png}
+\end{frame}
+
+\begin{frame}{Byte-Pair Encoding (BPE)}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{How BPE works:}
+    \begin{itemize}
+      \item Start with characters.
+      \item Merge most frequent pair (e.g., ``t", ``h" $\rightarrow$ ``th").
+      \item Repeat until vocab size reached.
+    \end{itemize}
+    \vspace{1em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Advantages:}
+    \begin{itemize}
+      \item Handles unknown words well (e.g., unbelievably $\rightarrow$ un + believ + ably)
+      \item Reduces sequence length
+    \end{itemize}
+    \vspace{1em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Limitations:}
+    \begin{itemize}
+      \item Not optimal for all scripts (e.g., Chinese)
+      \item Word boundaries may be unclear
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Byte-Pair Encoding (BPE)}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_053.png}
+\end{frame}
+
+\begin{frame}{Token-Free LLMs}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_054.png}
+\end{frame}
+
+\begin{frame}{Token-Free LLMs}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_055.png}
+\end{frame}
+
+\begin{frame}{Token-Free LLMs}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{What are Token-Free LLMs?}
+    \begin{itemize}
+      \item Models that operate directly on raw text without tokenization.
+      \item Aim to eliminate the need for pre-defined tokens.
+    \end{itemize}
+    \vspace{1em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Advantages:}
+    \begin{itemize}
+      \item Avoids tokenization errors and biases.
+      \item Can handle arbitrary text lengths and formats.
+      \item Potentially more efficient for certain tasks.
+    \end{itemize}
+    \vspace{1em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Challenges:}
+    \begin{itemize}
+      \item Requires novel architectures to process raw text effectively.
+      \item May struggle with long-range dependencies without tokenization.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Token-Free LLMs}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_058.png}
+\end{frame}
+
+\begin{frame}{Token-Free LLMs}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_059.png}
+\end{frame}
+
+\begin{frame}{Token-Free LLMs}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_060.png}
+\end{frame}
+
+\begin{frame}{Token-Free LLMs}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Current Research:}
+    \begin{itemize}
+      \item Exploring architectures like \textit{Raw Transformer} and \textit{Text2Vec}.
+      \item Investigating how to maintain performance without tokenization.
+    \end{itemize}
+    \vspace{1em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Future Directions:}
+    \begin{itemize}
+      \item Integrating token-free approaches with existing LLMs.
+      \item Enhancing efficiency and scalability of token-free models.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Context Window Problems}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] Current LLMs have a finite ``context window'':
+      \begin{itemize}
+        \item \textbf{GPT-3:} 2K tokens
+        \item \textbf{GPT-4:} Up to 128K tokens
+        \item \textbf{Claude 3.5:} Up to 200K tokens
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Problems:}
+      \begin{itemize}
+        \item Long documents get truncated
+        \item Token limit affects reasoning
+        \item Difficult to do document-level QA or summarization
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Context Window Problems}
+  \begin{center}
+    \textbf{Example of a Context Window}
+    \vspace{1em}
+
+    % A manual diagram in TikZ for a context window on a token sequence
+    \begin{tikzpicture}[xscale=1.5, yscale=1]
+      % Draw number line
+      \draw[->, thick] (0,0) -- (7,0) node[right]{Number of tokens};
+      % Tick marks and labels
+      \foreach \x in {0,1,2,3,4,5,6}
+        \draw[thick] (\x,0.1) -- (\x,-0.1);
+      \node[below] at (0,-0.1) {0};
+      \node[below] at (6,-0.1) {$\infty$};
+
+      % Draw context window box
+      \draw[thick, green!70!black] (2.2,0.7) -- (2.2,-0.7) -- (4.8,-0.7) -- (4.8,0.7) -- cycle;
+
+      % Arrow to target token N
+      \draw[->, thick] (3.5,0.8) -- (3.5,0.3);
+      \node[above] at (3.5,0.85) {Target token N};
+
+      % Arrows for left/right tokens
+      \draw[<->] (2.25,0.5) -- (3.4,0.5);
+      \node[above] at (2.8,0.55) {\scriptsize tokens to the left};
+      \draw[<->] (3.6,0.5) -- (4.75,0.5);
+      \node[above] at (4.2,0.55) {\scriptsize tokens to the right};
+
+      % Label context window
+      \node[below] at (3.5,-0.75) {Context window};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Context Window Problems}
+  \begin{center}
+    {\large \textbf{Why \textcolor{blue}{Bigger Context Windows} Aren't Always Better?}}
+  \end{center}
+  \vspace{1em}
+  \begin{columns}[t,onlytextwidth]
+    \begin{column}{0.24\textwidth}
+      \fcolorbox{red}{white}{%
+        \parbox{0.95\linewidth}{
+          \centering
+          \textbf{\textcolor{red}{1}}\\[0.3em]
+          \textbf{Information Overload}\\[0.4em]
+          {\scriptsize
+          $\bullet$ Excess data can overwhelm the LLM.\\
+          $\bullet$ Reduces focus and slows performance.
+          }
+        }
+      }
+    \end{column}
+    \begin{column}{0.24\textwidth}
+      \fcolorbox{orange}{white}{%
+        \parbox{0.95\linewidth}{
+          \centering
+          \textbf{\textcolor{orange}{2}}\\[0.3em]
+          \textbf{Getting Lost in Data}\\[0.4em]
+          {\scriptsize
+          $\bullet$ Large windows prioritize edges,\\ 
+          $\bullet$ Missing key middle info.
+          }
+        }
+      }
+    \end{column}
+    \begin{column}{0.24\textwidth}
+      \fcolorbox{green}{white}{%
+        \parbox{0.95\linewidth}{
+          \centering
+          \textbf{\textcolor{teal}{3}}\\[0.3em]
+          \textbf{Poor Management}\\[0.4em]
+          {\scriptsize
+          $\bullet$ More data leads to noise,\\
+          $\bullet$ Redundancy, and potential bias.
+          }
+        }
+      }
+    \end{column}
+    \begin{column}{0.24\textwidth}
+      \fcolorbox{black}{white}{%
+        \parbox{0.95\linewidth}{
+          \centering
+          \textbf{4}\\[0.3em]
+          \textbf{Long-Range Issues}\\[0.4em]
+          {\scriptsize
+          $\bullet$ Understanding relationships\\ 
+          becomes harder with large context windows.
+          }
+        }
+      }
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Context Window Problems}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_065.png}
+\end{frame}
+
+\begin{frame}{Moving Towards Larger Context Windows}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Efficient Attention Variants:}
+      \begin{itemize}
+        \item Longformer, BigBird, FlashAttention-2
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Memory-Augmented Models:}
+      \begin{itemize}
+        \item Retrieval-augmented generation (RAG)
+        \item Memory layers (e.g., RetNet)
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Chunking + Re-ranking:}
+      \begin{itemize}
+        \item Process in parts, summarize/join results
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Recurrence or State Passing:}
+      \begin{itemize}
+        \item Transformer-XL, RWKV (RNN-inspired)
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Moving Towards Larger Context Windows}
+  \begin{center}
+  \begin{tikzpicture}[node distance=1.4cm, >=latex, font=\sffamily, scale=0.8, every node/.style={transform shape}]
+
+    % Retriever Node
+    \node[draw, fill=purple!20, minimum width=1.5cm, minimum height=0.7cm, rounded corners=0.4cm] (retriever) {Retriever};
+
+    % Long Context LLM container
+    \node[draw, fill=gray!8, minimum width=6.0cm, minimum height=2.0cm, rounded corners=0.2cm, right=2.0cm of retriever, anchor=west] (llmbox) {};
+
+    % KV Cache box inside LLM
+    \node[draw, fill=cyan!15, minimum width=2.7cm, minimum height=1.1cm, rounded corners=0.13cm, left=0.2cm of llmbox.center, anchor=east] (kv) {
+      \begin{tabular}{c}
+        \textbf{KV Cache}\\
+        1M{+} tokens
+      \end{tabular}
+    };
+
+    % Prompt/User Conversation
+    \node[draw, fill=yellow!25, minimum width=1.7cm, minimum height=1.1cm, rounded corners=0.13cm, right=0.14cm of kv, anchor=west] (prompt) {
+      \begin{tabular}{c}
+        \textbf{Prompt}\\
+        User Conversation
+      \end{tabular}
+    };
+
+    % Label above LLM box
+    \node[font=\small] at (llmbox.north) [yshift=0.7em] {Long Context LLM};
+
+    % Output node
+    \node[draw, fill=gray!15, minimum width=1.0cm, minimum height=0.6cm, rounded corners=0.18cm, right=1.6cm of llmbox, anchor=west] (output) {Output};
+
+    % Connections
+    \draw[->, thick] (retriever) -- (llmbox.west);
+
+    \draw[->, thick] (llmbox.east) -- (output);
+
+    % Divider line between KV and Prompt
+    \draw[gray!70, thick] ([xshift=0.08cm]kv.east|-kv.north) -- ([xshift=0.08cm]kv.east|-kv.south);
+
+  \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Limitations of LLMs}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] High inference costs \& latency
+    \item[\textcolor{red}{$\blacktriangleright$}] Bias and toxic outputs
+    \item[\textcolor{red}{$\blacktriangleright$}] Hallucination and factual inconsistency
+    \item[\textcolor{red}{$\blacktriangleright$}] Limited interpretability
+    \item[\textcolor{red}{$\blacktriangleright$}] Require vast pre-training data
+    \item[\textcolor{red}{$\blacktriangleright$}] Poor domain generalization (medical, legal, etc.)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Future Directions for LLMs}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Long Context Handling:} Efficient token reuse, sparse attention, recurrence.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Token-Free Models:} Improved byte/character models.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Multimodal LLMs:} Integrating vision, speech, and more.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Smaller, Efficient LLMs:} Distillation, quantization, sparse models.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Open-Weight \& Ethical LLMs:} Responsible, accessible models.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+  \begin{itemize}
+    \item These slides have been adapted from:
+    \begin{itemize}
+      \item Bhiksha Raj \& Rita Singh, \href{https://www.cs.cmu.edu/~11-785/}{11-785 Introduction to Deep Learning, CMU}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{References}
+  \scriptsize
+  \begin{enumerate}
+    \item Kaplan et al., ``Scaling Laws for Neural Language Models'', 2020.
+    \item Devlin et al., ``BERT: Pre-training of Deep Bidirectional Transformers'', 2018.
+    \item Brown et al., ``Language Models are Few-Shot Learners (GPT-3)'', 2020.
+    \item Xue et al., ``ByT5: Towards a token-free future with pre-trained byte-to-byte models'', 2022.
+    \item Beltagy et al., ``Longformer: The Long-Document Transformer'', 2020.
+    \item Tay et al., ``Efficient Transformers: A Survey'', 2020.
+    \item OpenAI, ``Technical Report on GPT-4'', 2023.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{References}
+  \scriptsize
+  \begin{enumerate}
+    \setcounter{enumi}{7}
+    \item Google Research Blog: Scaling Transformer Models.
+    \item Anthropic, ``Claude 3.5 Release Notes'', 2024.
+    \item FlashAttention: \href{https://arxiv.org/abs/2205.14135}{https://arxiv.org/abs/2205.14135}
+  \end{enumerate}
+\end{frame}
+
+\end{document}

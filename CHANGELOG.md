@@ -20,6 +20,7 @@
 * **Labs:** RAGs lab ([368b35e](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/368b35ef4a9d6472649bcefc8b8ddf658056161e))
 * **Labs:** Simple NN Labs ([5d01f1c](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/5d01f1c351d8456544a79a282df4e2f3eeb6730e))
 * **Labs:** SVM, R^2, Logistic Regression Basics and Advanced, Linear Regression Basics and Advanced, and Decision Trees ([21b42b6](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/21b42b61cf20d391bc64018b4695067fcb37e34c))
+* **Labs:** Time series labs (Uni/Multivariate) ([ca2d270](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/ca2d270202166f1d9f27361bbdb79a5ef039cf94))
 * **Labs:** Transformers_with_BERT_English ([b5a44ab](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/b5a44ab05c8fa87fa5913a0a199b60bcefef88e8))
 * **Labs:** yolo_fire_and_smoke_seg.ipynb ([1f1002a](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1f1002af4237b5aecf8f8286bca4e48641f92cba))
 * **Lectures:** Bulk Upload Lectures ([d8db6b3](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d8db6b355a25a3de66a1c367ce6ede506571957c))

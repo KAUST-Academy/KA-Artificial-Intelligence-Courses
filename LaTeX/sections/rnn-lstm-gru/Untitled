@@ -1,0 +1,9 @@
+% \begin{frame}{Summary}
+%   \small
+%   \begin{itemize}
+%     \item RNNs struggle with long dependencies due to vanishing/exploding gradients
+%     \item GRU and LSTM improve memory retention using gating mechanisms
+%     \item GRU is simpler and faster; LSTM is more expressive
+%     \item Attention and transformers now dominate, but RNNs remain relevant in many domains
+%   \end{itemize}
+% \end{frame}

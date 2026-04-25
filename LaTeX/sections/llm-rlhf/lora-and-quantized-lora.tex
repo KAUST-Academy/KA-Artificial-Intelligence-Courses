@@ -1,0 +1,73 @@
+\section{LoRA and Quantized LoRA}
+\begin{frame}{}
+  \LARGE LoRA and Quantized LoRA
+\end{frame}
+
+\begin{frame}{What is LoRA?}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Key Idea:} Update low-rank matrices instead of full weights.
+    \item[\textcolor{red}{$\blacktriangleright$}] For a weight matrix $W \in \mathbb{R}^{d \times k}$:
+      \[
+      W' = W + \Delta W, \quad \Delta W = AB^T
+      \]
+      where $A \in \mathbb{R}^{d \times r}$, $B \in \mathbb{R}^{k \times r}$.
+    \item[\textcolor{red}{$\blacktriangleright$}] Only train $A, B$ $\rightarrow$ drastically reduces parameters.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{What is LoRA?}  
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_034.png}
+\end{frame}
+
+\begin{frame}{Benefits of LoRA}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Very lightweight:} Only 0.1\%--1\% of parameters are trainable.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Hardware friendly:} Enables fine-tuning on consumer GPUs and even laptops.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Modular:} Supports plug-and-play adapters for different tasks or users.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Personalization:} Allows efficient user- or domain-specific adaptation.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{QLoRA --- Quantized LoRA}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Key Idea:} Fine-tune large language models in 4-bit precision using LoRA adapters.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Scalability:} Enables fine-tuning of 65B parameter models on a single 48GB GPU.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Efficiency:} Highly memory-efficient with no significant performance loss (Dettmers et al., 2023).
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Techniques:}
+      \begin{itemize}
+        \item Double quantization
+        \item Paged optimizers
+        \item NF4 (NormalFloat 4-bit) quantization format
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{QLoRA --- Quantized LoRA}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_037.png}
+\end{frame}
+
+\begin{frame}{QLoRA --- Quantized LoRA}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_038.png}
+\end{frame}
+
+\begin{frame}{Applications of LoRA / QLoRA}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Instruction tuning for resource-constrained settings:}
+      \begin{itemize}
+        \item Enables fine-tuning large models on modest hardware (e.g., consumer GPUs, laptops).
+        \item Used for domain adaptation, personalization, and rapid prototyping.
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Popular fine-tuned models:}
+      \begin{itemize}
+        \item \textbf{Alpaca}, \textbf{Guanaco}, \textbf{Vicuna}, \textbf{Mistral}: All leverage LoRA/QLoRA for efficient instruction tuning.
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Model merging and compositionality:}
+      \begin{itemize}
+        \item Merge multiple LoRA adapters for multi-domain or multi-task capabilities.
+        \item Compose adapters for new tasks without retraining the base model.
+      \end{itemize}
+  \end{itemize}
+\end{frame}

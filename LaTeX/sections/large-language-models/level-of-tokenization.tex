@@ -1,0 +1,37 @@
+\begin{frame}{Different Levels of Tokenization}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Character-level}
+    \begin{itemize}
+      \item Fine-grained, handles unknowns
+      \item Long sequences, slow training
+    \end{itemize}
+    \vspace{0.7em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Word-level}
+    \begin{itemize}
+      \item Intuitive, natural boundaries
+      \item Large vocab, OOV (Out-of-Vocab) issues
+    \end{itemize}
+    \vspace{0.7em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Subword-level}
+    \begin{itemize}
+      \item Balance of generalization \& compactness
+      \item Requires segmentation algorithm
+    \end{itemize}
+    \vspace{0.7em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{SentencePiece/Unigram LM}
+    \begin{itemize}
+      \item Learned from data, language-agnostic
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Different Levels of Tokenization}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_050.png}
+\end{frame}
+
+\begin{frame}{Different Levels of Tokenization}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_051.png}
+\end{frame}

@@ -1,0 +1,13 @@
+\begin{frame}{Limitations of Fine-Tuning and RLHF}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Data Quality:} RLHF relies heavily on high-quality, diverse preference data or human feedback; poor data leads to suboptimal or biased models.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Scalability:} Collecting human feedback at scale is expensive and time-consuming.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Alignment Gaps:} RLHF may not perfectly capture complex, nuanced human values or intent.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Overoptimization:} Models may "game" the reward model, leading to reward hacking or unnatural outputs.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Generalization:} Fine-tuning and RLHF can cause models to overfit to specific tasks or feedback distributions, reducing robustness.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Catastrophic Forgetting:} Risk of losing previously learned capabilities during aggressive fine-tuning.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Computational Cost:} Both fine-tuning and RLHF are resource-intensive, especially for large models.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Ethical Concerns:} Human preferences used for training may encode societal biases, under-representation, or other ethical issues.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Transparency:} RLHF pipelines can be hard to interpret and debug.
+  \end{itemize}
+\end{frame}

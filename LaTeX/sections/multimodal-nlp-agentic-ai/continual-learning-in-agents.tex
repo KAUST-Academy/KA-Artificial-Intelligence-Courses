@@ -1,0 +1,66 @@
+\section{Continual Learning in Agents}
+\begin{frame}{}
+  \LARGE Continual Learning in Agents
+\end{frame}
+
+\begin{frame}{Continual Learning in Agents}
+  \centering
+  \includegraphics[width=0.98\textwidth,keepaspectratio]{assets/Lecture-10_Multimodal_NLP_Agentic_AI/slide_054.png}
+\end{frame}
+
+\begin{frame}{Why Continual Learning?}
+  \begin{itemize}
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Agentic AI should evolve with time:}
+    \begin{itemize}
+      \item[\textcolor{red}{$\bullet$}] Learn from feedback
+      \item[\textcolor{red}{$\bullet$}] Adapt to new tasks
+      \item[\textcolor{red}{$\bullet$}] Retain useful knowledge
+    \end{itemize}
+
+    \vspace{1em}
+    \centering
+    \textbf{Real-world scenarios:}
+    \begin{itemize}
+      \item[\textcolor{red}{$\triangleright$}] \textbf{Personalization}
+      \item[\textcolor{red}{$\triangleright$}] \textbf{Environment drift}
+      \item[\textcolor{red}{$\triangleright$}] \textbf{Avoiding forgetting}
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Challenges in Continual Learning}
+  \begin{itemize}
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Catastrophic forgetting:} Agents may lose previously acquired knowledge when learning new tasks.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Stability-plasticity dilemma:} Balancing the ability to learn new information (plasticity) with retaining old knowledge (stability).
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Modality drift:} Changes or shifts in the types or distributions of input modalities over time.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Scaling memory:} Managing both semantic (general knowledge) and episodic (specific experiences) memory as agents interact with the world.
+  \end{itemize}
+
+  \vspace{1em}
+  \textbf{Solutions:}
+  \begin{itemize}
+      \item Replay memory (experience replay)
+      \item Progressive networks
+      \item Elastic weight consolidation (EWC)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Catastrophic forgetting}
+  \centering
+  \includegraphics[width=0.98\textwidth,keepaspectratio]{assets/Lecture-10_Multimodal_NLP_Agentic_AI/slide_057.png}
+\end{frame}
+
+\begin{frame}{Catastrophic forgetting}
+  \centering
+  \includegraphics[width=0.98\textwidth,keepaspectratio]{assets/Lecture-10_Multimodal_NLP_Agentic_AI/slide_058.png}
+\end{frame}
+
+\begin{frame}{Stability-plasticity dilemma}
+  \centering
+  \includegraphics[width=0.98\textwidth,keepaspectratio]{assets/Lecture-10_Multimodal_NLP_Agentic_AI/slide_059.png}
+\end{frame}
+
+\begin{frame}{Scaling memory}
+  \centering
+  \includegraphics[width=0.8\textwidth,height=0.8\textheight,keepaspectratio]{assets/Lecture-10_Multimodal_NLP_Agentic_AI/slide_060.png}
+\end{frame}

@@ -1,0 +1,39 @@
+\begin{frame}{Direct Preference Optimization (DPO)}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{New method:} Bypasses RL and reward model training entirely.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Key Idea:} Optimize the policy directly from human preference data.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Reference:} Rafailov et al., 2023.
+  \end{itemize}
+  
+  \vspace{0.6em}
+  \textbf{DPO Loss:}
+  
+  \[
+  L_{\mathrm{DPO}} = \log \frac{
+      \exp\left(\beta \log \frac{\pi(y^+)}{\pi_0(y^+)}\right)
+    }{
+      \exp\left(\beta \log \frac{\pi(y^+)}{\pi_0(y^+)}\right) + \exp\left(\beta \log \frac{\pi(y^-)}{\pi_0(y^-)}\right)
+    }
+  \]
+  
+  \footnotesize
+  where $y^+$ is the preferred response, $y^-$ is the dispreferred response, $\pi$ is the current policy, $\pi_0$ is the reference (SFT) policy, and $\beta$ is a temperature parameter.
+
+  \vspace{0.6em}
+  \normalsize
+  \textcolor{red}{\textbf{Benefits:}}
+  \begin{itemize}
+    \item Simpler and more stable than PPO
+    \item No need for reward model training or RL rollouts
+  \end{itemize}
+\end{frame}
+
+% \begin{frame}[t]{RLHF Pipeline}
+%   \begin{itemize}
+%     \item Natural Language Processing\n    \item LMH\n    \item 23\n  \end{itemize}
+% \end{frame}
+
+\begin{frame}{Direct Preference Optimization (DPO)}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_031.png}
+\end{frame}

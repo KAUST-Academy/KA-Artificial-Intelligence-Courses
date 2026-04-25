@@ -1,0 +1,77 @@
+\begin{frame}{Pre-training Overview}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Pre-training Phase:}
+      \begin{itemize}
+        \item Large-scale unsupervised training on corpus (e.g., Common Crawl, Books)
+        \item Objective: learn general-purpose language representations
+      \end{itemize}
+    \vspace{0.6em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Why Pre-train?}
+      \begin{itemize}
+        \item Data-efficient fine-tuning
+        \item Enables zero-shot and few-shot capabilities
+        \item Foundation for instruction tuning, alignment
+      \end{itemize}
+    \vspace{0.6em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Challenges:}
+      \begin{itemize}
+        \item Massive compute costs
+        \item Environmental concerns (carbon footprint)
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Pre-training Overview}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_038.png}
+\end{frame}
+
+\begin{frame}[t]{Training of Decoder-only LLMs --- Llama 2}
+  \begin{itemize}
+    \item \textbf{Auto-regressive Pre-training} \\
+      \textcolor{blue}{Train to predict the next token on very large scale corpora ($\sim$3 trillion tokens)}
+    \item \textbf{Instruction Fine-tuning / Supervised Fine-tuning (SFT)} \\
+      \textcolor{blue}{Fine-tune the pre-trained model with pairs of (instruction + input, output) using a large dataset, then further with a small high-quality dataset}
+  \end{itemize}
+  \vspace{1em}
+  Instruction fine-tuning provides, as a prefix, a natural language description of the task along with the input.
+  \begin{itemize}
+    \item \textbf{Example:} Translate into French this sentence: \texttt{my name is} $\rightarrow$ \texttt{je m'appelle}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Supervised Fine-tuning versus Pre-training}
+  \begin{itemize}
+    \item \textbf{Objective function}
+      \begin{itemize}
+        \item Loss computed only for target tokens in SFT, all tokens are targets in pre-training
+      \end{itemize}
+    \item \textbf{Input and Target}
+      \begin{itemize}
+        \item Instruction + input as input with the target in SFT and only input as input with shifted input as target
+      \end{itemize}
+    \item \textbf{Purpose}
+      \begin{itemize}
+        \item Pre-training makes good generalist auto-completes but good SFT builds models that can do many unseen tasks
+        \item SFT can also guide nature of outputs in terms of safety and helpfulness
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Instruction Tuning (Wei et. al. 2021)}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_042.png}
+\end{frame}
+
+\begin{frame}{Unsafe Outputs -- Alignment Problem}
+  \begin{itemize}
+    \item LLMs may produce
+      \begin{itemize}
+        \item Harmful text -- unparliamentary language, bias and discrimination
+        \item Text that can cause direct harm -- allowing easy access to dangerous information
+      \end{itemize}
+    \item Therefore, LLMs should be trained to produce outputs that align with human preferences and values
+    \item Modern LLMs do so by using SFT and by using human preference directly in model training
+  \end{itemize}
+\end{frame}

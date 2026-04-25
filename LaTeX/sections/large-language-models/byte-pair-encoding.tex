@@ -1,0 +1,27 @@
+\begin{frame}{Byte-Pair Encoding (BPE)}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{How BPE works:}
+    \begin{itemize}
+      \item Start with characters.
+      \item Merge most frequent pair (e.g., ``t", ``h" $\rightarrow$ ``th").
+      \item Repeat until vocab size reached.
+    \end{itemize}
+    \vspace{1em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Advantages:}
+    \begin{itemize}
+      \item Handles unknown words well (e.g., unbelievably $\rightarrow$ un + believ + ably)
+      \item Reduces sequence length
+    \end{itemize}
+    \vspace{1em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Limitations:}
+    \begin{itemize}
+      \item Not optimal for all scripts (e.g., Chinese)
+      \item Word boundaries may be unclear
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Byte-Pair Encoding (BPE)}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_053.png}
+\end{frame}

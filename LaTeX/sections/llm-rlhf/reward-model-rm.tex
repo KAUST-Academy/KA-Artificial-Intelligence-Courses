@@ -1,0 +1,13 @@
+\begin{frame}{Reward Model (RM)}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Given:} Two responses $y_A$ and $y_B$ to the same prompt.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Human Feedback:} Annotator selects which response is preferred.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Learning:} The reward model $r_\phi$ is trained to assign higher scores to preferred responses.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Pairwise Loss:}
+      \[
+      L_{\mathrm{RM}} = -\log \sigma\Big(r_\phi(y_A) - r_\phi(y_B)\Big)
+      \]
+      where $\sigma$ is the sigmoid function.
+    \item[\textcolor{red}{$\blacktriangleright$}] The RM acts as a proxy for human judgment in downstream RL optimization.
+  \end{itemize}
+\end{frame}

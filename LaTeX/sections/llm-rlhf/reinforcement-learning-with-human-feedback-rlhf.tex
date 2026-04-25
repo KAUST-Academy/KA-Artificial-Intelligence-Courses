@@ -1,0 +1,34 @@
+\begin{frame}{RLHF --- Reinforcement Learning with Human Feedback}
+  \begin{center}
+    \Large
+    RLHF --- Reinforcement Learning with\\ Human Feedback
+  \end{center}
+\end{frame}
+
+
+\begin{frame}[t]{Why RLHF?}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] SFT doesn't teach the model what humans prefer.
+    \item[\textcolor{red}{$\blacktriangleright$}] RLHF introduces reward learning and policy optimization.
+    \item[\textcolor{red}{$\blacktriangleright$}] Inspired by InstructGPT (Ouyang et al., 2022).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{RLHF Pipeline Overview}
+  \begin{enumerate}
+    \item \textbf{Supervised Fine-Tuning (SFT):} Train the base model on instruction-response pairs.
+    \item \textbf{Reward Model (RM) Training:} Learn a reward function from human preference rankings.
+    \item \textbf{RL Optimization (e.g., PPO):} Optimize the language model to maximize the learned reward.
+  \end{enumerate}
+\end{frame}
+
+
+\begin{frame}{RLHF Pipeline}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_022.png}
+\end{frame}
+
+\begin{frame}{RLHF Pipeline}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_023.png}
+\end{frame}

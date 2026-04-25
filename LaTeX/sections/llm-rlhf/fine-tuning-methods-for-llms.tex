@@ -1,0 +1,66 @@
+\begin{frame}[plain]
+  \centering
+  \vspace*{0.18\paperheight}
+  \LARGE \textbf{Fine-Tuning Methods for LLMs}
+\end{frame}
+
+\begin{frame}{Categories of Fine-Tuning}
+  \begin{center}
+    \begin{tabular}{|l|p{3.3cm}|c|c|}
+      \hline
+      \textbf{Method} & \textbf{Description} & \textbf{Params} & \textbf{Efficiency} \\
+      \hline
+      Full FT & Retrain all weights & All & Expensive \\
+      Adapter & Add small bottlenecks (Houlsby) & Few & Efficient \\
+      Prefix & Tune soft prompts & Few tokens & Efficient \\
+      LoRA/QLoRA & Low-rank weight deltas & Very few & Very Efficient \\
+      Instr. Tuning & Tune on instr. datasets & All/Part & - \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{Full Fine-Tuning (FT)}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Definition:} Fine-tune all parameters of the pre-trained model on downstream data.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Historical Use:} Common in early GPT-2 and BERT applications.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Pros:}
+      \begin{itemize}
+        \item Maximum flexibility and performance
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Cons:}
+      \begin{itemize}
+        \item Expensive (requires large compute resources)
+        \item Prone to catastrophic forgetting
+        \item Not efficient for large models
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Full Fine-Tuning Workflow}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_010.png}
+\end{frame}
+
+\begin{frame}{Parameter-Efficient Fine-Tuning (PEFT)}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Key Idea:} Keep the base model frozen, tune only a small subset of parameters.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Types:}
+    \begin{itemize}
+      \item Adapter Modules (Houlsby et al., 2019)
+      \item Prompt Tuning / Prefix Tuning
+      \item LoRA / QLoRA
+    \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Benefits:}
+    \begin{itemize}
+      \item Enables multi-tasking and personalization
+      \item Suitable for low-resource adaptation
+      \item Reduces compute and memory requirements
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Parameter-Efficient Fine-Tuning (PEFT)}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_012.png}
+\end{frame}

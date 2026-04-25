@@ -1,0 +1,109 @@
+\begin{frame}{Self-Attention Mechanism}
+  \begin{itemize}
+    \item[$\blacktriangleright$] Computes contextual representation of a word using all other words
+    \item[$\blacktriangleright$] \textbf{Inputs:} Query (Q), Key (K), Value (V)
+    \item[$\blacktriangleright$] \textbf{Output:} Weighted sum of values
+  \end{itemize}
+
+  \vspace{0.5em}
+  \textbf{Attention formula:}
+  \begin{align*}
+    \text{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+  \end{align*}
+
+  \vspace{0.5em}
+  \begin{itemize}
+    \item[$\blacktriangleright$] Enables each word to attend to all others
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Self-Attention Intuition: The ``Bank'' Analogy}
+  \begin{itemize}
+    \item[$\blacktriangleright$] \textbf{Query:} What we're looking for (e.g., the meaning of ``bank'' in context)
+    \item[$\blacktriangleright$] \textbf{Keys:} Tags or features associated with each word/sentence (e.g., ``river'', ``money'')
+    \item[$\blacktriangleright$] \textbf{Values:} Information linked to each key (e.g., context-specific meaning)
+    \item[$\blacktriangleright$] Uses dot-product similarity between Query and Keys to assign attention weights
+    \item[$\blacktriangleright$] Weighted sum of Values produces the contextual representation
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_013.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_014.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_015.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_016.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_017.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_018.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_019.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+      \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_020.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_021.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_022.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_023.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_024.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_025.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_026.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_027.png}
+\end{frame}
+
+\begin{frame}{Self Attention}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_028.png}
+\end{frame}
+

@@ -1,0 +1,52 @@
+\section{LSTM vs GRU}
+\begin{frame}{LSTM vs GRU}
+  \small
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|}
+      \hline
+      \textbf{Feature} & \textbf{LSTM} & \textbf{GRU} \\
+      \hline
+      Gates & 3 (i, f, o) & 2 (z, r) \\
+      Memory Cell & Yes & No \\
+      Complexity & Higher & Lower \\
+      Training Speed & Slower & Faster \\
+      Performance & Great for long sequences & Similar or better on short tasks \\
+      \hline
+    \end{tabular}
+  \end{table}
+  \vspace{1em}
+  \textbf{\textcolor{blue}{Tip:}} Try GRU first for faster results; switch to LSTM if performance suffers.
+\end{frame}
+
+\begin{frame}{Use Cases for GRU/LSTM}
+  \small
+  \textbf{NLP Tasks:}
+  \begin{itemize}
+    \item Language Modeling
+    \item Machine Translation
+    \item Sentiment Analysis
+    \item Chatbots
+  \end{itemize}
+  \textbf{Audio \& Time Series:}
+  \begin{itemize}
+    \item Music Generation
+    \item Speech Recognition
+    \item Anomaly Detection
+  \end{itemize}
+  \textbf{Video \& Sequential Vision:}
+  \begin{itemize}
+    \item Action Recognition
+    \item Video Captioning
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Limitations of GRU/LSTM}
+  \small
+  \begin{itemize}
+    \item \textcolor{red}{Sequential computation --- hard to parallelize}
+    \item \textcolor{red}{Forget long-term dependencies}
+    \item \textcolor{red}{Slow training due to sequential nature}
+    \item \textcolor{red}{Struggle with varying-length sequences}
+  \end{itemize}
+\end{frame}

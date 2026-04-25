@@ -1,35 +1,35 @@
-% Adjust the aspect ratio and font size as needed
+% Frames extracted from the source PDF
 \documentclass[10pt, aspectratio=149]{beamer}
 
-% Include preamble files
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
+
+% Include project preamble files for consistency
 \input{preamble/packages}
 \input{preamble/commands}
-\input{preamble/beamer_settings-KA-LMH}
+\input{preamble/beamer_settings}
 
 \title[Large Language Models]{Large Language Models}
 
 \begin{document}
 
-% Include sections
-\input{sections/cover-KA+LMH}
-\input{sections/llms/cover}
-\input{sections/toc}
-\input{sections/llms/motivation}
-\input{sections/llms/learning_outcomes}
-\input{sections/llms/bert_gpt_concepts}
-\input{sections/llms/scaling_laws}
-\input{sections/llms/pre_training_overview}
-\input{sections/llms/tokenization}
-\input{sections/llms/level_of_tokenization}
-\input{sections/llms/bpe}
-\input{sections/llms/token_free_llms}
-\input{sections/llms/context_window_problems}
-\input{sections/llms/moving_towards_larger_context_windows}
+\title[Large Language Models]{Large Language Models}
 
-\input{sections/llms/limitations}
-\input{sections/llms/summary}
-\input{sections/llms/references}
-
+\input{sections/cover}
+\input{sections/large-language-models/toc}
+\input{sections/large-language-models/motivation}
+\input{sections/large-language-models/learning-outcomes}
+\input{sections/large-language-models/bert-gpt-concepts}
+\input{sections/large-language-models/scaling-laws-for-llms}
+\input{sections/large-language-models/pre-training-overview}
+\input{sections/large-language-models/tokenization}
+\input{sections/large-language-models/level-of-tokenization}
+\input{sections/large-language-models/byte-pair-encoding}
+\input{sections/large-language-models/token-free-llms}
+\input{sections/large-language-models/context-window-problems}
+\input{sections/large-language-models/moving-towards-larger-context-windows}
+\input{sections/large-language-models/limitations-of-llms}
+\input{sections/large-language-models/summary}
+\input{sections/large-language-models/references}
 \input{sections/credits}
-
-\end{document} 
+\end{document}

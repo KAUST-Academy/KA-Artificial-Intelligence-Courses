@@ -1,0 +1,65 @@
+\begin{frame}{Moving Towards Larger Context Windows}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Efficient Attention Variants:}
+      \begin{itemize}
+        \item Longformer, BigBird, FlashAttention-2
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Memory-Augmented Models:}
+      \begin{itemize}
+        \item Retrieval-augmented generation (RAG)
+        \item Memory layers (e.g., RetNet)
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Chunking + Re-ranking:}
+      \begin{itemize}
+        \item Process in parts, summarize/join results
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Recurrence or State Passing:}
+      \begin{itemize}
+        \item Transformer-XL, RWKV (RNN-inspired)
+      \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Moving Towards Larger Context Windows}
+  \begin{center}
+  \begin{tikzpicture}[node distance=1.4cm, >=latex, font=\sffamily, scale=0.8, every node/.style={transform shape}]
+
+    % Retriever Node
+    \node[draw, fill=purple!20, minimum width=1.5cm, minimum height=0.7cm, rounded corners=0.4cm] (retriever) {Retriever};
+
+    % Long Context LLM container
+    \node[draw, fill=gray!8, minimum width=6.0cm, minimum height=2.0cm, rounded corners=0.2cm, right=2.0cm of retriever, anchor=west] (llmbox) {};
+
+    % KV Cache box inside LLM
+    \node[draw, fill=cyan!15, minimum width=2.7cm, minimum height=1.1cm, rounded corners=0.13cm, left=0.2cm of llmbox.center, anchor=east] (kv) {
+      \begin{tabular}{c}
+        \textbf{KV Cache}\\
+        1M{+} tokens
+      \end{tabular}
+    };
+
+    % Prompt/User Conversation
+    \node[draw, fill=yellow!25, minimum width=1.7cm, minimum height=1.1cm, rounded corners=0.13cm, right=0.14cm of kv, anchor=west] (prompt) {
+      \begin{tabular}{c}
+        \textbf{Prompt}\\
+        User Conversation
+      \end{tabular}
+    };
+
+    % Label above LLM box
+    \node[font=\small] at (llmbox.north) [yshift=0.7em] {Long Context LLM};
+
+    % Output node
+    \node[draw, fill=gray!15, minimum width=1.0cm, minimum height=0.6cm, rounded corners=0.18cm, right=1.6cm of llmbox, anchor=west] (output) {Output};
+
+    % Connections
+    \draw[->, thick] (retriever) -- (llmbox.west);
+
+    \draw[->, thick] (llmbox.east) -- (output);
+
+    % Divider line between KV and Prompt
+    \draw[gray!70, thick] ([xshift=0.08cm]kv.east|-kv.north) -- ([xshift=0.08cm]kv.east|-kv.south);
+
+  \end{tikzpicture}
+  \end{center}
+\end{frame}

@@ -1,0 +1,18 @@
+\begin{frame}{Causal Masking}
+  \begin{itemize}
+    \item<1> \textbf{Purpose:} Prevents the model from attending to future tokens in the sequence.
+    \item<2> \textbf{Implementation:} Uses a triangular mask in the self-attention mechanism.
+    \item<3> \textbf{Effect:} Ensures that predictions for a token only depend on previous tokens, maintaining the autoregressive property.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Causal Masking}
+  \centering
+  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_081.png}
+\end{frame}
+
+\begin{frame}{Causal Masking}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_082.png}
+\end{frame}
+

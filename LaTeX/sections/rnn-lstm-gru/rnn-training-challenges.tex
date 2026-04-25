@@ -1,0 +1,50 @@
+\section{RNN Training Challenges}
+\begin{frame}{RNN Training Challenges}
+  \LARGE RNN : \textbf{Challenges}
+\end{frame}
+
+\begin{frame}{RNN Basic Structure}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-3_Recurrent_Neural_Networks/pdf_page_041.png}
+\end{frame}
+
+\begin{frame}{RNN Training Challenges}
+  \textbf{Backpropagation Through Time (BPTT)}
+  \begin{itemize}
+    \item Training RNNs involves unfolding the network across time steps.
+    \item Standard backpropagation is applied through this unrolled structure.
+    \end{itemize}
+  \end{frame}
+
+\begin{frame}{RNN: Backpropagation through time}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-3_Recurrent_Neural_Networks/pdf_page_043.png}
+\end{frame}
+
+\begin{frame}{Backpropagation through time}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-3_Recurrent_Neural_Networks/pdf_page_044.png}
+\end{frame}
+
+\begin{frame}{Backpropagation through time}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-3_Recurrent_Neural_Networks/pdf_page_045.png}
+\end{frame}
+
+\begin{frame}{Backpropagation through time}
+  \centering
+  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-3_Recurrent_Neural_Networks/pdf_page_046.png}
+\end{frame}
+
+\begin{frame}{RNN Training Challenges}
+  \textbf{Problems}
+  \begin{itemize}
+    \item \textbf{Vanishing Gradients:} Gradients shrink as they are propagated back, making it hard to learn long-term dependencies.
+    \item \textbf{Exploding Gradients:} Gradients grow exponentially, leading to unstable updates.
+    \end{itemize}
+    \textbf{Solutions Preview (covered in future modules)}
+    \begin{itemize}
+      \item Use of LSTM and GRU architectures
+      \item Gradient Clipping
+      \end{itemize}    
+\end{frame}

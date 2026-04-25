@@ -1,0 +1,38 @@
+\begin{frame}{Supervised Fine-Tuning (SFT)}
+  \begin{center}
+    \Large
+    Supervised Fine-Tuning (SFT)
+  \end{center}
+\end{frame}
+
+
+\begin{frame}{What is Supervised Fine-Tuning (SFT)?}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_015.png}
+\end{frame}
+
+\begin{frame}{Supervised Fine-Tuning For Gemini LLM}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_016.png}
+\end{frame}
+
+\begin{frame}{Datasets for Supervised Fine-Tuning (SFT)}
+  \begin{itemize}
+    \item \textbf{Instructional datasets:}
+    \begin{itemize}
+      \item \textbf{OpenAI:} InstructGPT (Anthropic Helpfulness data)
+      \item \textbf{Stanford Alpaca:} 52k GPT-3 generated instructions
+      \item \textbf{Others:} Dolly, ShareGPT, OASST, UltraChat
+    \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Note:} Quality of supervision greatly affects model behavior.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Limitations of Supervised Fine-Tuning (SFT)}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] Cannot capture nuanced human preferences or values.
+    \item[\textcolor{red}{$\blacktriangleright$}] May reinforce existing biases or hallucinations present in the data.
+    \item[\textcolor{red}{$\blacktriangleright$}] Risk of overfitting, especially on synthetic or noisy datasets.
+    \item[\textcolor{red}{$\blacktriangleright$}] Often leads to safe but bland and generic responses.
+  \end{itemize}
+\end{frame}

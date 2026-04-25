@@ -1,0 +1,22 @@
+\section{Motivation}
+\begin{frame}[plain]
+    \centering
+    \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-11_LRM_MoE/slide_002.png}
+  \end{frame}
+  
+  \begin{frame}{Motivation}
+    \textbf{Why Do We Need Seq2Seq and Attention?}
+    \begin{itemize}
+      \item[\textcolor{red}{$\blacktriangleright$}] Many real-world problems require transforming one sequence to another:
+      \begin{itemize}
+        \item Translation: \texttt{"Bonjour"} $\rightarrow$ \texttt{"Hello"}
+        \item Dialogue systems: Question $\rightarrow$ Response
+        \item Speech: Audio $\rightarrow$ Text
+      \end{itemize}
+    \end{itemize}
+    \vspace{1em}
+    \textcolor{red}{\textbf{Standard RNNs struggle with input/output sequences of different lengths and long-term dependencies.}}
+    \vspace{1em}
+  
+    \textcolor{teal}{\textbf{Seq2Seq models + attention solve this with a powerful encoder-decoder framework.}}
+  \end{frame}

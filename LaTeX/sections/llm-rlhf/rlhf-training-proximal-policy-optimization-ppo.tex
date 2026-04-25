@@ -1,0 +1,32 @@
+\begin{frame}{RLHF Training: Proximal Policy Optimization (PPO)}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Objective:} Maximize the reward given by the reward model (RM).
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Algorithm:} Proximal Policy Optimization (PPO) is used to update the language model.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{PPO Loss:}
+      \[
+        L_{\mathrm{PPO}} = \mathbb{E}\left[
+            \min\Big(r_t(\theta)\hat{A}_t,\,\,\,\, \text{clip}\big(r_t(\theta), 1 - \epsilon, 1 + \epsilon\big)\hat{A}_t\Big)
+          \right]
+      \]
+      where $r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_\text{old}(a_t|s_t)}$ is the probability ratio, and $\hat{A}_t$ is the advantage estimate.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{KL Penalty:} A KL-divergence penalty is added to keep the policy close to the base (SFT) model:
+      \[
+        L_{\mathrm{KL}} = \beta\, \mathrm{KL}\Big(\pi_\theta \;\|\; \pi_{\text{SFT}}\Big)
+      \]
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{RLHF Training: Proximal Policy Optimization (PPO)}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-8_Fine_Tuning_RLHF/slide_022.png}
+\end{frame}
+
+\begin{frame}{PPO --- Pros and Cons}
+  \begin{itemize}
+    \item[\textcolor{red}{\checkmark}] Stable optimization
+    \item[\textcolor{red}{\checkmark}] Encourages exploration
+    \item[\textcolor{gray}{\texttimes}] Expensive (needs many rollouts)
+    \item[\textcolor{gray}{\texttimes}] Sensitive to reward model errors
+  \end{itemize}
+\end{frame}

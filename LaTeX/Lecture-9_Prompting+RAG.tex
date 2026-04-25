@@ -1,27 +1,45 @@
-% Adjust the aspect ratio and font size as needed
 \documentclass[10pt, aspectratio=149]{beamer}
 
-% Include preamble files
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
+
+% Include project preamble files for consistency
 \input{preamble/packages}
 \input{preamble/commands}
-\input{preamble/beamer_settings-KA-LMH}
+\input{preamble/beamer_settings}
 
-\title[Prompting and Retrieval-Augmented Generation (RAG)]{Prompting \& Retrieval-Augmented Generation (RAG)}
+\title[Prompting & Retrieval-Augmented Generation (RAG)]{Prompting & Retrieval-Augmented Generation (RAG)}
 
 \begin{document}
 
-% Include sections
-\input{sections/cover-KA+LMH}
-\input{sections/prompting+RAG/cover}
-\input{sections/toc}
-\input{sections/prompting+RAG/complete}
-% \input{sections/prompting+RAG/motivation}
-% \input{sections/prompting+RAG/learning_outcomes}
+\title[Prompting & Retrieval-Augmented Generation (RAG)]{Prompting & Retrieval-Augmented Generation (RAG)}
 
-% \input{sections/prompting+RAG/limitations}
-% \input{sections/prompting+RAG/summary}
-% \input{sections/prompting+RAG/references}
-
+\input{sections/cover}
+\input{sections/prompting-rag/toc}
+\input{sections/prompting-rag/motivation}
+\input{sections/prompting-rag/learning-outcomes}
+\input{sections/prompting-rag/what-are-prompts}
+\input{sections/prompting-rag/why-prompt-engineering}
+\input{sections/prompting-rag/rise-of-in-context-learning}
+\input{sections/prompting-rag/parameters-of-decoding}
+\input{sections/prompting-rag/first-basic-prompt}
+\input{sections/prompting-rag/elements-of-a-prompt}
+\input{sections/prompting-rag/settings-to-keep-in-mind}
+\input{sections/prompting-rag/designing-prompts-for-different-tasks}
+\input{sections/prompting-rag/text-summarization}
+\input{sections/prompting-rag/question-answering}
+\input{sections/prompting-rag/text-classification}
+\input{sections/prompting-rag/role-playing}
+\input{sections/prompting-rag/code-generation}
+\input{sections/prompting-rag/reasoning}
+\input{sections/prompting-rag/prompt-engineering-techniques}
+\input{sections/prompting-rag/few-shot-prompts}
+\input{sections/prompting-rag/chain-of-thought-prompting}
+\input{sections/prompting-rag/self-consistency}
+\input{sections/prompting-rag/knowledge-generation-prompting}
+\input{sections/prompting-rag/react}
+\input{sections/prompting-rag/summary}
+\input{sections/prompting-rag/references}
 \input{sections/credits}
 
-\end{document} 
+\end{document}

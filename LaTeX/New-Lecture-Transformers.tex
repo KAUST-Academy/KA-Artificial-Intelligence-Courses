@@ -1,0 +1,167 @@
+% Transformers: 2017 vs 2026 (~90-minute graduate outline)
+\documentclass[10pt, aspectratio=149]{beamer}
+
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
+
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+\title[Transformers: 2017 vs 2026]{Transformers: 2017 vs 2026\\(Multimodal LLMs, MoE, Attention at Scale)}
+
+\begin{document}
+
+\input{sections/cover}
+
+% --- Table of Contents ---
+\begin{frame}{Table of Contents}
+  \begin{enumerate}
+    \item Baseline (2017): encoder--decoder Transformer and self-attention
+    \item Layer norms, position information, and the decoder-only shift
+    \item Rotary positional embeddings (\textbf{RoPE}) and length generalization
+    \item Normalization: LayerNorm $\to$ \textbf{RMSNorm}; activation choices (e.g., SwiGLU)
+    \item Multi-head attention variants: \textbf{MHA}, \textbf{MQA}, \textbf{GQA}; \textbf{KV cache} and memory
+    \item Attention complexity and \textbf{approximation}: FlashAttention-class IO-aware exact attention
+    \item Parameter efficiency: \textbf{Mixture-of-Experts (MoE)} routing and serving
+    \item Beyond text: \textbf{vision--language models (VLMs)} and multimodal LLMs (2026 landscape)
+    \item Training and systems: parallelism, quantization, what's next?
+    \item Discussion and references
+  \end{enumerate}
+\end{frame}
+
+% --- 2017 baseline ---
+\begin{frame}{``Attention Is All You Need'' (2017): what stayed?}
+  \begin{itemize}
+    \item \textbf{Stacked blocks} of multi-head self-attention + position-wise FFN; residual connections.
+    \item \textbf{Scaled dot-product attention} and softmax over keys; encoder--decoder cross-attention for seq2seq.
+    \item \textbf{Train stability:} residual + LayerNorm (original post-LN placement); now often \textbf{Pre-LN} or RMSNorm in large LMs.
+    \item The \textbf{computational story} changed: today the bottleneck is memory bandwidth for attention, not FLOPs alone.
+  \end{itemize}
+  \centering
+  \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{assets/New-Lecture-Transformers/attention_paper_page_3.png}
+\end{frame}
+
+\begin{frame}{Self-attention recap}
+  \begin{itemize}
+    \item $\mathrm{Attention}(Q,K,V)=\mathrm{softmax}(QK^\top/\sqrt{d_k})V$; \textbf{MHA} runs $h$ heads in parallel and concatenates.
+    \item Complexity $\mathcal{O}(n^2 d)$ in sequence length $n$ for dense attention---drives research into sparse, linear, and IO-aware implementations.
+    \item \textbf{Positional encoding} in 2017: sinusoidal or learned absolute vectors; modern decoders largely use \textbf{RoPE} or similar relative schemes.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Decoder-only LLMs (post-2017 trend)}
+  \begin{itemize}
+    \item GPT-style \textbf{causal (masked) self-attention}: each token attends only to the past.
+    \item Single stack replaces separate encoder/decoder for many language (and vision--language) workloads.
+    \item Encoder--decoder Transformers remain standard in \textbf{seq2seq} (MT, Whisper ASR, some VL captioning) where cross-attention helps.
+  \end{itemize}
+\end{frame}
+
+% --- RoPE ---
+\begin{frame}{RoPE: rotary position embeddings}
+  \begin{itemize}
+    \item Encodes \textbf{relative} position by rotating $Q$ and $K$ in 2D subspaces (pairs of dimensions); attention score depends on $m-n$ in the idealized construction.
+    \item Popular in LLaMA, PaLM-class, Mistral, etc.; supports \textbf{length extrapolation} tricks (NTK scaling, YaRN, \ldots).
+    \item Below: illustration from the RoFormer line (Su et al.\ / conceptual ``rotary'' framing in the literature).
+  \end{itemize}
+  \centering
+  \includegraphics[width=\textwidth,height=0.46\textheight,keepaspectratio]{assets/New-Lecture-Transformers/roformer_page_2.png}
+\end{frame}
+
+% --- RMSNorm ---
+\begin{frame}{RMSNorm and Pre-Norm stacks}
+  \begin{itemize}
+    \item \textbf{RMSNorm} re-centers normalization: scales by RMS of activations without mean centering; fewer ops than LayerNorm, common in LLaMA-family models.
+    \item \textbf{Pre-LN} (norm before sublayers) improves training depth; many 2026 stacks are Pre-LN + RMSNorm + gated FFN (e.g., SwiGLU).
+    \item Figure excerpt: LLaMA-family architecture and normalization (Touvron et al.; RMSNorm as in the original LLaMA report).
+  \end{itemize}
+  \centering
+  \includegraphics[width=\textwidth,height=0.50\textheight,keepaspectratio]{assets/New-Lecture-Transformers/llama2_page_5.png}
+\end{frame}
+
+% --- MQA GQA ---
+\begin{frame}{MHA, MQA, and GQA: fewer KV heads}
+  \begin{itemize}
+    \item \textbf{MHA:} $h$ query heads each with their own $K,V$ projections: KV cache stores $h$ copies---memory-heavy for long contexts.
+    \item \textbf{MQA:} single shared $K,V$ across heads (Shazeer et al.); cuts KV memory, may need re-tuning.
+    \item \textbf{GQA:} group heads so each \textbf{group} shares KV (Ainslie et al.): interpolates quality vs.\ bandwidth; used in LLaMA~2 70B-class models.
+  \end{itemize}
+  \centering
+  \includegraphics[width=\textwidth,height=0.44\textheight,keepaspectratio]{assets/New-Lecture-Transformers/gqa_paper_page_2.png}
+\end{frame}
+
+\begin{frame}{KV cache: what you store at inference}
+  \begin{itemize}
+    \item Autoregressive decoding caches past \textbf{key/value} tensors so each new token only computes one new column of attention against history.
+    \item Memory $\propto$ \textbf{layers} $\times$ \textbf{batch} $\times$ \textbf{context length} $\times$ \textbf{KV head dim}; \textbf{MQA/GQA} directly reduce footprint.
+    \item Systems stack: paged attention (vLLM), prefix caching, speculative decoding, offloading---as important as raw model FLOPs.
+  \end{itemize}
+\end{frame}
+
+% --- Flash attention ---
+\begin{frame}{Attention ``approximation'' vs.\ IO-aware exact attention}
+  \begin{itemize}
+    \item \textbf{True approximations:} sparse patterns (Longformer), low-rank / kernel linear attention (Performers), sliding windows (some production hybrids).
+    \item \textbf{FlashAttention} (Dao et al.): \textbf{tiled} attention on GPU to reduce HBM traffic---same output (up to numerics) but much faster in practice.
+    \item Below: throughput comparison graphic from the FlashAttention project materials (A100 class).
+  \end{itemize}
+  \centering
+  \includegraphics[width=0.92\textwidth,height=0.38\textheight,keepaspectratio]{assets/New-Lecture-Transformers/flash_attention_fwd.png}
+\end{frame}
+
+% --- MoE ---
+\begin{frame}{Mixture of Experts (MoE): sparse activation}
+  \begin{itemize}
+    \item Each layer has many \textbf{FFN experts}; a \textbf{router} picks top-$k$ experts per token: parameters grow, \textbf{FLOPs per token} stay closer to dense-width controls.
+    \item Trade-offs: \textbf{load balancing} losses, all-to-all communication in distributed training, and \textbf{routing degeneracy} if not regularized.
+    \item Switch Transformers (Fedus et al.) popularized \textbf{token-choice} top-1 routing at scale; later models (Mixtral, Grok-class, DBRX) refine routing + shared experts.
+  \end{itemize}
+  \centering
+  \includegraphics[width=\textwidth,height=0.46\textheight,keepaspectratio]{assets/New-Lecture-Transformers/switch_moe_page_3.png}
+\end{frame}
+
+% --- VLMs ---
+\begin{frame}{Multimodal LLMs and VLMs (2026 snapshot)}
+  \begin{itemize}
+    \item \textbf{Connector pattern:} strong \textbf{vision encoder} (ViT, ConvNeXt, SigLIP) $\to$ projection into LLM token space; train on image--text pairs + instruction data.
+    \item Examples: \textbf{LLaVA}, Qwen-VL, InternVL, GPT-4V-class closed models---converging on ``one tokenizer for text + patches or latent visual tokens''.
+    \item Challenges: \textbf{resolution}, \textbf{counting}, hallucinated object references, video temporal grounding, and \textbf{data licensing}.
+  \end{itemize}
+  \centering
+  \includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{assets/New-Lecture-Transformers/llava_vlm_example.png}
+\end{frame}
+
+\begin{frame}{From 2017 to 2026: systems co-design}
+  \begin{itemize}
+    \item \textbf{Tensor / pipeline / expert parallelism}; ZeRO-style sharding; FP8 / mixed precision; quantization (GPTQ, AWQ) for deployment.
+    \item \textbf{Long context}: RoPE fixes + sparse attention hybrids + better KV memory; product requirements drive research (RAG vs.\ native context).
+    \item Reliability: \textbf{evaluation harnesses} (MMLU, coding, multimodal benches) lag behind capability growth---a research area.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Discussion prompts}
+  \begin{itemize}
+    \item When is \textbf{GQA} preferable to \textbf{full MHA} if you need 128k+ context on a single GPU?
+    \item How do \textbf{MoE} training dynamics interact with multimodal \textbf{modality imbalance}?
+    \item Which 2017 ablations (depth, heads, FFN width) still predict 2026 scaling behavior?
+  \end{itemize}
+\end{frame}
+
+% --- References ---
+\begin{frame}{References}
+  \footnotesize
+  \begin{enumerate}
+    \item Vaswani et al., ``Attention Is All You Need'', NeurIPS 2017, \href{https://arxiv.org/abs/1706.03762}{arXiv:1706.03762}. \textit{Figure:} \texttt{attention\_paper\_page\_3.png} (rendered from arXiv PDF).
+    \item Su et al., ``RoFormer: Enhanced Transformer with Rotary Position Embedding'', \href{https://arxiv.org/abs/2104.09864}{arXiv:2104.09864}. \textit{RoPE figure:} \texttt{roformer\_page\_2.png}.
+    \item Touvron et al., ``LLaMA: Open and Efficient Foundation Language Models'', \href{https://arxiv.org/abs/2302.13971}{arXiv:2302.13971}; ``LLaMA~2: Open Foundation and Fine-Tuned Chat Models'', \href{https://arxiv.org/abs/2307.09288}{arXiv:2307.09288}. \textit{Arch excerpt:} \texttt{llama2\_page\_5.png}.
+    \item Shazeer, ``Fast Transformer Decoding: One Write-Head is All You Need'', \href{https://arxiv.org/abs/1911.02150}{arXiv:1911.02150} (MQA).
+    \item Ainslie et al., ``GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints'', \href{https://arxiv.org/abs/2305.13245}{arXiv:2305.13245}. \textit{Figure:} \texttt{gqa\_paper\_page\_2.png}.
+    \item Fedus et al., ``Switch Transformers: Scaling to Trillion Parameter Models'', JMLR 2022, \href{https://arxiv.org/abs/2101.03961}{arXiv:2101.03961}. \textit{Figure:} \texttt{switch\_moe\_page\_3.png}.
+    \item Dao et al., ``FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness'', NeurIPS 2022, \href{https://arxiv.org/abs/2205.14135}{arXiv:2205.14135}; FlashAttention-2, \href{https://arxiv.org/abs/2307.08691}{arXiv:2307.08691}. \textit{Benchmark plot:} \texttt{flash\_attention\_fwd.png}.
+    \item Liu et al., ``Visual Instruction Tuning'' (LLaVA), \href{https://arxiv.org/abs/2304.08485}{arXiv:2304.08485}. \textit{VLM example:} \texttt{llava\_vlm\_example.png}.
+  \end{enumerate}
+\end{frame}
+
+\input{sections/credits}
+
+\end{document}

@@ -1,0 +1,50 @@
+\section{Alignment Function}
+\begin{frame}{Alignment Function}
+  \begin{itemize}
+    \item The alignment function is a crucial component of attention mechanisms, determining how much focus to place on different parts of the input sequence.
+    \item It computes a score for each input token relative to the current output token being generated.
+    \item The scores are then normalized (often using softmax) to create a probability distribution, indicating the relative importance of each input token.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Alignment Function}
+  \textbf{Common alignment functions include:}
+      \begin{itemize}
+        \item \textbf{Dot Product}: Computes the dot product between the query and key vectors.
+        \item \textbf{Scaled Dot Product}: Similar to dot product but scaled by the square root of the dimension of the key vectors to prevent large values that can saturate the softmax function.
+        \item \textbf{Additive Attention}: Combines the query and key vectors using a feed-forward neural network to compute the alignment scores.
+      \end{itemize}
+\end{frame}
+
+\begin{frame}{Importance of Alignment Function}
+  \justifying
+  The choice of alignment function can significantly impact the model’s performance, especially in tasks with long sequences or complex dependencies.
+
+  \vspace{1em}
+  \small
+  \textbf{Example:} In a translation task, the alignment function helps the model determine which words in the source language should be emphasized when generating each word in the target language. For instance, when translating “The cat sat on the mat,” the model might focus more on “cat” when generating “gato” in Spanish, while still considering “sat” and “on” to maintain the context.
+\end{frame}
+
+\begin{frame}{Types of Alignment Functions}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Dot Product}: 
+      \begin{equation*}
+        \text{score} = \mathbf{q}^\top \mathbf{k}
+      \end{equation*}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Scaled Dot Product}:
+      \begin{equation*}
+        \text{score} = \frac{\mathbf{q}^\top \mathbf{k}}{\sqrt{d_k}}
+      \end{equation*}
+      \textit{(used in Transformers to prevent softmax saturation)}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Additive (Bahdanau) Attention}:
+      \begin{equation*}
+        \text{score} = \mathbf{v}^\top \tanh(W_1 h_1 + W_2 s_t)
+      \end{equation*}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{General}:
+      \begin{equation*}
+        \text{score} = \mathbf{q}^\top W_k \mathbf{k}
+      \end{equation*}
+  \end{itemize}
+  \vspace{1em}
+  \textbf{Each function balances efficiency vs expressiveness.}
+\end{frame}

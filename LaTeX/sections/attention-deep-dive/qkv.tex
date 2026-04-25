@@ -1,0 +1,90 @@
+\section{Query, Key, Value (QKV)}
+\begin{frame}{Query, Key, Value (QKV)}
+  \begin{itemize}
+    \item[$\blacktriangleright$] \textbf{Query:} What you want (the search)
+    \item[$\blacktriangleright$] \textbf{Key:} Index of content (where to look)
+    \item[$\blacktriangleright$] \textbf{Value:} Actual content (what you get)
+  \end{itemize}
+  \vspace{1em}
+  \textit{Intuition}
+  \begin{itemize}
+    \item[] Think of QKV like a search engine:
+    \begin{itemize}
+      \item[$\blacktriangleright$] \textbf{Query (Q):} Comes from the current decoder state (or token)
+      \item[$\blacktriangleright$] \textbf{Key (K)}, \textbf{Value (V):} Come from the encoder (or input sequence)
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% Slide 22
+\begin{frame}{QKV -- Formulation}
+\textbf{Given:}
+\begin{itemize}
+    \item[$\blacktriangleright$] Input sequence $\mathbf{X}$
+\end{itemize}
+\vspace{0.5em}
+\textbf{Linear projections:}
+\begin{align*}
+    \mathbf{Q} &= \mathbf{X} W_Q \\
+    \mathbf{K} &= \mathbf{X} W_K \\
+    \mathbf{V} &= \mathbf{X} W_V \\
+\end{align*}
+
+\vspace{0.5em}
+\textbf{Attention:}
+\begin{align*}
+    \mathrm{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \mathrm{softmax}\left(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d_k}}\right) \mathbf{V}
+\end{align*}
+\end{frame}
+
+% Slide 23
+\begin{frame}[Query, Key, Value (QKV) ]
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-5_Attention_Mechanism_Deep_Dive/pdf_page_023.png}
+\end{frame}
+
+% Slide 24
+\begin{frame}[Query, Key, Value (QKV)]
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-5_Attention_Mechanism_Deep_Dive/pdf_page_024.png}
+\end{frame}
+
+% Slide 25
+\begin{frame}[Query, Key, Value (QKV)]
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-5_Attention_Mechanism_Deep_Dive/pdf_page_025.png}
+\end{frame}
+
+% Slide 26
+\begin{frame}[Query, Key, Value (QKV)]
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-5_Attention_Mechanism_Deep_Dive/pdf_page_026.png}
+\end{frame}
+
+% Slide 27
+\begin{frame}[Query, Key, Value (QKV)]
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-5_Attention_Mechanism_Deep_Dive/pdf_page_027.png}
+\end{frame}
+
+% Slide 28
+\begin{frame}[Query, Key, Value (QKV)]
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-5_Attention_Mechanism_Deep_Dive/pdf_page_028.png}
+\end{frame}
+
+% Slide 29
+\begin{frame}[Query, Key, Value (QKV)]
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-5_Attention_Mechanism_Deep_Dive/pdf_page_029.png}
+\end{frame}
+
+% Slide 30
+\begin{frame}[plain]
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-5_Attention_Mechanism_Deep_Dive/pdf_page_030.png}\end{frame}
+
+% Slide 31
+\begin{frame}[plain]
+  \centering
+  \includegraphics[width=0.85\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-5_Attention_Mechanism_Deep_Dive/pdf_page_031.png}\end{frame}

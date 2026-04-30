@@ -1,4 +1,4 @@
-##  (2026-04-23)
+##  (2026-04-30)
 
 
 ### Features
@@ -35,5 +35,6 @@
 
 ### Bug Fixes
 
+* **path:** AutoEncoders images fix ([31594f2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/31594f2028908046772418e91cb38e1e79a2d932))
 * **path:** fixed a path for one of the images in the cifar lab ([c876999](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/c876999da623b8e7d6bf12b3c8e88d62cbeeaef7))
 

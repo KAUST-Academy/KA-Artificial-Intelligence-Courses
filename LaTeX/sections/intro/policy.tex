@@ -13,6 +13,22 @@
     
 \end{frame}
 
+\begin{frame}{Parameterized Policies}
+\begin{itemize}
+    \item In tabular settings, we can store $\pi(a|s)$ for every state explicitly
+    \item In large or continuous state spaces this is infeasible --- same curse of dimensionality problem
+    \item Instead, represent the policy as a parameterized function: $\pi_\theta(a|s)$
+    \item $\theta$ are learnable parameters (e.g., weights of a neural network)
+    \item The network takes state $s$ as input and outputs a probability distribution over actions
+    \item Learning RL then becomes: find $\theta^*$ that maximizes expected return
+    \item Two broad approaches:
+    \begin{itemize}
+        \item Learn a value function and derive the policy from it (Days 2, 5, 6)
+        \item Directly optimize $\theta$ to maximize return --- Policy Gradient methods (Day 3 onwards)
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
 \begin{frame}{The Optimal Policy}
 \begin{itemize}
     \item We want to find optimal policy $\bm{\pi^{\star}}$ that maximizes the sum of reward

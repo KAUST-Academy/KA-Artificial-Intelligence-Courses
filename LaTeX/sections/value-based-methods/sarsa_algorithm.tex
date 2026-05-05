@@ -33,8 +33,8 @@
 \begin{frame}{SARSA vs. Q-Learning}
     \begin{itemize}
         \item The SARSA algorithm is a slight variation of the Q-Learning algorithm.
-        \item Q-Learning is an \textbf{off-policy} method and uses a greedy approach to learn the Q-values.
-        \item SARSA, on the other hand, is an \textbf{on-policy} method and uses the action performed by the current policy to update the Q-values.
+        \item Q-Learning is \textbf{off-policy}: the Bellman update uses $\max_{a'} Q(s',a')$, which asks ``what is the \emph{best possible} action in $s'$?''---regardless of what the agent actually does.
+        \item SARSA is \textbf{on-policy}: the update uses $Q(s',a')$ where $a'$ is the action the current policy actually selects, so it learns from real experience, not hypothetical alternatives.
     \end{itemize}
     \pause
     \begin{equation*}
@@ -73,6 +73,7 @@
             \textbf{Feature} & \textbf{Q-Learning} & \textbf{SARSA} \\
             \hline
             Policy Type & Off-policy & On-policy \\
+            Learns From & Others' or past experience & Own current experience \\
             Target & $\max Q(s', a')$ & $Q(s', a')$ actually taken \\
             Exploration Aware & No & Yes \\
             Risk Sensitivity & More aggressive & More conservative \\
@@ -80,4 +81,6 @@
             \hline
         \end{tabular}
     \end{table}
+    \vspace{0.3em}
+    \small The on-policy vs.\ off-policy distinction is one of the most important axes in RL algorithm design and will appear in every remaining day of this course.
 \end{frame}

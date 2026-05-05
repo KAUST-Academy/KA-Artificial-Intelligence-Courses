@@ -1,0 +1,44 @@
+\section{Summary}
+\begin{frame}{}
+    \LARGE DQN Family \& SARSA: \textbf{Summary}
+\end{frame}
+
+\begin{frame}{When to Use Which Algorithm?}
+    \begin{table}[]
+        \centering
+        \renewcommand{\arraystretch}{2.5}
+        \begin{tabular}{lcc}
+            \hline
+            \textbf{Scenario} & \textbf{Recommended Algorithm} \\ \hline
+            Environment is stochastic & SARSA (conservative) \\ 
+            Maximizing reward is the priority & Q-Learning or DQN \\ 
+            Large state space (e.g., images) & DQN \\ 
+            Limited computational resources & SARSA (simpler model) \\ \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Future Directions}
+    \small
+    DQN works well but has known weaknesses. Each extension below addresses one specific problem. Together they form the DQN family.
+    \begin{itemize}
+        \setlength{\itemsep}{0.4em}
+        \item \textbf{Dueling DQN}: Splits $Q$ into $V(s)$ and $A(s,a)$---learns which states are valuable without evaluating every action.
+        \item \textbf{Prioritized Replay}: Samples transitions proportional to TD error instead of uniformly---prioritises what the network got wrong.
+        \item \textbf{Distributional RL}: Learns the full return distribution $Z(s,a)$, not just the expected value---richer signal, faster learning.
+        \item \textbf{Noisy Nets}: Replaces $\varepsilon$-greedy with learned noise in the weights---the network decides how much to explore.
+        \item \textbf{Rainbow}: Combines all of the above. Represents the practical ceiling of value-based methods.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Summary}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item SARSA is an on-policy alternative to Q-learning, using the action the agent actually takes rather than $\max_{a'} Q(s',a')$.
+        \item The on-policy vs.\ off-policy distinction is one of the most important axes in RL algorithm design.
+        \item Deep Q-Learning uses a neural network as a function approximator for Q-values, enabling RL on high-dimensional inputs.
+        \item Experience replay breaks correlation between consecutive samples; the target network stabilizes the moving target.
+        \item Double DQN decouples action selection from evaluation to reduce overestimation bias.
+        \item The DQN family extensions (Dueling, Prioritized Replay, Distributional, Noisy Nets, Rainbow) each address a specific weakness of vanilla DQN.
+    \end{itemize}
+\end{frame}

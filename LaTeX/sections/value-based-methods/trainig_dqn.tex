@@ -16,5 +16,6 @@
             \item Maintain a replay memory buffer of transitions $(s_t, a_t, r_t, s_{t+1})$ as episodes are played.
             \item Train the Q-network on random minibatches of transitions sampled from the replay memory, instead of using consecutive samples.
         \end{itemize}
+        \item Note: the replay buffer is a general off-policy tool---it is not specific to DQN.
     \end{itemize}
 \end{frame}

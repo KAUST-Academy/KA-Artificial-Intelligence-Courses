@@ -6,7 +6,7 @@
 \begin{frame}{Policy}
 \begin{itemize}
     \item Policy $\pi$ determines how the agent chooses actions
-    \item $\pi : S \rightarrow A$, mapping from states to actions
+    \item $\pi : \mathcal{S} \rightarrow \mathcal{A}$, mapping from states to actions
     \item Deterministic Policy: $$\pi(s) = a$$
     \item Stochastic Policy: $$\pi(a|s) = Pr(a_t = a | s_t = s)$$
 \end{itemize}
@@ -31,7 +31,7 @@
 
 \begin{frame}{The Optimal Policy}
 \begin{itemize}
-    \item We want to find optimal policy $\bm{\pi^{\star}}$ that maximizes the sum of reward
+    \item We want to find optimal policy $\pi^{\star}$ that maximizes the sum of reward
     \item But, how do we handle the randomness (initial state, transition probability…)?
     \pause
     \item \textbf{Solution}: Maximize the expected sum of rewards!

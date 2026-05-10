@@ -1,0 +1,22 @@
+\section{On-Policy vs.\ Off-Policy Learning}
+\begin{frame}{}
+    \LARGE Reinforcement Learning: \textbf{On-Policy vs.\ Off-Policy}
+\end{frame}
+
+\begin{frame}{On-Policy vs.\ Off-Policy Learning}
+\begin{itemize}
+    \item Recall from Day 2: SARSA is \textbf{on-policy} --- it updates using the action the current policy actually takes.
+    \item Q-learning is \textbf{off-policy} --- it updates using $\max_{a'} Q(s',a')$, regardless of what the policy does.
+    \pause
+    \item \textbf{REINFORCE is also on-policy:} it samples full trajectories under the current policy $\pi_\theta$ and uses them to estimate the gradient.
+    \item Once the policy parameters $\theta$ are updated, the old trajectories are discarded --- they came from a different policy and cannot be reused.
+    \pause
+    \item \textbf{Consequence:} REINFORCE cannot use an experience replay buffer.
+    \begin{itemize}
+        \item Replay stores transitions from past policies --- that is off-policy data.
+        \item Mixing off-policy data into an on-policy gradient estimate introduces bias.
+    \end{itemize}
+    \pause
+    \item This sample inefficiency is a core limitation of vanilla policy gradient methods and a key motivation for the algorithms we cover in Days 4 and 6.
+\end{itemize}
+\end{frame}

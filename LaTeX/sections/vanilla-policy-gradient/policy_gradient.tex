@@ -29,9 +29,29 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Policy Parameterization: What Does $\pi_\theta$ Look Like?}
+    \begin{itemize}
+        \item \textbf{Discrete actions} --- Softmax policy:
+        \[
+            \pi_\theta(a \mid s) = \frac{e^{\phi(s,a)^\top \theta}}{\sum_{a'} e^{\phi(s,a')^\top \theta}}
+        \]
+        The network outputs one logit per action; softmax converts them to probabilities.
+        \pause
+        \item \textbf{Continuous actions} --- Gaussian policy:
+        \[
+            \pi_\theta(a \mid s) = \mathcal{N}\!\left(\mu_\theta(s),\, \sigma_\theta(s)^2\right)
+        \]
+        The network outputs a mean and standard deviation; actions are sampled from the resulting Gaussian.
+        \pause
+        \item The Gaussian policy will be central to continuous-control algorithms (Days 5--6).
+        \item Both are differentiable w.r.t.\ $\theta$, which is what makes gradient ascent possible.
+    \end{itemize}
+\end{frame}
+
 \begin{frame}{Policy Gradients}
     \begin{figure}
         \centering
-        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1400/1*94EI9DpoXnWa6oLHvh14pw.jpeg}{images/policygrad+reinforce+actor/policy_gradient.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1400/1*94EI9DpoXnWa6oLHvh14pw.jpeg}{images/vanilla-policy-gradient/policy_gradient.png}{width=\textwidth,height=0.85\textheight,keepaspectratio}
     \end{figure}
+    \footnotetext{Note: this diagram uses $u$ for actions and $\pi(u|s)$; equivalent to $a$ and $\pi(a|s)$ throughout this course.}
 \end{frame}

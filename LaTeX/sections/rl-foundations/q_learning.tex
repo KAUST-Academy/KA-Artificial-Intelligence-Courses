@@ -17,18 +17,18 @@
         \item Each time we sample consecutive states and actions $(s_t, a_t, s_{t+1})$
     \end{itemize}
 
-    $$Q(s_t,a_t) \leftarrow Q(s_t,a_t) + \alpha \underbrace{\left [ r(s,a) + \gamma \max_{a'} Q(s_{t+1},a') - Q(s_t,a_t) \right ]}_{\text{Bellman Error}}$$
+    $$Q(s_t,a_t) \leftarrow Q(s_t,a_t) + \alpha \underbrace{\left [ r_t + \gamma \max_{a'} Q(s_{t+1},a') - Q(s_t,a_t) \right ]}_{\text{Bellman Error}}$$
     
 \end{frame}
 
 \begin{frame}{From Bellman Equation to Q-Learning: The Bridge (1/2)}
 \begin{itemize}
-    \item The optimal Bellman equation tells us what $Q^*$ must satisfy:
-    $$Q^*(s,a) = r(s,a) + \gamma \max_{a'} Q^*(s',a')$$
-    \item We do not know $Q^*$ --- but we can define a target for any current estimate $Q$:
+    \item The optimal Bellman equation tells us what $Q^{\star}$ must satisfy:
+    $$Q^{\star}(s,a) = r(s,a) + \gamma \max_{a'} Q^{\star}(s',a')$$
+    \item We do not know $Q^{\star}$ --- but we can define a target for any current estimate $Q$:
     $$\text{Target} = r(s,a) + \gamma \max_{a'} Q(s',a')$$
-    \item If $Q = Q^*$ then Target $= Q(s,a)$ --- there is no error
-    \item If $Q \neq Q^*$ then (Target $- Q(s,a)$) is the \textbf{Bellman error} --- the gap between what our estimate predicts and what the Bellman equation says it should be
+    \item If $Q = Q^{\star}$ then Target $= Q(s,a)$ --- there is no error
+    \item If $Q \neq Q^{\star}$ then (Target $- Q(s,a)$) is the \textbf{Bellman error} --- the gap between what our estimate predicts and what the Bellman equation says it should be
 \end{itemize}
 \end{frame}
 
@@ -69,14 +69,14 @@
 
 \begin{frame}{Convergence Properties}
     \begin{itemize}
-        \item Q-learning converges to the optimal action-value function $Q^*$ under certain conditions:
+        \item Q-learning converges to the optimal action-value function $Q^{\star}$ under certain conditions:
         \begin{itemize}
             \item \textbf{Sufficient exploration:} Every state-action pair is visited infinitely often.
             \item \textbf{Learning rate:} The learning rate $\alpha$ decays appropriately, i.e., $\alpha \to 0$ as the number of visits increases, but $\sum_t \alpha_t = \infty$ and $\sum_t \alpha_t^2 < \infty$.
             \item \textbf{Finite MDP:} The environment is a finite Markov Decision Process.
         \end{itemize}
         \item In plain terms: $\alpha$ must be large enough that the agent keeps learning ($\sum \alpha_t = \infty$, so it does not stop updating), but must shrink fast enough that the random noise in updates averages out ($\sum \alpha_t^2 < \infty$). In practice, a constant small $\alpha$ (e.g., 0.001) is almost always used instead --- convergence guarantees are lost but the algorithm works well empirically.
-        \item Under these conditions, Q-learning is guaranteed to converge to $Q^*$ with probability 1.
+        \item Under these conditions, Q-learning is guaranteed to converge to $Q^{\star}$ with probability 1.
     \end{itemize}
 \end{frame}
 

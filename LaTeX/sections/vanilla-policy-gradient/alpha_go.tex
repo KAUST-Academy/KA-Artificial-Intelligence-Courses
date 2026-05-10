@@ -1,0 +1,29 @@
+\section{Policy Gradients in Action: AlphaGo Zero}
+\begin{frame}{}
+    \LARGE Policy Gradients in Action: \textbf{AlphaGo Zero}
+\end{frame}
+
+\begin{frame}{Policy Gradients in Action: AlphaGo Zero}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth,height=0.6\textheight,keepaspectratio]{images/vanilla-policy-gradient/alphago.png}
+\end{figure}
+\begin{itemize}
+    \item AlphaGo Zero (2017) reaches superhuman Go play with \textbf{no human data} --- pure self-play using policy gradients
+    \item A cleaner demonstration of REINFORCE-style learning than the original AlphaGo, which relied on supervised pretraining from human games
+\end{itemize}
+\footnotetext{Silver et al., \textit{Mastering the game of Go without human knowledge}, Nature 550, 354--359 (2017)}
+\end{frame}
+
+\begin{frame}{Policy Gradients in Action: AlphaGo Zero}
+\begin{itemize}
+    \setlength{\itemsep}{0.8em}
+    \large
+    \item \textbf{No human games:} policy network initialised randomly; improves entirely through self-play
+    \item \textbf{Policy gradient training:} actions sampled from the policy; wins (+1) and losses (--1) provide the reward signal
+    \item \textbf{Value network:} learns to estimate board outcome from any position, acting as the critic
+    \item \textbf{Monte Carlo Tree Search:} combines policy and value networks for lookahead at inference time
+    \item Surpassed the original AlphaGo within 40 days of training
+\end{itemize}
+\footnotetext{Silver et al., \textit{Mastering the game of Go without human knowledge}, Nature 550, 354--359 (2017)}
+\end{frame}

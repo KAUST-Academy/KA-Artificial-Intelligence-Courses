@@ -1,0 +1,48 @@
+\section{Summary}
+\begin{frame}{}
+    \LARGE Reinforcement Learning: \textbf{Summary}
+\end{frame}
+
+\begin{frame}{Comparison of Methods}
+    \begin{table}[]
+        \centering
+        \renewcommand{\arraystretch}{2.5}
+        \begin{tabular}{lllll}
+            \hline
+            \textbf{Method} & \textbf{Policy Type} & \textbf{Gradient Source} & \textbf{Stability} & \textbf{Efficiency} \\
+            \hline
+            Q-learning    & Deterministic & Value gradients         & Medium & High \\
+            REINFORCE     & Stochastic    & Monte Carlo returns     & Low    & Low  \\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{frame}
+
+\begin{frame}{Limitations of REINFORCE}
+    \begin{itemize}
+        \item \textbf{High variance} in gradient estimates --- Monte Carlo returns are noisy.
+        \item \textbf{Sample inefficiency} --- on-policy: each trajectory is used once and discarded.
+        \item \textbf{Slow convergence} --- many samples needed before the signal-to-noise ratio is acceptable.
+        \item \textbf{No credit assignment} across timesteps beyond the causality trick and discounting.
+        \item Variance reduction techniques (baselines, advantage) help but do not fully solve these issues.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{What's Next}
+    \begin{itemize}
+        \item \textbf{Day 4 --- Actor-Critic \& PPO:} Combine a learned critic $V^{\pi}$ with the policy gradient to reduce variance. Build up to A2C, TRPO, and PPO.
+        \item \textbf{Day 5 --- DDPG:} Extend to deterministic policies for continuous action spaces.
+        \item \textbf{Day 6 --- SAC:} Add an \textbf{entropy bonus} $\mathcal{H}(\pi_\theta(\cdot|s))$ to the reward signal --- encouraging exploration while maximizing return.
+        \item \textbf{Days 7--10:} Exploration, model-based planning, RLHF, and open problems.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{itemize}
+    \item It can be hard to learn the exact Q-value for every (state, action) pair in high-dimensional state and action spaces.
+    \item However, we can just learn a policy that maximizes the reward.
+    \item We can use gradient ascent on policy parameters.
+    \item However, this can suffer from high variance. Various strategies exist to tackle this: causality, discounting, baselines, and the advantage function.
+    \item \textit{Next: Day 4 introduces Actor-Critic methods, which learn a critic $V^{\pi}$ alongside the policy to make advantage estimation practical.}
+\end{itemize}
+\end{frame}

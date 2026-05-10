@@ -15,11 +15,11 @@
 
 \begin{frame}{REINFORCE}
 \begin{itemize}
-    \item Expected reward:
+    \item Expected reward, where $r(\tau) := \sum_{t \geq 0} \gamma^t r_t$ is the discounted trajectory return:
         \begin{equation*}
         \begin{split}
             \mathcal{J}(\theta) & = \mathbb{E}_{\tau \sim p(\tau;\theta)}\left[ r(\tau) \right] \\
-            & = \int_\tau r(\tau) p(\tau;\theta) d\tau 
+            & = \int_\tau r(\tau) p(\tau;\theta) d\tau
         \end{split}
         \end{equation*}
     \pause
@@ -97,13 +97,14 @@
 \begin{frame}{REINFORCE}
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/policygrad+reinforce+actor/reinforce.png}
+        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/vanilla-policy-gradient/reinforce.png}
     \end{figure}
 \end{frame}
 
 \begin{frame}{REINFORCE Cycle}
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/policygrad+reinforce+actor/reinforce_cycle.png}
+        \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{images/vanilla-policy-gradient/reinforce_cycle.png}
     \end{figure}
+    \footnotetext{Note: the diagram mentions TensorFlow/Keras; in this course we use PyTorch. The steps are framework-agnostic.}
 \end{frame}

@@ -18,6 +18,8 @@
         \item Bellman equation: Recursively defines value and Q-value functions.
         \item Q-learning: Updates Q-values to reduce Bellman error.
         \item Deep Q-Learning: Uses neural networks to approximate Q-values.
-        \item SARSA: On-policy version of Q-learning.
+        \item SARSA: On-policy version of Q-learning (learns from actions the policy actually takes).
+        \item Deterministic vs.\ Stochastic policy: $\pi(s) = a$ vs.\ $\pi(a|s) = \Pr(a_t = a \mid s_t = s)$.
+        \item Advantage function: $A^{\pi}(s,a) = Q^{\pi}(s,a) - V^{\pi}(s)$ — how much better an action is than average in that state.
     \end{itemize}
 \end{frame}

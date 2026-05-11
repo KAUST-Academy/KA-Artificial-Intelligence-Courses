@@ -1,8 +1,9 @@
-##  (2026-04-23)
+##  (2026-05-07)
 
 
 ### Features
 
+* add new lab ([8e7ba73](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/8e7ba738aa1a499237fdb81cef9bf76e3dbee177))
 * **Homeworks:** All ML Homeworks done ([b853257](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/b853257c5eb1ad82def3b713b6c54300deea3482))
 * **Homeworks:** Asthma_Detection_with_WaveNet_Homework_Assignment ([518b6be](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/518b6be87a7efe901b67bfb032710ad843639185))
 * **Homeworks:** CLIP from Scratch. ([0857159](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/0857159bb999d347c70d1b46e1ff86d65d66ec17))
@@ -35,5 +36,6 @@
 
 ### Bug Fixes
 
+* **path:** AutoEncoders images fix ([31594f2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/31594f2028908046772418e91cb38e1e79a2d932))
 * **path:** fixed a path for one of the images in the cifar lab ([c876999](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/c876999da623b8e7d6bf12b3c8e88d62cbeeaef7))
 

@@ -1,0 +1,14 @@
+\begin{frame}{A3C: Asynchronous Variant}
+\begin{itemize}
+    \item \textbf{A3C} (Mnih et al., 2016): Asynchronous Advantage Actor-Critic
+    \item Workers run asynchronously on CPU threads, applying gradients to a shared model without locks (Hogwild-style updates)
+    \item The asynchrony acts as an implicit decorrelation mechanism --- each worker is at a different point in its trajectory
+    \pause
+    \item \textbf{In practice:} A2C (synchronous) performs at least as well as A3C and is simpler to implement and reproduce
+    \item A3C's asynchrony introduces \textbf{gradient staleness}: a worker may apply a gradient computed under an older version of $\theta$
+    \pause
+    \item \textbf{Going forward:} we use A2C as the basis for PPO; A3C is historical context
+    \pause
+    \item But parallel actors only \emph{accelerate} data collection --- they do not fix the underlying issue that \textbf{a single gradient step can still destroy the policy}. That motivates the next section.
+\end{itemize}
+\end{frame}

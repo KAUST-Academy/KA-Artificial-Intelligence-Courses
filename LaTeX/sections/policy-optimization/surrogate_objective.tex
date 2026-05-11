@@ -1,0 +1,20 @@
+\section{Surrogate Objective}
+\begin{frame}{Surrogate Objective \& Importance Sampling}
+\begin{itemize}
+    \item \textbf{Relative policy performance identity:} the improvement of $\pi_{\theta}$ over $\pi_{\theta_\text{old}}$ can be written as:
+    $$\mathcal{J}(\theta) - \mathcal{J}(\theta_\text{old}) = \mathbb{E}_{\tau \sim \pi_\theta}\!\left[\sum_{t \geq 0} \gamma^t A^{\pi_{\theta_\text{old}}}(s_t, a_t)\right]$$
+    \item Since we collect data under $\pi_{\theta_\text{old}}$, re-weight via importance sampling. Define the probability ratio:\footnotemark
+    $$r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_\text{old}}(a_t|s_t)}$$
+    \item This gives the \textbf{surrogate objective}:
+    $$\mathcal{L}(\theta) = \mathbb{E}_t\!\left[ r_t(\theta)\, A^{\pi_{\theta_\text{old}}}(s_t, a_t) \right]$$
+\end{itemize}
+\footnotetext{$r_t(\theta)$ here is the probability ratio, not the reward $r_t$ from earlier lectures --- distinguished by the $\theta$ argument.}
+\end{frame}
+
+\begin{frame}{Surrogate Objective: Why It Needs a Constraint}
+\begin{itemize}
+    \item \textbf{Problem:} if $\pi_\theta$ drifts far from $\pi_{\theta_\text{old}}$, the ratio $r_t(\theta)$ explodes and the estimate becomes unreliable
+    \item \textbf{Solution:} \textbf{constrain how far $\pi_\theta$ can move} from $\pi_{\theta_\text{old}}$
+    \item Next we make this precise: \textit{why} the surrogate is principled in the first place, and \textit{why} importance sampling specifically demands a constraint --- before turning to TRPO and PPO, which both implement the constraint in different ways
+\end{itemize}
+\end{frame}

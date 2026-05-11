@@ -1,0 +1,20 @@
+\begin{frame}{Actor-Critic Algorithm}
+\begin{columns}
+\begin{column}{0.55\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{images/policy-optimization/a2c.png}
+\end{figure}
+\end{column}
+\begin{column}{0.42\textwidth}
+\begin{itemize}
+    \item \textbf{Actor update} (policy gradient):
+    $$\theta \leftarrow \theta + \alpha_\theta\, \nabla_\theta \log \pi_\theta(a_t|s_t)\, \delta_t$$
+    \item \textbf{Critic update} (TD learning):
+    $$\phi \leftarrow \phi - \alpha_\phi\, \delta_t\, \nabla_\phi V_\phi(s_t)$$
+    \item where $\delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$
+    \item Updates happen \textbf{at every timestep} --- no full trajectory needed
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}

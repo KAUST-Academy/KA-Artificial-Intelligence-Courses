@@ -48,15 +48,15 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{$\epsilon$-Greedy Policy}
+\begin{frame}{$\varepsilon$-Greedy Policy}
 \begin{itemize}
-    \item Simple solution: $\epsilon$-greedy policy
+    \item Simple solution: $\varepsilon$-greedy policy
     \begin{itemize}
-        \item With probability $1 - \epsilon$, choose the optimal action according to Q
-        \item With probability $\epsilon$, choose a random action
+        \item With probability $1 - \varepsilon$, choose the optimal action according to Q
+        \item With probability $\varepsilon$, choose a random action
     \end{itemize}
-    \item $\epsilon$-greedy policy still widely used today regardless of simplicity
-    \item Key practical consideration: $\epsilon$ is often annealed over training --- starting high (lots of exploration early on) and decaying toward a small value (mostly exploitation once $Q$ is well-estimated). We will revisit exploration more rigorously on Day 7.
+    \item $\varepsilon$-greedy policy still widely used today regardless of simplicity
+    \item Key practical consideration: $\varepsilon$ is often annealed over training --- starting high (lots of exploration early on) and decaying toward a small value (mostly exploitation once $Q$ is well-estimated). We will revisit exploration more rigorously on Day 7.
 \end{itemize}
 \end{frame}
 

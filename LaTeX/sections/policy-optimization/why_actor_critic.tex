@@ -1,0 +1,11 @@
+\begin{frame}{Why Actor-Critic Helps}
+\begin{itemize}
+    \item \textbf{Variance reduction vs REINFORCE:} the TD residual $\delta_t$ is a much lower-variance signal than $G_t - b$ because it bootstraps off $V_\phi$ rather than waiting for the full trajectory
+    \item \textbf{Online updates:} no need to wait until the end of an episode --- the critic provides a training signal at every timestep
+    \item \textbf{Bootstrapping:} propagating value estimates forward allows the agent to learn from partial trajectories and even in continuing (non-episodic) tasks
+    \pause
+    \item \textbf{Trade-off:} if $V_\phi$ is a bad critic, the TD residual is a biased advantage estimate --- the actor is being guided by a noisy critic
+    \item Both networks must be trained together carefully; instability can arise if the critic lags the actor
+    \item This is the bias-variance trade-off formalised by GAE
+\end{itemize}
+\end{frame}

@@ -1,0 +1,18 @@
+\begin{frame}{What's Next: Day 5}
+\begin{itemize}
+    \item PPO is the workhorse of on-policy RL: stable, simple, widely deployed
+    \item \textbf{Key limitation:} on-policy methods discard all experience after each update --- data-hungry for complex environments
+    \pause
+    \item \textbf{Day 5 --- DDPG \& TD3:} deterministic policies for continuous action spaces
+    \begin{itemize}
+        \item Keep a \textbf{replay buffer} and reuse experience across many updates (off-policy)
+        \item Critic becomes $Q_\phi(s,a)$ (action-value, not state-value)
+        \item Actor becomes a \textbf{deterministic} policy $\mu_\theta(s)$ --- gradient flows through $Q_\phi(s, \mu_\theta(s))$
+    \end{itemize}
+    \item \textbf{Day 6 --- SAC:} max-entropy Actor-Critic
+    \begin{itemize}
+        \item Stochastic policy with an explicit entropy bonus in the objective
+        \item SAC's entropy term is the same $c_2 \mathcal{H}(\pi_\theta)$ you saw in PPO --- but now it is \textbf{central} to the algorithm
+    \end{itemize}
+\end{itemize}
+\end{frame}

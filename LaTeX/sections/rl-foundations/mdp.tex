@@ -10,8 +10,9 @@
         \begin{itemize}
             \item $\mathcal{S}$: set of possible states
             \item $\mathcal{A}$: set of possible actions
-            \item $R(s,a)$: reward distribution given a (state, action) pair
-            \item $P(s' \mid s, a)$: transition probability, i.e., distribution over next state given a (state, action) pair
+\item $R(s,a)$: reward distribution given a (state, action) pair
+        \item $P(s' \mid s, a)$: transition probability, i.e., distribution over next state given a (state, action) pair
+        \item \textit{Notation:} we write $r(s,a) = \mathbb{E}[R(s,a)]$ for the expected reward and $p(s' \mid s,a)$ for the transition density. These lowercase forms appear in the Bellman equations and throughout the rest of the course.
             \item $\gamma$: discount factor
         \end{itemize}
         \item Assumes the \textbf{Markov property}: the next state depends only on the current state and action.

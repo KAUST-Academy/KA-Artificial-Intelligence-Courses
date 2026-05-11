@@ -73,5 +73,5 @@
     \item It is unbiased, and it provides lower variance than a fixed moving-average baseline.
 \end{itemize}
 \vspace{0.5em}
-\textit{How to estimate $A^{\pi}$ in practice? We only need to learn $V^{\pi}$: the TD residual $r_t + \gamma V^{\pi}(s_{t+1}) - V^{\pi}(s_t)$ approximates $A^{\pi}(s_t, a_t)$, so $Q^{\pi}$ never needs to be estimated explicitly. This is covered on Day 4.}
+\textit{How to estimate $A^{\pi}$ in practice? We only need to learn $V_\phi$: the TD residual $r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$ approximates $A^{\pi}(s_t, a_t)$, so $Q^{\pi}$ never needs to be estimated explicitly. This is covered on Day 4.}
 \end{frame}

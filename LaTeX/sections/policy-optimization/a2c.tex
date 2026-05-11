@@ -1,0 +1,14 @@
+\section{A2C and A3C}
+\begin{frame}{A2C: Synchronous Advantage Actor-Critic}
+\begin{itemize}
+    \item \textbf{Key idea:} run $N$ parallel actors sharing the same $\theta$ and $\phi$
+    \item All actors step simultaneously; gradients are aggregated and a single synchronous update is applied
+    \item The shared critic sees diverse experience from all environments --- more stable training signal
+    \vspace{0.5em}
+    \item \textbf{Policy loss:} $\mathcal{L}^{\pi}(\theta) = -\mathbb{E}_t\!\left[\log \pi_\theta(a_t|s_t)\, \hat{A}_t\right]$
+    \item \textbf{Value loss:} $\mathcal{L}^{V}(\phi) = \mathbb{E}_t\!\left[\delta_t^2\right]$
+    \vspace{0.5em}
+    \item A2C is what most modern Actor-Critic implementations actually use
+    \item Parallel actors de-correlate experience without a replay buffer (on-policy)
+\end{itemize}
+\end{frame}

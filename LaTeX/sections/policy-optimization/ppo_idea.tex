@@ -1,0 +1,18 @@
+\section{Proximal Policy Optimization (PPO)}
+\begin{frame}{}
+    \LARGE Policy Optimization: \textbf{PPO}
+\end{frame}
+
+\begin{frame}{PPO: First-Order Trust Region}
+\begin{itemize}
+    \item TRPO achieves monotonic improvement but requires second-order optimisation (conjugate gradient, Fisher matrix) --- expensive and complex to implement
+    \item \textbf{Question:} can we get TRPO-level stability with plain SGD?
+    \pause
+    \item \textbf{PPO} (Schulman et al., 2017) proposes two variants:
+    \begin{itemize}
+        \item \textbf{PPO-KL:} add a KL penalty to the objective and adapt the penalty coefficient $\beta$ over training
+        \item \textbf{PPO-Clip:} clip the probability ratio $r_t(\theta)$ to prevent large policy updates
+    \end{itemize}
+    \item PPO-Clip is the standard variant --- simpler, no hyperparameter tuning on $\beta$, works at least as well empirically
+\end{itemize}
+\end{frame}

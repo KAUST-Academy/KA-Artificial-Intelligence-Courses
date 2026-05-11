@@ -1,0 +1,48 @@
+% Adjust the aspect ratio and font size as needed
+\documentclass[10pt, aspectratio=149]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+\title[Policy Optimization]{Policy Optimization: Actor-Critic to PPO}
+
+\begin{document}
+
+% Include sections
+\input{sections/cover}
+\input{sections/policy-optimization/cover}
+\input{sections/toc}
+\input{sections/policy-optimization/recap}
+\input{sections/policy-optimization/learning_outcomes}
+% Part 1: Actor-Critic
+\input{sections/policy-optimization/two_worlds}
+\input{sections/policy-optimization/baselines_to_critics}
+\input{sections/policy-optimization/td_advantage}
+\input{sections/policy-optimization/gae_preview}
+\input{sections/policy-optimization/actor_critic_algorithm}
+\input{sections/policy-optimization/why_actor_critic}
+% Part 2: A2C/A3C overview
+\input{sections/policy-optimization/a2c}
+\input{sections/policy-optimization/a3c}
+% Part 3: Trust region motivation
+\input{sections/policy-optimization/step_size_matters}
+\input{sections/policy-optimization/surrogate_objective}
+\input{sections/policy-optimization/theoretical_foundations}
+% Part 4: TRPO overview
+\input{sections/policy-optimization/trpo}
+% Part 5: PPO focus
+\input{sections/policy-optimization/ppo_idea}
+\input{sections/policy-optimization/ppo_clipped_objective}
+\input{sections/policy-optimization/ppo_clip_visualization}
+\input{sections/policy-optimization/ppo_algorithm}
+\input{sections/policy-optimization/ppo_empirical}
+% Wrap
+\input{sections/policy-optimization/summary}
+\input{sections/policy-optimization/whats_next}
+\input{sections/policy-optimization/references}
+
+\input{sections/credits}
+
+\end{document}

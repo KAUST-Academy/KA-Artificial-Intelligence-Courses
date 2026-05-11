@@ -1,0 +1,24 @@
+\section{Recap}
+\begin{frame}{}
+    \LARGE Policy Optimization: \textbf{Recap (Day 3)}
+\end{frame}
+
+\begin{frame}{Recap: What Day 3 Established}
+\begin{itemize}
+    \item The policy gradient theorem gives us:
+    $$\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t \geq 0} \nabla_\theta \log \pi_\theta(a_t|s_t)\, A^{\pi}(s_t, a_t) \right]$$
+    \item $A^{\pi}(s,a) = Q^{\pi}(s,a) - V^{\pi}(s)$ is the \textbf{advantage function} --- the optimal baseline
+    \item Using $A^{\pi}$ instead of raw returns reduces variance without introducing bias
+    \item \textbf{Unresolved question:} how do we estimate $A^{\pi}$ in practice?
+    \item Day 3 noted: we only need $V^{\pi}$, since the TD residual $\delta_t = r_t + \gamma V^{\pi}(s_{t+1}) - V^{\pi}(s_t)$ approximates $A^{\pi}$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Recap: What Today Delivers}
+\begin{itemize}
+    \item \textbf{Today we cash that promise.}
+    \item We learn a critic $V_\phi$ alongside the policy --- this is the \textbf{Actor-Critic} architecture
+    \item The critic is trained via TD learning; the TD residual $\delta_t$ serves as an online, low-variance estimate of $A^{\pi}$
+    \item Then we scale up: A2C/A3C $\rightarrow$ trust region (TRPO) $\rightarrow$ clipped objective (PPO)
+\end{itemize}
+\end{frame}

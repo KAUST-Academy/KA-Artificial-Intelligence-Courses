@@ -16,7 +16,7 @@
         \begin{itemize}
             \item Learn policy parameters directly to maximize expected return:
             \[
-                \mathcal{J}(\theta) = \mathbb{E}_{\pi_\theta}[R]
+                \mathcal{J}(\theta) = \mathbb{E}_{\pi_\theta}\!\left[\sum_{t \geq 0} \gamma^t r_t\right]
             \]
         \end{itemize}
     \end{itemize}

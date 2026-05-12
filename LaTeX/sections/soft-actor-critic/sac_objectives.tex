@@ -1,0 +1,44 @@
+\begin{frame}{SAC: Objectives and Optimization}
+\begin{itemize}
+    \item \textbf{Critic --- Soft Q-function}
+    \begin{itemize}
+        \item minimize square error
+        \item $\bar{\theta}$ exponential moving average of soft Q-function weights to stabilize training (DQN)
+    \end{itemize}
+\end{itemize}
+\[
+J_Q(\theta) = \mathbb{E}_{(\mathbf{s}_t, \mathbf{a}_t) \sim \mathcal{D}}\!\left[\, \tfrac{1}{2}\Big( Q_\theta(\mathbf{s}_t, \mathbf{a}_t) - \big( r(\mathbf{s}_t, \mathbf{a}_t) + \gamma\, \mathbb{E}_{\mathbf{s}_{t+1} \sim p}\!\left[ V_{\bar{\theta}}(\mathbf{s}_{t+1}) \right] \big) \Big)^{2} \,\right]
+\]
+\[
+V(\mathbf{s}_t) = \mathbb{E}_{\mathbf{a}_t \sim \pi}\!\left[ Q(\mathbf{s}_t, \mathbf{a}_t) - \alpha \log \pi(\mathbf{a}_t \mid \mathbf{s}_t) \right]
+\]
+\[
+\hat{\nabla}_\theta J_Q(\theta) = \nabla_\theta Q_\theta(\mathbf{a}_t, \mathbf{s}_t)\big( Q_\theta(\mathbf{s}_t, \mathbf{a}_t) - \big( r(\mathbf{s}_t, \mathbf{a}_t) + \gamma\big( Q_{\bar\theta}(\mathbf{s}_{t+1}, \mathbf{a}_{t+1}) - \alpha \log(\pi_\phi(\mathbf{a}_{t+1} \mid \mathbf{s}_{t+1})) \big) \big) \big)
+\]
+\end{frame}
+\begin{frame}{SAC: Objectives and Optimization}
+\begin{itemize}
+    \item \textbf{Actor --- Policy} \hfill
+    $\displaystyle \pi_{\text{new}} = \arg\min_{\pi' \in \Pi} D_{\mathrm{KL}}\!\left( \pi'(\,\cdot \mid \mathbf{s}_t) \,\Big\|\, \frac{\exp\!\left(\tfrac{1}{\alpha} Q^{\pi_{\text{old}}}(\mathbf{s}_t, \,\cdot)\right)}{Z^{\pi_{\text{old}}}(\mathbf{s}_t)} \right)$
+    \vspace{0.5em}
+    \item multiply by alpha and ignoring the normalization $Z$
+\end{itemize}
+\[
+J_\pi(\phi) = \mathbb{E}_{\mathbf{s}_t \sim \mathcal{D}}\!\left[ \mathbb{E}_{\mathbf{a}_t \sim \pi_\phi}\!\left[ \alpha \log(\pi_\phi(\mathbf{a}_t \mid \mathbf{s}_t)) - Q_\theta(\mathbf{s}_t, \mathbf{a}_t) \right] \right]
+\]
+\begin{itemize}
+    \item reparameterize with neural network $f$\quad $\mathbf{a}_t = f_\phi(\epsilon_t; \mathbf{s}_t)$
+    \begin{itemize}
+        \item epsilon: input noise vector, sampled from a fixed distribution (spherical Gaussian)
+    \end{itemize}
+\end{itemize}
+\[
+J_\pi(\phi) = \mathbb{E}_{\mathbf{s}_t \sim \mathcal{D},\, \epsilon_t \sim \mathcal{N}}\!\left[ \alpha \log \pi_\phi(f_\phi(\epsilon_t; \mathbf{s}_t) \mid \mathbf{s}_t) - Q_\theta(\mathbf{s}_t, f_\phi(\epsilon_t; \mathbf{s}_t)) \right]
+\]
+\[
+\hat{\nabla}_\phi J_\pi(\phi) = \nabla_\phi \alpha \log(\pi_\phi(\mathbf{a}_t \mid \mathbf{s}_t)) + \big( \nabla_{\mathbf{a}_t} \alpha \log(\pi_\phi(\mathbf{a}_t \mid \mathbf{s}_t)) - \nabla_{\mathbf{a}_t} Q(\mathbf{s}_t, \mathbf{a}_t) \big) \nabla_\phi f_\phi(\epsilon_t; \mathbf{s}_t)
+\]
+\begin{itemize}
+    \item \textbf{Unbiased gradient estimator that extends DDPG stype policy gradients to any tractable stochastic policy}
+\end{itemize}
+\end{frame}

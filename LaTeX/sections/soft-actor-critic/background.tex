@@ -1,0 +1,72 @@
+\section{Background}
+\begin{frame}{Background: On-Policy vs.\ Off-Policy}
+\begin{itemize}
+    \item \textbf{On-policy learning:} use the deterministic outcomes or samples from the target policy to train the algorithm
+    \begin{itemize}
+        \item has low sample efficiency (TRPO, PPO, A3C)
+        \item require new samples to be collected for nearly every update to the policy
+        \item becomes extremely expensive when the task is complex
+    \end{itemize}
+    \item \textbf{Off-policy methods:} training on a distribution of transitions or episodes produced by a different behavior policy rather than that produced by the target policy
+    \begin{itemize}
+        \item Does not require full trajectories and can reuse any past episodes (experience replay) for much better sample efficiency
+        \item relatively straightforward for Q-learning based methods
+    \end{itemize}
+\end{itemize}
+\end{frame}
+\begin{frame}{Background: Bellman Equation}
+\begin{itemize}
+    \item \textbf{Value Function:} How good is a state?
+\end{itemize}
+\begin{align*}
+V(s) &= \mathbb{E}[G_t \mid S_t = s] \\
+     &= \mathbb{E}[R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \ldots \mid S_t = s] \\
+     &= \mathbb{E}[R_{t+1} + \gamma (R_{t+2} + \gamma R_{t+3} + \ldots) \mid S_t = s] \\
+     &= \mathbb{E}[R_{t+1} + \gamma G_{t+1} \mid S_t = s] \\
+     &= \mathbb{E}[\underbrace{R_{t+1} + \gamma V(S_{t+1})}_{\textcolor{red}{\text{temporal difference target}}} \mid S_t = s]
+\end{align*}
+\begin{itemize}
+    \item Similarly, for \textbf{Q-Function:} How good is a state-action pair?
+\end{itemize}
+\begin{align*}
+Q(s,a) &= \mathbb{E}[R_{t+1} + \gamma V(S_{t+1}) \mid S_t = s, A_t = a] \\
+       &= \mathbb{E}[R_{t+1} + \gamma\, \mathbb{E}_{a \sim \pi} Q(S_{t+1}, a) \mid S_t = s, A_t = a]
+\end{align*}
+\end{frame}
+\begin{frame}{Background: Value-Based Method}
+\begin{itemize}
+    \item $\ldots, S_t, A_t, R_{t+1}, S_{t+1}, A_{t+1}, \ldots$ \textbf{(on-policy):}
+\end{itemize}
+\[
+Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha\big( R_{t+1} + \gamma Q(S_{t+1}, A_{t+1}) - Q(S_t, A_t) \big)
+\]
+\begin{itemize}
+    \item \textbf{Q-Learning (off-policy)}
+\end{itemize}
+\[
+Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha\big( R_{t+1} + \gamma \max_{a \in \mathcal{A}} Q(S_{t+1}, a) - Q(S_t, A_t) \big)
+\]
+\begin{itemize}
+    \item \textbf{DQN}, Minh et al., 2015
+\end{itemize}
+\[
+\mathcal{L}(\theta) = \mathbb{E}_{(s,a,r,s') \sim U(D)}\!\left[ \Big( r + \gamma \max_{a'} Q(s', a'; \theta^{-}) - Q(s, a; \theta) \Big)^{2} \right]
+\]
+\begin{itemize}
+    \item Function Approximation
+    \item Experience Replay: samples randomly drawn from replay memory
+    \item Doesn't scale to continuous action space
+\end{itemize}
+\end{frame}
+\begin{frame}{Background: Policy-Based Method (Actor-Critic)}
+\begin{itemize}
+    \item \textbf{Critic:} updates value function parameters $w$ and depending on the algorithm it could be action-value $Q(a \mid s; w)$ or state-value $V(s; w)$.
+    \item \textbf{Actor:} updates policy parameters $\theta$, in the direction suggested by the critic, $\pi(a \mid s; \theta)$.
+\end{itemize}
+\begin{align*}
+\nabla \mathcal{J}(\theta) &= \mathbb{E}_{\pi_\theta}\!\left[ \nabla \ln \pi(a \mid s, \theta)\, Q_\pi(s, a) \right] && \text{policy gradient} \\
+\theta &\leftarrow \theta + \alpha_\theta\, Q(s, a; w)\, \nabla_\theta \ln \pi(a \mid s; \theta) && \text{update actor} \\
+G_{t:t+1} &= r_t + \gamma Q(s', a'; w) - Q(s, a; w) && \text{correction for action-value} \\
+w &\leftarrow w + \alpha_w\, G_{t:t+1}\, \nabla_{\!w} Q(s, a; w) && \text{update critic}
+\end{align*}
+\end{frame}

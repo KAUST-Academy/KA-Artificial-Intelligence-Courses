@@ -1,0 +1,29 @@
+\begin{frame}{SAC --- Parameterized soft Q-function}
+\begin{columns}[T]
+\begin{column}{0.35\textwidth}
+\vspace{0.3em}
+\[ Q_\theta(\mathbf{s}_t, \mathbf{a}_t) \]
+\vspace{0.5em}
+\[ \pi_\phi(\mathbf{a}_t \mid \mathbf{s}_t) \]
+\vspace{1em}
+\[ J_Q(\theta) \quad \hat{\nabla}_\theta J_Q(\theta) \]
+\vspace{0.5em}
+\[ J_\pi(\phi) \quad \hat{\nabla}_\phi J_\pi(\phi) \]
+\end{column}
+\begin{column}{0.6\textwidth}
+\begin{itemize}
+    \item[$\bullet$] e.g.\ neural network
+\end{itemize}
+\vspace{0.3em}
+parameterized tractable policy
+\begin{itemize}
+    \item[$\bullet$] e.g.\ Gaussian with mean and covariances given by neural networks
+\end{itemize}
+\vspace{0.3em}
+soft Q-function objective and its stochastic gradient wrt its parameters
+\vspace{0.3em}
+
+policy objective and stochastic gradient wrt its parameters
+\end{column}
+\end{columns}
+\end{frame}

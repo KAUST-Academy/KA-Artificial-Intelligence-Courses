@@ -1,0 +1,56 @@
+% Adjust the aspect ratio and font size as needed
+\documentclass[10pt, aspectratio=169]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+\title[Soft Actor-Critic]{Reinforcement Learning}
+
+\begin{document}
+
+\input{sections/cover}
+\input{sections/soft-actor-critic/cover}
+
+% Motivation: sample inefficiency
+\input{sections/soft-actor-critic/main_problem}
+% Background: value-based and actor-critic methods
+\input{sections/soft-actor-critic/background}
+% Prior Work: DDPG
+\input{sections/soft-actor-critic/ddpg}
+% Motivation: robustness
+\input{sections/soft-actor-critic/robustness}
+% Background: control-as-inference perspective
+\input{sections/soft-actor-critic/control_as_inference}
+% Background: maximum entropy RL
+\input{sections/soft-actor-critic/max_entropy_rl}
+% Prior Work: Soft Q-Learning
+\input{sections/soft-actor-critic/soft_q_learning}
+
+% Soft Actor-Critic: contributions and theory
+\input{sections/soft-actor-critic/sac_contributions}
+\input{sections/soft-actor-critic/soft_policy_iteration}
+% Soft Actor-Critic: algorithm derivation
+\input{sections/soft-actor-critic/sac_parameterization}
+\input{sections/soft-actor-critic/sac_objectives}
+\input{sections/soft-actor-critic/sac_algorithm}
+
+% Experimental Results
+\input{sections/soft-actor-critic/experimental_results}
+
+% Automatic Temperature Tuning extension
+\input{sections/soft-actor-critic/limitation}
+\input{sections/soft-actor-critic/auto_temp_contributions}
+\input{sections/soft-actor-critic/real_world_robots}
+\input{sections/soft-actor-critic/auto_temp_derivation}
+\input{sections/soft-actor-critic/experimental_results_full}
+
+% Limitations / open issues
+\input{sections/soft-actor-critic/limitations_open_issues}
+
+% Wrap
+\input{sections/soft-actor-critic/recap}
+\input{sections/soft-actor-critic/references}
+
+\end{document}

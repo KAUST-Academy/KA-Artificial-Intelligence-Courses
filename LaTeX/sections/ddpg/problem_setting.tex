@@ -1,0 +1,23 @@
+\begin{frame}{DDPG Problem Setting}
+\vspace{1em}
+\begin{tabular}{ll}
+$\mu(s \mid \theta^{\mu})$ & \begin{tabular}{@{}l@{}}Policy (Actor) Network \\ Deterministic, Continuous Action Space\end{tabular}
+\end{tabular}
+\end{frame}
+
+\begin{frame}{DDPG Problem Setting}
+\vspace{1em}
+\begin{tabular}{ll}
+$\mu(s \mid \theta^{\mu})$ & \begin{tabular}{@{}l@{}}Policy (Actor) Network \\ Deterministic, Continuous Action Space\end{tabular} \\[1.2em]
+$Q(s, a \mid \theta^{Q})$ & Value (Critic) Network
+\end{tabular}
+\end{frame}
+
+\begin{frame}{DDPG Problem Setting}
+\vspace{1em}
+\begin{tabular}{ll}
+$\mu(s \mid \theta^{\mu})$ & \begin{tabular}{@{}l@{}}Policy (Actor) Network \\ Deterministic, Continuous Action Space\end{tabular} \\[1.2em]
+$Q(s, a \mid \theta^{Q})$ & Value (Critic) Network \\[1.2em]
+$\mu'(s \mid \theta^{\mu'}),\; Q'(s, a \mid \theta^{Q'})$ & Target Policy and Value Networks
+\end{tabular}
+\end{frame}

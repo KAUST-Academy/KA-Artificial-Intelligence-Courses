@@ -1,0 +1,527 @@
+% 120-minute graduate lecture: video generation and links to world models
+% Synthesized from Lecture-9, extensions, and synthesis in ``Grad Lecture: Video Generation \& World Models'' (2026).
+\documentclass[10pt, aspectratio=149]{beamer}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric, shadows}
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+\title[Video Generation \& World Models]{Video Generation}
+\subtitle{From media synthesis to world simulators}
+
+\begin{document}
+
+\title[Video Generation \& World Models]{Video Generation}
+\subtitle{From media synthesis to world simulators}
+
+\input{sections/cover}
+
+\begin{frame}[t]{Video Generation Today: Stunning Visuals}
+  \centering
+  \includegraphics[width=0.75\linewidth,keepaspectratio]{assets/New-Lecture-Video_Generation/sora_video.png}\\[0.8em]
+  {\scriptsize Image from OpenAI's Sora website.}
+\end{frame}
+
+
+
+% \begin{frame}{Learning outcomes}
+%   By the end of this session, you should be able to:
+%   \begin{itemize}
+%     \item[\textcolor{red}{$\blacktriangleright$}] Contrast \textbf{pixel-centric} simulators (e.g.\ large DiT text-to-video) with \textbf{latent predictive} models (e.g.\ V-JEPA-style JEPA) and state where each is appropriate.
+%     \item[\textcolor{red}{$\blacktriangleright$}] Map major architectural families to the \textbf{four paradigms} used in graduate curricula (3D scene models, interactive video, latent prediction, text-to-video diffusion).
+%     \item[\textcolor{red}{$\blacktriangleright$}] Apply a simple \textbf{``membership test''} for world models (action conditioning, causal plausibility, long-horizon consistency) when judging new systems.
+%   \end{itemize}
+% \end{frame}
+
+\begin{frame}{From media synthesis to world simulators}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] The frontier is shifting from realistic-looking clips to models that approximate causal structure and action consequences---what curricula often bundle under \emph{world models}.
+    \item[\textcolor{red}{$\blacktriangleright$}] A useful split today: systems that prioritize high-fidelity pixels and instruction following (e.g.\ large text-to-video diffusion) versus systems that prioritize compact latent dynamics for control (e.g.\ JEPA-style prediction).
+    \item[\textcolor{red}{$\blacktriangleright$}] Video remains expensive: long tensors and coherent motion are harder than sharp stills; evaluation must separate perceptual quality from physical plausibility.
+  \end{itemize}
+\end{frame}
+
+
+% \begin{frame}{Four paradigms (curriculum-style taxonomy)}
+%   \tiny
+%   \setlength{\tabcolsep}{3pt}
+%   \renewcommand{\arraystretch}{1.15}
+%   \begin{tabularx}{\linewidth}{@{} >{\raggedright\arraybackslash}p{0.19\linewidth} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{0.28\linewidth} >{\raggedright\arraybackslash}X @{}}
+%     \toprule
+%     \textbf{Paradigm} & \textbf{Architectural idea} & \textbf{Representative systems} & \textbf{Primary objective} \\
+%     \midrule
+%     Structured 3D scenes & NeRF / Gaussian splatting; differentiable rendering & DreamFusion, GSGen, Marble (World Labs) & Multi-view--consistent 3D that routes through graphics pipelines \\
+%     \midrule
+%     Interactive generative video & Action-conditioned diffusion or autoregressive transformers & Genie, GameNGen, GAIA & Interactive ``game-like'' rollouts from actions \\
+%     \midrule
+%     Latent predictive & Joint embedding predictive architectures (JEPA) & V-JEPA, PAN & Predict future \emph{representations} without full pixel generation \\
+%     \midrule
+%     Text-to-video simulators & Large DiT / diffusion stacks at scale & Sora, Veo, Gen-3 & Maximize fidelity + prompt alignment; emergence as ``simulator'' \\
+%     \bottomrule
+%   \end{tabularx}
+%   \vspace{0.35em}
+%   {\scriptsize Pedagogical splits echo materials such as CMU 10-423/10-723 generative-AI world-model lectures and CVPR-style world-model tutorials---see references.}
+% \end{frame}
+
+
+
+\begin{frame}{World Models: Motivation}
+  \textbf{Intuition:} a baseball batter reacts in milliseconds---action is tied to a \textbf{predictive}, action-conditioned internal model, not to slow deliberate search.
+  \centering
+  \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{assets/New-Lecture_World_Models/mccloud_baseball.jpeg}\\[-0.1em]
+  {\scriptsize Scott McCloud excerpt (time--space in comics).}      
+\end{frame}
+
+\begin{frame}{World Models: Motivation}
+  \centering
+  \vspace{0.1em}
+  \includegraphics[width=\linewidth,height=0.88\textheight,keepaspectratio]{assets/New-Lecture_World_Models/cmu10423_lecture26_world_models_slide04.png}\\[0.32em]
+  {\scriptsize Stanford 10-423, Lecture 26.}
+\end{frame}
+
+\begin{frame}{World Models: Motivation}
+  \centering
+  \vspace{0.1em}
+  \includegraphics[width=\linewidth,height=0.88\textheight,keepaspectratio]{assets/New-Lecture_World_Models/cmu10423_lecture26_world_models_slide05.png}\\[0.32em]
+  {\scriptsize Stanford 10-423, Lecture 26.}
+\end{frame}
+
+\begin{frame}{World Models: Motivation}
+  \begin{itemize}\itemsep0.28em
+    \item[\textcolor{red}{$\blacktriangleright$}] Humans develop a mental model of the world based on what they are able to perceive with their limited senses. Our decisions and actions are based on this internal model.    
+    \item[\textcolor{red}{$\blacktriangleright$}] Train a generative world model in an unsupervised way to learn a compact spatio-temporal representation of the environment.
+    \item[\textcolor{red}{$\blacktriangleright$}] Use features from the world model to train a simple policy (agent) to solve the required task.
+  \end{itemize}
+\end{frame}
+
+% \begin{frame}{World Models: Definition}
+%   \begin{itemize}
+%     \item A \textbf{world model} is a learned map that summarizes experience so we can predict (or sample) \textbf{what happens next} and sometimes \textbf{counterfactuals}: ``if I had pushed left \ldots''
+%     \item An \textbf{agent} chooses actions $a_t$ and receives observations $o_t$ and rewards $r_t$. Planning and learning are easier if we can \textbf{imagine} plausible futures without acting in the real environment.
+%     \item Core tension: predict \textbf{everything in pixels} (high-dimensional, noisy) vs.\ predict in a \textbf{compact latent space} (lose detail but gain stability and generalization).
+%   \end{itemize}
+% \end{frame}
+
+\begin{frame}{World Models: Definition}
+      % TikZ block for shaded definition box
+      \begin{center}
+      \begin{tikzpicture}
+        \node[fill=cyan!25, rounded corners=3pt, inner sep=8pt, align=left, drop shadow] (box) {
+            \begin{minipage}{0.93\columnwidth}
+              \textbf{Definition:} \textit{A world model} takes a previous world state $s$ and an action $a$, and samples (or predicts) the next world state $s'$ through a distribution (or function):\\[0.6em]
+              \centering
+              $s' \sim p(s' \mid s, a)$
+            \end{minipage}
+        };
+      \end{tikzpicture}
+      \end{center}
+\end{frame}
+
+\begin{frame}{World Models: Definition}
+  \textbf{Question:} What does a world state hold?\\[0.4em]
+  \textbf{Answer:} It depends on what you're trying to model. Consider the contrast of:
+  \begin{itemize}\itemsep0.24em
+    \item [A)] All geopolitical entities, their leaders, and decisions they make
+    \item [B)] Physical interactions in a 3D world
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{World Model Overview}
+    \centering
+    \includegraphics[width=0.95\linewidth,height=0.88\textheight,keepaspectratio]{assets/New-Lecture_World_Models/worldmodels_githubio_rollout_schematic.png}\\[0.15em]
+    {\scriptsize World model overview.\\
+    \textit{Source: Ha \& Schmidhuber (2018); }\href{https://arxiv.org/abs/1803.10122}{arXiv:1803.10122}.}
+\end{frame}
+
+\begin{frame}{Vision module: variational autoencoder (V)}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.44\textwidth}
+    \begin{itemize}\itemsep0.26em
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Goal:} learn an abstract, compressed representation of each observed input frame.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{VAE:} first stage of a two-stage sequence model---similar in spirit to modern tokenizers, but trained with classic VAE objective.
+    \end{itemize}
+    \column{0.54\textwidth}
+    \centering
+    \includegraphics[width=0.95\linewidth,height=0.88\textheight,keepaspectratio]{assets/New-Lecture_World_Models/worldmodels_githubio_vae.png}\\[0.15em]
+    {\scriptsize VAE diagram.\\
+    \textit{Source: Ha \& Schmidhuber (2018); }\href{https://arxiv.org/abs/1803.10122}{arXiv:1803.10122}.}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Memory module: Predict the future}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.42\textwidth}
+    \begin{itemize}\itemsep0.26em
+      \item[\textcolor{red}{$\blacktriangleright$}] Model $p(z_{t+1} \mid z_t, a_t, h_t)$ where $z_t$ is the latent state at time $t$, $a_t$ is the action at time $t$, and $h_t$ is the hidden state at time $t$.
+      \item[\textcolor{red}{$\blacktriangleright$}] adjust a temperature parameter $\tau$ to control model uncertainty
+    \end{itemize}
+    \column{0.56\textwidth}
+    \centering
+    \includegraphics[width=0.95\linewidth,height=0.76\textheight,keepaspectratio]{assets/New-Lecture_World_Models/mdn_rnn_new.png}\\[0.15em]
+    {\scriptsize MDN-RNN architecture.\\
+    \textit{Source: Ha \& Schmidhuber (2018); }\href{https://arxiv.org/abs/1803.10122}{arXiv:1803.10122}.}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}{Controller module: decision-making (C)}
+    \begin{itemize}\itemsep0.26em
+      \item[\textcolor{red}{$\blacktriangleright$}] The \textbf{Controller (C)} selects actions to maximize expected cumulative reward during agent rollout.
+      \item[\textcolor{red}{$\blacktriangleright$}] Designed to be as simple and small as possible; trained \textbf{separately} from the Vision (V) and Memory (M) modules.
+      \item[\textcolor{red}{$\blacktriangleright$}] Most agent complexity is thus concentrated in the world model (V and M).
+      \item[\textcolor{red}{$\blacktriangleright$}] C is a \textbf{single-layer linear} model that maps the latent vector $z_t$ and RNN hidden state $h_t$ directly to the action $a_t$ at each time step:
+    \end{itemize}
+    \vspace{0.7em}
+    {\small
+    \[
+      a_t = W_c [z_t; h_t] + b_c
+    \]
+    }
+    \begin{itemize}\itemsep0.15em
+      \item[\textcolor{red}{$\blacktriangleright$}] Here, $W_c$ and $b_c$ are the weight matrix and bias; $[z_t; h_t]$ is the concatenated latent and memory state.
+      \item[\textcolor{red}{$\blacktriangleright$}] Output vector $a_t$ is the action taken by the agent.
+    \end{itemize}
+    % Optionally: say evolved with CMA-ES, not trained end-to-end.
+\end{frame}
+
+\begin{frame}{World model: Putting Everything Together}
+  \centering
+  \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{assets/New-Lecture_World_Models/world_model_schematic_downloads.png}\\[0.28em]
+  {\scriptsize Agent-environment flow (observation $\rightarrow$ $z_t$, RNN state $h_t$, action $a_t$, next step).\\
+  \textit{Source: Ha \& Schmidhuber (2018); }\href{https://arxiv.org/abs/1803.10122}{arXiv:1803.10122}.}
+\end{frame}
+
+
+% \begin{frame}[plain]
+%   \centering
+%   \vspace{0.1em}
+%   \includegraphics[width=\linewidth,height=0.88\textheight,keepaspectratio]{assets/New-Lecture_World_Models/cmu10423_lecture26_world_models_slide08.png}\\[0.32em]
+%   {\scriptsize Same deck --- slide 8 (data modalities: image/video/3D/text/audio/multimodal).}
+% \end{frame}
+
+% \begin{frame}[plain]
+%   \centering
+%   \vspace{0.1em}
+%   \includegraphics[width=\linewidth,height=0.88\textheight,keepaspectratio]{assets/New-Lecture_World_Models/cmu10423_lecture26_world_models_slide09.png}\\[0.32em]
+%   {\scriptsize Same deck --- slide 9 (three paradigms: 3D scene+render; interactive video; latent representations).}
+% \end{frame}
+
+\begin{frame}[t]{Architectures: Generative v/s Joint Embedding}
+  \centering
+  \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{assets/New-Lecture_World_Models/jepa_cs25_sl05_lecun_world_model_figure.png}\\[0.08em]
+  {\scriptsize Image credit: \href{https://drive.google.com/file/d/1bF5Yfzf-FG5iNIAgsXn2DwVD3l3ymvZW/view}{CS25}.}
+\end{frame}
+
+\begin{frame}{How Could We Use a World Model?}
+  \centering
+  \vspace{0.1em}
+  \includegraphics[width=\linewidth,height=0.88\textheight,keepaspectratio]{assets/New-Lecture_World_Models/cmu10423_lecture26_world_models_slide10.png}\\[0.32em]
+  {\scriptsize Stanford 10-423, Lecture 26.}
+\end{frame}
+
+% \begin{frame}{Architectures: Generative v/s Joint Embedding}
+%   \begin{columns}[T,onlytextwidth]
+%     \column{0.48\textwidth}
+%     \textbf{Generative (reconstruction) path}\\[0.35em]
+%     \begin{itemize}\itemsep0.28em
+%       \item[\textcolor{red}{$\blacktriangleright$}] Learn latents that \textbf{decode} back to pixels (VAE/RSSM).
+%       \item[\textcolor{red}{$\blacktriangleright$}] Strength: full \textbf{observation model} for planning, denoising, and imagined rollouts with explicit images.
+%       \item[\textcolor{red}{$\blacktriangleright$}] Cost: optimization can emphasize pixels over semantics.
+%     \end{itemize}
+%     \column{0.48\textwidth}
+%     \textbf{Joint-embedding predictive (JEPA) path}\\[0.35em]
+%     \begin{itemize}\itemsep0.28em
+%       \item[\textcolor{red}{$\blacktriangleright$}] Predict \textbf{embeddings} of future or masked regions in \textbf{representation space}.
+%       \item[\textcolor{red}{$\blacktriangleright$}] Strength: can learn useful \textbf{video/robotics} features without needing to generate every pixel.
+%       \item[\textcolor{red}{$\blacktriangleright$}] Cost: requires clear action input (e.g.\ V-JEPA 2-AC, LeWM). 
+%     \end{itemize}
+%   \end{columns}
+% \end{frame}
+
+\begin{frame}[t]{Generative world models}
+  \centering
+  \includegraphics[width=0.76\linewidth,height=0.86\textheight,keepaspectratio]{assets/New-Lecture_World_Models/jepa_cs25_sl04_generative_world_models_sora_gaia.png}\\[0.04em]
+  {\scriptsize Image credit: \href{https://drive.google.com/file/d/1bF5Yfzf-FG5iNIAgsXn2DwVD3l3ymvZW/view}{CS25}.}
+\end{frame}
+
+% ----- OpenAI Sora (Liu et al. survey, arXiv:2402.17177) -----
+\begin{frame}{A Brief History: From Texture Synthesis to Sora}
+  \centering
+  \includegraphics[width=\linewidth,height=0.56\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/genai_vision_history.png}
+  \footnotesize
+  \begin{itemize}\footnotesize
+    \item \textbf{Before deep learning:} Image generation relies on hand-crafted features.
+    \item \textbf{The deep learning revolution:} GANs and VAEs brought greater realism in images, diffusion models become backbone of modern visual generation.
+    \item \textbf{Transformers and modality fusion:} Transformers, adapted from NLP (BERT, GPT) to vision tasks (e.g.\ ViT), enable new capabilities; multimodal models (e.g. CLIP) align vision and language for T2I and T2V generation.
+    \item \textbf{Sora and beyond:} Models like Sora represent the frontier---generating high-quality, minute-long videos from text prompts.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Sora: a Breakthrough in AI-powered Vision Generation}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+    \begin{itemize}\footnotesize
+      \item Generates high-quality, minute-long videos with strong visual coherence for a wide range of physical and digital scenes.
+      \item Rapidly turns text prompts into compelling videos, accelerating creative work, education, and accessibility.
+      \item Enables new applications in marketing, game development, and more through scalable video generation.
+    \end{itemize}
+    \column{0.50\textwidth}
+    \centering
+    \includegraphics[width=\linewidth,height=0.70\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/sora_arxiv2402177_p01_fig1_title.png}\\[-0.12em]
+    {\scriptsize Liu et al.\ (2024); \href{https://arxiv.org/abs/2402.17177}{arXiv:2402.17177}}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[t]{Sora Core: Diffusion Transformer Architecture}
+  \centering
+  \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/sora_arxiv2402177_p06_fig4_framework.png}\\[0.12em]
+  \begin{itemize}\footnotesize
+    \item Time-space compressor: compresses input video into compact latent space representation.
+    \item ViT processes tokenized latents and predicts denoised versions.
+    \item CLIP-like conditioning: incorporates user instructions and visual prompts, guiding generation with learned theme and style.
+    \item Denoising and decoding: after multiple denoising steps, final latent video decoded back into pixel space to yield generated video.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Sora: Limitations}
+  \begin{itemize}\itemsep0.26em
+    \item \textbf{Physical realism:} unstable causal detail (e.g.\ objects not updating consistently after contact); implausible rigid-body motion; occasional absurd multi-object interactions.
+    \item \textbf{Spatial/temporal control:} confusion over placement and left/right; drift in camera motion and event order; stray characters or animals that break the intended shot.
+    \item \textbf{Interaction \& prompting:} fine-grained local edits remain difficult; complex natural-language constraints may be misread.
+    \item \textbf{Access:} no fixed public release schedule at review time---safety and readiness framing ({OpenAI}).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{Genie-1: interactive video generation}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.47\textwidth}
+      % Placeholder for Genie-1 diagram image
+      \includegraphics[width=0.85\linewidth,height=0.85\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide18.png}\\[0.18em]
+      {\scriptsize Source: CMU Lecture 26 \href{https://www.cs.cmu.edu/~mgormley/courses/10423/slides/lecture26-world-models.pdf}{lecture26-world-models.pdf}}
+    \column{0.51\textwidth}
+      \textbf{Genie-1} is an interactive video\\generation model.\\[0.28em]
+      \textbf{At test time:}
+      \begin{itemize}\itemsep0.16em
+        \item Takes a prompt (image) as input
+        \item At each time step, accepts\\ an action given by the user
+        \item Given the current frame \& action, generates the next frame
+      \end{itemize}
+      This simulates the style of interaction\\one would have with a video game.
+  \end{columns}
+\end{frame}
+
+\begin{frame}[t]{2D Platformer Games (Setting)}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.52\textwidth}
+        \textbf{Q:} What is a 2D Platformer game?\\[0.5em]
+        \textbf{A:} A 2D platformer is a video game where the player moves a character through a flat, two-dimensional world, usually by running, jumping, and avoiding obstacles or enemies. The gameplay often focuses on timing, movement precision, and reaching goals such as exits, items, or new areas.\\[0.8em]
+        \textbf{Canonical Example:}\\
+        Super Mario World for SNES
+    \column{0.46\textwidth}
+        \centering
+        % Image placeholder: Space Panic, the first 2D platformer
+        \includegraphics[width=0.98\linewidth,height=0.54\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide19.png}\\[-0.1em]
+        {\scriptsize Space Panic: The first 2D platformer}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[t]{Genie-1: training data}
+  \centering\vspace{0.06em}
+  \includegraphics[width=\linewidth,height=0.86\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide20.png}\\[0.28em]
+  {\scriptsize CMU Lecture 26, slide 20.}
+\end{frame}
+
+\begin{frame}[t]{Genie-1: video tokenizer}
+  \centering\vspace{0.06em}
+  \includegraphics[width=\linewidth,height=0.86\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide21.png}\\[0.28em]
+  {\scriptsize CMU Lecture 26, slide 21.}
+\end{frame}
+
+\begin{frame}[t]{Genie-1: latent action model}
+  \centering\vspace{0.06em}
+  \includegraphics[width=\linewidth,height=0.86\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide22.png}\\[0.28em]
+  {\scriptsize CMU Lecture 26, slide 22.}
+\end{frame}
+
+\begin{frame}[t]{Genie-1: dynamics model (MaskGIT)}
+  \centering\vspace{0.06em}
+  \includegraphics[width=\linewidth,height=0.86\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide23.png}\\[0.28em]
+  {\scriptsize CMU Lecture 26, slide 23.}
+\end{frame}
+
+\begin{frame}[t]{Genie-1 at test time}
+  \centering\vspace{0.06em}
+  \includegraphics[width=\linewidth,height=0.86\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide24.png}\\[0.28em]
+  {\scriptsize CMU Lecture 26, slide 24.}
+\end{frame}
+
+\begin{frame}[t]{Genie-1 Qualitative Results}
+  \begin{itemize}
+    \item Images created with a text-to-image model can serve as a prompt.
+    \item Then Genie-1 enables a user to interact directly with the environment.
+    \item The latent actions are mapped to actual keys (a, s, d, f, etc.) so that the user can explore what they do.
+  \end{itemize}
+  \vfill
+  \includegraphics[width=0.85\linewidth,height=0.85\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide25.png}\\[0.28em]
+  {\scriptsize CMU Lecture 26, slide 25.}
+\end{frame}
+
+\begin{frame}[t]{Genie-1 Application to Robotics}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+      \begin{itemize}\itemsep0.38em
+        \item \textbf{Robotics dataset:}
+        \begin{itemize}\itemsep0.2em
+          \item 130k robotics demonstrations
+          \item a simulation dataset (size unspecified)
+          \item 209k episodes of real robot data
+        \end{itemize}
+        \item No actions included, just videos
+      \end{itemize}
+    \column{0.52\textwidth}
+      \begin{itemize}\itemsep0.38em
+        \item Training Genie on the robotics datasets learns a new model that can simulate ``game'' style play with a robotic arm as shown below
+      \end{itemize}
+  \end{columns}
+  \vspace{0.6em}
+
+  \begin{center}
+    % Placeholder for composite image illustrating Genie-1 application to robotics (see slide)
+    \includegraphics[width=0.76\linewidth,height=0.27\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide26.png}\\[0.28em]
+  \end{center}
+\end{frame}
+
+\begin{frame}[t]{Genie-1: Are the Latent Actions Transferable?}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.52\textwidth}
+      \begin{itemize}\itemsep0.45em
+        \item CoinRun is a procedurally generated platformer.
+        \item \textbf{Models:}
+        \begin{enumerate}
+          \item \textbf{Behavior Cloning:} train a policy given a dataset of each frame paired with the expert action (skyline)
+          \item \textbf{Random Agent:} always take a random action (baseline)
+          \item \textbf{LAM-based Policy:} train a policy given a dataset of each frame paired with the Genie latent action; separately learn a mapping from latent actions to expert actions from a few examples
+        \end{enumerate}
+      \end{itemize}
+    \column{0.46\textwidth}
+      % Placeholder for CoinRun image composite
+      \includegraphics[width=\linewidth]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide27.png}\\[0.15em]
+      {\scriptsize Figure: Four generated CoinRun levels with the coin at the right.}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[t]{Genie-1: Are the Latent Actions Transferable? (II)}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.56\textwidth}
+      \begin{itemize}\itemsep0.22em
+        \item CoinRun is a procedurally generated platformer.
+        \item \textbf{Models:}
+        \begin{enumerate}\itemsep0.12em
+          \item \textbf{Behavior Cloning:} train a policy given a dataset of each frame paired with the expert action (\emph{skyline}).
+          \item \textbf{Random Agent:} always take a random action (baseline).
+          \item \textbf{LAM-based Policy:} train a policy given a dataset of each frame paired with the Genie latent action; separately learn a mapping from latent actions to expert actions from a few examples.
+        \end{enumerate}
+      \end{itemize}
+    \column{0.44\textwidth}
+      % Placeholder for Genie-1 transfer plot
+      \includegraphics[width=0.85\linewidth,height=0.85\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide28.png}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[t]{Genie-2}
+  \centering\vspace{0.06em}
+  \includegraphics[width=\linewidth,height=0.86\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide29.png}\\[0.28em]
+\end{frame}
+
+\begin{frame}[t]{Genie-2}
+  \begin{itemize}
+    \item The technical description of Genie-2 is rather vague.
+    \item This could indicate that the primary change is \textbf{scale}:
+    \begin{itemize}
+      \item \textbf{more parameters}
+      \item \textbf{more training data}
+    \end{itemize}
+  \end{itemize}
+  \vfill
+  \includegraphics[width=0.85\linewidth,height=0.85\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide30.png}
+\end{frame}
+
+\begin{frame}[t]{Genie-3}
+\centering\vspace{0.06em}
+\includegraphics[width=0.85\linewidth,height=0.85\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide31.png}
+\end{frame}
+
+\begin{frame}[t]{Genie-3}
+  \centering\vspace{0.06em}
+  \includegraphics[width=0.85\linewidth,height=0.85\textheight,keepaspectratio]{assets/New-Lecture-Video_Generation/cmu10423_lecture26_world_models_slide32.png}
+\end{frame}
+
+\begin{frame}[t]{Genie-3: Limitations}
+  \begin{itemize}\itemsep0.37em
+    \item Interaction window is limited to a short duration (a few minutes).
+    \item Actions are (likely) latent and from a fixed set; defining new actions is not possible.
+    \item Prompting for changes in the world is possible and represents an open set; this creates an asymmetry between the closed action set and the open world change set.
+    \item Limited to one character (at least that seems to be the case).
+    \item Fundamentally just a video model: no game-engine-interpretable world representation (e.g., point cloud, mesh, Gaussian splatting) is provided.
+    \item Extremely high computational demands.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{V-JEPA: video {JEPA}}
+  \centering
+  \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{assets/New-Lecture_World_Models/jepa_cs25_sl07_vjepa_bardes_2024.png}\\[0.08em]
+  {\scriptsize Bardes et al., \href{https://arxiv.org/abs/2404.08471}{arXiv:2404.08471}. Image credit: \href{https://drive.google.com/file/d/1bF5Yfzf-FG5iNIAgsXn2DwVD3l3ymvZW/view}{CS25}.}
+\end{frame}
+
+\begin{frame}[t]{V-JEPA\,2: action-conditioned latent prediction}
+  \centering
+  \includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{assets/New-Lecture_World_Models/jepa_cs25_sl08_vjepa2_action_world_model.png}\\[0.04em]
+  {\scriptsize Assran et al., \href{https://arxiv.org/abs/2506.09985}{arXiv:2506.09985}. Image credit: \href{https://drive.google.com/file/d/1bF5Yfzf-FG5iNIAgsXn2DwVD3l3ymvZW/view}{CS25}.}
+\end{frame}
+
+\begin{frame}{Lecture summary}
+  \small
+  \begin{itemize}\itemsep0.22em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Motivation:} video is the natural domain for dynamics, control, and ``world'' hypotheses; we contrast \textbf{pixel generative} stacks with \textbf{latent predictive} models.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Classical world models (Ha \& Schmidhuber):} VAE observations, recurrent latent dynamics, and a small controller---imagined rollouts for {RL}-style planning.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Scaling simulators ({Sora}):} long-form text-to-video via latent compression, spacetime tokens, and diffusion-style training---strong visuals but \textbf{physical} and \textbf{temporal} failure modes remain.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Interactive video ({Genie}):} tokenizer, latent action model ({LAM}), and dynamics ({MaskGIT}); transfer and scale ({Genie}-2/3) with clear \textbf{limits} (window, actions, compute).
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Representation path ({V-JEPA} / {V-JEPA}\,2):} predict in embedding space (and optionally with \textbf{actions}) for understanding and planning without full pixel generation.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Takeaway:} one narrative thread is \textbf{consistency under intervention}---whether through latent actions, masks, or diffusion---and choosing metrics that separate \textbf{looks good} from \textbf{behaves well}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+  \tiny
+  \setlength{\leftmargini}{1.1em}
+  \setlength{\itemsep}{0.09em}
+  \raggedright
+  Sources keyed to this deck and to the graduate synthesis report (\emph{Grad Lecture: Video Generation \& World Models}). Machine-readable duplicates live in \texttt{references.bib}.
+  \begin{enumerate}
+    \setlength{\itemsep}{0.07em}
+    \item From Video Generation to World Model ({CVPR} 2025 tutorial). \href{https://world-model-tutorial.github.io/}{world-model-tutorial.github.io}
+    \item Survey: Is {Sora} a World Simulator? ({arXiv}:2405.03520). \href{https://arxiv.org/abs/2405.03520}{link}
+    \item Gormley ({CMU} 10-423 / 10-723): Interactive World Models, Lecture 26 slides. \href{https://www.cs.cmu.edu/~mgormley/courses/10423/slides/lecture26-world-models.pdf}{PDF}
+    \item Ha: World Models interactive write-up / demos. \href{https://worldmodels.github.io/}{worldmodels.github.io}
+    \item Bardes et al.\ ({V-JEPA}). \href{https://arxiv.org/abs/2404.08471}{arXiv:2404.08471}
+    \item Assran et al.\ ({V-JEPA}\,2). \href{https://arxiv.org/abs/2506.09985}{arXiv:2506.09985}
+    \item {Meta AI}: Introducing {V-JEPA} 2. \href{https://ai.meta.com/research/vjepa/}{link}
+    \item Bruce et al.\ ({Genie}). \href{https://arxiv.org/abs/2402.15391}{arXiv:2402.15391}
+    \item {Sora} review paper ({arXiv}:2402.17177). \href{https://arxiv.org/abs/2402.17177}{link}
+    \item Bar-Tal et al.\ ({Lumiere}). \href{https://arxiv.org/abs/2401.12945}{arXiv:2401.12945}; project \href{https://lumiere-video.github.io/}{site}
+    \item Learning World Models for Interactive Video Generation ({arXiv}:2505.21996). \href{https://arxiv.org/abs/2505.21996}{link}
+    \item {GameNGen} project. \href{https://gamengen.github.io/}{site}; \href{https://arxiv.org/abs/2408.14837}{arXiv:2408.14837}
+    \item Hafner et al.: Dream to Control ({Dreamer}; {arXiv}:1912.01603). \href{https://arxiv.org/abs/1912.01603}{link}
+    \item Hafner et al.: {DreamerV3} ({arXiv}:2301.04104). \href{https://arxiv.org/abs/2301.04104}{link}
+    \item Ha \& Schmidhuber: World Models ({arXiv}:1803.10122). \href{https://arxiv.org/abs/1803.10122}{link}
+    \item Stanford {CS25} deck used on slides ({Google} Drive). \href{https://drive.google.com/file/d/1bF5Yfzf-FG5iNIAgsXn2DwVD3l3ymvZW/view}{link}
+  \end{enumerate}
+\end{frame}
+
+
+\end{document}

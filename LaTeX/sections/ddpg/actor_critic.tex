@@ -1,0 +1,99 @@
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Stochastic Policy Gradient (Actor-Critic)
+\end{itemize}
+\[
+\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
+\]
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Stochastic Policy Gradient (Actor-Critic)
+\end{itemize}
+\[
+\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
+\]
+
+\textbf{Actor:} Policy function $\pi_\theta$
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Stochastic Policy Gradient (Actor-Critic)
+\end{itemize}
+\[
+\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
+\]
+
+\textbf{Actor:} Policy function $\pi_\theta$
+
+\textbf{Critic:} Value function $Q^{w}$, which provides guidance to improve the actor
+\end{frame}
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Deterministic Policy Gradient (Actor-Critic)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Deterministic Policy Gradient (Actor-Critic)
+\end{itemize}
+\vspace{0.5em}
+\textbf{Objective:}
+\[
+J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, r(s, \pi_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ r(s, \pi_\theta(s)) \right]
+\]
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Deterministic Policy Gradient (Actor-Critic)
+\end{itemize}
+\textbf{Objective:}
+\[
+J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, r(s, \pi_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ r(s, \pi_\theta(s)) \right]
+\]
+\textbf{Policy Gradient:}
+\[
+\nabla_\theta J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, \nabla_\theta \pi_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\pi_\theta(s)}\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ \nabla_\theta \pi_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\pi_\theta(s)} \right]
+\]
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\textbf{Deterministic Policy Gradient (Actor-Critic)}
+\vspace{0.5em}
+
+\textbf{Objective:}
+\[
+J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, r(s, \pi_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ \rbox{r(s, \pi_\theta(s))} \right]
+\]
+\textbf{Policy Gradient:}
+\[
+\nabla_\theta J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, \nabla_\theta \pi_\theta(s)\, \nabla_a \rbox{Q^{w}(s, a)\big|_{a=\pi_\theta(s)}}\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ \nabla_\theta \pi_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\pi_\theta(s)} \right]
+\]
+\end{frame}
+\begin{frame}{Background -- DPG}
+\textbf{Stochastic Policy Gradient:}
+\[
+\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, \rbox{a \sim \pi_\theta}}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
+\]
+
+\textbf{Deterministic Policy Gradient:}
+\[
+\nabla_\theta J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, \nabla_\theta \pi_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\pi_\theta(s)}\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ \nabla_\theta \pi_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\pi_\theta(s)} \right]
+\]
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\textbf{Stochastic Policy Gradient:}
+\[
+\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, \rbox{a \sim \pi_\theta}}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
+\]
+
+\textbf{Deterministic Policy Gradient:}\hfill\textcolor{red}{\footnotesize DDPG: Use deep learning to learn both functions!}
+\[
+\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi}\!\left[ \nabla_\theta\, \rbox{\pi_\theta(s)}\, \nabla_a\, \rbox{Q^{w}(s, a)}\,\big|_{a=\pi_\theta(s)} \right]
+\]
+\end{frame}

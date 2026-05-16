@@ -1,0 +1,18 @@
+\section{Recap}
+% Slide 2
+\begin{frame}{Recap}
+\begin{itemize}
+    \item Sometimes, it is better to learn a stochastic policy than a
+          deterministic policy
+    \item Policy gradient methods suffer from poor sample efficiency
+    \item Importance sampling can help alleviate this problem
+    \item However, we need to make sure that current policy is not far from
+          policy with which we have collected trajectories
+    \item Small changes in the policy parameters can unexpectedly lead to big
+          changes in the policy.
+    \item TRPO uses importance sampling to take multiple gradient steps and
+          constrains the optimization objective in the policy space
+    \item PPO does the same but approximately enforces KL constraint
+          without computing natural gradients.
+\end{itemize}
+\end{frame}

@@ -1,0 +1,52 @@
+\section{Failure \& Data Distribution Mismatch}
+% Slide 18
+\begin{frame}{How can this approach fail?}
+\centering
+\includegraphics[width=0.42\textwidth]{images/model-based-rl/figures/cliff-fail.jpg}
+\end{frame}
+
+% Slide 19
+\begin{frame}{How can this approach fail?}
+\centering
+\includegraphics[width=0.36\textwidth]{images/model-based-rl/figures/cliff-fail.jpg}
+\begin{itemize}
+    \item In the first step, when we sample using random policy we may get
+          get trajectories like the red line.
+\end{itemize}
+\end{frame}
+
+% Slide 20
+\begin{frame}{How can this approach fail?}
+\centering
+\includegraphics[width=0.36\textwidth]{images/model-based-rl/figures/cliff-fail.jpg}
+\begin{itemize}
+    \item In the first step, when we sample using random policy we may get
+          get trajectories like the red line.
+    \item The agent may learn that going right means that we can go higher!
+\end{itemize}
+\end{frame}
+
+% Slide 21
+\begin{frame}{How can this approach fail?}
+\centering
+\includegraphics[width=0.36\textwidth]{images/model-based-rl/figures/cliff-fail.jpg}
+\begin{itemize}
+    \item In the first step, when we sample using random policy we may get
+          get trajectories like the red line.
+    \item The agent may learn that going right means that we can go higher!
+    \item Thus, it will learn an incomplete policy and fall at the top.
+\end{itemize}
+\end{frame}
+
+% Slide 22
+\begin{frame}{How can this approach fail?}
+\centering
+\includegraphics[width=0.36\textwidth]{images/model-based-rl/figures/cliff-fail.jpg}
+\begin{itemize}
+    \item In the first step, when we sample using random policy we may get
+          get trajectories like the red line.
+    \item The agent may learn that going right means that we can go higher!
+    \item Thus, it will learn an incomplete policy and fall at the top.
+    \item Data distribution mismatch $p_{\pi_0}(s) \neq p_{\pi_f}(s)$
+\end{itemize}
+\end{frame}

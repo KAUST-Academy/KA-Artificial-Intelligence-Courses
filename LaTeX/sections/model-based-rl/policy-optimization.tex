@@ -1,0 +1,60 @@
+\section{Model-Based Policy Optimization}
+% Slide 31
+\begin{frame}{Model-Based Policy Optimization}
+\begin{itemize}
+    \item We can also use model-based RL for policy optimization
+\end{itemize}
+\end{frame}
+
+% Slide 32
+\begin{frame}{Model-Based Policy Optimization}
+\begin{itemize}
+    \item We can also use model-based RL for policy optimization
+    \item Key Idea:
+    \begin{itemize}
+        \item Augment data with model-simulated roll-outs
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+% Slide 33
+\begin{frame}{Model-Based Policy Optimization}
+\begin{itemize}
+    \item We can also use model-based RL for policy optimization
+    \item Key Idea:
+    \begin{itemize}
+        \item Augment data with model-simulated roll-outs
+    \end{itemize}
+    \item Algorithm:
+    \begin{enumerate}
+        \item Collect data using current policy $\pi_\theta$, add to $D_{\text{env}}$
+        \item Update model $p_\phi(s' \mid s, a)$ using $D_{\text{env}}$
+        \item Collect synthetic roll-outs using $\pi_\theta$ in model $p_\phi$ from states in $D_{\text{env}}$;
+              add to $D_{\text{model}}$
+        \item Update policy $\pi_\theta$ (and critic $Q$) using $D_{\text{env}}$
+        \item Go to step 1
+    \end{enumerate}
+\end{itemize}
+\end{frame}
+
+% Slide 34
+\begin{frame}{Model-Based Policy Optimization}
+\begin{itemize}
+    \item We can also use model-based RL for policy optimization
+    \item Key Idea:
+    \begin{itemize}
+        \item Augment data with model-simulated roll-outs
+    \end{itemize}
+    \item Algorithm:
+    \begin{enumerate}
+        \item Collect data using current policy $\pi_\theta$, add to $D_{\text{env}}$
+        \item Update model $p_\phi(s' \mid s, a)$ using $D_{\text{env}}$
+        \item Collect synthetic roll-outs using $\pi_\theta$ in model $p_\phi$ from states in $D_{\text{env}}$;
+              add to $D_{\text{model}}$
+        \item Update policy $\pi_\theta$ (and critic $Q$) using $D_{\text{env}}$
+        \item Go to step 1
+    \end{enumerate}
+    \item Compatible with variety of model-free RL methods
+    \item Could additionally use $D_{\text{env}}$ in policy update (step 4)
+\end{itemize}
+\end{frame}

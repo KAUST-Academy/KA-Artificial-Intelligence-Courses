@@ -1,0 +1,35 @@
+\section{Model Learning}
+% Slide 6
+\begin{frame}{What is a Model?}
+\begin{itemize}
+    \item A model $\mathcal{M}$ is a representation of an MDP $\langle \mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R} \rangle$
+    \item We will assume state space $\mathcal{S}$ and action space $\mathcal{A}$ are known
+    \item So a model $\mathcal{M} = \langle \mathcal{P}_\phi, \mathcal{R}_\phi \rangle$ represents state transitions $\mathcal{P}_\phi \approx \mathcal{P}$ and
+          rewards $\mathcal{R}_\phi \approx \mathcal{R}$
+\end{itemize}
+\[
+    s_{t+1} \sim \mathcal{P}_\phi(s_{t+1} \mid s_t, a_t)
+\]
+\[
+    r_{t+1} = \mathcal{R}_\phi(r_{t+1} \mid s_t, a_t)
+\]
+\end{frame}
+
+% Slide 7
+\begin{frame}{What is a Model?}
+\begin{itemize}
+    \item A model $\mathcal{M}$ is a representation of an MDP $\langle \mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R} \rangle$
+    \item We will assume state space $\mathcal{S}$ and action space $\mathcal{A}$ are known
+    \item So a model $\mathcal{M} = \langle \mathcal{P}_\phi, \mathcal{R}_\phi \rangle$ represents state transitions $\mathcal{P}_\phi \approx \mathcal{P}$ and
+          rewards $\mathcal{R}_\phi \approx \mathcal{R}$
+\end{itemize}
+\[
+    s_{t+1} \sim \mathcal{P}_\phi(s_{t+1} \mid s_t, a_t)
+\]
+\[
+    r_{t+1} = \mathcal{R}_\phi(r_{t+1} \mid s_t, a_t)
+\]
+\begin{itemize}
+    \item We can also only learn one of state transitions and reward model
+\end{itemize}
+\end{frame}

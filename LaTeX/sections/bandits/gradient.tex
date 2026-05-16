@@ -1,0 +1,74 @@
+\section{Gradient Bandit Algorithms}
+% Slide 24
+\begin{frame}[shrink=10]{Gradient Bandit Algorithms}
+\begin{itemize}
+    \item Gradient Bandit Algorithms are based on Stochastic Gradient Ascent
+    \item We optimize Score parameters $s_a$ for $a \in \mathcal{A} = \{a_1, \ldots, a_m\}$
+    \item Objective function to be maximized is the Expected Reward
+    \[
+        J(s_{a_1}, \ldots, s_{a_m}) = \sum_{a \in \mathcal{A}} \pi(a) \cdot \mathbb{E}[r \mid a]
+    \]
+    \item $\pi(\cdot)$ is probabilities of taking actions (based on a stochastic policy)
+    \item The stochastic policy governing $\pi(\cdot)$ is a function of the Scores:
+    \[
+        \pi(a) = \frac{e^{s_a}}{\sum_{b \in \mathcal{A}} e^{s_b}}
+    \]
+    \item Scores represent the relative value of actions based on seen rewards
+    \item Note: $\pi$ has a Boltzmann distribution (Softmax-function of Scores)
+    \item We move the Score parameters $s_a$ (hence, action probabilities $\pi(a)$)
+          such that we ascend along the direction of gradient of objective $J(\cdot)$
+\end{itemize}
+\end{frame}
+
+% Slide 25
+\begin{frame}[shrink=20]{Gradient of Expected Reward}
+\begin{itemize}
+    \item To construct Gradient of $J(\cdot)$, we calculate $\frac{\partial J}{\partial s_a}$ for all $a \in \mathcal{A}$
+    \begin{align*}
+        \frac{\partial J}{\partial s_a}
+        &= \frac{\partial}{\partial s_a}\!\left(\sum_{a' \in \mathcal{A}} \pi(a') \cdot \mathbb{E}[r \mid a']\right)
+         = \sum_{a' \in \mathcal{A}} \mathbb{E}[r \mid a'] \cdot \frac{\partial \pi(a')}{\partial s_a} \\
+        &= \sum_{a' \in \mathcal{A}} \pi(a') \cdot \mathbb{E}[r \mid a'] \cdot \frac{\partial \log \pi(a')}{\partial s_a}
+         = \mathbb{E}_{a' \sim \pi, \, r \sim \mathcal{R}^{a'}}\!\left[r \cdot \frac{\partial \log \pi(a')}{\partial s_a}\right]
+    \end{align*}
+    \item We know from standard softmax-function calculus that:
+    \[
+        \frac{\partial \log \pi(a')}{\partial s_a} = \frac{\partial}{\partial s_a}\!\left(\log \frac{e^{s_{a'}}}{\sum_{b \in \mathcal{A}} e^{s_b}}\right) = \mathbf{1}_{a = a'} - \pi(a)
+    \]
+    \item Therefore $\frac{\partial J}{\partial s_a}$ can be re-written as:
+    \[
+        = \mathbb{E}_{a' \sim \pi, \, r \sim \mathcal{R}^{a'}}\!\left[r \cdot (\mathbf{1}_{a = a'} - \pi(a))\right]
+    \]
+    \item At each step $t$, we approximate the gradient with $(a_t, r_t)$ sample as:
+    \[
+        r_t \cdot (\mathbf{1}_{a = a_t} - \pi_t(a)) \quad \text{for all } a \in \mathcal{A}
+    \]
+\end{itemize}
+\end{frame}
+
+% Slide 26
+\begin{frame}[shrink=25]{Score updates with Stochastic Gradient Ascent}
+\begin{itemize}
+    \item $\pi_t(a)$ is the probability of $a$ at step $t$ derived from score $s_t(a)$ at
+          step $t$
+    \item Reduce variance of estimate with baseline $B$ that's independent of $a$:
+    \[
+        (r_t - B) \cdot (\mathbf{1}_{a = a_t} - \pi_t(a)) \quad \text{for all } a \in \mathcal{A}
+    \]
+    \item This doesn't introduce bias in the estimate of gradient of $J(\cdot)$
+          because
+    \begin{align*}
+        \mathbb{E}_{a' \sim \pi}[B \cdot (\mathbf{1}_{a = a'} - \pi(a))]
+        &= \mathbb{E}_{a' \sim \pi}\!\left[B \cdot \tfrac{\partial \log \pi(a')}{\partial s_a}\right] \\
+        = B \cdot \sum_{a' \in \mathcal{A}} \pi(a') \cdot \tfrac{\partial \log \pi(a')}{\partial s_a}
+        = B \cdot \sum_{a' \in \mathcal{A}} \tfrac{\partial \pi(a')}{\partial s_a}
+        &= B \cdot \tfrac{\partial}{\partial s_a}\!\left(\sum_{a' \in \mathcal{A}} \pi(a')\right) = 0
+    \end{align*}
+    \item We can use $B = \bar{r}_t = \frac{1}{t} \sum_{s=1}^{t} r_s$ = average rewards until step $t$
+    \item So, the update to scores $s_t(a)$ for all $a \in \mathcal{A}$ is:
+    \[
+        s_{t+1}(a) = s_t(a) + \alpha \cdot (r_t - \bar{r}_t) \cdot (\mathbf{1}_{a = a_t} - \pi_t(a))
+    \]
+    \item \href{https://github.com/TikhonJelvis/RL-book/tree/master/rl/chapter14/gradient_bandits.py}{Educational Code} for this Gradient Bandit Algorithm
+\end{itemize}
+\end{frame}

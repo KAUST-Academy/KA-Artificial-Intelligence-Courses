@@ -1,0 +1,94 @@
+\section{Information State Space}
+% Slide 27
+\begin{frame}{Value of Information}
+\begin{itemize}
+    \item Exploration is useful because it gains information
+    \item Can we quantify the value of information?
+    \begin{itemize}
+        \item How much would a decision-maker be willing to pay to have that
+              information, prior to making a decision?
+        \item Long-term reward after getting information minus immediate reward
+    \end{itemize}
+    \item Information gain is higher in uncertain situations
+    \item Therefore it makes sense to explore uncertain situations more
+    \item If we know value of information, we can trade-off exploration and
+          exploitation optimally
+\end{itemize}
+\end{frame}
+
+% Slide 28
+\begin{frame}{Information State Space}
+\begin{itemize}
+    \item We have viewed bandits as one-step decision-making problems
+    \item Can also view as sequential decision-making problems
+    \item At each step there is an information state $\tilde{s}$
+    \begin{itemize}
+        \item $\tilde{s}$ is a statistic of the history, i.e., $\tilde{s}_t = f(h_t)$
+        \item summarizing all information accumulated so far
+    \end{itemize}
+    \item Each action $a$ causes a transition to a new information state $\tilde{s}'$ (by
+          adding information), with probability $\tilde{\mathcal{P}}^a_{\tilde{s}, \tilde{s}'}$
+    \item This defines an MDP $\tilde{\mathcal{M}}$ in information state space
+    \[
+        \tilde{\mathcal{M}} = (\tilde{\mathcal{S}}, \mathcal{A}, \tilde{\mathcal{P}}, \mathcal{R}, \gamma)
+    \]
+\end{itemize}
+\end{frame}
+
+% Slide 29
+\begin{frame}{Example: Bernoulli Bandits}
+\begin{itemize}
+    \item Consider a Bernoulli Bandit, such that $\mathcal{R}^a = \mathcal{B}(\mu_a)$
+    \item For arm $a$, reward$=1$ with probability $\mu_a$ ($=0$ with probability $1 - \mu_a$)
+    \item Assume we have $m$ arms $a_1, a_2, \ldots, a_m$
+    \item The information state is $\tilde{s} = (\alpha_{a_1}, \beta_{a_1}, \alpha_{a_2}, \beta_{a_2} \ldots, \alpha_{a_m}, \beta_{a_m})$
+    \item $\alpha_a$ records the pulls of arms $a$ for which reward was 1
+    \item $\beta_a$ records the pulls of arm $a$ for which reward was 0
+    \item In the long-run, $\frac{\alpha_a}{\alpha_a + \beta_a} \to \mu_a$
+\end{itemize}
+\end{frame}
+
+% Slide 30
+\begin{frame}{Solving Information State Space Bandits}
+\begin{itemize}
+    \item We now have an infinite MDP over information states
+    \item This MDP can be solved by Reinforcement Learning
+    \item Model-free Reinforcement learning, eg: Q-Learning (Duff, 1994)
+    \item Or Bayesian Model-based Reinforcement Learning
+    \begin{itemize}
+        \item eg: Gittins indices (Gittins, 1979)
+        \item This approach is known as Bayes-adaptive RL
+        \item Finds Bayes-optimal exploration/exploitation trade-off with respect
+              of prior distribution
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+% Slide 31
+\begin{frame}{Bayes-Adaptive Bernoulli Bandits}
+\begin{itemize}
+    \item Start with $\mathrm{Beta}(\alpha_a, \beta_a)$ prior over reward function $\mathcal{R}^a$
+    \item Each time $a$ is selected, update posterior for $\mathcal{R}^a$ as:
+    \begin{itemize}
+        \item $\mathrm{Beta}(\alpha_a + 1, \beta_a)$ if $r = 1$
+        \item $\mathrm{Beta}(\alpha_a, \beta_a + 1)$ if $r = 0$
+    \end{itemize}
+    \item This defines transition function $\tilde{\mathcal{P}}$ for the Bayes-adaptive MDP
+    \item $(\alpha_a, \beta_a)$ in information state provides reward model $\mathrm{Beta}(\alpha_a, \beta_a)$
+    \item Each state transition corresponds to a Bayesian model update
+\end{itemize}
+\end{frame}
+
+% Slide 32
+\begin{frame}{Gittins Indices for Bernoulli Bandits}
+\begin{itemize}
+    \item Bayes-adaptive MDP can be solved by Dynamic Programming
+    \item The solution is known as the Gittins Index
+    \item Exact solution to Bayes-adaptive MDP is typically intractable
+    \item Guez et al.\ 2020 applied Simulation-based search
+    \begin{itemize}
+        \item Forward search in information state space
+        \item Using simulations from current information state
+    \end{itemize}
+\end{itemize}
+\end{frame}

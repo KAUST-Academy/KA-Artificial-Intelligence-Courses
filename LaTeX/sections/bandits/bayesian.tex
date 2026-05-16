@@ -1,0 +1,34 @@
+\section{Bayesian Bandits}
+% Slide 20
+\begin{frame}{Bayesian Bandits}
+\begin{itemize}
+    \item So far we have made no assumptions about the rewards distribution
+          $\mathcal{R}$ (except bounds on rewards)
+    \item Bayesian Bandits exploit prior knowledge of rewards distribution
+          $\mathbb{P}[\mathcal{R}]$
+    \item They compute posterior distribution of rewards $\mathbb{P}[\mathcal{R} \mid h_t]$ where
+          $h_t = a_1, r_1, \ldots, a_t, r_t$ is the history
+    \item Use posterior to guide exploration
+    \begin{itemize}
+        \item Upper Confidence Bounds (Bayesian UCB)
+        \item Probability Matching (Thompson sampling)
+    \end{itemize}
+    \item Better performance if prior knowledge of $\mathcal{R}$ is accurate
+\end{itemize}
+\end{frame}
+
+% Slide 21
+\begin{frame}{Bayesian UCB Example: Independent Gaussians}
+\begin{itemize}
+    \item Assume reward distribution is Gaussian, $\mathcal{R}^a(r) = \mathcal{N}(r; \mu_a, \sigma_a^2)$
+    \item Compute Gaussian posterior over $\mu_a, \sigma_a^2$
+          (\href{https://people.eecs.berkeley.edu/~jordan/courses/260-spring10/lectures/lecture5.pdf}{Bayes update details here})
+    \[
+        \mathbb{P}[\mu_a, \sigma_a^2 \mid h_t] \propto \mathbb{P}[\mu_a, \sigma_a^2] \cdot \prod_{t \mid a_t = a} \mathcal{N}(r_t; \mu_a, \sigma_a^2)
+    \]
+    \item Pick action that maximizes Expectation of: ``$c$ std-errs above mean''
+    \[
+        a_{t+1} = \operatorname*{arg\,max}_{a \in \mathcal{A}} \mathbb{E}_{\mathbb{P}[\mu_a, \sigma_a \mid h_t]}\!\left[\mu_a + \frac{c \cdot \sigma_a}{\sqrt{N_t(a)}}\right]
+    \]
+\end{itemize}
+\end{frame}

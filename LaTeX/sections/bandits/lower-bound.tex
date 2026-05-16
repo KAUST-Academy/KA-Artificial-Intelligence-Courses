@@ -1,0 +1,18 @@
+% Slide 13
+\begin{frame}{Lower Bound}
+\begin{itemize}
+    \item Goal: Find an algorithm with sublinear total regret for any
+          multi-armed bandit (without any prior knowledge of $\mathcal{R}$)
+    \item The performance of any algorithm is determined by the similarity
+          between the optimal arm and other arms
+    \item Hard problems have similar-looking arms with different means
+    \item Formally described by KL-Divergence $\mathrm{KL}(\mathcal{R}^a \| \mathcal{R}^{a^*})$ and gaps $\Delta_a$
+\end{itemize}
+\begin{block}{Theorem (Lai and Robbins)}
+Asymptotic Total Regret is at least logarithmic in number of steps
+\[
+    \lim_{T \to \infty} L_T \geq \log T \sum_{a \mid \Delta_a > 0} \frac{1}{\Delta_a}
+    \geq \log T \sum_{a \mid \Delta_a > 0} \frac{\Delta_a}{\mathrm{KL}(\mathcal{R}^a \| \mathcal{R}^{a^*})}
+\]
+\end{block}
+\end{frame}

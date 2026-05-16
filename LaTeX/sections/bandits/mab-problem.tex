@@ -1,0 +1,37 @@
+\section{The Multi-Armed Bandit Problem}
+% Slide 4
+\begin{frame}{The Multi-Armed Bandit (MAB) Problem}
+\begin{itemize}
+    \item Multi-Armed Bandit is spoof name for ``Many Single-Armed
+          Bandits''
+    \item A Multi-Armed bandit problem is a 2-tuple $(\mathcal{A}, \mathcal{R})$
+    \item $\mathcal{A}$ is a known set of $m$ actions (known as ``arms'')
+    \item $\mathcal{R}^a(r) = \mathbb{P}[r \mid a]$ is an unknown probability distribution over rewards
+    \item At each step $t$, the AI agent (algorithm) selects an action $a_t \in \mathcal{A}$
+    \item Then the environment generates a reward $r_t \sim \mathcal{R}^{a_t}$
+    \item The AI agent's goal is to maximize the Cumulative Reward:
+    \[
+        \sum_{t=1}^{T} r_t
+    \]
+    \item Can we design a strategy that does well (in Expectation) for any $T$?
+    \item Note that any selection strategy risks wasting time on ``duds'' while
+          exploring and also risks missing untapped ``gems'' while exploiting
+\end{itemize}
+\end{frame}
+
+% Slide 5
+\begin{frame}{Is the MAB problem a Markov Decision Process (MDP)?}
+\begin{itemize}
+    \item Note that the environment doesn't have a notion of State
+    \item Upon pulling an arm, the arm just samples from its distribution
+    \item However, the agent might maintain a statistic of history as it's State
+    \item To enable the agent to make the arm-selection (action) decision
+    \item The action is then a (Policy) function of the agent's State
+    \item So, agent's arm-selection strategy is basically this Policy
+    \item Note that many MAB algorithms don't take this formal MDP view
+    \item Instead, they rely on heuristic methods that don't aim to optimize
+    \item They simply strive for ``good'' Cumulative Rewards (in Expectation)
+    \item Note that even in a simple heuristic algorithm, $a_t$ is a random
+          variable simply because it is a function of past (random) rewards
+\end{itemize}
+\end{frame}

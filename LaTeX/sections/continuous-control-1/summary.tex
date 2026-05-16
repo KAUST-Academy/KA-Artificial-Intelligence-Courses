@@ -1,0 +1,52 @@
+\section{Summary}
+\begin{frame}{}
+    \LARGE Continuous Control: \textbf{Summary}
+\end{frame}
+
+\begin{frame}{The Algorithm Family Tree}
+\begin{center}
+DQN $\;+\;$ DPG $\;\rightarrow\;$ \textbf{DDPG} $\;\rightarrow\;$ +clipped double-Q / delayed updates $\;\rightarrow\;$ \textbf{TD3} $\;\rightarrow\;$ +max-entropy $\;\rightarrow\;$ \textbf{SAC} (Day 6)
+\end{center}
+
+\vspace{0.6em}
+
+\begin{table}[]
+    \centering
+    \renewcommand{\arraystretch}{1.8}
+    \small
+    \begin{tabular}{lcccc}
+        \hline
+        \textbf{Algorithm} & \textbf{On-policy?} & \textbf{Action space} & \textbf{Policy} & \textbf{Stability} \\
+        \hline
+        DQN   & No (replay) & Discrete            & Implicit ($\arg\max Q$) & Medium \\
+        DPG   & No          & Continuous          & Deterministic           & --- (not deep) \\
+        DDPG  & No (replay) & Continuous          & Deterministic           & Brittle \\
+        TD3   & No (replay) & Continuous          & Deterministic           & Improved \\
+        \hline
+    \end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{itemize}
+    \item \textbf{DDPG = DPG + DQN.} Bypass the intractable $\arg\max_a Q$ by training a second network (the actor) to output the maximising action; the gradient flows through the critic
+    \item Tricks that made DDPG work:
+    \begin{itemize}
+        \item \textbf{Replay buffer} \& \textbf{target networks} (from DQN) --- off-policy, stable TD targets
+        \item \textbf{Soft target updates} $\theta' \leftarrow \tau\theta + (1-\tau)\theta'$ instead of DQN's hard periodic copy
+        \item \textbf{Batch normalisation} --- transfers across tasks with different state scales
+        \item \textbf{Added action noise} (OU / Gaussian) --- exploration for a deterministic policy
+    \end{itemize}
+    \item \textbf{TD3} fixes DDPG's Q-overestimation with clipped double-Q, target-policy smoothing, and delayed policy updates
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Limitations of DDPG}
+\begin{itemize}
+    \item \textbf{Overestimation bias:} the single critic, maximised by the actor, systematically over-estimates $Q$ (the experiments showed $R_{av} \ll R_{best}$)
+    \item \textbf{Hyperparameter brittleness:} sensitive to learning rates, $\tau$, noise scale, and network architecture; results vary widely across random seeds
+    \item \textbf{Deterministic exploration:} relies entirely on injected noise --- weak, undirected exploration in sparse-reward tasks
+    \item \textbf{Scaling:} struggles on high-dimensional, complex tasks compared with later methods (TD3, SAC)
+    \item \textbf{Two-network instability:} actor and critic form a coupled feedback loop that can diverge if either lags
+\end{itemize}
+\end{frame}

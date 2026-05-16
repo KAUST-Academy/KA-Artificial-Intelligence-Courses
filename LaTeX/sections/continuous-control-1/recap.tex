@@ -1,0 +1,26 @@
+\section{Recap}
+\begin{frame}{}
+    \LARGE Continuous Control: \textbf{Recap (Day 4)}
+\end{frame}
+
+\begin{frame}{Recap: What Day 4 Established}
+\begin{itemize}
+    \item \textbf{Actor-Critic} pairs a policy (actor) with a learned value function (critic) that supplies low-variance gradient signal
+    \item The on-policy policy gradient:
+    $$\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t} \nabla_\theta \log \pi_\theta(a_t|s_t)\, A^{\pi}(s_t, a_t) \right]$$
+    \item A2C/A3C $\rightarrow$ TRPO $\rightarrow$ \textbf{PPO}: the workhorse of stable on-policy RL
+    \item \textbf{Key limitation:} on-policy methods \emph{discard all experience after each update} --- extremely data-hungry in complex environments
+    \item Stochastic policies also need a tractable $\log\pi_\theta$ --- awkward for high-dimensional \emph{continuous} actuators
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Recap: What Today Delivers}
+\begin{itemize}
+    \item \textbf{Today we go off-policy and continuous.}
+    \item \footnotesize \textcolor{red}{Note:} PPO already handles continuous actions \emph{on-policy}; ``Continuous Control I/II'' is specifically the \emph{off-policy, deterministic-policy} branch (DDPG/TD3 today) and the \emph{max-entropy} branch (SAC, Day 6).
+    \item \textbf{DPG} \rref{4}: a policy-gradient update rule for \emph{deterministic} policies $\mu_\theta(s)$ over continuous action spaces
+    \item \textbf{DDPG} \rref{5}: DPG made deep, by importing the DQN \rref{6} tricks (replay buffer, target networks) --- off-policy, sample-reusing
+    \item The critic becomes an action-value $Q_\phi(s,a)$; the policy gradient flows \emph{through the critic}: $\nabla_\theta Q_\phi(s,\mu_\theta(s))$
+    \item We close with \textbf{TD3}, the direct fix for DDPG's overestimation and brittleness --- and the bridge to Day 6 (SAC)
+\end{itemize}
+\end{frame}

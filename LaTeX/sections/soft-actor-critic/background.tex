@@ -47,7 +47,7 @@ Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha\big( R_{t+1} + \gamma Q(S_{t+1}, A_{
 Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha\big( R_{t+1} + \gamma \max_{a \in \mathcal{A}} Q(S_{t+1}, a) - Q(S_t, A_t) \big)
 \]
 \begin{itemize}
-    \item \textbf{DQN}, Minh et al., 2015
+    \item \textbf{DQN}, Mnih et al., 2015
 \end{itemize}
 \[
 \mathcal{L}(\theta) = \mathbb{E}_{(s,a,r,s') \sim U(D)}\!\left[ \Big( r + \gamma \max_{a'} Q(s', a'; \theta^{-}) - Q(s, a; \theta) \Big)^{2} \right]

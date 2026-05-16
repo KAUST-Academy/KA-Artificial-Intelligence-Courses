@@ -1,0 +1,47 @@
+\section{Extensions \& Applications}
+\begin{frame}{TD3: DDPG done right \rref{7}}
+\vspace{0.3em}
+The experiments showed DDPG \emph{overestimates} $Q$ and is brittle. \textbf{TD3} (Twin Delayed DDPG) keeps the deterministic off-policy actor-critic but adds three fixes:
+\begin{enumerate}
+    \footnotesize
+    \item \textbf{Clipped double-Q (twin critics):} learn two critics, use the \emph{minimum} for the TD target to curb overestimation bias:
+    \[
+    y = r + \gamma \min_{i=1,2} Q_{\theta_i'}\!\big(s',\, \mu_{\theta'}(s') + \epsilon\big)
+    \]
+    \item \textbf{Target policy smoothing:} $\epsilon \sim \mathrm{clip}(\mathcal{N}(0,\sigma),-c,c)$ --- regularizes the target so the actor cannot exploit sharp $Q$ peaks.
+    \item \textbf{Delayed policy updates:} update the actor (and targets) less often than the critics (e.g.\ every 2 critic steps) for lower-variance policy updates.
+\end{enumerate}
+\vspace{0.2em}
+\footnotesize\textcolor{red}{Takeaway:} TD3 is the deterministic successor to DDPG; its clipped double-Q idea carries directly into SAC (next lecture).
+\end{frame}
+
+\begin{frame}{Beyond TD3: other directions}
+\begin{itemize}
+    \footnotesize
+    \item \textbf{Make the actor an explicit $\arg\max$ of a convex critic} --- avoids a separate policy network entirely:
+    \begin{itemize}
+        \item \emph{Continuous Deep Q-Learning with Model-based Acceleration} (NAF) \rref{9}
+        \item \emph{Input Convex Neural Networks} \rref{10}
+    \end{itemize}
+    \vspace{0.3em}
+    \item \textbf{Stochastic policy search} --- replace the deterministic actor with an entropy-regularised stochastic one (the Day 6 path):
+    \begin{itemize}
+        \item \emph{Soft Actor-Critic} \rref{8}
+    \end{itemize}
+\end{itemize}
+\vspace{0.2em}
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,height=0.22\textheight,keepaspectratio]{images/continuous-control-1/figures/followup-quote-1.jpg}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,height=0.22\textheight,keepaspectratio]{images/continuous-control-1/figures/followup-quote-2.jpg}
+\end{figure}
+\end{column}
+\end{columns}
+\end{frame}

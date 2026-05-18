@@ -1,21 +1,12 @@
-\begin{frame}{$n$-step Returns \& GAE}
+\begin{frame}{GAE: The Two Limits}
 \begin{itemize}
-    \item \textbf{1-step TD residual:} $\delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$
-    \begin{itemize}
-        \item Low variance, but biased (relies on the critic estimate)
-    \end{itemize}
-    \item \textbf{Full Monte Carlo:} use actual return $G_t = \sum_{t'=t}^{T} \gamma^{t'-t} r_{t'}$ minus $V_\phi(s_t)$\footnotemark
-    \begin{itemize}
-        \item Unbiased, but high variance (sensitive to every reward in the episode)
-    \end{itemize}
-    \pause
-    \item \textbf{Generalised Advantage Estimation (GAE)} interpolates between them:
+    \item GAE gives a single knob $\lambda$ that interpolates the bias--variance trade-off:
     $$\hat{A}^{\mathrm{GAE}(\gamma,\lambda)}_t = \sum_{l=0}^{\infty} (\gamma\lambda)^l\, \delta_{t+l}$$
-    \item We write $\hat{A}_t$ for short: it is a \textbf{practical estimate} of the true advantage $A^{\pi}(s_t, a_t)$ from Day 1
-    \item $\lambda = 0$: pure 1-step TD (low variance, biased)
-    \item $\lambda = 1$: full Monte Carlo (unbiased, high variance)
+    \item $\lambda = 0$: pure 1-step TD --- low variance, biased
+    \item $\lambda = 1$: full Monte Carlo ($G_t - V_\phi(s_t)$) --- unbiased, high variance
     \item $\lambda \approx 0.95$: standard in PPO implementations
-    \item \textbf{Used by PPO in the lab} --- we will revisit this when implementing the algorithm
+    \pause
+    \item We write $\hat{A}_t$ for short: a \textbf{practical estimate} of the true advantage $A^{\pi}(s_t, a_t)$ from Day 1
+    \item \textbf{Used by PPO in the lab} --- we revisit this when implementing the algorithm
 \end{itemize}
-\footnotetext{The return $G_t = \sum_{t'=t}^{T} \gamma^{t'-t} r_{t'}$ is the same quantity denoted $r(\tau) := \sum_{t \geq 0} \gamma^t r_t$ in Day 3 (evaluated at $t{=}0$). We switch to $G_t$ here because GAE uses the time-indexed version.}
 \end{frame}

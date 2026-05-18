@@ -5,7 +5,7 @@
 
 \begin{frame}{The Algorithm Family Tree}
 \begin{center}
-REINFORCE $\;\rightarrow\;$ +baseline $\;\rightarrow\;$ +critic (A2C) $\;\rightarrow\;$ +GAE $\;\rightarrow\;$ +trust region (TRPO) $\;\rightarrow\;$ +clipping (PPO)
+REINFORCE $\;\rightarrow\;$ +baseline $\;\rightarrow\;$ +critic (A2C) $\;\rightarrow\;$ +GAE $\;\rightarrow\;$ +trust region (TRPO) $\;\rightarrow\;$ +clipping (PPO) $\;\rightarrow\;$ $-$critic (GRPO)
 \end{center}
 
 \vspace{0.5em}
@@ -22,6 +22,7 @@ REINFORCE $\;\rightarrow\;$ +baseline $\;\rightarrow\;$ +critic (A2C) $\;\righta
         A2C              & Yes & Medium & Medium & Moderate \\
         TRPO             & Yes & Medium & Medium & High \\
         PPO              & Yes & Medium & Medium & Low \\
+        GRPO             & Yes & Medium & Medium & Low (no critic) \\
         \hline
     \end{tabular}
 \end{table}
@@ -34,13 +35,14 @@ REINFORCE $\;\rightarrow\;$ +baseline $\;\rightarrow\;$ +critic (A2C) $\;\righta
     \item \textbf{TRPO} guarantees monotonic improvement via a KL trust region but is expensive to compute
     \item \textbf{PPO-Clip} approximates the trust region with a first-order method: clip $r_t(\theta)$ to $[1{-}\varepsilon, 1{+}\varepsilon]$ and take the $\min$ with the unclipped objective
     \item PPO is the workhorse of modern on-policy RL: simple, stable, widely used in robotics, games, and RLHF
+    \item \textbf{GRPO} drops the critic and uses group-mean baselines --- now the default for LLM RL (DeepSeek-R1)
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Limitations of Actor-Critic \& PPO}
 \begin{itemize}
     \item \textbf{Function approximation bias:} the TD residual $\delta_t$ is only an unbiased advantage estimate if $V_\phi = V^{\pi}$. An inaccurate critic introduces bias into the policy gradient
-    \item \textbf{Two-network instability:} if the critic lags behind the actor (or vice versa), the feedback loop can diverge --- both networks must be trained carefully together
+    \item \textbf{Two-network instability:} if the critic lags behind the actor (or vice versa), the feedback loop can diverge --- both networks must be trained carefully together (GRPO sidesteps this by dropping the critic entirely)
     \item \textbf{Hyperparameter sensitivity:} PPO performance is sensitive to $\varepsilon$ (clip range), $\lambda$ (GAE), number of epochs per rollout, and entropy coefficient $c_2$
     \item \textbf{On-policy sample inefficiency:} all methods in this lecture discard experience after each update. In complex environments this can require billions of environment steps
     \item \textbf{Dense-reward assumption:} variance reduction via advantage estimation works well when rewards are frequent. Sparse-reward tasks remain challenging for all on-policy methods

@@ -43,7 +43,7 @@
 \vspace{0.5em}
 \textbf{Objective:}
 \[
-J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, r(s, \pi_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ r(s, \pi_\theta(s)) \right]
+J(\mu_\theta) = \int_{\mathcal{S}} \rho^{\mu}(s)\, r(s, \mu_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\mu}\!\left[ r(s, \mu_\theta(s)) \right]
 \]
 \end{frame}
 
@@ -53,11 +53,14 @@ J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, r(s, \pi_\theta(s))\, ds = \m
 \end{itemize}
 \textbf{Objective:}
 \[
-J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, r(s, \pi_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ r(s, \pi_\theta(s)) \right]
+J(\mu_\theta) = \int_{\mathcal{S}} \rho^{\mu}(s)\, r(s, \mu_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\mu}\!\left[ r(s, \mu_\theta(s)) \right]
 \]
 \textbf{Policy Gradient:}
 \[
-\nabla_\theta J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, \nabla_\theta \pi_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\pi_\theta(s)}\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ \nabla_\theta \pi_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\pi_\theta(s)} \right]
+\begin{aligned}
+\nabla_\theta J(\mu_\theta) &= \int_{\mathcal{S}} \rho^{\mu}(s)\, \nabla_\theta \mu_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\mu_\theta(s)}\, ds \\[2pt]
+&= \mathbb{E}_{s \sim \rho^\mu}\!\left[ \nabla_\theta \mu_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\mu_\theta(s)} \right]
+\end{aligned}
 \]
 \end{frame}
 
@@ -67,11 +70,14 @@ J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, r(s, \pi_\theta(s))\, ds = \m
 
 \textbf{Objective:}
 \[
-J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, r(s, \pi_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ \rbox{r(s, \pi_\theta(s))} \right]
+J(\mu_\theta) = \int_{\mathcal{S}} \rho^{\mu}(s)\, r(s, \mu_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\mu}\!\left[ \rbox{r(s, \mu_\theta(s))} \right]
 \]
 \textbf{Policy Gradient:}
 \[
-\nabla_\theta J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, \nabla_\theta \pi_\theta(s)\, \nabla_a \rbox{Q^{w}(s, a)\big|_{a=\pi_\theta(s)}}\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ \nabla_\theta \pi_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\pi_\theta(s)} \right]
+\begin{aligned}
+\nabla_\theta J(\mu_\theta) &= \int_{\mathcal{S}} \rho^{\mu}(s)\, \nabla_\theta \mu_\theta(s)\, \nabla_a \rbox{Q^{w}(s, a)\big|_{a=\mu_\theta(s)}}\, ds \\[2pt]
+&= \mathbb{E}_{s \sim \rho^\mu}\!\left[ \nabla_\theta \mu_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\mu_\theta(s)} \right]
+\end{aligned}
 \]
 \end{frame}
 \begin{frame}{Background -- DPG}
@@ -82,7 +88,10 @@ J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, r(s, \pi_\theta(s))\, ds = \m
 
 \textbf{Deterministic Policy Gradient:}
 \[
-\nabla_\theta J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, \nabla_\theta \pi_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\pi_\theta(s)}\, ds = \mathbb{E}_{s \sim \rho^\pi}\!\left[ \nabla_\theta \pi_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\pi_\theta(s)} \right]
+\begin{aligned}
+\nabla_\theta J(\mu_\theta) &= \int_{\mathcal{S}} \rho^{\mu}(s)\, \nabla_\theta \mu_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\mu_\theta(s)}\, ds \\[2pt]
+&= \mathbb{E}_{s \sim \rho^\mu}\!\left[ \nabla_\theta \mu_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\mu_\theta(s)} \right]
+\end{aligned}
 \]
 \end{frame}
 
@@ -92,8 +101,12 @@ J(\pi_\theta) = \int_{\mathcal{S}} \rho^{\pi}(s)\, r(s, \pi_\theta(s))\, ds = \m
 \nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, \rbox{a \sim \pi_\theta}}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
 \]
 
-\textbf{Deterministic Policy Gradient:}\hfill\textcolor{red}{\footnotesize DDPG: Use deep learning to learn both functions!}
+\textbf{Deterministic Policy Gradient:}
 \[
-\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi}\!\left[ \nabla_\theta\, \rbox{\pi_\theta(s)}\, \nabla_a\, \rbox{Q^{w}(s, a)}\,\big|_{a=\pi_\theta(s)} \right]
+\nabla_\theta J(\mu_\theta) = \mathbb{E}_{s \sim \rho^\mu}\!\left[ \nabla_\theta\, \rbox{\mu_\theta(s)}\, \nabla_a\, \rbox{Q^{w}(s, a)}\,\big|_{a=\mu_\theta(s)} \right]
 \]
+\vspace{0.8em}
+\begin{center}
+\textcolor{red}{\textbf{DDPG: use deep learning to learn \emph{both} the actor $\mu_\theta(s)$ and the critic $Q^{w}(s,a)$.}}
+\end{center}
 \end{frame}

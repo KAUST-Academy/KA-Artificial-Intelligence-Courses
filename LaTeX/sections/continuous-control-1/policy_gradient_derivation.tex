@@ -126,7 +126,7 @@
     \item Vanilla Stochastic Policy Gradient:
 \end{itemize}
 \[
-\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t, \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
+\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
 \]
 \vfill
 \begin{flushright}
@@ -139,10 +139,11 @@
     \item Vanilla Stochastic Policy Gradient:
 \end{itemize}
 \[
-\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t, \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
+\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
 \]
+{\footnotesize Grouping the causal return-to-go and recognising it as the action-value $Q^{\pi_\theta}(s_t,a_t)=\mathbb{E}\!\left[\sum_{t'\geq t} r \mid s_t,a_t\right]$ (Day 3):}
 \[
-= \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log_{\pi_\theta}(a \mid s)\, \rbox{Q^{\pi_\theta}(s, a)} \right]
+= \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, \rbox{Q^{\pi_\theta}(s, a)} \right]
 \]
 \vspace{0.5em}
 
@@ -160,8 +161,9 @@ True value function is still not trivial to compute
 \[
 \nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t, \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
 \]
+{\footnotesize Grouping the causal return-to-go and recognising it as the action-value $Q^{\pi_\theta}(s_t,a_t)=\mathbb{E}\!\left[\sum_{t'\geq t} r \mid s_t,a_t\right]$ (Day 3):}
 \[
-= \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log_{\pi_\theta}(a \mid s)\, \rbox{Q^{\pi_\theta}(s, a)} \right]
+= \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, \rbox{Q^{\pi_\theta}(s, a)} \right]
 \]
 
 True value function is still not trivial to compute, but we can approximate it with a parameterized function:

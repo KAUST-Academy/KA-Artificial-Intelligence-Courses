@@ -45,8 +45,9 @@ DQN $\;+\;$ DPG $\;\rightarrow\;$ \textbf{DDPG} $\;\rightarrow\;$ +clipped doubl
 \begin{itemize}
     \item \textbf{Overestimation bias:} the single critic, maximised by the actor, systematically over-estimates $Q$ (the experiments showed $R_{av} \ll R_{best}$)
     \item \textbf{Hyperparameter brittleness:} sensitive to learning rates, $\tau$, noise scale, and network architecture; results vary widely across random seeds
-    \item \textbf{Deterministic exploration:} relies entirely on injected noise --- weak, undirected exploration in sparse-reward tasks
+    \item \textbf{Deterministic exploration:} relies entirely on injected noise --- weak, undirected exploration in sparse-reward tasks ($\rightarrow$ Day 7: exploration)
     \item \textbf{Scaling:} struggles on high-dimensional, complex tasks compared with later methods (TD3, SAC)
     \item \textbf{Two-network instability:} actor and critic form a coupled feedback loop that can diverge if either lags
+    \item \textbf{Offline failure:} DDPG on a \emph{fixed} buffer is essentially offline RL --- it diverges from extrapolation error on out-of-distribution actions ($\rightarrow$ Day 8: motivates BCQ/CQL)
 \end{itemize}
 \end{frame}

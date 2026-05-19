@@ -32,3 +32,16 @@
 \end{itemize}
 \begin{flushright}\tiny Figure: DDPG \rref{5}\end{flushright}
 \end{frame}
+
+\begin{frame}{Why batch normalisation here?}
+\vspace{0.4em}
+\begin{itemize}
+    \item Low-dimensional observations have components on \emph{wildly different physical scales}: joint angles (radians), velocities, torques, positions (metres)
+    \vspace{0.3em}
+    \item A single network must learn across MuJoCo tasks where these ranges differ by orders of magnitude --- raw inputs make the optimisation ill-conditioned
+    \vspace{0.3em}
+    \item \textbf{Batch normalisation} whitens each layer's activations (zero mean, unit variance per minibatch), so the same hyperparameters \emph{transfer across tasks} with different state scales
+    \vspace{0.3em}
+    \item This is the green-vs-grey gap on the previous slide --- batch norm is a genuine ablation variable, not a cosmetic add-on
+\end{itemize}
+\end{frame}

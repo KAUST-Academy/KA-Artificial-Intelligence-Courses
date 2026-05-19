@@ -4,7 +4,7 @@
     \pause
     \item \textbf{Day 6 --- Soft Actor-Critic (SAC):} maximum-entropy RL
     \begin{itemize}
-        \item Stochastic policy with an explicit \textbf{entropy bonus} in the objective: $\mathcal{J}(\pi) = \mathbb{E}\big[\sum_t r_t + \alpha\,\mathcal{H}(\pi(\cdot|s_t))\big]$
+        \item Stochastic policy with an explicit \textbf{entropy bonus} in the objective: $J(\pi_\theta) = \mathbb{E}\big[\sum_t r_t + \alpha\,\mathcal{H}(\pi_\theta(\cdot|s_t))\big]$
         \item Entropy drives \emph{directed} exploration --- no hand-tuned OU/Gaussian noise schedule
         \item Reuses what we built today: replay buffer, target networks, and \textbf{TD3's clipped double-Q} critic
         \item The deterministic policy gradient $\nabla_\theta Q(s,\mu_\theta(s))$ generalises to the \textbf{reparameterised} stochastic gradient

@@ -9,8 +9,23 @@
 \end{flushright}
 \end{frame}
 \begin{frame}{Experimental Results: Robustness}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.6\textwidth,height=0.78\textheight,keepaspectratio]{images/soft-actor-critic/figures/sac-robustness-robot.jpg}
-\end{figure}
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}
+\small
+\textbf{Task:} Sawyer arm trained with SAC to stack a block.
+\vspace{0.4em}
+\begin{itemize}
+    \item Evaluated under \emph{perturbations unseen at training time} (a human pushes the block / arm)
+    \item The stochastic, entropy-regularised policy adapts to off-distribution states
+    \item A deterministic policy would freeze on the trained trajectory
+\end{itemize}
+\end{column}
+\begin{column}{0.45\textwidth}
+\centering
+\includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio]{images/soft-actor-critic/figures/sac-robustness-robot.jpg}
+\end{column}
+\end{columns}
+\begin{flushright}
+    \tiny\url{https://sites.google.com/view/sac-and-applications}
+\end{flushright}
 \end{frame}

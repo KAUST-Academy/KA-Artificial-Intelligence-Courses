@@ -1,17 +1,27 @@
 % Adjust the aspect ratio and font size as needed
-\documentclass[10pt, aspectratio=169]{beamer}
+\documentclass[10pt, aspectratio=149]{beamer}
 
 % Include preamble files
 \input{preamble/packages}
 \input{preamble/commands}
 \input{preamble/beamer_settings}
 
-\title[Soft Actor-Critic]{Reinforcement Learning}
+\title[SAC]{Soft Actor-Critic: Off-Policy Maximum Entropy RL}
+
+% Clickable reference citation: [n] jumps to the matching bibliography entry.
+% Kept in normal text colour (like the Day 1--5 footnote markers).
+\newcommand{\rref}[1]{\hyperlink{ref:#1}{\textcolor{black}{[#1]}}}
 
 \begin{document}
 
+% Title pages
 \input{sections/cover}
 \input{sections/soft-actor-critic/cover}
+\input{sections/toc}
+
+% Recap & learning outcomes
+\input{sections/soft-actor-critic/recap}
+\input{sections/soft-actor-critic/learning_outcomes}
 
 % Motivation: sample inefficiency
 \input{sections/soft-actor-critic/main_problem}
@@ -21,8 +31,8 @@
 \input{sections/soft-actor-critic/ddpg}
 % Motivation: robustness
 \input{sections/soft-actor-critic/robustness}
-% Background: control-as-inference perspective
-\input{sections/soft-actor-critic/control_as_inference}
+% Control-as-inference detour cut (Day 6 review): the MaxEnt payoff is shown
+% directly in max_entropy_rl.tex; a one-line Levine 2018 pointer lives there.
 % Background: maximum entropy RL
 \input{sections/soft-actor-critic/max_entropy_rl}
 % Prior Work: Soft Q-Learning
@@ -50,7 +60,8 @@
 \input{sections/soft-actor-critic/limitations_open_issues}
 
 % Wrap
-\input{sections/soft-actor-critic/recap}
+\input{sections/soft-actor-critic/summary}
+\input{sections/soft-actor-critic/whats_next}
 \input{sections/soft-actor-critic/references}
 
 \end{document}

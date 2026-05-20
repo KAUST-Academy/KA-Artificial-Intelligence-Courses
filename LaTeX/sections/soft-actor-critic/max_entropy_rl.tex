@@ -47,12 +47,15 @@ H(P) = \mathbb{E}_{x \sim P}\!\left[ -\log P(x) \right]
 \begin{column}{0.58\textwidth}
 \small
 \begin{align*}
-&\min_{\pi} D_{\mathrm{KL}}\big(\pi(\,\cdot \mid s_0) \,\|\, \exp(Q(s_0, \cdot))\big) \\
+&\min_{\pi} D_{\mathrm{KL}}\big(\pi(\,\cdot \mid s_0) \,\|\, \exp(Q(s_0, \cdot))/Z(s_0)\big) \\
 &= \min_{\pi} \mathbb{E}_\pi\!\left[ \log \frac{\pi(a_0 \mid s_0)}{\exp(Q(s_0, a_0))} \right] \\
 &= \max_{\pi} \mathbb{E}_\pi\!\left[ Q(s_0, a_0) - \log \pi(a_0 \mid s_0) \right] \\
+&\qquad\text{\footnotesize(expand $Q$ recursively over the horizon)} \\
 &= \max_{\pi} \mathbb{E}_\pi\!\left[ \sum_t r(s_t, a_t) + \mathcal{H}(\pi(\,\cdot \mid s_0)) \mid s_0 \right] \\
 &= J_{\mathrm{MaxEnt}}(\pi(\,\cdot \mid s_0))
 \end{align*}
 \end{column}
 \end{columns}
+\vspace{0.2em}
+{\footnotesize The partition function $Z(s_0) = \int \exp(Q(s_0,a))\,da$ is constant in $\pi$, so it drops from the $\arg\min$ --- the KL is well-defined against the \emph{unnormalised} Boltzmann distribution. $Z$ reappears explicitly on the SAC policy-improvement slide. The same objective also drops out of casting control as probabilistic inference --- see Levine \rref{3}, \href{https://arxiv.org/abs/1805.00909}{\emph{RL and Control as Probabilistic Inference}} (2018); revisited under RLHF.}
 \end{frame}

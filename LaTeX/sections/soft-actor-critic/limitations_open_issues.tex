@@ -1,33 +1,20 @@
-\begin{frame}{Limitations/Open Issues}
+\begin{frame}{Limitations / Open Issues}
+\begin{columns}[T]
+\begin{column}{0.55\textwidth}
 \begin{itemize}
-    \item Lack of experiments on hard-exploration problem
+    \setlength{\itemsep}{0.5em}
+    \item Lack of experiments on hard-exploration problems (entropy is undirected --- $\to$ Day 7)
+    \item Approximating a multi-modal Boltzmann distribution with a \emph{unimodal} Gaussian collapses modes
+    \item High-variance gradients when using automatic temperature tuning on hard tasks (e.g.\ Humanoid rllab)
 \end{itemize}
-\end{frame}
-\begin{frame}{Limitations/Open Issues}
-\begin{itemize}
-    \item Lack of experiments on hard-exploration problem
-    \item Approximating a multi-modal Boltzmann distribution with a unimodal Gaussian
-\end{itemize}
+\end{column}
+\begin{column}{0.43\textwidth}
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\textwidth,height=0.55\textheight,keepaspectratio]{images/soft-actor-critic/figures/limitations-boltzmann-gauss.jpg}
+    \includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{images/soft-actor-critic/figures/limitations-boltzmann-gauss.jpg}\\
+    \vspace{0.4em}
+    \includegraphics[width=0.75\linewidth,height=0.32\textheight,keepaspectratio]{images/soft-actor-critic/figures/limitations-humanoid-rllab.jpg}
 \end{figure}
-\end{frame}
-\begin{frame}{Limitations/Open Issues}
-\begin{itemize}
-    \item Lack of experiments on hard-exploration problem
-    \item Approximating a multi-modal Boltzmann distribution with a unimodal Gaussian
-    \item High-variance using automatic temperature tuning
-\end{itemize}
-\end{frame}
-\begin{frame}{Limitations/Open Issues}
-\begin{itemize}
-    \item Lack of experiments on hard-exploration problem
-    \item Approximating a multi-modal Boltzmann distribution with a unimodal Gaussian
-    \item High-variance using automatic temperature tuning
-\end{itemize}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.5\textwidth,height=0.55\textheight,keepaspectratio]{images/soft-actor-critic/figures/limitations-humanoid-rllab.jpg}
-\end{figure}
+\end{column}
+\end{columns}
 \end{frame}

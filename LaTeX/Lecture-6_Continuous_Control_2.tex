@@ -1,0 +1,67 @@
+% Adjust the aspect ratio and font size as needed
+\documentclass[10pt, aspectratio=149]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+\title[SAC]{Continuous Control II: Max Entropy RL, SAC}
+
+% Clickable reference citation: [n] jumps to the matching bibliography entry.
+% Kept in normal text colour (like the Day 1--5 footnote markers).
+\newcommand{\rref}[1]{\hyperlink{ref:#1}{\textcolor{black}{[#1]}}}
+
+\begin{document}
+
+% Title pages
+\input{sections/cover}
+\input{sections/continuous-control-2/cover}
+\input{sections/toc}
+
+% Recap & learning outcomes
+\input{sections/continuous-control-2/recap}
+\input{sections/continuous-control-2/learning_outcomes}
+
+% Motivation: sample inefficiency
+\input{sections/continuous-control-2/main_problem}
+% Background: value-based and actor-critic methods
+\input{sections/continuous-control-2/background}
+% Prior Work: DDPG
+\input{sections/continuous-control-2/ddpg}
+% Motivation: robustness
+\input{sections/continuous-control-2/robustness}
+% Control-as-inference detour cut (Day 6 review): the MaxEnt payoff is shown
+% directly in max_entropy_rl.tex; a one-line Levine 2018 pointer lives there.
+% Background: maximum entropy RL
+\input{sections/continuous-control-2/max_entropy_rl}
+% Prior Work: Soft Q-Learning
+\input{sections/continuous-control-2/soft_q_learning}
+
+% Soft Actor-Critic: contributions and theory
+\input{sections/continuous-control-2/sac_contributions}
+\input{sections/continuous-control-2/soft_policy_iteration}
+% Soft Actor-Critic: algorithm derivation
+\input{sections/continuous-control-2/sac_parameterization}
+\input{sections/continuous-control-2/sac_objectives}
+\input{sections/continuous-control-2/sac_algorithm}
+
+% Experimental Results
+\input{sections/continuous-control-2/experimental_results}
+
+% Automatic Temperature Tuning extension
+\input{sections/continuous-control-2/limitation}
+\input{sections/continuous-control-2/auto_temp_contributions}
+\input{sections/continuous-control-2/real_world_robots}
+\input{sections/continuous-control-2/auto_temp_derivation}
+\input{sections/continuous-control-2/experimental_results_full}
+
+% Limitations / open issues
+\input{sections/continuous-control-2/limitations_open_issues}
+
+% Wrap
+\input{sections/continuous-control-2/summary}
+\input{sections/continuous-control-2/whats_next}
+\input{sections/continuous-control-2/references}
+
+\end{document}

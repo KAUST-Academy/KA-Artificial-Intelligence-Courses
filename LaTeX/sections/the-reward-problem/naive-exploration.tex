@@ -1,0 +1,99 @@
+\section{Naive Exploration}
+
+\begin{frame}{Greedy Algorithm}
+\begin{itemize}
+    \item For each arm, maintain a \textbf{sample-mean estimate} of its value --- average the rewards seen from that arm so far:
+    \[
+        \hat{Q}_t(a) \;\stackrel{\text{def}}{=}\; \frac{1}{N_t(a)} \sum_{s=1}^{t} r_s \cdot \mathbf{1}_{a_s = a} \;\;\approx\;\; Q(a)
+    \]
+    \item Pick the action with highest estimate:
+    \[
+        a_t = \operatorname*{arg\,max}_{a \in \mathcal{A}} \hat{Q}_{t-1}(a)
+    \]
+    \item \textcolor{red}{Greedy can lock onto a suboptimal action forever $\Rightarrow$ \textbf{linear total regret}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{$\epsilon$-Greedy Algorithm}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item Force a small amount of exploration at every step. At time $t$:
+    \begin{itemize}
+        \item With probability $1 - \epsilon$, select $a_t = \operatorname*{arg\,max}_{a} \hat{Q}_{t-1}(a)$
+        \item With probability $\epsilon$, select a uniformly random action
+    \end{itemize}
+    \item Constant $\epsilon$ ensures a minimum per-step regret proportional to the mean gap:
+    \[
+        l_t \;\geq\; \frac{\epsilon}{|\mathcal{A}|} \sum_{a \in \mathcal{A}} \Delta_a
+    \]
+    \item \textcolor{red}{Therefore $\epsilon$-Greedy also has \textbf{linear total regret}}
+\end{itemize}
+\end{frame}
+
+% Day-2 callback as its own small slide (mirrors the Day-3 REINFORCE callback)
+\begin{frame}{$\epsilon$-Greedy Is DQN's Exploration Rule}
+\vspace{0.5em}
+\begin{center}
+\textcolor{red}{\textbf{This is the exact exploration rule used in DQN on Day 2.}}
+\end{center}
+\vspace{1em}
+\begin{itemize}
+    \setlength{\itemsep}{0.6em}
+    \item DQN inherits $\epsilon$-Greedy's \emph{linear-regret} weakness
+    \item It works in practice with a decay schedule (next slide), but it has no theoretical guarantee of efficient exploration
+    \item This is why the rest of this lecture exists --- everything that follows is a more principled answer to ``how do I explore?''
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Optimistic Initialization}
+\begin{itemize}
+    \setlength{\itemsep}{0.45em}
+    \item Simple, practical idea: initialize $\hat{Q}_0(a)$ to a \emph{high} value for every $a$
+    \item Update by incremental averaging:
+    \[
+        \hat{Q}_t(a_t) = \hat{Q}_{t-1}(a_t) + \frac{1}{N_t(a_t)} \big(r_t - \hat{Q}_{t-1}(a_t)\big)
+    \]
+    \item Encourages systematic exploration early on (every arm starts off looking great until tried)
+    \item But the algorithm can still lock onto a suboptimal action $\Rightarrow$ \textbf{linear regret}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Decaying $\epsilon_t$-Greedy}
+\begin{itemize}
+    \setlength{\itemsep}{0.65em}
+    \item Idea: let $\epsilon$ shrink over time --- explore aggressively early, exploit increasingly late
+    \item In theory, a schedule that depends on the (unknown) suboptimality gaps $\Delta_a$ achieves \emph{logarithmic} regret --- but you can't compute it without knowing the gaps, so it's impractical
+    \item \textcolor{red}{In practice} use problem-agnostic schedules: $\epsilon_t = 1/t$, $\epsilon_t = 1/\sqrt{t}$, or simple linear annealing --- no guarantee, but all work in practice
+    \item \href{https://github.com/TikhonJelvis/RL-book/blob/master/rl/chapter14/epsilon_greedy.py}{Educational Code} for decaying $\epsilon$-greedy with optimistic initialization
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Lai-Robbins Lower Bound: Setup}
+\textbf{What is a ``lower bound''?} A statement that \emph{no algorithm, however clever}, can do better than a certain regret growth rate --- it tells us the best we can ever hope for.
+\vspace{0.5em}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item \textbf{Goal:} an algorithm with \emph{sublinear} total regret $L_T = \sum_{t=1}^T l_t$ for any MAB, without knowing the reward distributions $\mathcal{R}^a$ in advance
+    \item Two quantities will appear:
+    \begin{itemize}
+        \item \textbf{Gap} $\Delta_a = V^* - Q(a)$: how much value we lose \emph{each time} we pull suboptimal arm $a$
+        \item \textbf{KL-divergence} $\mathrm{KL}(\mathcal{R}^a \,\|\, \mathcal{R}^{a^*})$: a statistical distance between two distributions --- \emph{how easy is it to tell arm $a$ apart from the best arm $a^*$ from samples?} \\
+              Small KL $\Rightarrow$ distributions look almost identical $\Rightarrow$ need many samples to distinguish
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Lai-Robbins Lower Bound: The Theorem}
+\begin{block}{Theorem (Lai \& Robbins, 1985)}
+For any reasonable\footnote{\scriptsize ``consistent'': sub-polynomial regret on every problem instance} bandit algorithm, asymptotically:
+\[
+    \lim_{T \to \infty} \frac{L_T}{\log T} \;\;\geq\;\; \sum_{a \mid \Delta_a > 0} \frac{\Delta_a}{\mathrm{KL}(\mathcal{R}^a \,\|\, \mathcal{R}^{a^*})}
+\]
+\end{block}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item \textbf{Reading it.} Each suboptimal arm contributes regret proportional to its \emph{gap}, scaled \emph{inversely} by how easy it is to tell apart from the best
+    \item \textbf{The worst kind of arm:} large gap (expensive to pull) \emph{and} small KL (hard to distinguish, so we keep pulling it) --- exactly what you'd expect
+    \item \textcolor{red}{The best regret growth any algorithm can achieve is $\mathcal{O}(\log T)$} --- UCB (next) and Thompson sampling both match this rate
+\end{itemize}
+\end{frame}

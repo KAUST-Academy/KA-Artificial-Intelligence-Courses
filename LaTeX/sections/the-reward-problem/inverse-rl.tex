@@ -1,0 +1,149 @@
+\section{Inverse Reinforcement Learning}
+
+\begin{frame}{}
+    \LARGE The Reward Problem: \textbf{Inverse RL}
+\end{frame}
+
+\begin{frame}{Inverse RL: Given Behavior, Learn the Reward}
+\begin{itemize}
+    \setlength{\itemsep}{0.6em}
+    \item \textbf{Forward RL} (everything so far): given a reward $R(s,a)$, learn a policy $\pi^*$ that maximizes it
+    \item \textbf{Inverse RL} (today): given (expert) behavior $\tau^E \sim \pi^E$, learn a reward $R_\theta$ that \emph{explains} it
+    \[
+        \pi^E \;\;\Longrightarrow\;\; R_\theta
+    \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Inverse RL?}
+\begin{itemize}
+    \setlength{\itemsep}{0.65em}
+    \item In many domains, rewards are far easier to \emph{demonstrate} than to specify in closed form
+    \item Driving: hard to write ``polite, safe, fast'' as a scalar; easy to show
+    \item Manipulation, dialogue, locomotion: same story
+    \item \textcolor{red}{\textbf{This is the strongest form of the reward problem}} --- the reward function itself is unknown.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Ill-Posedness of IRL}
+\begin{itemize}
+    \setlength{\itemsep}{0.6em}
+    \item \emph{Many} reward functions rationalize the same expert behavior
+    \begin{itemize}
+        \item Trivially: $R(s,a) \equiv 0$ makes every policy optimal
+        \item Potential-based shaping: $R$ and $R + \gamma\Phi(s') - \Phi(s)$ are policy-equivalent
+    \end{itemize}
+    \item We need a \emph{principle} to pick one reward out of the equivalence class
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Two Structural Fixes for the Ambiguity}
+\begin{itemize}
+    \setlength{\itemsep}{0.75em}
+    \item \textbf{(a) Max-margin IRL} \\
+          \emph{Ng \& Russell, ICML 2000;\ Abbeel \& Ng, ICML 2004} \\
+          The expert's reward should beat alternatives by a wide margin
+    \item \textbf{(b) Maximum-entropy IRL} \\
+          \emph{Ziebart et al., AAAI 2008} \\
+          Pick the reward whose induced policy distribution has \emph{maximum entropy}, subject to matching the expert's feature counts --- a unique, well-posed choice
+    \item We focus on (b) --- standard fix today, and generalizes to modern preference learning
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Maximum-Entropy IRL: The Principle}
+\textbf{Among all policy distributions consistent with the expert's behavior, pick the one with maximum entropy.}
+\vspace{0.6em}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item Trajectory distribution under reward $R_\theta$:
+    \[
+        P_\theta(\tau) \;\propto\; \exp\!\Big(\textstyle\sum_t R_\theta(s_t, a_t)\Big)
+    \]
+    \item Higher-reward trajectories are exponentially more likely, but the entropy term keeps the distribution from collapsing
+    \item Train $\theta$ by maximum likelihood of expert trajectories:
+    \[
+        \max_\theta \;\sum_{\tau^E} \log P_\theta(\tau^E)
+    \]
+    \item Uniquely resolves the ambiguity; matches expert feature-counts in expectation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MaxEnt IRL: The Day-6 Connection}
+\vspace{0.4em}
+\begin{center}
+\textcolor{red}{\textbf{The same max-entropy principle that justified SAC's $-\log\pi$ bonus.}}
+\end{center}
+\vspace{0.8em}
+\begin{itemize}
+    \setlength{\itemsep}{0.7em}
+    \item In SAC (Day 6): adds exploration to the policy
+    \item In MaxEnt IRL: resolves reward ambiguity
+    \item \textbf{Same principle, two different jobs.}
+    \item Cite: \textbf{Ziebart, Maas, Bagnell \& Dey, AAAI 2008} --- \emph{Maximum Entropy Inverse Reinforcement Learning}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Preference-Based Reward Learning: The Setup}
+\textbf{What if we have neither demonstrations nor a written reward, only human \emph{comparisons}?}
+\vspace{0.6em}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item Show two trajectories $\tau^A, \tau^B$; ask a human which is better
+    \item Model the preference with a \textbf{Bradley--Terry} likelihood under a learned reward $R_\theta$:
+    \[
+        P(\tau^A \succ \tau^B) \;=\;
+        \frac{\exp\!\big(\sum_t R_\theta(s_t^A, a_t^A)\big)}
+             {\exp\!\big(\sum_t R_\theta(s_t^A, a_t^A)\big)
+            + \exp\!\big(\sum_t R_\theta(s_t^B, a_t^B)\big)}
+    \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Preference-Based Reward Learning: The Pipeline}
+\begin{enumerate}
+    \setlength{\itemsep}{0.6em}
+    \item Collect a dataset of human-labeled preferences over trajectory pairs
+    \item Train $R_\theta$ by cross-entropy on the Bradley--Terry likelihood
+    \item Run any standard RL algorithm (e.g.\ PPO from Day 4) against $R_\theta$
+\end{enumerate}
+\vspace{0.7em}
+\begin{itemize}
+    \item Cite: \textbf{Christiano, Leike, Brown, Martic, Legg \& Amodei, NeurIPS 2017}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Day-9 Bridge}
+\vspace{0.6em}
+\begin{center}
+\textcolor{red}{\textbf{This exact pipeline + a language-model policy $=$ RLHF.}}
+\end{center}
+\vspace{0.9em}
+\begin{itemize}
+    \setlength{\itemsep}{0.65em}
+    \item The reward model in RLHF is the $R_\theta$ from the previous slide
+    \item The only thing that changes is the policy class: $\pi_\theta$ becomes a large language model
+    \item The optimizer (PPO) and the pipeline (SFT $\to$ RM $\to$ PPO) are the same machinery
+    \item Day 9 picks up exactly here.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Three Faces, Resolved}
+\begin{center}
+\renewcommand{\arraystretch}{1.6}
+\small
+\begin{tabular}{p{0.42\textwidth}p{0.50\textwidth}}
+\hline
+\textbf{If you can\ldots} & \textbf{Then use\ldots} \\
+\hline
+\ldots write the reward & \emph{Forward RL} (Days 1--6) \\
+\ldots demonstrate the reward & \emph{Inverse RL} (MaxEnt IRL) \\
+\ldots compare outcomes & \emph{Preference-based reward learning} \\
+                       & (Day 9: RLHF) \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{1em}
+\begin{itemize}
+    \item One unifying view: every method on the board is a different way to recover the optimal policy when the reward is unknown, partially known, or hard to specify
+\end{itemize}
+\end{frame}

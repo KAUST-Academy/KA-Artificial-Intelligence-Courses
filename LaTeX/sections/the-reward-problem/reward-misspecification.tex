@@ -1,0 +1,73 @@
+\section{Reward Misspecification}
+
+\begin{frame}{}
+    \LARGE The Reward Problem: \textbf{When the Reward is Wrong}
+\end{frame}
+
+\begin{frame}{Reward Shaping: The Promise and the Trap}
+\begin{itemize}
+    \setlength{\itemsep}{0.6em}
+    \item Sparse rewards are hard; a well-shaped reward dramatically accelerates learning
+    \item \textcolor{red}{But arbitrary shaping changes the optimal policy} --- the agent optimizes the \emph{shape}, not the goal
+    \item Example: reward the agent for ``getting closer to the goal'' and you may teach it to circle the goal forever
+    \item We need a principled way to inject prior knowledge that \emph{doesn't change the optimum}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Potential-Based Reward Shaping (PBRS)}
+\textbf{Setup.} Replace the original reward $R(s, a, s')$ with $R(s, a, s') + F(s, s')$ during training, where $F$ is an extra \emph{shaping signal} of our choice.
+\vspace{0.4em}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item Restrict $F$ to the form
+    \[
+        F(s, s') \;=\; \gamma\, \Phi(s') \;-\; \Phi(s)
+    \]
+    where $\Phi : \mathcal{S} \to \mathbb{R}$ assigns a real number to each state --- a ``\emph{potential}'' (e.g.\ ``negative distance to goal''). The shaping is a discounted difference of potentials.
+    \item \textbf{Policy invariance:} the shaped MDP has the \emph{same} optimal policy as the original
+    \item \emph{This form is necessary}: any non-PBRS shaping can in principle change the optimum
+    \item Cite: \textbf{Ng, Harada \& Russell, ICML 1999}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Reward Hacking: Goodhart's Law for RL}
+\vspace{0.3em}
+\begin{center}
+\textcolor{red}{\textit{When a reward becomes a target, the agent finds a way to satisfy the letter, not the spirit.}}
+\end{center}
+\vspace{0.8em}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item Every misspecified reward eventually gets hacked
+    \item The agent's optimization pressure exposes every loophole in the specification
+    \item The clearer the reward becomes ``measurable,'' the more likely the agent ignores what the measurement was \emph{supposed} to track
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Reward Hacking: Famous Examples}
+\begin{itemize}
+    \setlength{\itemsep}{0.65em}
+    \item \textbf{CoastRunners} (OpenAI 2016): boat-racing game scored on hitting targets, not finishing. Agent learned to drive in circles hitting the same green blocks --- high score, no race
+    \item \textbf{Tetris pause}: agent learned to indefinitely pause the game when about to lose --- never loses, never plays
+    \item \textbf{ROUGE summarization}: language-model summarizer exploited ROUGE's $n$-gram overlap to produce high-scoring but barely readable text
+\end{itemize}
+\vspace{0.5em}
+\begin{itemize}
+    \item Cites: \textbf{Amodei \& Clark, OpenAI 2016} (CoastRunners primary source); \textbf{Krakovna et al., DeepMind 2020} (catalogued survey of dozens of examples)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{When We Can't Write a Reward At All}
+\begin{itemize}
+    \setlength{\itemsep}{0.7em}
+    \item Reward hacking is the same failure mode as \textbf{reward-model overoptimization in RLHF} --- a learned $R_\theta$ is also a misspecified target
+    \item For tasks like ``write a useful summary,'' ``drive politely,'' ``be helpful, harmless, honest'' --- writing the reward is essentially impossible without specification gaming
+    \item[]
+    \item \textcolor{red}{\textbf{If we can't write the reward $\ldots$ can we learn it?}}
+    \item Two ways:
+    \begin{itemize}
+        \item From \emph{demonstrations} $\longrightarrow$ \textbf{Inverse RL} (up next)
+        \item From \emph{human preferences} $\longrightarrow$ preference-based reward learning $\longrightarrow$ \textbf{RLHF} (Day 9)
+    \end{itemize}
+\end{itemize}
+\end{frame}

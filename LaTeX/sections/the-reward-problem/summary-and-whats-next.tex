@@ -1,0 +1,90 @@
+\section{Summary}
+\begin{frame}{}
+    \LARGE Day 7: \textbf{Summary}
+\end{frame}
+
+\begin{frame}{Recap: Faces 1 \& 2 of the Reward Problem}
+\begin{itemize}
+    \setlength{\itemsep}{0.7em}
+    \item \textbf{Face 1 --- Find the reward.}
+    \begin{itemize}
+        \item Bandits formalize explore vs.\ exploit; UCB / Thompson / gradient bandits give principled, near-optimal-regret algorithms
+        \item Scaled to deep RL: bootstrapped DQN $\equiv$ posterior sampling, pseudo-counts $\equiv$ UCB in pixel space, curiosity / RND are genuinely new
+        \item Entropy (SAC, Day 6) is the gradient-bandit descendant --- now we have the full family
+    \end{itemize}
+    \item \textbf{Face 2 --- The reward is wrong.}
+    \begin{itemize}
+        \item Potential-based shaping is the only safe shaping
+        \item Everything else is at risk of specification gaming (CoastRunners, ROUGE, Tetris pause)
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Recap: Face 3 of the Reward Problem}
+\begin{itemize}
+    \setlength{\itemsep}{0.7em}
+    \item \textbf{Face 3 --- Can't write the reward.}
+    \begin{itemize}
+        \item \textbf{Inverse RL} learns it from demonstrations (MaxEnt IRL, Ziebart 2008)
+        \item \textbf{Preference-based learning} learns it from comparisons (Christiano 2017)
+        \item This is the \emph{direct ancestor of RLHF} on Day 9
+    \end{itemize}
+    \item \textbf{One unifying theme:} every algorithm today is a different way to recover the optimal policy when the reward is unknown, partially known, or hard to specify
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Algorithm Map}
+\begin{center}
+\renewcommand{\arraystretch}{1.45}
+\footnotesize
+\begin{tabular}{p{0.40\textwidth}p{0.52\textwidth}}
+\hline
+\textbf{Setting} & \textbf{Algorithm family (today)} \\
+\hline
+One-state bandit                          & $\epsilon$-greedy, UCB1, Thompson, gradient bandits \\
+Contextual bandit                         & LinUCB and successors (recommendation) \\
+Deep RL, sparse reward                    & PSRL / Bootstrapped DQN, pseudo-counts, ICM, RND, HER \\
+Reward is shapeable                       & Potential-based shaping (policy-invariant) \\
+Reward unwritable; demonstrations available & Maximum-entropy IRL \\
+Reward unwritable; comparisons available  & Bradley--Terry preference learning $\to$ RLHF (Day 9) \\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\section{What's Next}
+\begin{frame}[t]{What's Next: Day 8}
+\vspace{0.4em}
+\textbf{Day 8 --- Model-Based \& Offline RL.} The next way to attack sample inefficiency.
+\vspace{0.5em}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item \emph{Model-based RL:} learn the dynamics, plan with the model (MPC, MCTS, Dyna, world models)
+    \item \emph{Offline RL:} learn from a \emph{fixed} dataset with no further interaction --- the same OOD problem as exploration, in reverse: you must \emph{avoid} the unfamiliar regions exploration would push you toward
+    \item Posterior sampling (today, via Bootstrapped DQN) reappears as PSRL for full MDPs
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{What's Next: Day 9}
+\vspace{0.4em}
+\textbf{Day 9 --- RLHF.} The IRL $\to$ preference-learning chain from today, applied to LLMs.
+\vspace{0.5em}
+\begin{itemize}
+    \setlength{\itemsep}{0.6em}
+    \item The reward model in RLHF is the $R_\theta$ from today's preference slide
+    \item ``Reward-model overoptimization'' is today's reward-hacking failure mode, in LLM form
+    \item PPO (Day 4) is the policy optimizer; SFT $\to$ RM $\to$ PPO is the pipeline
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{What's Next: Day 10}
+\vspace{0.4em}
+\textbf{Day 10 --- Frontiers.}
+\vspace{0.5em}
+\begin{itemize}
+    \setlength{\itemsep}{0.7em}
+    \item Intrinsic motivation reappears in meta-RL, open-ended learning, and hierarchical RL
+    \item Curiosity (today) is one of the central ideas of the open-ended-learning agenda
+    \item Reward design / specification gaming reappears as a central concern of AI safety
+\end{itemize}
+\end{frame}

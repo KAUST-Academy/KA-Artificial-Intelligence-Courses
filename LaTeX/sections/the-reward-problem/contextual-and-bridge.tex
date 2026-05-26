@@ -1,0 +1,85 @@
+\section{Contextual Bandits and the Bridge to MDPs}
+
+\begin{frame}{Contextual Bandits: The Setup}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item A contextual bandit is a 3-tuple $(\mathcal{A}, \mathcal{S}, \mathcal{R})$:
+    \begin{itemize}
+        \item $\mathcal{A}$: known set of $m$ actions (``arms'')
+        \item $\mathcal{S}$: distribution over states (``contexts'')
+        \item $\mathcal{R}^a_s$: reward distribution \emph{conditional} on $(s, a)$
+    \end{itemize}
+    \item \textcolor{red}{Same as MAB, but the agent now sees a context $s$ before choosing}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Contextual Bandits: The Interaction}
+At each step $t$:
+\begin{enumerate}
+    \setlength{\itemsep}{0.5em}
+    \item Environment generates a context $s_t \sim \mathcal{S}$
+    \item Agent selects an action $a_t \in \mathcal{A}$
+    \item Environment generates a reward $r_t \sim \mathcal{R}^{a_t}_{s_t}$
+\end{enumerate}
+\vspace{0.7em}
+\begin{itemize}
+    \item Goal as before: maximize $\sum_{t=1}^{T} r_t$
+    \item Bandit algorithms extend naturally: $Q(a) \;\to\; Q(s, a)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{LinUCB: The Intuition}
+\textbf{Setting.} Each (context, action) pair has a feature vector $x_{s,a} \in \mathbb{R}^d$ (e.g.\ user features $\otimes$ article features).
+\begin{itemize}
+    \setlength{\itemsep}{0.6em}
+    \item Model the mean reward as \textbf{linear in the features}: $\mathbb{E}[r \mid s, a] = x_{s,a}^\top \theta_a$
+    \item Estimate each arm's parameter $\theta_a$ by \emph{ridge regression} on its past pulls $\Rightarrow$ get not just a point estimate $\hat{\theta}_a$ but a \emph{confidence ellipsoid} around it
+    \item \emph{Same UCB philosophy:} pick the action whose \textbf{optimistic} reward estimate is highest --- mean estimate $+$ how far the true $\theta_a$ could plausibly be from $\hat{\theta}_a$ in direction $x_{s,a}$
+    \item Reduces to UCB1 if the features are just one-hot per arm (i.e.\ no context)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{LinUCB: The Algorithm}
+\textbf{For each arm $a$,} maintain $A_a$ (the $d\times d$ Gram matrix of past feature vectors pulled for that arm) and $\hat{\theta}_a = A_a^{-1} b_a$ (the ridge-regression coefficient).
+\vspace{0.4em}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item Action choice at step $t$:
+    \[
+        a_t = \operatorname*{arg\,max}_{a} \Big\{\; \underbrace{x_{s_t, a}^\top \hat{\theta}_a}_{\text{linear estimate}} \;+\; \alpha\,\underbrace{\sqrt{x_{s_t, a}^\top A_a^{-1} x_{s_t, a}}}_{\text{confidence-ellipsoid radius}} \;\Big\}
+    \]
+    \item Same shape as UCB1: \emph{mean estimate} $+$ \emph{bonus that shrinks as more data accumulates in direction $x_{s,a}$}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{LinUCB in the Wild}
+\begin{itemize}
+    \setlength{\itemsep}{0.6em}
+    \item \textbf{Industrially dominant case of contextual bandits}: deployed at scale on \emph{Yahoo Front Page news recommendation}
+    \begin{itemize}
+        \item 33M-event dataset
+        \item 12.5\% click lift over the context-free baseline
+    \end{itemize}
+    \item Cite: \textbf{Li, Chu, Langford \& Schapire, WWW 2010}
+    \item LinUCB and its successors power a huge fraction of online recommendation systems today
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bandits $\longrightarrow$ MDPs}
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\large
+\begin{tabular}{ll}
+One-armed bandit     & $=$ \emph{one-state} MDP \\
+Contextual bandit    & $=$ \emph{one-step} MDP \\
+Add state transitions $\Longrightarrow$ & the full MDP from Day 1 \\
+\end{tabular}
+\end{center}
+\vspace{0.8em}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item Everything we just covered --- UCB, Thompson, gradient bandits --- \emph{lifts} to MDPs in principle
+    \item Naively, the state space explodes: visiting every $(s, a)$ enough times isn't feasible in deep RL
+    \item \textcolor{red}{\textbf{Up next:}} how to scale these exploration ideas to deep RL with sparse rewards.
+\end{itemize}
+\end{frame}

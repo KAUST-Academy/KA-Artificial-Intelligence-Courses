@@ -1,0 +1,35 @@
+% ============================================================================
+\section{Synthesis and discussion}
+% ============================================================================
+
+\begin{frame}[t]{Summary: Transformers 2017 vs.\ 2026}
+  \footnotesize
+  \vspace{-0.2em}
+  \begin{center}
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.37\linewidth}>{\raggedright\arraybackslash}p{0.37\linewidth}@{}}
+      \textbf{Component} & \textbf{2017 Transformer} & \textbf{2026 consensus} \\
+      \hline
+      Attention mechanism & Multi-Head Attention (MHA) & Grouped-Query Attention (GQA) / Multi-Head Latent Attention (MLA) \\
+      \hline
+      Position encoding & Absolute sinusoidal (or learned absolute) & Rotary Positional Embeddings (RoPE) \\
+      \hline
+      Normalization & Post-Layer Normalization (post-LN) & Pre-Layer Normalization with RMSNorm \\
+      \hline
+      Activation & ReLU in the FFN & SwiGLU / gated linear units \\
+      \hline
+      Bias terms & Biases in linear layers common & Bias-free or minimal-bias architectures \\
+      \hline
+      Parameter density & Dense (all parameters active per forward) & Sparse activation (e.g., Mixture-of-Experts) \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Summary}
+  \begin{itemize}
+    \item The slowest part is often getting data in and out of memory, not just the math.
+    \item New models (2024–2026) are designed together, optimizing attention, normalization, position encoding, sparsity (MoE), and serving (memory, paging, kernels).
+    \item The main goals: cut down on moving data, adjust compute to the input’s length and type, and add more parameters without needing a lot more computation per token.
+  \end{itemize}
+\end{frame}

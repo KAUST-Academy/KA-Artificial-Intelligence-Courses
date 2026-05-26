@@ -1,0 +1,78 @@
+% ============================================================================
+\section{Positional information}
+% ============================================================================
+
+\begin{frame}{Positional Encoding}
+
+  \begin{itemize}
+    \item[$\blacktriangleright$] Transformers lack sequence order awareness.
+    \item[$\blacktriangleright$] \textbf{Positional encodings} are added to input embeddings to provide information about token positions.
+    \item[$\blacktriangleright$] \textbf{Sinusoidal encoding:}
+  \end{itemize}
+  
+  \vspace{0.8em}
+  
+  \begin{align*}
+    PE(pos, 2i) &= \sin\left(\frac{pos}{10000^{\frac{2i}{d_{\text{model}}}}}\right) \\
+    PE(pos, 2i+1) &= \cos\left(\frac{pos}{10000^{\frac{2i}{d_{\text{model}}}}}\right)
+  \end{align*}
+
+\end{frame}
+
+\begin{frame}{Position Encoding}
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+      For each position, an embedded input is moved the same distance but at a different angle. \textbf{Inputs that are close to each other in the sequence have similar perturbations, but inputs that are far apart are perturbed in different directions.}
+
+      \[
+        PE_{(pos,\,2i)} = \sin\left( pos / 10000^{2i/d_{\text{model}}} \right)
+      \]
+      \[
+        PE_{(pos,\,2i+1)} = \cos\left( pos / 10000^{2i/d_{\text{model}}} \right)
+      \]
+
+      \vspace{1em}
+      \begin{description}
+        \item[pos] idx of the token in input sentence
+        \item[i] $i^\text{th}$ dimension out of $d$
+        \item[$d_\text{model}$] embedding dimension of each token
+      \end{description}
+      Different calculations for odd and even embedding indices.
+ 
+ 
+
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \centering
+      % Placeholder for positional encoding/input embedding diagram
+      \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_040.png}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Position Encoding}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-6_Introduction_to_Transformers/pdf_page_051.png}
+\end{frame}
+
+\begin{frame}{Alternatives to Positional Encoding}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Learnable position embeddings:}
+    \begin{itemize}
+      \item Position embeddings are parameters learned during training.
+      \item Allow the model to adapt position representations to the task.
+    \end{itemize}
+    \vspace{0.5em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Rotary Position Embeddings (RoPE):}
+    \begin{itemize}
+      \item Encodes positions by rotating query and key vectors in multi-head attention.
+      \item Enables better extrapolation to longer sequences.
+    \end{itemize}
+    \vspace{0.5em}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{ALiBi (Attention with Linear Biases):}
+    \begin{itemize}
+      \item Adds linear biases to attention scores based on distance between tokens.
+      \item Encourages attention to nearby tokens without explicit position embeddings.
+    \end{itemize}
+  \end{itemize}
+\end{frame}

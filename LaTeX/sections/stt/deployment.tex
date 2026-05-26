@@ -1,0 +1,44 @@
+% ============================================================================
+\section{Deployment and responsible use}
+% ============================================================================
+
+% --- Stanford CS224S lec11, slide 37 ---
+\begin{frame}[allowframebreaks]{What to consider when choosing an ASR solution}
+  \begin{itemize}
+    \item \textbf{How many hours of data do you have?}
+    \begin{itemize}
+      \item If you have hundreds of hours of data and need speech recognition for a specific domain, you could get away with training your own model or fine tuning an existing model.
+      \item If you have tens of hours of data, you can finetune an existing model.
+    \end{itemize}
+    \item \textbf{Which language are you looking to transcribe or translate?}
+    \begin{itemize}
+      \item If the model is well represented in Whisper, it is a strong baseline, especially for translation into English.
+      \item If you’d like to translate into another language, you will need your own model.
+    \end{itemize}
+    \framebreak
+    \item \textbf{What is your compute budget?}
+    \begin{itemize}
+      \item If you don’t have any compute budget, using the best model you can find may be the best way forward.
+      \item If you have a small compute budget, finetuning a small model variant could outperform a larger model out-of-the-box.
+      \item If you have a large compute budget (and large enough dataset) you can consider finetuning a larger model variant.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% % --- Source: STT Lecture Material Generation report (segment 6; Stanford L12; Koenecke et al.) ---
+\begin{frame}{Real-world factors and fairness}
+  \begin{itemize}
+    \item Noise, codecs, mic quality, overlap, and domain mismatch dominate field WER.
+    \item Demographic bias in accents and dialects---audit before justice, hiring, or grading use cases.
+    \item Voice is biometric: consent, retention, on-device options, and transparent API error rates.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Benchmarks and open tooling}
+  \begin{itemize}
+    \item \textbf{Datasets:} LibriSpeech, GigaSpeech, Common Voice, AMI, CHiME, Fleurs---match to deployment domain.
+    \item \textbf{Toolkits:} ESPnet, NeMo/Riva, Fairseq, SpeechBrain, Hugging Face \texttt{transformers}.
+  \end{itemize}
+  \centering
+  \includegraphics[width=0.78\textwidth,keepaspectratio]{assets/New-Lecture-STT/espnet_logo_wide.png}
+\end{frame}

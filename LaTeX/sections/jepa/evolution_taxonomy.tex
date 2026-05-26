@@ -1,0 +1,40 @@
+% --- Introduction to SSL ---
+% \begin{frame}{Introduction: What is Self-Supervised Learning (SSL)?}
+%   \begin{itemize}
+%     \item SSL enables models to learn representations from unlabeled data by creating proxy (pretext) tasks.
+%     \item Removes the need for costly manual labels.
+%     \item Has revolutionized computer vision and language modeling.
+%     \item \textbf{Examples:} Colorization, jigsaw puzzles, contrastive learning.
+%   \end{itemize}
+% \end{frame}
+
+% --- Evolution of SSL ---
+\begin{frame}{Evolution of SSL: A Brief History}
+  \begin{itemize}\itemsep0.28em
+    \item \textbf{Early methods:} rotation prediction, jigsaw, colorization---cheap supervision, limited semantic depth.
+    \item \textbf{Contrastive SSL:} SimCLR, MoCo, BYOL, VICReg---align embeddings across views while avoiding collapse.
+    \item \textbf{Masked modeling / generative SSL:} MAE, BEiT---reconstruct tokens or pixels in observation space.
+    \item \textbf{Predictive in latent space (JEPA):} I-JEPA, V-JEPA---predict \emph{representations} of held-out regions, not raw observations.
+  \end{itemize}
+  \vspace{0.35em}
+  {\scriptsize Cross-method survey of SSL for ViTs: \href{https://arxiv.org/abs/2408.17059}{arXiv:2408.17059}.}
+\end{frame}
+
+% --- Three-way taxonomy (from SSL/JEPA lecture resources report) ---
+\begin{frame}{Three Architectural Families in Self-Supervised Learning}
+  \footnotesize
+  \begin{center}
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{@{}p{2.35cm}p{4.35cm}p{3.55cm}@{}}
+      \hline
+      \textbf{Family} & \textbf{Core mechanism} & \textbf{Representative examples} \\
+      \hline
+      Joint-embedding \newline \textit{(invariant)} & Pull together compatible views; contrastive or regularized losses prevent collapse. & SimCLR, MoCo, BYOL, VICReg \\
+      \hline
+      Generative \newline \textit{(reconstruction)} & Fill in missing input in pixel or token space; model must explain fine observation detail. & MAE, BEiT, VAEs, GAN-style objectives \\
+      \hline
+      JEPA \newline \textit{(latent prediction)} & Predict embedding of a target region from context embeddings---semantics without full pixel likelihood. & I-JEPA, V-JEPA, V-JEPA~2, Point-JEPA, CNN-JEPA \\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{frame}

@@ -1,4 +1,4 @@
-##  (2026-06-07)
+##  (2026-06-12)
 
 
 ### Features
@@ -32,6 +32,7 @@
 * **Linear Regression:** Perspectives, Bias and Variance, Metrics, Data Split and Regularization ([4be272c](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/4be272c6014b69b51dd5bf90232b5eb3e73961d0))
 * **Release:** Combine all courses into one Repository ([605b754](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/605b7548b76afb4d968c7c488edc8f927c207ed7))
 * **Slides:** Add Stage 2 ML lecture LaTeX source and images ([1ef30cc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1ef30ccefb075515e4b0eb10d53fe7f6845a5e36))
+* **Slides:** Migrate Stage 3 slides into repo ([320fb22](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/320fb22d7095483d19ddc76f786df89eb98238af))
 * **Test:** Create new test file ([d6733cc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d6733cc684c7239783440d5e5647144be66d501f))
 
 

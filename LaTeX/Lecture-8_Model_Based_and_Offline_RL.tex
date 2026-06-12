@@ -1,0 +1,77 @@
+% Adjust the aspect ratio and font size as needed
+\documentclass[10pt, aspectratio=149]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+\title[Model-Based \& Offline RL]{Data \& Planning: Model-Based \& Offline RL}
+
+\usetikzlibrary{positioning,fit,shapes.geometric,arrows.meta,calc,backgrounds,decorations.pathreplacing}
+
+\begin{document}
+
+\input{sections/cover}
+
+% Recap of the previous lecture (TRPO/PPO)
+\input{sections/model-based-rl/recap}
+
+% Model-Based vs Model-Free RL
+\input{sections/model-based-rl/model-based-vs-free}
+
+% What is a model
+\input{sections/model-based-rl/what-is-a-model}
+
+% Why build a model at all? (motivation, after defining what a model is)
+\input{sections/model-based-rl/why-model}
+
+% How to learn the model
+\input{sections/model-based-rl/model-learning}
+
+% Model-Based RL: idea, the basic algorithm, and how it fails
+\input{sections/model-based-rl/mbrl-overview}
+\input{sections/model-based-rl/mbrl-diagram}
+\input{sections/model-based-rl/mbrl-algorithm}
+
+% How planning actually works (mechanism) -- BEFORE the cliff relies on it
+\input{sections/model-based-rl/how-to-plan}
+
+\input{sections/model-based-rl/failure}
+\input{sections/model-based-rl/alleviating}
+\input{sections/model-based-rl/revisiting-cliff}
+
+% Planning search methods (random shooting, CEM) + naming the replan loop (MPC)
+\input{sections/model-based-rl/planning}
+
+% Model uncertainty / ensembles (PETS, PSRL)
+\input{sections/model-based-rl/uncertainty}
+
+% Model-Based Policy Optimization
+\input{sections/model-based-rl/policy-optimization}
+\input{sections/model-based-rl/how-to-augment}
+
+% Modern model-based landscape (MuZero, Dreamer pointer)
+\input{sections/model-based-rl/modern-landscape}
+
+% When to use model-based RL
+\input{sections/model-based-rl/when-to-use}
+
+% Case study
+\input{sections/model-based-rl/case-study}
+
+% ===== Part 2: Offline RL =====
+\input{sections/model-based-rl/offline/setup}
+\input{sections/model-based-rl/offline/the-cliff-again}
+\input{sections/model-based-rl/offline/behavior-cloning}
+\input{sections/model-based-rl/offline/extrapolation-error}
+\input{sections/model-based-rl/offline/conservatism}
+\input{sections/model-based-rl/offline/benchmarks}
+\input{sections/model-based-rl/offline/offline-to-online}
+\input{sections/model-based-rl/offline/unification}
+
+% Wrap-up
+\input{sections/model-based-rl/summary}
+\input{sections/model-based-rl/references}
+
+\end{document}

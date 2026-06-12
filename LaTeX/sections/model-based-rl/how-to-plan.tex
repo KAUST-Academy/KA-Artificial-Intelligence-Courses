@@ -1,0 +1,103 @@
+\section{Planning with a Model}
+% The MECHANISM of planning: comes right after the first algorithm (step 3),
+% BEFORE the cliff, so the reader knows what "plan through the model" means
+% before the failure depends on it. Search methods + MPC come later.
+
+% === Intuition ==========================================================
+\begin{frame}{How Does the Policy ``Plan'' with the Model?}
+\begin{itemize}
+    \item Step 3 said to \emph{``sample action sequences, run through the model
+          to choose actions''}. What does that actually mean?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{How Does the Policy ``Plan'' with the Model?}
+\begin{itemize}
+    \item Step 3 said to \emph{``sample action sequences, run through the model
+          to choose actions''}. What does that actually mean?
+    \item \textbf{Planning}: imagine candidate action sequences, use the model to
+          predict what each one leads to, and pick the one with the most reward
+    \item No real environment needed: the model does the imagining. Let us
+          build up the notation, one symbol at a time
+\end{itemize}
+\end{frame}
+
+% === The symbols ========================================================
+\begin{frame}{Planning: The Symbols}
+\begin{itemize}
+    \item $t$: the \textbf{current} time step (where the agent is right now)
+    \item $H$: the \textbf{planning horizon} (how many steps ahead we look)
+    \item $a_{t:t+H}$: a whole \textbf{sequence} of actions
+          $(a_t,\, a_{t+1},\, \dots,\, a_{t+H})$; the ``$:$'' just means
+          ``from $t$ through $t+H$''
+    \item $k$: a counter for steps into the future, $k = 0, 1, \dots, H$,
+          so $s_{t+k}$ is ``the state $k$ steps from now''
+\end{itemize}
+\end{frame}
+
+% === The rollout figure =================================================
+\begin{frame}{Planning: Rolling the Model Forward}
+\definecolor{mbgreen}{RGB}{122,173,75}
+\definecolor{mborange}{RGB}{237,148,72}
+\definecolor{mbblue}{RGB}{79,129,189}
+\centering
+\begin{tikzpicture}[font=\scriptsize, >={Stealth[length=2.4mm]},
+    st/.style={circle, draw=mbblue, fill=mbblue!12, thick, minimum size=0.85cm}]
+    \node[st] (s0) at (0,0)   {$s_t$};
+    \node[st] (s1) at (2.5,0) {$s_{t+1}$};
+    \node[st] (s2) at (5.0,0) {$s_{t+2}$};
+    \node      (sd) at (6.7,0) {$\cdots$};
+    \node[st] (sH) at (8.4,0) {$s_{t+H}$};
+    \draw[->, thick, mborange] (s0) -- node[above]{$a_t$} node[below=1pt, mbgreen!50!black]{$f_\phi$} (s1);
+    \draw[->, thick, mborange] (s1) -- node[above]{$a_{t+1}$} node[below=1pt, mbgreen!50!black]{$f_\phi$} (s2);
+    \draw[->, thick, mborange] (s2) -- node[above]{$a_{t+2}$} (sd);
+    \draw[->, thick, mborange] (sd) -- (sH);
+    \node[mbblue!70!black] at (0,-1.05)   {$r(s_t,a_t)$};
+    \node[mbblue!70!black] at (2.5,-1.05) {$r(s_{t+1},a_{t+1})$};
+    \node[mbblue!70!black] at (5.0,-1.05) {$r(s_{t+2},a_{t+2})$};
+    \draw[decorate, decoration={brace, amplitude=4pt, mirror}, thick]
+        (0,-1.55) -- (8.4,-1.55)
+        node[midway, below=5pt]{horizon $H$: add up these predicted rewards};
+\end{tikzpicture}
+\begin{itemize}
+    \item Start from now ($s_t$). Feed each state and a chosen action into the
+          model $f_\phi$ to get the next state. This is ``rolling out'' the
+          model $H$ steps
+    \item Each step earns a predicted reward $r(s_{t+k}, a_{t+k})$; we add them up
+\end{itemize}
+\end{frame}
+
+% === The objective, annotated ===========================================
+\begin{frame}{Planning: The Objective}
+\begin{itemize}
+    \item Try this for many candidate sequences; keep the one whose roll-out
+          scores highest:
+\end{itemize}
+\[
+    a_{t:t+H}^\star \;=\;
+    \underbrace{\arg\max_{a_{t:t+H}}}_{\text{choose the sequence\ldots}}
+    \;\;
+    \underbrace{\sum_{k=0}^{H} r(s_{t+k},\, a_{t+k})}_{\text{\ldots with the most predicted reward}}
+\]
+\[
+    \text{rolling the model forward:}\quad
+    \underbrace{s_{t+k+1} = f_\phi(s_{t+k},\, a_{t+k})}_{\text{each next state comes from the model}}
+\]
+\begin{itemize}
+    \item $a_{t:t+H}^\star$ is the \emph{best} sequence; we assume the reward
+          $r(s,a)$ is known (or use the learned $\mathcal{R}_\phi$)
+    \item The hard part is the $\arg\max$: searching over many sequences. We
+          will see practical search methods shortly
+\end{itemize}
+\end{frame}
+
+% === Transition into the algorithm/cliff ================================
+\begin{frame}{Planning: Putting It Together}
+\begin{itemize}
+    \item That is how a policy ``plans through the model'': imagine action
+          sequences, roll them forward with $f_\phi$, and pick the best-scoring one
+    \item This is exactly what step 3 does, so we now have a complete algorithm
+    \item But will planning with a \emph{learned} model actually work? Let us see
+          how it can break\ldots
+\end{itemize}
+\end{frame}

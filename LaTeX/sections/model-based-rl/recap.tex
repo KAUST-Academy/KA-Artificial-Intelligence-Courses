@@ -1,18 +1,22 @@
 \section{Recap}
-% Slide 2
-\begin{frame}{Recap}
+% Slide 2: threads from Day 7 (The Reward Problem, with exploration folded in)
+% into today's two halves.
+\begin{frame}{Recap \& Today}
 \begin{itemize}
-    \item Sometimes, it is better to learn a stochastic policy than a
-          deterministic policy
-    \item Policy gradient methods suffer from poor sample efficiency
-    \item Importance sampling can help alleviate this problem
-    \item However, we need to make sure that current policy is not far from
-          policy with which we have collected trajectories
-    \item Small changes in the policy parameters can unexpectedly lead to big
-          changes in the policy.
-    \item TRPO uses importance sampling to take multiple gradient steps and
-          constrains the optimization objective in the policy space
-    \item PPO does the same but approximately enforces KL constraint
-          without computing natural gradients.
+    \item Day 7 (\emph{The Reward Problem}) was about getting a \emph{good signal}
+          from the world: exploration (optimism, posterior sampling, curiosity)
+          and designing or learning the reward
+    \item One theme ran through it: what happens \textbf{off the data
+          distribution}, where the agent has not been
+    \item Today is about what to \emph{do} with the data you have:
+    \begin{itemize}
+        \item \textbf{Model-based RL}: learn a model of the world, plan with it,
+              and fix mistakes by collecting more data where the model is wrong
+        \item \textbf{Offline RL}: learn from a \emph{fixed} batch with no new
+              interaction (the same off-distribution problem, with that fix
+              \emph{forbidden})
+    \end{itemize}
+    \item Two halves, one spine: distribution shift, and what you are allowed to
+          do about it
 \end{itemize}
 \end{frame}

@@ -1,0 +1,70 @@
+\section{Modern Model-Based RL}
+% Overview depth: position the methods on a map, no derivations.
+
+\begin{frame}{Modern Model-Based RL: Two Families}
+\begin{itemize}
+    \item Everything so far used the model to \emph{plan}. Modern methods split
+          along one axis:
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Modern Model-Based RL: Two Families}
+\definecolor{mbgreen}{RGB}{122,173,75}
+\definecolor{mborange}{RGB}{237,148,72}
+\definecolor{mbblue}{RGB}{79,129,189}
+\begin{itemize}
+    \item Everything so far used the model to \emph{plan}. Modern methods split
+          along one axis:
+\end{itemize}
+\vspace{0.4em}
+\centering
+\begin{tikzpicture}[font=\footnotesize, >={Stealth[length=2.6mm]},
+    node distance=3mm,
+    box/.style={rounded corners=3pt, draw, align=center, inner sep=4pt,
+                minimum height=0.8cm, font=\scriptsize}]
+    \node[box, draw=mbblue, fill=mbblue!10] (root) {learned model};
+    \node[box, draw=mbgreen, fill=mbgreen!12, below left=0.9cm and 0.4cm of root] (plan)
+        {\textbf{Plan with the model}\\(search at decision time)};
+    \node[box, draw=mborange, fill=mborange!12, below right=0.9cm and 0.4cm of root] (imag)
+        {\textbf{Learn a policy in the model}\\(latent imagination)};
+    \node[box, draw=mbgreen, fill=mbgreen!6, below=0.7cm of plan] (mz)
+        {MCTS $\to$ AlphaZero $\to$ \textbf{MuZero}};
+    \node[box, draw=mborange, fill=mborange!6, below=0.7cm of imag] (dr)
+        {World Models $\to$ \textbf{Dreamer}};
+    \draw[->] (root) -- (plan);
+    \draw[->] (root) -- (imag);
+    \draw[->] (plan) -- (mz);
+    \draw[->] (imag) -- (dr);
+\end{tikzpicture}
+\end{frame}
+
+% === MuZero (single high-level slide) ===================================
+\begin{frame}{Planning with a Learned Model: AlphaZero \& MuZero}
+\begin{itemize}
+    \item Both \emph{plan} by \textbf{tree search} (MCTS), the discrete-move
+          cousin of our CEM planner: grow a tree of moves, search the promising
+          branches
+    \item \textbf{AlphaZero}: MCTS $+$ a \emph{known} model, the rules of
+          Go / chess handed to it for free
+    \item \textbf{MuZero}: \emph{learns} the model instead, and the clever part is
+          \emph{what} it learns: a model that predicts only \textbf{reward,
+          value, and the best move}, never the raw pixels (a model of \emph{what
+          matters}, not what the world looks like)
+    \item So the same search works \emph{without being told the rules}: one
+          architecture mastered Go, chess, shogi, \emph{and} Atari
+          (Schrittwieser et al., 2020)
+\end{itemize}
+\end{frame}
+
+% === Dreamer pointer (demoted to one-line pointer) ======================
+\begin{frame}{Learning a Policy in the Model: Dreamer}
+\begin{itemize}
+    \item The other family learns a policy entirely \emph{inside} a learned world
+          model: ``imagined'' roll-outs, no real interaction per update
+    \item Its model is trained to \textbf{reconstruct what the world looks like}
+          (predict the next observation), the opposite choice from MuZero's
+          ``predict only what matters''
+    \item \textbf{Dreamer / DreamerV3}: one fixed configuration solves 150+ tasks.
+          Full treatment in the dedicated \emph{World Models} lecture
+\end{itemize}
+\end{frame}

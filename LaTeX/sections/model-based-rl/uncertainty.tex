@@ -1,0 +1,79 @@
+\section{Model Uncertainty \& Ensembles}
+% Pays off the slide-13 "can reason about model uncertainty" promise and
+% makes the PETS / Nagabandi legend on the case-study slide legible.
+
+\begin{frame}{Why Model Uncertainty Matters}
+\begin{itemize}
+    \item Recall the cliff: the model was \emph{confidently wrong} off the data
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Model Uncertainty Matters}
+\definecolor{mbgreen}{RGB}{122,173,75}
+\definecolor{mborange}{RGB}{237,148,72}
+\definecolor{mbblue}{RGB}{79,129,189}
+\begin{itemize}
+    \item Recall the cliff: the model was \emph{confidently wrong} off the data
+    \item A single model gives one point prediction, no signal that it is guessing
+\end{itemize}
+\vspace{0.3em}
+\centering
+\begin{tikzpicture}[font=\scriptsize, >={Stealth[length=2.2mm]}]
+    \fill[mbblue!12] (0,-0.05) rectangle (2.6,2.0);
+    \node[mbblue!60!black] at (1.3,1.85) {seen data};
+    \foreach \x/\y in {0.4/0.7, 0.8/0.95, 1.2/1.1, 1.6/1.0, 2.0/1.2, 2.4/1.05}
+        \fill[mbblue] (\x,\y) circle (1.3pt);
+    % predictions agree on-data, fan out off-data
+    \draw[mbgreen, thick] (2.6,1.1) .. controls (3.6,1.2) .. (5.4,1.6);
+    \draw[mborange, thick] (2.6,1.1) .. controls (3.6,1.0) .. (5.4,0.3);
+    \draw[mbblue, thick] (2.6,1.1) .. controls (3.6,1.1) .. (5.4,2.0);
+    \draw[densely dashed] (2.6,-0.05) -- (2.6,2.0);
+    \node[align=center] at (4.2,-0.45) {off-data: the models \emph{disagree}};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Ensembles: Disagreement as Uncertainty}
+\begin{itemize}
+    \item Train an \textbf{ensemble} of $N$ models (different initializations,
+          bootstrapped data)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Ensembles: Disagreement as Uncertainty}
+\begin{itemize}
+    \item Train an \textbf{ensemble} of $N$ models (different initializations,
+          bootstrapped data)
+    \item On data they \emph{agree}; off data they \emph{disagree}
+    \item That disagreement measures \textbf{epistemic uncertainty} $u(s,a)$: a
+          per state--action score for uncertainty due to \emph{not having seen
+          enough data}. It is high off-data, and it \emph{shrinks} as you collect
+          more (unlike the environment's inherent noise, which never does)
+    \item Plan conservatively where $u(s,a)$ is high: don't trust a plan that
+          exploits one model's fantasy
+\end{itemize}
+\end{frame}
+
+\begin{frame}{PETS: Planning with an Ensemble}
+\begin{itemize}
+    \item Put the two pieces together:
+    \begin{itemize}
+        \item \textbf{Planner}: CEM (from the previous section)
+        \item \textbf{Model}: an ensemble of probabilistic dynamics models
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{PETS: Planning with an Ensemble}
+\begin{itemize}
+    \item Put the two pieces together:
+    \begin{itemize}
+        \item \textbf{Planner}: CEM (from the previous section)
+        \item \textbf{Model}: an ensemble of probabilistic dynamics models
+    \end{itemize}
+    \item Evaluate each candidate plan by propagating it through \emph{sampled}
+          models and averaging the return
+    \item \textbf{PETS} (Chua et al., 2018): this is the ``CEM-based planner''
+          in the case study; Nagabandi's method is the same idea \emph{without}
+          the ensemble
+\end{itemize}
+\end{frame}

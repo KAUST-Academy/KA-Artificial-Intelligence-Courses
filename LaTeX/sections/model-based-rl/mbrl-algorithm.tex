@@ -1,11 +1,13 @@
 % Slide 16
-\begin{frame}{Model-Based RL}
+\begin{frame}{A First Algorithm: Planning}
 \begin{itemize}
-    \item So, now we have the following algorithm
+    \item We take the first option \textbf{(planning)}: use the model to choose
+          good actions directly, with no separate policy yet. The simplest version:
     \begin{enumerate}
         \item Run some policy (e.g.\ random policy) to collect data
-              $D = \{(s, a, s')_i\}$
-        \item Learn model $f_\phi(s, a)$ to minimize $\sum_i \lVert f_\phi(s_i, a_i) - s'_i \rVert$
+              $D = \{(s, a, r, s')_i\}$
+        \item Learn the model $f_\phi(s, a)$ (weights $\phi$) to minimize
+              $\sum_i \lVert f_\phi(s_i, a_i) - s'_i \rVert$
         \item Iteratively sample action sequences, run through model $f_\phi(s, a)$ to
               choose actions
     \end{enumerate}
@@ -13,16 +15,19 @@
 \end{frame}
 
 % Slide 17
-\begin{frame}{Model-Based RL}
+\begin{frame}{A First Algorithm: Planning}
 \begin{itemize}
-    \item So, now we have the following algorithm
+    \item We take the first option \textbf{(planning)}: use the model to choose
+          good actions directly, with no separate policy yet. The simplest version:
     \begin{enumerate}
         \item Run some policy (e.g.\ random policy) to collect data
-              $D = \{(s, a, s')_i\}$
-        \item Learn model $f_\phi(s, a)$ to minimize $\sum_i \lVert f_\phi(s_i, a_i) - s'_i \rVert$
+              $D = \{(s, a, r, s')_i\}$
+        \item Learn the model $f_\phi(s, a)$ (weights $\phi$) to minimize
+              $\sum_i \lVert f_\phi(s_i, a_i) - s'_i \rVert$
         \item Iteratively sample action sequences, run through model $f_\phi(s, a)$ to
               choose actions
     \end{enumerate}
-    \item What can go wrong here?
+    \item Step 3 is doing the real work, but \emph{how} do we use the model to
+          ``choose actions''? Let us unpack it
 \end{itemize}
 \end{frame}

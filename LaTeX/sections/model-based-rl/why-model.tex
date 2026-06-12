@@ -1,0 +1,65 @@
+\section{Why Build a Model?}
+% Motivation FIRST: why approximate the environment when we already have it?
+
+\begin{frame}{Why Build a Model of the Environment?}
+\begin{itemize}
+    \item A fair objection: if we can already \emph{act} in the environment, why
+          bother building an approximate \emph{copy} of it?
+\end{itemize}
+\end{frame}
+
+% === What the real environment won't let you do =========================
+\begin{frame}{The Catch with the Real Environment}
+\begin{itemize}
+    \item The real environment offers only \emph{one} operation: \textbf{take an
+          action, see what happens} (once, forwards, at a cost)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Catch with the Real Environment}
+\begin{itemize}
+    \item The real environment offers only \emph{one} operation: \textbf{take an
+          action, see what happens} (once, forwards, at a cost)
+    \item You \emph{cannot} ask ``what would have happened if I had done something
+          else?'' (no what-ifs)
+    \item You \emph{cannot} reset it to any state you like
+    \item You \emph{cannot} look ahead without actually committing to the action
+    \item Every single query costs a \textbf{real step}: time, money, wear,
+          risk (a real robot can break; a real patient can be harmed)
+\end{itemize}
+\end{frame}
+
+% === What a model gives you =============================================
+\begin{frame}{What a Model Gives You}
+\begin{itemize}
+    \item A learned model is a \textbf{cheap, fast, safe simulator} you can query
+          as often as you like
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What a Model Gives You}
+\begin{itemize}
+    \item A learned model is a \textbf{cheap, fast, safe simulator} you can query
+          as often as you like
+    \item \textbf{Sample efficiency}: turn a little real data into (almost)
+          unlimited synthetic experience
+    \item \textbf{Planning}: imagine the consequences of actions \emph{before}
+          committing to them
+    \item Superpowers the real world denies you: ask counterfactuals, reset to
+          any state, even differentiate through it
+    \item It is trained by cheap \textbf{supervised learning}, and is somewhat
+          task-agnostic (reusable across different rewards)
+\end{itemize}
+\end{frame}
+
+% === The honest trade-off (foreshadows the cliff) =======================
+\begin{frame}{The Trade-off}
+\begin{itemize}
+    \item No free lunch: the model is only an \emph{approximation} of the real
+          environment
+    \item A \emph{wrong} model can confidently mislead you. We will see exactly
+          this failure (the ``cliff'') shortly
+    \item Model-based RL trades \emph{real-world cost} for \emph{model error}:
+          worth it when the model is easier to get right than the policy itself
+\end{itemize}
+\end{frame}

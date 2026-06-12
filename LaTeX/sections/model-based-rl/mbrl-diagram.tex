@@ -1,10 +1,14 @@
 % Slide 15: the model-based RL loop diagram (recreated in TikZ; equations in LaTeX)
-\begin{frame}{Model-Based RL}
+\begin{frame}{Model-Based RL: The Shared Loop}
 \definecolor{mbgreen}{RGB}{122,173,75}
 \definecolor{mborange}{RGB}{237,148,72}
 \definecolor{mbblue}{RGB}{79,129,189}
+\begin{itemize}
+    \item Both uses run the same outer loop: collect data, fit the model,
+          act better, repeat:
+\end{itemize}
 \centering
-\vspace{1.5em}
+\vspace{0.4em}
 \begin{tikzpicture}[
     >={Stealth[length=3mm,width=3mm]},
     box/.style={rounded corners=4pt, text width=2.4cm, align=center,
@@ -29,4 +33,10 @@
   \node[anchor=west, font=\normalsize] at (2.0, -3.2)
         {optimize $\pi_\theta(\mathbf{a}\mid\mathbf{s})$ (model-based)};
 \end{tikzpicture}
+\vspace{0.4em}
+\begin{flushleft}\small
+The bottom step (``improve the policy'') is exactly where the two uses
+\emph{differ}: \emph{plan} good actions directly (next), or \emph{train} a policy
+$\pi_\theta$ on model-generated data (later).
+\end{flushleft}
 \end{frame}

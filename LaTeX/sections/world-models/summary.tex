@@ -1,0 +1,9 @@
+% --- Summary ---
+\begin{frame}[t]{Summary}
+  \begin{itemize}\itemsep0.22em\footnotesize
+    \item World models compress experience so an agent can roll imagined futures and choose actions; the main design split is predict pixels (generative simulators) vs.\ predict latents (JEPA-style), with hybrid systems in between.
+    \item Dreamer $\rightarrow$ DreamerV2 $\rightarrow$ DreamerV3: a single RSSM-style world model (representation, dynamics, often decode/reward) plus actor--critic training on imagined trajectories; V2 scales width; V3 keeps the recipe and stresses stability across many domains with one configuration.
+    \item JEPA: predict in embedding space, not full observations; V-JEPA scales masked video prediction; V-JEPA\,2 adds action-conditioned latent prediction as a bridge to planning and robotics.
+    \item LeWorldModel: End-to-end from pixels with just next-embedding loss + SIGReg. Fast latent MPC planning with a small model.
+  \end{itemize}
+\end{frame}

@@ -1,0 +1,57 @@
+\section{Benefits of MoE}
+\begin{frame}[allowframebreaks]{}
+    \LARGE Benefits of MoE
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Benefits of MoE}
+    \begin{itemize}
+        \item \textbf{Scalability:}
+        \begin{itemize}
+            \item Can scale to billions of parameters.
+            \item Only a small subset of experts is activated for each input.
+            \item Allows for larger models without proportional increases in compute.
+        \end{itemize}
+    \framebreak
+        \item \textbf{Efficient Computation:}
+        \begin{itemize}
+            \item Activates only 10–20\% of total parameters per token.
+            \item Reduces computational cost per token.
+            \item Sparse activation means fewer parameters are active at any time.
+            \item Enables training on larger datasets with limited resources.
+            \item Leads to lower latency and inference cost.
+            \item Allows for models with vastly more parameters.
+        \end{itemize}
+    \framebreak
+        \item \textbf{Flexibility:}
+        \begin{itemize}
+            \item Different experts can specialize in different tasks or data distributions.
+            \item Allows for more nuanced model behavior and adaptability.
+            \item Can be tailored to specific applications or domains.
+        \end{itemize}
+    \framebreak
+        \item \textbf{Specialization:}
+        \begin{itemize}
+            \item Experts can focus on specific domains (e.g., math, code, biology, logic).
+            \item Improves accuracy and performance in specialized tasks.
+        \end{itemize}
+        \item \textbf{Example 1: MoE with Domain Experts}
+        \begin{itemize}
+            \item A math expert becomes active only on arithmetic inputs.
+            \item Improves accuracy specifically for math problems.
+            \item Outperforms generalist models on these tasks.
+        \end{itemize}
+        \item \textbf{Example 2: MORE (Mixture of Reasoning Experts)}
+        \begin{itemize}
+            \item Explicitly uses experts for types of reasoning (e.g., multihop, factual, analogical).
+            \item Boosts performance and provides greater interpretability.
+            \item Allows understanding which expert handles which reasoning step.
+        \end{itemize}
+    \framebreak
+        \item \textbf{Performance:}
+        \begin{itemize}
+            \item Often achieves state-of-the-art results on various benchmarks.
+            \item Combines the strengths of multiple models without the overhead of training them separately.
+            \item Can outperform dense models with fewer active parameters.
+        \end{itemize}
+    \end{itemize}
+\end{frame}

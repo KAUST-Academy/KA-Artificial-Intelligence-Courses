@@ -1,7 +1,8 @@
-% Speech in NLP: Speech-to-Text / ASR (90-minute graduate outline)
+% Speech in NLP: Speech-to-Text / ASR (graduate outline; ~120 min)
+% Synthesized from: STT Lecture Material Generation report (May 2026);
+%   Stanford CS224S lec9 (classical ASR), lec10 (neural acoustic modeling) \& lec11 (Conformer, Whisper);
+%   Edinburgh ASR, CMU 11-751, and ranked ArXiv literature.
 \documentclass[10pt, aspectratio=149]{beamer}
-
-\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
 
 \input{preamble/packages}
 \input{preamble/commands}
@@ -9,202 +10,20 @@
 
 \title[Speech in NLP: STT]{Speech in NLP: Speech-to-Text (STT / ASR)}
 
+\newcommand{\slideimgsource}[1]{\\[0.2em]{\scriptsize\textbf{Source:} #1}}
+
 \begin{document}
 
 \input{sections/cover}
-
-% --- Table of Contents ---
-\begin{frame}{Table of Contents}
-  \begin{enumerate}
-    \item Speech, NLP, and the role of automatic speech recognition (ASR)
-    \item Problem setup: signal, noise, and decoding objectives
-    \item Acoustic features and the classic hybrid pipeline
-    \item End-to-end modeling: CTC and RNN-Transducer (overview)
-    \item Attention-based ``Listen, Attend and Spell'' seq2seq ASR
-    \item Transformers and Conformer encoders
-    \item Self-supervised pretraining (wav2vec~2.0, HuBERT, WavLM) and fine-tuning
-    \item Large-scale weak supervision: Whisper-style models
-    \item Streaming ASR, VAD, and production constraints
-    \item Evaluation: WER, benchmarks, and analysis
-    \item Multilingual models, bias, and robustness
-    \item Privacy, consent, and deployment ethics
-    \item Tooling, practice, and references
-  \end{enumerate}
-\end{frame}
-
-% --- Block 1 ---
-\begin{frame}{Speech in NLP}
-  \begin{itemize}
-    \item \textbf{STT / ASR} maps a speech waveform (or stream) to \textbf{text}---the entry point for Spoken Language Understanding, dialogue, search, and accessibility.
-    \item Typical stack: \textbf{signal frontend} $\to$ \textbf{acoustic model} $\to$ \textbf{decoder} (with optional \textbf{LM}); modern systems often fold pieces into one neural network.
-    \item Same ML ideas as NLP appear at scale: \textbf{subword BPE}, \textbf{attention}, \textbf{transformers}, and \textbf{self-supervised learning} on raw audio.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Why is ASR hard?}
-  \begin{itemize}
-    \item \textbf{Variability:} speaker, accent, dialect, emotion, rate, microphone, room noise, codecs, packet loss.
-    \item \textbf{Ambiguity:} homophones, overlapping speech, disfluency, code-switching.
-    \item \textbf{Latency vs.\ accuracy:} batch transcription vs.\ real-time captioning vs.\ on-device budgets.
-    \item Objective: minimize \textbf{word error rate (WER)} or task-specific cost under domain constraints.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Time--frequency representations}
-  \begin{itemize}
-    \item Raw waveform $\to$ \textbf{short-time Fourier transform}; magnitude $\to$ \textbf{mel filterbank} (\textbf{log-mel}) features at fixed frame rate (e.g., 10~ms hop).
-    \item Hybrid systems used \textbf{MFCC}/GMM; neural models typically consume \textbf{log-mel} or learned frontend features.
-    \item Below: example \textbf{mel spectrogram} (same representation family is shared with TTS and voice conversion).
-  \end{itemize}
-  \centering
-  \includegraphics[width=0.88\textwidth,keepaspectratio]{assets/New-Lecture-STT/speech_features_mel.png}
-\end{frame}
-
-% --- Block 2: classic ---
-\begin{frame}{Classic hybrid ASR (sketch)}
-  \begin{itemize}
-    \item \textbf{HMM} state topology + \textbf{GMM} or \textbf{DNN} emissions for context-dependent phones (triphones).
-    \item \textbf{Dictionary} maps words $\to$ phones; \textbf{language model} (n-gram or neural) guides \textbf{Viterbi} or lattice rescoring.
-    \item Strengths: decades of tooling; weakness: many hand-tied stages and heavy expert tuning.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{End-to-end goals}
-  \begin{itemize}
-    \item Learn a single network from audio frames (or samples) to \textbf{characters}, \textbf{phonemes}, or \textbf{subword BPE}.
-    \item Reduces pipeline complexity; enables \textbf{sequence-level} losses and joint training with LMs via LM fusion or shallow fusion.
-    \item Still need careful \textbf{data}, \textbf{text normalization} for scoring, and \textbf{decoding} tricks at scale.
-  \end{itemize}
-\end{frame}
-
-% --- Block 3: CTC / RNN-T ---
-\begin{frame}{CTC and RNN-Transducer (RNN-T)}
-  \begin{itemize}
-    \item \textbf{CTC} (Connectionist Temporal Classification): frame-wise predictions with blank; dynamic programming alignment; fast but \textbf{conditional independence} assumptions unless extra models help.
-    \item \textbf{RNN-T}: prediction network + encoder + joint network; \textbf{streaming}-friendly; widely deployed on device (when quantized).
-    \item Both train with \textbf{segmentation-free} alignment---no need for frame-level forced labels once set up.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Listen, Attend and Spell (LAS)}
-  \begin{itemize}
-    \item Encoder--decoder with \textbf{attention} from decoder steps to encoder frames; generates output tokens \textbf{autoregressively}.
-    \item Strong accuracy on offline ASR; attention must be regularized for \textbf{monotonicity} in some formulations; latency higher than single-pass CTC/T without tricks.
-    \item Paved the way for \textbf{transformer} listeners and large ``Whisper-class'' models.
-  \end{itemize}
-\end{frame}
-
-% --- Block 4: transformers ---
-\begin{frame}{Transformers and Conformer}
-  \begin{itemize}
-    \item \textbf{Self-attention} over time models long-range acoustic context; \textbf{Conformer} interleaves convolution and attention (Gulati et al.) for local + global patterns.
-    \item \textbf{Subsampling} early (strided conv) reduces sequence length and compute.
-    \item Same encoders power both \textbf{offline} and \textbf{streaming} (chunked) inference with different masks.
-  \end{itemize}
-\end{frame}
-
-% --- Block 5: SSL ---
-\begin{frame}{Self-supervised pretraining on audio}
-  \begin{itemize}
-    \item Pretrain encoders on \textbf{unlabeled} audio: masked prediction, contrastive objectives, or teacher--student (HuBERT-style).
-    \item \textbf{wav2vec~2.0}, \textbf{HuBERT}, \textbf{WavLM}: strong \textbf{frozen-encoder} linear probes and large gains after \textbf{fine-tuning} on labeled ASR.
-    \item SUPERB-style benchmarks aggregate \textbf{phoneme recognition}, \textbf{ASR}, speaker, and sentiment tasks---illustrative results below (WavLM row highlights).
-  \end{itemize}
-  \centering
-  \includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{assets/New-Lecture-STT/wavlm_superb_asr.png}
-\end{frame}
-
-\begin{frame}{Whisper: weakly supervised transformers at scale}
-  \begin{itemize}
-    \item Radford et al.\ train a \textbf{seq2seq transformer} on large amounts of \textbf{paired} web audio and transcripts (multilingual), with \textbf{multitask} format (translate, detect language, timestamps).
-    \item Strong \textbf{zero-shot} generalization across datasets; trade-offs: size, compute, and less control over domain-specific lexicons without adaptation.
-  \end{itemize}
-  \centering
-  \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{assets/New-Lecture-STT/whisper_architecture.png}
-\end{frame}
-
-% --- Block 6: production ---
-\begin{frame}{Streaming and on-device ASR}
-  \begin{itemize}
-    \item \textbf{Causal encoders}, chunkwise attention, or RNN-T for \textbf{low latency}; \textbf{VAD} / endpointing to save compute.
-    \item \textbf{Quantization}, distillation, and custom ops for mobile/NPU; \textbf{federated} or server-side personalization for vocabulary.
-  \end{itemize}
-\end{frame}
-
-% --- Block 7: eval ---
-\begin{frame}{Evaluation and error analysis}
-  \begin{itemize}
-    \item \textbf{WER / CER:} normalize text (case, punctuation) consistently; report \textbf{speaker- / domain- stratified} WER.
-    \item Analyze \textbf{insertions} (hallucinations), \textbf{deletions}, \textbf{substitutions}---often tied to LM or data mismatch.
-    \item \textbf{Latency}, \textbf{real-time factor (RTF)}, memory, and \textbf{carbon} cost matter for production.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Benchmarks and datasets}
-  \begin{itemize}
-    \item \textbf{LibriSpeech}, \textbf{GigaSpeech}, \textbf{VoxPopuli}, \textbf{Common Voice}, \textbf{AMI}, \textbf{CHiME}, \textbf{Fleurs}, etc.
-    \item Match benchmarks to \textbf{deployment domain}: clean read vs.\ telephony vs.\ meeting vs.\ clinical speech.
-  \end{itemize}
-\end{frame}
-
-% --- Block 8: multilingual / bias ---
-\begin{frame}{Multilingual ASR and social bias}
-  \begin{itemize}
-    \item Massively multilingual models improve \textbf{coverage} but can \textbf{underperform} on low-resource dialects; active area: \textbf{adapter} modules, data balancing, scripted collection.
-    \item \textbf{Bias:} ASR errors correlate with \textbf{dialect}, gender presentation, and non-native accents---audit before high-stakes use (justice, hiring, grading).
-  \end{itemize}
-\end{frame}
-
-% --- Block 9: ethics ---
-\begin{frame}{Privacy and consent}
-  \begin{itemize}
-    \item Voice is \textbf{biometric}: storage, retention, and jurisdiction (e.g., GDPR) require clear policies.
-    \item \textbf{User control:} opt-in, on-device processing, deletion; avoid covert listening without consent.
-    \item Research: IRB for human subjects when collecting or transcribing personal speech.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Open-source ecosystem}
-  \begin{itemize}
-    \item \textbf{ESPnet}, \textbf{NVIDIA NeMo}, \textbf{Fairseq}, \textbf{SpeechBrain}, \textbf{Hugging Face} \texttt{transformers}---training recipes, pretrained checkpoints, ONNX export.
-    \item Reproducibility: fix \textbf{data splits}, \textbf{LM fuse} settings, and decoding configuration when comparing papers.
-  \end{itemize}
-  \centering
-  \includegraphics[width=0.82\textwidth,keepaspectratio]{assets/New-Lecture-STT/espnet_logo_wide.png}
-\end{frame}
-
-\begin{frame}{Takeaways}
-  \begin{itemize}
-    \item \textbf{Representations + scale + data} drove the leap from hybrids to transformer ASR; \textbf{SSL} leverages unlabeled audio before expensive labeling.
-    \item Always separate \textbf{model quality} from \textbf{decoding}, \textbf{text normalization}, and \textbf{domain shift}---WER alone is incomplete.
-    \item \textbf{Responsible deployment} demands bias testing and privacy design, not only lower WER.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Discussion prompts}
-  \begin{itemize}
-    \item When would you choose \textbf{Whisper-style} general models vs.\ \textbf{domain-finetuned} Conformer + RNN-T?
-    \item How should course projects \textbf{report} WER and confidence intervals?
-    \item What safeguards belong in \textbf{ASR-as-a-service} APIs used in education or hiring?
-  \end{itemize}
-\end{frame}
-
-% --- References ---
-\begin{frame}{References}
-  \footnotesize
-  \begin{enumerate}
-    \item Graves et al., ``Connectionist Temporal Classification: Labelling Unsegmented Sequence Data with Recurrent Neural Networks'', ICML 2006.
-    \item Chan et al., ``Listen, Attend and Spell'', \href{https://arxiv.org/abs/1508.01211}{arXiv:1508.01211}.
-    \item Gulati et al., ``Conformer: Convolution-augmented Transformer for Speech Recognition'', \href{https://arxiv.org/abs/2005.08100}{arXiv:2005.08100}.
-    \item Baevski et al., ``wav2vec 2.0: A Framework for Self-Supervised Learning of Speech Representations'', NeurIPS 2020, \href{https://arxiv.org/abs/2006.11477}{arXiv:2006.11477}.
-    \item Hsu et al., ``HuBERT: Self-Supervised Speech Representation Learning by Masked Prediction of Hidden Units'', \href{https://arxiv.org/abs/2106.07447}{arXiv:2106.07447}.
-    \item Chen et al., ``WavLM: Large-Scale Self-Supervised Pre-training for Full Stack Speech Processing'', \href{https://arxiv.org/abs/2110.13900}{arXiv:2110.13900}.
-    \item Radford et al., ``Robust Speech Recognition via Large-Scale Weak Supervision'' (Whisper), \href{https://arxiv.org/abs/2212.04356}{arXiv:2212.04356}.
-    \item Panayotov et al., ``LibriSpeech: an ASR Corpus Based on Public Domain Audio Books'', ICASSP 2015.
-    \item Watanabe et al., ``ESPnet: End-to-End Speech Processing Toolkit'', \href{https://arxiv.org/abs/1804.00015}{arXiv:1804.00015}; \textbf{figures:} OpenAI Whisper repo (\texttt{approach.png}); UniSpeech WavLM SUPERB results; ming024/FastSpeech2 mel example (shared time--frequency illustration).
-  \end{enumerate}
-\end{frame}
-
-\input{sections/credits}
+\input{sections/stt/toc}
+\input{sections/stt/introduction}
+\input{sections/stt/classical-asr}
+\input{sections/stt/acoustic-features}
+\input{sections/stt/hmm-dnn-asr}
+\input{sections/stt/end-to-end-asr}
+\input{sections/stt/wav2vec}
+\input{sections/stt/modern-asr}
+\input{sections/stt/deployment}
+\input{sections/stt/references}
 
 \end{document}

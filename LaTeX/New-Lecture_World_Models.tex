@@ -1,207 +1,23 @@
 % World models, RSSM, DreamerV3, JEPA & LeWorldModel (~120-minute graduate outline)
 \documentclass[10pt, aspectratio=149]{beamer}
 
-\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
-
 \input{preamble/packages}
 \input{preamble/commands}
 \input{preamble/beamer_settings}
 
-\title[World Models]{World Models\\(From Ha \& Schmidhuber to DreamerV3, JEPA, and LeWorldModel)}
+\title[World Models]{World Models}
 
 \begin{document}
 
 \input{sections/cover}
-
-% --- Table of Contents (suggested pacing: 6--8 blocks × ~15--20 min) ---
-\begin{frame}{Table of Contents}
-  \begin{enumerate}
-    \item Why \textbf{world models}? From control to prediction in latent space
-    \item Historical thread: Schmidhuber's \textbf{learning predictable world models}
-    \item \textbf{Ha \& Schmidhuber (2018):} VAE + RNN + controller in a latent ``generative neighborhood''
-    \item \textbf{RSSM} (recurrent state-space model): stochastic \& deterministic latents for dynamics
-    \item \textbf{Dreamer} line: model-based RL through imagined rollouts
-    \item \textbf{DreamerV3:} scalability, categorical latents, fixed hyperparameters
-    \item \textbf{Joint-Embedding Predictive Architectures (JEPA)}: predict representations, not pixels
-    \item \textbf{V-JEPA} and the connection to model-based \textbf{representation} learning in video
-    \item \textbf{LeWorldModel (LeWM):} stable \textbf{end-to-end} JEPA from \textbf{pixels} (SIGReg, no EMA tricks)
-    \item What to use when, open problems, and \textbf{references}
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}{Recap vocabulary (intermediate ML)}
-  \begin{itemize}
-    \item \textbf{MDP / POMDP:} Markov decision process; often \textbf{partially observed}---we infer state from frames.
-    \item \textbf{Policy} $\pi(a\mid s)$ vs.\ \textbf{model} $p(s',r\mid s,a)$ (or observation model). \textbf{Value} functions judge long-run return.
-    \item \textbf{Model-based RL:} use learned dynamics to improve policy or value (planning, imagination, MPC). \textbf{Model-free:} no explicit transition model.
-  \end{itemize}
-\end{frame}
-
-% --- Part A: motivation ---
-\begin{frame}{Why train a world model?}
-  \begin{itemize}
-    \item An \textbf{agent} chooses actions $a_t$ and receives observations $o_t$ and rewards $r_t$. Planning and learning are easier if we can \textbf{imagine} plausible futures without acting in the real environment.
-    \item A \textbf{world model} is a learned map that summarizes experience so we can predict (or sample) \textbf{what happens next} and sometimes \textbf{counterfactuals}: ``if I had pushed left \ldots''
-    \item Core tension: predict \textbf{everything in pixels} (high-dimensional, noisy) vs.\ predict in a \textbf{compact latent space} (lose detail but gain stability and generalization).
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Schmidhuber: compress what is predictable}
-  \begin{itemize}
-    \item Early idea (informed by e.g.\ 1990 FL framework and follow-on work): an \textbf{adaptive model} should learn a \textbf{compact internal state} that throws away unpredictable noise but keeps what matters to predict future sensory inputs and rewards.
-    \item Modern deep learning makes this concrete: \textbf{autoencoders} and \textbf{sequence models} learn a \textbf{state} $s_t$ or distribution $p(s_t\mid s_{t-1},a_{t-1})$ that supports \textbf{rollouts} in imagination.
-    \item This lecture focuses on \textbf{successors} that implement these ideas with VAEs/RSSMs/JEPA-style objectives, not on the full historical bibliography.
-  \end{itemize}
-\end{frame}
-
-% --- Part B: Ha & Schmidhuber ---
-\begin{frame}{Ha \& Schmidhuber (2018): ``World Models''}
-  \begin{itemize}
-    \item Three modules: \textbf{(1) VAE} compresses a frame $x_t$ to a latent $z_t$; \textbf{(2) MDN-RNN} models $p(z_{t+1}\mid z_{\le t}, a_{\le t})$ (mixture-density RNN for variability); \textbf{(3) Controller} is a small policy mapping $(z_t, \text{hidden})$ $\to$ $a_t$.
-    \item Training can be \textbf{decoupled}: train VAE on a dataset of rollouts, train RNN on $(z_t,a_t)$ sequences, then evolve a controller \textbf{inside} the learned model (e.g., CMA-ES)---\textbf{``training in the dream''}.
-    \item Limitations: VAE \textbf{reconstruction} pressure can spend capacity on visual detail; controller optimization in a flawed simulator can \textbf{exploit} artifacts (\textbf{RPG}: ``reality gap'').
-  \end{itemize}
-  \centering
-  \includegraphics[width=\textwidth,height=0.42\textheight,keepaspectratio]{assets/New-Lecture_World_Models/ha_world_models_page_3.png}
-\end{frame}
-
-\begin{frame}{Takeaways from the 2018 recipe}
-  \begin{itemize}
-    \item \textbf{Separation of concerns:} perception (VAE), dynamics (RNN), decision (controller)---easy to prototype but may \textbf{not} share gradients end-to-end through the full agent loop at scale.
-    \item \textbf{Stochastic latents} matter: the world is multi-modal; Gaussian or MDN heads encode ``many possible futures''.
-    \item Next step (PlaNet, Dreamer): unify training with \textbf{RSSM}-style latent dynamics and \textbf{model-based RL} losses.
-  \end{itemize}
-\end{frame}
-
-% --- Part C: RSSM ---
-\begin{frame}{RSSM: recurrent state-space model (PlaNet / Dreamer family)}
-  \begin{itemize}
-    \item \textbf{Deterministic path} $h_t = f(h_{t-1}, z_{t-1}, a_{t-1})$ summarizes history (like an RNN or GRU). \textbf{Stochastic} $z_t$ captures uncertainty not captured by $h_t$.
-    \item \textbf{Generative model} (sketch): prior $p_\theta(z_t\mid h_t)$, decoder $p_\theta(x_t\mid h_t,z_t)$, reward/continue heads for RL. \textbf{Posterior} $q_\phi(z_t\mid h_t, x_t)$ uses the observation at training time.
-    \item Enables \textbf{rollouts in latent space} without decoding full images at every step when training policy/value on imagined trajectories.
-  \end{itemize}
-  \centering
-  \includegraphics[width=\textwidth,height=0.40\textheight,keepaspectratio]{assets/New-Lecture_World_Models/planet_rssm_page_3.png}
-\end{frame}
-
-\begin{frame}{RSSM inference \& training intuition}
-  \begin{itemize}
-    \item \textbf{ELBO-style} objectives: reconstruction + KL between approximate posterior and prior (with free-bits / balancing tricks in practice).
-    \item The \textbf{deterministic bottleneck} $h_t$ carries long-term memory; $z_t$ injects \textbf{local variability} (contact, stochasticity in physics).
-    \item Compared to pure pixel prediction (e.g., early action-conditional ConvLSTMs), RSSM is meant to be \textbf{more sample-efficient} for control when paired with value learning.
-  \end{itemize}
-\end{frame}
-
-% --- Part D: Dreamer line ---
-\begin{frame}{Dreamer: act from imagined trajectories}
-  \begin{itemize}
-    \item \textbf{Dreamer} (Hafner et al.) learns RSSM world model + actor--critic; critic and actor losses use \textbf{latent imagination} (unrolling $h_t,z_t$ with the model) and TD($\lambda$) targets.
-    \item Later versions refine \textbf{representation} (e.g., KL balancing, categorical latents), \textbf{scalability}, and robustness across domains---culminating in \textbf{DreamerV3}.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{DreamerV3 (overview)}
-  \begin{itemize}
-    \item \textbf{Generalist} model-based RL with \textbf{fixed hyperparameters} across many environments (Atari, DMLab, Crafter, DM Control, \ldots).
-    \item World model uses \textbf{categorical} latent representations; emphasizes \textbf{robust value targets} (symlog domain, return normalization) and stable optimization.
-    \item \textbf{Scaling:} larger networks improve both \textbf{final return} and \textbf{data efficiency} in reported experiments---consistent with ``more capacity for the world model helps everything downstream.''
-  \end{itemize}
-  \centering
-  \includegraphics[width=\textwidth,height=0.38\textheight,keepaspectratio]{assets/New-Lecture_World_Models/dreamerv3_method.png}
-\end{frame}
-
-\begin{frame}{DreamerV3: what changed from DreamerV1/V2?}
-  \begin{itemize}
-    \item Strong \textbf{symlog} transforms for rewards and network outputs; \textbf{two-hot} regression for categorical signals where appropriate.
-    \item \textbf{No task-specific tuning}: goal is to ``remove RL engineering'' barriers while keeping a generative world model + actor--critic loop.
-    \item Practical implication for projects: read \textbf{implementation notes} (JAX, replay ratios, model horizon)---small off-by-ones in latent rollout length still bite.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Model error \& imagination horizon}
-  \begin{itemize}
-    \item Multi-step \textbf{latent rollouts} compound approximation error---policies can overfit to \textbf{biases} of the simulator (similar to sim-to-real gap but entirely inside the network).
-    \item Mitigations: \textbf{shorter} imagination horizons, \textbf{ensemble} world models, \textbf{uncertainty}-aware planning, mixed \textbf{real} replays, or KL regularization toward empirical trajectories.
-    \item Debugging tip: visualize \textbf{decoded} rollouts (when a decoder exists) even if training is mostly in latent space.
-  \end{itemize}
-\end{frame}
-
-% --- Part E: JEPA / V-JEPA ---
-\begin{frame}{JEPA: predict in embedding space, not pixels}
-  \begin{itemize}
-    \item \textbf{I-JEPA / V-JEPA} (Meta): predict \textbf{representations} of masked spatio(-temporal) regions from context encoders; avoid pixel reconstruction (unlike MAE on pixels).
-    \item Connection to world models: both seek \textbf{abstract state} that supports prediction. JEPA losses are typically \textbf{SSL for representation learning}; Dreamer adds explicit \textbf{action-conditioned dynamics} + RL objectives.
-    \item V-JEPA is \textbf{not} a full action-conditioned control world model out of the box---it is a \textbf{video world model} for \textbf{prediction and downstream tasks}; you can connect it conceptually to \textbf{what RSSM latents are trying to achieve}.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{V-JEPA: masked video prediction}
-  \begin{itemize}
-    \item Encoder sees a subset of \textbf{space--time} patches; a \textbf{predictor} (often ViT-style) forecasts target patch \textbf{embeddings} from a target encoder (EMA or stop-grad variants in prior Meta work).
-    \item Produces features for recognition, localization, planning research directions---\textbf{semantic \& dynamics} without generative decoding of pixels.
-  \end{itemize}
-  \centering
-  \includegraphics[width=\textwidth,height=0.44\textheight,keepaspectratio]{assets/New-Lecture_World_Models/vjepa_page_2.png}
-\end{frame}
-
-\begin{frame}{Conceptual bridge: RSSM latents vs.\ JEPA embeddings}
-  \begin{itemize}
-    \item \textbf{RSSM} latents are trained for \textbf{reconstruction + RL} (reward, continuation); optimized to support \textbf{policy gradients through imagination}.
-    \item \textbf{JEPA} targets are \textbf{invariance / prediction in feature space}; may align better with \textbf{semantics}, less with pixel-perfect physics unless combined with additional losses or fine-tuning.
-    \item Active research: \textbf{action-conditioned JEPA}-style models for control (LeWM and successors push toward stable end-to-end training from pixels).
-  \end{itemize}
-\end{frame}
-
-% --- Part F: LeWorldModel ---
-\begin{frame}{LeWorldModel (LeWM): stable end-to-end JEPA from pixels}
-  \begin{itemize}
-    \item Maes et al.\ (2025 / arXiv:2603.19312): first JEPA-style world model reported to train \textbf{end-to-end from pixels} without classic stabilizers (\textbf{stop-gradient} tricks, \textbf{EMA target encoder}, handcrafted schedules) that complicate prior JEPA pipelines.
-    \item Combines (i) \textbf{next-embedding prediction} and (ii) \textbf{SIGReg}---pushing latent embeddings toward a \textbf{Gaussian} to avoid collapse and improve optimization geometry.
-    \item Result: reported \textbf{stable training} on a single GPU in hours on benchmark environments; useful reference for students implementing JEPA-like control models.
-  \end{itemize}
-  \centering
-  \includegraphics[width=\textwidth,height=0.40\textheight,keepaspectratio]{assets/New-Lecture_World_Models/leworldmodel_page_2.png}
-\end{frame}
-
-\begin{frame}{LeWM: what students should remember}
-  \begin{itemize}
-    \item \textbf{Lesson:} representation learning for world models benefits from \textbf{explicit regularity} on the latent (SIGReg) alongside prediction---not only contrastive or stop-grad engineering.
-    \item Compare \textbf{failure modes}: representation collapse, hallucinated dynamics, exploitation during imagination---map each to whether it is primarily a \textbf{perception}, \textbf{dynamics}, or \textbf{RL} issue.
-    \item Open directions: \textbf{long-horizon} latent consistency, \textbf{3D / physical} priors, combining LeWM-style training with \textbf{large offline datasets}.
-  \end{itemize}
-\end{frame}
-
-% --- Synthesis ---
-\begin{frame}{Practical comparison (cheat sheet)}
-  \begin{itemize}
-    \item \textbf{Ha 2018 world model:} modular VAE+RNN+controller; great didactic baseline; may need careful tuning for sample efficiency.
-    \item \textbf{RSSM / DreamerV3:} strong default for \textbf{model-based RL} from pixels in research codebases; categorical latents + robust targets.
-    \item \textbf{V-JEPA:} large-scale \textbf{video representation} learning; connect conceptually to latent prediction; not a drop-in RL planner by itself.
-    \item \textbf{LeWM:} research reference for \textbf{stable end-to-end JEPA} world models with explicit latent regularization.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Discussion prompts}
-  \begin{itemize}
-    \item When would you \textbf{prefer pixel reconstruction} (or decoded rollouts) vs.\ \textbf{pure latent imagination} for debugging a new environment?
-    \item How would you \textbf{detect} when a world model is being \textbf{exploited} by the policy (pathological latents)?
-    \item Where could \textbf{V-JEPA representations} plug into a \textbf{Dreamer}-like actor--critic loop?
-  \end{itemize}
-\end{frame}
-
-% --- References ---
-\begin{frame}{References}
-  \footnotesize
-  \begin{enumerate}
-    \item Schmidhuber, formative work on \textbf{curiosity} and agents that build \textbf{internal predictive models} of the environment (1990s--2000s); see retrospectives on \textbf{artificial curiosity} and model-based RL.
-    \item Ha \& Schmidhuber, ``World Models'', \href{https://arxiv.org/abs/1803.10122}{arXiv:1803.10122}. \textit{Figure:} \texttt{ha\_world\_models\_page\_3.png}.
-    \item Hafner et al., ``Learning Latent Dynamics for Planning from Pixels'' (PlaNet), \href{https://arxiv.org/abs/1811.01745}{arXiv:1811.01745}. \textit{RSSM plate:} \texttt{planet\_rssm\_page\_3.png}.
-    \item Hafner et al., ``Mastering Diverse Control Tasks through World Models'' (DreamerV3), \href{https://www.nature.com/articles/s41586-025-09846-4}{Nature 2025}; \href{https://arxiv.org/abs/2301.04104}{arXiv:2301.04104}. \textit{Diagram:} \texttt{dreamerv3\_method.png} (Danijar Hafner's DreamerV3 README).
-    \item Bardes, Garrido, Ponce, LeCun, ``V-JEPA: Video Joint Embedding Predictive Architecture'', \href{https://arxiv.org/abs/2408.00714}{arXiv:2408.00714}. \textit{Figure:} \texttt{vjepa\_page\_2.png}.
-    \item Maes, Le Lidec, Scieur, LeCun, Balestriero, ``LeWorldModel: Stable End-to-End Joint-Embedding Predictive Architecture from Pixels'', \href{https://arxiv.org/abs/2603.19312}{arXiv:2603.19312}. \textit{Figure:} \texttt{leworldmodel\_page\_2.png}. Code: \href{https://github.com/lucas-maes/le-wm}{github.com/lucas-maes/le-wm}.
-  \end{enumerate}
-\end{frame}
-
-\input{sections/credits}
+\input{sections/world-models/toc}
+\input{sections/world-models/introduction}
+\input{sections/world-models/ha_schmidhuber_vmc}
+\input{sections/world-models/rssm}
+\input{sections/world-models/dreamer}
+\input{sections/world-models/generative_jepa}
+\input{sections/world-models/leworldmodel}
+\input{sections/world-models/summary}
+\input{sections/world-models/references}
 
 \end{document}

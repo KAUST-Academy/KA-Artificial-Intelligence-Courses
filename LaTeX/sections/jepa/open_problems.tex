@@ -1,0 +1,32 @@
+% % --- Discussion and Open Problems ---
+\begin{frame}{Open Problems and Research Directions}
+  \begin{itemize}\itemsep0.28em
+    \item \textbf{Masking and targets:} How much to mask, where, and at what semantic scale (patch vs.\ object vs.\ clip)?
+    \item \textbf{Long horizon:} Original V-JEPA focused on short clips; \textbf{V-JEPA 2} pushes scale and adds action-conditioned planning (V-JEPA~2-AC), but long-horizon world models remain open.
+    \item \textbf{Multimodal fusion:} aligning audio, language, and video under JEPA-style latent prediction without collapsing modalities.
+    \item \textbf{Theory:} when does latent prediction provably recover predictable structure, and when do shortcuts dominate?
+    \item \textbf{Deployment:} latency, memory, and hardware-aware training for billion-scale video corpora.
+  \end{itemize}
+\end{frame}
+
+% \begin{frame}{Further Study: Courses, Surveys, and Primary Readings}
+%   \footnotesize
+%   \begin{itemize}\itemsep0.22em
+%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Stanford CS231n}, Lecture 12 (SSL history, pretext tasks, linear probing): \href{https://cs231n.stanford.edu/2024/slides/2024/lecture_12.pdf}{slides}.
+%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Berkeley CS294-158}, Deep Unsupervised Learning (likelihood models $\rightarrow$ non-generative SSL): \href{https://sites.google.com/view/berkeley-cs294-158-sp20/home}{SP20 site}.
+%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{CMU 11-785} Intro to Deep Learning / \textbf{DLSys} lecture hub: \href{https://deeplearning.cs.cmu.edu/}{deeplearning.cs.cmu.edu}, \href{https://dlsyscourse.org/lectures/}{dlsyscourse.org}.
+%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{MIT 6.S191} Introduction to Deep Learning: \href{https://introtodeeplearning.com/}{introtodeeplearning.com}.
+%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Survey (ViT + SSL):} mechanisms taxonomy for vision transformers, \href{https://arxiv.org/abs/2408.17059}{arXiv:2408.17059}.
+%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{LeCun lecture deck} (Les Houches / world-model narrative): \href{https://leshouches2022.github.io/SLIDES/lecun-20220720-leshouches-03.pdf}{PDF}.
+%   \end{itemize}
+% \end{frame}
+
+% % --- Recent Advances in JEPA Models ---
+% \begin{frame}{Frontiers: Efficiency, Multimodal JEPA, and Theory}
+%   \begin{itemize}\itemsep0.28em
+%     \item \textbf{Modality and scale:} point clouds (Point-JEPA), ConvNets (CNN-JEPA), vision--language (VL-JEPA), and long-horizon video (V-JEPA~2 line of work).
+%     \item \textbf{Training mechanics:} static vs.\ EMA teachers (SALT), masking design, and predictor capacity remain active design levers.
+%     \item \textbf{Hybrid objectives:} combining predictive latent losses with light contrastive or generative terms where pixels truly matter.
+%     \item \textbf{Evaluation:} frozen-backbone benchmarks, planning downstream tasks, and ``what makes a good world model?''---still open.
+%   \end{itemize}
+% \end{frame}

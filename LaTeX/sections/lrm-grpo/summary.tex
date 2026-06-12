@@ -1,0 +1,10 @@
+% --- Summary ---
+\begin{frame}{Summary}
+    \begin{itemize}\itemsep0.45em
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Reasoning models} spend test-time compute on chains of thought; post-training (especially RLVR) is what makes this reliable.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{GRPO} removes the critic, uses group-relative advantages, and pairs naturally with verifiable rewards---the backbone of DeepSeek-R1-Zero.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{DeepSeek-R1} combines cold-start SFT, reasoning RL, synthetic SFT, and alignment RL; \textbf{distillation} transfers gains to smaller models.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{GSPO} stabilizes long-sequence and MoE RL via sequence-level clipping; newer methods (SAPO, HölderPO) refine credit assignment.
+      \item[\textcolor{red}{$\blacktriangleright$}] Watch for \textbf{plateaus}, \textbf{looping}, and \textbf{calibration}---scaling laws and failure modes differ from pretraining.
+    \end{itemize}
+\end{frame}

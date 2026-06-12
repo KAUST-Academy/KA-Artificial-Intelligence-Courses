@@ -1,0 +1,38 @@
+\section{Conclusion}
+\begin{frame}{The "No Free Lunch" Theorem}
+    \centering
+    \textit{"Is there one Master Algorithm to rule them all?"}
+    \normalsize
+    % \vspace{-1em}
+    
+    \begin{columns}[c]
+        \begin{column}{0.6\textwidth}
+            \begin{tcolorbox}[colback=yellow!10, colframe=orange!80!black, title=\textbf{The Theorem (Wolpert, 1996)}]
+                Averaged over all possible data generating distributions, every classification algorithm has the same error rate when classifying previously unobserved points.
+                \vspace{-1mm}
+                $$ \mathbb{E}[Error(\text{Model}_A)] = \mathbb{E}[Error(\text{Model}_B)] $$
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.4\textwidth}
+            \centering
+            \textbf{In Plain English:}
+            \vspace{0.5em}
+            \begin{itemize}
+                \item No model works best for \textit{every} problem.
+                \item A model that is great at Image Recognition might be terrible at Spam Classification.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    % \vspace{-1em}
+    \begin{alertblock}{The Implication for us}
+        Since we cannot mathematically prove which model will work best beforehand:
+        \begin{enumerate}
+            \item We must make \textbf{assumptions} about our data (e.g., "it looks linear").
+            \item We must \textbf{experiment} with multiple models from our toolbox.
+        \end{enumerate}
+    \end{alertblock}
+\end{frame}
+
+% --- PART 6: SUMMARY ---
+\section{References}

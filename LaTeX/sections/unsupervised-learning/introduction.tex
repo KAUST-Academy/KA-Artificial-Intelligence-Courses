@@ -1,0 +1,124 @@
+\section{Introduction}
+\begin{frame}{What is Unsupervised Learning?}
+\textbf{So far:} We've been doing \textbf{Supervised Learning}, learning from labeled data $(x, y)$.
+
+\vspace{1em}
+\begin{columns}[c]
+\begin{column}{0.50\textwidth}
+\begin{tcolorbox}[colback=blue!5, colframe=blue!50, title=\textbf{Supervised Learning}]
+\textbf{Data:} $(x, y)$ pairs
+\begin{itemize}
+\item $x$: input (features)
+\item $y$: label (target)
+\end{itemize}
+\vspace{0.3em}
+\textbf{Goal:} Learn $f(x) \approx y$
+
+\textbf{Examples:}
+\begin{itemize}
+\item Image classification
+\item House price prediction
+\end{itemize}
+\end{tcolorbox}
+\end{column}
+
+\begin{column}{0.50\textwidth}
+\begin{tcolorbox}[colback=green!5, colframe=green!50!black, title=\textbf{Unsupervised Learning}]
+\textbf{Data:} Only $x$ (no labels!)
+\begin{itemize}
+\item Just raw data
+\item No target to predict
+\end{itemize}
+\vspace{0.3em}
+\textbf{Goal:} Find hidden patterns or structure
+
+\textbf{Examples:}
+\begin{itemize}
+\item Customer segmentation
+\item Data compression
+\end{itemize}
+\end{tcolorbox}
+\end{column}
+\end{columns}
+
+\vspace{1em}
+\centering
+\textbf{Key difference:} No labels $\rightarrow$ algorithm must discover structure on its own!
+\end{frame}
+
+% --- SLIDE: Why Unsupervised Learning? ---
+\begin{frame}{Why Unsupervised Learning?}
+\textbf{Labels are expensive!}
+
+\vspace{0.5em}
+\begin{itemize}
+\item Labeling data requires human effort, time, and expertise
+\item Most real-world data is unlabeled
+\item Sometimes we don't even know what labels to look for
+\end{itemize}
+
+\vspace{1em}
+\begin{tcolorbox}[colback=yellow!8, colframe=orange!60, title=\textbf{The Big Idea}]
+Can we learn useful things from data \textbf{without} labels? \\
+Yes! Unsupervised learning finds hidden patterns, structure, and representations.
+\end{tcolorbox}
+
+\end{frame}
+
+% --- SLIDE: Tasks in Unsupervised Learning ---
+\begin{frame}{Common Unsupervised Learning Tasks}
+\textbf{What can we do without labels?}
+
+% \vspace{0.8em}
+\begin{columns}[t]
+\begin{column}{0.52\textwidth}
+\begin{tcolorbox}[colback=blue!5, colframe=blue!50, height=2.7cm]
+\textbf{1. Clustering}
+
+Group similar data points together
+
+\textbf{Example:} Customer segmentation, document group
+\end{tcolorbox}
+
+\vspace{0.5em}
+
+\begin{tcolorbox}[colback=red!5, colframe=red!50, height=2.7cm]
+\textbf{2. Dimensionality Reduction}
+
+Compress high-dimensional data to lower dimensions
+
+\textbf{Example:} Visualization, feature extraction
+\end{tcolorbox}
+\end{column}
+
+\begin{column}{0.50\textwidth}
+\begin{tcolorbox}[colback=orange!5, colframe=orange!50, height=2.7cm]
+\textbf{3. Anomaly Detection}
+
+Identify unusual or outlier data points
+
+\textbf{Example:} Fraud detection, quality control
+\end{tcolorbox}
+
+\vspace{0.5em}
+
+\begin{tcolorbox}[colback=purple!5, colframe=purple!50, height=2.7cm]
+\textbf{4. Generation}
+
+Learn to create new, realistic data samples
+
+\textbf{Example:} Image synthesis, data augmentation
+\end{tcolorbox}
+\end{column}
+\end{columns}
+
+\vspace{0.5em}
+\centering
+\small \textit{We'll explore four powerful algorithms that tackle these tasks.}
+\end{frame}
+
+% =========================
+% K-Means Clustering - IMPROVED VERSION
+% =========================
+
+% --- SLIDE 1: What is Clustering? ---

@@ -1,36 +1,68 @@
+\section{Model Learning}
 % Slide 8
 \begin{frame}{Model Learning}
 \begin{itemize}
-    \item Goal: Estimate model $\mathcal{M}_\phi$ from experience $s_1, a_1, r_1, \cdots, s_T$
+    \item Goal: estimate the model $\mathcal{M}_\phi$ from logged experience
+          $s_1, a_1, r_1, \cdots, s_T$
 \end{itemize}
 \end{frame}
 
 % Slide 9
 \begin{frame}{Model Learning}
 \begin{itemize}
-    \item Goal: Estimate model $\mathcal{M}_\phi$ from experience $s_1, a_1, r_1, \cdots, s_T$
-    \item This is a supervised learning problem
+    \item Goal: estimate the model $\mathcal{M}_\phi$ from logged experience
+          $s_1, a_1, r_1, \cdots, s_T$
+    \item This is a \textbf{supervised learning} problem: each transition gives us
+          an input $(s, a)$ and the targets to predict ($r$ and $s'$)
 \end{itemize}
 \end{frame}
 
-% Slide 10
-\begin{frame}{Model Learning}
+% Slide 10: predict the reward (regression)
+\begin{frame}{Model Learning: Two Things to Predict}
 \begin{itemize}
-    \item Goal: Estimate model $\mathcal{M}_\phi$ from experience $s_1, a_1, r_1, \cdots, s_T$
-    \item This is a supervised learning problem
-    \item Learning $s, a \rightarrow r$ is a regression problem
-    \item Learning $s, a \rightarrow s'$ is a density estimation problem
+    \item \textbf{Predict the reward}: \;$s, a \rightarrow r$
+    \begin{itemize}
+        \item the reward is just a \emph{number}: the model outputs one value
+              and we fit it to the observed reward
+        \item predicting a number is a \textbf{regression} problem
+    \end{itemize}
 \end{itemize}
 \end{frame}
 
-% Slide 11
-\begin{frame}{Model Learning}
+% Slide 11: predict the next state (density estimation)
+\begin{frame}{Model Learning: Two Things to Predict}
 \begin{itemize}
-    \item Goal: Estimate model $\mathcal{M}_\phi$ from experience $s_1, a_1, r_1, \cdots, s_T$
-    \item This is a supervised learning problem
-    \item Learning $s, a \rightarrow r$ is a regression problem
-    \item Learning $s, a \rightarrow s'$ is a density estimation problem
-    \item We pick a loss function like MSE, KL Divergence etc., and then
-          optimize
+    \item \textbf{Predict the reward}: \;$s, a \rightarrow r$
+    \begin{itemize}
+        \item the reward is just a \emph{number}: the model outputs one value
+              and we fit it to the observed reward
+        \item predicting a number is a \textbf{regression} problem
+    \end{itemize}
+    \item \textbf{Predict the next state}: \;$s, a \rightarrow s'$
+    \begin{itemize}
+        \item the \emph{same} action can lead to \emph{different} next states:
+              the environment is often random (stochastic)
+        \item so a single guess is not enough; we want the whole \emph{distribution}
+              $p(s' \mid s, a)$ over where we might land
+        \item learning a distribution is \textbf{density estimation}
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+% Slide 12: losses + the deterministic shortcut
+\begin{frame}{Model Learning: Picking a Loss}
+\begin{itemize}
+    \item Each task comes with a matching loss:
+    \begin{itemize}
+        \item regression (reward) $\rightarrow$ mean-squared error (MSE)
+        \item density estimation (next state) $\rightarrow$ maximum likelihood /
+              KL divergence
+    \end{itemize}
+    \item Common shortcut: if we \emph{assume} the dynamics are deterministic
+          (one action $\Rightarrow$ one next state), predicting $s'$ collapses to
+          plain regression too
+    \item That is the $f_\phi$ trained with MSE,
+          $\min_\phi \sum_i \lVert f_\phi(s_i, a_i) - s'_i \rVert^2$, that we use in
+          the algorithm next
 \end{itemize}
 \end{frame}

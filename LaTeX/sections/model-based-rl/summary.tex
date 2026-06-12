@@ -1,16 +1,33 @@
 \section{Summary}
-% Slide 45
+% Slide 45: rewritten to cover both halves + Day 9 hook.
 \begin{frame}{Summary}
 \begin{itemize}
-    \item Reinforcement Learning can be categorised into Model-Based and
-          Model-Free.
-    \item In Model-Based RL, we also learn the model of the world i.e, the
-          state transition model and/or the reward model
-    \item Model-Based RL can be employed with both value and/or policy
-          based methods
-    \item We can use the model to augment the real environment data
-    \item Models can be immensely useful if easy to learn but sometimes they
-          can be harder to learn than a policy
-    \item Whether to use a model depends on how hard it is to learn
+    \item \textbf{Model-based RL}: learn the dynamics (and/or reward) by
+          supervised learning, then \emph{plan} (random shooting, CEM, MPC) or
+          \emph{optimize a policy} (Dyna-style, MBPO) with the model
+    \item Models are wrong off-distribution: \textbf{ensembles} measure that,
+          and re-collecting data (MPC) fixes it
+    \item Modern lines: planning with a learned model (MuZero) and latent
+          imagination (Dreamer)
+    \item \textbf{Offline RL}: learn from a fixed batch, no interaction. The core
+          failure is \emph{value extrapolation} on OOD actions; the fix is
+          \textbf{pessimism} (CQL, BCQ, IQL)
+    \item The two halves meet in model-based offline RL (MOReL / MOPO / COMBO):
+          a model plus a penalty for where it is uncertain
+    \item One spine: \emph{optimism} explores, \emph{pessimism} stays safe; the
+          sign of the uncertainty bonus is the whole story
+\end{itemize}
+\end{frame}
+
+% Day 9 forward hook
+\begin{frame}{What's Next: Day 9}
+\textbf{Day 9: RL in the Real World (RLHF).}
+\begin{itemize}
+    \item RLHF's \emph{reward model} is the learned reward model $\mathcal{R}_\phi$
+          from the start of today
+    \item Learning a policy from fixed human demonstration / preference data is an
+          \textbf{offline} setting
+    \item ``Pretrain on logged data, then fine-tune with RL'' is exactly the
+          offline-to-online recipe, now applied to LLMs
 \end{itemize}
 \end{frame}

@@ -1,0 +1,129 @@
+\section{Planning: Searching for the Best Plan}
+% The "how to search" methods + MPC. Comes AFTER the cliff arc: the mechanism
+% (how-to-plan.tex) was already shown before the cliff; here we make the search
+% practical and finally name the replan loop as MPC.
+
+\begin{frame}{Back to Planning: How to Search?}
+\begin{itemize}
+    \item Recall: planning = pick the action sequence whose model roll-out scores
+          highest. The hard part was the $\arg\max$ over sequences
+    \item The fix we just used (replan + collect data) also relied on this search
+    \item Two separate questions: first, how to \emph{search} for a plan (random
+          shooting, CEM); then, how often to \emph{replan} (MPC)
+\end{itemize}
+\end{frame}
+
+% === Random shooting ====================================================
+\begin{frame}{How to Search? Random Shooting}
+\begin{itemize}
+    \item Simplest idea (no gradients, just guess):
+    \begin{enumerate}
+        \item Sample $N$ action sequences $a_{t:t+H}^{(1)}, \dots, a_{t:t+H}^{(N)}$
+              from some distribution
+        \item Roll each one through the model $f_\phi$, sum the predicted rewards
+        \item Keep the sequence with the highest predicted return
+    \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{How to Search? Random Shooting}
+\begin{itemize}
+    \item Simplest idea (no gradients, just guess):
+    \begin{enumerate}
+        \item Sample $N$ action sequences $a_{t:t+H}^{(1)}, \dots, a_{t:t+H}^{(N)}$
+              from some distribution
+        \item Roll each one through the model $f_\phi$, sum the predicted rewards
+        \item Keep the sequence with the highest predicted return
+    \end{enumerate}
+    \item Derivative-free and trivially parallel
+    \item This is the planner in \textbf{Nagabandi et al.}: ``random shooting'',
+          no ensembles
+    \item Weakness: most samples land in low-reward regions, wasteful
+\end{itemize}
+\end{frame}
+
+% === CEM ================================================================
+\begin{frame}{Cross-Entropy Method (CEM)}
+\begin{itemize}
+    \item Fix random shooting's waste: \emph{refit} the sampling distribution
+          toward the good sequences
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cross-Entropy Method (CEM)}
+\begin{itemize}
+    \item Fix random shooting's waste: \emph{refit} the sampling distribution
+          toward the good sequences
+    \begin{enumerate}
+        \item Sample $N$ sequences from a Gaussian $\mathcal{N}(\mu, \Sigma)$
+        \item Evaluate under the model; keep the top-$k$ \emph{elites}
+        \item Refit $\mu, \Sigma$ to the elites
+        \item Repeat for a few iterations
+    \end{enumerate}
+    \item The distribution concentrates on high-return plans
+    \item This is the optimizer hiding inside step 3 of our algorithm
+\end{itemize}
+\end{frame}
+
+% === MPC: a different question, NOT a search method =====================
+\section{Planning: When to Replan?}
+\begin{frame}{A Different Question: When to Replan?}
+\begin{itemize}
+    \item Random shooting and CEM answered \emph{how to find} a good plan
+    \item MPC answers a \emph{different} question: not how to \emph{search},
+          but \textbf{how much of a plan to trust before re-deciding}
+    \item It is a planning \emph{technique}, not another search method
+\end{itemize}
+\end{frame}
+
+% === MPC ================================================================
+\begin{frame}{Model Predictive Control (MPC)}
+\begin{itemize}
+    \item A full open-loop plan is fragile: model errors compound over the
+          horizon $H$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Model Predictive Control (MPC)}
+\definecolor{mbgreen}{RGB}{122,173,75}
+\definecolor{mborange}{RGB}{237,148,72}
+\definecolor{mbblue}{RGB}{79,129,189}
+\begin{itemize}
+    \item A full open-loop plan is fragile: model errors compound over the
+          horizon $H$
+    \item \textbf{MPC}: plan a horizon, but \emph{execute only the first action},
+          then re-plan from the state you actually land in
+\end{itemize}
+\vspace{0.5em}
+\centering
+\begin{tikzpicture}[>={Stealth[length=2.4mm]}, font=\scriptsize]
+    \foreach \i in {0,1,2,3}{
+        \fill[mbblue] (1.7*\i,0) circle (2.4pt);
+    }
+    \node[below] at (0,-0.15) {$s_t$};
+    \node[below] at (1.7,-0.15) {$s_{t+1}$};
+    \node[below] at (3.4,-0.15) {$s_{t+2}$};
+    \node[below] at (5.1,-0.15) {$s_{t+3}$};
+    % planned (faded) horizon from s_t
+    \draw[mborange!55, dashed, ->] (0,0) .. controls (0.8,0.9) and (1.4,0.9) .. (1.7,0);
+    \draw[mborange!35, dashed] (1.7,0) .. controls (2.5,0.8) .. (3.4,0.2);
+    \draw[mborange!25, dashed] (3.4,0.2) .. controls (4.2,0.8) .. (5.1,0.1);
+    % executed (solid) first step
+    \draw[mbgreen, very thick, ->] (0,0) .. controls (0.8,-0.7) and (1.4,-0.7) .. (1.7,0);
+    \node[mbgreen!60!black] at (0.85,-0.95) {execute 1st action};
+    \node[mborange!70!black] at (3.4,1.0) {planned horizon (discarded)};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Model Predictive Control (MPC)}
+\begin{itemize}
+    \item A full open-loop plan is fragile: model errors compound over the
+          horizon $H$
+    \item \textbf{MPC}: plan a horizon, but \emph{execute only the first action},
+          then re-plan from the state you actually land in
+    \item This \emph{is} the ``execute, then re-plan'' loop we used to fix the
+          cliff, now it has a name
+    \item Next: combine a CEM planner with an \emph{ensemble} model
+          $\Rightarrow$ \textbf{PETS}
+\end{itemize}
+\end{frame}

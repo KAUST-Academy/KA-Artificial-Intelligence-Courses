@@ -1,0 +1,73 @@
+% The core slide of the block: why value-based offline RL breaks.
+% Deliberate contrast with the cliff: this failure needs no dynamics model.
+
+% Goal/lead-in: WHY does running Q-learning on the fixed dataset break?
+\begin{frame}{The Core Failure: Extrapolation Error}
+\begin{itemize}
+    \item Stitching needs \textbf{Q-learning}, so just run it on the fixed
+          dataset. Look at its update target, which bootstraps from a $\max$ over
+          actions:
+          \[ y = r + \gamma\,\max_{a'} Q_\theta(s', a') \]
+    \item That $\max$ ranges over \textbf{all} actions, including ones the
+          dataset \emph{never tried} (\emph{out-of-distribution}, or \textbf{OOD}).
+          Why is that fatal?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Core Failure: Extrapolation Error}
+\definecolor{oteal}{RGB}{0,141,160}
+\definecolor{ogreen}{RGB}{106,168,79}
+\definecolor{ored}{RGB}{158,28,38}
+\definecolor{oblue}{RGB}{16,53,103}
+\centering
+\begin{tikzpicture}[font=\scriptsize, >={Stealth[length=2.4mm]}]
+    \draw[->] (0,0) -- (8.0,0) node[below left]{$a$};
+    \draw[->] (0,0) -- (0,3.3);
+    \node[rotate=90] at (-0.35,1.6) {$Q(s,\cdot)$};
+    \fill[oteal!12] (0.8,0.02) rectangle (3.6,3.0);
+    \node[oteal!60!black] at (2.2,2.8) {data support};
+    \draw[ogreen!70!black, thick] plot[smooth] coordinates
+      {(0.3,0.9) (1.2,1.5) (2.2,1.9) (3.2,1.7) (4.5,1.2) (6.0,0.85) (7.4,0.6)};
+    \node[ogreen!60!black, font=\scriptsize] at (7.3,0.95) {true $Q$};
+    \draw[ored, very thick, dashed] plot[smooth] coordinates
+      {(0.3,1.0) (1.2,1.45) (2.2,1.95) (3.2,1.75) (4.4,1.9) (5.6,2.5) (7.0,3.05)};
+    \node[ored, font=\scriptsize] at (7.45,2.75) {learned $\hat Q$};
+    \foreach \x/\y in {1.0/1.42, 1.5/1.66, 1.9/1.84, 2.4/1.92, 2.8/1.85, 3.3/1.66}
+      \fill[oblue] (\x,\y) circle (1.6pt);
+    \node[ored, font=\scriptsize\bfseries] (ph) at (5.2,3.15) {phantom peak};
+    \draw[->, ored] (ph.east) -- (6.85,3.0);
+    \draw[->, ored, thick] (7.0,-0.5) -- (7.0,-0.08);
+    \node[ored, font=\scriptsize] at (5.7,-0.5)
+      {$\arg\max_a \hat Q$: the policy goes here};
+\end{tikzpicture}
+\begin{itemize}
+    \item $Q_\theta$ is a neural net: feed it \emph{any} action and it returns a
+          number, even where there is \textbf{no data}; there the value is not
+          learned, only \emph{extrapolated} (``invented'')
+    \item The $\max$ seeks the \emph{largest} invented value $\Rightarrow$
+          \textbf{overestimation}; the policy $\arg\max_a \hat Q$ chases that
+          \emph{phantom}, and bootstrapping spreads the inflated value onward
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Online RL Never Noticed}
+\begin{itemize}
+    \item Online, an overestimated action gets \emph{tried}, disappoints, and is
+          corrected; overestimation is self-erasing
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Online RL Never Noticed}
+\begin{itemize}
+    \item Online, an overestimated action gets \emph{tried}, disappoints, and is
+          corrected; overestimation is self-erasing
+    \item Offline, the policy can chase the phantom forever: no data will ever
+          contradict it
+    \item More gradient steps make it \textbf{worse}, not better: we optimize
+          against the fantasy (Fujimoto et al., 2019: \emph{extrapolation error})
+\end{itemize}
+\vspace{0.8em}
+\begin{center}
+\textcolor{red}{Online, hype meets reality. Offline, it never does.}
+\end{center}
+\end{frame}

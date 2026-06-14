@@ -1,0 +1,104 @@
+\section{k-Nearest Neighbors}
+\begin{frame}{The ML Toolbox: Roadmap Update}
+    \centering \vspace*{\fill} \hspace*{-0.6cm}
+    \resizebox{1.1\linewidth}{!}{
+    \begin{tikzpicture}[node distance=0.5cm, box/.style={scale=1.25, rectangle, draw=gray!40, fill=gray!5, rounded corners, minimum width=2.8cm, minimum height=1.8cm, align=center, font=\small}, active/.style={draw=myblue, fill=blue!10, line width=1.5pt}, completed/.style={draw=mygreen, fill=green!10, line width=1pt, dashed}, arrow/.style={-latex, thick, gray!60}]
+        \node[font=\bfseries\Large] (root) at (0, 3) {Machine Learning Models ($f_\theta$)};
+        
+        \node[box, completed] (linear) at (-6, 0) {\textbf{1. Linear Models}};
+        \node[box, active] (distance) at (-2, 0) {\textbf{2. Distance-Based}\\KNN\\(Non-Parametric)};
+        \node[box] (kernel) at (2, 0) {\textbf{3. Kernel-Based}\\SVM};
+        \node[box] (trees) at (6, 0) {\textbf{4. Tree-Based}\\Trees \& Ensembles};
+
+        \draw[arrow] (root) -- (linear); \draw[arrow] (root) -- (distance);
+        \draw[arrow] (root) -- (kernel); \draw[arrow] (root) -- (trees);
+        
+        \node[myblue, below=0.3cm of distance, font=\bfseries] {$\uparrow$ We Are Here};
+    \end{tikzpicture}
+    }
+    \vspace*{\fill}
+\end{frame}
+
+% --- Slide 1: KNN Concept ---
+\begin{frame}{k-Nearest Neighbors (k-NN): Concept}
+    Linear models try to learn a global formula ($\mathbf{w}^T\mathbf{x}$). 
+    \textbf{k-NN} is different: it is a \textbf{Lazy Learner}. It memorizes the training data and makes predictions based on local similarity. So, it has \textbf{no parameters}.
+
+    \begin{columns}[c]
+        \begin{column}{0.5\textwidth}
+            \textbf{The Algorithm:}
+            \begin{enumerate}
+                \item Choose a distance metric $d(\cdot, \cdot)$ and an integer $k$.
+                \item For a new point $x_{new}$, find the $k$ training points closest to it.
+                \item \textbf{Classification:} Take the majority vote.
+                \item \textbf{Regression:} Take the average.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.45\textwidth}
+            \centering
+            % Simple TikZ for KNN
+            \begin{tikzpicture}[scale=1.0]
+                \draw[help lines, color=gray!30] (0,0) grid (5,5);
+                % Data points Class A
+                \foreach \p in {(1,1), (1.5,2), (2,1), (0.5,1.5)} \fill[red] \p circle (3pt);
+                % Data points Class B
+                \foreach \p in {(3,4), (4,3), (4,4.5), (3.5, 3.5)} \fill[blue] \p circle (3pt);
+                
+                % Query point
+                \node[star, star points=5, star point height=0.3cm, fill=green, draw=black, label=above:$?$, inner sep=2pt] (q) at (2.5, 2.5) {};
+                
+                % Circle for k=3
+                \draw[dashed, thick, black] (2.5, 2.5) circle (1.8cm);
+                \node at (2.5, 0.5) {\small Neighborhood ($k=5$)};
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide 2: KNN Math ---
+\begin{frame}{k-NN: Mathematics of Distance}
+    The performance of k-NN depends heavily on how we define "closeness."
+    
+    \vspace{1em}
+    \textbf{1. Euclidean Distance ($L_2$ Norm)}: Most common
+    $$ d(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_{i=1}^d (x_i - y_i)^2} = ||\mathbf{x} - \mathbf{y}||_2 $$
+    
+    \textbf{2. Manhattan Distance ($L_1$ Norm)}: Good for high dimensions
+    $$ d(\mathbf{x}, \mathbf{y}) = \sum_{i=1}^d |x_i - y_i| = ||\mathbf{x} - \mathbf{y}||_1 $$
+
+\end{frame}
+
+% --- Slide 3: KNN Pros/Cons ---
+\begin{frame}{k-NN: Advantages and Disadvantages}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{Advantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Simple:} Easy to understand and implement.
+                    \item \textbf{No Training:} Training time is effectively zero ($O(1)$).
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.50\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=\textbf{Disadvantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Slow Inference:} Prediction is $O(N)$ (must scan all data).
+                    \item \textbf{Memory Intensive:} Must store the entire dataset.
+                    \item \textbf{Scaling Required:} Sensitive to feature magnitude (Requires Standardization).
+                    \item \textbf{Curse of Dimensionality:} Performance degrades noticeably in high dimensions.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+% ==============================================================================
+% SECTION 3: KERNEL-BASED (SVM)
+% ==============================================================================
+
+\subsection{Kernel-Based Models}
+
+% --- Roadmap Update ---

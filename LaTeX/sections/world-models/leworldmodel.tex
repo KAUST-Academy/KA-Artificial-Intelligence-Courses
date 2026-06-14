@@ -1,0 +1,51 @@
+% --- LeWorldModel (LeWM) ---
+% % % --- Part F: LeWorldModel (Maes et al., arXiv:2603.19312) ---
+\begin{frame}[t]{LeWorldModel (LeWM): Motivation}
+  \centering
+  \includegraphics[width=0.82\linewidth,height=0.62\textheight,keepaspectratio]{assets/New-Lecture_World_Models/leworldmodel_arxiv2603_fig1_training_pipeline_crop.png}\\[-0.08em]
+  {\scriptsize Image credit: Maes et al., \href{https://arxiv.org/pdf/2603.19312v1.pdf}{LeWorldModel (arXiv:2603.19312)}.}
+  \begin{itemize}
+    \item \textbf{LeWorldModel (LeWM):} The LeWorldModel is the first JEPA-style world model trained end-to-end from raw pixels using only two simple loss terms: a prediction loss and a regularizer that encourages Gaussian-distributed latents. This streamlined approach avoids the complex loss functions and additional tricks used by earlier models, yielding a provably stable and anti-collapse training procedure.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[t]{LeWorldModel (LeWM): Architecture}
+  \centering
+  \includegraphics[width=0.82\linewidth,height=0.62\textheight,keepaspectratio]{assets/New-Lecture_World_Models/leworldmodel_arxiv2603_fig1_training_pipeline_crop.png}\\[-0.08em]
+  {\scriptsize Image credit: Maes et al., \href{https://arxiv.org/pdf/2603.19312v1.pdf}{LeWorldModel (arXiv:2603.19312)}.}
+  \begin{itemize}\itemsep0.20em\footnotesize
+    \item \textbf{Model Architecture.} LeWM consists of an encoder (mapping frames to latent codes) and a predictor (forecasting the next latent given the current latent and action).
+    \item \textbf{Training Objective.} The model is trained end-to-end with a prediction loss plus a regularizer that encourages Gaussian-distributed latents:
+    \[
+        \mathcal{L} = \mathcal{L}_\text{pred} + \lambda\,\mathrm{SIGReg}(Z)
+    \]
+  \end{itemize}  
+\end{frame}
+
+\begin{frame}[t]{LeWorldModel (LeWM): Latent Planning}
+  \begin{figure}[t]
+    \centering
+    \includegraphics[width=0.98\linewidth,keepaspectratio]{assets/New-Lecture_World_Models/leworldmodel_arxiv2603_fig4_latent_planning_p4.png}
+    \caption*{\footnotesize
+    \textbf{LeWorldModel Latent Planning.} Given an initial observation $o_1$ and a goal $o_g$, the world model learned performs planning in the LeWM latent space. The initial state embedding $z_1$ and the goal embedding $z_g$ are obtained from the encoder. The predictor then rolls out future latent states up to a horizon $H$. A latent cost between the final predicted state and the goal embedding guides a solver to optimize the action sequence. This prediction--optimization loop is repeated until convergence to a good plan candidate.
+    }
+  \end{figure}
+\end{frame}
+
+\begin{frame}[t]{LeWorldModel (LeWM): Results}
+  \centering
+  % Placeholder for bar chart image
+  \includegraphics[width=0.97\linewidth]{assets/New-Lecture_World_Models/leworldmodel_arxiv2603_fig6_planning_performance_p8.png}\\[0.4em]
+  \footnotesize
+  \textbf{Planning performance across environments.} Results are shown for \textit{Two-Room} (left), \textit{Reacher} (center 1), \textit{PushT} (center-2) and \textit{OGBench-Cube} (right). LeWM consistently outperforms PLDM and DINO-WM on PushT and Reacher. On OGBench-Cube, DINO-WM slightly outperforms LeWM, possibly due to the higher visual complexity and the 3D nature of the environment, which makes encoder training more challenging. In the simpler Two-Room environment, PLDM and DINO-WM outperform LeWM, which may be explained by the SIGReg regularization encouraging a Gaussian distribution in a high-dimensional latent space, while the intrinsic dimensionality of the environment is much lower.
+\end{frame}
+
+% --- Synthesis ---
+% \begin{frame}{Cheat Sheet}
+%   \begin{itemize}\itemsep0.26em
+%     \item \textbf{Ha 2018 (V--M--C):} modular VAE+MDN-RNN+controller; train-in-the-dream; exposes \textbf{generative} world-model design patterns and RPG issues.
+%     \item \textbf{RSSM / DreamerV3:} \textbf{ELBO-trained} latent dynamics + actor--critic on imagined rollouts; categorical latents, symlog, and strong scaling curves.
+%     \item \textbf{V-JEPA / V-JEPA\,2 / 2.1:} \textbf{non-generative} video SSL at scale; add \textbf{AC} heads or LLM alignment for robotics / VQA; different training stack than Dreamer.
+%     \item \textbf{LeWM:} \textbf{JEPA-from-pixels control} with \textbf{SIGReg} instead of EMA/stop-grad recipes---good code-first reference for MSc projects.
+%   \end{itemize}
+% \end{frame}

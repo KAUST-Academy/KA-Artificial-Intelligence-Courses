@@ -1,245 +1,29 @@
-% Frames extracted from the source PPTX->PDF
+% Advanced Self-Supervised Learning and JEPA Models
 \documentclass[10pt, aspectratio=149]{beamer}
 
+\usepackage{tikz}
 \usetikzlibrary{positioning, arrows.meta, shapes.geometric}
 
-% Include project preamble files for consistency
 \input{preamble/packages}
 \input{preamble/commands}
 \input{preamble/beamer_settings}
-
-\title[Foundation Models: Modern Advances and Applications]{Foundation Models: Modern Advances and Applications}
 
 \begin{document}
 
 \title[Advanced SSL \& JEPA Models]{Advanced Self-Supervised Learning and JEPA Models}
 
 \input{sections/cover}
-
-% --- Table of Contents ---
-\begin{frame}{Table of Contents}
-  \begin{enumerate}
-    \item Introduction: What is Self-Supervised Learning (SSL)?
-    \item Evolution of SSL: From Early Contrastive Methods to Masked Modeling
-    \item Theoretical Foundations: Why Does SSL Work?
-    \item Joint Embedding Predictive Architectures (JEPA): Motivation and Evolution
-    \item I-JEPA: Architecture, Training, and Insights
-    \item Practical Applications and Performance of I-JEPA
-    \item From Images to Video: Introduction to V-JEPA
-    \item V-JEPA: Architecture, Training Dynamics, and Challenges
-    \item Advanced Topics and Recent Progress in JEPA Research
-    \item Open Problems and Research Directions
-    \item References
-  \end{enumerate}
-\end{frame}
-
-% --- Introduction to SSL ---
-\begin{frame}{Introduction: What is Self-Supervised Learning (SSL)?}
-  \begin{itemize}
-    \item SSL enables models to learn representations from unlabeled data by creating proxy (pretext) tasks.
-    \item Removes the need for costly manual labels.
-    \item Has revolutionized computer vision and language modeling.
-    \item \textbf{Examples:} Colorization, jigsaw puzzles, contrastive learning.
-  \end{itemize}
-\end{frame}
-
-% --- Evolution of SSL ---
-\begin{frame}{Evolution of SSL: A Brief History}
-  \begin{itemize}
-    \item \textbf{Early Methods:} Context prediction, patch-based tasks.
-    \item \textbf{Contrastive SSL:} SimCLR, MoCo, BYOL -- explicit/implicit negative pairs.
-    \item \textbf{Masked Modeling:} Masked autoencoders (MAE), BERT for vision.
-    \item \textbf{Joint Embedding:} SwAV, DINO, and emergence of JEPA models.
-  \end{itemize}
-\end{frame}
-
-% --- Theoretical Foundations ---
-\begin{frame}{Theoretical Foundations: Why Does SSL Work?}
-  \begin{itemize}
-    \item Leverages natural data structure and context.
-    \item Encourages models to learn invariant features (robust to data augmentation).
-    \item Provides strong transfer to downstream tasks.
-    \item Ongoing research: understanding what representations encode.
-  \end{itemize}
-\end{frame}
-
-% --- JEPA Motivation ---
-\begin{frame}{Motivation for JEPA Models}
-  \begin{itemize}
-    \item Most SSL frameworks aim to predict local features or reconstruct pixels.
-    \item Can we go beyond pixels? Predict high-level embeddings instead.
-    \item Predicting masked region \textit{representations} rather than pixel values---the core insight of JEPA.
-    \item Enables rich, semantically meaningful representations.
-  \end{itemize}
-\end{frame}
-
-% --- What is JEPA? ---
-\begin{frame}{What are Joint Embedding Predictive Architectures (JEPA)?}
-  \begin{itemize}
-    \item \textbf{JEPA:} Models that learn by predicting the embedding of one part of the input from another, jointly.
-    \item Do not reconstruct pixels; learn on the level of abstract representations.
-    \item Naturally supports masked prediction and context-aware learning.
-    \item Example: Predict the embedding of a masked image region (target) from the visible (context) regions.
-  \end{itemize}
-\end{frame}
-
-% --- I-JEPA Overview ---
-\begin{frame}{I-JEPA: Image Joint Embedding Predictive Architecture}
-  \begin{itemize}
-    \item Introduced by Meta AI (Grill et al. 2023).
-    \item Predicts latent representations of masked patches from the visible context.
-    \item Uses vision transformer (ViT) backbone.
-    \item Learns more transferable, semantic representations compared to pixel-level methods.
-  \end{itemize}
-\end{frame}
-
-% --- I-JEPA: Key Principles ---
-\begin{frame}{I-JEPA: Key Principles}
-  \begin{itemize}
-    \item Move SSL objectives to embedding space.
-    \item Masked input: only parts of the image are visible (context).
-    \item The model predicts the representations, not pixel values, of masked patches (targets).
-    \item Encourages abstraction and invariance in learned features.
-  \end{itemize}
-\end{frame}
-
-% --- I-JEPA: Model Architecture ---
-\begin{frame}{I-JEPA: Model Architecture}
-  \centering
-  \includegraphics[width=0.85\textwidth]{assets/New-Lecture_JEPA_models/ijepa_diagram.png}
-  \begin{itemize}
-    \item \textbf{Context Encoder:} Processes the visible part of the image.
-    \item \textbf{Prediction Head:} Projects context to target's embedding space.
-    \item \textbf{Target Encoder:} Encodes masked patches (only used during training, no peeking).
-    \item Loss: Distance between predicted embedding and target embedding.
-  \end{itemize}
-\end{frame}
-
-% --- I-JEPA: Training Dynamics ---
-\begin{frame}{I-JEPA: Training and Implementation}
-  \begin{itemize}
-    \item Mask random regions of input images.
-    \item For each masked region, predict its feature embedding using only the unmasked context.
-    \item Train with mean squared error (MSE) or cosine embedding loss in feature space.
-    \item Uses stop-gradient to avoid collapse.
-    \item Strong data augmentation and masking strategies.
-  \end{itemize}
-\end{frame}
-
-% --- I-JEPA: Why Predict Features, Not Pixels? ---
-\begin{frame}{I-JEPA: Why Predict Features, Not Pixels?}
-  \begin{itemize}
-    \item Image pixels are noisy and low-level; predicting them encourages less semantic features.
-    \item Predicting feature embeddings focuses learning on semantics (object structure, relationships).
-    \item Avoids blurry or trivial reconstructions.
-    \item Empirically improves transfer learning on downstream vision tasks.
-  \end{itemize}
-\end{frame}
-
-% --- I-JEPA: Results and Applications ---
-\begin{frame}{I-JEPA: Results and Applications}
-  \begin{itemize}
-    \item Outperforms prior SSL methods on linear probing, fine-tuning, and semi-supervised settings.
-    \item Produces rich representations usable for classification, segmentation, detection, and more.
-    \item Efficient and scalable due to reduced pixelwise loss computation.
-    \item Rapid rise in adoption by vision research community.
-  \end{itemize}
-  \centering
-  \includegraphics[width=0.8\textwidth]{assets/New-Lecture_JEPA_models/ijepa_results.png}
-\end{frame}
-
-% --- Comparing SSL Architectures ---
-\begin{frame}{SSL Architectures: MAE vs. JEPA}
-  \centering
-  \includegraphics[width=0.9\textwidth]{assets/New-Lecture_JEPA_models/mae_vs_ijepa.png}
-  \begin{itemize}
-    \item \textbf{MAE:} Predicts pixels for masked regions, high reconstruction overhead.
-    \item \textbf{JEPA:} Predicts feature embeddings, abstracting visual content.
-    \item JEPA encourages more semantically meaningful representations.
-  \end{itemize}
-\end{frame}
-
-% --- V-JEPA: Motivation and Overview ---
-\begin{frame}{From Images to Video: V-JEPA Motivation}
-  \begin{itemize}
-    \item Visual world is dynamic: temporal modeling is key for understanding actions and events.
-    \item Can JEPA be extended to model spatiotemporal dependencies?
-    \item Enter V-JEPA (Video-JEPA): Predicts embeddings for masked video patches over space and time.
-    \item Enables learning representations of dynamic visual processes with limited or no labels.
-  \end{itemize}
-\end{frame}
-
-% --- V-JEPA: Architecture ---
-\begin{frame}{V-JEPA: Model Architecture}
-  \centering
-  \includegraphics[width=0.85\textwidth]{assets/New-Lecture_JEPA_models/vjepa_diagram.png}
-  \begin{itemize}
-    \item \textbf{Spatiotemporal Masking:} Mask random blocks in the video across space and time.
-    \item \textbf{Context Encoder:} Processes the visible video patches.
-    \item \textbf{Target Encoder:} Encodes masked video patches for training.
-    \item Loss: Predict features of masked regions from context, just as in I-JEPA.
-  \end{itemize}
-\end{frame}
-
-% --- V-JEPA: Training Specifics ---
-\begin{frame}{V-JEPA: Training and Implementation}
-  \begin{itemize}
-    \item Utilizes 3D vision transformers (ViT variants).
-    \item Leverages large-scale unlabeled video datasets.
-    \item Augmentation strategies consider both spatial and temporal dimensions.
-    \item Handles challenges in temporal coherence, motion, and scene continuity.
-  \end{itemize}
-\end{frame}
-
-% --- V-JEPA: Capabilities and Evaluation ---
-\begin{frame}{V-JEPA: Capabilities and Evaluation}
-  \begin{itemize}
-    \item Learns representations useful for action recognition, temporal segmentation, video retrieval.
-    \item Outperforms pixel-level approaches for temporal vision tasks.
-    \item Enables efficient transfer to labeled video benchmarks.
-    \item Promising for robotics, surveillance, generative modeling.
-  \end{itemize}
-  \centering
-  \includegraphics[width=0.8\textwidth]{assets/New-Lecture_JEPA_models/vjepa_results.png}
-\end{frame}
-
-% --- Recent Advances in JEPA Models ---
-\begin{frame}{Recent Advances: Beyond I-JEPA and V-JEPA}
-  \begin{itemize}
-    \item JEPA paradigm inspires research in multi-modal, language-vision, and generative modeling.
-    \item Extensions: multi-scale masking, longer-range prediction, hybrid with contrastive objectives.
-    \item Questions: How to regularize, avoid shortcut solutions, leveraging domain-specific priors.
-    \item Active area: combination with generative and causal inference architectures.
-  \end{itemize}
-\end{frame}
-
-% --- Discussion and Open Problems ---
-\begin{frame}{Open Problems and Research Directions}
-  \begin{itemize}
-    \item Masking strategies: how much, where, and what to mask?
-    \item Extending JEPA to multi-modal signals (vision, language, audio).
-    \item Improving temporal modeling in V-JEPA (long-term dependencies).
-    \item Evaluation: what is a good representation?
-    \item Scalability to real-world problems and hardware.
-    \item Impact on few-shot, transfer, and reinforcement learning.
-  \end{itemize}
-\end{frame}
-
-% --- References ---
-\begin{frame}{References}
-  \footnotesize
-  \begin{enumerate}
-    \item Grill et al., “Self-supervised learning with joint embedding predictive architectures”, ICLR 2023. (\href{https://arxiv.org/abs/2301.08243}{arXiv:2301.08243})
-    \item Baevski et al., “data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language”, ICML 2022.
-    \item He et al., “Masked Autoencoders Are Scalable Vision Learners”, CVPR 2022.
-    \item Mahmoudi et al., “V-JEPA: Video Joint Embedding Predictive Architecture”, Meta AI, 2023. (\href{https://arxiv.org/abs/2310.13121}{arXiv:2310.13121})
-    \item Touvron et al., “An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale”, ICLR 2021.
-    \item Chen et al., “A Simple Framework for Contrastive Learning of Visual Representations (SimCLR)”, ICML 2020.
-    \item Devlin et al., “BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding”, NAACL 2019.
-    \item Additional: Official JEPA, I-JEPA, V-JEPA project pages and open-source implementations.
-  \end{enumerate}
-\end{frame}
-
-\input{sections/credits}
+\input{sections/jepa/toc}
+\input{sections/jepa/introduction}
+\input{sections/jepa/evolution_taxonomy}
+\input{sections/jepa/theoretical_foundations}
+\input{sections/jepa/jepa_motivation}
+\input{sections/jepa/ijepa}
+\input{sections/jepa/vjepa}
+\input{sections/jepa/vjepa2}
+\input{sections/jepa/extensions}
+\input{sections/jepa/summary}
+\input{sections/jepa/open_problems}
+\input{sections/jepa/references}
 
 \end{document}

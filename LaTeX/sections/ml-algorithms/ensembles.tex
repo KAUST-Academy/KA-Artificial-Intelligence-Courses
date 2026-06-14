@@ -1,0 +1,192 @@
+\section{Ensemble Methods}
+\begin{frame}{Random Forest}
+    \textbf{Problem:} Single trees are unstable (High Variance). \\
+    \vspace{0.5em}
+    \pause
+    \textbf{Solution:} Train many trees on random subsets and average them (\textbf{Bagging}).
+
+    \vspace{0.5em}
+    \centering
+    \resizebox{1.0\linewidth}{!}{
+    \begin{tikzpicture}[
+        node distance=1.5cm,
+        data/.style={draw, cylinder, shape border rotate=90, aspect=0.25, fill=gray!20, minimum height=1cm, minimum width=0.8cm, font=\scriptsize},
+        tree/.style={isosceles triangle, isosceles triangle apex angle=60, draw, fill=green!10, shape border rotate=90, minimum height=1cm, font=\tiny, align=center},
+        arrow/.style={->, thick, gray}
+    ]
+        % Dataset
+        \node[data, label=below:Dataset] (D) {Data};
+
+        % Subsets
+        \node[data, right=2cm of D, yshift=1.5cm] (S1) {Sub 1};
+        \node[data, right=2cm of D] (S2) {Sub 2};
+        \node[data, right=2cm of D, yshift=-1.5cm] (S3) {Sub 3};
+
+        % Trees
+        \node[tree, right=1cm of S1] (T1) {Tree 1};
+        \node[tree, right=1cm of S2] (T2) {Tree 2};
+        \node[tree, right=1cm of S3] (T3) {Tree 3};
+
+        % Aggregation
+        \node[draw, rectangle, rounded corners, fill=blue!10, right=2cm of T2, minimum height=3cm, align=center] (Agg) {\textbf{Majority}\\\textbf{Vote}};
+
+        % Output
+        \node[right=1cm of Agg, font=\bfseries] (Out) {Final Pred};
+
+        % Arrows
+        \draw[arrow] (D) -- (S1); \draw[arrow] (D) -- (S2); \draw[arrow] (D) -- (S3);
+        \draw[arrow] (S1) -- (T1); \draw[arrow] (S2) -- (T2); \draw[arrow] (S3) -- (T3);
+        \draw[arrow] (T1) -- (Agg.west |- T1);
+        \draw[arrow] (T2) -- (Agg);
+        \draw[arrow] (T3) -- (Agg.west |- T3);
+        \draw[arrow] (Agg) -- (Out);
+
+    \end{tikzpicture}
+    }
+    \\
+    \vspace{0.5em}
+    \small "Many uncorrelated weak models $\to$ One strong model."
+\end{frame}
+
+% --- Slide 10: Random Forest Pros/Cons ---
+\begin{frame}{Random Forest: Advantages and Disadvantages}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{Advantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Robust:} Very hard to overfit.
+                    \item \textbf{High Performance:} Very good baseline.
+                    \item \textbf{Low Hyperparameters Sensitivity:} Works well with default hyperparameters.
+                    \item \textbf{Interpretability:} Tells you which features matter most (Feature Importance).
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=\textbf{Disadvantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Slow Inference:} Must run data through every single tree.
+                    \item \textbf{Memory Intensive:} Stores all trees in RAM.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+% --- Slide 11: Gradient Boosting Concept ---
+\begin{frame}{Gradient Boosting: Correcting Mistakes}
+    \textbf{Problem:} Random Forest just averages opinions. It doesn't learn from mistakes. \\
+    \vspace{0.5em}
+    \pause
+    \textbf{Solution:} Train trees \textbf{sequentially}. Each tree fixes the errors of the previous one.
+    
+    \vspace{1em}
+    \centering
+    \resizebox{0.9\linewidth}{!}{
+    \begin{tikzpicture}[node distance=1.5cm, auto,
+        model/.style={draw, rectangle, rounded corners, fill=orange!10, minimum width=1.5cm, minimum height=1cm, align=center, font=\footnotesize},
+        error/.style={draw, circle, fill=red!10, inner sep=2pt, font=\scriptsize},
+        arrow/.style={->, thick, >=latex}
+    ]
+        % Model 1
+        \node[model] (M1) {Tree 1};
+        \node[below=0.2cm of M1] {Learns Data};
+
+        % Residual 1
+        \node[error, right=1cm of M1] (R1) {Err 1};
+        
+        % Model 2
+        \node[model, right=1cm of R1] (M2) {Tree 2};
+        \node[below=0.2cm of M2] {Learns Err 1};
+
+        % Residual 2
+        \node[error, right=1cm of M2] (R2) {Err 2};
+
+        % Model 3
+        \node[model, right=1cm of R2] (M3) {Tree 3};
+        \node[below=0.2cm of M3] {Learns Err 2};
+
+        % Arrows
+        \draw[arrow] (M1) -- node[above] {} (R1);
+        \draw[arrow] (R1) -- (M2);
+        \draw[arrow] (M2) -- node[above] {} (R2);
+        \draw[arrow] (R2) -- (M3);
+
+    \end{tikzpicture}
+    }
+    \pause
+    \begin{itemize}
+    Common Implementations:
+    \vspace{-1.0em}
+        \item \textbf{XGBoost:} Best Default
+        \item \textbf{LightGBM:} Lightweight
+        \item \textbf{CatBoost:} Requires minimal hyperparamters tuning.
+    \end{itemize}
+\end{frame}
+
+% --- Slide: The "Gradient" Connection ---
+\begin{frame}{Why is it called \textit{Gradient} Boosting?}
+    We are not just "fixing errors." We are performing \textbf{Gradient Descent}, but in a different way.
+
+    \vspace{-1.0em}
+    \begin{columns}[T]
+        % Left: Standard GD (Analogy)
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=gray!10, title=\textbf{1. Gradient Descent}]
+                \small
+                In Linear Regression, we update \textbf{parameters} ($w$) to minimize Loss.
+                \vspace{-2mm}
+                $$ \mathbf{w}_{new} = \mathbf{w}_{old} \underbrace{- \alpha \cdot \nabla Loss}_{\text{Step down the hill}} $$
+            \end{tcolorbox}
+        \end{column}
+
+        % Right: Gradient Boosting
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=blue!5, colframe=blue!60, title=\textbf{2. Gradient Boosting}]
+                \small
+                Here, we update the \textbf{function} ($F$) by adding new trees.
+                \vspace{-1mm}
+                $$ F_{new}(x) = F_{old}(x) + \underbrace{\alpha \cdot \text{Tree}(x)}_{\text{Step down the hill}} $$
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    % \vspace{1em}
+    \begin{itemize}
+        \item If we use \textbf{Squared Error} Loss: $L = \frac{1}{2}(y - \hat{y})^2$
+        \item The Gradient (derivative) is: $\nabla L = -(y - \hat{y})$
+        \item Therefore: \textbf{The Residual (which we fit trees on) $(y - \hat{y})$ is effectively the Negative Gradient!}
+        \item Final Model = Base Tree + $\sum$ (Error-Correcting Trees). 
+    \end{itemize}
+\end{frame}
+
+% --- Slide 12: Gradient Boosting Pros/Cons ---
+\begin{frame}{Gradient Boosting}
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, title=\textbf{Advantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{SOTA Performance:} Best accuracy for tabular data.
+                    \item \textbf{Flexibility:} Customizable Loss functions.
+                    \item \textbf{No Preprocessing Required:} Handles Missing Values natively. No need for scaling.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, title=\textbf{Disadvantages}]
+                \small
+                \begin{itemize}
+                    \item \textbf{Sensitive:} Harder to tune (learning rate, depth).
+                    \item \textbf{Overfitting:} Easy to overfit if not careful (too many trees).
+                    \item \textbf{Serial:} Slow training (hard to parallelize).
+                    \item \textbf{Data Hungry:} Can overfit easily if data is small.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+% --- Slide: No Free Lunch Theorem ---

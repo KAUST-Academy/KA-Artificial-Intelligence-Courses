@@ -1,0 +1,217 @@
+\section{Evaluation Metrics}
+\begin{frame}{}
+    \LARGE \textbf{Evaluation Metrics}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Word Error Rate (WER) for ASR}
+
+\begin{itemize}
+    \item Word Error Rate (WER) is a standard metric to evaluate ASR transcription accuracy.  
+    It is based on the edit distance between the reference and the hypothesis.
+
+    \item Formula:
+    \[
+        \text{WER} = \frac{S + D + I}{N}
+    \]
+    where:  
+    \begin{itemize}
+        \item $S$ = substitutions  
+        \item $D$ = deletions  
+        \item $I$ = insertions  
+        \item $N$ = total words in reference
+    \end{itemize}
+\framebreak
+    \item Example:
+    \begin{itemize}
+        \item Reference: ``the cat sat on the mat''  
+        \item Hypothesis: ``the cat sat mat''  
+        \item Errors: 1 deletion → WER = 1/6 ≈ 16.7\%
+    \end{itemize}
+
+    \item Why it matters:
+    \begin{itemize}
+        \item Provides an intuitive, widely-used measure of transcription accuracy for ASR systems.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Perplexity (Language Models)}
+
+\begin{itemize}
+    \item Perplexity (PPL) measures how well a language model predicts a sequence of words.  
+    Intuitively, it reflects ``on average, how many choices the model is unsure about'' per word.
+
+    \item Formula:
+    \[
+        \text{PPL}(W) = P(w_1, \dots, w_N)^{-\frac{1}{N}} 
+        = \exp\Bigg(-\frac{1}{N} \sum_{i=1}^{N} \log P(w_i) \Bigg)
+    \]
+
+    \item How to interpret:
+    \begin{itemize}
+        \item Lower perplexity → model assigns higher probability to the test set sequences → better predictions.
+    \end{itemize}
+\framebreak
+    \item Why it matters:
+    \begin{itemize}
+        \item Standard metric for evaluating language models in ASR and NLG.
+    \end{itemize}
+
+    \item Example:
+    \begin{itemize}
+        \item Bigram model on a test set → PPL = 200 (poor).  
+        \item Transformer LM → PPL = 20 (much better).
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{BLEU (Bilingual Evaluation Understudy)}
+
+\begin{itemize}
+    \item BLEU is an n-gram overlap metric commonly used to evaluate text generation tasks such as machine translation and ASR outputs.  
+    It compares generated text against reference text using precision of n-grams.
+
+    \item Formula:
+    \[
+        \text{BLEU} = \text{BP} \cdot \exp\Bigg(\sum_{n=1}^{N} w_n \log p_n \Bigg)
+    \]
+    where:  
+    \begin{itemize}
+        \item $p_n$ = precision of n-grams  
+        \item $w_n$ = weight for each n-gram order (usually uniform)  
+        \item BP = brevity penalty to penalize short hypotheses
+    \end{itemize}
+\framebreak
+    \item How it works:
+    \begin{itemize}
+        \item BLEU evaluates how many n-grams in the hypothesis match the reference.  
+        \item Missing or misordered words reduce the score.
+    \end{itemize}
+
+    \item Example:
+    \begin{itemize}
+        \item Reference: ``the cat is on the mat''  
+        \item Hypothesis: ``the cat on mat''  
+        \item Unigram precision = 4/4 = 1.0  
+        \item Bigram precision = 2/3 ≈ 0.67  
+        \item BLEU penalizes missing words via BP.
+    \end{itemize}
+
+    \item Why it matters:
+    \begin{itemize}
+        \item Easy to compute and widely adopted for automatic evaluation of generated text.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{ROUGE (Recall-Oriented Understudy)}
+
+\begin{itemize}
+    \item ROUGE is a recall-focused metric widely used in text summarization to evaluate how much of the reference content is captured by the generated text.
+
+    \item Common variants:
+    \begin{itemize}
+        \item \textbf{ROUGE-N:} recall of n-grams.
+        \item \textbf{ROUGE-L:} based on the longest common subsequence.
+    \end{itemize}
+
+    \item Formula (ROUGE-N):
+    \[
+        \text{ROUGE-N} = \frac{\sum_{\text{n-gram} \in \text{Ref}} \min(\text{count}_{\text{hyp}}, \text{count}_{\text{ref}})}{\sum_{\text{n-gram} \in \text{Ref}} \text{count}_{\text{ref}}}
+    \]
+\framebreak
+    \item Example:
+    \begin{itemize}
+        \item Reference: ``the cat sat on the mat''  
+        \item Hypothesis: ``the cat sat on mat''  
+        \item ROUGE-1 recall = 5/6 ≈ 83\%
+    \end{itemize}
+
+    \item Why it matters:
+    \begin{itemize}
+        \item Good for checking content coverage in summarization tasks.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{METEOR \& TER (Other Evaluation Metrics)}
+
+\begin{itemize}
+    \item \textbf{METEOR:}  
+    Measures text generation quality considering not just exact word matches but also stemming, synonyms, and paraphrases.  
+    Tends to correlate better with human judgment than BLEU.
+
+    \item \textbf{TER (Translation Edit Rate):}  
+    Counts the minimum number of edits—insertions, deletions, substitutions, and shifts—needed to match the reference text.  
+    Lower TER indicates better performance.
+
+    \item Why these metrics matter:  
+    \begin{itemize}
+        \item Often used alongside BLEU and ROUGE to get a more complete evaluation of generated text quality.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Automated Metrics vs Human Evaluation}
+
+\begin{itemize}
+    \item \textbf{Automated Metrics} (e.g., WER, BLEU, ROUGE):
+    \begin{itemize}
+        \item \textbf{Postive:} Cheap, fast, and reproducible.
+        \item \textbf{Negative:} Limited depth; may not capture fluency, naturalness, or true meaning.
+    \end{itemize}
+
+    \item \textbf{Human Evaluation:}
+    \begin{itemize}
+        \item \textbf{Postive:} Captures fluency, naturalness, and semantic meaning.
+        \item \textbf{Negative:} Expensive, slow, and less reproducible.
+    \end{itemize}
+
+    \item Why both matter:
+    \begin{itemize}
+        \item Automated metrics allow rapid iteration and benchmarking.
+        \item Human evaluation ensures quality aligns with real-world perception.
+        \item Best practice: combine both depending on the task.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Example: BLEU vs ROUGE in Practice}
+
+\begin{itemize}
+    \item Reference: ``The cat sat on the mat.''
+
+    \item Hypotheses:
+    \begin{itemize}
+        \item Hypothesis A: ``The cat is on the mat.''
+        \item Hypothesis B: ``A feline rested on the rug.''
+    \end{itemize}
+
+    \item Metric evaluation:
+    \begin{itemize}
+        \item \textbf{BLEU:} A > B (closer word overlap with reference)
+        \item \textbf{ROUGE:} A > B (better recall of reference n-grams)
+        \item \textbf{LLM/semantic judge:} B ≈ A (both semantically correct)
+    \end{itemize}
+
+    \item Takeaway:
+    \begin{itemize}
+        \item Different metrics capture different aspects of quality.  
+        \item Word overlap metrics may disagree with human or semantic judgment.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+

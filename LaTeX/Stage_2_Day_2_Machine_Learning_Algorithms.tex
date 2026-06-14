@@ -1,0 +1,49 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings-KA-LMH}
+
+% Stage-2 specific macros and packages
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\by}{\mathbf{y}}
+\newcommand{\bX}{\mathbf{X}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usetikzlibrary{positioning}
+\usepackage[utf8]{inputenc}
+\usepackage{pifont}
+\usepackage{newunicodechar}
+\newunicodechar{✓}{\ding{51}}
+\newunicodechar{✗}{\ding{55}}
+
+\title[Machine Learning Algorithms]{Machine Learning Algorithms}
+
+\begin{document}
+
+% Include sections
+\input{sections/cover-KA+LMH}
+
+\input{sections/ml-algorithms/learning_outcomes}
+\input{sections/ml-algorithms/three_pillars}
+\input{sections/ml-algorithms/loss_functions}
+\input{sections/ml-algorithms/models}
+\input{sections/ml-algorithms/linear_regression}
+\input{sections/ml-algorithms/logistic_regression}
+\input{sections/ml-algorithms/knn}
+\input{sections/ml-algorithms/svm}
+\input{sections/ml-algorithms/decision_trees}
+\input{sections/ml-algorithms/ensembles}
+\input{sections/ml-algorithms/conclusion}
+\input{sections/ml-algorithms/references}
+
+\end{document}

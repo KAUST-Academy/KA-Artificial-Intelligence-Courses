@@ -1,0 +1,10 @@
+% --- Summary ---
+\begin{frame}{Summary}
+  \begin{itemize}\footnotesize
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Inference optimisation lowers latency, increases throughput, and reduces memory.}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{KV caching} avoids recomputing past keys/values but grows memory with layers, batch, and length---motivating KV quantization, grouped attention, paging, etc.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Distillation:} train a compact \textbf{student} to mimic a \textbf{teacher} for deployment; \textbf{soft targets} at raised \textbf{temperature} carry knowledge beyond one-hot labels.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Quantization:} shrink \textbf{weights}, \textbf{activations}, and the \textbf{KV cache} via lower-bit formats.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{TurboQuant:} a compression method that reduces model size with zero accuracy loss---addressing long-context and agentic workflow constraints---and applies to any model at inference time with no offline preparation or calibration data.
+  \end{itemize}
+\end{frame}

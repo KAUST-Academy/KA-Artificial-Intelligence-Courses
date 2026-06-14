@@ -1,7 +1,5 @@
-% Speech in NLP: Text-to-Speech (90-minute graduate outline)
+% Speech in NLP: Text-to-Speech (graduate outline; ~90--120 min)
 \documentclass[10pt, aspectratio=149]{beamer}
-
-\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
 
 \input{preamble/packages}
 \input{preamble/commands}
@@ -9,228 +7,20 @@
 
 \title[Speech in NLP: TTS]{Speech in NLP: Text-to-Speech (TTS)}
 
+% Caption line below slide figures (source attribution)
+\newcommand{\slideimgsource}[1]{\\[0.25em]{\scriptsize\textbf{Source:} #1}}
+
 \begin{document}
 
 \input{sections/cover}
-
-% --- Table of Contents (~90 min: ~10 blocks x 6--9 min) ---
-\begin{frame}{Table of Contents}
-  \begin{enumerate}
-    \item Speech, language, and the place of TTS in NLP
-    \item Problem definition, speech signals, and intermediate representations
-    \item Text analysis: normalization, G2P, and prosody hints
-    \item Classical TTS: concatenative and statistical parametric synthesis
-    \item Neural two-stage TTS: from spectrograms to vocoders
-    \item Seq2seq TTS and attention (Tacotron family)
-    \item Fast parallel synthesis: FastSpeech-style models
-    \item Neural vocoders: GAN and flow-based waveform generation
-    \item Multi-speaker, expressive, and zero-shot voice
-    \item Codec language models and ``generative'' TTS (overview)
-    \item Evaluation, datasets, and benchmarks
-    \item Ethics, misuse, and responsible deployment
-    \item Tools, practice, and references
-  \end{enumerate}
-\end{frame}
-
-% --- Block 1: positioning ---
-\begin{frame}{Speech and NLP}
-  \begin{itemize}
-    \item Spoken language interfaces tie together \textbf{ASR} (speech$\to$text), \textbf{NLU/generation}, and \textbf{TTS} (text$\to$speech).
-    \item TTS is not only ``reading aloud'': it must encode \textbf{linguistic content}, \textbf{speaker identity}, and \textbf{prosody} (rhythm, emphasis, phrasing).
-    \item Modern systems inherit ideas from NLP (subword units, attention, transformers) and from signal processing (spectra, vocoders).
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{What is TTS?}
-  \begin{itemize}
-    \item \textbf{Input:} Raw text (and optionally speaker/style control).
-    \item \textbf{Output:} A waveform $x(t)$ or a discrete audio codec sequence listeners perceive as speech.
-    \item \textbf{Core difficulty:} Many-to-many mapping---the same sentence can be spoken in many natural ways.
-    \item Systems range from \textbf{concatenative} and \textbf{HMM/DNN parametric} pipelines to fully \textbf{neural} and \textbf{LLM+codec} designs.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Mel spectrogram: a standard intermediate target}
-  \begin{itemize}
-    \item Many neural TTS models predict a \textbf{mel spectrogram} (time--frequency image) or similar; a \textbf{vocoder} then inverts it to audio.
-    \item Advantages: smoother targets than raw waveforms; reuse one vocoder across front-end models.
-  \end{itemize}
-  \centering
-  \includegraphics[width=0.92\textwidth,keepaspectratio]{assets/New-Lecture-TTS/tts_mel_spectrogram.png}
-\end{frame}
-
-% --- Block 2: frontend ---
-\begin{frame}{Text analysis (front end)}
-  \begin{itemize}
-    \item \textbf{Normalization:} numbers, dates, abbreviations, currencies (\texttt{\$3.50} $\to$ ``three dollars fifty'').
-    \item \textbf{Tokenization} aligned with pronunciation units (words, subwords, or characters).
-    \item \textbf{G2P:} grapheme-to-phoneme (lexicon + rules; or neural G2P) for languages with opaque spelling.
-    \item Optional: phrase breaks, accent/pitch accents, SSML tags in deployed systems.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Prosody and ``what to say'' vs.\ ``how to say it''}
-  \begin{itemize}
-    \item \textbf{Linguistic prosody:} phrase boundaries, focus, intonation contours tied to syntax and meaning.
-    \item Systems may use explicit labels (pitch/duration/energy contours), learned latents, or autoregressive decoders that imply timing.
-    \item Evaluation: naturalness (MOS), intelligibility, and robustness on out-of-domain text.
-  \end{itemize}
-\end{frame}
-
-% --- Block 3: classical ---
-\begin{frame}{Classical TTS paradigms}
-  \begin{itemize}
-    \item \textbf{Concatenative:} select and stitch small waveform units (diphones, half-phones); natural but inflexible and data-heavy.
-    \item \textbf{Statistical parametric (HMM/GMM, later DNN):} generate \textbf{vocoder parameters} (e.g., cepstra, F0, aperiodicity) from text; smaller footprint, more mangled prosody before neural methods.
-    \item Motivated the move to \textbf{joint neural} models that predict spectra or waveforms directly.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Neural TTS: high-level picture}
-  \begin{itemize}
-    \item \textbf{Two-stage:} text/spectrogram model + neural vocoder (WaveNet, WaveGlow, HiFi-GAN, BigVGAN, \ldots).
-    \item \textbf{End-to-end:} single network from text (or phonemes) to audio or codec tokens (e.g., VITS-style).
-    \item \textbf{Recent:} discrete speech codes + large sequence models (AudioLM / VALL-E class ideas) for prompting and cloning at scale.
-  \end{itemize}
-\end{frame}
-
-% --- Block 4: Tacotron / attention ---
-\begin{frame}{Seq2seq TTS and attention (Tacotron)}
-  \begin{itemize}
-    \item Encoder--decoder with \textbf{attention} aligns variable-length text to variable-length spectrogram frames.
-    \item Tacotron~2 couples a mel predictor with a separate neural vocoder (e.g., WaveNet-class).
-    \item Training challenges: \textbf{attention collapse}, misalignment on long or unusual sentences; later work adds location priors, guided attention, or duration-based models.
-  \end{itemize}
-  \centering
-  \includegraphics[width=\textwidth,keepaspectratio]{assets/New-Lecture-TTS/tacotron2_mel_alignment.png}
-\end{frame}
-
-\begin{frame}{Autoregression: quality vs.\ latency}
-  \begin{itemize}
-    \item Frame-by-frame autoregressive decoders can yield expressive prosody but are \textbf{slow} at inference and sensitive to exposure bias.
-    \item Motivates \textbf{parallel} acoustic models that predict full mels in few steps using static or monotonic alignments.
-  \end{itemize}
-\end{frame}
-
-% --- Block 5: FastSpeech ---
-\begin{frame}{Parallel TTS: FastSpeech-style architectures}
-  \begin{itemize}
-    \item Predict \textbf{durations} (and often pitch/energy) per phoneme or token; expand to frame grid \textbf{without} autoregressive mel steps.
-    \item Much faster synthesis; typical recipe uses a \textbf{teacher} (Tacotron) or aligner to supply durations at training time.
-    \item Trade-offs: reliance on reliable alignments; engineering complexity for multilingual and spontaneous styles.
-  \end{itemize}
-  \centering
-  \includegraphics[width=0.92\textwidth,keepaspectratio]{assets/New-Lecture-TTS/fastspeech2_architecture.png}
-\end{frame}
-
-\begin{frame}{Controllable speech with explicit predictors}
-  \begin{itemize}
-    \item FastSpeech~2 class models expose knobs for \textbf{speaking rate}, \textbf{pitch}, and \textbf{energy} via scaled duration/F0/energy predictions.
-    \item Useful for audiobooks, dialogue systems, and assistive technologies; still an active research area for \textbf{emotional} and \textbf{conversational} styles.
-  \end{itemize}
-\end{frame}
-
-% --- Block 6: vocoders ---
-\begin{frame}{Neural vocoders}
-  \begin{itemize}
-    \item Map mel (or linear) spectrograms to \textbf{waveforms}; critical for perceptual quality.
-    \item Families: \textbf{autoregressive} (WaveNet-class), \textbf{flow} (WaveGlow), \textbf{GAN} (MelGAN, HiFi-GAN, UnivNet, \ldots), \textbf{diffusion} variants.
-    \item Often trained on multi-speaker data for \textbf{generalization} across synthesizers.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{HiFi-GAN: efficient GAN vocoding (illustration)}
-  \begin{itemize}
-    \item HiFi-GAN uses residual/discriminator structure tailored for periodic structure in speech; widely paired with parallel TTS front ends.
-    \item Below: typical training loss curves from the reference implementation (qualitative sanity check, not a benchmark).
-  \end{itemize}
-  \centering
-  \includegraphics[width=0.55\textwidth,keepaspectratio]{assets/New-Lecture-TTS/hifigan_validation.png}
-\end{frame}
-
-\begin{frame}{End-to-end stochastic TTS (sketch)}
-  \begin{itemize}
-    \item Models such as \textbf{VITS} combine normalizing flows, variational latents, and adversarial training for \textbf{single-stage} training and sampling.
-    \item Advantages: fewer hand-engineered losses, natural variability via stochastic duration and latent noise.
-    \item See Kim, Kong, and Son, \textit{VITS}, \href{https://arxiv.org/abs/2106.06103}{arXiv:2106.06103}.
-  \end{itemize}
-\end{frame}
-
-% --- Block 7: speakers / cloning ---
-\begin{frame}{Multi-speaker and zero-shot voice}
-  \begin{itemize}
-    \item \textbf{Speaker embeddings} (lookup tables, GE2E/x-vector style encoders) condition a shared acoustic model.
-    \item \textbf{YourTTS}-style approaches: multilingual transfer and few-shot cloning from short reference audio.
-    \item \textbf{XTTS/Bark}-class systems pair large-scale data with generative decoding; quality and safety trade-offs differ from classic TTS.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{``Generative'' TTS with discrete codes}
-  \begin{itemize}
-    \item \textbf{Neural codecs} (e.g., EnCodec) quantize waveforms to codebooks; \textbf{language models} predict codes from text or phoneme streams.
-    \item Enables strong zero-shot cloning and prompt-style control when trained at very large scale (research systems such as VALL-E document this direction).
-    \item Caveat: higher risk of misuse (spoofing); watermarking and policy matter.
-  \end{itemize}
-\end{frame}
-
-% --- Block 8: evaluation ---
-\begin{frame}{Evaluation}
-  \begin{itemize}
-    \item \textbf{MOS / CMOS:} subjective listening tests---gold standard but expensive.
-    \item \textbf{Objective proxies:} mel/STFT loss, F0 RMSE, speaker similarity (ECAPA embeddings), WER through an ASR ``bells'' test.
-    \item \textbf{Robustness:} long sentences, rare words, code-switching, disfluent text; latency and RTF for deployment.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Data and communities}
-  \begin{itemize}
-    \item \textbf{LJSpeech, LibriTTS, VCTK, Common Voice, Mozilla datasets,} and proprietary enterprise corpora.
-    \item License and \textbf{speaker consent} increasingly central; multilingual coverage still uneven.
-    \item Open ecosystems: Coqui TTS, ESPnet, Fairseq speech, Hugging Face \texttt{transformers} TTS models.
-  \end{itemize}
-\end{frame}
-
-% --- Block 9: ethics ---
-\begin{frame}{Ethics and misuse}
-  \begin{itemize}
-    \item High-quality cloning enables \textbf{fraud} and \textbf{non-consensual} impersonation.
-    \item Mitigations: consent workflows, \textbf{detection} (fake-audio classifiers), \textbf{watermarks}, rate limits on APIs, and clear \textbf{disclosure} policies.
-    \item Academic norm: IRB/human subjects norms for listening tests; industry norm: safety review for voice products.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Takeaways for practitioners}
-  \begin{itemize}
-    \item Choose \textbf{two-stage} vs.\ \textbf{end-to-end} vs.\ \textbf{LM+codec} based on quality, latency, compute, and control requirements.
-    \item Invest in \textbf{text normalization} and evaluation suites early---most user-visible failures are frontend or robustness issues.
-    \item Treat \textbf{voice cloning} as a \textbf{security and policy surface}, not only a modeling problem.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Discussion prompts}
-  \begin{itemize}
-    \item Where should explicit \textbf{linguistic} structure (syntax, emphasis) enter a TTS stack today?
-    \item How would you \textbf{audit} a TTS system for bias across accents, dialects, and gender presentation?
-    \item What open problems matter most for \textbf{low-resource languages}?
-  \end{itemize}
-\end{frame}
-
-% --- References ---
-\begin{frame}{References}
-  \footnotesize
-  \begin{enumerate}
-    \item Wang et al., ``Tacotron: Towards End-to-End Speech Synthesis'', \href{https://arxiv.org/abs/1703.10135}{arXiv:1703.10135}.
-    \item Shen et al., ``Natural TTS Synthesis by Conditioning WaveNet on Mel Spectrogram Predictions'' (Tacotron~2), \href{https://arxiv.org/abs/1712.05884}{arXiv:1712.05884}.
-    \item Ren et al., ``FastSpeech 2: Fast and High-Quality End-to-End Text to Speech'', \href{https://arxiv.org/abs/2006.04558}{arXiv:2006.04558}.
-    \item Kim, Kong, Son, ``VITS: Conditional VAE with Adversarial Learning for End-to-End TTS'', \href{https://arxiv.org/abs/2106.06103}{arXiv:2106.06103}.
-    \item Kong et al., ``HiFi-GAN: Generative Adversarial Networks for Efficient and High Fidelity Speech Synthesis'', \href{https://arxiv.org/abs/2010.05646}{arXiv:2010.05646}.
-    \item van den Oord et al., ``WaveNet: A Generative Model for Raw Audio'', \href{https://arxiv.org/abs/1609.03499}{arXiv:1609.03499}.
-    \item Chen et al., ``VALL-E: Neural Codec Language Models are Zero-Shot Text to Speech Synthesizers'', \href{https://arxiv.org/abs/2301.02111}{arXiv:2301.02111}.
-    \item Défossez et al., ``High Fidelity Neural Audio Compression'' (EnCodec), \href{https://arxiv.org/abs/2210.13438}{arXiv:2210.13438}.
-    \item Textbooks / surveys: Taylor, \textit{Text-to-Speech Synthesis} (Cambridge); Zen et al., statistical parametric synthesis survey (IEEE TASLP).
-  \end{enumerate}
-\end{frame}
-
-\input{sections/credits}
+\input{sections/tts/toc}
+\input{sections/tts/introduction}
+\input{sections/tts/classical_synthesis}
+\input{sections/tts/neural_e2e}
+\input{sections/tts/parallel_synthesis}
+\input{sections/tts/foundation_models}
+\input{sections/tts/applications}
+\input{sections/tts/evaluation}
+\input{sections/tts/references}
 
 \end{document}

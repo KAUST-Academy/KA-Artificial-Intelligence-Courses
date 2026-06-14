@@ -1,0 +1,47 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings-KA-LMH}
+
+% Stage-2 specific macros and packages
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\by}{\mathbf{y}}
+\newcommand{\bX}{\mathbf{X}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usetikzlibrary{positioning}
+\usepackage[utf8]{inputenc}
+\usepackage{pifont}
+\usepackage{newunicodechar}
+\newunicodechar{✓}{\ding{51}}
+\newunicodechar{✗}{\ding{55}}
+
+\title[Data Science Foundations]{Data Science Foundations}
+
+\begin{document}
+
+% Include sections
+\input{sections/cover-KA+LMH}
+
+\input{sections/ds-foundations/learning_outcomes}
+\input{sections/ds-foundations/introduction}
+\input{sections/ds-foundations/three_pillars}
+\input{sections/ds-foundations/data_problems}
+\input{sections/ds-foundations/generalization}
+\input{sections/ds-foundations/validation}
+\input{sections/ds-foundations/metrics}
+\input{sections/ds-foundations/hyperparameters}
+\input{sections/ds-foundations/practical_workflow}
+\input{sections/ds-foundations/references}
+
+\end{document}

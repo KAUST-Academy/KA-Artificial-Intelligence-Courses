@@ -1,0 +1,40 @@
+\section{Limitations of LRMs and MoE Models}
+\begin{frame}[allowframebreaks]{}
+    \LARGE Limitations of LRMs and MoE Models
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Limitations of LRMs and MoE Models}
+    \begin{itemize}
+        \item \textbf{For LRMs (Large Language Models):}
+        \begin{itemize}
+            \item \textbf{Verbose outputs:} CoT (Chain-of-Thought) and ToT (Tree-of-Thought) methods generate long outputs.
+            \item May confuse end-users due to extensive reasoning traces.
+            \item \textbf{Prompt sensitivity:} Small changes in prompt wording lead to large changes in output.
+            \item Requires careful prompt engineering.
+            \item \textbf{Computation overhead:} Especially with self-consistency sampling or ToT trees.
+            \item Increases inference cost and time.
+            \item \textbf{Example:} CoT prompting works well on GSM8K (a math dataset), but fails without careful prompt tuning.
+            \item Shows sensitivity to specific prompt design.
+        \end{itemize}
+        \item \textbf{For MoEs (Mixture of Experts):}
+        \begin{itemize}
+            \item \textbf{Training instability:} Some experts may be underused, leading to "expert collapse."
+            \item This is often addressed with load balancing.
+            \item \textbf{Hard to debug:} Expert specialization may not always align with human-interpretable domains.
+            \item Makes understanding model behavior challenging.
+            \item \textbf{Distributed training cost:} Load balancing across GPUs adds significant engineering overhead.
+            \item Requires complex distributed systems.
+        \framebreak
+            \item \textbf{Example 1: GShard training instability}
+            \begin{itemize}
+                \item Some experts never activate after several epochs of training.
+                \item Requires manual intervention or advanced balancing techniques.
+            \end{itemize}
+            \item \textbf{Example 2: Switch Transformer}
+            \begin{itemize}
+                \item Needed custom gradient balancing.
+                \item To prevent expert overload or dropout during training.
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+\end{frame}

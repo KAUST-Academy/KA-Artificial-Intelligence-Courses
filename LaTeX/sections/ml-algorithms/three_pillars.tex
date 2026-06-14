@@ -1,0 +1,231 @@
+\section{The Three Pillars of Learning}
+\begin{frame}{The Three Pillars of Learning}
+    \centering
+    % Scaled down to 85% to fit better
+    \begin{tikzpicture}[
+        scale=0.85, transform shape, 
+        node distance=1.0cm and 0.3cm,
+        box/.style={
+            rectangle, rounded corners, draw=none, 
+            text width=4.0cm, minimum height=1.8cm, 
+            align=center, font=\small
+        },
+        title/.style={font=\bfseries\large},
+        % Arrow style removed
+    ]
+
+        % --- Column 1: The Model ---
+        \node[title, blue] (h_title) at (0,0) {1. The Model ($f_\theta$)};
+        \node[box, fill=blue!10, below=0.2cm of h_title] (h_box) {
+            \textbf{Design Choice:}\\
+            ML (Linear, Kernel, Trees) \\ \& DL (MLP, CNN)
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            Data Type (Tabular, image) \\ \& Complexity
+        };
+
+        % --- Column 2: Loss Function ---
+        \node[title, red] (l_title) at (4.5,0) {2. Loss Function ($J$)};
+        \node[box, fill=red!10, below=0.2cm of l_title] (l_box) {
+            \textbf{Design Choice:}\\
+            MSE vs. Cross-Entropy
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            The Task\\
+            (Regression vs. Classification)
+        };
+
+        % --- Column 3: Optimizer (Dimmed) ---
+        \node[title, green!60!black] (o_title) at (9.0,0) {3. Optimizer};
+        \node[box, fill=green!10, below=0.2cm of o_title] (o_box) {
+            \textbf{Design Choice:}\\
+            Gradient Descent, Adam
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            Stability \& Convergence Speed\\
+            \footnotesize{(Covered later in Deep Learning)}
+        };
+
+        % Arrows removed as requested
+
+    \end{tikzpicture}
+
+    \vspace{1em}
+
+    \begin{block}{}
+        Today we focus on \textbf{1 \& 2}. \\
+        % Let's start by discussing the loss functions first.
+    \end{block}
+\end{frame}
+
+
+\begin{frame}{The Three Pillars of Learning}
+    \centering
+    % Scaled down to 85% to fit better
+    \begin{tikzpicture}[
+        scale=0.85, transform shape, 
+        node distance=1.0cm and 0.3cm,
+        box/.style={
+            rectangle, rounded corners, draw=none, 
+            text width=4.0cm, minimum height=1.8cm, 
+            align=center, font=\small
+        },
+        title/.style={font=\bfseries\large},
+        % Arrow style removed
+    ]
+
+        % --- Column 1: The Model (Dimmed) ---
+        \node[title, blue, opacity=0.4] (h_title) at (0,0) {1. The Model ($f_\theta$)};
+        \node[box, fill=blue!10, text=gray, opacity=0.5, below=0.2cm of h_title] (h_box) {
+            \textbf{Design Choice:}\\
+            ML (Linear, Kernel, Trees) \\ \& DL (MLP, CNN)
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            Data Type (Tabular, image) \\ \& Complexity
+        };
+
+        % --- Column 2: Loss Function (Active) ---
+        \node[title, red] (l_title) at (4.5,0) {2. Loss Function ($J$)};
+        \node[box, fill=red!10, below=0.2cm of l_title] (l_box) {
+            \textbf{Design Choice:}\\
+            MSE vs. Cross-Entropy
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            The Task\\
+            (Regression vs. Classification)
+        };
+
+        % --- Column 3: Optimizer (Dimmed) ---
+        \node[title, green!60!black, opacity=0.4] (o_title) at (9.0,0) {3. Optimizer};
+        \node[box, fill=green!10, text=gray, opacity=0.5, below=0.2cm of o_title] (o_box) {
+            \textbf{Design Choice:}\\
+            Gradient Descent, Adam
+            \vspace{0.5em}
+            
+            \textbf{Depends on:}\\
+            Stability \& Convergence Speed\\
+            \footnotesize{(Covered later in Deep Learning)}
+        };
+
+        % Arrows removed as requested
+
+    \end{tikzpicture}
+
+    \vspace{1em}
+
+    \begin{block}{}
+        Today we focus on \textbf{1 \& 2}. \\
+        Let's start by discussing the loss functions first.
+    \end{block}
+\end{frame}
+
+
+% =========================
+% 2. Supervised Learning
+% =========================
+
+% \section{Supervised Learning Algorithms}
+
+% \subsection{Problem Formulation}
+
+% \begin{frame}{Supervised Learning: Problem Setup}
+%     In supervised learning, we are provided with a labeled dataset $\{(x_i, y_i)\}_{i=1}^{n}$, where each input $x_i \in \mathbb{R}^d$ is paired with a target $y_i$. The objective is to learn a function $f: \mathbb{R}^d \to \mathbb{R}$ (or discrete space) that generalizes well to unseen data, such that $f(x_i) \approx y_i$ for all $i$.
+    
+%     \vspace{1em}
+    
+%     Supervised tasks divide into two primary categories based on the nature of $y_i$:
+    
+%     \begin{columns}[T]
+%         \begin{column}{0.48\textwidth}
+%             \textbf{Regression Tasks}
+%             \begin{itemize}
+%                 \item $y_i$ is continuous ($y_i \in \mathbb{R}$)
+%                 \item Examples: Predicting house prices or temperatures
+%                 \item Common loss: Mean Squared Error (MSE), which measures average squared deviation
+%             \end{itemize}
+%         \end{column}
+        
+%         \begin{column}{0.48\textwidth}
+%             \textbf{Classification Tasks}
+%             \begin{itemize}
+%                 \item $y_i$ is categorical ($y_i \in \{1, \dots, K\}$)
+%                 \item Examples: Identifying spam emails or medical diagnoses
+%                 \item Common loss: Cross-Entropy, which quantifies probabilistic mismatch
+%             \end{itemize}
+%         \end{column}
+%     \end{columns}
+% \end{frame}
+
+% =================================================================
+% SECTION 1: SUPERVISED LEARNING FRAMEWORK
+% =================================================================
+
+\section{Supervised Learning}
+
+
+
+\begin{frame}{Supervised Learning: The Setup}
+    \begin{block}{The Objective}
+        Given a labeled dataset $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^{n}$, we aim to learn a mapping function $f$ that generalizes to unseen data:
+        \begin{equation*}
+            \hat{y} = f(x; \theta) \approx y
+        \end{equation*}
+        \small where $\theta$ represents the learnable model parameters.
+    \end{block}
+
+    \vspace{1.5em}
+
+    \centering
+    \begin{tikzpicture}[node distance=2cm, auto, thick, >=stealth]
+        % Nodes
+        \node[draw, circle, fill=gray!10, minimum size=1cm] (input) {$x_i$};
+        \node[draw, rectangle, rounded corners, fill=blue!10, minimum width=2.5cm, minimum height=1.2cm, right=of input] (model) {Model $f_\theta$};
+        \node[draw, circle, fill=green!10, minimum size=1cm, right=of model] (output) {$\hat{y}_i$};
+        \node[draw, circle, fill=gray!10, minimum size=1cm, below=0.8cm of output] (target) {$y_i$};
+        
+        % Edges
+        \draw[->] (input) -- node[above, font=\scriptsize] {Features} (model);
+        \draw[->] (model) -- node[above, font=\scriptsize] {Prediction} (output);
+        \draw[<->, dashed, red] (output) -- node[right, font=\scriptsize] {Error / Loss} (target);
+        
+        % Annotation
+        \node[below=0.5cm of model, text width=5cm, align=center, font=\itshape\small] 
+            {Learning involves adjusting $\theta$ to minimize this error across all $i$.};
+    \end{tikzpicture}
+\end{frame}
+
+
+
+% % --- SLIDE 1: THE MATHEMATICAL SETUP ---
+% \begin{frame}{1.1 Supervised Learning: The Setup}
+%     \begin{block}{The Objective}
+%         Given a training set $\mathcal{D} = \{(\bx^{(i)}, y^{(i)})\}_{i=1}^N$, learn a mapping function $f_\theta$ such that:
+%         $$ f_\theta(\bx^{(i)}) \approx y^{(i)} $$
+%         for unseen data (Generalization).
+%     \end{block}
+
+%     \vspace{1.5em}
+%     \centering
+%     % Visualizing the Function Mapping
+%     \begin{tikzpicture}[node distance=2cm, auto, thick]
+%         % Nodes
+%         \node[draw, circle, fill=gray!10, minimum size=1cm] (input) {$\bx$};
+%         \node[draw, rectangle, fill=blue!10, minimum width=2.5cm, minimum height=1.2cm, right=of input] (model) {Model $f_\theta$};
+%         \node[draw, circle, fill=green!10, minimum size=1cm, right=of model] (output) {$\hat{y}$};
+%         \node[draw, circle, fill=gray!10, minimum size=1cm, below=0.8cm of output] (target) {$y$};
+        
+%         % Edges
+%         \draw[->] (input) -- node[above] {Features} (model);
+%         \draw[->] (model) -- node[above] {Prediction} (output);
+%         \draw[<->, dashed, red] (output) -- node[right] {Error (Loss)} (target);
+%     \end{tikzpicture}
+% \end{frame}
+
+\subsection{Regression}
+
+% --- SLIDE 2: REGRESSION TASKS ---

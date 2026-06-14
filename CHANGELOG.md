@@ -1,9 +1,10 @@
-##  (2026-05-07)
+##  (2026-06-13)
 
 
 ### Features
 
 * add new lab ([8e7ba73](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/8e7ba738aa1a499237fdb81cef9bf76e3dbee177))
+* added new labs (YASREF CV) ([1345b79](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1345b79d6af798e0e9804e128418f423bd1257ea))
 * **Homeworks:** All ML Homeworks done ([b853257](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/b853257c5eb1ad82def3b713b6c54300deea3482))
 * **Homeworks:** Asthma_Detection_with_WaveNet_Homework_Assignment ([518b6be](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/518b6be87a7efe901b67bfb032710ad843639185))
 * **Homeworks:** CLIP from Scratch. ([0857159](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/0857159bb999d347c70d1b46e1ff86d65d66ec17))
@@ -14,6 +15,7 @@
 * **Homeworks:** Video Classification FineTuning ([eacff11](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/eacff1157409498933b23ffacc5490f010bf085e))
 * **Homeworks:** ViT Swin Sliding Window Cells Classification ([1a8161b](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1a8161b0284039bf7e67530bdfa37a5ceb29992f))
 * **Labs:** 1D CNN and Audio classification labs ([72f7ac3](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/72f7ac373186963d76d03b8f516c59b919e18d9a))
+* **Labs:** Added multiple new labs for ML ([b5d4628](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/b5d4628d7cd10318afa26c89566ad134576c05ea))
 * **Labs:** Attention_Mechanism_Japanese_English ([23cbd41](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/23cbd4191038fe2e472ece30d85845973fb22187))
 * **Labs:** Bulk upload NLP Labs. ([d3d3c97](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d3d3c97be89cb65e56e94e28d8dda24a2e99d85c))
 * **Labs:** English-Japanese_Seq2Seq_Translation ([edb4b42](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/edb4b42823db60af822ef030efa9de5fa3345be5))
@@ -31,6 +33,9 @@
 * **Linear Regression:** Perspectives, Bias and Variance, Metrics, Data Split and Regularization ([4be272c](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/4be272c6014b69b51dd5bf90232b5eb3e73961d0))
 * **Release:** Combine all courses into one Repository ([605b754](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/605b7548b76afb4d968c7c488edc8f927c207ed7))
 * **Slides:** Add Stage 2 ML lecture LaTeX source and images ([1ef30cc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1ef30ccefb075515e4b0eb10d53fe7f6845a5e36))
+* **Slides:** Added Audio_Processing_Evaluation_In_NLP ([3ed46f7](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/3ed46f7d9301300daa239d295359d6294ed1246b))
+* **Slides:** Migrate Stage 3 slides into repo ([320fb22](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/320fb22d7095483d19ddc76f786df89eb98238af))
+* **Slides:** Migrated stage 2 slides. ([553b1a2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/553b1a252b95ffcdf1db978265828f14c1887ec4))
 * **Test:** Create new test file ([d6733cc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d6733cc684c7239783440d5e5647144be66d501f))
 
 

@@ -1,0 +1,44 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings-KA-LMH}
+
+% Stage-2 specific macros and packages
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\by}{\mathbf{y}}
+\newcommand{\bX}{\mathbf{X}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usetikzlibrary{positioning}
+\usepackage[utf8]{inputenc}
+\usepackage{pifont}
+\usepackage{newunicodechar}
+\newunicodechar{✓}{\ding{51}}
+\newunicodechar{✗}{\ding{55}}
+
+\title[Unsupervised Learning]{Unsupervised Learning}
+
+\begin{document}
+
+% Include sections
+\input{sections/cover-KA+LMH}
+
+\input{sections/unsupervised-learning/learning_outcomes}
+\input{sections/unsupervised-learning/introduction}
+\input{sections/unsupervised-learning/kmeans}
+\input{sections/unsupervised-learning/pca}
+\input{sections/unsupervised-learning/tsne}
+\input{sections/unsupervised-learning/autoencoders}
+\input{sections/unsupervised-learning/references}
+
+\end{document}

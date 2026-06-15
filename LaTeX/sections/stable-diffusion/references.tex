@@ -1,35 +1,43 @@
-% --- References (from sections/diffusion/complete/references.tex) ---
+% --- References (Stable Diffusion lecture) ---
 \section{References}
 \begin{frame}[allowframebreaks]{References}
 \textbf{Tutorials and Surveys}
 \begin{itemize}
+    \item Binxu Wang: \href{https://binxuw.scholars.harvard.edu/sites/g/files/omnuum11221/files/binxuw/files/stable_diffusion_a_tutorial.pdf}{Stable Diffusion: A Tutorial (Harvard ML from Scratch)} --- U-Net, time embedding, CLIP conditioning.
     \item Kreis, K., Gao, R., \& Vahdat, A.: \href{https://cvpr2022-tutorial-diffusion-models.github.io/}{CVPR 2022 Tutorial: Diffusion Models}
     \item Rogge, L., \& Rasul, K.: \href{https://huggingface.co/blog/annotated-diffusion}{The Annotated Diffusion Model}
-    \item Yang Song: \href{https://yang-song.github.io/blog/2021/score/}{Score-Based Generative Modeling: A Brief Overview}
     \item Lilian Weng: \href{https://lilianweng.github.io/posts/2021-07-11-diffusion-models/}{What are Diffusion Models?}
-    \item Binxu Wang: \href{https://binxuw.scholars.harvard.edu/sites/g/files/omnuum11221/files/binxuw/files/stable_diffusion_a_tutorial.pdf}{Stable Diffusion: A Tutorial (Harvard ML from Scratch)}
-    \item Cornell CS4782 (2025): \href{https://www.cs.cornell.edu/courses/cs4782/2025sp/slides/pdf/week9_2_slides.pdf}{Diffusion Models II (Course Slides)}
+    \item Yang Song: \href{https://yang-song.github.io/blog/2021/score/}{Score-Based Generative Modeling: A Brief Overview}
 \end{itemize}
 
 \framebreak
 
-\textbf{Foundational Papers}
+\textbf{Foundational Diffusion Models}
 \begin{itemize}
     \item Ho, J., Jain, A., \& Abbeel, P. (2020). \href{https://arxiv.org/abs/2006.11239}{Denoising Diffusion Probabilistic Models}
-    \item Sohl-Dickstein, J., Weiss, E., Maheswaranathan, N., \& Ganguli, S. (2015). \href{https://arxiv.org/abs/1503.03585}{Deep Unsupervised Learning using Nonequilibrium Thermodynamics}
+    \item Sohl-Dickstein, J., et al.\ (2015). \href{https://arxiv.org/abs/1503.03585}{Deep Unsupervised Learning using Nonequilibrium Thermodynamics}
     \item Song, Y., \& Ermon, S. (2019). \href{https://arxiv.org/abs/1907.05600}{Generative Modeling by Estimating Gradients of the Data Distribution}
     \item Nichol, A., \& Dhariwal, P. (2021). \href{https://arxiv.org/abs/2102.09672}{Improved Denoising Diffusion Probabilistic Models}
 \end{itemize}
 
 \framebreak
 
-\textbf{Applications and Notable Models}
+\textbf{Stable Diffusion: Core Papers}
 \begin{itemize}
-    \item Ramesh, A., et al. (2022). \href{https://arxiv.org/abs/2204.06125}{Hierarchical Text-Conditional Image Generation with CLIP Latents (DALL·E 2)}
-    \item Saharia, C., et al. (2022). \href{https://arxiv.org/abs/2205.11487}{Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding (Imagen)}
-    \item Nichol, A., Dhariwal, P., et al. (2021). \href{https://arxiv.org/abs/2112.10752}{GLIDE: Towards Photorealistic Image Generation and Editing with Text-Guided Diffusion Models}
-    \item Preechakul, T., et al. (2022). \href{https://arxiv.org/abs/2201.09865}{Diffusion Autoencoders: Toward a Meaningful and Decodable Representation}
-    \item Saharia, C., et al. (2022). \href{https://arxiv.org/abs/2104.07636}{Image Super-Resolution via Iterative Refinement}
-    \item Poole, B., et al. (2022). \href{https://arxiv.org/abs/2206.02736}{DreamFusion: Text-to-3D using 2D Diffusion}
+    \item Rombach, R., et al.\ (2022). \href{https://arxiv.org/abs/2112.10752}{High-Resolution Image Synthesis with Latent Diffusion Models} --- Stable Diffusion / LDM (VAE + U-Net + conditioning).
+    \item Radford, A., et al.\ (2021). \href{https://arxiv.org/abs/2103.00020}{Learning Transferable Visual Models From Natural Language Supervision (CLIP)} --- text encoder and cross-attention conditioning.
+\end{itemize}
+
+\framebreak
+
+\textbf{Applications and Model Releases}
+\begin{itemize}
+    \item Nichol, A., et al.\ (2021). \href{https://arxiv.org/abs/2112.10741}{GLIDE: Towards Photorealistic Image Generation and Editing with Text-Guided Diffusion Models}
+    \item Ramesh, A., et al.\ (2022). \href{https://arxiv.org/abs/2204.06125}{Hierarchical Text-Conditional Image Generation with CLIP Latents (DALL·E~2)}
+    \item Saharia, C., et al.\ (2022). \href{https://arxiv.org/abs/2205.11487}{Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding (Imagen)}
+    \item Blattmann, A., et al.\ (2023). \href{https://arxiv.org/abs/2311.15127}{Stable Video Diffusion: Scaling Latent Video Diffusion Models to Large Datasets}
+    \item Lopez, J. (2022). \href{https://stability.ai/news-updates/stable-diffusion-v2-release}{Stable Diffusion 2.0 Release} --- OpenCLIP, upscaler, depth2img, inpainting (Stability AI blog).
+    \item Stability AI (2024). \href{https://stability.ai/news-updates/introducing-stable-diffusion-3-5}{Introducing Stable Diffusion 3.5} --- SD~3.5 Large / Large Turbo / Medium (Stability AI blog).
+    \item Raisinghani, A. (2026). \href{https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/}{Nano Banana 2: Combining Pro capabilities with lightning-fast speed} (Google DeepMind blog).
 \end{itemize}
 \end{frame}

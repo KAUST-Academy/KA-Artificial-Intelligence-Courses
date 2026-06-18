@@ -6,7 +6,7 @@
 % Slide 33Introduction to Attention Mechanism
 \begin{frame}{Introduction to Attention Mechanism}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_033.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_033.png}
 \end{frame}
 
 % Slide 34
@@ -37,7 +37,7 @@
 % --- PAGE 35 ---
 \begin{frame}{Attention Models}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.5\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_035.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_035.png}
   \begin{itemize}
       \item \textbf{Attention weights:} The weights are dynamically computed as functions of decoder state.
       \item \textbf{Expectation:} if the model is well-trained, this will automatically ``highlight'' the correct input.
@@ -48,7 +48,7 @@
 % --- PAGE 36 ---
 \begin{frame}{Attention weights at time $t$}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_036.png}  
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_036.png}  
   \begin{itemize}
       \item The ``attention'' weights $w_i(t)$ must be computed from available information at time $t$.
       \item The primary information is $s_{t-1}$ (the state at time $t-1$).
@@ -62,7 +62,7 @@
 % --- PAGE 37-38 ---
 \begin{frame}{Requirement on attention weights}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.5\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_037.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_037.png}
   \begin{itemize}
       \item The weights must be positive and sum to 1.0 (i.e., be a distribution).
       \item Ideally, they must be high for the most relevant inputs for the $i$-th output and low elsewhere.
@@ -77,7 +77,7 @@
 % Slide 38
 \begin{frame}{Requirement on attention weights}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_038.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_038.png}
   % \begin{itemize}
   %     \item The weights must be positive and sum to 1.0 (i.e., be a distribution).
   %     \item Ideally, they must be high for the most relevant inputs for the $i$-th output and low elsewhere.
@@ -111,29 +111,29 @@
 % Slide 41
 \begin{frame}{Requirement on attention weights}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.85\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_041.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_041.png}
 \end{frame}
 
 % Slide 42
 \begin{frame}{Attention weights}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_042.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_042.png}
 \end{frame}
 
 \begin{frame}{Attention weights}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_043.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_043.png}
 \end{frame}
 
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_044.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_044.png}
   Pass the input through the encoder to produce hidden representations $h_{i}$
 \end{frame}
 
 % Slide 45
 \begin{frame}{Converting an input: Inference}
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_045.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_045.png}
   \begin{itemize}
     \item[] \textbf{Pass the input through the encoder to produce hidden representations $\pmb{h_i}$}
   \end{itemize}
@@ -142,68 +142,68 @@
 % Slide 46
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_046.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_046.png}
 \end{frame}
 
 % Slide 47
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_047.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_047.png}
 \end{frame}
 
 % Slide 48
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_048.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_048.png}
 \end{frame}
 
 % Slide 49
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_049.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_049.png}
 \end{frame}
 
 % Slide 50
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_050.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_050.png}
 \end{frame}
 
 % Slide 51
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_051.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_051.png}
 \end{frame}
 
 
 % Slide 52
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_052.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_052.png}
 \end{frame}
 
 % Slide 53
 % \begin{frame}{Converting an input: Inference}
 %   \centering
-%   \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_053.png}
+%   \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_053.png}
 % \end{frame}
 
 % Slide 54
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_054.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_054.png}
 \end{frame}
 
 % Slide 55
 \begin{frame}{Attention-based Decoding}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_055.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_055.png}
 \end{frame}
 
 % Slide 56
 \begin{frame}{Recap: Sequence to Sequence Models}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_056.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_056.png}
 \begin{itemize}
   \item The input sequence feeds into a recurrent structure
   \item The input sequence is terminated by an explicit \textless eos\textgreater{} symbol
@@ -217,7 +217,7 @@
 % Slide 57
 \begin{frame}{Recap: Attention Models}
   \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_057.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_057.png}
 \begin{itemize}
   \item Encoder recurrently produces hidden representations of input word sequence
   \item Decoder recurrently generates output word sequence
@@ -230,7 +230,7 @@
 % Slide 58
 \begin{frame}{Recap: Attention Models}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.7\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_058.png}
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_058.png}
 \begin{itemize}
   \item \textbf{Problem:} Because of the recurrence, the hidden representation for any word is also influenced by \emph{all} preceding words
     \begin{itemize}

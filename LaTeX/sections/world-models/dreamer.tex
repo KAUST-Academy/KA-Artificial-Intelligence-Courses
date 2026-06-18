@@ -33,15 +33,14 @@
     \includegraphics[width=0.94\linewidth,height=0.94\textheight,keepaspectratio]{assets/New-Lecture_World_Models/eclecticsheep_dreamerv2_worldmodel_arch.png}\\[0.08em]
     {\tiny World-model overview. Diagram credit: Belotti (2023)}
     \column{0.36\textwidth}
-    \begin{itemize}\itemsep0.06em
-      \item Model components are exactly the same as those in Dreamer-V1.
-      \item The only notable difference: \textbf{model size} increases---the number of dense units in the MLPs and feature maps per layer are larger in all model components.
-      \item This change results in an increase from \textbf{13M} parameters (V1) to \textbf{22M} parameters (V2).
+    \begin{itemize}\footnotesize
+      \item \textbf{Key upgrade:} The world model now uses \textbf{discrete categorical latents} instead of continuous Gaussian variables. Each latent consists of 32 variables, each taking one of 32 categories, enabling a richer and more expressive latent space.
+      \item Discrete latents are optimized using \textbf{straight-through gradients} for effective backpropagation despite non-differentiability. This allows for more precise representation and imagination.
+      \item \textbf{KL balancing} is introduced to stabilize training by balancing the KL divergence term across model components.
     \end{itemize}
   \end{columns}
-\end{frame}
+\end{frame} 
 
-% % --- Part D: Dreamer line (continued): DreamerV3 (Hafner et al., arXiv:2301.04104) ---
 \begin{frame}[t]{DreamerV3: motivation}
   \begin{itemize}\itemsep0.10em
     \item Achieves state-of-the-art performance across 150+ diverse tasks with a single configuration.

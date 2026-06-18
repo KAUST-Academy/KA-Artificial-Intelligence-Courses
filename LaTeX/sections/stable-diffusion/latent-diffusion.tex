@@ -28,7 +28,7 @@
 % --- Latent diffusion (from sections/diffusion/complete/latent-diffusion.tex) ---
 \section{Latent Diffusion Models (LDMs)}
 \begin{frame}{}
-    \LARGE Diffusion Models: \textbf{Latent Diffusion Models (LDMs)}
+    \LARGE Stable Diffusion: \textbf{A Latent Diffusion Model (LDM)}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{What is a Latent Space?}
@@ -72,31 +72,23 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Applications of Latent Diffusion}
-    \begin{itemize}
-        \item Text-to-image generation (e.g., Stable Diffusion) uses text embeddings in latent space.
-        \item Image editing by modifying specific parts of the latent.
-        \item Inversion: map a real image to latent, edit, then decode back.
-    \end{itemize}
-\end{frame}
+% \begin{frame}{Latent Diffusion Models (Stable Diffusion): Key Concepts}
+%     \begin{itemize}
+%         \item \textbf{Latent Diffusion Models (LDMs):} Operate in a compressed latent space for efficiency.
+%         \item \textbf{Diffusion Process:} Gradually adds noise to data, then learns to reverse this process.
+%         \item \textbf{Text Conditioning:} Uses CLIP text encoders to guide image generation from prompts.
+%     \end{itemize}
+% \end{frame}
 
-\begin{frame}{Latent Diffusion Models (Stable Diffusion): Key Concepts}
-    \begin{itemize}
-        \item \textbf{Latent Diffusion Models (LDMs):} Operate in a compressed latent space for efficiency.
-        \item \textbf{Diffusion Process:} Gradually adds noise to data, then learns to reverse this process.
-        \item \textbf{Text Conditioning:} Uses CLIP text encoders to guide image generation from prompts.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Latent Diffusion Models: Architecture Overview}
-    \textbf{Architecture Overview}
-    \begin{itemize}
-        \item \textbf{Encoder:} Maps images to latent space.
-        \item \textbf{UNet:} Core denoising network operating in latent space.
-        \item \textbf{Decoder:} Reconstructs images from latent representations.
-        \item \textbf{Text Encoder:} CLIP-based, encodes prompts for conditioning.
-    \end{itemize}
-\end{frame}
+% \begin{frame}{Latent Diffusion Models: Architecture Overview}
+%     \textbf{Architecture Overview}
+%     \begin{itemize}
+%         \item \textbf{Encoder:} Maps images to latent space.
+%         \item \textbf{UNet:} Core denoising network operating in latent space.
+%         \item \textbf{Decoder:} Reconstructs images from latent representations.
+%         \item \textbf{Text Encoder:} CLIP-based, encodes prompts for conditioning.
+%     \end{itemize}
+% \end{frame}
 
 \begin{frame}{Latent Diffusion Models: Visual Overview}
     \begin{figure}
@@ -105,30 +97,10 @@
     \end{figure}
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Stable Video Diffusion}
-    \begin{itemize}
-        \item Initialize from Stable Diffusion.
-        \item Add temporal layers (e.g., 1D Conv, temporal attention).
-        \item Finetune on video data.
-        \item Data pipeline:
-        \begin{itemize}
-            \item Scrape \textbf{unlabeled} videos from the internet.
-            \item Use image and video captioners to generate synthetic text labels.
-            \item Apply aggressive data filtering using several heuristics (CLIP score, optical flow score, aesthetic scores, OCR, etc.).
-        \end{itemize}
-    \end{itemize}
-    
-    \framebreak
-
-    \begin{figure}
-        \centering
-        \includegraphics[width=1.06\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_101_1_img.png}
-        \caption*{\href{https://drive.google.com/file/d/19XVG5MpxMRXP1hwHETkP_prlbHOcuTSj/view?usp=sharing}{Link: GIFF}}
-    \end{figure}
-
-    % \textbf{References}
-    % \begin{itemize}
-    %     \item Rombach et al., "High-Resolution Image Synthesis with Latent Diffusion Models", CVPR 2022.
-    %     \item Official Stable Diffusion GitHub: \url{https://github.com/CompVis/stable-diffusion}
-    % \end{itemize}
-\end{frame}
+% \begin{frame}{Applications of Stable Diffusion}
+%     \begin{itemize}
+%         \item Text-to-image generation (e.g., Stable Diffusion) uses text embeddings in latent space.
+%         \item Image editing by modifying specific parts of the latent.
+%         \item Inversion: map a real image to latent, edit, then decode back.
+%     \end{itemize}
+% \end{frame}

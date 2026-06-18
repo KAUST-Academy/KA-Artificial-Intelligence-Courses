@@ -1,24 +1,41 @@
-% --- Summary (from sections/diffusion/complete/summary.tex) ---
+% --- Summary (Stable Diffusion lecture) ---
 \section{Summary \& Limitations}
 \begin{frame}{}
-    \LARGE Diffusion Models: \textbf{Summary \& Limitations}
+    \LARGE Stable Diffusion: \textbf{Summary \& Limitations}
 \end{frame}
 
-\begin{frame}{Summary}
-    \begin{itemize}
-        \item Diffusion models add noise to data and learn to reverse it
-        \item Core task: Predict noise at different steps
-        \item Training is efficient; Sampling is iterative and slow
-        \item U-Nets with attention are the winning architecture
-    \end{itemize}
+\begin{frame}[allowframebreaks]{Summary}
+  \textbf{From diffusion to Stable Diffusion}
+  \begin{itemize}\itemsep0.35em
+    \item Diffusion models learn to reverse a gradual noising process; sampling remains iterative but training is stable and scalable.
+    \item \textbf{Latent Diffusion (LDM):} denoise in a VAE-compressed latent space ($\sim 8\times$ downsampling) rather than full pixel space---lower memory and faster training/inference.
+  \end{itemize}
+
+  \framebreak
+
+  \textbf{Core architecture}
+  \begin{itemize}\itemsep0.35em
+    \item \textbf{Attention U-Net:} encoder--decoder with skip connections; downsampling / upsampling for multiscale features.
+    \item \textbf{Time conditioning:} Fourier-feature time embeddings added per channel ($s(x,t)=\nabla_x \log p(x,t)$).
+    \item \textbf{Text conditioning:} CLIP (ViT-L/14 in SD v1) maps prompts to token embeddings; cross-attention injects language into the U-Net.
+  \end{itemize}
+
+  \framebreak
+
+  \textbf{Model evolution \& applications}
+  \begin{itemize}\itemsep0.35em
+    \item \textbf{SD 2.0:} OpenCLIP text encoder; native 512/768 T2I; upscaler ($\times 4$), depth2img, and updated inpainting.
+    \item \textbf{SD 3.5:} Large 8.1B, Large Turbo, Medium 2.5B; strong prompt adherence; run on consumer GPUs.
+    \item Broader ecosystem: video (Stable Video Diffusion), inpainting/editing (GLIDE, DALL·E~2), and newer multimodal systems (e.g.\ Nano Banana~2).
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Limitations}
-    \begin{itemize}
-        \item \textbf{Slow sampling} – iterative process
-        \item \textbf{Data-heavy} – needs lots of varied data
-        \item \textbf{Distribution miss} – struggles in tails of data
-        \item \textbf{Compute needs} – high GPU/time investment
-        \item \textbf{Misinformation concerns} – used in deepfake creation
-    \end{itemize}
+  \begin{itemize}\itemsep0.35em
+    \item \textbf{Slow sampling} --- many denoising steps (partially addressed by distilled models such as SD~3.5 Large Turbo).
+    \item \textbf{Data \& compute} --- high-quality open models still require large-scale curated data and substantial GPU resources to train.
+    \item \textbf{Prompt sensitivity} --- output quality and adherence depend on prompt wording; base models may vary across seeds.
+    \item \textbf{Distribution gaps} --- rare concepts, fine details, and compositional reasoning remain challenging.
+    \item \textbf{Safety \& misuse} --- text-to-image systems raise concerns around deepfakes, copyright, and misinformation.
+  \end{itemize}
 \end{frame}

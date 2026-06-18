@@ -134,18 +134,18 @@
       % Table displaying labels and probabilities, faithfully matching slide image
       \setlength{\tabcolsep}{0.45em}
       \renewcommand{\arraystretch}{1.22}
-      \begin{tabular}{c|ccc}
-        & \footnotesize cow & \footnotesize dog & \footnotesize cat \\
+      \begin{tabular}{c|cccc}
+        & \footnotesize cow & \footnotesize car & \footnotesize dog & \footnotesize cat \\
         \hline
-        \footnotesize Original labels & $0$ & $1$ & $0$ \\
-        \footnotesize Probabilities & $10^{-6}$ & $0.9$ & $0.1$ \\
+        \footnotesize Original labels & $0$ & $1$ & $0$ & $0$ \\
+        \footnotesize Probabilities & $10^{-6}$ & $0.9$ & $0.1$ & $10^{-9}$ \\
       \end{tabular}
  
       \vspace{0.6em}
 
       {\scriptsize
         Adapted from:\par
-        Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \href{https://arxiv.org/abs/1503.02531}{\textit{Dark Knowledge}}
+        Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \href{https://arxiv.org/abs/1503.02531}{\textit{Distilling the Knowledge in a Neural Network}}
       }
   \end{columns}
 \end{frame}
@@ -170,18 +170,18 @@
       % Table matching values from image, with original, softmax, and softened probabilities
       \setlength{\tabcolsep}{0.4em}
       \renewcommand{\arraystretch}{1.1}
-      \begin{tabular}{c|ccc}
-        & \footnotesize cow & \footnotesize dog & \footnotesize cat \\
+      \begin{tabular}{c|cccc}
+        & \footnotesize cow & \footnotesize car & \footnotesize dog & \footnotesize cat \\
         \hline
-        \footnotesize Original labels & $0$ & $1$ & $0$ \\
-        \footnotesize Softmax probabilities & $10^{-6}$ & $0.9$ & $0.1$ \\
+        \footnotesize Original labels & $0$ & $1$ & $0$ & $0$ \\
+        \footnotesize Softmax probabilities & $10^{-6}$ & $0.9$ & $0.1$ & $10^{-9}$ \\
         \footnotesize Softened probabilities & $0.05$ & $0.3$ & $0.2$ & $0.005$
       \end{tabular}
 
       \vspace{0.75em}
       {\footnotesize
         Adapted from:\par
-        Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \href{https://arxiv.org/abs/1503.02531}{\textit{Dark Knowledge}}
+        Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \href{https://arxiv.org/abs/1503.02531}{\textit{Distilling the Knowledge in a Neural Network}}
       }
   \end{columns}
 \end{frame}
@@ -202,18 +202,18 @@
       % Table matching values from image, with original, softmax, and softened probabilities
       \setlength{\tabcolsep}{0.4em}
       \renewcommand{\arraystretch}{1.1}
-      \begin{tabular}{c|ccc}
-        & \footnotesize cow & \footnotesize dog & \footnotesize cat \\
+      \begin{tabular}{c|cccc}
+        & \footnotesize cow & \footnotesize car & \footnotesize dog & \footnotesize cat \\
         \hline
-        \footnotesize Original labels & $0$ & $1$ & $0$ \\
-        \footnotesize Softmax probabilities & $10^{-6}$ & $0.9$ & $0.1$ \\
+        \footnotesize Original labels & $0$ & $1$ & $0$ & $0$ \\
+        \footnotesize Softmax probabilities & $10^{-6}$ & $0.9$ & $0.1$ & $10^{-9}$ \\
         \footnotesize Softened probabilities & $0.05$ & $0.3$ & $0.2$ & $0.005$
       \end{tabular}
 
       \vspace{0.75em}
       {\footnotesize
         Adapted from:\par
-        Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \href{https://arxiv.org/abs/1503.02531}{\textit{Dark Knowledge}}
+        Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \href{https://arxiv.org/abs/1503.02531}{\textit{Distilling the Knowledge in a Neural Network}}
       }
   \end{columns}
 \end{frame}
@@ -237,7 +237,7 @@
         \parbox[c][4.2cm][c]{0.92\linewidth}{
           \centering
           \includegraphics[width=0.78\linewidth,height=0.5\textheight,keepaspectratio]{assets/New-Lecture-Inference_Optimisation/harvard_L11_compression_p25.png}\\[0.2em]
-          {\scriptsize Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Dark Knowledge}}
+          {\scriptsize Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Distilling the Knowledge in a Neural Network}}
      
         }
       }
@@ -245,7 +245,7 @@
 
       % If desired, can also include something like:
       % \includegraphics[width=\linewidth,keepaspectratio]{assets/New-Lecture-Inference_Optimisation/teacher_student_distillation.png}\\
-      % {\scriptsize Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Dark Knowledge}}
+      % {\scriptsize Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Distilling the Knowledge in a Neural Network}}
   \end{columns}
 \end{frame}
 
@@ -276,7 +276,7 @@
     \column{0.42\textwidth}
       \centering
       \includegraphics[width=0.98\linewidth,height=0.5\textheight,keepaspectratio]{assets/New-Lecture-Inference_Optimisation/harvard_L11_compression_p25.png}\\[0.2em]
-      {\scriptsize Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Dark Knowledge}}
+      {\scriptsize Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Distilling the Knowledge in a Neural Network}}
   \end{columns}
 \end{frame}
 
@@ -284,7 +284,7 @@
   \centering
   % Use the referenced slide as a visual explanation for training process
   \includegraphics[width=0.97\linewidth,height=0.8\textheight,keepaspectratio]{assets/New-Lecture-Inference_Optimisation/harvard_L11_compression_p28.png}\\[0.4em]
-  {\scriptsize Reference: Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Dark Knowledge}.}
+  {\scriptsize Reference: Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Distilling the Knowledge in a Neural Network}.}
   \vspace{1em}
   
   \[

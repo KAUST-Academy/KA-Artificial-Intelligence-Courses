@@ -1,0 +1,46 @@
+% Adjust the aspect ratio and font size as needed
+\documentclass[10pt, aspectratio=169]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+\title[Meta-RL \& Open Problems]{Reinforcement Learning}
+
+\usetikzlibrary{positioning,fit,shapes.geometric,arrows.meta,calc,backgrounds,decorations.pathreplacing,tikzmark}
+
+\begin{document}
+
+\input{sections/cover}
+
+% ===================== Part 1: Meta-Reinforcement Learning =====================
+% Transfer learning: framing and challenges
+\input{sections/meta-rl-open/transfer}
+
+% Meta-learning: what and why (supervised view)
+\input{sections/meta-rl-open/meta-learning}
+
+% Meta-RL: recurrent policies, the meta-RL problem, architectures
+\input{sections/meta-rl-open/meta-rl}
+
+% ===================== Part 2: Challenges and Open Problems =====================
+% Core challenges: stability, sample complexity, generalization, formulation
+\input{sections/meta-rl-open/challenges}
+
+% RL as an engineering tool
+\input{sections/meta-rl-open/engineering}
+
+% RL and the real world
+\input{sections/meta-rl-open/real-world}
+
+% RL as "universal" learning (offline RL + data)
+\input{sections/meta-rl-open/universal}
+
+% Bigger picture
+\input{sections/meta-rl-open/bigger-picture}
+
+% Wrap-up
+\input{sections/meta-rl-open/references}
+
+\end{document}

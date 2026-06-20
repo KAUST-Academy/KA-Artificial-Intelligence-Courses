@@ -1,0 +1,84 @@
+\section{Retrieval-Augmented Generation (RAG)}
+\begin{frame}{}
+    \LARGE Retrieval-Augmented Generation (RAG)
+\end{frame}
+
+
+\begin{frame}{Motivation for RAG}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item LLMs are fixed after training---their knowledge cannot be easily updated.
+        \item Updating facts or adding new information requires retraining or fine-tuning, which is costly and slow.
+        \item Retrieval-Augmented Generation (RAG) addresses this by combining:
+        \begin{itemize}
+            \item A \textbf{retriever} that fetches relevant documents or facts from an external knowledge base.
+            \item A \textbf{reader} (LLM) that generates answers conditioned on the retrieved information.
+        \end{itemize}
+        \item This enables up-to-date, accurate, and context-aware responses without retraining the LLM.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{RAG Architecture}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Retriever:} Fetches relevant documents from a corpus (e.g., via vector search).
+        \item \textbf{Reader:} LLM generates answers based on the retrieved documents.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Two main components:}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Dense retriever:} Learns to encode queries and documents into vectors for similarity search (e.g., DPR, ColBERT).
+        \item \textbf{Generator:} Produces final answers conditioned on retrieved context (e.g., GPT, BART).
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Example RAG Workflow}
+    \begin{enumerate}
+        \setlength{\itemsep}{1em}
+        \item \textbf{User asks a question.}
+        \item \textbf{Retriever:} Embedding and similarity search retrieves top-$k$ relevant documents from the knowledge base.
+        \item \textbf{Reader:} Retrieved documents and the user prompt are fed to the LLM.
+        \item \textbf{LLM generates a response} grounded in the retrieved documents.
+    \end{enumerate}
+\end{frame}
+
+
+\begin{frame}{RAG Tools and Libraries}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{LangChain:} Framework for building LLM-powered applications with retrieval, chaining, and orchestration.
+        \item \textbf{LlamaIndex:} Data framework for connecting LLMs with external data sources and knowledge bases.
+        \item \textbf{Haystack:} Open-source framework for building production-ready RAG pipelines.
+    \end{itemize}
+    \vspace{1em}
+    \textbf{Popular Vector Databases:}
+    \begin{itemize}
+        \item \textbf{FAISS:} Facebook AI Similarity Search, efficient vector search library.
+        \item \textbf{Weaviate:} Scalable, cloud-native vector database with RESTful APIs.
+        \item \textbf{Qdrant:} Open-source vector search engine with filtering and payload support.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Benefits of RAG}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Factual accuracy:} Answers are grounded in retrieved documents, reducing hallucinations.
+        \item \textbf{Real-time updates:} Knowledge can be updated instantly by modifying the underlying corpus, without retraining the LLM.
+        \item \textbf{Scalable with large corpora:} Efficient retrieval enables handling vast and dynamic knowledge bases.
+    \end{itemize}
+\end{frame}
+
+
+\begin{frame}{RAG Limitations}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item \textbf{Requires good retrieval quality:} Poor retrieval leads to irrelevant or incomplete context for the LLM.
+        \item \textbf{Latency overhead:} Retrieval and reranking steps add to response time.
+        \item \textbf{Domain-specific retrievers may require tuning:} Customization and fine-tuning are often needed for specialized domains.
+        \item \textbf{Context length limits in LLMs:} Only a limited amount of retrieved content can be passed to the LLM at once.
+    \end{itemize}
+\end{frame}

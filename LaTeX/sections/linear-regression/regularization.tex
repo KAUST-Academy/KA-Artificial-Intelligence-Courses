@@ -112,8 +112,8 @@
 
     \begin{figure}
         \centering
-        \includegraphics[width=0.35\textwidth]{images/linear-regression/linear-regression-22.png}
-        \includegraphics[width=0.35\textwidth]{images/linear-regression/linear-regression-23.png}
+        \includegraphics[width=0.15\textwidth]{images/linear-regression/linear-regression-22.png}
+        \includegraphics[width=0.15\textwidth]{images/linear-regression/linear-regression-23.png}
     \end{figure}
 \end{frame}
 
@@ -175,7 +175,7 @@
 
 \begin{columns}
     \column{0.48\textwidth}
-    \includegraphics[width=\linewidth]{images/linear-regression/linear-regression-28.png}
+    \includegraphics[width=0.8\linewidth]{images/linear-regression/linear-regression-28.png}
 
     \begin{itemize}
         \item $L_{Ridge}(\boldsymbol{\beta}) = \frac{1}{n} \sum_{i=1}^n \left| y_i - \boldsymbol{\beta}^T \boldsymbol{x} \right|^2 + \lambda \sum_{j=1}^J (\beta_j)^2$
@@ -184,7 +184,7 @@
     \end{itemize}
 
     \column{0.48\textwidth}
-    \includegraphics[width=\linewidth]{images/linear-regression/linear-regression-29.png}
+    \includegraphics[width=0.8\linewidth]{images/linear-regression/linear-regression-29.png}
 
     \begin{itemize}
         \item $\frac{1}{n} \sum_{i=1}^n \left| y_i - \hat{\boldsymbol{\beta}}^{Ridge\, T} \boldsymbol{x} \right|^2 = D$
@@ -201,13 +201,13 @@
 
 \begin{columns}
     \column{0.48\textwidth}
-    \includegraphics[width=\linewidth]{images/linear-regression/linear-regression-30.png}
+    \includegraphics[width=0.8\linewidth]{images/linear-regression/linear-regression-30.png}
     \begin{itemize}
         \item The ridge estimator is where the constraint and the loss intersect.
     \end{itemize}
 
     \column{0.48\textwidth}
-    \includegraphics[width=\linewidth]{images/linear-regression/linear-regression-31.png}
+    \includegraphics[width=0.8\linewidth]{images/linear-regression/linear-regression-31.png}
     \begin{itemize}
         \item The values of the coefficients decrease as lambda increases, but they are not nullified.
     \end{itemize}
@@ -219,7 +219,7 @@
 \begin{frame}{The Geometry of Regularization}
 
 \begin{center}
-    \includegraphics[width=0.9\linewidth]{images/linear-regression/linear-regression-32.png}
+    \includegraphics[width=0.70\linewidth]{images/linear-regression/linear-regression-32.png}
 \end{center}
 
 \end{frame}
@@ -280,7 +280,7 @@
 
 \begin{frame}{Ridge regularization with \textbf{validation only}: step by step}
 \centering
-\includegraphics[width=0.85\linewidth]{images/linear-regression/linear-regression-33.png}
+\includegraphics[width=0.65\linewidth]{images/linear-regression/linear-regression-33.png}
 
 \end{frame}
 
@@ -324,7 +324,7 @@
 \begin{frame}{Ridge regularization with \textbf{CV} only: step by step}
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{images/linear-regression/linear-regression-34.png}
+    \includegraphics[width=0.70\textwidth]{images/linear-regression/linear-regression-34.png}
     \caption*{
         \small
         Validation error $MSE_{\text{val}}$ across $\lambda$ values (log scale) using 5-fold cross-validation. \\

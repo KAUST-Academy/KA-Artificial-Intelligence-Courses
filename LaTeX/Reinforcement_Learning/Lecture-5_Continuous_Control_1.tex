@@ -1,0 +1,65 @@
+% Adjust the aspect ratio and font size as needed
+\documentclass[10pt, aspectratio=169]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+\title[DDPG]{Continuous Control I: Deterministic Policy Gradients \& DDPG}
+
+\usetikzlibrary{positioning,fit,shapes.geometric,arrows.meta,calc,backgrounds}
+
+% Red-box annotation macro used in formula slides
+\newcommand{\rbox}[1]{%
+  {\setlength{\fboxsep}{1pt}\setlength{\fboxrule}{0.7pt}%
+   \fcolorbox{red}{white}{\ensuremath{#1}}}%
+}
+
+% Clickable reference citation: [n] jumps to the matching bibliography entry.
+% Kept in normal text colour (like the Day 1--4 footnote markers) rather than
+% hyperref's default red, so it is not visually distracting.
+\newcommand{\rref}[1]{\hyperlink{ref:#1}{\textcolor{black}{[#1]}}}
+
+\begin{document}
+
+% Title pages
+\input{sections/cover}
+\input{sections/continuous-control-1/cover}
+\input{sections/toc}
+
+% Recap & learning outcomes
+\input{sections/continuous-control-1/recap}
+\input{sections/continuous-control-1/learning_outcomes}
+
+% Motivation and DDPG overview
+\input{sections/continuous-control-1/intro}
+\input{sections/continuous-control-1/dpg_motivation}
+\input{sections/continuous-control-1/ddpg_overview}
+
+% Background: Q-learning, the SPG-to-DPG derivation, and summary
+\input{sections/continuous-control-1/q_learning_motivation}
+\input{sections/continuous-control-1/policy_gradient_derivation}
+\input{sections/continuous-control-1/actor_critic}
+\input{sections/continuous-control-1/background_summary}
+
+% Method
+\input{sections/continuous-control-1/method_overview}
+\input{sections/continuous-control-1/problem_setting}
+\input{sections/continuous-control-1/algorithm_flow}
+
+% Experiments
+\input{sections/continuous-control-1/experiments_target_batchnorm}
+\input{sections/continuous-control-1/experiments_ddpg_vs_dpg}
+\input{sections/continuous-control-1/experiments_q_estimate}
+
+% Extensions & applications
+\input{sections/continuous-control-1/follow_up}
+\input{sections/continuous-control-1/application_wayve}
+
+% Wrap
+\input{sections/continuous-control-1/summary}
+\input{sections/continuous-control-1/whats_next}
+\input{sections/continuous-control-1/references}
+
+\end{document}

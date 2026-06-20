@@ -1,11 +1,11 @@
 \begin{frame}{Token-Free LLMs}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_054.png}
+  \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_054.png}
 \end{frame}
 
 \begin{frame}{Token-Free LLMs}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_055.png}
+  \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_055.png}
 \end{frame}
 
 \begin{frame}{Token-Free LLMs}
@@ -33,17 +33,39 @@
 
 \begin{frame}{Token-Free LLMs}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_058.png}
+  \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_058.png}
 \end{frame}
 
 \begin{frame}{Token-Free LLMs}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_059.png}
+  \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_059.png}
 \end{frame}
 
 \begin{frame}{Token-Free LLMs}
   \centering
-  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_060.png}
+  \includegraphics[width=0.8\paperwidth,height=0.75\paperheight,keepaspectratio]{assets/Lecture-7_Large_Language_Models/pdf_page_060.png}
+\end{frame}
+
+\begin{frame}{Token-Free LLMs: Example --- ByT5}
+    \begin{itemize}
+        \item \textbf{Example: ByT5 (Xue et al., 2022)}
+        \begin{itemize}
+            \item Character-level variant of T5 that processes raw bytes instead of tokens.
+            \item Eliminates the need for a tokenizer, enabling better multilingual and low-resource language support.
+        \end{itemize}
+        \item \textbf{Pros:}
+        \begin{itemize}
+            \item No preprocessing or tokenization pipeline required.
+            \item Handles any language or script without modification.
+            \item Performs better on low-resource and unseen languages.
+        \end{itemize}
+        \item \textbf{Cons:}
+        \begin{itemize}
+            \item Training is slower due to longer input sequences.
+            \item Increased computational requirements.
+            \item May require more data to achieve comparable performance.
+        \end{itemize}
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Token-Free LLMs}

@@ -1,0 +1,26 @@
+\section{RNNs vs Transformers}
+\begin{frame}{}
+    \LARGE Transformers: \textbf{RNNs vs Transformers}
+\end{frame}
+
+\begin{frame}{RNNs vs Transformers}
+    \begin{table}[]
+    \centering
+    \begin{tabular}{|l|c|c|}
+    \hline
+    \textbf{Aspect} & \textbf{RNN / LSTM} & \textbf{Transformer} \\
+    \hline
+    Computation & Sequential & Parallel \\
+    Long-range dependencies & Hard (signal decays) & Direct (any-to-any) \\
+    Path length between tokens & $O(n)$ & $O(1)$ \\
+    Complexity per layer & $O(n \cdot d^2)$ & $O(n^2 \cdot d)$ \\
+    Order information & Built-in (recurrence) & Added (positional encoding) \\
+    \hline
+    \end{tabular}
+    \end{table}
+    \vspace{0.4cm}
+    \begin{itemize}
+        \item Transformers trade quadratic attention cost for full parallelism and shorter gradient paths.
+        \item This makes them far more scalable on modern hardware --- the key to large pretrained models.
+    \end{itemize}
+\end{frame}

@@ -1,0 +1,21 @@
+\section{Limitations and Future Directions}
+\begin{frame}{}
+    \LARGE Transformers: \textbf{Limitations and Future Directions}
+\end{frame}
+
+\begin{frame}{Limitations of Transformers}
+    \begin{itemize}
+        \item \textbf{Quadratic complexity}: self-attention scales as $O(n^2)$ in sequence length.
+        \item \textbf{Data hungry}: need large datasets or pretraining to perform well.
+        \item \textbf{No built-in inductive bias}: must learn structure (e.g., order, locality) from data.
+        \item \textbf{Memory intensive}: long sequences are expensive to store and compute.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Future Directions}
+    \begin{itemize}
+        \item \textbf{Efficient attention}: \href{https://arxiv.org/abs/2006.04768}{Linformer}, \href{https://arxiv.org/abs/2009.14794}{Performer}, \href{https://arxiv.org/abs/2004.05150}{Longformer}, \href{https://arxiv.org/abs/2205.14135}{FlashAttention}.
+        \item \textbf{Vision}: extend self-attention to images (next topic: \href{https://arxiv.org/abs/2010.11929}{Vision Transformers}).
+        \item \textbf{Multimodality}: unify text, image, and audio in a single architecture (e.g., \href{https://arxiv.org/abs/2204.14198}{Flamingo}).
+    \end{itemize}
+\end{frame}

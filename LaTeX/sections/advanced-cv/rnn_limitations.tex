@@ -1,0 +1,21 @@
+\section{Limitations and Future Directions}
+\begin{frame}{}
+    \LARGE Recurrent Neural Networks: \textbf{Limitations and Future Directions}
+\end{frame}
+
+\begin{frame}{Limitations of RNNs}
+    \begin{itemize}
+        \item \textbf{Sequential computation}: cannot be parallelized across time steps (slow to train).
+        \item \textbf{Long-range dependencies}: even LSTMs/GRUs struggle on very long sequences.
+        \item \textbf{Limited memory}: the entire context is squeezed into a fixed-size hidden state.
+        \item \textbf{Bottleneck in seq2seq}: a single context vector limits the decoder.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Future Directions}
+    \begin{itemize}
+        \item \textbf{Attention}: let the decoder look at all encoder states (\href{https://arxiv.org/abs/1409.0473}{Bahdanau et al.}; next topic).
+        \item \textbf{Transformers}: drop recurrence entirely for full parallelism (\href{https://arxiv.org/abs/1706.03762}{Vaswani et al.}).
+        \item \textbf{Efficient sequence models}: e.g., state-space models (\href{https://arxiv.org/abs/2111.00396}{S4}, \href{https://arxiv.org/abs/2312.00752}{Mamba}).
+    \end{itemize}
+\end{frame}

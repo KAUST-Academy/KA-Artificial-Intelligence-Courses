@@ -51,8 +51,25 @@ if [ -n "$TEX_FILE" ]; then
   latexmk -pdf -shell-escape -interaction=nonstopmode -file-line-error -bibtex -use-make "$TEX_FILE" || echo "Warning: PDF build had issues but continuing..."
   latexmk -pdf -shell-escape -interaction=nonstopmode -file-line-error -bibtex -use-make "$TEX_FILE" || echo "Warning: PDF build had issues but continuing..."
 else
-  latexmk -pdf -shell-escape -interaction=nonstopmode -file-line-error -bibtex -use-make $FILE_PREFIX*.tex || echo "Warning: PDF build had issues but continuing..."
-  latexmk -pdf -shell-escape -interaction=nonstopmode -file-line-error -bibtex -use-make $FILE_PREFIX*.tex || echo "Warning: PDF build had issues but continuing..."
+  # Main .tex files live in per-topic subfolders (CV/ NLP/ GenAI/ ...).
+  # Collect them while skipping the shared infra folders, which contain
+  # \input-only fragments (cover.tex, packages.tex, ...) that are NOT
+  # standalone documents and must not be compiled directly.
+  SHARED_DIRS="preamble sections images assets style_files"
+  TEX_FILES=()
+  for dir in */; do
+    dir="${dir%/}"
+    case " $SHARED_DIRS " in *" $dir "*) continue ;; esac
+    for f in "$dir"/$FILE_PREFIX*.tex; do
+      [ -f "$f" ] && TEX_FILES+=("$f")
+    done
+  done
+  if [ ${#TEX_FILES[@]} -eq 0 ]; then
+    echo "No matching .tex files found in topic subfolders."; exit 1
+  fi
+  echo "Building ${#TEX_FILES[@]} file(s): ${TEX_FILES[*]}"
+  latexmk -pdf -shell-escape -interaction=nonstopmode -file-line-error -bibtex -use-make "${TEX_FILES[@]}" || echo "Warning: PDF build had issues but continuing..."
+  latexmk -pdf -shell-escape -interaction=nonstopmode -file-line-error -bibtex -use-make "${TEX_FILES[@]}" || echo "Warning: PDF build had issues but continuing..."
 fi
 # latexmk -f -pdf *.tex || echo "Warning: PDF build had issues but continuing..."
 # latexmk -pdf -shell-escape -interaction=nonstopmode -file-line-error -bibtex -use-make *.tex || echo "Warning: PDF build had issues but continuing..."
@@ -62,7 +79,9 @@ fi
 if [ "$OUTPUT_DIR" != "." ]; then
   echo "Moving PDFs to $OUTPUT_DIR/"
   if [ -n "$TEX_FILE" ]; then
-    PDF_NAME="${TEX_FILE%.tex}.pdf"
+    # latexmk writes the PDF into the cwd (LaTeX/) using the basename only,
+    # even when the source .tex is in a subfolder (e.g. CV/Day-1_CNN_Recap.tex).
+    PDF_NAME="$(basename "${TEX_FILE%.tex}").pdf"
     mv "$PDF_NAME" "../$OUTPUT_DIR/" || { echo "Error: Could not move PDF"; exit 1; }
   else
     mv *.pdf "../$OUTPUT_DIR/" || { echo "Error: Could not move PDFs"; exit 1; }
@@ -70,9 +89,11 @@ if [ "$OUTPUT_DIR" != "." ]; then
   # mv *.pdf "../$OUTPUT_DIR/" || { echo "Error: Could not move PDF"; exit 1; }
 fi
 
-# Clean up auxiliary files
+# Clean up auxiliary files (latexmk writes them into the cwd / LaTeX root,
+# so clean here regardless of which subfolder the source .tex lives in).
 echo "Cleaning up auxiliary files..."
-latexmk -C
-rm -f *.nav *.snm *.out *.toc *.aux *.bbl *.log *.fdb_latexmk *.fls *.vrb *.bcf *.run.xml *.synctex.gz 2>/dev/null; echo "Auxiliary files cleaned."
+latexmk -C */*.tex 2>/dev/null || true
+rm -f *.nav *.snm *.out *.toc *.aux *.bbl *.blg *.log *.fdb_latexmk *.fls *.vrb *.bcf *.run.xml *.synctex.gz 2>/dev/null || true
+echo "Auxiliary files cleaned."
 
 echo "Build completed successfully!" 

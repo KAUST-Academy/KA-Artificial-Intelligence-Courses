@@ -1,4 +1,4 @@
-# KA-Artificial-Intelligence-Courses
+# Artificial-Intelligence-Courses
 This is the base repo for all Artificial Intelligence courses for KAUST Academy.
 
 
@@ -14,10 +14,21 @@ project-root/
 │
 ├── build.sh           # The build script
 ├── Lectures/          # (Default) Output directory for generated PDFs
-└── LaTeX/             # Directory containing .tex source files
-    ├── file1.tex
-    ├── file2.tex
-    └── ...
+└── LaTeX/             # LaTeX project
+    ├── Computer_Vision/   # Compilable main .tex, organized by topic
+    │   ├── 01_Introduction_to_Computer_Vision_and_CNNs.tex
+    │   └── ...
+    ├── Natural_Language_Processing/
+    ├── Generative_AI/
+    ├── Introduction_To_AI/
+    ├── Reinforcement_Learning/
+    ├── Review_needed/
+    ├── sections/      # Shared content \input{sections/...}
+    ├── preamble/      # Shared \input{preamble/...}
+    ├── images/        # Shared figures
+    ├── assets/        # Shared per-lecture assets
+    ├── style_files/   # Logos + .sty helpers
+    └── *.sty *.cls references.bib   # Shared beamer theme + bibliography
 
 ```
 
@@ -37,15 +48,15 @@ From the root directory, run the build script:
 ./build.sh
 ````
 
-This compiles **all** `.tex` files in the `LaTeX/` directory and moves the resulting PDFs to the `Lectures/` folder.
+This compiles **all** `.tex` files across the topic subfolders in `LaTeX/` and moves the resulting PDFs to the `Lectures/` folder.
 
 ### Compile a Specific File
 
 ```bash
-./build.sh --file filename.tex
+./build.sh --file Computer_Vision/01_Introduction_to_Computer_Vision_and_CNNs.tex
 ```
 
-Replace `filename.tex` with the name of the LaTeX file (located inside the `LaTeX/` directory) you want to compile.
+Pass the path **relative to the `LaTeX/` directory**, i.e. `<Topic>/<filename>.tex` (the main `.tex` files live in topic subfolders such as `Computer_Vision/`, `Natural_Language_Processing/`, `Generative_AI/`, `Introduction_To_AI/`, `Reinforcement_Learning/`, `Review_needed/`).
 
 ### Specify an Output Directory
 
@@ -65,7 +76,8 @@ The script automatically cleans up auxiliary files generated during the build pr
 
 ## ❗ Notes
 
-* All LaTeX source files **must be located in the `LaTeX/` directory**.
+* Main LaTeX source files live in **topic subfolders under `LaTeX/`** (e.g. `LaTeX/CV/`, `LaTeX/NLP/`); shared content (`sections/`, `preamble/`, `images/`, themes) stays at the `LaTeX/` root so builds must run from there (the script handles this).
+* When using `--file`, give the path relative to `LaTeX/`, e.g. `--file Natural_Language_Processing/Lecture-9_Prompting+RAG.tex`.
 * If the specified file does not exist, the script will exit with an error.
 * If no `--file` is provided, the script will default to building all `.tex` files.
 

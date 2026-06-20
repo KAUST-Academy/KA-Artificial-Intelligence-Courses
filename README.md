@@ -1,4 +1,4 @@
-# KA-Artificial-Intelligence-Courses
+# Artificial-Intelligence-Courses
 This is the base repo for all Artificial Intelligence courses for KAUST Academy.
 
 

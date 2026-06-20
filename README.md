@@ -15,13 +15,13 @@ project-root/
 ├── build.sh           # The build script
 ├── Lectures/          # (Default) Output directory for generated PDFs
 └── LaTeX/             # LaTeX project
-    ├── CV/            # Compilable main .tex, organized by topic
-    │   ├── Day-1_CNN_Recap.tex
+    ├── Computer_Vision/   # Compilable main .tex, organized by topic
+    │   ├── 01_Introduction_to_Computer_Vision_and_CNNs.tex
     │   └── ...
-    ├── NLP/
-    ├── GenAI/
-    ├── IntroToAI/
-    ├── RL/
+    ├── Natural_Language_Processing/
+    ├── Generative_AI/
+    ├── Introduction_To_AI/
+    ├── Reinforcement_Learning/
     ├── Review_needed/
     ├── sections/      # Shared content \input{sections/...}
     ├── preamble/      # Shared \input{preamble/...}
@@ -53,10 +53,10 @@ This compiles **all** `.tex` files across the topic subfolders in `LaTeX/` and m
 ### Compile a Specific File
 
 ```bash
-./build.sh --file CV/Day-1_CNN_Recap.tex
+./build.sh --file Computer_Vision/01_Introduction_to_Computer_Vision_and_CNNs.tex
 ```
 
-Pass the path **relative to the `LaTeX/` directory**, i.e. `<Topic>/<filename>.tex` (the main `.tex` files live in topic subfolders such as `CV/`, `NLP/`, `GenAI/`, `IntroToAI/`, `RL/`, `Review_needed/`).
+Pass the path **relative to the `LaTeX/` directory**, i.e. `<Topic>/<filename>.tex` (the main `.tex` files live in topic subfolders such as `Computer_Vision/`, `Natural_Language_Processing/`, `Generative_AI/`, `Introduction_To_AI/`, `Reinforcement_Learning/`, `Review_needed/`).
 
 ### Specify an Output Directory
 
@@ -77,7 +77,7 @@ The script automatically cleans up auxiliary files generated during the build pr
 ## ❗ Notes
 
 * Main LaTeX source files live in **topic subfolders under `LaTeX/`** (e.g. `LaTeX/CV/`, `LaTeX/NLP/`); shared content (`sections/`, `preamble/`, `images/`, themes) stays at the `LaTeX/` root so builds must run from there (the script handles this).
-* When using `--file`, give the path relative to `LaTeX/`, e.g. `--file NLP/Lecture-9_Prompting+RAG.tex`.
+* When using `--file`, give the path relative to `LaTeX/`, e.g. `--file Natural_Language_Processing/Lecture-9_Prompting+RAG.tex`.
 * If the specified file does not exist, the script will exit with an error.
 * If no `--file` is provided, the script will default to building all `.tex` files.
 

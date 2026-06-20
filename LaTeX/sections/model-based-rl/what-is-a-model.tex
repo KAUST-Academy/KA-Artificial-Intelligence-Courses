@@ -1,0 +1,106 @@
+\section{What is a Model?}
+% Slide 6: the intuitive answer FIRST: what a model actually is.
+\begin{frame}{What is a Model?}
+\begin{itemize}
+    \item A model is a \textbf{learned simulator of the environment}
+    \item It is \emph{not} a state, and \emph{not} the real environment itself:
+          it is a \emph{function} (e.g.\ a neural network) that \emph{imitates}
+          how the environment behaves
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What is a Model?}
+\begin{itemize}
+    \item A model is a \textbf{learned simulator of the environment}
+    \item It is \emph{not} a state, and \emph{not} the real environment itself:
+          it is a \emph{function} (e.g.\ a neural network) that \emph{imitates}
+          how the environment behaves
+    \item You ask it: \emph{``if I take action $a$ in state $s$, what happens
+          next?''}
+    \item It answers with a predicted \textbf{next state} $s'$ and \textbf{reward}
+          $r$, just like the real environment would, but without having to
+          actually be there
+\end{itemize}
+\end{frame}
+
+% Slide: the picture: model stands in for the environment.
+\begin{frame}{What is a Model?}
+\definecolor{mbgreen}{RGB}{122,173,75}
+\definecolor{mborange}{RGB}{237,148,72}
+\definecolor{mbblue}{RGB}{79,129,189}
+\centering
+\begin{tikzpicture}[font=\small, >={Stealth[length=2.6mm]},
+    blk/.style={rounded corners=4pt, draw, thick, align=center,
+                minimum width=2.6cm, minimum height=1.0cm}]
+    % real environment
+    \node[blk, draw=mbgreen, fill=mbgreen!12] (env) at (0,1.4) {real\\environment};
+    \node[blk, draw=mbblue, fill=mbblue!12]   (mod) at (0,-1.0) {model $f_\phi$\\(a neural net)};
+    \node[left=1.9cm of env, align=center] (in1) {state $s$\\action $a$};
+    \node[left=1.9cm of mod, align=center] (in2) {state $s$\\action $a$};
+    \node[right=1.9cm of env, align=center] (out1) {next state $s'$\\reward $r$};
+    \node[right=1.9cm of mod, align=center] (out2) {\emph{predicted} $s'$\\\emph{predicted} $r$};
+    \draw[->, thick] (in1) -- (env);
+    \draw[->, thick] (env) -- (out1);
+    \draw[->, thick] (in2) -- (mod);
+    \draw[->, thick] (mod) -- (out2);
+    \node[mbblue!70!black, font=\footnotesize] at (0,-2.2)
+        {the model \emph{imitates} the environment};
+\end{tikzpicture}
+\begin{itemize}
+    \item Same inputs, same kind of outputs: the model is a stand-in we can
+          query as often as we like, for free
+\end{itemize}
+\end{frame}
+
+% Slide 7: now the formalism, tied back to the picture.
+\begin{frame}{What is a Model? (Formally)}
+\begin{itemize}
+    \item The environment is a Markov Decision Process
+          $\langle \mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R} \rangle$:
+    \begin{itemize}
+        \item $\mathcal{P}$: the true transition dynamics (next-state rule),
+              \emph{unknown}
+        \item $\mathcal{R}$: the true reward function, \emph{unknown}
+    \end{itemize}
+    \item We assume the states $\mathcal{S}$ and actions $\mathcal{A}$ are known
+    \item The model $\mathcal{M}_\phi = \langle \mathcal{P}_\phi, \mathcal{R}_\phi \rangle$
+          \emph{learns} to approximate the unknown parts:
+          $\mathcal{P}_\phi \approx \mathcal{P}$ and $\mathcal{R}_\phi \approx \mathcal{R}$
+    \item Here $\phi$ are the model's \textbf{parameters}: the weights we train
+          from data
+    \item When the model predicts the next state directly we write
+          $s' = f_\phi(s, a)$, the same $f_\phi$ from the diagram, used in the
+          algorithm shortly
+\end{itemize}
+\[
+    \underbrace{s_{t+1}}_{\text{next state}} \sim
+    \underbrace{\mathcal{P}_\phi(s_{t+1} \mid s_t, a_t)}_{\text{predicted from current state \& action}},
+    \qquad
+    \underbrace{r_{t+1}}_{\text{reward}} \sim
+    \mathcal{R}_\phi(r_{t+1} \mid s_t, a_t)
+\]
+\end{frame}
+
+% Slide: only one of the two is fine.
+\begin{frame}{What is a Model? (Formally)}
+\begin{itemize}
+    \item The environment is a Markov Decision Process
+          $\langle \mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R} \rangle$:
+    \begin{itemize}
+        \item $\mathcal{P}$: the true transition dynamics (next-state rule),
+              \emph{unknown}
+        \item $\mathcal{R}$: the true reward function, \emph{unknown}
+    \end{itemize}
+    \item We assume the states $\mathcal{S}$ and actions $\mathcal{A}$ are known
+    \item The model $\mathcal{M}_\phi = \langle \mathcal{P}_\phi, \mathcal{R}_\phi \rangle$
+          \emph{learns} to approximate the unknown parts:
+          $\mathcal{P}_\phi \approx \mathcal{P}$ and $\mathcal{R}_\phi \approx \mathcal{R}$
+    \item Here $\phi$ are the model's \textbf{parameters}: the weights we train
+          from data
+    \item When the model predicts the next state directly we write
+          $s' = f_\phi(s, a)$, the same $f_\phi$ from the diagram, used in the
+          algorithm shortly
+    \item We can also learn just \emph{one} of the two (only dynamics, or only
+          reward); often the dynamics $\mathcal{P}_\phi$ is the hard part
+\end{itemize}
+\end{frame}

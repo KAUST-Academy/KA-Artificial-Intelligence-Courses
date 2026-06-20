@@ -1,0 +1,14 @@
+\begin{frame}{From $n$-step Returns to GAE}
+\begin{itemize}
+    \item Between 1-step TD and full Monte Carlo lies a whole family of \textbf{$n$-step advantage estimators}:
+    $$\hat{A}^{(n)}_t = \underbrace{r_t + \gamma r_{t+1} + \dots + \gamma^{n-1} r_{t+n-1} + \gamma^{n} V_\phi(s_{t+n})}_{n\text{-step return}} \;-\; V_\phi(s_t)$$
+    \begin{itemize}
+        \item Small $n$: low variance, high bias; large $n$: high variance, low bias
+    \end{itemize}
+    \pause
+    \item Each $\hat{A}^{(n)}_t$ telescopes into a sum of TD residuals: $\hat{A}^{(n)}_t = \sum_{l=0}^{n-1} \gamma^{l}\, \delta_{t+l}$
+    \item \textbf{GAE} avoids picking a single $n$: take an \textbf{exponentially-weighted average} over all $n$ with decay $\lambda$:
+    $$\hat{A}^{\mathrm{GAE}(\gamma,\lambda)}_t = (1-\lambda)\sum_{n=1}^{\infty} \lambda^{n-1}\, \hat{A}^{(n)}_t \;=\; \sum_{l=0}^{\infty} (\gamma\lambda)^l\, \delta_{t+l}$$
+    \item $\lambda$ smoothly tunes the bias--variance trade-off (next slide: the limits)
+\end{itemize}
+\end{frame}

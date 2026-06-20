@@ -1,0 +1,171 @@
+\section{Deep Exploration in MDPs}
+
+\begin{frame}{}
+    \LARGE Exploration: \textbf{From Bandits to Deep RL}
+\end{frame}
+
+\begin{frame}{Why Bandit Exploration Doesn't Scale Naively}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item Bandits gave us \emph{optimism} (UCB), \emph{posterior sampling} (Thompson), and \emph{policy gradient with stochastic policy} --- in one step
+    \item In an MDP with sparse rewards, none of these scale naively:
+    \begin{itemize}
+        \item Visiting every $(s,a)$ enough times is infeasible
+        \item $\epsilon$-greedy is provably weak (linear regret)
+        \item Uniform random exploration drowns in pixels
+    \end{itemize}
+    \item Note: SAC's $-\log\pi$ entropy bonus (Day 6) is \emph{undirected} exploration --- what follows is \emph{directed}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Through-Line: Montezuma's Revenge}
+\begin{center}
+\textit{The canonical hard-exploration Atari game.}
+\end{center}
+\vspace{0.6em}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item \textbf{Vanilla DQN:} $\sim 0$ points (extrinsic reward is essentially never reached)
+    \item \textbf{Pseudo-counts (2016):} first dramatic progress
+    \item \textbf{Random Network Distillation (2018):} first above-human, no demonstrations
+\end{itemize}
+\vspace{0.8em}
+\centering\small\textcolor{gray}{This is the single benchmark we'll use to anchor every method in this section.}
+\end{frame}
+
+\begin{frame}{Aside: Hindsight Experience Replay (HER)}
+\textbf{An orthogonal trick for sparse-reward goal-conditioned RL.}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item Idea: after a failed episode (didn't reach the goal), relabel it as a \emph{success} for the goal it actually reached
+    \item Now every episode has a non-zero learning signal
+    \item Combines with any off-policy algorithm
+    \item Cite: \textbf{Andrychowicz et al., NeurIPS 2017} --- \emph{Hindsight Experience Replay}
+\end{itemize}
+\vspace{0.4em}
+\centering\small\textcolor{gray}{(Forward-referenced from Day 5.)}
+\end{frame}
+
+\begin{frame}{Bootstrapped DQN: Thompson Sampling for MDPs}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item Idea: \emph{Posterior Sampling for RL (PSRL).} Maintain a posterior over the Q-function; sample one Q per episode and act greedily w.r.t.\ the sample
+    \item For an \emph{entire episode}: temporally-extended (``deep'') exploration --- fundamentally different from $\epsilon$-greedy's per-step dithering
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bootstrapped DQN: How It Approximates the Posterior}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item \textbf{$K$ parallel Q-heads}: $K$ separate output layers on top of a single shared convolutional trunk, each predicting its own Q-function
+    \item Each head trained on its own \textbf{bootstrap-sampled} (with replacement) subset of replay --- the standard statistical-bootstrap trick; different heads see different data, so they disagree
+    \item \emph{Each episode}: pick one head uniformly at random and act greedily by it for the whole episode
+    \item Disagreement across heads $\approx$ posterior uncertainty over the true Q-function
+    \item Cite: \textbf{Osband, Blundell, Pritzel \& Van Roy, NeurIPS 2016} --- \emph{Deep Exploration via Bootstrapped DQN}
+    \item \textcolor{red}{Thompson sampling lifted to MDPs} --- same bandit method, with a Q-function instead of an arm-reward.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Count-Based Exploration: The Idea}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item \emph{Tabular intuition:} a UCB-style exploration bonus
+    \[
+        r_t^+ \;=\; r_t \;+\; \beta \cdot \frac{1}{\sqrt{N(s,a)}}
+    \]
+    encourages visiting under-counted $(s,a)$ pairs
+    \item Provably good in tabular MDPs --- a direct lift of UCB1 from bandits
+    \item \emph{Problem in deep RL:} pixels are essentially never visited twice; $N(s,a) = 1$ almost always, and the bonus becomes uninformative
+    \item Need a \emph{generalizable} notion of ``count''
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pseudo-Counts: UCB in Pixel Space}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item Use a density model $\rho$ over states. Let $\rho'(s)$ be its prediction \emph{after} one more observation of $s$
+    \item Define a \emph{pseudo-count}:
+    \[
+        \hat{N}(s) \;=\; \frac{\rho(s)\,(1 - \rho'(s))}{\rho'(s) - \rho(s)}
+    \]
+    A novel state has small $\rho(s)$, hence small $\hat{N}(s)$, hence large bonus
+    \item Cite: \textbf{Bellemare et al., NeurIPS 2016} --- \emph{Unifying Count-Based Exploration and Intrinsic Motivation}
+    \item \textbf{Result on Montezuma:} \emph{first dramatic progress}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Curiosity / ICM: The Idea}
+\textbf{Intrinsic reward $=$ ``surprise''} --- the agent is rewarded for finding observations it can't yet predict.
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item Embed states into a feature space: $\phi(s) \in \mathbb{R}^d$ (a learned encoder)
+    \item Train a \textbf{forward-dynamics model} $f$ to predict the \emph{next-state features} from the current features and action:
+    \[
+        \hat{\phi}(s_{t+1}) \;=\; f\!\big(\phi(s_t),\, a_t\big)
+    \]
+    (so $\hat{\phi}(s_{t+1})$ is the model's \emph{predicted} embedding of $s_{t+1}$; $\phi(s_{t+1})$ is the actual one observed)
+    \item Intrinsic reward $=$ how wrong the prediction was:
+    \[
+        r_t^i \;=\; \tfrac{1}{2}\big\|\,\hat{\phi}(s_{t+1}) \,-\, \phi(s_{t+1})\,\big\|^2
+    \]
+    \item High prediction error $\Rightarrow$ novel transition $\Rightarrow$ bonus to visit it again
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Curiosity / ICM: Why the Feature Space Matters}
+\textbf{The noisy-TV problem.} Picture a TV in the environment showing pure random static. A naive curiosity agent will sit and stare at it forever --- static is \emph{always} unpredictable, so the prediction-error bonus never decays. The agent is endlessly ``surprised'' by useless noise.
+\vspace{0.4em}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item Fix: don't let $\phi$ encode action-irrelevant detail. Train $\phi$ with an \textbf{inverse-dynamics} objective --- predict the action $a_t$ that was taken from the embeddings $\big(\phi(s_t),\, \phi(s_{t+1})\big)$
+    \item This forces $\phi$ to encode only features the agent can \emph{affect} --- the noisy TV is filtered out, since the agent's actions don't change what's on it
+    \item Cite: \textbf{Pathak, Agrawal, Efros \& Darrell, ICML 2017} --- \emph{Curiosity-driven Exploration by Self-supervised Prediction}
+    \item Strong results on Mario, VizDoom, and sparse-reward navigation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Random Network Distillation (RND)}
+\textbf{Curiosity made absurdly simple:}
+\begin{itemize}
+    \setlength{\itemsep}{0.55em}
+    \item Pick a \emph{fixed, randomly-initialized} target network $f^*$
+    \item Train a predictor $f_\theta$ to match $f^*(s)$ on visited states
+    \item Intrinsic reward: $r_t^i = \|f_\theta(s_t) - f^*(s_t)\|^2$
+\end{itemize}
+\vspace{0.6em}
+\begin{itemize}
+    \item Novel states have high prediction error (the predictor hasn't been trained there) $\Rightarrow$ high bonus
+    \item No dynamics model, no inverse model, no density model
+\end{itemize}
+\end{frame}
+
+\begin{frame}{RND: Results and Caveat}
+\begin{itemize}
+    \setlength{\itemsep}{0.6em}
+    \item Cite: \textbf{Burda, Edwards, Storkey, Klimov, ICLR 2019} --- \emph{Exploration by Random Network Distillation}
+    \item \textbf{Result on Montezuma:} \emph{first above-human performance without demonstrations or game-state access}
+    \item \emph{Caveat:} still subject to the noisy-TV issue in principle; in practice works because randomly-initialized networks aren't very sensitive to stochastic pixel noise
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Mapping Bandits $\longrightarrow$ Deep RL}
+\begin{center}
+\renewcommand{\arraystretch}{1.55}
+\small
+\begin{tabular}{p{0.35\textwidth}p{0.52\textwidth}}
+\hline
+\textbf{Bandit method} & \textbf{Deep-RL descendant} \\
+\hline
+UCB / $1/\sqrt{N}$ bonus & Count-based / pseudo-counts (Bellemare 2016) \\
+Thompson sampling     & Bootstrapped DQN / PSRL (Osband 2016) \\
+Gradient bandits      & \textcolor{blue}{Entropy bonus --- SAC (Day 6)} \\
+\emph{(new in deep RL)} & Curiosity / ICM (Pathak 2017); RND (Burda 2018) \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{0.7em}
+\begin{itemize}
+    \item \textcolor{red}{\textbf{Entropy is one answer to exploration.}} Optimism, posterior sampling, and curiosity are the others.
+    \item Day 6's $-\log\pi$ bonus is the gradient-bandit descendant --- now we have the full family.
+\end{itemize}
+\end{frame}

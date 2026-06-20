@@ -1,0 +1,47 @@
+\begin{frame}{Automatic Temperature Tuning}
+\small
+\textbf{Constrained problem} --- maximise return subject to a minimum policy entropy $\bar{\mathcal{H}}$ (so we set a \emph{target entropy} instead of a temperature):
+\[
+\max_{\pi_{0:T}} \mathbb{E}_{\rho_\pi}\!\left[ \sum_{t} r(\mathbf{s}_t, \mathbf{a}_t) \right] \;\; \text{s.t.}\;\; \mathbb{E}_{(\mathbf{s}_t, \mathbf{a}_t) \sim \rho_\pi}\!\left[ -\log \pi_t(\mathbf{a}_t \mid \mathbf{s}_t) \right] \geq \bar{\mathcal{H}}\;\; \forall t
+\]
+
+\textbf{Dual.} Introduce a Lagrange multiplier $\alpha_t\!\ge\!0$ per constraint (Levine \rref{3}). Each inner problem is the usual MaxEnt objective with $\alpha_t$ as temperature; the multiplier itself minimises the dual:
+\[
+\alpha_t^{*} = \arg\min_{\alpha_t \geq 0}\; \mathbb{E}_{\mathbf{a}_t \sim \pi_t^{*}}\!\left[\, -\alpha_t\big(\log \pi_t^{*}(\mathbf{a}_t \mid \mathbf{s}_t) + \bar{\mathcal{H}}\big) \,\right]
+\]
+
+\textbf{In practice} --- one SGD step on a single scalar, jointly with the actor/critic updates:
+\[
+J(\alpha) = \mathbb{E}_{\mathbf{a}_t \sim \pi_\phi}\!\left[\, -\alpha\big(\log\pi_\phi(\mathbf{a}_t\mid\mathbf{s}_t) + \bar{\mathcal{H}}\big) \,\right],\quad
+\alpha \leftarrow \alpha - \lambda\,\hat\nabla_\alpha J(\alpha)
+\]
+\end{frame}
+\begin{frame}{Implementation Cheatsheet}
+\renewcommand{\arraystretch}{1.6}
+\begin{center}
+\small
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Setting} & \textbf{Default (Haarnoja 2018b)} \rref{2} \\
+\hline
+Policy parameterization & Squashed Gaussian:\ $\mathbf{a}=\tanh(\mu_\phi+\sigma_\phi\!\odot\!\epsilon)$ \\
+\hline
+Critic & Twin soft $Q_{\theta_1}, Q_{\theta_2}$; clipped double-$Q$ target \\
+\hline
+Target network update & Polyak: $\bar\theta_i \leftarrow \tau\theta_i + (1-\tau)\bar\theta_i$,\ \ $\tau = 0.005$ \\
+\hline
+Target entropy $\bar{\mathcal{H}}$ & $\bar{\mathcal{H}} = -\dim(\mathcal{A})$ (one nat per action dim) \\
+\hline
+Optimizer & Adam, learning rate $3\!\times\!10^{-4}$ for $Q$, $\pi$, and $\alpha$ \\
+\hline
+Discount $\gamma$ & $0.99$ \\
+\hline
+Replay buffer / batch & $|\mathcal{D}| = 10^{6}$,\ \ batch size $256$ \\
+\hline
+Reward scale (v1 only) & task-specific (replaced by auto-$\alpha$ in v2) \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{0.3em}
+{\footnotesize These are the defaults that ship with most SAC implementations (SB3, rlpyt, the authors' code). Tune only $\bar{\mathcal{H}}$ and network sizes per task.}
+\end{frame}

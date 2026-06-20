@@ -1,0 +1,25 @@
+\begin{frame}{A cool application of DDPG: Wayve}
+\begin{columns}[T]
+\begin{column}{0.45\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,height=0.7\textheight,keepaspectratio]{images/continuous-control-1/figures/wayve-car.jpg}
+\end{figure}
+\end{column}
+\begin{column}{0.55\textwidth}
+\vspace{0.5em}
+\textbf{Learning to Drive in a Day} \rref{11}
+\vspace{0.3em}
+
+\footnotesize We selected a simple continuous action domain model-free reinforcement learning algorithm: \textcolor{blue}{\underline{deep deterministic policy gradients (DDPG)}} \rref{5}, to show that an off-the-shelf reinforcement learning algorithm with no task-specific adaptation is capable of solving the MDP posed in Section III-A.
+
+\vspace{0.4em}
+
+DDPG consists of two function approximators: a critic $Q : \mathcal{S} \times \mathcal{A} \to \mathbb{R}$, which estimates the value $Q(s, a)$ of the expected cumulative discounted reward upon using action $a$ in state $s$, trained to satisfy the Bellman equation
+\[
+Q(s_t, a_t) = r_{t+1} + \gamma(1 - d_t) Q(s_{t+1}, \pi(s_{t+1})),
+\]
+under a policy given by the actor $\pi : \mathcal{S} \to \mathcal{A}$, which attempts to estimate a $Q$-optimal policy $\pi(s) = \arg\max_a Q(s, a)$; here $(s_t, a_t, r_{t+1}, d_{t+1}, s_{t+1})$ is an experience tuple, a transition
+\end{column}
+\end{columns}
+\end{frame}

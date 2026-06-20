@@ -1,0 +1,52 @@
+\section{Case Study}
+% Split into setup (photos + methods) and results (plots, shown large). The
+% original single slide crammed a 4-panel composite into 2/3 of the width, so
+% the plot legends/axes were unreadable; the plots now get a full slide.
+
+% === Setup: the tasks and the methods compared =========================
+\begin{frame}{Case study: Model-Based RL for dexterous manipulation}
+\definecolor{csblue}{RGB}{40,90,200}
+\definecolor{csred}{RGB}{200,40,40}
+\definecolor{csgreen}{RGB}{40,150,70}
+\definecolor{csorange}{RGB}{230,140,40}
+\definecolor{cscyan}{RGB}{60,160,200}
+\centering
+\includegraphics[width=0.9\linewidth]{images/model-based-rl/figures/case-study-photos.jpg}\\
+{\scriptsize Tasks: Baoding balls (left) and handwriting (right) on a simulated dexterous hand}
+\vspace{0.4em}
+\begin{columns}[t]
+\begin{column}{0.48\textwidth}
+\footnotesize
+\textbf{Model-free methods:}
+\begin{itemize}
+    \item[] {\color{csblue}\textbf{SAC}}: actor--critic method
+    \item[] {\color{csred}\textbf{NPG}}: policy gradient method
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\footnotesize
+\textbf{Model-based methods:}
+\begin{itemize}
+    \item[] {\color{csgreen}\textbf{PDDM}}: proposed method
+    \item[] {\color{csorange}\textbf{MBPO}}: RL with model-generated data
+    \item[] {\color{cscyan}\textbf{PETS}}: CEM-based planner
+    \item[] {\color{csorange}\textbf{Nagabandi et al.}}: random shooting, no ensembles
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+% === Results: the plots, shown large ===================================
+\begin{frame}{Case study: Results}
+\definecolor{csgreen}{RGB}{40,150,70}
+\centering
+\includegraphics[width=0.86\linewidth]{images/model-based-rl/figures/case-study-plots.jpg}
+\vspace{0.2em}
+\begin{itemize}
+    \item Model-based {\color{csgreen}\textbf{PDDM}} (green) reaches higher reward
+          and lower tracking error with \emph{far less data} than the model-free
+          baselines (SAC, NPG)
+\end{itemize}
+\vspace{0.2em}
+{\centering\tiny Nagabandi et al., \emph{Deep Dynamics Models for Learning Dexterous Manipulation}\par}
+\end{frame}

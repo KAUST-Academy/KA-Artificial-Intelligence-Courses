@@ -1,0 +1,49 @@
+% Closes the day: the two halves compose. Pulls together the cliff (dynamics
+% error), the ensembles section, MBPO rollouts, and the conservatism principle.
+
+\begin{frame}{Closing the Loop: Model-Based Offline RL}
+\definecolor{oblue}{RGB}{16,53,103}
+\definecolor{ored}{RGB}{158,28,38}
+\definecolor{ogreen}{RGB}{106,168,79}
+\centering
+\begin{tikzpicture}[font=\scriptsize, >={Stealth[length=2.4mm]},
+    obox/.style={rounded corners, align=center, thick, inner sep=4pt}]
+    \node[oblue, font=\scriptsize\bfseries] at (0.4,3.15) {Part 1: model-based};
+    \node[obox, draw=oblue, fill=oblue!12] (f) at (0.4,2.3)  {dynamics model $f_\phi$ from $\mathcal{D}$};
+    \node[obox, draw=oblue, fill=oblue!12] (e) at (0.4,1.35) {ensembles $\Rightarrow u(s,a)$};
+    \node[obox, draw=oblue, fill=oblue!12] (m) at (0.4,0.4)  {short rollouts (MBPO)};
+    \node[ored, font=\scriptsize\bfseries] at (7.7,3.15) {Part 2: offline};
+    \node[obox, draw=ored, fill=ored!12]  (p) at (7.7,2.3)  {pessimism under uncertainty};
+    \node[obox, draw=ored, fill=ored!12]  (c) at (7.7,0.4)  {conservatism (CQL)};
+    \node[obox, draw=ogreen, fill=ogreen!12, font=\scriptsize\bfseries, inner sep=6pt] (u) at (4.6,1.35)
+      {MOReL / MOPO / COMBO\\[1pt]\mdseries model-based $\cap$ offline};
+    \draw[->, thick] (f) -- (u);
+    \draw[->, thick] (e) -- (u);
+    \draw[->, thick] (m) -- (u);
+    \draw[->, thick] (p) -- (u);
+    \draw[->, thick] (c) -- (u);
+\end{tikzpicture}
+\begin{itemize}
+    \item Learn a model from $\mathcal{D}$ $\to$ it is wrong off-support (the
+          cliff!) $\to$ measure that with ensemble disagreement $\to$ build a
+          \emph{pessimistic MDP} $\to$ run MBPO inside it
+    \item \textbf{MOReL}, \textbf{MOPO}, \textbf{COMBO} are all instances of
+          \emph{one} idea: learn a model from the batch, then \emph{subtract a
+          penalty wherever the model is uncertain} (e.g.\ reward
+          $\hat r - \lambda\, u(s,a)$). This is pessimism, now about the \emph{model}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{One Story, Two Signs}
+\begin{itemize}
+    \item Exploration (Day 7) and offline RL (today) are the \textbf{same OOD
+          problem, in reverse}
+    \item Online: uncertainty is an opportunity, so add the bonus and go look
+    \item Offline: uncertainty is a hazard, so subtract the bonus and stay home
+\end{itemize}
+\vspace{0.8em}
+\begin{center}
+\textcolor{red}{Optimism for exploration, pessimism for offline data:
+ the sign of the uncertainty bonus is the whole story.}
+\end{center}
+\end{frame}

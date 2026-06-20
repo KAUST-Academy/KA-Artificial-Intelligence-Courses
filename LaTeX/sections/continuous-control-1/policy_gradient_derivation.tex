@@ -1,0 +1,177 @@
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item \textbf{Goal:}
+    \vspace{0.5em}
+    \\ Derive a gradient update rule to learn deterministic policy
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item \textbf{Goal:}
+    \vspace{0.5em}
+    \\ Derive a gradient update rule to learn deterministic policy
+    \vspace{1em}
+    \item \textbf{Idea:}
+    \vspace{0.5em}
+    \\ Adapt the stochastic policy gradient formulation for deterministic policies
+\end{itemize}
+\end{frame}
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Vanilla Stochastic Policy Gradient:
+\end{itemize}
+\vfill
+\begin{flushright}
+    \tiny Source: \rref{13}
+\end{flushright}
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Vanilla Stochastic Policy Gradient:
+\end{itemize}
+\[
+\theta^{\star} = \arg\max_{\theta} \underbrace{\mathbb{E}_{\tau \sim p_\theta(\tau)}\!\left[ \sum_t r(\mathbf{s}_t, \mathbf{a}_t) \right]}_{J(\theta)}
+\]
+\vfill
+\begin{flushright}
+    \tiny Source: \rref{13}
+\end{flushright}
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Vanilla Stochastic Policy Gradient:
+\end{itemize}
+\[
+\theta^{\star} = \arg\max_{\theta} \underbrace{\mathbb{E}_{\tau \sim p_\theta(\tau)}\!\left[ \sum_t r(\mathbf{s}_t, \mathbf{a}_t) \right]}_{J(\theta)}
+\]
+\[
+\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
+\]
+\vfill
+\begin{flushright}
+    \tiny Source: \rref{13}
+\end{flushright}
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Vanilla Stochastic Policy Gradient:
+\end{itemize}
+\[
+\theta^{\star} = \arg\max_{\theta} \underbrace{\mathbb{E}_{\tau \sim p_\theta(\tau)}\!\left[ \sum_t r(\mathbf{s}_t, \mathbf{a}_t) \right]}_{J(\theta)}
+\]
+\[
+\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
+\]
+\[
+\theta \leftarrow \theta + \alpha \nabla_\theta J(\theta)
+\]
+\vfill
+\begin{flushright}
+    \tiny Source: \rref{13}
+\end{flushright}
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Vanilla Stochastic Policy Gradient:
+\end{itemize}
+\[
+\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
+\]
+\vspace{1em}
+
+\large model-free
+\vspace{0.5em}
+
+\textcolor{red}{\large Not trivial to compute!}
+\vfill
+\begin{flushright}
+    \tiny Source: \rref{13}
+\end{flushright}
+\end{frame}
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Vanilla Stochastic Policy Gradient with Monte-Carlo Sampling:
+\end{itemize}
+\[
+\nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^{N} \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_{i,t} \mid \mathbf{s}_{i,t}) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_{i,t}, \mathbf{a}_{i,t}) \right)
+\]
+\vfill
+\begin{flushright}
+    \tiny Source: \rref{13}
+\end{flushright}
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Vanilla Stochastic Policy Gradient with Monte-Carlo Sampling:
+\end{itemize}
+\[
+\nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^{N} \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_{i,t} \mid \mathbf{s}_{i,t}) \right) \rbox{\left( \sum_{t=1}^{T} r(\mathbf{s}_{i,t}, \mathbf{a}_{i,t}) \right)}
+\]
+\vspace{1em}
+
+\textcolor{red}{Problem: Point Estimate -- High Variance!}
+\vfill
+\begin{flushright}
+    \tiny Source: \rref{13}
+\end{flushright}
+\end{frame}
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Vanilla Stochastic Policy Gradient:
+\end{itemize}
+\[
+\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
+\]
+\vfill
+\begin{flushright}
+    \tiny Source: \rref{13}
+\end{flushright}
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Vanilla Stochastic Policy Gradient:
+\end{itemize}
+\[
+\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
+\]
+{\footnotesize Grouping the causal return-to-go and recognising it as the action-value $Q^{\pi_\theta}(s_t,a_t)=\mathbb{E}\!\left[\sum_{t'\geq t} r \mid s_t,a_t\right]$ (Day 3):}
+\[
+= \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, \rbox{Q^{\pi_\theta}(s, a)} \right]
+\]
+\vspace{0.5em}
+
+True value function is still not trivial to compute
+\vfill
+\begin{flushright}
+    \tiny Source: \rref{13}
+\end{flushright}
+\end{frame}
+
+\begin{frame}{Background -- DPG}
+\begin{itemize}
+    \item Vanilla Stochastic Policy Gradient:
+\end{itemize}
+\[
+\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t, \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
+\]
+{\footnotesize Grouping the causal return-to-go and recognising it as the action-value $Q^{\pi_\theta}(s_t,a_t)=\mathbb{E}\!\left[\sum_{t'\geq t} r \mid s_t,a_t\right]$ (Day 3):}
+\[
+= \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, \rbox{Q^{\pi_\theta}(s, a)} \right]
+\]
+
+True value function is still not trivial to compute, but we can approximate it with a parameterized function:
+\[
+\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, \rbox{Q^{w}(s, a)} \right]
+\]
+\vfill
+\begin{flushright}
+    \tiny Source: \rref{13}
+\end{flushright}
+\end{frame}

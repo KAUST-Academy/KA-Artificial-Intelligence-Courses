@@ -1,0 +1,67 @@
+\section{Offline RL}
+% Part 2 of the day. Style matches the rest of the deck: build-up frames,
+% no \pause, colors defined inline inside each TikZ frame.
+
+% === A hidden assumption ================================================
+\begin{frame}{A Hidden Assumption}
+\begin{itemize}
+    \item Every algorithm in this course has shared one quiet privilege:
+          \textbf{if the agent acts badly, it can simply try again}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A Hidden Assumption}
+\begin{itemize}
+    \item Every algorithm in this course has shared one quiet privilege:
+          \textbf{if the agent acts badly, it can simply try again}
+    \item DQN, PPO, DDPG, SAC, MBPO: all interleave \emph{learning} with
+          \emph{acting}
+    \item Even model-based RL fixed its early mistakes by going back out and
+          collecting more data
+    \item What if there is no ``going back out''?
+\end{itemize}
+\end{frame}
+
+% === The setting (figure) ===============================================
+\begin{frame}{Offline RL: The Setting}
+\definecolor{oblue}{RGB}{16,53,103}
+\definecolor{ogreen}{RGB}{106,168,79}
+\definecolor{oorange}{RGB}{230,145,56}
+\definecolor{ored}{RGB}{158,28,38}
+\definecolor{ogray}{RGB}{125,125,125}
+\centering
+\begin{tikzpicture}[font=\small, >={Stealth[length=2.6mm]}]
+    \node[draw=oblue, fill=oblue!10, rounded corners, minimum width=2.4cm,
+          minimum height=0.95cm, thick] (agent) {Agent};
+    \node[draw=ogreen, fill=ogreen!12, rounded corners, minimum width=2.8cm,
+          minimum height=0.95cm, thick, right=4.6cm of agent] (env) {Environment};
+    \draw[->, thick, oblue] (env.north) to[bend right=30]
+      node[above]{$s_{t+1},\,r_{t+1}$} (agent.north);
+    \draw[->, thick, ogray, dashed] (agent.south) to[bend right=30]
+      node[pos=0.5](mid){} node[below=2pt]{$a_t$} (env.south);
+    \node[ored, font=\LARGE\bfseries] at ($(mid)+(0,0.08)$) {$\times$};
+    \node[ored, font=\scriptsize\bfseries] at ($(mid)+(0,-0.62)$) {no new interaction};
+    \node[cylinder, shape border rotate=90, draw=oorange, fill=oorange!15,
+          aspect=0.22, minimum width=1.9cm, minimum height=1.5cm, thick,
+          below=1.05cm of agent] (data) {$\mathcal{D}$};
+    \draw[->, very thick, oorange] (data) -- (agent)
+      node[midway, left=2pt, font=\scriptsize]{logged $(s,a,r,s')$};
+\end{tikzpicture}
+\begin{itemize}
+    \item Given: a \textbf{fixed} dataset $\mathcal{D} = \{(s_i, a_i, r_i, s'_i)\}$,
+          collected by an unknown \emph{behavior policy} $\pi_\beta$
+    \item Goal: the best possible policy, \textbf{without a single new interaction}
+\end{itemize}
+\end{frame}
+
+% === Why bother =========================================================
+\begin{frame}{Why Would We Tie Our Own Hands?}
+\begin{itemize}
+    \item Healthcare: we cannot experiment on patients
+    \item Autonomous driving: we cannot crash in order to learn
+    \item Recommenders, industrial control: years of logs, no appetite for live
+          exploration
+    \item The situation of modern machine learning: \textbf{mountains of logged
+          data, zero permission to explore}
+\end{itemize}
+\end{frame}

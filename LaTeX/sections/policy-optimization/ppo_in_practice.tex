@@ -1,0 +1,13 @@
+\begin{frame}{PPO in Practice}
+\begin{itemize}
+    \item The clipped objective is only half the story --- these implementation details matter \emph{as much as} $\varepsilon$, and explain why two ``correct'' PPO implementations can differ by an order of magnitude\footnotemark
+    \vspace{0.3em}
+    \item \textbf{Advantage normalisation:} standardise $\hat{A}_t$ per minibatch (stabilises gradient scale)
+    \item \textbf{Value-loss clipping:} clip the critic update like the policy
+    \item \textbf{Gradient clipping:} bound global grad-norm (typically $0.5$)
+    \item \textbf{KL early stopping:} end the epoch loop once mean KL exceeds a target --- a cheap trust-region safeguard
+    \item \textbf{Obs / reward normalisation:} running normalisation keeps inputs and returns well-scaled
+    \item \textbf{Orthogonal init:} small policy-head gain avoids an over-confident initial policy
+\end{itemize}
+\footnotetext{Andrychowicz et al.\ (2020), \emph{What Matters in On-Policy RL?}}
+\end{frame}

@@ -1,0 +1,13 @@
+\begin{frame}{From Baselines to Critics}
+\begin{itemize}
+    \item Day 3: subtracting a \textbf{state-dependent baseline} $b(s)$ reduces variance with zero bias:
+    $$\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_t\!\left[\nabla_\theta \log \pi_\theta(a_t|s_t)\, \bigl(Q^{\pi}(s_t,a_t) - b(s_t)\bigr)\right]$$
+    \item The best choice of baseline is $b(s) = V^{\pi}(s)$, giving $A^{\pi}(s,a) = Q^{\pi}(s,a) - V^{\pi}(s)$
+    \pause
+    \item But we don't know $V^{\pi}$ --- we have to \textbf{learn it}
+    \item This turns the baseline into a \textbf{critic}: a second network $V_\phi(s)$ trained alongside the actor $\pi_\theta$
+    \vspace{0.5em}
+    \item \textbf{Actor} $\pi_\theta(a|s)$: selects actions, updated by policy gradient
+    \item \textbf{Critic} $V_\phi(s)$: evaluates states, updated by TD learning
+\end{itemize}
+\end{frame}

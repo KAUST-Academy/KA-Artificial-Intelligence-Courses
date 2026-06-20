@@ -1,0 +1,27 @@
+\section{Group Relative Policy Optimization (GRPO)}
+\begin{frame}{}
+    \LARGE Policy Optimization: \textbf{GRPO}
+\end{frame}
+
+\begin{frame}{PPO Without a Critic: GRPO}
+\begin{itemize}
+    \item The fragile part of the Actor-Critic loop is the \textbf{critic} $V_\phi$ --- training two networks together is the main source of instability
+    \item \textbf{Group Relative Policy Optimization} (GRPO; Shao et al., 2024) removes the critic entirely
+    \pause
+    \item Per prompt/state, sample a \textbf{group} of $G$ outputs under $\pi_{\theta_\text{old}}$, scored with rewards $R_i$
+    \item Use the \textbf{group mean as the baseline} --- a Monte Carlo advantage, no value function:
+    $$\hat{A}_i = \frac{R_i - \overbrace{\mathrm{mean}(R_1,\dots,R_G)}^{\text{the ``Group Relative'' baseline}}}{\underbrace{\mathrm{std}(R_1,\dots,R_G)}_{\text{per-group advantage normalisation}}}$$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{GRPO: What Is and Isn't the Baseline}
+\begin{itemize}
+    \item Only the \textbf{mean-subtraction} is the GRPO contribution --- that is the ``Group Relative'' baseline replacing the critic $V_\phi$
+    \item The \textbf{std-normalisation} is a \emph{separate} stabilisation trick: it is exactly the per-minibatch advantage normalisation from the PPO-in-Practice slide, applied per group --- not part of the baseline
+    \item So a Monte Carlo baseline does \emph{not} ``need'' variance correction; the std term is an orthogonal, optional stabiliser
+    \pause
+    \item Plug $\hat{A}_i$ into the \emph{same} PPO-Clip objective (plus a KL term to a reference policy)
+    \item \textbf{Why it matters:} no critic $\Rightarrow$ no two-network instability and $\approx$half the memory
+    \item Since 2024 GRPO is the default for \textbf{LLM RL} (DeepSeek-R1, many open recipes) --- revisited in \textbf{Day 9 (RLHF)}, where the reward is a learned preference model
+\end{itemize}
+\end{frame}

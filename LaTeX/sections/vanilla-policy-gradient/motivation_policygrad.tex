@@ -1,0 +1,23 @@
+\section{Motivation for Policy Gradient Methods}
+\begin{frame}{Motivation for Policy Gradient Methods}
+    \begin{itemize}
+        \item Recall from Day 1: RL algorithms split into \textbf{value-based} and \textbf{policy-based} methods.
+        \item Days 1--2 covered the value-based branch: Q-learning, DQN, SARSA.
+        \item Today we move to the other branch: \textbf{directly optimizing the policy}.
+        \pause
+        \item Value-based methods learn Q-values and derive the policy indirectly.
+        \begin{itemize}
+            \item Inefficient in continuous or large action spaces
+            \item Can’t represent stochastic policies
+            \item May lead to high variance and instability
+        \end{itemize}
+        \vspace{1em}
+        \item[]\textbf{Policy Gradient Methods:}
+        \begin{itemize}
+            \item Learn policy parameters directly to maximize expected return:
+            \[
+                \mathcal{J}(\theta) = \mathbb{E}_{\pi_\theta}\!\left[\sum_{t \geq 0} \gamma^t r_t\right]
+            \]
+        \end{itemize}
+    \end{itemize}
+\end{frame}

@@ -1,0 +1,35 @@
+\begin{frame}{SAC: Algorithm}
+\begin{center}
+{\scriptsize\textbf{\textcolor{red}{Red}} = the two additions over SAC v1: \emph{clipped double-Q} (TD3, Day 5) and \emph{automatic temperature}.\quad Shorthand $Q^{\min}_\theta \triangleq \min_{i=1,2} Q_{\theta_i}$.}
+\end{center}
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{1.06\textwidth}
+\begin{algorithm}[H]
+\scriptsize
+\DontPrintSemicolon
+\LinesNotNumbered
+\setlength{\algomargin}{0pt}
+Initialize $\theta_1,\theta_2,\phi,\alpha$;\ \ targets $\bar\theta_i\!\leftarrow\!\theta_i$;\ \ replay $\mathcal{D}\leftarrow\emptyset$\;
+\For{each iteration}{
+  \For{each environment step}{
+    $\mathbf{a}_t\sim\pi_\phi(\,\cdot\mid\mathbf{s}_t)$;\ \ $\mathbf{s}_{t+1}\sim p$;\ \
+    $\mathcal{D}\leftarrow\mathcal{D}\cup\{(\mathbf{s}_t,\mathbf{a}_t,r_t,\mathbf{s}_{t+1})\}$\;
+  }
+  \For{each gradient step}{
+    sample minibatch from $\mathcal{D}$;\ \ $\tilde{\mathbf{a}}_{t+1}\sim\pi_\phi(\,\cdot\mid\mathbf{s}_{t+1})$\;
+    \textcolor{red}{$y = r_t + \gamma\big( Q^{\min}_{\bar\theta}(\mathbf{s}_{t+1},\tilde{\mathbf{a}}_{t+1}) - \alpha\log\pi_\phi(\tilde{\mathbf{a}}_{t+1}\mid\mathbf{s}_{t+1})\big)$}\;
+    $\theta_i \leftarrow \theta_i - \lambda_Q\,\hat\nabla_{\theta_i}\big[\tfrac12(Q_{\theta_i}(\mathbf{s}_t,\mathbf{a}_t)-y)^2\big]$,\ \ $i\in\{1,2\}$\;
+    $\phi \leftarrow \phi - \lambda_\pi\,\hat\nabla_\phi J_\pi(\phi)$ \ \ ($J_\pi$ critic term uses $Q^{\min}_\theta$)\;
+    \textcolor{red}{$\alpha \leftarrow \alpha - \lambda\,\hat\nabla_\alpha\big[\,-\alpha\big(\log\pi_\phi(\mathbf{a}_t\mid\mathbf{s}_t)+\bar{\mathcal{H}}\big)\,\big]$}\;
+    $\bar\theta_i \leftarrow \tau\theta_i+(1-\tau)\bar\theta_i$,\ \ $i\in\{1,2\}$\;
+  }
+}
+\end{algorithm}
+\end{minipage}%
+}
+\end{center}
+\begin{flushleft}
+    \tiny Haarnoja et al.\ 2018b, \url{https://arxiv.org/abs/1812.05905}
+\end{flushleft}
+\end{frame}

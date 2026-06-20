@@ -1,0 +1,60 @@
+% Slide 23
+\begin{frame}{Model-Based RL}
+\begin{itemize}
+    \item How might we alleviate this issue?
+\end{itemize}
+\end{frame}
+
+% Slide 24
+\begin{frame}{Model-Based RL}
+\begin{itemize}
+    \item How might we alleviate this issue?
+    \item Let's modify the algorithm a bit
+    \begin{enumerate}
+        \item Run some policy (e.g.\ random policy) to collect data
+              $D = \{(s, a, r, s')_i\}$
+        \item Learn the model $f_\phi(s, a)$ (weights $\phi$) to minimize
+              $\sum_i \lVert f_\phi(s_i, a_i) - s'_i \rVert$
+        \item Iteratively sample action sequences, run through model $f_\phi(s, a)$ to
+              choose actions
+    \end{enumerate}
+\end{itemize}
+\end{frame}
+
+% Slide 25
+\begin{frame}{Model-Based RL}
+\begin{itemize}
+    \item How might we alleviate this issue?
+    \item Let's modify the algorithm a bit
+    \begin{enumerate}
+        \item Run some policy (e.g.\ random policy) to collect data
+              $D = \{(s, a, r, s')_i\}$
+        \item Learn the model $f_\phi(s, a)$ (weights $\phi$) to minimize
+              $\sum_i \lVert f_\phi(s_i, a_i) - s'_i \rVert$
+        \item Iteratively sample action sequences, run through model $f_\phi(s, a)$ to
+              choose actions
+        \item Execute planned actions, appending visiting tuples $(s, a, r, s')$ to $D$
+        \item Go to step 2
+    \end{enumerate}
+\end{itemize}
+\end{frame}
+
+% Slide 26
+\begin{frame}{Model-Based RL}
+\begin{itemize}
+    \item How might we alleviate this issue?
+    \item Let's modify the algorithm a bit
+    \begin{enumerate}
+        \item Run some policy (e.g.\ random policy) to collect data
+              $D = \{(s, a, r, s')_i\}$
+        \item Learn the model $f_\phi(s, a)$ (weights $\phi$) to minimize
+              $\sum_i \lVert f_\phi(s_i, a_i) - s'_i \rVert$
+        \item Iteratively sample action sequences, run through model $f_\phi(s, a)$ to
+              choose actions
+        \item Execute planned actions, appending visiting tuples $(s, a, r, s')$ to $D$
+        \item Go to step 2
+    \end{enumerate}
+    \item Now, we update the model using data collected with planning
+    \item Then, replan periodically to help account for mistakes.
+\end{itemize}
+\end{frame}

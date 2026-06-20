@@ -1,0 +1,11 @@
+\begin{frame}{PPO Full Algorithm}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth,height=0.55\textheight,keepaspectratio]{images/policy-optimization/ppo_2.png}
+\end{figure}
+\begin{itemize}
+    \item \textbf{Sample efficiency:} PPO runs multiple SGD epochs over the same rollout --- unlike A2C which discards data after one update
+    \item \textbf{Combined loss:} $\mathcal{L}(\theta,\phi) = \mathcal{L}^{\mathrm{CLIP}}(\theta) - c_1 \mathcal{L}^{V}(\phi) + c_2 \mathcal{H}(\pi_\theta)$ (entropy bonus encourages exploration)
+    \item GAE is used to compute $\hat{A}_t$; the entropy term will reappear in SAC (Day 6)
+\end{itemize}
+\end{frame}

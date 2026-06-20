@@ -1,0 +1,35 @@
+\section{Recap}
+\begin{frame}{}
+    \LARGE Soft Actor-Critic: \textbf{Recap (Day 5)}
+\end{frame}
+
+\begin{frame}{Recap: Where Day 5 Left Us}
+\begin{itemize}
+    \item Day 5 gave us \textbf{off-policy continuous control}: DDPG \rref{4} / TD3 \rref{5} --- a replay buffer, target networks, and a deterministic actor $\mu_\theta(s)$
+    \pause
+    \item But DDPG is \textbf{fragile}:
+    \begin{itemize}
+        \item deterministic actor $\Rightarrow$ \emph{no native exploration} (hand-tuned OU/Gaussian noise bolted on)
+        \item brittle to hyperparameters and random seeds
+        \item mode collapse on multimodal $Q$-landscapes --- commits to one of several equally good actions
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Recap: What Today Delivers}
+\begin{itemize}
+    \item \textbf{Today --- Soft Actor-Critic (SAC)} \rref{1}: fix all three with a \emph{stochastic} actor and an \emph{entropy bonus} in the objective
+    $$J(\pi) = \sum_t \mathbb{E}_{(s_t,a_t)\sim\rho_\pi}\big[\, r(s_t,a_t) + \alpha\,\mathcal{H}(\pi(\cdot\mid s_t)) \,\big]$$
+    \item Entropy drives \emph{directed} exploration --- no hand-tuned noise schedule; robust to seeds; captures multimodal optima
+    \item \textbf{Everything from Day 5 carries over:} replay buffer, target networks, and TD3's clipped double-Q critic
+    \item We close with \textbf{automatic temperature tuning} (SAC v2) --- removing the last brittle hyperparameter
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Scope \& Notation}
+\begin{itemize}
+    \item \footnotesize \textcolor{red}{Note:} ``Continuous Control II'' is the \emph{max-entropy} branch. PPO (Day 4) already handles continuous actions on-policy; DDPG/TD3 (Day 5) are the off-policy \emph{deterministic} branch; SAC is the off-policy \emph{stochastic, entropy-regularised} branch.
+    \vspace{0.5em}
+    \item \textbf{Notation:} $\pi_\phi$ stochastic actor, $Q_\theta$ soft critic, $\alpha$ entropy temperature, $\bar{\mathcal{H}}$ target entropy (used in SAC v2), $\mathcal{D}$ replay buffer --- used consistently throughout.
+\end{itemize}
+\end{frame}

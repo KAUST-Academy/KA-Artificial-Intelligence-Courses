@@ -1,0 +1,35 @@
+% D4RL benchmark. The brace decoration needs decorations.pathreplacing
+% (added to the master \usetikzlibrary line in Phase 0).
+
+\begin{frame}{How the Field Keeps Score}
+\definecolor{ored}{RGB}{158,28,38}
+\definecolor{ogreen}{RGB}{106,168,79}
+\definecolor{oblue}{RGB}{16,53,103}
+\definecolor{ogray}{RGB}{125,125,125}
+\centering
+\begin{tikzpicture}[font=\scriptsize, >={Stealth[length=2.4mm]}]
+    \shade[left color=ored!35, right color=ogreen!55] (0,0) rectangle (8,0.45);
+    \node[below] at (0,-0.05) {random};
+    \node[below] at (4,-0.05) {medium / mixed};
+    \node[below] at (8,-0.05) {expert};
+    \node[below=0.45cm] at (4,0) {dataset quality};
+    \draw[decorate, decoration={brace, amplitude=4pt}, thick, oblue]
+      (1.2,0.6) -- (6.2,0.6)
+      node[midway, above=5pt, oblue]{offline RL shines here};
+    \draw[decorate, decoration={brace, amplitude=4pt}, thick, ogray]
+      (6.6,0.6) -- (8.0,0.6)
+      node[midway, above=5pt, ogray]{BC suffices};
+\end{tikzpicture}
+\begin{itemize}
+    \item Offline RL is measured on shared \textbf{benchmark suites} of fixed
+          datasets: the standard one is \textbf{D4RL} (``Datasets for Deep
+          Data-Driven RL'')
+    \item Its tasks stress different skills: e.g.\ a maze-navigation set built
+          to \emph{require stitching}, or a dexterous-hand set of \emph{human
+          demonstrations}
+    \item Each task comes at several \emph{data qualities} (random / medium /
+          expert mixtures), and method rankings flip between them
+    \item Scores are normalized ($0 =$ random, $100 =$ expert); on expert data
+          plain BC is hard to beat, so \textbf{always run it as the baseline}
+\end{itemize}
+\end{frame}

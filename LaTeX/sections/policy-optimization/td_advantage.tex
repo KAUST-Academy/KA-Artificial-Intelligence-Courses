@@ -1,0 +1,18 @@
+\begin{frame}{The TD Residual as Advantage}
+\begin{itemize}
+    \item Given a critic $V_\phi$, define the \textbf{TD residual}:
+    $$\delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$$
+    \item When $V_\phi = V^{\pi}$ (a perfect critic), the \textbf{expected} TD residual equals the advantage:
+    \begin{align*}
+        \mathbb{E}\!\left[\delta_t \mid s_t, a_t\right]
+        &= r(s_t,a_t) + \gamma \mathbb{E}_{s_{t+1}}\!\left[V^{\pi}(s_{t+1})\right] - V^{\pi}(s_t) \\
+        &= Q^{\pi}(s_t,a_t) - V^{\pi}(s_t) \;=\; A^{\pi}(s_t,a_t)
+    \end{align*}
+    where $r(s_t,a_t) = \mathbb{E}[r_t \mid s_t, a_t]$ is the expected reward function. In practice we use the observed $r_t$ and a learned $V_\phi$, so $\delta_t$ is an approximation of $A^{\pi}$.
+    \pause
+    \item So we can use $\delta_t$ as a \textbf{low-variance, online} estimate of $A^{\pi}$ --- no full trajectory needed
+    \item This is what Day 3 deferred: we now have a way to estimate $A^{\pi}$ at every timestep
+    \vspace{0.5em}
+    \item \textbf{Critic update:} minimize the TD error squared: $\mathcal{L}(\phi) = \mathbb{E}_t\!\left[\delta_t^2\right]$
+\end{itemize}
+\end{frame}

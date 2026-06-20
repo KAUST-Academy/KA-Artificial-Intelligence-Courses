@@ -1,0 +1,57 @@
+\section{Policy Gradients}
+\begin{frame}{}
+    \LARGE Reinforcement Learning: \textbf{Policy Gradients}
+\end{frame}
+
+\begin{frame}{Policy Gradients}
+    \begin{itemize}
+        \setlength{\itemsep}{1em}
+        \item {\large \textbf{What is the problem with Q-learning?}}
+        \item The Q-function can be very complex.
+        \item For example, a robot grasping an object may have a very high-dimensional state space. It can be difficult to learn the exact Q-value for every (state, action) pair.
+        \pause
+        \item However, the policy itself can be much simpler; for instance, just closing the robot's hand.
+        \item Can we learn a policy directly, i.e., find the best policy from a set of possible policies?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Policy Gradients}
+    \begin{itemize}
+        \item Formally, let us define a class of parameterized policies: 
+        $$\Pi = \{ \pi_\theta \mid \theta \in \mathbb{R}^m \}$$
+        \item For each policy, we can define its expected return:
+        $$\mathcal{J}(\theta) = \mathbb{E} \left [ \sum_{t \geq 0} \gamma^t r_t \mid \pi_\theta \right ]$$
+        \pause
+        \item Our goal is to find the optimal policy: $\theta^{\star} = \arg \max_\theta \mathcal{J}(\theta)$
+        \item How can we achieve this?
+        \pause
+        \item \textbf{Solution}: Perform gradient ascent on the policy parameters!
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Policy Parameterization: What Does $\pi_\theta$ Look Like?}
+    \begin{itemize}
+        \item \textbf{Discrete actions} --- Softmax policy:
+        \[
+            \pi_\theta(a \mid s) = \frac{e^{\phi(s,a)^\top \theta}}{\sum_{a'} e^{\phi(s,a')^\top \theta}}
+        \]
+        The network outputs one logit per action; softmax converts them to probabilities.
+        \pause
+        \item \textbf{Continuous actions} --- Gaussian policy:
+        \[
+            \pi_\theta(a \mid s) = \mathcal{N}\!\left(\mu_\theta(s),\, \sigma_\theta(s)^2\right)
+        \]
+        The network outputs a mean and standard deviation; actions are sampled from the resulting Gaussian.
+        \pause
+        \item The Gaussian policy will be central to continuous-control algorithms (Days 5--6).
+        \item Both are differentiable w.r.t.\ $\theta$, which is what makes gradient ascent possible.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Policy Gradients}
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{images/vanilla-policy-gradient/policy_gradient.png}
+    \end{figure}
+    \footnotetext{Note: this diagram uses $u$ for actions and $\pi(u|s)$; equivalent to $a$ and $\pi(a|s)$ throughout this course.}
+\end{frame}

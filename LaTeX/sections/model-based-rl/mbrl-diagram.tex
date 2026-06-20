@@ -1,0 +1,42 @@
+% Slide 15: the model-based RL loop diagram (recreated in TikZ; equations in LaTeX)
+\begin{frame}{Model-Based RL: The Shared Loop}
+\definecolor{mbgreen}{RGB}{122,173,75}
+\definecolor{mborange}{RGB}{237,148,72}
+\definecolor{mbblue}{RGB}{79,129,189}
+\begin{itemize}
+    \item Both uses run the same outer loop: collect data, fit the model,
+          act better, repeat:
+\end{itemize}
+\centering
+\vspace{0.4em}
+\begin{tikzpicture}[
+    >={Stealth[length=3mm,width=3mm]},
+    box/.style={rounded corners=4pt, text width=2.4cm, align=center,
+                minimum height=0.95cm, text=white, font=\scriptsize, inner sep=3pt},
+    flow/.style={mbblue, line width=3pt, ->, rounded corners=6pt}
+]
+  \node[box, fill=mbgreen]  (fit)  at (0,0)        {fit a model to estimate return};
+  \node[box, fill=mborange] (gen)  at (-3.4,-1.6)  {generate samples (i.e.\ run the policy)};
+  \node[box, fill=mbblue]   (imp)  at (0,-3.2)      {improve the policy};
+
+  \draw[flow] (imp.west) -| (gen.south);
+  \draw[flow] (gen.north) |- (fit.west);
+  \draw[flow] (fit.south) -- (imp.north);
+
+  % Right-hand annotations / equations
+  \node[anchor=west, font=\normalsize] at (2.0, 0.0)
+        {estimate $p(\mathbf{s}'\mid\mathbf{s},\mathbf{a})$ (model-based)};
+  \node[anchor=west, font=\normalsize\bfseries, text=mbgreen] at (3.0, -0.7)
+        {supervised learning};
+  \node[anchor=west, font=\normalsize] at (2.4, -1.6)
+        {$\displaystyle \min_{\phi}\sum_i \lVert f_\phi(\mathbf{s}_i,\mathbf{a}_i)-\mathbf{s}'_i\rVert^2$};
+  \node[anchor=west, font=\normalsize] at (2.0, -3.2)
+        {optimize $\pi_\theta(\mathbf{a}\mid\mathbf{s})$ (model-based)};
+\end{tikzpicture}
+\vspace{0.4em}
+\begin{flushleft}\small
+The bottom step (``improve the policy'') is exactly where the two uses
+\emph{differ}: \emph{plan} good actions directly (next), or \emph{train} a policy
+$\pi_\theta$ on model-generated data (later).
+\end{flushleft}
+\end{frame}

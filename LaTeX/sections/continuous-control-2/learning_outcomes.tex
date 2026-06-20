@@ -1,0 +1,11 @@
+\section{Learning Outcomes}
+\begin{frame}{Learning Outcomes}
+    \begin{itemize}
+        \setlength{\itemsep}{0.8em}
+        \item Motivate the maximum-entropy RL objective and explain why the $-\log\pi$ bonus is principled (exploration, robustness, multimodality)
+        \item State soft policy iteration --- soft policy evaluation \& improvement --- and why it converges (Lemmas 1--2, Theorem 1)
+        \item Derive the SAC critic and (reparameterised) actor objectives, including the squashed-Gaussian Jacobian correction
+        \item Explain how SAC v2 = SAC v1 + TD3's clipped double-Q + \emph{automatic temperature tuning}, and what reward-scale sensitivity has to do with it
+        \item Identify SAC's remaining limitations and place it in the algorithm family (REDQ / DroQ / TQC)
+    \end{itemize}
+\end{frame}

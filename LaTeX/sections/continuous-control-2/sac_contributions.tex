@@ -1,0 +1,19 @@
+\section{Soft Actor-Critic}
+\begin{frame}{SAC: Contributions}
+\begin{itemize}
+    \item One of the most efficient model-free algorithms
+    \begin{itemize}
+        \item SOTA off-policy
+        \item well suited for real world robotics learning
+    \end{itemize}
+    \item Can learn stochastic policy on continuous action domain
+    \item Robust to noise
+    \vspace{0.5em}
+    \item \textbf{Ingredients:}
+    \begin{itemize}
+        \item Actor-critic architecture with separate policy and value function networks
+        \item Off-policy formulation to reuse previously collected data for efficiency
+        \item Entropy-constrained objective to encourage stability and exploration
+    \end{itemize}
+\end{itemize}
+\end{frame}

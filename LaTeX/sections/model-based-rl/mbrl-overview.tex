@@ -1,0 +1,18 @@
+\section{Model-Based RL}
+% Bridge: we now know WHY and WHAT a model is. This frame sets up HOW we use it
+% and previews the two-pronged structure of the rest of the lecture.
+\begin{frame}{Model-Based RL: How We Use the Model}
+\begin{itemize}
+    \item We have the \emph{what} (a learned simulator $f_\phi$), the \emph{why}
+          (cheap, safe, plan-able experience), and \emph{how to learn it}. Now:
+          how to \textbf{use} it
+    \item Two uses, and they organize the rest of today:
+    \begin{itemize}
+        \item \textbf{Plan} with the model: pick good actions by looking ahead
+        \item \textbf{Optimize a policy} with the model: train a policy on
+              simulated experience
+    \end{itemize}
+    \item One perk we will lean on later: a model lets us \emph{reason about its
+          own uncertainty} (ensembles)
+\end{itemize}
+\end{frame}

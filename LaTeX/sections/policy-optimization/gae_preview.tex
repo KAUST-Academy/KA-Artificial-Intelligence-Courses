@@ -1,0 +1,12 @@
+\begin{frame}{GAE: The Two Limits}
+\begin{itemize}
+    \item GAE gives a single knob $\lambda$ that interpolates the bias--variance trade-off:
+    $$\hat{A}^{\mathrm{GAE}(\gamma,\lambda)}_t = \sum_{l=0}^{\infty} (\gamma\lambda)^l\, \delta_{t+l}$$
+    \item $\lambda = 0$: pure 1-step TD --- low variance, biased
+    \item $\lambda = 1$: full Monte Carlo ($G_t - V_\phi(s_t)$) --- unbiased, high variance
+    \item $\lambda \approx 0.95$: standard in PPO implementations
+    \pause
+    \item We write $\hat{A}_t$ for short: a \textbf{practical estimate} of the true advantage $A^{\pi}(s_t, a_t)$ from Day 1
+    \item \textbf{Used by PPO in the lab} --- we revisit this when implementing the algorithm
+\end{itemize}
+\end{frame}

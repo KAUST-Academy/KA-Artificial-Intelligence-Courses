@@ -1,0 +1,56 @@
+\section{Summary}
+\begin{frame}{}
+    \LARGE Soft Actor-Critic: \textbf{Summary}
+\end{frame}
+
+\begin{frame}{The Algorithm Family Tree}
+\begin{center}
+DQN $\;+\;$ DPG $\;\rightarrow\;$ \textbf{DDPG} $\;\rightarrow\;$ +clipped double-Q $\;\rightarrow\;$ \textbf{TD3} \\[0.4em]
+$\rightarrow\;$ +max-entropy / stochastic actor $\;\rightarrow\;$ \textbf{SAC v1} $\;\rightarrow\;$ +automatic temperature $\;\rightarrow\;$ \textbf{SAC v2}
+\end{center}
+\vspace{0.6em}
+\begin{table}[]
+    \centering
+    \renewcommand{\arraystretch}{1.8}
+    \small
+    \begin{tabular}{lcccc}
+        \hline
+        \textbf{Algorithm} & \textbf{Off-policy?} & \textbf{Policy} & \textbf{Exploration} & \textbf{Stability} \\
+        \hline
+        DDPG     & Yes (replay) & Deterministic & Injected noise      & Brittle \\
+        TD3      & Yes (replay) & Deterministic & Injected noise      & Improved \\
+        SAC v1   & Yes (replay) & Stochastic    & Entropy bonus       & Robust ($\alpha$ tuned) \\
+        SAC v2   & Yes (replay) & Stochastic    & Entropy bonus       & Robust (auto $\alpha$) \\
+        \hline
+    \end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Summary: SAC}
+\begin{itemize}
+    \item An \textbf{off-policy maximum-entropy} deep RL algorithm: sample-efficient, scales to high-dimensional observation/action spaces, robust to seeds and noise
+    \item \textbf{Theory:} convergence of soft policy iteration; the SAC objectives are its function-approximation instantiation
+    \item \textbf{Algorithm:} soft critic (clipped double-Q) + reparameterised stochastic actor + automatic temperature --- everything from Day 5 reused
+    \item \textbf{Empirically:} outperforms DDPG, PPO, TD3 and Soft Q-Learning in optimality, sample complexity and robustness
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Beyond SAC}
+\begin{itemize}
+    \item SAC (2018) is \emph{still} the de facto default for continuous control in simulation and real-world robotics
+    \item Direct descendants improved sample efficiency $5$--$10\times$:
+\end{itemize}
+\renewcommand{\arraystretch}{1.6}
+\begin{center}
+\small
+\begin{tabular}{l l}
+\hline
+\textbf{Method} & \textbf{Idea} \\
+\hline
+TQC (2020) \rref{9}    & truncated quantile critics --- controls overestimation \\
+REDQ (2021) \rref{10}  & randomized ensemble of $Q$-functions, high update-to-data ratio \\
+DroQ (2021) \rref{11}  & dropout-regularized critics --- REDQ's efficiency, fewer nets \\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}

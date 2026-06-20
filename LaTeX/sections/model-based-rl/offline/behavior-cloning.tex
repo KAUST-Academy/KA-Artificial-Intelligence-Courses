@@ -1,0 +1,114 @@
+% Behavior cloning: the naive baseline, its ceiling, and the stitching promise.
+
+\begin{frame}{Why Not Just Copy the Data?}
+\begin{itemize}
+    \item Simplest possible idea: treat $\mathcal{D}$ as a supervised dataset and
+          \emph{imitate} it
+    \item \textbf{Behavior cloning} (BC): train a policy $\pi_\theta$ to
+          reproduce the data's actions:
+          \[ \min_\theta\; -\,\mathbb{E}_{(s,a)\sim\mathcal{D}}
+             \big[\log \pi_\theta(a\mid s)\big] \]
+    \item In words: at each state in $\mathcal{D}$, push $\pi_\theta$ to put
+          \emph{high probability on the action the data actually took}, i.e.\
+          $\max_\theta \mathbb{E}[\log \pi_\theta]$. Papers write this as
+          ``$\min$ of $-\log$'' (the standard \emph{negative log-likelihood loss}),
+          since optimizers minimize losses
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Not Just Copy the Data?}
+\begin{itemize}
+    \item Simplest possible idea: treat $\mathcal{D}$ as a supervised dataset and
+          \emph{imitate} it
+    \item \textbf{Behavior cloning} (BC): train a policy $\pi_\theta$ to
+          reproduce the data's actions:
+          \[ \min_\theta\; -\,\mathbb{E}_{(s,a)\sim\mathcal{D}}
+             \big[\log \pi_\theta(a\mid s)\big] \]
+    \item In words: at each state in $\mathcal{D}$, push $\pi_\theta$ to put
+          \emph{high probability on the action the data actually took}, i.e.\
+          $\max_\theta \mathbb{E}[\log \pi_\theta]$. Papers write this as
+          ``$\min$ of $-\log$'' (the standard \emph{negative log-likelihood loss}),
+          since optimizers minimize losses
+    \item Plain supervised learning (like model learning, but for the policy):
+          input $s$, target $a$, with no rewards, no Bellman, no bootstrapping.
+          What could go wrong?
+\end{itemize}
+\end{frame}
+
+% === Ceiling and drift (figure) =========================================
+\begin{frame}{Behavior Cloning: The Ceiling and the Drift}
+\definecolor{oteal}{RGB}{0,141,160}
+\definecolor{ogreen}{RGB}{106,168,79}
+\definecolor{ored}{RGB}{158,28,38}
+\definecolor{ogray}{RGB}{125,125,125}
+\centering
+\begin{tikzpicture}[font=\scriptsize, >={Stealth[length=2.4mm]}]
+    \fill[oteal!14]
+      (0,0.35) .. controls (2,1.35) and (4,0.55) .. (7,1.45) --
+      (7,2.45) .. controls (4,1.55) and (2,2.35) .. (0,1.35) -- cycle;
+    \node[oteal!60!black] at (5.7,2.5) {data support};
+    \draw[ogreen!70!black, very thick]
+      (0,0.85) .. controls (2,1.85) and (4,1.05) .. (7,1.95)
+      node[right=-2pt, font=\scriptsize]{$\pi_\beta$};
+    \draw[ored, very thick, dashed, ->]
+      (0,0.85) .. controls (1.8,1.75) and (3.2,0.95) ..
+      (4.6,0.45) .. controls (5.6,0.1) .. (6.6,-0.3)
+      node[below left=-1pt, font=\scriptsize]{$\pi_{\mathrm{BC}}$};
+    \draw[->, ored] (2.6,1.42) -- (2.6,1.12)
+      node[midway, left, font=\scriptsize]{$\varepsilon$};
+    \node[ogray, font=\scriptsize] at (2.0,-0.25) {never-seen states};
+\end{tikzpicture}
+\begin{itemize}
+    \item $\pi_\beta$ = the (unknown) policy that \emph{collected} the data
+          ($\beta$ for ``behavior''); $\pi_{\mathrm{BC}}$ = the clone we train
+    \item Ceiling: at best $\pi_{\mathrm{BC}}$ \emph{matches} $\pi_\beta$, copying
+          its mistakes too
+    \item Drift: each step the clone has a small chance $\varepsilon$ of a wrong
+          action $\to$ a slightly unfamiliar state $\to$ a bigger error $\to$ off
+          the data entirely
+    \item These errors \emph{compound}: total error grows like
+          $O(\varepsilon T^2)$ over a horizon of $T$ steps (Ross \& Bagnell, 2010)
+\end{itemize}
+\end{frame}
+
+% === Stitching (figure) =================================================
+\begin{frame}{The Promise: Stitching}
+\definecolor{oteal}{RGB}{0,141,160}
+\definecolor{ogreen}{RGB}{106,168,79}
+\definecolor{oorange}{RGB}{230,145,56}
+\definecolor{oblue}{RGB}{16,53,103}
+\centering
+\begin{tikzpicture}[font=\scriptsize, >={Stealth[length=2.4mm]}]
+    \coordinate (A) at (0,0);
+    \coordinate (B) at (0.4,2.6);
+    \coordinate (M) at (3,1.2);
+    \coordinate (G) at (6.4,0.6);
+    \draw[ogreen, line width=4.5pt, opacity=0.35]
+      (A) .. controls (1.2,1.0) and (2.0,1.3) .. (M)
+          .. controls (4.2,0.9) and (5.4,0.2) .. (G);
+    \draw[->, oorange, very thick]
+      (A) .. controls (1.2,1.0) and (2.0,1.3) .. (M)
+          .. controls (3.8,1.9) .. (4.8,2.4);
+    \node[oorange!80!black, font=\scriptsize] at (5.3,2.55) {wanders off};
+    \draw[->, oteal, very thick]
+      (B) .. controls (1.2,2.2) and (2.2,1.7) .. (M)
+          .. controls (4.2,0.9) and (5.4,0.2) .. (G);
+    \fill[oblue] (M) circle (2.2pt);
+    \node[oblue, font=\scriptsize, below=2pt of M] {shared state};
+    \node[font=\scriptsize, left=1pt] at (A) {traj.\ A};
+    \node[font=\scriptsize, left=1pt] at (B) {traj.\ B};
+    \node[ogreen!60!black, font=\scriptsize\bfseries] at (6.4,1.25) {goal};
+    \node[ogreen!60!black, font=\Large] at (G) {$\star$};
+    \node[ogreen!60!black, font=\scriptsize] at (2.0,0.25) {stitched policy};
+\end{tikzpicture}
+\begin{itemize}
+    \item $\mathcal{D}$ may contain \textbf{no good trajectory}, yet contain
+          all the \emph{pieces} of one
+    \item Trajectories cross at a shared state: dynamic programming can
+          \textbf{stitch} the good halves together
+    \item The stitched policy is \emph{better than anything in the data};
+          BC can never do this
+    \item And we already own an off-policy algorithm: Q-learning learns from
+          \emph{any} data\ldots{} right?
+\end{itemize}
+\end{frame}

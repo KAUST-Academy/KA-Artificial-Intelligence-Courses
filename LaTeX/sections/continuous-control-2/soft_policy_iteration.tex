@@ -1,0 +1,54 @@
+\begin{frame}{Soft Policy Iteration: Policy Evaluation}
+\begin{itemize}
+    \item \textbf{policy evaluation:} compute value of $\pi$ according to Max Entropy RL Objective
+    \item modified Bellman backup operator $\mathcal{T}$:
+\end{itemize}
+\begin{align*}
+\mathcal{T}^{\pi} Q(\mathbf{s}_t, \mathbf{a}_t) &\triangleq r(\mathbf{s}_t, \mathbf{a}_t) + \gamma\, \mathbb{E}_{\mathbf{s}_{t+1} \sim p}\!\left[\, \boxed{V(\mathbf{s}_{t+1})}\, \right] \\
+\boxed{V(\mathbf{s}_t)} &= \mathbb{E}_{\mathbf{a}_t \sim \pi}\!\left[ Q(\mathbf{s}_t, \mathbf{a}_t) - \boxed{\alpha \log \pi(\mathbf{a}_t \mid \mathbf{s}_t)} \right]
+\end{align*}
+\begin{itemize}
+    \item \textbf{Lemma 1:} Contraction Mapping for Soft Bellman Updates
+\end{itemize}
+\[
+Q^{k+1} = \mathcal{T}^{\pi} Q^{k} \quad \text{converges to the soft Q-function of } \pi
+\]
+\begin{itemize}
+    \item[] {\footnotesize\emph{Why:} the standard Bellman contraction argument, unchanged --- the extra entropy term $-\alpha\log\pi$ is bounded, so $\mathcal{T}^\pi$ is still a $\gamma$-contraction.}
+\end{itemize}
+\end{frame}
+\begin{frame}{Soft Policy Iteration: Policy Improvement}
+\begin{itemize}
+    \item \textbf{policy improvement:} update policy towards the exponential of the new soft Q-function
+    \item modified Bellman backup operator $\mathcal{T}$:
+    \begin{itemize}
+        \item choose tractable family of distributions big $\Pi$
+        \item choose KL divergence to project the improved policy into big $\Pi$
+    \end{itemize}
+\end{itemize}
+\[
+\pi_{\text{new}} = \arg\min_{\pi' \in \Pi} D_{\mathrm{KL}}\!\left( \pi'(\,\cdot \mid \mathbf{s}_t) \,\Big\|\, \frac{\exp\!\left( \tfrac{1}{\alpha} Q^{\pi_{\text{old}}}(\mathbf{s}_t, \,\cdot)\right)}{Z^{\pi_{\text{old}}}(\mathbf{s}_t)} \right)
+\]
+\begin{itemize}
+    \item \textbf{Lemma 2:} the KL projection cannot decrease the soft value
+\end{itemize}
+\[
+Q^{\pi_{\text{new}}}(\mathbf{s}_t, \mathbf{a}_t) \geq Q^{\pi_{\text{old}}}(\mathbf{s}_t, \mathbf{a}_t) \quad \text{for any state action pair}
+\]
+\begin{itemize}
+    \item[] {\footnotesize\emph{Why:} $\pi_{\text{old}}$ is feasible for the $\arg\min$, so the new policy's KL objective is no worse; expanding it and using KL\,$\geq 0$ gives the monotone improvement.}
+\end{itemize}
+\end{frame}
+\begin{frame}{Soft Policy Iteration}
+\begin{itemize}
+    \item soft policy iteration: soft policy evaluation $\longleftrightarrow$ soft policy improvement
+    \vspace{0.5em}
+    \item \textbf{Theorem 1:} Repeated application of soft policy evaluation and soft policy improvement from any policy $\pi \in \Pi$ converges to the optimal MaxEnt policy among all policies in $\Pi$
+    \begin{itemize}
+        \item[] {\footnotesize\emph{Why:} Lemma 2 makes $\{Q^{\pi^k}\}$ monotonically increasing; bounded reward + entropy keeps it bounded above; a monotone bounded sequence converges, and Lemma 1 says each evaluation step reaches its fixed point.}
+        \item exact form applicable only in discrete case
+        \item need function approximation to represent Q-values in continuous domains
+        \item $\to$ Soft Actor-Critic (SAC)!
+    \end{itemize}
+\end{itemize}
+\end{frame}

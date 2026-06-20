@@ -1,0 +1,16 @@
+\begin{frame}{PPO Clipped Objective}
+\begin{itemize}
+    \item Recall the probability ratio: $r_t(\theta) = \dfrac{\pi_\theta(a_t|s_t)}{\pi_{\theta_\text{old}}(a_t|s_t)}$
+    \item The \textbf{PPO-Clip objective} is:
+    $$\mathcal{L}^{\mathrm{CLIP}}(\theta) = \mathbb{E}_t\!\left[ \min\!\left( r_t(\theta)\,\hat{A}_t,\; \mathrm{clip}(r_t(\theta), 1-\varepsilon, 1+\varepsilon)\,\hat{A}_t \right) \right]$$
+    \item $\varepsilon$ is a small hyperparameter (typically $\varepsilon = 0.2$)
+    \pause
+    \item \textbf{Why clip + min?}
+    \begin{itemize}
+        \item When $\hat{A}_t > 0$: clipping caps $r_t$ at $1+\varepsilon$, removing the incentive to increase the ratio further
+        \item When $\hat{A}_t < 0$: clipping floors $r_t$ at $1-\varepsilon$, removing the incentive to decrease the ratio further
+        \item The \textbf{min} ensures the objective is a lower bound --- we never benefit from going outside $[1-\varepsilon, 1+\varepsilon]$
+    \end{itemize}
+    \item This enforces a soft trust region without any second-order computation
+\end{itemize}
+\end{frame}

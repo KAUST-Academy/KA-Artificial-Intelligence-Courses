@@ -1,0 +1,180 @@
+% Slide 41: left-side diagram only (step 1)
+\begin{frame}{Method}
+\begin{flushleft}
+\hspace*{0.04\textwidth}%
+\begin{tikzpicture}
+  \node[inner sep=0] (diag) {\includegraphics[width=0.40\textwidth]{images/continuous-control-1/figures/method-flow-step1.jpg}};
+  \begin{scope}[shift={(diag.south west)}, x={($(diag.south east)-(diag.south west)$)}, y={($(diag.north west)-(diag.south west)$)}]
+    % Red dashed bounding rectangle around the trainable left diagram
+    \draw[red, line width=1pt, dashed] (-0.02, -0.04) rectangle (0.78, 1.05);
+  \end{scope}
+\end{tikzpicture}
+\end{flushleft}
+\begin{flushright}\tiny Adapted from \rref{14}\end{flushright}
+\end{frame}
+
+% Slide 42: build step --- reveal ONLY the top replay-buffer row
+% (matches the intended PPT build: (s,a,r,s') -> Replay buffer -> sample mini-batches)
+\begin{frame}{Method}
+\centering
+\begin{tikzpicture}
+  \node[inner sep=0] (diag) {\includegraphics[width=0.88\textwidth]{images/continuous-control-1/figures/method-flow-step3.jpg}};
+  \begin{scope}[shift={(diag.south west)}, x={($(diag.south east)-(diag.south west)$)}, y={($(diag.north west)-(diag.south west)$)}]
+    % Hide everything below the "Sample random mini-batches" line
+    \fill[white] (-0.05, -0.05) rectangle (1.05, 0.66);
+    % Red dashed box around the revealed top replay-buffer strip
+    \draw[red, line width=1pt, dashed] (0.10, 0.67) rectangle (0.86, 1.04);
+  \end{scope}
+\end{tikzpicture}
+\begin{flushright}\tiny Adapted from \rref{14}\end{flushright}
+\end{frame}
+
+% Slide 43: full method diagram
+\begin{frame}{Method}
+\centering
+\begin{tikzpicture}
+  \node[inner sep=0] (diag) {\includegraphics[width=0.88\textwidth]{images/continuous-control-1/figures/method-flow-step3.jpg}};
+  \begin{scope}[shift={(diag.south west)}, x={($(diag.south east)-(diag.south west)$)}, y={($(diag.north west)-(diag.south west)$)}]
+    % Red dashed rectangle around the right-side learning loop (matches original)
+    \draw[red, line width=1pt, dashed] (0.16, -0.04) rectangle (1.02, 1.04);
+  \end{scope}
+\end{tikzpicture}
+\begin{flushright}\tiny Adapted from \rref{14}\end{flushright}
+\end{frame}
+
+% Slide 44: DDPG algorithm pseudocode (no annotations)
+\begin{frame}{Method}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.80\textwidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/ddpg-algorithm.jpg}
+\end{figure}
+\end{frame}
+
+% Slide 45: replay buffer + soft target network update boxes
+\begin{frame}{Method}
+\begin{columns}[c]
+\begin{column}{0.18\textwidth}
+\centering
+\textbf{Replay buffer}\\[3em]
+\textbf{``Soft'' target network update}
+\end{column}
+\begin{column}{0.82\textwidth}
+\centering
+\begin{tikzpicture}
+\node[inner sep=0] (algo) {\includegraphics[width=\linewidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/ddpg-algorithm.jpg}};
+\begin{scope}[shift={(algo.south west)}, x={($(algo.south east)-(algo.south west)$)}, y={($(algo.north west)-(algo.south west)$)}]
+  \draw[red,line width=0.7pt] (0.03, 0.80) rectangle (0.30, 0.85);
+  \draw[red,line width=0.7pt] (0.18, 0.05) rectangle (0.78, 0.25);
+\end{scope}
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+% Slide 45b: soft target update equations (spelled out)
+\begin{frame}{Method --- ``Soft'' target network update}
+\vspace{0.5em}
+DQN copies the online weights into the target network \emph{periodically} (a hard update every $C$ steps). DDPG instead lets the targets \emph{slowly track} the online networks every step:
+\[
+\theta^{Q'} \leftarrow \tau\, \theta^{Q} + (1-\tau)\, \theta^{Q'}
+\qquad\qquad
+\theta^{\mu'} \leftarrow \tau\, \theta^{\mu} + (1-\tau)\, \theta^{\mu'}
+\]
+\vspace{0.2em}
+\begin{itemize}
+    \item $\tau \ll 1$ (typically $\tau = 10^{-3}$): targets change very slowly.
+    \item Constrains the TD target to move slowly $\Rightarrow$ greatly improves stability of learning, at the cost of slower value propagation.
+\end{itemize}
+\end{frame}
+
+% Slide 46: Add noise for exploration
+\begin{frame}{Method}
+\begin{columns}[c]
+\begin{column}{0.18\textwidth}
+\centering
+\textbf{Add noise for exploration}
+\end{column}
+\begin{column}{0.82\textwidth}
+\centering
+\begin{tikzpicture}
+\node[inner sep=0] (algo) {\includegraphics[width=\linewidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/ddpg-algorithm.jpg}};
+\begin{scope}[shift={(algo.south west)}, x={($(algo.south east)-(algo.south west)$)}, y={($(algo.north west)-(algo.south west)$)}]
+  \draw[red,line width=0.7pt] (0.06, 0.625) rectangle (0.95, 0.675);
+\end{scope}
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+% Slide 46b: exploration noise --- OU vs Gaussian
+\begin{frame}{Method --- Exploration in a deterministic policy}
+\vspace{0.4em}
+A deterministic actor $\mu(s\mid\theta^{\mu})$ has \emph{no} exploration of its own. DDPG explores by adding noise to the behaviour policy:
+\[
+a_t = \mu(s_t \mid \theta^{\mu}) + \mathcal{N}_t
+\]
+\begin{itemize}
+    \item \textbf{DDPG} \rref{5}: $\mathcal{N}_t$ from an \emph{Ornstein--Uhlenbeck process} \rref{12} --- temporally \emph{correlated} noise, well suited to physical control with inertia/momentum.
+    \vspace{0.3em}
+    \item \textbf{Later finding (TD3 \rref{7}):} uncorrelated zero-mean \emph{Gaussian} noise works just as well and is simpler --- now the common default.
+\end{itemize}
+\end{frame}
+
+% Slide 47: Value Network Update
+\begin{frame}{Method}
+\begin{columns}[c]
+\begin{column}{0.18\textwidth}
+\centering
+\textbf{Value Network Update}
+\end{column}
+\begin{column}{0.82\textwidth}
+\centering
+\begin{tikzpicture}
+\node[inner sep=0] (algo) {\includegraphics[width=\linewidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/ddpg-algorithm.jpg}};
+\begin{scope}[shift={(algo.south west)}, x={($(algo.south east)-(algo.south west)$)}, y={($(algo.north west)-(algo.south west)$)}]
+  \draw[red,line width=0.7pt] (0.06, 0.43) rectangle (0.85, 0.54);
+\end{scope}
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+% Slide 48: Policy Network Update
+\begin{frame}{Method}
+\begin{columns}[c]
+\begin{column}{0.18\textwidth}
+\centering
+\textbf{Policy Network Update}
+\end{column}
+\begin{column}{0.82\textwidth}
+\centering
+\begin{tikzpicture}
+\node[inner sep=0] (algo) {\includegraphics[width=\linewidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/ddpg-algorithm.jpg}};
+\begin{scope}[shift={(algo.south west)}, x={($(algo.south east)-(algo.south west)$)}, y={($(algo.north west)-(algo.south west)$)}]
+  \draw[red,line width=0.7pt] (0.10, 0.25) rectangle (0.78, 0.36);
+\end{scope}
+\end{tikzpicture}
+\end{column}
+\end{columns}
+\end{frame}
+
+% Slide 49: DQN algorithm pseudocode with epsilon-greedy box
+\begin{frame}{Method}
+\begin{tikzpicture}
+\node[inner sep=0] (dqn) {\includegraphics[width=0.85\textwidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/dqn-algorithm.jpg}};
+\begin{scope}[shift={(dqn.south west)}, x={($(dqn.south east)-(dqn.south west)$)}, y={($(dqn.north west)-(dqn.south west)$)}]
+  \draw[red,line width=0.7pt] (0.08, 0.52) rectangle (0.85, 0.66);
+\end{scope}
+\end{tikzpicture}
+\end{frame}
+
+% Slide 50: DQN algorithm annotated with DDPG callout
+\begin{frame}{Method}
+\begin{tikzpicture}
+\node[inner sep=0] (dqn) {\includegraphics[width=0.85\textwidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/dqn-algorithm.jpg}};
+\begin{scope}[shift={(dqn.south west)}, x={($(dqn.south east)-(dqn.south west)$)}, y={($(dqn.north west)-(dqn.south west)$)}]
+  \draw[red,line width=0.7pt] (0.08, 0.52) rectangle (0.85, 0.66);
+  \node[anchor=center,fill=white,inner sep=3pt,font=\footnotesize\bfseries,text=red] at (0.46, 0.59) {DDPG: Policy Network, learned with Deterministic Policy Gradient};
+\end{scope}
+\end{tikzpicture}
+\end{frame}

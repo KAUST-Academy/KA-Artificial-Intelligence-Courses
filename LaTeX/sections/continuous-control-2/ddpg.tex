@@ -1,0 +1,26 @@
+\section{Prior Work}
+\begin{frame}{Prior Work: DDPG}
+\begin{columns}[T]
+\begin{column}{0.7\textwidth}
+\begin{itemize}
+    \item DDPG = DQN + DPG (Lillicrap et al., 2015)
+    \begin{itemize}
+        \item \underline{off-policy} \underline{actor-critic} method that learns a \underline{deterministic} policy in \underline{continuous} domain
+        \item exploration noise added to the deterministic policy when select action
+        \vspace{0.4em}
+        \item difficult to stabilize and brittle to hyperparameters (Duan et al., 2016, Henderson et al., 2017)
+        \item unscalable to complex tasks with high dimensions (Gu et al., 2017)
+    \end{itemize}
+\end{itemize}
+\end{column}
+\begin{column}{0.28\textwidth}
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio]{images/soft-actor-critic/figures/ddpg-arch.jpg}
+\end{figure}
+\end{column}
+\end{columns}
+\begin{flushright}
+    \tiny\url{https://www.youtube.com/watch?v=zR11FLZ-O9M}
+\end{flushright}
+\end{frame}

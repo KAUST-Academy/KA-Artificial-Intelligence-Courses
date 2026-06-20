@@ -1,0 +1,9 @@
+\section{Automatic Temperature Tuning}
+\begin{frame}{Limitation}
+\begin{itemize}
+    \item SAC v1 fixed many of DDPG's issues, but inherited one: it is brittle to the temperature hyperparameter $\alpha$ that controls exploration (and $\alpha$ must be tuned per task)
+    \begin{itemize}
+        \item $\to$ automatic temperature tuning (SAC v2) \rref{2}
+    \end{itemize}
+\end{itemize}
+\end{frame}

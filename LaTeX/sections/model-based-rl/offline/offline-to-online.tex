@@ -1,0 +1,30 @@
+% Offline -> online fine-tuning. Day 9 forward hook on the last bullet.
+
+\begin{frame}{Offline $\to$ Online: The Deployment Recipe}
+\definecolor{ored}{RGB}{158,28,38}
+\definecolor{oblue}{RGB}{16,53,103}
+\definecolor{ogray}{RGB}{125,125,125}
+\centering
+\begin{tikzpicture}[font=\scriptsize, >={Stealth[length=2.4mm]}]
+    \draw[->] (0,0) -- (7.6,0) node[below left]{interaction steps};
+    \draw[->] (0,0) -- (0,2.7);
+    \node[rotate=90] at (-0.35,1.3) {performance};
+    \draw[oblue, very thick] (0,1.3) -- (1.6,1.3);
+    \node[oblue, font=\scriptsize] at (0.82,1.02) {offline pretraining};
+    \draw[dashed, ogray] (1.6,0) -- (1.6,2.5);
+    \draw[ored, very thick] plot[smooth] coordinates
+      {(1.6,1.3) (2.1,0.65) (2.9,0.95) (4.0,1.6) (5.4,2.1) (7.0,2.35)};
+    \draw[->, ored] (3.1,0.35) -- (2.35,0.6);
+    \node[ored, font=\scriptsize] at (4.15,0.3)
+      {the dip: conservatism meets reality};
+\end{tikzpicture}
+\begin{itemize}
+    \item In practice: \textbf{pretrain offline} (data is free) $\to$
+          \textbf{fine-tune online} (interaction is scarce and expensive)
+    \item Naive fine-tuning dips first: the pessimistic values get violently
+          re-calibrated before they improve
+    \item Fixes keep the offline ballast while admitting new data: AWAC, Cal-QL, RLPD
+    \item You already know this recipe's most famous instance: \emph{pretrain on
+          logged human data, then fine-tune with RL}, the LLM pipeline (Day 9!)
+\end{itemize}
+\end{frame}

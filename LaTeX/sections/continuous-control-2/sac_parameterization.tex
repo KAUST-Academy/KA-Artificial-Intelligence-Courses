@@ -1,0 +1,27 @@
+\begin{frame}{SAC --- Parameterized soft Q-function}
+\renewcommand{\arraystretch}{1.8}
+\begin{center}
+\small
+\begin{tabular}{|c|p{0.36\textwidth}|p{0.30\textwidth}|}
+\hline
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Example} \\
+\hline
+$Q_\theta(\mathbf{s}_t, \mathbf{a}_t)$
+    & parameterized soft Q-function
+    & neural network \\
+\hline
+$\pi_\phi(\mathbf{a}_t \mid \mathbf{s}_t)$
+    & parameterized tractable policy
+    & Gaussian, mean/cov.\ from a network \\
+\hline
+$J_Q(\theta),\ \hat{\nabla}_\theta J_Q(\theta)$
+    & soft Q-function objective \& its stochastic gradient
+    & minimize soft Bellman residual \\
+\hline
+$J_\pi(\phi),\ \hat{\nabla}_\phi J_\pi(\phi)$
+    & policy objective \& its stochastic gradient
+    & KL to $\exp(Q/\alpha)$, reparameterized \\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}

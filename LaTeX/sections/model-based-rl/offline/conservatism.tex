@@ -1,0 +1,112 @@
+% Pessimism principle -> CQL -> BCQ/IQL. The optimism/pessimism mirror reuses
+% the UCB optimism idea from exploration, flipped in sign.
+
+\begin{frame}{The Fix: Optimism's Mirror Twin}
+\definecolor{ogreen}{RGB}{106,168,79}
+\definecolor{ored}{RGB}{158,28,38}
+\definecolor{oblue}{RGB}{16,53,103}
+\centering
+\begin{tikzpicture}[font=\scriptsize, >={Stealth[length=2.4mm]}]
+    \draw[very thick] (4,0.4) -- (4,2.6);
+    \draw[very thick] (3.85,0.4) -- (4.15,0.4);
+    \draw[very thick] (3.85,2.6) -- (4.15,2.6);
+    \fill[oblue] (4,1.5) circle (2.2pt);
+    \node[right=3pt, font=\scriptsize] at (4,1.5) {$\hat Q(s,a)$};
+    \node[right=3pt, font=\scriptsize] at (4,2.6) {$\hat Q + u$};
+    \node[left=3pt, font=\scriptsize] at (4,0.4) {$\hat Q - u$};
+    \node[align=center, ogreen!60!black, font=\scriptsize\bfseries] (on) at (1.1,2.6)
+      {Online (Day 7)\\optimism $\to$ explore};
+    \draw[->, ogreen!70!black, thick] (on.east) -- (3.8,2.6);
+    \node[align=center, ored, font=\scriptsize\bfseries] (off) at (7.1,0.4)
+      {Offline (today)\\pessimism $\to$ stay supported};
+    \draw[->, ored, thick] (off.west) -- (4.2,0.4);
+\end{tikzpicture}
+\begin{itemize}
+    \item Day 7's rule: \emph{in the face of uncertainty, be optimistic}: UCB
+          acts on $\hat Q + u$, because uncertainty was an \textbf{opportunity}
+    \item Offline, uncertainty can never be resolved: it is a \textbf{hazard}
+    \item Same machinery, opposite sign: act on $\hat Q - u$, \emph{pessimism}
+          in the face of uncertainty
+    \item Two places to install it: in the \textbf{values} (CQL) or in the
+          \textbf{policy} (BCQ, IQL)
+\end{itemize}
+\end{frame}
+
+% === CQL objective ======================================================
+\begin{frame}{Conservative Q-Learning (CQL)}
+\begin{itemize}
+    \item Train $Q$ with an extra penalty that makes unfamiliar (OOD) actions
+          \emph{look bad on purpose}
+    \item[] {\small
+      \[ \min_Q\;\; \alpha\big(
+          \mathbb{E}_{a\sim\pi}[Q(s,a)] - \mathbb{E}_{a\sim\mathcal{D}}[Q(s,a)]
+        \big) + \mathcal{L}_{\mathrm{Bellman}} \]}
+    \item $\min_Q$ = train $Q$ (tune its weights) to make this whole expression
+          small
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Conservative Q-Learning (CQL)}
+\begin{itemize}
+    \item Train $Q$ with an extra penalty that makes unfamiliar (OOD) actions
+          \emph{look bad on purpose}
+    \item[] {\small
+      \[ \min_Q\;\; \alpha\big(
+          \mathbb{E}_{a\sim\pi}[Q(s,a)] - \mathbb{E}_{a\sim\mathcal{D}}[Q(s,a)]
+        \big) + \mathcal{L}_{\mathrm{Bellman}} \]}
+    \item $\min_Q$ = train $Q$ to make this small. The penalty is a
+          \emph{difference}, so lowering it forces $Q$ \emph{down} on $\pi$'s (OOD)
+          actions and \emph{up} on the data's actions
+    \item $\alpha$ = how hard to push ($\alpha{=}0$ is plain Q-learning);
+          $\mathcal{L}_{\mathrm{Bellman}}$ = the normal TD loss, fitting $Q$ to
+          $r + \gamma \max_{a'} Q(s',a')$
+\end{itemize}
+\end{frame}
+
+% === What CQL does (figure) =============================================
+\begin{frame}{What CQL Does to the Phantom}
+\definecolor{oteal}{RGB}{0,141,160}
+\definecolor{ored}{RGB}{158,28,38}
+\definecolor{oblue}{RGB}{16,53,103}
+\centering
+\begin{tikzpicture}[font=\scriptsize, >={Stealth[length=2.4mm]}]
+    \draw[->] (0,0) -- (8.0,0) node[below left]{$a$};
+    \draw[->] (0,0) -- (0,3.3);
+    \node[rotate=90] at (-0.35,1.6) {$Q(s,\cdot)$};
+    \fill[oteal!12] (0.8,0.02) rectangle (3.6,3.0);
+    \node[oteal!60!black] at (2.2,2.8) {data support};
+    \draw[ored, thick, dashed] plot[smooth] coordinates
+      {(0.3,1.0) (1.2,1.45) (2.2,1.95) (3.2,1.75) (4.4,1.9) (5.6,2.5) (7.0,3.05)};
+    \node[ored, font=\scriptsize] at (7.35,2.85) {naive $\hat Q$};
+    \draw[oblue, very thick] plot[smooth] coordinates
+      {(0.3,0.95) (1.2,1.4) (2.2,1.9) (3.2,1.65) (4.4,1.05) (5.6,0.6) (7.0,0.35)};
+    \node[oblue, font=\scriptsize] at (7.4,0.55) {CQL $\hat Q$};
+    \foreach \x/\y in {1.0/1.42, 1.5/1.66, 1.9/1.84, 2.4/1.92, 2.8/1.85, 3.3/1.66}
+      \fill[oblue] (\x,\y) circle (1.6pt);
+    \draw[->, oblue, thick] (5.0,2.05) -- (5.0,0.95);
+    \draw[->, oblue, thick] (6.2,2.65) -- (6.2,0.60);
+    \node[oblue, font=\scriptsize, align=center] at (5.6,-0.45)
+      {pushed down: $a\sim\pi$, $a\notin\mathcal{D}$};
+\end{tikzpicture}
+\begin{itemize}
+    \item The phantom peak from before, after CQL training
+    \item OOD actions now look \emph{worse} than in-data actions: the greedy
+          policy stays home
+\end{itemize}
+\end{frame}
+
+% === BCQ & IQL ==========================================================
+\begin{frame}{A Second Family: Constrain the Policy}
+\begin{itemize}
+    \item CQL enforced pessimism in the \textbf{values}. A second family enforces
+          it in the \textbf{policy} instead:
+    \item \textbf{Keep the policy close to the data}: let it pick only actions
+          the behavior policy plausibly could have taken, so it never reaches an
+          OOD action in the first place
+    \item \textbf{BCQ} and \textbf{IQL} are the well-known instances; they
+          differ in \emph{how} they enforce this, and those details are genuinely
+          involved (beyond our scope)
+    \item Same principle as CQL, applied in a different place: \emph{stay where the
+          data is}
+\end{itemize}
+\end{frame}

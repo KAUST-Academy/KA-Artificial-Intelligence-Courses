@@ -1,4 +1,4 @@
-##  (2026-06-20)
+##  (2026-06-23)
 
 
 ### Features
@@ -31,7 +31,16 @@
 * **Linear Regression:** Feature Engineering and Vectorization ([51fac41](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/51fac41c3fdde08540bfcedbd897c9a137e83ee0))
 * **Linear Regression:** Outline, Intro, Motivation, Simple RL and Optimization review ([8c72e40](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/8c72e40327c0bd2eed7e631cb38de7b02761acee))
 * **Linear Regression:** Perspectives, Bias and Variance, Metrics, Data Split and Regularization ([4be272c](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/4be272c6014b69b51dd5bf90232b5eb3e73961d0))
+* NLP labs (Yasref nlp course) ([ab56f08](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/ab56f081d81983cf857897131efec90c1a50a0e8))
 * **Release:** Combine all courses into one Repository ([605b754](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/605b7548b76afb4d968c7c488edc8f927c207ed7))
+* **rl:** add Day 10 (Meta-RL & Open Problems) as modular LaTeX ([d6b1159](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d6b1159d108f38ec5ec3a7be59af07986a84b33b))
+* **rl:** add Day 5 (Soft Actor-Critic) LaTeX source ([cc69c38](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/cc69c38a1c8c0b43b8753eb1cb29942908335b09))
+* **rl:** add Day 6 (DDPG) LaTeX source ([c46a262](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/c46a262b0565d6bb676a7d1b093c1ae40d6f43a2))
+* **rl:** add Day 7 (Model-Based RL) LaTeX source ([729a04a](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/729a04abe95ddc64c9bb05e248a81d5078f08f94))
+* **rl:** add Day 8 (Multi-Armed Bandits) LaTeX source ([0fc0508](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/0fc0508ddd0befd41b635d1d4c1593340678c656))
+* **rl:** add Day 9 (RL in the Real World) LaTeX source ([fe9ac28](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/fe9ac282699e8026bfaecd721e2db3d249c7fa01))
+* **rl:** expand Day 4 (Policy Optimization) with GRPO and more ([7989439](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/7989439871f1b5d6cd282f627c9ebd2d37b6b3cf))
+* **rl:** polish Day 5 (Continuous Control I) ([5155ed7](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/5155ed797c1bf2f903826c7e12279ef3bd58379c))
 * **Slides:** Add Stage 2 ML lecture LaTeX source and images ([1ef30cc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1ef30ccefb075515e4b0eb10d53fe7f6845a5e36))
 * **Slides:** Added Audio_Processing_Evaluation_In_NLP ([3ed46f7](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/3ed46f7d9301300daa239d295359d6294ed1246b))
 * **slides:** created RNN, Transformer, and ViT CV ([acb283f](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/acb283fd62d923073f6cb4f9a51875b935d53856))

@@ -28,7 +28,7 @@
     \item Simple, stable, and very common in open recipes (LLaVA, LLaMA~4-style early fusion, PaliGemma~2, DeepSeek-VL, \ldots).
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{assets/New-Lecture-Transformers/bandaru_vlm_llava_architecture.png}
+  \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_llava_architecture.png}
   \vspace{0.15em}
   {\scriptsize Diagram from Bandaru. Paper: Liu et al., LLaVA, \href{https://arxiv.org/abs/2304.08485}{arXiv:2304.08485}.}
 \end{frame}
@@ -38,7 +38,7 @@
     \item A small \textbf{adapter} uses learned query vectors that \textbf{cross-attend} to ViT tokens and output a \textbf{fixed small} set of visual summaries for the LLM.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{assets/New-Lecture-Transformers/bandaru_vlm_qwen_vl_adapter.png}
+  \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_qwen_vl_adapter.png}
   \vfill
   {\scriptsize Diagram from Bandaru (Qwen-VL ``position-aware'' adapter).}
 \end{frame}
@@ -49,7 +49,7 @@
 %     \item Nice for \textbf{tight multimodal reasoning}; heavier data and training pipeline than ``ViT patches + adapter.''
 %   \end{itemize}
 %   \centering
-%   \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{assets/New-Lecture-Transformers/bandaru_vlm_chameleon_architecture.png}
+%   \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_chameleon_architecture.png}
 %   \vspace{0.15em}
 %   {\scriptsize Diagram from Bandaru. Paper: Meta Chameleon, \href{https://arxiv.org/abs/2405.09818}{arXiv:2405.09818}.}
 % \end{frame}
@@ -59,7 +59,7 @@
     \item Keep a pretrained ViT and LLM frozen; insert Perceiver resamplers (compress variable tokens $\to$ fixed count) and gated cross-attention blocks inside the LLM stack.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{assets/New-Lecture-Transformers/bandaru_vlm_flamingo_architecture.png}
+  \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_flamingo_architecture.png}
   \vfill
   {\scriptsize Diagram from Bandaru. Paper: Alayrac et al., Flamingo, \href{https://arxiv.org/abs/2204.14198}{arXiv:2204.14198}.}
 \end{frame}
@@ -79,7 +79,7 @@
 %     \item Stage~2 \textbf{concatenates} Q-Former outputs to the LLM inputs and finetunes for generation---a template many recipes echo (alignment $\to$ instruction).
 %   \end{itemize}
 %   \centering
-%   \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{assets/New-Lecture-Transformers/bandaru_vlm_blip2_training_stages.png}
+%   \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_blip2_training_stages.png}
 %   \vspace{0.15em}
 %   {\scriptsize Diagram from Bandaru. Paper: Li et al., BLIP-2, \href{https://arxiv.org/abs/2301.12597}{arXiv:2301.12597}.}
 % \end{frame}
@@ -90,7 +90,7 @@
 %     \item Later variants add \textbf{video}, \textbf{dynamic resolution}, and \textbf{long-context} stages---each step uses fewer examples but higher signal.
 %   \end{itemize}
 %   \centering
-%   \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{assets/New-Lecture-Transformers/bandaru_vlm_qwen_vl_training_stages.png}
+%   \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_qwen_vl_training_stages.png}
 %   \vspace{0.15em}
 %   {\scriptsize Diagram from Bandaru (Qwen-VL training stages).}
 % \end{frame}
@@ -101,14 +101,14 @@
 %     \item Practical systems \textbf{subsample in time}, use \textbf{3D patch} encoders to merge frames, or learn \textbf{content-aware} compressors (example below: run-length style redundancy).
 %   \end{itemize}
 %   \centering
-%   \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{assets/New-Lecture-Transformers/bandaru_vlm_rlt_video_compression.png}
+%   \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_rlt_video_compression.png}
 %   \vspace{0.15em}
 %   {\scriptsize Diagram from Bandaru (Run-Length Tokenization sketch). Paper: Choudhury et al., \href{https://arxiv.org/abs/2411.05222}{arXiv:2411.05222}.}
 % \end{frame}
 
 % \begin{frame}[t]{Instruction-tuned VLM (LLaVA paper figure)}
 %   \centering
-%   \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{assets/New-Lecture-Transformers/llava_vlm_example.png}
+%   \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/transformers-2017-v-2026/llava_vlm_example.png}
 %   \vfill
 %   {\scriptsize Liu et al., ``Visual Instruction Tuning'' (LLaVA), \href{https://arxiv.org/abs/2304.08485}{arXiv:2304.08485}.}
 % \end{frame}

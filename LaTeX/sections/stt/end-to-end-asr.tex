@@ -12,7 +12,7 @@
     \item DNN approximates $P(a \mid x)$ over output tokens; no separate HMM state topology for alignment.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec10_slide_25.png}
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/stt/stt_ctc_character_alignment.png}
 \end{frame}
 
 \begin{frame}{CTC output assumptions}
@@ -24,22 +24,22 @@
     \item \textbf{Collapsing rule:} Ignore all blank tokens, and ignore repeated outputs of the same token.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec10_slide_26.png}
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/stt/stt_ctc_collapse_dinner.png}
 \end{frame}
 
 \begin{frame}{CTC collapsing. Sum over all possible alignments}
   \centering
-  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec10_slide_27.png}
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/stt/stt_ctc_alignment_summation.png}
 \end{frame}
 
 \begin{frame}{Real example. Full utterance with blank token}
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec10_slide_28.png}
+  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/stt/stt_ctc_greedy_decoding_example.png}
 \end{frame}
 
 \begin{frame}{Example CTC results. No word lexicon or LM (WSJ corpus)}
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec10_slide_29.png}
+  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/stt/stt_ctc_transcription_examples.png}
 \end{frame}
 
 \begin{frame}{CTC loss function}
@@ -78,7 +78,7 @@
     \begin{column}{0.48\textwidth}
       \centering
       % Placeholder for image
-      \includegraphics[width=\textwidth,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec10_slide_32.png}
+      \includegraphics[width=\textwidth,keepaspectratio]{images/stt/stt_las_encoder_subsampling.png}
     \end{column}
   \end{columns}
 \end{frame}
@@ -91,5 +91,5 @@
     \item Prediction network often pre-trained with CTC. Encoder provides transformed features for each $t$
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec10_slide_47.png}
+  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/stt/stt_rnnt_architecture.png}
 \end{frame}

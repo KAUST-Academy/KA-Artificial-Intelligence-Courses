@@ -20,7 +20,7 @@
   \begin{columns}[T,onlytextwidth]
     \column{0.5\textwidth}
   \centering
-      \includegraphics[width=0.95\textwidth, height=0.95\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/ijepa_blog_architecture.png}
+      \includegraphics[width=0.95\textwidth, height=0.95\textheight, keepaspectratio]{images/jepa/ijepa_blog_architecture.png}
       {\scriptsize Reference: Meta I-JEPA blog architecture.}
     \column{0.5\textwidth}
   \begin{itemize}
@@ -64,7 +64,7 @@
   \end{itemize}
     \column{0.56\textwidth}
     \centering
-    \includegraphics[width=0.95\textwidth, height=0.95\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/ijepa_blog_semantic_sketches.png}\\[0.2em]
+    \includegraphics[width=0.95\textwidth, height=0.95\textheight, keepaspectratio]{images/jepa/ijepa_blog_semantic_sketches.png}\\[0.2em]
     {\scriptsize Illustrating how the predictor learns to model the semantics of the world. For each image, the portion outside of the blue box is encoded and given to the predictor as context. The predictor outputs a representation for what it expects to be in the region within the blue box. To visualize the prediction, we train a generative model that produces a sketch of the contents represented by the predictor output, and we show a sample output within the blue box. Clearly the predictor recognizes the semantics of what parts should be filled in (the top of the dog's head, the bird's leg, the wolf's legs, the other side of the building).
     }
   \end{columns}
@@ -80,7 +80,7 @@
 %     \end{itemize}
 %     \column{0.6\textwidth}
 %     \centering
-%     \includegraphics[width=0.8\linewidth, height=0.8\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/ijepa_blog_gpu_hours_linear_eval.png}\\[0.2em]
+%     \includegraphics[width=0.8\linewidth, height=0.8\textheight, keepaspectratio]{images/jepa/ijepa_blog_gpu_hours_linear_eval.png}\\[0.2em]
 %     {\scriptsize ImageNet-1K linear eval vs.\ GPU hours (Meta).}
 %   \end{columns}
 % \end{frame}
@@ -88,7 +88,7 @@
 % --- I-JEPA: ImageNet table (Meta blog) ---
 \begin{frame}{I-JEPA: Evaluation}
   \centering
-  \includegraphics[width=0.8\textwidth, height=0.8\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/ijepa_blog_imagenet_linear_table.png}\\[0.35em]
+  \includegraphics[width=0.8\textwidth, height=0.8\textheight, keepaspectratio]{images/jepa/ijepa_blog_imagenet_linear_table.png}\\[0.35em]
   {\scriptsize Low Shot Classification Accuracy: Semi-supervised evaluation on ImageNet-1k with 1\% of the labels (approximately 12 labeled images per class).}
 \end{frame}
 
@@ -104,7 +104,7 @@
 % --- Comparing SSL Architectures ---
 % \begin{frame}{SSL Architectures: MAE vs. JEPA}
 %   \centering
-%   \includegraphics[width=0.9\textwidth]{assets/New-Lecture_JEPA_models/mae_vs_ijepa.png}
+%   \includegraphics[width=0.9\textwidth]{images/jepa/mae_vs_ijepa.png}
 %   \begin{itemize}
 %     \item \textbf{MAE:} Predicts pixels for masked regions, high reconstruction overhead.
 %     \item \textbf{JEPA:} Predicts feature embeddings, abstracting visual content.

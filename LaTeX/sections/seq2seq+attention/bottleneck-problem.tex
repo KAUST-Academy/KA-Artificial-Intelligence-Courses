@@ -29,7 +29,7 @@
 
 \begin{frame}{A problem with this framework}
   \begin{center}
-    \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_024.png}
+    \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_bottleneck_two_separate_rnns.png}
   \end{center}  
   \begin{itemize}
       \item In reality: All hidden values carry information.
@@ -42,7 +42,7 @@
 
 \begin{frame}{A problem with this framework}
   \begin{center}
-    \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_025.png}
+    \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_bottleneck_cross_attention_links.png}
   \end{center}  
   \begin{itemize}
       \item Every output is related to the input directly.
@@ -68,7 +68,7 @@
 
 \begin{frame}{Using all input hidden states}
   \begin{center}
-    \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_028.png}
+    \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_context_average_hidden_states.png}
   \end{center}  
   \begin{itemize}
       \item Simple solution: Compute the average of all encoder hidden states.
@@ -80,7 +80,7 @@
 
 \begin{frame}{Using all input hidden states}
   \begin{center}
-    \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_029.png}
+    \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_context_average_broadcast.png}
   \end{center}  
   \begin{itemize}
       \item Problem: The average applies the same weight to every input.
@@ -94,7 +94,7 @@
 
 \begin{frame}{Using all input hidden states}
   \begin{center}
-    \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_030.png}
+    \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_context_per_step_weighted.png}
   \end{center}
 
   \textcolor{red}{\textbf{Solution:} Use a \textit{different} weighted average for each output word}
@@ -108,7 +108,7 @@
 
 \begin{frame}{Using all input hidden states}
 \centering
-\includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{assets/Lecture-4_Sequence_to_Sequence_Models_Intro_to_Attention/slide_031.png}
+\includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_context_per_step_hidden_notation.png}
 \begin{equation*}
     c_t = \frac{1}{N} \sum_{i=1}^N w_i(t) h_i
 \end{equation*}

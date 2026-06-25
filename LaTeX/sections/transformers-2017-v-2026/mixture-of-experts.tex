@@ -16,14 +16,14 @@
 
 \begin{frame}[t]{MoE milestones}
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{assets/New-Lecture-Transformers/moe_survey_fig1_timeline.png}
+  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/transformers-2017-v-2026/moe_survey_fig1_timeline.png}
   \vspace{0.2em}
   {\scriptsize \textit{Reference:} Zhang et al., ``Mixture of Experts in Large Language Models,'' \href{https://arxiv.org/abs/2507.11181}{arXiv:2507.11181}.}
 \end{frame}
 
 \begin{frame}[t]{MoE for a decoder-only Transformer}
   \centering
-  \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{assets/New-Lecture-Transformers/moe_survey_fig5a_moe_layer.png}
+  \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{images/transformers-2017-v-2026/moe_survey_fig5a_moe_layer.png}
   {\scriptsize MoE for a decoder-only Transformer with $k=2$ experts.}
   \begin{itemize}\footnotesize
     \item Input $\mathbf{x}$ enters a \textbf{gating / router} that outputs scores for each expert.
@@ -44,14 +44,14 @@
     \item Instead, think ``\textbf{eight expert FFNs} per MoE layer, with \textbf{shared} attention and norms,'' and only a subset fires per token (here, \textbf{top-2} experts).
   \end{itemize}
   \centering
-  \includegraphics[width=0.72\textwidth,height=0.48\textheight,keepaspectratio]{assets/New-Lecture-Transformers/nvidia_blog_mixtral_misread_diagram.png}
+  \includegraphics[width=0.72\textwidth,height=0.48\textheight,keepaspectratio]{images/transformers-2017-v-2026/nvidia_blog_mixtral_misread_diagram.png}
   \vfill
   {\scriptsize \textit{Reference:} Kranen \& Nguyen, ``Applying Mixture of Experts in LLM Architectures,'' NVIDIA Technical Blog (2024), \href{https://developer.nvidia.com/blog/applying-mixture-of-experts-in-llm-architectures/}{article}.}
 \end{frame}
 
 \begin{frame}{MoE: Most Preferred Tokens By Experts}
   \centering
-  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{assets/New-Lecture-Transformers/most-common-tokens-processed-moe.png}
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/transformers-2017-v-2026/most-common-tokens-processed-moe.png}
   \linebreak
   {\scriptsize \textit{Reference:} Kranen \& Nguyen, ``Applying Mixture of Experts in LLM Architectures,'' NVIDIA Technical Blog (2024), \href{https://developer.nvidia.com/blog/applying-mixture-of-experts-in-llm-architectures/}{article}.}
 \end{frame}

@@ -13,7 +13,7 @@
 % \begin{frame}{Conformer: Convolution-augmented Transformer for Speech Recognition}
 %   A conformer is a transformer encoder with a convolutional module in the transformer layer
 %   \centering
-%   \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_04.png}
+%   \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_conformer_block_architecture.png}
 % \end{frame}
 
 \begin{frame}{Conformer: Convolution-augmented Transformer for Speech Recognition}
@@ -24,7 +24,7 @@
   \end{itemize}
   \vspace{0.6em}
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_04.png}
+  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/stt/stt_conformer_block_architecture.png}
 
   \vspace{0.6em}
   {\scriptsize
@@ -41,13 +41,13 @@
     \item Mask time/frequency bands in log-mel during training for robustness.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_05.png}
+  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/stt/stt_specaugment_spectrograms.png}
 \end{frame}
 
 % --- Stanford CS224S lec11, slide 6 ---
 \begin{frame}{Convolution subsampling: Log mel spectrogram is an image}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_06.png}
+  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_conformer_conv_subsampling.png}
 \end{frame}
 
 
@@ -55,13 +55,13 @@
 % \begin{frame}{Transformer encoder to conformer encoder}
 %   A conformer is a transformer encoder with a convolutional module in the transformer layer
 %   \centering
-%   \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_09.png}
+%   \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_conformer_macaron_layers.png}
 % \end{frame}
 
 % --- Stanford CS224S lec11, slide 11 ---
 % \begin{frame}{Conformer architecture overview}
 %   \centering
-%   \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_11.png}
+%   \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_conformer_title_overview.png}
 % \end{frame}
 
 % --- Stanford CS224S lec11, slide 13 ---
@@ -79,7 +79,7 @@
     \begin{column}{0.47\textwidth}
       \centering
       \\[0.3em]
-      \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_13.png}
+      \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_conformer_ablation_table.png}
       {\scriptsize \textit{Ablation results: Largest WER drop from convolutions.}}
     \end{column}
   \end{columns}
@@ -88,19 +88,19 @@
 % --- Stanford CS224S lec11, slide 18 ---
 \begin{frame}{State-of-the-art ASR: Whisper}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_18.png}
+  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_whisper_multilingual_example.png}
 \end{frame}
 
 % --- Stanford CS224S lec11, slide 20 ---
 \begin{frame}{Whisper: How does it perform a variety of tasks accurately?}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_20.png}
+  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_whisper_multitask_seq2seq.png}
 \end{frame}
 
 % --- Stanford CS224S lec11, slide 21 ---
 \begin{frame}{Whisper: encoder--decoder architecture}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_21.png}
+  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_whisper_vs_text_transformer.png}
 \end{frame}
 
 % --- Stanford CS224S lec11, slide 22 ---
@@ -120,7 +120,7 @@
     \end{column}
     \begin{column}{0.58\textwidth}
       \centering
-      \includegraphics[width=\textwidth,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_22.png}
+      \includegraphics[width=\textwidth,keepaspectratio]{images/stt/stt_whisper_encoder_detail.png}
     \end{column}
   \end{columns}
 \end{frame}
@@ -146,7 +146,7 @@
     \end{column}
     \begin{column}{0.51\textwidth}
       \centering
-      \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_23.png}
+      \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_whisper_decoder_detail.png}
     \end{column}
   \end{columns}
 \end{frame}
@@ -165,7 +165,7 @@
     \end{column}
     \begin{column}{0.60\textwidth}
       \centering
-      \includegraphics[width=\textwidth,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_30.png}
+      \includegraphics[width=\textwidth,keepaspectratio]{images/stt/stt_whisper_token_sequence_format.png}
     \end{column}
   \end{columns}
 \end{frame}
@@ -175,7 +175,7 @@
   \begin{columns}[T]
     \begin{column}{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{assets/New-Lecture-STT/cs224s_lec11_slide_34.png}
+    \includegraphics[width=\textwidth,keepaspectratio]{images/stt/stt_whisper_translation_bleu_scaling.png}
     \end{column}
     \begin{column}{0.50\textwidth}
       \textbf{Speech translation performance on FLEURS dataset (higher is better)}

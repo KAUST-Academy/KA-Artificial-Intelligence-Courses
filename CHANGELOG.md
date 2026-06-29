@@ -1,4 +1,4 @@
-##  (2026-06-25)
+##  (2026-06-29)
 
 
 ### Features
@@ -44,6 +44,7 @@
 * **Slides:** Add Stage 2 ML lecture LaTeX source and images ([1ef30cc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1ef30ccefb075515e4b0eb10d53fe7f6845a5e36))
 * **Slides:** Added Audio_Processing_Evaluation_In_NLP ([3ed46f7](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/3ed46f7d9301300daa239d295359d6294ed1246b))
 * **slides:** created RNN, Transformer, and ViT CV ([acb283f](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/acb283fd62d923073f6cb4f9a51875b935d53856))
+* **slides:** deduplicate CV slides ([3699263](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/36992639114242ac54db90cac73e72303986149d))
 * **Slides:** Migrate Stage 3 slides into repo ([320fb22](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/320fb22d7095483d19ddc76f786df89eb98238af))
 * **Slides:** Migrated stage 2 slides. ([553b1a2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/553b1a252b95ffcdf1db978265828f14c1887ec4))
 * **slides:** reorganize decks by course, switch to KAUST theme, 16:9 [minor] ([47db948](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/47db9487f00bb6fdf44917e5642eba73fb776ada))

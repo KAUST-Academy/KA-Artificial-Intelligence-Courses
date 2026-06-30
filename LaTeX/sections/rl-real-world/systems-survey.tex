@@ -1,0 +1,45 @@
+\section{RL for Systems}
+
+% ---------------------------------------------------------------- Survey slide
+\begin{frame}{RL Also Runs Systems}
+\begin{columns}[T]
+\begin{column}{0.52\textwidth}
+\footnotesize
+\textbf{Illustrative example: chip floorplanning} (Mirhoseini et al.,
+\emph{Nature} 2021):
+\begin{itemize}\itemsep0.25em
+    \item Place macros on a chip canvas to minimize wirelength, congestion,
+          and density.
+    \item The striking idea: \emph{pre-train} a placement policy on many
+          netlists, then place a \emph{new} chip in a forward pass, instead
+          of optimizing each one from scratch.
+\end{itemize}
+\vspace{0.4em}
+\textbf{Also deployed for:} datacenter resource scheduling, compiler / device
+placement, real-time ad bidding.
+\end{column}
+\begin{column}{0.48\textwidth}
+\centering
+\resizebox{0.8\linewidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize,
+    box/.style={draw, rounded corners, minimum height=0.8cm, align=center},
+    ar/.style={-{Stealth[length=2mm]}, thick}]
+  \node[box, fill=boxtan,  text width=1.8cm] (nl)  at (0,0)   {Netlist\\(graph)};
+  \node[box, fill=sysblue, text width=1.8cm] (pol) at (0,-1.4){Placement\\policy $\pi_\theta$};
+  \node[box, fill=boxgreen,text width=1.8cm] (pl)  at (0,-2.8){Placement\\(layout)};
+  \draw[ar] (nl)  -- (pol);
+  \draw[ar] (pol) -- (pl);
+  \draw[ar] (pl.east) -- ++(0.6,0) |- node[pos=0.25,right,font=\tiny,align=left]{reward:\\$-$wirelength} (pol.east);
+\end{tikzpicture}%
+}
+\end{column}
+\end{columns}
+\vfill
+\begin{center}
+\setlength{\fboxsep}{5pt}%
+\colorbox{boxgreen!50}{\parbox{0.94\textwidth}{\centering\footnotesize
+\textbf{The transferable idea:} all are \emph{combinatorial optimization as
+sequential decision-making}: one MDP framing with an \emph{engineered} reward
+(wirelength, runtime, ROI). The application details are not the lesson.}}
+\end{center}
+\end{frame}

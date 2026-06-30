@@ -1,181 +1,756 @@
-\section{Learning Rewards from Feedback: RLHF \& RLAIF}
+\section{Learning Rewards from Feedback: RLHF}
 
-% ---------------------------------------------------------------- Slide 18
-\begin{frame}{What to do in domains where reward is hard to specify?}
-\begin{itemize}
-    \item One solution is to ask humans to provide feedback --- however, this is
-          prohibitively expensive in the naive formulation, as RL typically requires
-          thousands to millions of labels to learn an effective policy (depending on
-          the complexity of the task)
-    \item But what if you train a model to predict human judgments and then use this
-          predictive model as the reward signal?
+% ================================================================ 3.1a  The wall
+\begin{frame}{First, a Reward We Cannot Write Down}
+\begin{itemize}\itemsep0.5em
+    \item Every method in Days 1--8 assumed a reward function $r$ we could
+          \emph{write down}: the game score, $-$distance to a target, $+1$ for a
+          win.
+    \item Now suppose the goal is \empr{``be a helpful, honest, harmless
+          assistant.''} What number measures that? There is no formula.
 \end{itemize}
-\vfill
-\begin{center}
-\includegraphics[width=0.6\linewidth,keepaspectratio]{images/rl-real-world/figures/reward-schematic.jpg}
-\end{center}
-\end{frame}
-
-% ---------------------------------------------------------------- Divider
-\begin{frame}{}
-    \LARGE Reinforcement Learning for \textbf{Human Feedback (RLHF)}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 20
-\begin{frame}{Deep RL from Human Preferences}
-\begin{itemize}
-    \item Without access to the true reward function and labeling $<1\%$ of the
-          environment interactions, able to perform complex tasks, including Atari
-          games and MuJoCo.
-\end{itemize}
-\vfill
-\begin{columns}[c]
-\begin{column}{0.42\textwidth}
-\centering
-\includegraphics[width=\linewidth,keepaspectratio]{images/rl-real-world/figures/prefs-schematic.jpg}
+\vspace{0.5em}
+\begin{columns}[T]
+\begin{column}{0.5\textwidth}\centering
+\setlength{\fboxsep}{6pt}%
+\colorbox{boxgreen!50}{\parbox{0.92\linewidth}{\footnotesize
+\textbf{Answer A.} ``It's the force that pulls things down. It's why a ball
+falls when you let go of it.''}}
 \end{column}
-\begin{column}{0.58\textwidth}
-\centering
-\includegraphics[width=\linewidth,keepaspectratio]{images/rl-real-world/figures/prefs-plots.jpg}
+\begin{column}{0.5\textwidth}\centering
+\setlength{\fboxsep}{6pt}%
+\colorbox{boxred!40}{\parbox{0.92\linewidth}{\footnotesize
+\textbf{Answer B.} ``Gravity is the curvature of spacetime sourced by the
+stress--energy tensor, $G_{\mu\nu} = 8\pi T_{\mu\nu}$\dots''}}
 \end{column}
 \end{columns}
-\footnote[0]{\scriptsize Christiano, Leike, Brown, Martic, Legg, Amodei. \href{https://arxiv.org/abs/1706.03741}{Deep Reinforcement Learning from Human Preferences}. NeurIPS 2017.}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 21
-\begin{frame}{RL from Human Feedback in LLMs (aka RLHF)}
-\begin{itemize}
-    \item ``Secret sauce'' behind powerful LLMs like ChatGPT!
-    \item Humans rank-order pairs of behavior, train a preference model, use preference
-          model as reward, and RL-finetune to optimize ``good'' behavior
-    \item Performing RLHF on top of pretrained large language models (LLMs) greatly
-          improves instruction-following / in-context learning / prompting.
-\end{itemize}
-\vfill
-\begin{center}
-\includegraphics[width=0.85\linewidth,height=0.48\textheight,keepaspectratio]{images/rl-real-world/figures/rlhf-llm.jpg}
+\vspace{0.5em}
+\begin{center}\small
+\emph{Prompt: ``Explain gravity to a 6-year-old.''}\\
+Almost everyone prefers \textbf{A}, yet \empr{no one can write the formula that
+says so.}
 \end{center}
-\footnote[0]{\scriptsize Bai et al. \href{https://arxiv.org/abs/2204.05862}{Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback}. 12 Apr 2022.}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 22
-\begin{frame}{How to Perform RLHF}
+% ================================================================ 3.1b  The idea
+\begin{frame}{The Idea: Don't Write the Reward, Learn It}
+\begin{itemize}\itemsep0.45em
+    \item \empr{Recall Day 7 (inverse RL):} when you cannot write the reward,
+          \emph{recover it from data.} RLHF is the most consequential example of
+          this.
+    \item People are bad at giving a \emph{number} (``this answer is a 7.3'') but
+          good at \emph{comparing}: ``A is better than B.'' Comparisons are cheap
+          and consistent.
+    \item \textbf{The plan, in three moves:}
+    \begin{enumerate}\footnotesize\itemsep0.2em
+        \item Collect many human \emph{comparisons} of model answers.
+        \item Train a model to predict those comparisons; this learned model
+              \emph{becomes our reward signal}.
+        \item Use RL to push the policy toward answers that score well under it.
+    \end{enumerate}
+    \item This is \textbf{Reinforcement Learning from Human Feedback (RLHF)}, the
+          method behind ChatGPT-style assistants.
+\end{itemize}
+\end{frame}
+
+% ================================================================ 3.2
+% Deep RL from Human Preferences (Christiano 2017) - one clear goal
+\begin{frame}{This Idea Was Proven Before LLMs (2017)}
+\textbf{The point of this slide:} the recipe works, and works with surprisingly
+little human input.
+\vspace{0.3em}
+\begin{columns}[c]
+\begin{column}{0.52\textwidth}
+\begin{itemize}\itemsep0.4em\small
+    \item Christiano et al.\ gave the agent \emph{no} reward function at all.
+    \item A human just watched \emph{pairs of short clips} and clicked which one
+          looked better.
+    \item From those clicks alone, labeling \empr{under 1\%} of the agent's
+          experience, it learned to play Atari games and make a simulated robot
+          do backflips.
+\end{itemize}
+\vspace{0.4em}
+{\footnotesize \textbf{Takeaway:} learning a reward from \emph{comparisons} is
+enough to train complex behaviour. RLHF scales this exact idea up to language.}
+\end{column}
+\begin{column}{0.48\textwidth}
+\centering
+\includegraphics[width=\linewidth, keepaspectratio]{images/rl-real-world/figures/prefs-schematic.jpg}
+\end{column}
+\end{columns}
+\srcnote{\scriptsize Christiano, Leike, Brown, Martic, Legg, Amodei. \href{https://arxiv.org/abs/1706.03741}{Deep Reinforcement Learning from Human Preferences}. NeurIPS 2017.}
+\end{frame}
+
+% ---------------------------------------------------------------- Divider: into LLMs
+\begin{frame}{}
 \vfill
 \centering
-\includegraphics[width=0.92\linewidth,keepaspectratio]{images/rl-real-world/figures/how-rlhf.jpg}%
-\footnote[0]{\scriptsize Bai et al. \href{https://arxiv.org/abs/2204.05862}{Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback}. 12 Apr 2022.}
+{\LARGE Reinforcement Learning \textbf{from} Human Feedback}\\[0.4em]
+{\large for Language Models}
 \vfill
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 23
-\begin{frame}{Step 1: Collect Human Judgments}
+% ================================================================ 3.3a  Vocabulary
+\begin{frame}{First, the Vocabulary: an LLM Is a Policy}
+Everything that follows is just the RL language from Day 1, applied to text.
+\vfill
+\begin{itemize}\itemsep0.4em\small
+    \item \textbf{Prompt $x$}, the input (a question or instruction).
+          \hfill \emph{the \textbf{state}}
+    \item \textbf{Response $y$}, the model's full answer.
+          \hfill \emph{the \textbf{action}}
+    \item \textbf{Policy $\pi_\theta(y \mid x)$}, the language model itself:
+          given a prompt, it assigns a probability to possible responses and
+          samples one. The weights $\theta$ are what we train.
+    \item It writes the answer one \emph{token} (word-piece) at a time; at each step
+          a final layer, the \textbf{LM head}, outputs a probability over the
+          next token.
+\end{itemize}
+\vfill
+\begin{center}
+\empr{So ``train the policy'' simply means ``adjust the language model's weights
+$\theta$.''}
+\end{center}
+\end{frame}
+
+% ================================================================ 3.3  Roadmap (plain English)
+\begin{frame}{The RLHF Pipeline: The Map}
+Three stages. We build each one up over the next slides; for now, just the plain
+English.
+\vfill
 \centering
-\includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{images/rl-real-world/figures/step1-judgments.jpg}
+\resizebox{0.98\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize,
+    box/.style={draw, rounded corners, minimum width=3.6cm, minimum height=1.7cm, align=center, fill=sysblue},
+    ar/.style={-{Stealth[length=2.8mm]}, very thick}]
+  \node[box] (s1) at (0, 0)  {\textbf{1.\ Imitate}\\[0.25em]\scriptsize teach it to\\\scriptsize follow instructions};
+  \node[box] (s2) at (5.2, 0){\textbf{2.\ Score}\\[0.25em]\scriptsize learn what\\\scriptsize people prefer};
+  \node[box] (s3) at (10.4, 0){\textbf{3.\ Optimize}\\[0.25em]\scriptsize push toward\\\scriptsize preferred answers};
+  \draw[ar] (s1) -- (s2);
+  \draw[ar] (s2) -- (s3);
+\end{tikzpicture}%
+}
+\vfill
+\begin{itemize}\itemsep0.25em\small
+    \item \textbf{Start:} a raw language model that can produce text but doesn't
+          reliably do what you ask.
+    \item \textbf{End:} a model that follows instructions \emph{and} leans toward
+          the answers people actually want.
+\end{itemize}
+\srcnote{\scriptsize Standard pipeline: Ouyang et al.\ (InstructGPT), 2022; Stiennon et al.\ 2020; Bai et al.\ 2022.}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 24
-\begin{frame}{Step 2: Train Preference Models (PMs)}
-\begin{itemize}
-    \item Train PM to assign a higher score to the response preferred by a human rater
-    \item Base models from 13M through 52B parameters (in increments of 4x)
+% ================================================================ 3.3 Stage 1: SFT
+\begin{frame}{Stage 1 (Imitate): Supervised Fine-Tuning (SFT)}
+\begin{itemize}\itemsep0.5em
+    \item \textbf{Problem:} a raw pretrained model can \emph{continue} text, but
+          doesn't reliably answer questions or follow instructions.
+    \item \textbf{Fix: show it examples.} Collect prompts paired with
+          \emph{human-written ideal answers}, and train the model to imitate them.
+          This is ordinary supervised learning (next-token prediction), no RL
+          yet.
+    \item The result is a decent instruction-follower. We \textbf{freeze a copy of
+          it} and call it the \empr{reference model $\pi_{\text{ref}}$}; it will
+          be our anchor in Stages 2 and 3.
 \end{itemize}
-\vfill
-\begin{center}
-\includegraphics[width=0.9\linewidth,keepaspectratio]{images/rl-real-world/figures/step2-pms.jpg}
+\vspace{0.5em}
+\begin{center}\footnotesize
+SFT can only \emph{copy} the demonstrations it was given. To go \emph{beyond} them,
+we need to capture what people \emph{prefer}. That is Stage 2.
 \end{center}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 25
-\begin{frame}{Step 3: Perform RL-Finetuning with PM as Reward Signal}
-\begin{itemize}
-    \item Extract all prompts from the previous steps, prompt the base LM to respond,
-          and then use the PM score as the reward signal
-    \item Train with Proximal Policy Optimization (PPO) with an auxiliary KL penalty
-\end{itemize}
-\vfill
-\begin{equation*}
-    r_{\text{total}} \;=\; r_{\text{PM}}
-        \;-\; \lambda_{\text{KL}}\, D_{\text{KL}}\!\left(\text{policy} \,\|\, \text{policy}_0\right)
-\end{equation*}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 26
-\begin{frame}{Takeaways}
-\begin{itemize}
-    \item Alignment tax for small models but alignment bonus for 13B+ models
-    \item Tradeoff between helpfulness and harmlessness, but performance improves on
-          both distributions as model scale up
-    \item RLHF improves programming ability for models pretrained on code
-    \item RLHF boosts performance on MMLU, Lambada, Hellaswag, OpenBookQA, and ARC,
-          but hurt performance on TriviaQA compared to a base models
+% ---------------------------------------------------------------- 3.3 Stage 2a: the RM in words
+\begin{frame}{Stage 2 (Score): A Model That Rates Answers}
+\begin{itemize}\itemsep0.5em
+    \item We want a \textbf{reward model} $r_\phi$: a network (its own weights
+          $\phi$) that reads a (prompt, response) and outputs \emph{a single
+          number} (\emph{how good is this answer?}). Higher means better.
+    \item \textbf{Where does its training data come from?} Comparisons. For one
+          prompt $x$, show a human two candidate responses; they pick the better
+          one. We label the pair:
+    \begin{itemize}\footnotesize\itemsep0.15em
+        \item $y^+$, the response the human \textbf{preferred},
+        \item $y^-$, the response they \textbf{rejected}.
+    \end{itemize}
+    \item \textbf{What we want from $r_\phi$:} give $y^+$ a higher score than $y^-$,
+          on every pair. Next slide: how to turn ``preferred'' into a trainable
+          loss.
 \end{itemize}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 27
-\begin{frame}{Next Step: RL from AI Feedback (RLAIF)!}
-\begin{itemize}
-    \item \textbf{Motivation:} Scaling supervision --- as models approach or exceed
-          human-level performance, it becomes difficult for humans to supervise them.
-    \item \textbf{RLAIF:} Perform RL-finetuning using AI feedback derived from a
-          ``constitution'' describing desired behavior. Humans don't need to be in the
-          loop, except to write the constitution!
+% ---------------------------------------------------------------- 3.3 Stage 2b: Bradley-Terry loss
+\begin{frame}{Turning Comparisons into a Loss: Bradley--Terry}
+How likely is a person to prefer $y^+$ over $y^-$? It should grow with the
+\textbf{gap in their scores}, squeezed into a probability by the sigmoid $\sigma$
+(``$\succ$'' reads \emph{``is preferred over''}):
+\[
+    \underbrace{P\big(y^+ \succ y^- \mid x\big)}_{\text{chance the human picks } y^+}
+    \;=\; \sigma\big(\, r(y^+) - r(y^-) \, \big),
+    \qquad \sigma(z) = \frac{1}{1 + e^{-z}}
+\]
+Train $r_\phi$ to make these probabilities match the human labels (maximum
+likelihood). The negative log-likelihood is the \textbf{reward-model loss}:
+\[
+    L_{\mathrm{RM}} \;=\; -\log\sigma\big(\, r_\phi(y^+) - r_\phi(y^-) \, \big)
+\]
+\begin{itemize}\itemsep0.2em\small
+    \item In plain words: \empr{push the preferred answer's score above the rejected
+          one's.}
+    \item Remember this $-\log\sigma(\Delta)$ shape: the \textbf{exact same form}
+          comes back when we reach DPO.
+    \item Only the \emph{gap} between scores matters; the absolute scale is free.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.3 RM architecture aside
+\begin{frame}{What Is the Reward Model, Concretely?}
+\vspace{0.8em}
+\begin{center}\small
+We've said \emph{what} the reward model does (rates answers) and \emph{how} it's
+trained (the Bradley--Terry loss). \textbf{Here is what it physically is.}
+\end{center}
+\vspace{0.6em}
+\begin{columns}[c]
+\begin{column}{0.54\textwidth}
+\begin{itemize}\itemsep0.35em\small
+    \item Start from the SFT model $\pi_{\text{ref}}$, the same transformer
+          backbone.
+    \item A \textbf{head} is the small output layer stacked on top of that backbone.
+          The \textbf{LM head} turns the backbone's features into a probability over
+          the next token.
+    \item Swap it for a \textbf{scalar head}: a layer that emits \emph{one number},
+          $r_\phi(x, y)$, for the whole (prompt, response). Train it with the
+          Bradley--Terry loss from the last slide.
+    \item So the reward model is \emph{``the same network, one number out instead
+          of a token distribution.''}
+\end{itemize}
+\end{column}
+\begin{column}{0.46\textwidth}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize,
+    box/.style={draw, rounded corners, minimum width=2.8cm, minimum height=0.9cm, align=center},
+    ar/.style={-{Stealth[length=2.2mm]}, thick}]
+  \node[box, fill=sysblue, minimum height=1.4cm] (body) at (0, 0) {Transformer body\\\scriptsize (init.\ from SFT)};
+  \node[box, fill=gray!25] (lm)  at (-1.5, 2.0) {LM head};
+  \node[box, fill=mlgreen] (sc)  at ( 1.6, 2.0) {scalar head};
+  \draw[ar, gray] (body) -- (lm);
+  \draw[ar] (body) -- (sc);
+  \node[font=\large, gray] at (-1.5, 2.0) {};
+  \draw[red, thick] (-2.5, 1.5) -- (-0.5, 2.5);
+  \draw[red, thick] (-2.5, 2.5) -- (-0.5, 1.5);
+  \node[above=0.05cm of sc, font=\scriptsize] {$r_\phi(x, y)\in\mathbb{R}$};
+\end{tikzpicture}%
+}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.3 supporting: PM scaling
+\begin{frame}{Stage 2, in practice: reward models scale}
+\begin{itemize}\itemsep0.3em\small
+    \item \emph{Note:} the source paper calls this a ``preference model (PM)'' (the same thing as our \textbf{reward model}).
+    \item \textbf{What's measured:} accuracy = how often the model picks the same
+          response the human preferred. The axes below are amount of preference data
+          (left) and model size (right).
+    \item \textbf{Model size} = number of parameters (weights); here $13\text{M}
+          \to 52\text{B}$, in $4\times$ steps. \empr{Bigger model + more data $\to$
+          a more accurate reward model.}
 \end{itemize}
 \vfill
 \begin{center}
-\includegraphics[width=0.85\linewidth,height=0.55\textheight,keepaspectratio]{images/rl-real-world/figures/cai-pipeline.jpg}
+\includegraphics[width=0.78\linewidth, keepaspectratio]{images/rl-real-world/figures/step2-pms.jpg}
 \end{center}
-\footnote[0]{\scriptsize Bai et al. \href{https://arxiv.org/abs/2212.08073}{Constitutional AI: Harmlessness from AI Feedback}. 15 Dec 2022.}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 28
-\begin{frame}{Benefits of Supervised Learning + Reinforcement Learning}
-\begin{itemize}
-    \item \textbf{Supervised Learning:} Improves initial model, which helps with
-          exploration and sample efficiency
-    \item \textbf{Reinforcement Learning:} Significantly boosts performance and
-          reliability of the final policy
+% ================================================================ 3.3 Stage 3 bridge
+\begin{frame}{Stage 3 (Optimize): Finally, Reinforcement Learning}
+\begin{itemize}\itemsep0.5em
+    \item We now have a reward model $r_\phi$ that scores answers. \textbf{The RL
+          loop:} the policy generates a response, $r_\phi$ scores it, and we update
+          the policy's weights to earn higher scores, with PPO (Day 4) or GRPO.
+    \item The policy starts as $\pi_{\text{ref}}$ (the frozen SFT model) and
+          improves from there.
+    \item \empr{One catch:} $r_\phi$ is only a \emph{learned proxy} for human taste,
+          not the real thing. Optimize it too hard and the model learns to
+          \emph{game} it. The next slide shows how that happens, and the fix.
+\end{itemize}
+\end{frame}
+
+% ================================================================ 3.4
+% Reward hacking / why the KL term exists (NEW) - TikZ Goodhart curve
+\begin{frame}{Why the KL Penalty Exists: Reward Over-Optimization}
+The RL objective is the reward-model score minus a leash to the reference policy
+($\beta$ sets how hard we pull back toward $\pi_{\text{ref}}$):
+\[
+    r_{\text{total}} \;=\; r_\phi
+        \;-\; \beta\, D_{\text{KL}}\!\left(\pi_\theta \, \|\, \pi_{\text{ref}}\right)
+\]
+\vspace{-0.4em}
+\begin{columns}[c]
+\begin{column}{0.54\textwidth}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize]
+  % axes
+  \draw[-{Stealth[length=2mm]}] (0, 0) -- (7, 0) node[right]{\scriptsize KL from $\pi_{\text{ref}}$};
+  \draw[-{Stealth[length=2mm]}] (0, 0) -- (0, 5)  node[above]{\scriptsize reward};
+  % proxy reward: monotonically increasing
+  \draw[thick, blue, smooth] plot coordinates
+    {(0, 0.3) (1, 1.4) (2, 2.4) (3, 3.2) (4, 3.8) (5, 4.2) (6, 4.5)};
+  \node[blue, right] at (6, 4.6) {\scriptsize proxy (RM)};
+  % true reward: rises then falls
+  \draw[thick, accentred, smooth] plot coordinates
+    {(0, 0.3) (1, 1.5) (2, 2.6) (3, 3.2) (3.2, 3.25) (4, 2.9) (5, 2.0) (6, 1.0)};
+  \node[accentred, right] at (6, 1.0) {\scriptsize true (human-intended)};
+  % KL operating point
+  \draw[dashed, gray] (3.2, 0) -- (3.2, 3.25);
+  \node[gray, align=center, font=\tiny] at (3.2, -0.5) {KL penalty\\keeps us here};
+  % reward-hacking gap
+  \draw[<->, gray] (5, 4.2) -- (5, 2.0);
+  \node[align=center, font=\tiny] at (5.95, 3.1) {reward\\hacking};
+\end{tikzpicture}%
+}
+\end{column}
+\begin{column}{0.46\textwidth}
+\footnotesize
+The reward model is a \textbf{proxy}. Optimize it too hard and you climb the proxy
+while the \emph{real} objective collapses, \empr{Goodhart's law}.
+\vspace{0.5em}
+\begin{itemize}\itemsep0.2em
+    \item Proxy reward (RM) keeps rising.
+    \item True reward rises, then \emph{falls}.
+    \item \textbf{Why the leash works:} the penalty subtracts reward that grows with
+          KL distance, so each step away from $\pi_{\text{ref}}$ costs more. Past the
+          peak, the extra proxy gain is outweighed by the penalty, so the
+          best-scoring policy sits \emph{near the peak}, not in the hacked region.
+\end{itemize}
+\end{column}
+\end{columns}
+\srcnote{\scriptsize Gao, Schulman, Hilton. \href{https://arxiv.org/abs/2210.10760}{Scaling Laws for Reward Model Overoptimization}, 2022.}
+\end{frame}
+
+% ================================================================ 3.5
+% PPO -> GRPO (pays off Day 4) - TikZ side by side
+\begin{frame}{The RL Back-End: PPO $\rightarrow$ GRPO}
+\centering
+\resizebox{0.96\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize,
+    box/.style={draw, rounded corners, minimum width=2.4cm, minimum height=1.0cm, align=center},
+    ar/.style={-{Stealth[length=2.2mm]}, thick}]
+
+  % ---- PPO panel ----
+  \node[font=\bfseries] at (1.6, 3.5) {PPO};
+  \node[box, fill=sysblue] (actor) at (1.6, 2.3) {Actor $\pi_\theta$};
+  \node[box, fill=boxred]  (critic) at (1.6, 0.6) {Critic $V_\phi$};
+  \draw[ar] (actor) -- node[right, font=\scriptsize]{advantage} (critic);
+  \draw[ar] (critic) -- (actor);
+  \node[align=center, font=\tiny, accentred] at (1.6, -0.7)
+        {the fragile, expensive\\half (Day 4)};
+
+  % divider
+  \draw[gray, dashed] (4.0, -1.1) -- (4.0, 3.8);
+
+  % ---- GRPO panel ----
+  \node[font=\bfseries] at (8.5, 3.5) {GRPO};
+  \node[box, fill=sysblue] (gactor) at (8.5, 2.3) {Actor $\pi_\theta$};
+  \node[draw, rounded corners, fill=boxgreen, align=center, minimum width=3.6cm]
+        (grp) at (8.5, 0.6) {samples $\{y_1, \dots, y_G\}$\\for the same prompt};
+  \node[box, fill=boxtan, minimum width=3.0cm] (base) at (8.5, -0.9)
+        {group-mean baseline};
+  \draw[ar] (gactor) -- (grp);
+  \draw[ar] (grp) -- (base);
+  \draw[ar] (base.east) -- ++(0.5, 0) |- (gactor.east);
+  \node[align=center, font=\tiny] at (12.6, 1.5)
+        {$\hat{A}_i = \dfrac{r_i - \mathrm{mean}(r)}{\mathrm{std}(r)}$\\[0.3em]\textbf{no critic}};
+\end{tikzpicture}%
+}
+\vfill
+{\footnotesize \empr{The critic estimates a response's expected reward to form the
+advantage: Day 4's brittle, expensive component.} GRPO deletes it: the baseline is
+just the average reward over a group of samples for the same prompt. PPO was the
+original RLHF back-end; \textbf{GRPO is now common for LLM RL.}}
+\srcnote{\scriptsize Shao et al. \href{https://arxiv.org/abs/2402.03300}{DeepSeekMath} (GRPO), 2024; DeepSeek-AI, \href{https://arxiv.org/abs/2501.12948}{DeepSeek-R1}, 2025.}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.5b GRPO objective
+\begin{frame}{GRPO, Written Out}
+For each prompt, sample a \textbf{group} of $G$ responses
+$\{y_1, \dots, y_G\}\sim\pi_{\text{old}}$ ($\pi_{\text{old}}$ = the policy from the
+\emph{previous} update step, which we sample from, not the frozen
+$\pi_{\text{ref}}$) and score each: $r_i = r_\phi(y_i)$ (or a verifiable check). The
+\textbf{group-relative advantage} replaces the critic:
+\[
+    \hat{A}_i \;=\; \frac{r_i - \operatorname{mean}(r_1, \dots, r_G)}
+                          {\operatorname{std}(r_1, \dots, r_G)}
+\]
+($\hat{A}_i$ = how much better response $i$ scored than the group average, in
+standard-deviation units: positive $\to$ reinforce it, negative $\to$ suppress it.)
+\vspace{0.2em}
+
+Same clipped ratio as PPO (Day 4), now driven by $\hat{A}_i$ and leashed to
+$\pi_{\text{ref}}$:
+\[
+    J_{\mathrm{GRPO}} =
+    \mathbb{E}\!\left[ \tfrac{1}{G}\sum_{i=1}^{G}
+        \min\!\big(\rho_i \hat{A}_i, \;
+        \operatorname{clip}(\rho_i, 1{-}\varepsilon, 1{+}\varepsilon)\, \hat{A}_i\big)
+    \right]
+    - \beta\, D_{\mathrm{KL}}\!\left(\pi_\theta \, \|\, \pi_{\text{ref}}\right),
+    \quad \rho_i = \frac{\pi_\theta(y_i)}{\pi_{\text{old}}(y_i)}
+\]
+\begin{itemize}\itemsep0.15em\small
+    \item Every response in the group shares \textbf{one baseline} (the group mean):
+          no learned value network.
+    \item Same machinery as PPO (Day 4): $\rho_i$ is Day 4's probability ratio
+          $r_t(\theta)$, and the clip is identical. Only the advantage source changed.
+\end{itemize}
+\srcnote{\scriptsize Shao et al. \href{https://arxiv.org/abs/2402.03300}{DeepSeekMath} (GRPO), 2024. Token-level clipping omitted for clarity.}
+\end{frame}
+
+% ================================================================ 3.6 intro: what is DPO
+\begin{frame}{A Simpler Path: Direct Preference Optimization (DPO)}
+\begin{itemize}\itemsep0.45em\small
+    \item \textbf{The pain.} The full pipeline is heavy: Stage 2 trains a
+          \emph{separate} reward model, and Stage 3 runs an RL loop juggling several
+          models at once (policy, reference, reward model, and, for PPO, a
+          critic), which is finicky to tune.
+    \item \textbf{The question.} The reward model exists only to score the
+          preferences we \emph{already collected}. What if we skip it, and the RL
+          loop, and tune the policy \emph{straight from the preference pairs}
+          $(y^+, y^-)$?
+    \item \textbf{DPO (Rafailov et al., 2023):} exactly that, a single
+          supervised-style loss on preference pairs, applied directly to
+          \textbf{the policy $\pi_\theta$} (the SFT model we are fine-tuning).
+          \empr{No reward model. No RL loop.}
+\end{itemize}
+\vspace{0.4em}
+\begin{center}\small
+\setlength{\fboxsep}{5pt}%
+\colorbox{boxblue!40}{\parbox{0.92\textwidth}{\centering
+\textbf{RLHF:}\; preferences $\to$ train reward model $\to$ RL loop $\to$ policy\\[0.3em]
+\textbf{DPO:}\;\; preferences $\to$ one loss $\to$ policy}}
+\end{center}
+\vspace{0.3em}
+{\footnotesize But how can you train toward a reward you never built? First the
+plain-English idea (next slide), then we \emph{derive} it from the RLHF objective, and the last slide reveals what the policy secretly becomes.}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.6 intuition (plain English)
+\begin{frame}{The DPO Trick, in Plain English}
+\textbf{Delete the judge: the chatbot is already its own judge.}
+\begin{itemize}\itemsep0.55em
+    \item Look at how much \textbf{more likely} the current chatbot is to give an
+          answer than the \emph{original} (starting) model was. If it has become much
+          more likely to say answer A, that \emph{is} the chatbot ``rating A
+          highly.'' \empr{That ratio, ``how much more do I favour this than I used
+          to'', is the score.}
+    \item So DPO throws away the separate judge \emph{and} the practice loop, and
+          trains the chatbot directly so that, for each comparison, \textbf{its own
+          favouring of the preferred answer beats its favouring of the rejected
+          one.} One model, one training step, no loop.
+    \item The next slides make this exact, and at the end we'll see why it earns
+          the name \empr{``your LM is secretly a reward model.''}
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.6 derivation: Step 1
+\begin{frame}{Where DPO Comes From (Step 1 of 5): The RLHF Objective}
+We start from the goal Stage 3 already gave us: earn reward, but stay near the
+reference model.
+\[
+    \max_{\pi}\;\; \mathbb{E}_{y\sim\pi(\cdot\mid x)}\big[\, r(y)\, \big]
+    \;-\; \beta\, D_{\mathrm{KL}}\!\big(\pi(\cdot\mid x)\, \big\|\, \pi_{\text{ref}}(\cdot\mid x)\big)
+\]
+\begin{itemize}\itemsep0.45em\small
+    \item \textbf{What:} $\pi$ is the policy we optimize; $r(y)$ is the reward for a
+          response $y$; $D_{\mathrm{KL}}(\pi\|\pi_{\text{ref}})$ measures how far
+          $\pi$ has drifted from the frozen SFT model $\pi_{\text{ref}}$; $\beta$
+          sets the strength of that leash.
+    \item \textbf{Why:} maximize reward \emph{without} drifting into the
+          reward-hacking region: this is exactly the Goodhart trade-off from a few
+          slides back, written as one objective.
+    \item \textbf{How:} nothing new yet: this is just the Stage-3 RLHF objective.
+          Everything that follows is solving it on paper.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.6 derivation: Step 2
+\begin{frame}{Where DPO Comes From (Step 2 of 5): The Optimal Policy}
+The \textbf{Step-1 objective} (maximize reward minus the $\beta$-KL leash) has a
+known closed-form maximizer, a one-line result you can get with a single
+Lagrange-multiplier calculation; we'll just use it:
+\[
+    \pi^\star(y\mid x) \;=\; \frac{1}{Z(x)}\;\pi_{\text{ref}}(y\mid x)\;
+        e^{\, r(y)/\beta},
+    \qquad
+    Z(x) \;=\; \sum_{y}\pi_{\text{ref}}(y\mid x)\, e^{\, r(y)/\beta}
+\]
+\begin{itemize}\itemsep0.4em\small
+    \item \textbf{What:} $\pi^\star$ is the policy that \emph{maximizes Step 1}.
+          $Z(x)$ is a \emph{normalizer} (partition function) that makes the
+          probabilities sum to 1; it depends \emph{only} on the prompt $x$.
+          Remember that.
+    \item \textbf{Why:} we don't have to run RL to know what the optimum looks like; the maths hands it to us directly.
+    \item \textbf{How / reading the formula:} take the reference policy and reweight
+          each response by $e^{\, r(y)/\beta}$. The exponential turns the (possibly
+          negative) reward into a \emph{positive multiplier}, so higher-reward
+          responses get up-weighted; $\beta$ sets how sharply. This $\pi_{\text{ref}}
+          \cdot e^{\, r/\beta}$ shape (Gibbs/Boltzmann) is exactly what
+          ``reward minus KL'' always produces.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.6 derivation: Step 3
+\begin{frame}{Where DPO Comes From (Step 3 of 5): Invert for the Reward}
+Take $\log$ of Step 2's formula, then solve for $r(y)$ (just algebra):
+\begin{align*}
+    \log\pi^\star(y\mid x)
+        &= \log\pi_{\text{ref}}(y\mid x) \;+\; \frac{r(y)}{\beta} \;-\; \log Z(x)
+        && \text{\scriptsize($\log$ of a product)}\\[0.3em]
+    \Longrightarrow\quad
+    r(y) &= \beta\log\frac{\pi^\star(y\mid x)}{\pi_{\text{ref}}(y\mid x)}
+        \;+\; \beta\log Z(x)
+        && \text{\scriptsize(move terms, multiply by $\beta$)}
+\end{align*}
+\begin{itemize}\itemsep0.4em\small
+    \item \textbf{What:} the reward now sits alone on the left, written entirely in
+          terms of the policies.
+    \item \textbf{Why:} we want the reward \emph{expressed through the policy}: if
+          reward is just a function of $\pi^\star$, maybe we never need a separate
+          reward model.
+    \item \textbf{How:} the only snag is $\beta\log Z(x)$, and $Z(x)$ sums over
+          \emph{all possible responses}, so it is impossible to compute. Step 4
+          removes it.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.6 derivation: Step 4
+\begin{frame}{Where DPO Comes From (Step 4 of 5): The $Z(x)$ Cancels}
+Feed Step 3's reward into the Bradley--Terry model
+$P(y^+\!\succ y^-\mid x)=\sigma\big(r(y^+)-r(y^-)\big)$. Only the \emph{difference}
+of rewards appears:
+\[
+    r(y^+) - r(y^-) =
+    \beta\log\frac{\pi^\star(y^+)}{\pi_{\text{ref}}(y^+)}
+    - \beta\log\frac{\pi^\star(y^-)}{\pi_{\text{ref}}(y^-)}
+    + \underbrace{\beta\log Z(x) - \beta\log Z(x)}_{=\, 0}
+\]
+\begin{itemize}\itemsep0.45em\small
+    \item \textbf{What:} Bradley--Terry scores a \emph{pair} by the gap in rewards,
+          never the absolute values.
+    \item \textbf{Why:} $Z(x)$ depends only on the prompt $x$, so it is identical
+          for $y^+$ and $y^-$; in the difference it \textbf{cancels exactly}.
+    \item \textbf{How:} that single cancellation is the whole reason DPO is
+          possible: the intractable term vanishes, leaving an expression in
+          $\pi^\star$ and $\pi_{\text{ref}}$ only.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.6 derivation: Step 5
+\begin{frame}{Where DPO Comes From (Step 5 of 5): The DPO Loss}
+$\pi^\star$ is unknown; it is the optimum we are trying to reach. Replace it with
+our trainable policy $\pi_\theta$ and fit the human labels by maximum likelihood:
+\[
+    L_{\mathrm{DPO}} = -\log\sigma\!\Big(
+        \beta\log\tfrac{\pi_\theta(y^+)}{\pi_{\text{ref}}(y^+)}
+        - \beta\log\tfrac{\pi_\theta(y^-)}{\pi_{\text{ref}}(y^-)}\Big)
+\]
+\begin{itemize}\itemsep0.45em\small
+    \item \textbf{What:} the final DPO loss, depending only on $\pi_\theta$,
+          the frozen $\pi_{\text{ref}}$, and the preference pair $(y^+, y^-)$.
+    \item \textbf{Why:} no reward model and no RL loop, just a supervised loss on
+          preference pairs, applied directly to $\pi_\theta$.
+    \item \textbf{How:} the same Bradley--Terry maximum likelihood as the reward
+          model, but with the \emph{implicit} reward
+          $\hat r(y)=\beta\log\pi_\theta(y)/\pi_{\text{ref}}(y)$ in place of a
+          learned $r_\phi$.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.6 payoff: the identity
+\begin{frame}{The Payoff: Your LM Is Secretly a Reward Model}
+Put the loss we just derived next to the \emph{reward-model} loss from Stage 2. They are the \textbf{same shape}:
+\begin{align*}
+    L_{\mathrm{RM}}  &= -\log\sigma\big(\, r_\phi(y^+) - r_\phi(y^-) \, \big) \\[0.3em]
+    L_{\mathrm{DPO}} &= -\log\sigma\big(\, \hat{r}(y^+) - \hat{r}(y^-) \, \big),
+        \qquad \hat{r}(y) = \beta \log\frac{\pi_\theta(y)}{\pi_{\text{ref}}(y)}
+\end{align*}
+\begin{itemize}\itemsep0.25em\small
+    \item The only change: the learned reward $r_\phi$ is replaced by the
+          \emph{implicit} reward $\hat{r} = \beta\log\pi_\theta/\pi_{\text{ref}}$,
+          read straight off the policy. \empr{So the policy \emph{is} the reward
+          model}; that is why ``your LM is secretly a reward model.''
+    \item \textbf{Honesty caveat:} the equivalence is exact only if the reward model
+          were Bradley--Terry-optimal. In practice \textbf{DPO $\neq$ PPO}: DPO
+          gives up the RL loop's fresh on-policy samples.
+\end{itemize}
+\vspace{0.2em}
+\begin{center}
+\setlength{\fboxsep}{6pt}%
+\colorbox{boxgreen!50}{\parbox{0.9\textwidth}{\centering\small
+RLHF objective $\to\ \pi^\star\ \to\ r(y)\ \to$ Bradley--Terry $\to\ L_{\mathrm{DPO}}$,
+and we never built a reward model. \empr{That's the whole trick.}}}
+\end{center}
+\srcnote{\scriptsize Rafailov et al. \href{https://arxiv.org/abs/2305.18290}{Direct Preference Optimization}, NeurIPS 2023 (full author list in References). Variants: IPO, KTO, ORPO.}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.6 minimal contrast
+\begin{frame}{RLHF vs DPO}
+\centering
+\resizebox{0.92\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize,
+    b/.style={draw, rounded corners, minimum width=1.9cm, minimum height=0.85cm, align=center},
+    ar/.style={-{Stealth[length=2mm]}, thick}]
+  % RLHF row
+  \node[font=\bfseries] at (-1.2, 1.2) {RLHF};
+  \node[b, fill=boxtan]  (p1) at (1.0, 1.2) {prefs};
+  \node[b, fill=sysblue] (rm) at (3.4, 1.2) {RM $r_\phi$};
+  \node[b, fill=boxgreen](rl) at (5.9, 1.2) {RL loop};
+  \node[b, fill=sysblue] (po) at (8.4, 1.2) {policy};
+  \draw[ar] (p1)--(rm); \draw[ar] (rm)--(rl); \draw[ar] (rl)--(po);
+  % DPO row
+  \node[font=\bfseries] at (-1.2, -0.6) {DPO};
+  \node[b, fill=boxtan]  (p2) at (1.0, -0.6) {prefs};
+  \node[b, fill=boxgreen](ls) at (4.0, -0.6) {one loss $L_{\mathrm{DPO}}$};
+  \node[b, fill=sysblue] (po2)at (8.4, -0.6) {policy};
+  \draw[ar] (p2)--(ls); \draw[ar] (ls)--(po2);
+\end{tikzpicture}%
+}
+\vfill
+\begin{center}
+\setlength{\fboxsep}{6pt}%
+\colorbox{boxred!50}{\parbox{0.8\textwidth}{\centering
+\textbf{DPO is the offline RL of alignment.}}}
+\end{center}
+\vspace{0.4em}
+{\footnotesize \empr{Frame it as an analogy, not an identity.} The shared property
+is \emph{offline optimization without distribution coverage} (same family, not
+the same mechanism):
+\begin{itemize}\itemsep0.1em\footnotesize
+    \item \textbf{Day 8 offline RL:} the \emph{value function} extrapolates on
+          out-of-distribution (OOD) \emph{actions}.
+    \item \textbf{DPO:} the \emph{policy / implicit reward} is unconstrained on OOD
+          \emph{responses}, because it never samples on-policy.
+\end{itemize}}
+\srcnote{\scriptsize Cf.\ Xu et al., \href{https://arxiv.org/abs/2404.10719}{Is DPO Superior to PPO for LLM Alignment?}, ICML 2024.}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.6 B3: DPO in practice
+\begin{frame}{DPO in Practice: What You Give Up}
+DPO's simplicity has a cost: you lose the control knobs the RL loop gave you.
+\begin{itemize}\itemsep0.5em\small
+    \item \textbf{It constrains only the \emph{gap}, nothing else.} The loss just
+          pushes the preferred answer's favoring above the rejected one's. With no
+          on-policy sampling to pin down absolute behaviour, it can push \emph{both}
+          down, leaking probability onto unrelated answers it never saw. RLHF's
+          RL loop and ``don't-drift'' anchor would catch that; DPO has neither.
+    \item \textbf{Length bias (shared, but harder to patch).} If the data favours
+          long answers, \emph{both} RLHF and DPO turn verbose. RLHF lets you subtract
+          an explicit length penalty from the reward; DPO has no separate reward to
+          adjust, so length control must be bolted on as extra loss terms.
+    \item \textbf{No fresh samples.} The policy only ever sees the fixed preference
+          pairs, so it can drift off that distribution, the price of dropping the
+          RL loop.
+\end{itemize}
+\end{frame}
+
+% ================================================================ 3.7
+% RLAIF / Constitutional AI (de-duplicated to ONE diagram with overlays)
+\begin{frame}{Scaling Oversight: RL from AI Feedback (RLAIF)}
+\begin{itemize}\itemsep0.3em
+    \item \textbf{Motivation:} as models approach or exceed human performance, it
+          gets harder for humans to label every output. \emph{Move the labeller
+          from human to AI; the only human input is the constitution}, a short
+          list of written principles the model uses to critique and revise its own
+          answers.
+    \item \textbf{Constitutional AI} has two phases:
+    \begin{itemize}\footnotesize
+        \item \textbf{Supervised:} sample $\to$ self-critique $\to$ revise $\to$
+              fine-tune on revisions.
+        \item \textbf{RL:} AI labels which response is better $\to$ train a
+              reward model (RM) $\to$ RL-finetune with it (just like RLHF).
+    \end{itemize}
 \end{itemize}
 \vfill
 \begin{center}
-\includegraphics[width=0.8\linewidth,keepaspectratio]{images/rl-real-world/figures/cai-pipeline.jpg}
+\includegraphics[width=0.78\linewidth, height=0.42\textheight, keepaspectratio]{images/rl-real-world/figures/cai-pipeline.jpg}
+\end{center}
+\srcnote{\scriptsize Bai et al. \href{https://arxiv.org/abs/2212.08073}{Constitutional AI: Harmlessness from AI Feedback}, 2022. In production, not a toy.}
+\end{frame}
+
+\begin{frame}{RLAIF: Takeaway}
+\begin{itemize}
+    \item Fine-tuning with \textbf{AI-generated feedback} can match or exceed
+          models fine-tuned with human feedback, on \emph{both} helpfulness and
+          harmlessness.
+    \item \footnotesize The plot rates models by \textbf{Elo}, a head-to-head
+          win-rate score borrowed from chess (higher = preferred more often in
+          pairwise comparisons).
+\end{itemize}
+\vfill
+\begin{center}
+\includegraphics[width=0.55\linewidth, height=0.55\textheight, keepaspectratio]{images/rl-real-world/figures/rlhf-elo.jpg}
 \end{center}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 29
-\begin{frame}{Supervised Phase}
-\begin{enumerate}
-    \item Sample from an initial policy
-    \item Generate ``self-critiques'' and revisions
-    \item Finetune the original model with the revised responses
+% ================================================================ 3.8
+% RLVR / RL for reasoning (NEW - the day's climax) - TikZ spectrum
+\begin{frame}{The Climax: RL with Verifiable Rewards (RLVR)}
+\begin{itemize}\itemsep0.3em\small
+    \item When the answer is \textbf{checkable} (math is right/wrong, code
+          passes tests), the reward needs \emph{no learned model} and
+          \textbf{can't be hacked} the way an RM can.
+    \item This is how modern \textbf{reasoning models} are trained: long
+          \textbf{chain-of-thought} (the model writes out its reasoning steps before
+          answering), optimized with \textbf{GRPO} against a programmatic check.
+\end{itemize}
+\vfill
+\centering
+\resizebox{0.98\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize,
+    stop/.style={draw, rounded corners, minimum width=3.0cm, minimum height=1.0cm, align=center},
+    ar/.style={-{Stealth[length=2.4mm]}, very thick}]
+  \node[stop, fill=boxtan]   (rlhf) at (0, 0)  {\textbf{RLHF}\\\scriptsize human prefs};
+  \node[stop, fill=boxblue]  (rlaif)at (4.5, 0){\textbf{RLAIF}\\\scriptsize AI prefs};
+  \node[stop, fill=mlgreen]  (rlvr) at (9, 0)  {\textbf{RLVR}\\\scriptsize verifiable};
+  \draw[ar] (rlhf) -- (rlaif);
+  \draw[ar] (rlaif) -- (rlvr);
+  % reward source under each
+  \node[font=\scriptsize, align=center, below=0.3cm of rlhf]  {learned RM\\(Bradley--Terry)};
+  \node[font=\scriptsize, align=center, below=0.3cm of rlaif] {AI judge\\+ constitution};
+  \node[font=\scriptsize, align=center, below=0.3cm of rlvr]  {programmatic check\\(answer / unit tests)};
+  % annotation arrows
+  \draw[-{Stealth[length=2mm]}, gray] (0, 1.4) -- node[above, font=\scriptsize]{scales better $\rightarrow$} (9, 1.4);
+  \draw[-{Stealth[length=2mm]}, gray] (0, 0.9) -- node[above, font=\scriptsize]{harder to hack $\rightarrow$} (9, 0.9);
+\end{tikzpicture}%
+}
+\srcnote{\scriptsize DeepSeek-AI, \href{https://arxiv.org/abs/2501.12948}{DeepSeek-R1}, 2025; Lambert et al., \href{https://arxiv.org/abs/2411.15124}{T\"ulu 3}, 2024 (RL with verifiable rewards).}
+\end{frame}
+
+% ---------------------------------------------------------------- 3.8b RLVR in action: R1-Zero
+\begin{frame}{RLVR in Action: DeepSeek-R1-Zero}
+\textbf{One RLVR step} (no reward model anywhere):
+\begin{enumerate}\itemsep0.1em\small
+    \item the policy samples several answers to a \emph{checkable} question;
+    \item a \emph{rule} grades each (right answer? right format?), giving reward
+          $1$ or $0$;
+    \item GRPO uses those rewards to update the policy. \empr{Nothing to hack: the
+          checker is exact.}
 \end{enumerate}
-\vfill
-\begin{center}
-\includegraphics[width=0.8\linewidth,keepaspectratio]{images/rl-real-world/figures/cai-pipeline.jpg}
-\end{center}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 30
-\begin{frame}{Reinforcement Learning Phase}
-\begin{enumerate}
-    \item Sample from a finetuned model
-    \item Use a model to evaluate which of two responses is ``better''
-    \item Train a preference model on the AI-labeled data
-    \item Perform RL-finetuning with the PM as the reward signal (just like RLAIF)
-\end{enumerate}
-\vfill
-\begin{center}
-\includegraphics[width=0.8\linewidth,keepaspectratio]{images/rl-real-world/figures/cai-pipeline.jpg}
-\end{center}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 31
-\begin{frame}{Takeaways}
-\begin{itemize}
-    \item Finetuning with AI-generated feedback can generate results that match or
-          exceed models that are finetuned with human feedback
+\vspace{0.3em}
+\textbf{DeepSeek-R1-Zero} ran exactly this on a \emph{base} model, \textbf{no SFT
+at all}, with reward = ``answer correct'' $+$ ``reasoning in \texttt{<think>}
+tags'':
+\begin{itemize}\itemsep0.1em\small
+    \item \empr{Reasoning emerged on its own}: longer chains of thought,
+          self-checking, backtracking, even an ``\emph{aha moment}'' where it stops
+          and corrects itself. Nobody taught it to.
+    \item AIME 2024 math: \textbf{15.6\% $\to$ 71.0\%} (86.7\% with majority vote), matching OpenAI o1.
+    \item Catch: raw R1-Zero was hard to read (language-mixing), so the full
+          \textbf{R1} adds a small SFT ``cold start.'' But R1-Zero proved the point:
+          \empr{reasoning can be grown by pure RL from verifiable rewards.}
 \end{itemize}
-\vfill
-\begin{center}
-\includegraphics[width=0.6\linewidth,height=0.6\textheight,keepaspectratio]{images/rl-real-world/figures/rlhf-elo.jpg}
-\end{center}
+\srcnote{\scriptsize DeepSeek-AI, \href{https://arxiv.org/abs/2501.12948}{DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning}, 2025.}
 \end{frame}

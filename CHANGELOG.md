@@ -1,4 +1,4 @@
-##  (2026-06-29)
+##  (2026-07-01)
 
 
 ### Features
@@ -16,6 +16,7 @@
 * **Homeworks:** ViT Swin Sliding Window Cells Classification ([1a8161b](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1a8161b0284039bf7e67530bdfa37a5ceb29992f))
 * **Labs:** 1D CNN and Audio classification labs ([72f7ac3](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/72f7ac373186963d76d03b8f516c59b919e18d9a))
 * **Labs:** Added multiple new labs for ML ([b5d4628](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/b5d4628d7cd10318afa26c89566ad134576c05ea))
+* **Labs:** Added two new Labs ([644d780](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/644d7805d8f8e561f704510ceb2481860726c8be))
 * **Labs:** Attention_Mechanism_Japanese_English ([23cbd41](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/23cbd4191038fe2e472ece30d85845973fb22187))
 * **Labs:** Bulk upload NLP Labs. ([d3d3c97](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d3d3c97be89cb65e56e94e28d8dda24a2e99d85c))
 * **Labs:** English-Japanese_Seq2Seq_Translation ([edb4b42](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/edb4b42823db60af822ef030efa9de5fa3345be5))

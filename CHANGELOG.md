@@ -44,6 +44,7 @@
 * **rl:** polish Day 5 (Continuous Control I) ([5155ed7](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/5155ed797c1bf2f903826c7e12279ef3bd58379c))
 * **Slides:** Add Stage 2 ML lecture LaTeX source and images ([1ef30cc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1ef30ccefb075515e4b0eb10d53fe7f6845a5e36))
 * **Slides:** Added Audio_Processing_Evaluation_In_NLP ([3ed46f7](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/3ed46f7d9301300daa239d295359d6294ed1246b))
+* **Slides:** added SD Unet ([1d8dcdb](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1d8dcdb765c71e4c7e12d6815c75638e506c6fc7))
 * **slides:** created RNN, Transformer, and ViT CV ([acb283f](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/acb283fd62d923073f6cb4f9a51875b935d53856))
 * **slides:** deduplicate CV slides ([3699263](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/36992639114242ac54db90cac73e72303986149d))
 * **Slides:** Migrate Stage 3 slides into repo ([320fb22](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/320fb22d7095483d19ddc76f786df89eb98238af))
@@ -55,6 +56,7 @@
 
 ### Bug Fixes
 
+* Modify and correct labs as per recommendations. ([57c1e99](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/57c1e99ab8d66a361408f50f5fc3784926cdcd10))
 * **path:** AutoEncoders images fix ([31594f2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/31594f2028908046772418e91cb38e1e79a2d932))
 * **path:** fixed a path for one of the images in the cifar lab ([c876999](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/c876999da623b8e7d6bf12b3c8e88d62cbeeaef7))
 

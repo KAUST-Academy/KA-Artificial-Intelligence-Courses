@@ -1,4 +1,4 @@
-##  (2026-07-01)
+##  (2026-07-03)
 
 
 ### Features
@@ -49,6 +49,7 @@
 * **Slides:** Migrate Stage 3 slides into repo ([320fb22](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/320fb22d7095483d19ddc76f786df89eb98238af))
 * **Slides:** Migrated stage 2 slides. ([553b1a2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/553b1a252b95ffcdf1db978265828f14c1887ec4))
 * **slides:** reorganize decks by course, switch to KAUST theme, 16:9 [minor] ([47db948](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/47db9487f00bb6fdf44917e5642eba73fb776ada))
+* **Slides:** Split SSL into two slides ([78e7564](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/78e756449ce8354d5affe8570daa8c8f8171931f))
 * **Test:** Create new test file ([d6733cc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d6733cc684c7239783440d5e5647144be66d501f))
 
 

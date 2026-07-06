@@ -25,7 +25,7 @@
   \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/gpt3_unicorns_foundation_models.png}
 \end{frame}
 
-\begin{frame}{2021: Transformers & foundation models reach computer vision}
+\begin{frame}{2021: Transformers \& foundation models reach computer vision}
   \centering
   \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/vit_vision_transformer_patches.png}
 \end{frame}
@@ -58,7 +58,17 @@
       \textbf{Objective:} learn to generate images and/or text.
       \begin{itemize}\itemsep0.32em
         \item Text $\rightarrow$ Image (e.g.\ Stable Diffusion, DALL-E)
-        \item Text, Image $\rightarrow$ Text (e.g.\ Flamingo, GPT4-V)
+        \item Text, Image $\rightarrow$ Text (e.g.\ Flamingo, GPT-4V)
       \end{itemize}
   \end{columns}
+\end{frame}
+
+% --- Generative class in brief (cohort skipped the VAE/GAN/diffusion lectures) ---
+\begin{frame}{The Generative Class in Brief}
+  \begin{itemize}\itemsep0.3em
+    \item \textbf{Text-to-image diffusion} (Stable Diffusion, DALL-E): start from random noise and iteratively \textbf{denoise} it, conditioned on a text prompt. The denoiser is trained on billions of captioned images; latent diffusion (Rombach et al., 2022) runs the process in a compressed latent space to cut cost.
+    \item \textbf{Vision-language generative models} (Flamingo, GPT-4V, LLaVA): a vision encoder feeds visual tokens into an \textbf{LLM} through a small projector, the same pattern as the V-JEPA 2 language alignment seen last lecture. The LLM then generates text about the image.
+    \item Text conditioning in both cases relies on strong text encoders; Stable Diffusion uses \textbf{CLIP's} text encoder, which we cover next.
+    \item This lecture focuses on the \textbf{representation-learning} class; generative modeling has its own dedicated lectures in the full course.
+  \end{itemize}
 \end{frame}

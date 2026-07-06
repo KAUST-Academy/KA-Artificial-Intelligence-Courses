@@ -26,13 +26,23 @@
 % %     \item Active research: \textbf{action-conditioned JEPA}-style models for control (LeWM and successors push toward stable end-to-end training from pixels).
 % %   \end{itemize}
 % % \end{frame}
+% --- Generative simulators in text (cohort skipped the diffusion lecture) ---
+\begin{frame}{Generative Simulators: Video Generation as a World Model}
+  \begin{itemize}\itemsep0.28em
+    \item Large video generators are increasingly pitched as world simulators; most build on diffusion or autoregressive generation (covered in the diffusion lecture of the full course).
+    \item \textbf{Sora} (OpenAI, 2024) frames video generation explicitly as ``world simulation''; \textbf{GAIA-1} and its successors (Wayve) generate driving scenarios for autonomous-vehicle development.
+    \item \textbf{Genie} (Google DeepMind) makes \textbf{playable} worlds: the model predicts the next frames \emph{given user actions}, which is exactly the world-model interface, realized in pixel space. Genie 3 (2025) is reported to run interactive worlds in real time at 720p.
+    \item The debate: photorealistic video is not the same as physically consistent prediction. Failures in object permanence and physics are common, and evaluating a simulator's ``correctness'' is an open problem.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}[t]{Generative world models}
   \centering
   \includegraphics[width=0.76\linewidth,height=0.76\textheight,keepaspectratio]{images/world-models/jepa_cs25_sl04_generative_world_models_sora_gaia.png}\\[0.04em]
   {\scriptsize Image credit: \href{https://drive.google.com/file/d/1bF5Yfzf-FG5iNIAgsXn2DwVD3l3ymvZW/view}{CS25}.}
 \end{frame}
 
-\begin{frame}[t]{Architectures: Generative v/s Joint Embedding}
+\begin{frame}[t]{Architectures: Generative vs.\ Joint Embedding}
   \centering
   \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{images/world-models/jepa_cs25_sl05_lecun_world_model_figure.png}\\[0.08em]
   {\scriptsize Image credit: \href{https://drive.google.com/file/d/1bF5Yfzf-FG5iNIAgsXn2DwVD3l3ymvZW/view}{CS25}.}
@@ -70,8 +80,7 @@
     \begin{itemize}\itemsep0.28em
       \item[\textcolor{red}{$\blacktriangleright$}] Predict \textbf{embeddings} of future or masked regions in \textbf{representation space}.
       \item[\textcolor{red}{$\blacktriangleright$}] Strength: can learn useful \textbf{video/robotics} features without needing to generate every pixel.
-      \item[\textcolor{red}{$\blacktriangleright$}] Cost: requires clear action input (e.g.\ V-JEPA 2-AC, LeWM).
- 
+      \item[\textcolor{red}{$\blacktriangleright$}] Cost: no pixel rollouts to inspect, and control requires adding an action pathway (V-JEPA 2-AC, LeWM).
     \end{itemize}
   \end{columns}
 \end{frame}

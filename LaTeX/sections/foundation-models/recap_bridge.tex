@@ -1,0 +1,9 @@
+% --- Recap / bridge from the SSL and JEPA lectures ---
+\begin{frame}{Recap: From Pretraining Methods to Foundation Models}
+  \begin{itemize}\itemsep0.3em
+    \item \textbf{SSL and contrastive lectures:} pretext tasks, contrastive learning (SimCLR, MoCo), and self-distillation (BYOL, DINO, DINOv2) learn features from unlabeled data.
+    \item \textbf{JEPA lecture:} latent prediction (I-JEPA, V-JEPA 2) trains encoders that serve many tasks from frozen features; V-JEPA 2 already behaves like a video foundation model.
+    \item Those lectures answered \emph{how to pretrain}. Today we look at the pretrained models the field actually builds on: what they are, what data they use, and how they are adapted.
+    \item Working definition (Bommasani et al., 2021): a \textbf{foundation model} is trained on broad data at scale and can be \textbf{adapted} to a wide range of downstream tasks.
+  \end{itemize}
+\end{frame}

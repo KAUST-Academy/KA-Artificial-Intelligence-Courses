@@ -2,19 +2,18 @@
 % % --- Tabular Foundation Models: TabPFN ---
 \begin{frame}{TabPFN: Prior-Data Fitted Network}
   \begin{itemize}
-    \item Trained to “meta-learn” classification and regression solutions for tabular datasets.
-    \item One forward pass -- inference in less than 1 second.
+    \item Trained to ``meta-learn'' classification solutions for tabular datasets; pretraining uses millions of \textbf{synthetic} datasets, never real data.
+    \item A new dataset is handled by \textbf{in-context learning}: the training rows go in as context, and predictions come out in one forward pass, in under a second.
     \item Zero-shot predictions for new, small tabular datasets.
+    \item TabPFN v2 (published in \emph{Nature}, 2025) extends this to regression, missing values, and larger tables.
     \item Applications: Science data analysis, health records, finance.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{TabPFN: Architecture and Capabilities}
   \centering
-  \includegraphics[width=0.85\textwidth, height=0.56\textheight, keepaspectratio]{images/foundation-models/tabpfn_summary.png}
-  \break
-  {\scriptsize Hollmann et al., "TabPFN: A Transformer That Solves Small Tabular Classification Problems in a Second," ICLR 2023 (\href{https://arxiv.org/abs/2207.01848}{arXiv:2207.01848})}
-  \break
+  \includegraphics[width=0.85\textwidth, height=0.56\textheight, keepaspectratio]{images/foundation-models/tabpfn_summary.png}\\[0.15em]
+  {\scriptsize Hollmann et al., ``TabPFN: A Transformer That Solves Small Tabular Classification Problems in a Second,'' ICLR 2023 (\href{https://arxiv.org/abs/2207.01848}{arXiv:2207.01848})}\\[0.15em]
   \begin{itemize}\footnotesize
     \item Learns a prior over tabular tasks by pretraining on large synthetic task distributions.
     \item Performs in-context learning on a new dataset in one forward pass.
@@ -35,7 +34,7 @@
     \begin{column}{0.56\textwidth}
       \centering
       \includegraphics[width=\linewidth]{images/foundation-models/tribe_v2_arxiv_fig1_approach.png}\\[0.15em]
-      {\scriptsize Figure from TRIBE v2 paper: data $\rightarrow$ pretrained embeddings $\rightarrow$ predicted cortical response vs.\ measured mean response}
+      {\scriptsize Figure from Meta AI's TRIBE v2 announcement: data $\rightarrow$ pretrained embeddings $\rightarrow$ predicted cortical response vs.\ measured mean response}
     \end{column}
   \end{columns}
 \end{frame}
@@ -45,7 +44,7 @@
     \begin{column}{0.48\textwidth}
       \centering
       \includegraphics[width=\linewidth]{images/foundation-models/tribe_v2_arxiv_fig2_encoding_results.png}\\[0.15em]
-      {\scriptsize Figure from TRIBE v2 paper: Cortical/subcortical encoding scores; vs.\ linear baseline; scaling with training data.}
+      {\scriptsize Figure from Meta AI's TRIBE v2 announcement: Cortical/subcortical encoding scores; vs.\ linear baseline; scaling with training data.}
     \end{column}
     \begin{column}{0.48\textwidth}
       \begin{itemize}\footnotesize

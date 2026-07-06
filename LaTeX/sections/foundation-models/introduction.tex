@@ -16,15 +16,15 @@
   \begin{itemize}
     \item \textbf{Accelerate innovation:} Dramatically reduce time and resources needed to create high-performing AI applications.
     \item \textbf{Expand accessibility:} Lower the expertise required for deploying AI, empowering domain experts (not just AI researchers).
-    \item \textbf{Enable new capabilities:} Support advanced “few-shot” and “zero-shot” learning, allowing for rapid adaptation to new tasks.
+    \item \textbf{Enable new capabilities:} Support advanced ``few-shot'' and ``zero-shot'' learning, allowing for rapid adaptation to new tasks.
     \item \textbf{Transform industries:} Fuel advances in medicine, science, robotics, business, and beyond.
     \item \textbf{Introduce new challenges:} Require careful management of data/computational resources, fairness, safety, and responsible use.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{How Do Foundation Models Work?}
+\begin{frame}{One Foundation Model, Many Tasks}
   \centering
-  \includegraphics[width=0.92\textwidth]{images/foundation-models/crfm2108_fig2_modalities_to_tasks.png}\\[0.1em]
+  \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/foundation-models/crfm2108_fig2_modalities_to_tasks.png}\\[0.1em]
   {\scriptsize Diverse modalities feed training; one foundation model supports many downstream tasks via adaptation (Bommasani et al., arXiv:2108.07258).}
 \end{frame}
 
@@ -36,8 +36,9 @@
     \item \textbf{Vision models:} Trained on images/videos, they can recognize objects, segment scenes, and more.\\
       {\footnotesize Examples: CLIP, SAM}
     \item \textbf{Multi-modal models:} Learn to connect information across text, images, audio, or video.\\
-      {\footnotesize Examples: CLIP (text-image), Flamingo, Gemini}
-    \item \textbf{Other domains:} Foundation models exist for structured (tabular) data, medical data, code, and scientific domains.
+      {\footnotesize Examples: CLIP (text-image), Flamingo, GPT-4V, Gemini}
+    \item \textbf{Other domains:} Foundation models exist for structured (tabular) data, medical data, code, and scientific domains.\\
+      {\footnotesize Examples: TabPFN (tabular), TRIBE (brain responses); both appear later in this lecture}
   \end{itemize}
 \end{frame}
 
@@ -56,14 +57,12 @@
   \end{itemize}
 \end{frame}
 
-% --- Examples of Foundation Models ---
-\begin{frame}{Examples of Foundation Models}
-  \begin{itemize}
-    \item \textbf{BERT:} Foundation for language understanding and search.
-    \item \textbf{GPT (Generative Pretrained Transformer):} Powers chatbots, writing assistants, and more.
-    \item \textbf{CLIP:} Bridges vision and language—for example, “find images matching this caption.”
-    \item \textbf{SAM (Segment Anything Model):} Segments objects in any image with a single forward pass.
-    \item \textbf{Gemini (Google):} Multi-modal model that integrates language, vision, and more.
-    \item \textbf{PaLM, LaMDA, Imagen:} Other prominent foundation models from industry leaders.
+% --- Adaptation methods in practice ---
+\begin{frame}{Adaptation in Practice: From Frozen Probes to LoRA}
+  \begin{itemize}\itemsep0.28em
+    \item \textbf{Frozen probes:} keep the backbone fixed and train a small head on top (linear or attentive probe, as in the JEPA lecture). Cheapest option; also the standard way to \emph{evaluate} a foundation model.
+    \item \textbf{Full fine-tuning:} update all weights on the downstream task. Strongest task performance, highest cost, and the model can forget general capabilities.
+    \item \textbf{Parameter-efficient fine-tuning (PEFT):} train small added modules while the backbone stays frozen. \textbf{LoRA} (Hu et al., 2022) learns a low-rank update $\Delta W = BA$ next to each frozen weight matrix $W$, typically well under 1\% of the parameters.
+    \item \textbf{Prompting and in-context learning:} no weight updates at all; instructions or examples are given at inference time. TabPFN (later this lecture) classifies whole tabular datasets this way.
   \end{itemize}
 \end{frame}

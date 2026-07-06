@@ -1,0 +1,11 @@
+% --- Limitations and open problems ---
+\begin{frame}{Limitations and Open Problems}
+  \begin{itemize}\itemsep0.22em
+    \item \textbf{Compounding errors:} imagined rollouts drift from reality as the horizon grows; short horizons with value bootstrapping (Dreamer) or frequent replanning (MPC) are workarounds, not solutions.
+    \item \textbf{Model exploitation:} policies find states where the model is wrong. Ha's temperature trick, Dreamer's KL constraints, and SIGReg all target versions of this problem.
+    \item \textbf{Pixels vs.\ latents, unresolved:} generative simulators produce impressive video with weak physics guarantees; latent models plan well but have no decoder to inspect, so evaluating what they know is indirect.
+    \item \textbf{Goal specification:} reward heads or goal images are the norm; language-conditioned goals for latent world models remain largely open.
+    \item \textbf{Benchmarks are narrow:} games, simulated control, and tabletop robotics dominate; long-horizon, open-world transfer is not demonstrated.
+    \item \textbf{Compute asymmetry:} video-generator simulators are expensive at inference time; latent planners are cheap but lower fidelity. Where the field settles between them is open.
+  \end{itemize}
+\end{frame}

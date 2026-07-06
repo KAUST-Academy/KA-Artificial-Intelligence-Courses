@@ -1,15 +1,64 @@
 % --- CLIP: joint image--text representation learning ---
-\begin{frame}{CLIP learns a joint representation space for images and text}
+% Students skipped the Vision+Text lecture, so CLIP is introduced from scratch here.
+\begin{frame}{CLIP: Learning Vision from Natural Language}
+  \begin{itemize}\itemsep0.3em
+    \item \textbf{CLIP} (Radford et al., 2021): trained on \textbf{400 million} image--text pairs collected from the web; no class labels at all.
+    \item Two encoders: an \textbf{image encoder} (ResNet or ViT) and a \textbf{text encoder} (transformer), each mapping its input to a shared embedding space.
+    \item Training pulls each image toward \emph{its own caption} and away from the other captions in the batch.
+    \item Same contrastive idea as SimCLR from the contrastive-methods lecture, but the two ``views'' come from \textbf{different modalities}: an image and its natural-language description.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{CLIP: Contrastive Pre-training}
   \centering
   \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/clip_contrastive_pretraining.png}
 \end{frame}
 
-\begin{frame}{CLIP learns a joint representation space for images and text}
+\begin{frame}{CLIP: The Objective}
+  For a batch of $N$ pairs, compute the $N \times N$ matrix of cosine similarities $s_{ij}$ between image embeddings $I_i$ and text embeddings $T_j$. The loss is a symmetric cross-entropy that treats the diagonal as correct:
+  \begin{equation*}
+    \mathcal{L} \;=\; -\frac{1}{2N}\sum_{i=1}^{N}\left[\,
+      \log \frac{e^{s_{ii}/\tau}}{\sum_{j} e^{s_{ij}/\tau}}
+      \;+\;
+      \log \frac{e^{s_{ii}/\tau}}{\sum_{j} e^{s_{ji}/\tau}}
+    \,\right]
+  \end{equation*}
+  \begin{itemize}\itemsep0.25em
+    \item First term: match each \textbf{image} to the right \textbf{caption}; second term: match each \textbf{caption} to the right \textbf{image}.
+    \item $\tau$ is a learned \textbf{temperature}; large batches (up to 32{,}768 pairs) supply many negatives, as in the contrastive methods seen earlier.
+    \item The result is a \textbf{joint embedding space} where semantically matching images and texts are close.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{CLIP: Objective in Practice}
   \centering
   \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/clip_contrastive_objective_training.png}
 \end{frame}
 
-\begin{frame}{CLIP learns a joint representation space for images and text}
+\begin{frame}{CLIP: Zero-Shot Classification via Prompts}
+  \begin{itemize}\itemsep0.28em
+    \item A classifier can be built \textbf{from label names alone}: embed prompts such as ``a photo of a \{label\}'' with the text encoder, embed the image, and pick the label with the highest similarity.
+    \item No training on the target dataset: this is \textbf{zero-shot transfer}. Prompt wording matters, and ensembling several templates improves accuracy.
+    \item The largest CLIP matches the accuracy of the original supervised ResNet-50 on ImageNet \textbf{without seeing a single labeled ImageNet example}, and is notably more robust to distribution shift.
+    \item Known weaknesses: fine-grained categories, counting objects, and reading text in images; the web training data also carries social biases.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{CLIP: Zero-Shot Classification}
   \centering
   \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/clip_zero_shot_classification.png}
+\end{frame}
+
+\begin{frame}{CLIP as Infrastructure}
+  \begin{itemize}\itemsep0.3em
+    \item CLIP's encoders became \textbf{building blocks} across the field:
+    \begin{itemize}\itemsep0.15em
+      \item \textbf{Stable Diffusion} conditions image generation on CLIP text embeddings.
+      \item \textbf{Open-vocabulary detection} (Grounding DINO, next section) grounds detections in text.
+      \item \textbf{SAM 3} segments ``any concept'' described by a short text prompt.
+      \item Vision-language assistants (LLaVA and similar) use a CLIP-style vision tower.
+    \end{itemize}
+    \item \textbf{OpenCLIP} and the \textbf{LAION} datasets reproduce CLIP openly, so the recipe is fully public.
+    \item In practice: when a task can be phrased in language, a CLIP-family model often gives a strong zero-shot baseline before any training.
+  \end{itemize}
 \end{frame}

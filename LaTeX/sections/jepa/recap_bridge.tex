@@ -1,0 +1,25 @@
+% --- Recap / bridge from Lectures 13-14 (SSL + Contrastive Methods) ---
+\begin{frame}{Recap: Self-Supervised Learning So Far}
+  \begin{itemize}\itemsep0.3em
+    \item \textbf{Pretext tasks} (rotation, jigsaw, colorization): free supervision from the data itself, but features are only as good as the proxy task.
+    \item \textbf{Contrastive learning} (instance discrimination, SimCLR, MoCo): pull augmented views together and push \emph{negatives} apart; requires large batches or memory queues.
+    \item \textbf{Self-distillation without negatives} (BYOL, DINO, DINOv2): a \textbf{student} matches a \textbf{teacher} that is an \textbf{exponential moving average (EMA)} of the student, with no negative pairs at all.
+    \item \textbf{iBOT}: adds \textbf{masked image modeling} to self-distillation; the student predicts the teacher's \emph{tokens} for hidden patches.
+  \end{itemize}
+  \vspace{0.4em}
+  \textbf{Today:} predict abstract representations of unseen or future content, and use the resulting predictor as a \textbf{world model}.
+\end{frame}
+
+\begin{frame}{From iBOT and data2vec to JEPA}
+  \begin{itemize}\itemsep0.3em
+    \item \textbf{iBOT's token-level distillation} is already \emph{latent} masked prediction: hide patches, then predict the \textbf{teacher's representation} of the missing content instead of its pixels.
+    \item \textbf{data2vec} (Baevski et al., 2022) generalized this across speech, vision, and language: always predict \textbf{contextualized latent targets} from an EMA teacher.
+    \item \textbf{JEPA} (this lecture) turns the recipe into an explicit architecture:
+    \begin{itemize}
+      \item a \textbf{context encoder} sees only the visible input;
+      \item a separate \textbf{predictor} maps context $\rightarrow$ predicted target embeddings;
+      \item an \textbf{EMA target encoder} provides the targets (as in BYOL / DINO / iBOT).
+    \end{itemize}
+    \item New emphasis: the predictor acts as a \textbf{world model}, a module that reasons about unseen or future states in representation space.
+  \end{itemize}
+\end{frame}

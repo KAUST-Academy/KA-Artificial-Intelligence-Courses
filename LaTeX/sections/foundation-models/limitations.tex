@@ -1,0 +1,11 @@
+% --- Limitations and critical perspective ---
+\begin{frame}{Limitations and a Critical Perspective}
+  \begin{itemize}\itemsep0.28em
+    \item \textbf{Homogenization risk:} when many applications share one backbone, they inherit the same failure modes and biases (Bommasani et al.).
+    \item \textbf{Data provenance:} web-scale corpora raise licensing, privacy, and bias questions; curation (DINOv2's LVD-142M) and licensed collection (SA-1B) are partial answers, not full solutions.
+    \item \textbf{Evaluation:} zero-shot numbers depend on prompt engineering, and at web scale it is hard to rule out that benchmark images appeared in training data.
+    \item \textbf{Compute concentration:} pretraining budgets limit who can build these models; most practitioners work at the \textbf{adaptation} layer (probes, LoRA, prompting).
+    \item \textbf{Task coverage:} strong global features do not guarantee strong \emph{dense} features (segmentation, depth); DINOv3's gram anchoring targets exactly this gap.
+    \item \textbf{Source bias:} most of today's headline vision foundation models come from a handful of industry labs; treat their benchmark selections critically.
+  \end{itemize}
+\end{frame}

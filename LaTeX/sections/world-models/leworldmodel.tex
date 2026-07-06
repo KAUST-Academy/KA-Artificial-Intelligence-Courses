@@ -2,16 +2,18 @@
 % % % --- Part F: LeWorldModel (Maes et al., arXiv:2603.19312) ---
 \begin{frame}[t]{LeWorldModel (LeWM): Motivation}
   \centering
-  \includegraphics[width=0.82\linewidth,height=0.62\textheight,keepaspectratio]{images/world-models/leworldmodel_arxiv2603_fig1_training_pipeline_crop.png}\\[-0.08em]
+  \includegraphics[width=0.82\linewidth,height=0.52\textheight,keepaspectratio]{images/world-models/leworldmodel_arxiv2603_fig1_training_pipeline_crop.png}\\[-0.08em]
   {\scriptsize Image credit: Maes et al., \href{https://arxiv.org/pdf/2603.19312v1.pdf}{LeWorldModel (arXiv:2603.19312)}.}
-  \begin{itemize}
-    \item \textbf{LeWorldModel (LeWM):} The LeWorldModel is the first JEPA-style world model trained end-to-end from raw pixels using only two simple loss terms: a prediction loss and a regularizer that encourages Gaussian-distributed latents. This streamlined approach avoids the complex loss functions and additional tricks used by earlier models, yielding a provably stable and anti-collapse training procedure.
+  \begin{itemize}\itemsep0.2em\footnotesize
+    \item \textbf{LeWorldModel (LeWM):} a JEPA-style world model trained \textbf{end-to-end from raw pixels}, presented as the first to do so with only two loss terms.
+    \item The two terms: a next-latent \textbf{prediction loss} and \textbf{SIGReg}, a regularizer that pushes latents toward a Gaussian distribution.
+    \item This replaces the EMA / stop-gradient machinery of earlier JEPA recipes, with a stability and anti-collapse argument (as claimed in the paper).
   \end{itemize}
 \end{frame}
 
 \begin{frame}[t]{LeWorldModel (LeWM): Architecture}
   \centering
-  \includegraphics[width=0.82\linewidth,height=0.62\textheight,keepaspectratio]{images/world-models/leworldmodel_arxiv2603_fig1_training_pipeline_crop.png}\\[-0.08em]
+  \includegraphics[width=0.82\linewidth,height=0.58\textheight,keepaspectratio]{images/world-models/leworldmodel_arxiv2603_fig1_training_pipeline_crop.png}\\[-0.08em]
   {\scriptsize Image credit: Maes et al., \href{https://arxiv.org/pdf/2603.19312v1.pdf}{LeWorldModel (arXiv:2603.19312)}.}
   \begin{itemize}\itemsep0.20em\footnotesize
     \item \textbf{Model Architecture.} LeWM consists of an encoder (mapping frames to latent codes) and a predictor (forecasting the next latent given the current latent and action).
@@ -37,7 +39,17 @@
   % Placeholder for bar chart image
   \includegraphics[width=0.97\linewidth]{images/world-models/leworldmodel_arxiv2603_fig6_planning_performance_p8.png}\\[0.4em]
   \footnotesize
-  \textbf{Planning performance across environments.} Results are shown for \textit{Two-Room} (left), \textit{Reacher} (center 1), \textit{PushT} (center-2) and \textit{OGBench-Cube} (right). LeWM consistently outperforms PLDM and DINO-WM on PushT and Reacher. On OGBench-Cube, DINO-WM slightly outperforms LeWM, possibly due to the higher visual complexity and the 3D nature of the environment, which makes encoder training more challenging. In the simpler Two-Room environment, PLDM and DINO-WM outperform LeWM, which may be explained by the SIGReg regularization encouraging a Gaussian distribution in a high-dimensional latent space, while the intrinsic dimensionality of the environment is much lower.
+  \textbf{Planning performance across environments} (Two-Room, Reacher, PushT, OGBench-Cube). LeWM outperforms PLDM and DINO-WM on PushT and Reacher. DINO-WM leads slightly on the visually complex 3D OGBench-Cube, and both baselines lead on the simple Two-Room task, where the paper suggests SIGReg's Gaussian pressure is a poor fit for a low-dimensional environment.
+\end{frame}
+
+% --- Synthesis across the lecture ---
+\begin{frame}{Synthesis: Four Design Points}
+  \begin{itemize}\itemsep0.26em
+    \item \textbf{Ha \& Schmidhuber (V--M--C):} modular VAE + MDN-RNN + tiny controller; training inside the dream; a generative model with an evolution-trained policy.
+    \item \textbf{PlaNet / Dreamer v1--v3:} ELBO-trained RSSM latents; CEM planning (PlaNet), then actor-critic learned in imagination (Dreamer); categorical latents and normalization for stability at scale.
+    \item \textbf{V-JEPA 2 (+AC):} non-generative video SSL at scale; an action-conditioned head plus CEM planning brings it to robotics (JEPA lecture).
+    \item \textbf{LeWM:} JEPA from pixels for control, with SIGReg replacing EMA recipes; a small model with fast latent planning, and a good code-first reference for course projects.
+  \end{itemize}
 \end{frame}
 
 % --- Synthesis ---

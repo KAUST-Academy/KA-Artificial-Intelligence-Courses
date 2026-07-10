@@ -1,7 +1,10 @@
 % --- Summary (Stable Diffusion lecture) ---
 \section{Summary \& Limitations}
-\begin{frame}{}
-    \LARGE Stable Diffusion: \textbf{Summary \& Limitations}
+\begin{frame}[plain]
+    \centering
+    \vspace{2cm}
+    {\Huge \textcolor{blue}{Stable Diffusion:}\\[1em]
+     \textbf{Summary \& Limitations}}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Summary}
@@ -16,8 +19,17 @@
   \textbf{Core architecture}
   \begin{itemize}\itemsep0.35em
     \item \textbf{Attention U-Net:} encoder--decoder with skip connections; downsampling / upsampling for multiscale features.
-    \item \textbf{Time conditioning:} Fourier-feature time embeddings added per channel ($s(x,t)=\nabla_x \log p(x,t)$).
+    \item \textbf{Time conditioning:} Fourier-feature time embeddings added per channel.
     \item \textbf{Text conditioning:} CLIP (ViT-L/14 in SD v1) maps prompts to token embeddings; cross-attention injects language into the U-Net.
+  \end{itemize}
+
+  \framebreak
+
+  \textbf{Using and steering the model}
+  \begin{itemize}\itemsep0.35em
+    \item \textbf{Classifier-free guidance:} extrapolate past the conditional prediction with scale $w$; negative prompts reuse the same mechanism.
+    \item \textbf{Samplers:} DDIM and higher-order ODE solvers cut 1000 steps to 20--50; distillation (LCM, Turbo) reaches 1--4.
+    \item \textbf{Customization:} Textual Inversion, DreamBooth, and LoRA personalize; ControlNet adds spatial control.
   \end{itemize}
 
   \framebreak
@@ -25,7 +37,8 @@
   \textbf{Model evolution \& applications}
   \begin{itemize}\itemsep0.35em
     \item \textbf{SD 2.0:} OpenCLIP text encoder; native 512/768 T2I; upscaler ($\times 4$), depth2img, and updated inpainting.
-    \item \textbf{SD 3.5:} Large 8.1B, Large Turbo, Medium 2.5B; strong prompt adherence; run on consumer GPUs.
+    \item \textbf{SDXL:} 3.5B U-Net, dual text encoders, native 1024$^2$, optional refiner.
+    \item \textbf{SD 3 / 3.5:} MM-DiT transformer backbone trained with rectified flow; Large 8.1B, Large Turbo, Medium 2.5B run on consumer GPUs; FLUX.1 continues the lineage.
     \item Broader ecosystem: video (Stable Video Diffusion), inpainting/editing (GLIDE, DALL·E~2), and newer multimodal systems (e.g.\ Nano Banana~2).
   \end{itemize}
 \end{frame}

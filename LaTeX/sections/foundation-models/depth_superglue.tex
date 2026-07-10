@@ -3,12 +3,13 @@
 \begin{frame}{Depth Estimation Foundation Model: Depth Anything}
   \begin{itemize}
     \item Foundation model for single image depth estimation.
-    \item Trained with a large-scale teacher-student pipeline:
+    \item Trained with a large-scale teacher--student pipeline:
       \begin{itemize}
         \item $\sim$1.5M labeled images + $\sim$62M unlabeled images
       \end{itemize}
     \item Encoder priors from DINOv2 improve cross-domain geometric understanding.
-    \item Robust transfer across indoor/outdoor domains with limited task-specific supervision.    
+    \item Robust transfer across indoor/outdoor domains with limited task-specific supervision.
+    \item Depth Anything V2 (2024) trains the teacher on synthetic images with exact labels, improving fine detail and robustness.
     \item Applications:
       \begin{itemize}
         \item Robotics and autonomous driving
@@ -25,16 +26,17 @@
     \item Outputs dense depth maps that transfer to segmentation and other geometric downstream tasks.
   \end{itemize}
   \centering
-  \includegraphics[width=0.95\textwidth]{assets/New-Lecture_Foundation_models/depth_anything_cvpr2024_fig2_pipeline.png}\\[0.15em]
+  \includegraphics[width=0.95\textwidth]{images/foundation-models/depth_anything_cvpr2024_fig2_pipeline.png}\\[0.15em]
   {\scriptsize Yang et al., ``Depth Anything,'' CVPR 2024 (\href{https://openaccess.thecvf.com/content/CVPR2024/papers/Yang_Depth_Anything_Unleashing_the_Power_of_Large-Scale_Unlabeled_Data_CVPR_2024_paper.pdf}{OpenAccess}).}
 \end{frame}
 
 % % --- Keypoint Detection: SuperGlue ---
-\begin{frame}{SuperGlue: Foundation model for Keypoint Detection}
+\begin{frame}{SuperGlue: Reusable Matching for Geometric Vision}
   \begin{itemize}
     \item Combines graph neural networks and attention to find matches between sets of keypoints in different images.
     \item Generalizes across scenes and keypoint detector types.
     \item Applications: Visual localization and mapping, 3D reconstruction, Object pose estimation.
+    \item A caveat on terminology: SuperGlue (2020) predates the foundation-model era and is task-specific; it appears here as the standard \emph{reusable component} for matching, a role foundation models now play for other tasks.
   \end{itemize}
 \end{frame}
 
@@ -51,7 +53,7 @@
     \end{column}
     \begin{column}{0.54\textwidth}
       \centering
-      \includegraphics[width=\linewidth]{assets/New-Lecture_Foundation_models/superglue_cvpr2020_fig3_architecture.png}\\[0.2em]
+      \includegraphics[width=\linewidth]{images/foundation-models/superglue_cvpr2020_fig3_architecture.png}\\[0.2em]
       {\scriptsize Sarlin et al., ``SuperGlue: Learning Feature Matching with Graph Neural Networks,'' CVPR 2020 (\href{https://openaccess.thecvf.com/content_CVPR_2020/papers/Sarlin_SuperGlue_Learning_Feature_Matching_With_Graph_Neural_Networks_CVPR_2020_paper.pdf}{OpenAccess}).}
     \end{column}
   \end{columns}

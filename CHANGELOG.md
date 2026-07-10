@@ -1,4 +1,4 @@
-##  (2026-06-20)
+##  (2026-07-09)
 
 
 ### Features
@@ -16,6 +16,8 @@
 * **Homeworks:** ViT Swin Sliding Window Cells Classification ([1a8161b](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1a8161b0284039bf7e67530bdfa37a5ceb29992f))
 * **Labs:** 1D CNN and Audio classification labs ([72f7ac3](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/72f7ac373186963d76d03b8f516c59b919e18d9a))
 * **Labs:** Added multiple new labs for ML ([b5d4628](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/b5d4628d7cd10318afa26c89566ad134576c05ea))
+* **Labs:** Added SSL lab ([fad3e95](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/fad3e9592db461d4591449dde17331618c3364ad))
+* **Labs:** Added two new Labs ([644d780](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/644d7805d8f8e561f704510ceb2481860726c8be))
 * **Labs:** Attention_Mechanism_Japanese_English ([23cbd41](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/23cbd4191038fe2e472ece30d85845973fb22187))
 * **Labs:** Bulk upload NLP Labs. ([d3d3c97](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d3d3c97be89cb65e56e94e28d8dda24a2e99d85c))
 * **Labs:** English-Japanese_Seq2Seq_Translation ([edb4b42](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/edb4b42823db60af822ef030efa9de5fa3345be5))
@@ -31,18 +33,34 @@
 * **Linear Regression:** Feature Engineering and Vectorization ([51fac41](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/51fac41c3fdde08540bfcedbd897c9a137e83ee0))
 * **Linear Regression:** Outline, Intro, Motivation, Simple RL and Optimization review ([8c72e40](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/8c72e40327c0bd2eed7e631cb38de7b02761acee))
 * **Linear Regression:** Perspectives, Bias and Variance, Metrics, Data Split and Regularization ([4be272c](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/4be272c6014b69b51dd5bf90232b5eb3e73961d0))
+* NLP labs (Yasref nlp course) ([ab56f08](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/ab56f081d81983cf857897131efec90c1a50a0e8))
 * **Release:** Combine all courses into one Repository ([605b754](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/605b7548b76afb4d968c7c488edc8f927c207ed7))
+* **rl:** add Day 10 (Meta-RL & Open Problems) as modular LaTeX ([d6b1159](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d6b1159d108f38ec5ec3a7be59af07986a84b33b))
+* **rl:** add Day 5 (Soft Actor-Critic) LaTeX source ([cc69c38](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/cc69c38a1c8c0b43b8753eb1cb29942908335b09))
+* **rl:** add Day 6 (DDPG) LaTeX source ([c46a262](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/c46a262b0565d6bb676a7d1b093c1ae40d6f43a2))
+* **rl:** add Day 7 (Model-Based RL) LaTeX source ([729a04a](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/729a04abe95ddc64c9bb05e248a81d5078f08f94))
+* **rl:** add Day 8 (Multi-Armed Bandits) LaTeX source ([0fc0508](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/0fc0508ddd0befd41b635d1d4c1593340678c656))
+* **rl:** add Day 9 (RL in the Real World) LaTeX source ([fe9ac28](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/fe9ac282699e8026bfaecd721e2db3d249c7fa01))
+* **rl:** expand Day 4 (Policy Optimization) with GRPO and more ([7989439](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/7989439871f1b5d6cd282f627c9ebd2d37b6b3cf))
+* **rl:** polish Day 5 (Continuous Control I) ([5155ed7](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/5155ed797c1bf2f903826c7e12279ef3bd58379c))
 * **Slides:** Add Stage 2 ML lecture LaTeX source and images ([1ef30cc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1ef30ccefb075515e4b0eb10d53fe7f6845a5e36))
 * **Slides:** Added Audio_Processing_Evaluation_In_NLP ([3ed46f7](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/3ed46f7d9301300daa239d295359d6294ed1246b))
+* **Slides:** added SD Unet ([1d8dcdb](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1d8dcdb765c71e4c7e12d6815c75638e506c6fc7))
 * **slides:** created RNN, Transformer, and ViT CV ([acb283f](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/acb283fd62d923073f6cb4f9a51875b935d53856))
+* **slides:** deduplicate CV slides ([3699263](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/36992639114242ac54db90cac73e72303986149d))
 * **Slides:** Migrate Stage 3 slides into repo ([320fb22](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/320fb22d7095483d19ddc76f786df89eb98238af))
 * **Slides:** Migrated stage 2 slides. ([553b1a2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/553b1a252b95ffcdf1db978265828f14c1887ec4))
 * **slides:** reorganize decks by course, switch to KAUST theme, 16:9 [minor] ([47db948](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/47db9487f00bb6fdf44917e5642eba73fb776ada))
+* **Slides:** Split SSL into two slides ([78e7564](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/78e756449ce8354d5affe8570daa8c8f8171931f))
+* **Slides:** Updated JEPA/Foundation/World slides ([d4d65ed](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d4d65ed0235670a6949428a6ed0fe7b20e2d1b2d))
+* **slides:** updated SD and NF slides ([d439894](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d439894c3fe9655d3f52ccf4fb21df3f151faf73))
+* **Slides:** World model slides ([ff5c523](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/ff5c523650721ae90e8f3848111877a0dbeb9666))
 * **Test:** Create new test file ([d6733cc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d6733cc684c7239783440d5e5647144be66d501f))
 
 
 ### Bug Fixes
 
+* Modify and correct labs as per recommendations. ([57c1e99](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/57c1e99ab8d66a361408f50f5fc3784926cdcd10))
 * **path:** AutoEncoders images fix ([31594f2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/31594f2028908046772418e91cb38e1e79a2d932))
 * **path:** fixed a path for one of the images in the cifar lab ([c876999](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/c876999da623b8e7d6bf12b3c8e88d62cbeeaef7))
 

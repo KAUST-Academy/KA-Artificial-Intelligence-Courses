@@ -1,0 +1,26 @@
+% --- Customization ecosystem: why open weights mattered ---
+\section{Customizing Stable Diffusion}
+\begin{frame}[plain]
+    \centering
+    \vspace{2cm}
+    {\Huge \textcolor{blue}{Stable Diffusion:}\\[1em]
+     \textbf{Customizing Stable Diffusion}}
+\end{frame}
+
+\begin{frame}{Personalization: Textual Inversion, DreamBooth, LoRA}
+  \begin{itemize}\itemsep0.3em
+    \item Open weights made SD the platform people \textbf{fine-tune}; three techniques cover most of it:
+    \item \textbf{Textual Inversion} (Gal et al., 2023): learn a \textbf{new token embedding} for a concept from a few images; the rest of the model stays frozen ($\sim$kilobytes per concept).
+    \item \textbf{DreamBooth} (Ruiz et al., 2023): fine-tune the model itself to bind a \textbf{rare token} to a specific subject (your pet, a product), with a prior-preservation loss against forgetting the class.
+    \item \textbf{LoRA} (Hu et al., 2022): train \textbf{low-rank adapters} on the attention weights instead of the full model; megabytes instead of gigabytes, composable, and cheap to share. The de facto standard for style and character adaptation.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Spatial Control: ControlNet}
+  \begin{itemize}\itemsep0.3em
+    \item Text describes \emph{what}; it is poor at \emph{where}. \textbf{ControlNet} (Zhang et al., 2023) adds spatial conditioning: edge maps, human pose, depth, sketches, segmentation.
+    \item Mechanism: clone the U-Net encoder into a \textbf{trainable copy} that ingests the condition image, keep the original weights \textbf{frozen}, and connect the copy through \textbf{zero-initialized convolutions} so training starts from a no-op and cannot damage the base model.
+    \item Result: precise layout control with modest paired data, reusing everything the base model knows.
+    \item Together with LoRA and inpainting, this is why an open 2022 model still anchors production pipelines today.
+  \end{itemize}
+\end{frame}

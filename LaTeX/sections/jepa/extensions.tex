@@ -3,11 +3,11 @@
     \column{0.48\textwidth}
     \begin{itemize}\itemsep0.32em
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Point-JEPA:} applies the JEPA recipe to \textbf{unordered 3D point sets}; uses spatial proximity and masking in the point domain so the model predicts \textbf{latent structure} of masked regions from geometric context (not pixels).
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{CNN-JEPA:} keeps \textbf{convolutional} encoders (sparse, translation-friendly) while retaining \textbf{latent prediction} rather than pixel reconstruction---useful when ViTs are not the deployment backbone.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{CNN-JEPA:} keeps \textbf{convolutional} encoders (sparse, translation-friendly) while retaining \textbf{latent prediction} rather than pixel reconstruction; useful when ViTs are not the deployment backbone.
     \end{itemize}
     \column{0.5\textwidth}
     \begin{itemize}\itemsep0.32em
-      \item[\textcolor{red}{$\blacktriangleright$}] Related 3D SSL: \textbf{Sonata} (2025) pursues highly reliable point representations from large-scale self-supervision---complementary reading for geometry-heavy applications.
+      \item[\textcolor{red}{$\blacktriangleright$}] Related 3D SSL: \textbf{Sonata} (2025) pursues highly reliable point representations from large-scale self-supervision; complementary reading for geometry-heavy applications.
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{VL-JEPA} extends the same \textbf{predictive latent} philosophy to \textbf{vision--language} setups: build world models that couple visual structure with language for richer situational understanding.
     \end{itemize}
   \end{columns}
@@ -20,28 +20,37 @@
 %   \end{itemize}
 % \end{frame}
 
+% --- More modalities: motion and audio ---
+\begin{frame}{More Modalities: MC-JEPA (Motion) and A-JEPA (Audio)}
+  \begin{itemize}\itemsep0.32em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{MC-JEPA} (Bardes et al., 2023): learns \textbf{motion} and \textbf{content} jointly with a \emph{shared} encoder. One branch estimates \textbf{optical flow} between frames (a JEPA-style prediction task in feature space), the other learns content features (VICReg-style regularization); each objective improves the other.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{A-JEPA} (Fei et al., 2023): applies the masked latent-prediction recipe to \textbf{audio}: mel-spectrograms are patchified like images, and the model predicts representations of masked time--frequency regions (with a curriculum masking strategy).
+    \item[\textcolor{red}{$\blacktriangleright$}] The JEPA recipe is \textbf{modality-agnostic}: masking plus latent prediction applies to images, video, point clouds, audio, and motion.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Video SSL Efficiency: Frozen Teachers (SALT)}
   \begin{itemize}\itemsep0.3em
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{SALT} (\emph{Static-teacher Asymmetric Latent Training}, Li et al., 2025) uses a \textbf{two-stage recipe:} (i) train a teacher with a \textbf{pixel reconstruction} objective under V-JEPA--style masking; (ii) \textbf{freeze} the teacher and train a student to predict teacher latents on masked regions.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{SALT} (\emph{Static-teacher Asymmetric Latent Training}, Li et al., 2025) uses a \textbf{two-stage recipe:} (i) train a teacher with a \textbf{pixel reconstruction} objective under V-JEPA-style masking; (ii) \textbf{freeze} the teacher and train a student to predict teacher latents on masked regions.
     \item[\textcolor{red}{$\blacktriangleright$}] Reported benefits: simpler optimization than coupled EMA schedules, favorable \textbf{accuracy--compute} trade-offs in frozen evaluation, and student quality surprisingly robust to teacher size.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{SALT: Two-Stage Recipe for Video SSL (Stage 1)}
   \centering
-  \includegraphics[width=0.99\linewidth, height=0.40\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/SALT_stages1_2_diagram.png}
+  \includegraphics[width=0.99\linewidth, height=0.40\textheight, keepaspectratio]{images/jepa/SALT_stages1_2_diagram.png}
   \linebreak
   {\scriptsize Source: Li et al.\ (2025) SALT, \href{https://arxiv.org/pdf/2509.24317}{arXiv:2509.24317}, Fig.\ 2.}
   \begin{itemize}\footnotesize
     \item \textbf{Goal:} Train a \textbf{teacher encoder} to robustly reconstruct masked video regions \emph{at the pixel level}.
     \item \textbf{Approach:} Use a \textbf{V-JEPA-style masking} scheme; teach the encoder to infill missing pixels based on visible context.
-    \item\textbf{Outcome:} Teacher encoder learns to summarize temporal and spatial structure, producing feature-rich latent representations.
+    \item \textbf{Outcome:} Teacher encoder learns to summarize temporal and spatial structure, producing feature-rich latent representations.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{SALT: Two-Stage Recipe for Video SSL (Stage 2)}
   \centering
-  \includegraphics[width=0.99\linewidth, height=0.60\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/SALT_stages1_2_diagram.png}
+  \includegraphics[width=0.99\linewidth, height=0.60\textheight, keepaspectratio]{images/jepa/SALT_stages1_2_diagram.png}
   \linebreak
   {\scriptsize Reference: Li et al.\ (2025) SALT, \href{https://arxiv.org/pdf/2509.24317}{arXiv:2509.24317}, Fig.\ 2.}
   \begin{itemize}\footnotesize

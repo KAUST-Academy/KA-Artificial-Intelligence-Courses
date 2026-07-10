@@ -13,12 +13,12 @@
   \begin{columns}[T,onlytextwidth]
     \column{0.42\textwidth}
     \begin{itemize}\itemsep0.35em
-      \item Encoder trained by predicting masked spatio-temporal regions in a \textbf{learned latent space}---analogous to I-JEPA comparing abstract image embeddings rather than pixels.
+      \item Encoder trained by predicting masked spatio-temporal regions in a \textbf{learned latent space}, analogous to I-JEPA comparing abstract image embeddings rather than pixels.
       \item Self-supervised pre-training on diverse video; task labels used only after pre-training.
     \end{itemize}
     \column{0.56\textwidth}
     \centering
-    \includegraphics[width=0.9\linewidth, height=0.9\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/vjepa_encoder_training.png}\\[0.25em]
+    \includegraphics[width=0.9\linewidth, height=0.9\textheight, keepaspectratio]{images/jepa/vjepa_encoder_training.png}\\[0.25em]
     {\scriptsize Encoder trained by predicting masked regions in latent space (not pixels). Reference: \href{https://arxiv.org/abs/2404.08471}{V-JEPA paper (Bardes et al., 2024)}.}
   \end{columns}
 \end{frame}
@@ -26,12 +26,12 @@
 % --- V-JEPA: Spatiotemporal masking (Meta blog) ---
 \begin{frame}{V-JEPA: Masking in Space \emph{and} Time}
   \centering
-  \includegraphics[width=0.8\linewidth, height=0.8\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/vjepa_blog_spatiotemporal_figure.png}\\[0.25em]
+  \includegraphics[width=0.8\linewidth, height=0.8\textheight, keepaspectratio]{images/jepa/vjepa_blog_spatiotemporal_figure.png}\\[0.25em]
   {\scriptsize Spatio-temporal context and masking. Reference: Meta V-JEPA blog.}
   \begin{itemize}\footnotesize
-    \item Masking must be hard enough: \textbf{sparse random patches} make the task too easy---little is learned about dynamics.
+    \item Masking must be hard enough: \textbf{sparse random patches} make the task too easy, and little is learned about dynamics.
     \item If a region is masked only at \textbf{one instant} while adjacent frames stay visible, the model can ``cheat'' from neighboring time steps.
-    \item V-JEPA uses masking across \textbf{both space and time} so the model must infer what happens in the scene, not copy texture from nearby frames.
+    \item V-JEPA uses masking across \textbf{both space and time} so the model must infer what happens in the scene rather than copy texture from nearby frames.
   \end{itemize}
 \end{frame}
 
@@ -46,7 +46,7 @@
   \end{itemize}
     \column{0.56\textwidth}
       \centering
-      \includegraphics[width=0.95\linewidth, height=0.9\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/vjepa_encoder_training.png}\\[0.25em]
+      \includegraphics[width=0.95\linewidth, height=0.9\textheight, keepaspectratio]{images/jepa/vjepa_encoder_training.png}\\[0.25em]
       {\scriptsize Reference: \href{https://arxiv.org/abs/2404.08471}{V-JEPA paper (Bardes et al., 2024)}.}
   \end{columns}
 \end{frame}
@@ -61,7 +61,7 @@
 % \end{frame}
 
 % --- V-JEPA: Frozen evaluation (Meta blog) ---
-\begin{frame}{V-JEPA: Architecture}
+\begin{frame}{V-JEPA: Frozen Evaluation Across Tasks}
   \begin{columns}[T,onlytextwidth]
     \column{0.42\textwidth}
     \begin{itemize}\itemsep0.35em
@@ -70,7 +70,7 @@
   \end{itemize}
     \column{0.56\textwidth}
     \centering
-    \includegraphics[width=0.95\linewidth, height=0.9\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/vjepa_downstream_tasks.png}\\[0.25em]
+    \includegraphics[width=0.95\linewidth, height=0.9\textheight, keepaspectratio]{images/jepa/vjepa_downstream_tasks.png}\\[0.25em]
     {\scriptsize Reusing frozen representations for downstream video understanding. Reference: \href{https://arxiv.org/abs/2404.08471}{V-JEPA paper (Bardes et al., 2024)}.}
   \end{columns}
 \end{frame}
@@ -85,20 +85,19 @@
 %     \end{itemize}
 %     \column{0.6\textwidth}
 %     \centering
-%     \includegraphics[width=0.8\linewidth, height=0.8\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/
-%     vjepa_blog_eval_chart.png}\\[0.25em]
+%     \includegraphics[width=0.8\linewidth, height=0.8\textheight, keepaspectratio]{images/jepa/vjepa_blog_eval_chart.png}\\[0.25em]
 %     {\scriptsize Low-shot frozen evaluation on K400 / SSv2. Reference: Meta V-JEPA blog.}
 %   \end{columns}
 % \end{frame}
 
 % --- V-JEPA: Capabilities and Evaluation ---
-\begin{frame}{V-JEPA: Results, and Limitations}
-  \begin{itemize}
+\begin{frame}{V-JEPA: Results and Limitations}
+  \begin{itemize}\footnotesize
     \item Strong on \textbf{frozen} benchmarks spanning image/video classification, action recognition, and spatio-temporal action detection relative to prior video representation learning.
     \item Particularly strong on \textbf{fine-grained} interaction understanding over short clips (e.g., distinguishing put-down vs.\ pick-up vs.\ pretend actions).
     \item Reported limitations include \textbf{short clip} focus (on the order of seconds); \textbf{audio} and \textbf{long-horizon} prediction/planning highlighted as future directions.
   \end{itemize}
   \centering
-  \includegraphics[width=0.8\linewidth, height=0.5\textheight, keepaspectratio]{assets/New-Lecture_JEPA_models/vjepa_blog_eval_chart.png}\\[0.25em]
-  {\scriptsize Low-shot frozen evaluation: Comparing V-JEPA to other video models in frozen evaluation on Kinetics-400 and Something-Something-v2 (Meta V-JEPA blog; \href{https://arxiv.org/abs/2404.08471}{V-JEPA, Bardes et al.}).}
+  \includegraphics[width=0.8\linewidth, height=0.42\textheight, keepaspectratio]{images/jepa/vjepa_blog_eval_chart.png}\\[0.25em]
+  {\scriptsize Low-shot frozen evaluation on Kinetics-400 and Something-Something-v2 (Meta V-JEPA blog; \href{https://arxiv.org/abs/2404.08471}{Bardes et al.}).}
 \end{frame}

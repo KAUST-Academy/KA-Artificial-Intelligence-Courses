@@ -1,0 +1,24 @@
+% --- Background primers: RL vocabulary (CV cohort) and VAE (lecture 9 skipped) ---
+\begin{frame}{Minimal Reinforcement Learning Vocabulary}
+  This is a computer vision course, so here is the RL vocabulary used today:
+  \begin{itemize}\itemsep0.26em
+    \item \textbf{Agent--environment loop:} at each step the agent receives an observation $o_t$, picks an action $a_t$, and gets a reward $r_t$ from the environment.
+    \item \textbf{Return:} cumulative (discounted) reward over time; the quantity the agent maximizes.
+    \item \textbf{Policy} $\pi(a \mid s)$: the agent's action rule. \textbf{Value function} $V(s)$: expected return from state $s$; a network estimating it is called a \textbf{critic}, and the policy network an \textbf{actor}.
+    \item \textbf{Model-free RL:} learn the policy and value directly from real interactions; no model of the environment.
+    \item \textbf{Model-based RL:} first learn a model of the environment (the \textbf{world model}), then plan or train the policy inside it. Typically needs far fewer real interactions.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Background: Variational Autoencoders (VAE)}
+  \begin{itemize}\itemsep0.24em
+    \item An \textbf{autoencoder} compresses an input $x$ to a latent code $z$ (encoder) and reconstructs $x$ from $z$ (decoder).
+    \item A \textbf{VAE} (Kingma \& Welling, 2014) makes the latent \emph{probabilistic}: the encoder outputs a distribution $q(z \mid x) = \mathcal{N}(\mu, \sigma^2)$ and $z$ is \textbf{sampled} from it before decoding.
+    \item Training maximizes the \textbf{ELBO} (evidence lower bound):
+    \begin{equation*}
+      \mathcal{L} \;=\; \underbrace{\mathbb{E}_{q(z \mid x)}\!\left[\log p(x \mid z)\right]}_{\text{reconstruction}} \;-\; \underbrace{\mathrm{KL}\!\left(q(z \mid x)\,\|\,\mathcal{N}(0, I)\right)}_{\text{keep latents near a prior}}
+    \end{equation*}
+    \item The sampling step stays differentiable via the \textbf{reparameterization trick}: $z = \mu + \sigma \cdot \varepsilon$ with $\varepsilon \sim \mathcal{N}(0, I)$.
+    \item Why it matters today: Ha \& Schmidhuber's vision module \emph{is} this VAE, and RSSM training uses the same ELBO idea unrolled through time.
+  \end{itemize}
+\end{frame}

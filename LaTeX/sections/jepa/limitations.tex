@@ -1,0 +1,11 @@
+% --- Limitations and critical perspective ---
+\begin{frame}{Limitations and a Critical Perspective}
+  \begin{itemize}\itemsep0.26em
+    \item \textbf{Full fine-tuning gap:} JEPA's advantage shows in \textbf{frozen} and \textbf{low-shot} probes; with full fine-tuning, reconstruction methods like MAE remain highly competitive on many benchmarks.
+    \item \textbf{Masking is a hand-tuned inductive bias:} block sizes, ratios, and spatio-temporal shapes must be re-designed per modality; the recipe still involves substantial engineering.
+    \item \textbf{EMA fragility:} coupled teacher--student schedules add hyperparameters and instability; this is the issue SALT's frozen-teacher recipe targets.
+    \item \textbf{Reconstruction may not be wasted:} generative models such as diffusion also learn strong representations; the claim that pixel-level losses waste capacity is a hypothesis rather than a settled result.
+    \item \textbf{V-JEPA 2's own reported limitations:} sensitivity to camera pose, drift over long planning horizons, and goals specified only as \textbf{images} (no language-conditioned planning).
+    \item \textbf{Source bias:} much of the JEPA narrative comes from a single lab (Meta / LeCun); read the claims and the emphasized benchmarks critically.
+  \end{itemize}
+\end{frame}

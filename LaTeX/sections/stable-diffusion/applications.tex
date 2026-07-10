@@ -1,7 +1,10 @@
 % --- Applications (from sections/diffusion/complete/applications.tex) ---
 \section{Applications}
-\begin{frame}{}
-    \LARGE Diffusion Models: \textbf{Applications}
+\begin{frame}[plain]
+    \centering
+    \vspace{2cm}
+    {\Huge \textcolor{blue}{Stable Diffusion:}\\[1em]
+     \textbf{Applications and Lineage}}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Application: Stable Video Diffusion}
@@ -22,7 +25,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=1.06\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_101_1_img.png}
-        \caption*{\href{https://drive.google.com/file/d/19XVG5MpxMRXP1hwHETkP_prlbHOcuTSj/view?usp=sharing}{Link: GIFF}}
+        \caption*{\href{https://drive.google.com/file/d/19XVG5MpxMRXP1hwHETkP_prlbHOcuTSj/view?usp=sharing}{Link: GIF}}
     \end{figure}
 
 \end{frame}
@@ -38,16 +41,16 @@
 \end{frame}
 
 % --- DALL·E 2 (from sections/diffusion/complete/applications/dalle2.tex) ---
-\begin{frame}{Application: DALL.E 2 - OpenAI}
+\begin{frame}{Application: DALL·E 2 - OpenAI}
 \begin{figure}
     \centering
     \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/diffusion/diff_results_3.png}
-    \caption*{Text to image generation eith DAll.E 2}
+    \caption*{Text-to-image generation with DALL·E 2}
 \end{figure}
 \footnotetext{\href{https://arxiv.org/abs/2204.06125}{Hierarchical Text-Conditional Image Generation with CLIP Latents}}
 \end{frame}
 
-\begin{frame}{DALL.E 2 - OpenAI}
+\begin{frame}{DALL·E 2 - OpenAI}
 \begin{figure}
     \centering
     \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/diffusion/diff_results_4.png}
@@ -59,7 +62,7 @@
 
 \end{frame}
 
-\begin{frame}{DALL.E 2 - OpenAI}
+\begin{frame}{DALL·E 2 - OpenAI}
 \begin{figure}
     \centering
     \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/diffusion/diff_results_5.png}
@@ -70,7 +73,7 @@
 
 \end{frame}
 
-\begin{frame}{DALL.E 2 - OpenAI}
+\begin{frame}{DALL·E 2 - OpenAI}
 \begin{figure}
     \centering
     \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/diffusion/diff_results_6.png}
@@ -136,7 +139,7 @@
       \end{itemize}
     \column{0.54\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{assets/New-Lecture-Stable_Diffusion/sd2/upscaler_crop.png}\\[0.15em]
+      \includegraphics[width=\linewidth,height=0.68\textheight,keepaspectratio]{images/stable-diffusion/upscaler_crop.png}\\[0.15em]
       {\scriptsize Left: 128$\times$128.\quad Right: 512$\times$512 upscaled.}
   \end{columns}
   \footnotetext{\href{https://stability.ai/news-updates/stable-diffusion-v2-release}{Stability AI, Stable Diffusion 2.0 Release.}}
@@ -152,8 +155,8 @@
       \end{itemize}
     \column{0.50\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.34\textheight,keepaspectratio]{assets/New-Lecture-Stable_Diffusion/sd2/depth2img_crop.png}\\[0.2em]
-      \includegraphics[width=\linewidth,height=0.34\textheight,keepaspectratio]{assets/New-Lecture-Stable_Diffusion/sd2/depth2img_coherence_frame0.png}\\[0.1em]
+      \includegraphics[width=\linewidth,height=0.34\textheight,keepaspectratio]{images/stable-diffusion/depth2img_crop.png}\\[0.2em]
+      \includegraphics[width=\linewidth,height=0.34\textheight,keepaspectratio]{images/stable-diffusion/depth2img_coherence_frame0.png}\\[0.1em]
       {\scriptsize Input $\rightarrow$ variants (top); depth coherence preserved (bottom).}
   \end{columns}
   \footnotetext{\href{https://stability.ai/news-updates/stable-diffusion-v2-release}{Stability AI, Stable Diffusion 2.0 Release.}}
@@ -161,9 +164,30 @@
 
 \begin{frame}{Stable Diffusion 2.0: Inpainting}
   \centering
-  \includegraphics[width=0.62\linewidth,height=0.72\textheight,keepaspectratio]{assets/New-Lecture-Stable_Diffusion/sd2/inpainting_frame0.png}\\[0.2em]
+  \includegraphics[width=0.62\linewidth,height=0.72\textheight,keepaspectratio]{images/stable-diffusion/inpainting_frame0.png}\\[0.2em]
   {\scriptsize Text-guided inpainting model fine-tuned on the SD~2.0 text-to-image base.}
   \footnotetext{\href{https://stability.ai/news-updates/stable-diffusion-v2-release}{Stability AI, Stable Diffusion 2.0 Release.}}
+\end{frame}
+
+% --- SDXL (Podell et al., 2023) ---
+\begin{frame}{Application: SDXL}
+  \begin{itemize}\itemsep0.3em
+    \item \textbf{SDXL} (Podell et al., 2023): the scaled-up successor to SD 2; for a long time the most-used open text-to-image model.
+    \item A 2.6B-parameter U-Net (about 3$\times$ the 860M of SD 1/2) with \textbf{two text encoders} used together (OpenCLIP ViT-bigG + CLIP ViT-L).
+    \item Native \textbf{1024$\times$1024} generation, plus micro-conditioning on image size and crop so the model learns from mixed-resolution data without artifacts.
+    \item Optional \textbf{refiner} model: a second latent-diffusion stage specialized in high-frequency detail.
+  \end{itemize}
+\end{frame}
+
+% --- Inside SD 3: MM-DiT + rectified flow (Esser et al., ICML 2024) ---
+\begin{frame}{Inside Stable Diffusion 3: MM-DiT and Rectified Flow}
+  \begin{itemize}\itemsep0.28em
+    \item SD 3 changes both the backbone and the training objective (Esser et al., 2024).
+    \item \textbf{Backbone:} the U-Net is replaced by a \textbf{multimodal diffusion transformer (MM-DiT)}, following the DiT line (Peebles \& Xie, 2023): text and image tokens flow through a joint transformer with separate weights per modality.
+    \item \textbf{Objective:} \textbf{rectified flow}, i.e.\ flow matching on straight noise-data paths, instead of the DDPM objective; the paper's ablations found it superior at scale. (See the flow-matching section of the Normalizing Flows lecture.)
+    \item \textbf{Text encoders:} two CLIP encoders plus \textbf{T5-XXL} for long, compositional prompts and better in-image text.
+    \item \textbf{FLUX.1} (Black Forest Labs, 2024), built by SD's original authors, continues this rectified-flow-transformer lineage as the strongest open release of its generation.
+  \end{itemize}
 \end{frame}
 
 % --- Stable Diffusion 3.5 (Stability AI blog, Oct 2024) ---
@@ -171,17 +195,17 @@
 % \begin{frame}[allowframebreaks]{Application: Stable Diffusion 3.5}
 %   \vspace{0.4em}
 %   \centering
-%   \includegraphics[width=\linewidth,height=0.38\textheight,keepaspectratio]{assets/New-Lecture-Stable_Diffusion/sd35/benchmark_medium_crop.png}
+%   \includegraphics[width=\linewidth,height=0.38\textheight,keepaspectratio]{images/stable-diffusion/benchmark_medium_crop.png}
 %   \footnotetext{\href{https://stability.ai/news-updates/introducing-stable-diffusion-3-5}{Stability AI, ``Introducing Stable Diffusion 3.5'' (Oct 2024).}}
 % \end{frame}
 
 \begin{frame}{Stable Diffusion 3.5: Diverse \& Versatile Outputs}
     \centering
-    \includegraphics[width=\linewidth,height=0.38\textheight,keepaspectratio]{assets/New-Lecture-Stable_Diffusion/sd35/benchmark_medium_crop.png}
+    \includegraphics[width=\linewidth,height=0.38\textheight,keepaspectratio]{images/stable-diffusion/benchmark_medium_crop.png}
       \begin{itemize}\itemsep0.35em
         \item \textbf{Customizability:} Large (8.1B), Large Turbo (8.1B) and Medium (2.5B) models.
         \item \textbf{Efficient Performance:} Optimized to run on standard consumer hardware; Medium and Large Turbo require no specialized GPUs.
-        \item \textbf{Highly Accessible:} Medium needs only 9.9GB of VRAM making advanced diffusion imaging feasible on most consumer GPUs.
+        \item \textbf{Highly Accessible:} Medium needs only 9.9\,GB of VRAM, making advanced diffusion imaging feasible on most consumer GPUs.
       \end{itemize}
 \end{frame}
 
@@ -189,7 +213,7 @@
 \begin{frame}[t]{Application: Nano Banana 2 -- Google DeepMind}
     \begin{figure}
         \centering
-        \includegraphics[width=\linewidth,keepaspectratio]{assets/New-Lecture-Stable_Diffusion/nano-banana-2/slide1_world_knowledge.png}
+        \includegraphics[width=\linewidth,keepaspectratio]{images/stable-diffusion/nano_banana2_world_knowledge.png}
         \caption*{Examples: water-cycle infographic and cloud-type comparison.}
     \end{figure}
     \footnotetext{\href{https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/}{Raisinghani, ``Nano Banana 2: Combining Pro capabilities with lightning-fast speed,'' Google DeepMind blog (Feb 2026).}}

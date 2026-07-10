@@ -10,13 +10,13 @@
     \item VALL-E can do zero-shot TTS, speech editing, and content creation with other generative AI models like GPT-3.
   \end{itemize}
   \centering
-  \includegraphics[width=0.92\textwidth,height=0.46\textheight,keepaspectratio]{assets/New-Lecture-TTS/valle_overview_fig1.png}
+  \includegraphics[width=0.92\textwidth,height=0.46\textheight,keepaspectratio]{images/tts/valle_overview_fig1.png}
   \slideimgsource{Wang et al., ``VALL-E: Neural Codec Language Models are Zero-Shot Text to Speech Synthesizers,'' Fig.~1; \href{https://arxiv.org/abs/2301.02111}{arXiv:2301.02111} (cropped).}
 \end{frame}
 
 \begin{frame}{VALL-E: comparison with other cascaded TTS systems}
   \centering
-  \includegraphics[width=0.92\textwidth,height=0.44\textheight,keepaspectratio]{assets/New-Lecture-TTS/valle_page2.png}
+  \includegraphics[width=0.92\textwidth,height=0.44\textheight,keepaspectratio]{images/tts/valle_page2.png}
   \slideimgsource{Chen et al., VALL-E, Fig.~2: comparison with other cascaded TTS systems.}
 \end{frame}
 
@@ -48,7 +48,7 @@
     \item \textbf{Inference:} Sample random noise, which is then shaped into meaningful speech representations (mel spectrogram frames) by solving a continuous flow ordinary differential equation (ODE) conditioned on both the transcript and audio context. After obtaining the predicted mel spectrogram, a neural vocoder is used to convert these mel frames into audible waveform speech, thus completing the synthesis pipeline.
   \end{itemize}
   \centering
-  \includegraphics[width=0.95\textwidth,height=0.38\textheight,keepaspectratio]{assets/New-Lecture-TTS/voicebox_fig2_audio_model.png}
+  \includegraphics[width=0.95\textwidth,height=0.38\textheight,keepaspectratio]{images/tts/voicebox_fig2_audio_model.png}
   \slideimgsource{Le et al., Voicebox, Fig.~1: task generalization through in-context learning; \href{https://arxiv.org/abs/2306.15687}{arXiv:2306.15687}.}
 \end{frame}
 

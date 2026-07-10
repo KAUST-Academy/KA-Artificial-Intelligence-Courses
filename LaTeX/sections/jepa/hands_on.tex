@@ -1,0 +1,8 @@
+% --- Hands-on: code, checkpoints, and course lab ---
+\begin{frame}{Hands-On: Code, Checkpoints, and Lab}
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Official code:} \href{https://github.com/facebookresearch/ijepa}{facebookresearch/ijepa}, \href{https://github.com/facebookresearch/jepa}{facebookresearch/jepa} (V-JEPA), \href{https://github.com/facebookresearch/vjepa2}{facebookresearch/vjepa2}.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Hugging Face:} I-JEPA and V-JEPA 2 checkpoints are available in \texttt{transformers} (e.g.\ \texttt{facebook/ijepa\_vith14\_1k}, \texttt{facebook/vjepa2-vitl-fpc64-256}); loading a frozen encoder takes a few lines of code.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Suggested exercise:} train an \textbf{attentive probe} on frozen V-JEPA 2 features for a small video classification set, then compare with frame-level DINOv2 features on \emph{motion}-sensitive classes.
+  \end{itemize}
+\end{frame}

@@ -3,11 +3,11 @@
     \begin{columns}
       \begin{column}{0.5\textwidth}
         \centering
-        Model-based RL agent with RSSM core that achieves state-of-the-art performance on image-based control tasks but requries fewer samples.
+        Model-based RL agent with an RSSM core that reaches state-of-the-art performance on image-based control tasks while requiring fewer samples.
       \end{column}
       \begin{column}{0.5\textwidth}
         \centering
-        \includegraphics[width=0.95\linewidth,height=0.78\textheight,keepaspectratio]{assets/New-Lecture_World_Models/towardsai_primer_dreamer_hafner2020_iclr_p1_teaser.png}\\[0.12em]
+        \includegraphics[width=0.95\linewidth,height=0.78\textheight,keepaspectratio]{images/world-models/towardsai_primer_dreamer_hafner2020_iclr_p1_teaser.png}\\[0.12em]
         {\scriptsize Hafner et al., \href{https://arxiv.org/pdf/1912.01603.pdf}{\textit{Dream to Control}}. Chen, \href{https://pub.towardsai.net/dreamer-8b5a42acebbf}{Towards AI} (2020).}
       \end{column}
     \end{columns}
@@ -15,10 +15,9 @@
 
 \begin{frame}[t]{Dreamer: architecture}
   \centering
-  \includegraphics[width=\linewidth,height=0.84\textheight,keepaspectratio]{assets/New-Lecture_World_Models/towardsai_primer_dreamer_hafner2020_iclr_fig3_components.png}
-  {\tiny Dreamer architecture. Diagram credit: Hafner et al.\ (ICLR 2020), \href{https://arxiv.org/pdf/1912.01603.pdf}{PDF}}  
-  \break
-  Dreamer is composed of three main parts: 
+  \includegraphics[width=\linewidth,height=0.84\textheight,keepaspectratio]{images/world-models/towardsai_primer_dreamer_hafner2020_iclr_fig3_components.png}
+  {\tiny Dreamer architecture. Diagram credit: Hafner et al.\ (ICLR 2020), \href{https://arxiv.org/pdf/1912.01603.pdf}{PDF}}\\[0.2em]
+  Dreamer is composed of three main parts:
   \begin{itemize}\itemsep0.08em \footnotesize
     \item \textbf{ (a) Dynamics Learning:} learns representation, transition, reconstruction, reward models.
     \item \textbf{ (b) Behavior Learning:} based on the dynamics model, learns actor--critic architecture to maximize rewards.  
@@ -26,11 +25,21 @@
   \end{itemize}
 \end{frame}
 
+% --- Behaviors learned in imagination (the PlaNet -> Dreamer pivot) ---
+\begin{frame}[t]{Dreamer: Learning Behaviors in Imagination}
+  \begin{itemize}\itemsep0.28em
+    \item Instead of planning at act time (PlaNet), Dreamer trains an \textbf{actor} and a \textbf{critic} on \textbf{imagined latent trajectories}.
+    \item Rollouts never touch pixels: start from latent states of replayed real experience, then unroll the RSSM \textbf{prior} for a short horizon.
+    \item The \textbf{critic} estimates value beyond the horizon; the \textbf{actor} is improved by backpropagating value gradients \textbf{through the learned dynamics}, which is possible because the world model is differentiable.
+    \item Result: acting is a single forward pass (no per-step search), and the critic gives long-horizon credit assignment that CEM planning lacked.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}[t]{DreamerV2: discrete world model \& V1 $\rightarrow$ V2}
   \begin{columns}
     \column{0.64\textwidth}
     \centering
-    \includegraphics[width=0.94\linewidth,height=0.94\textheight,keepaspectratio]{assets/New-Lecture_World_Models/eclecticsheep_dreamerv2_worldmodel_arch.png}\\[0.08em]
+    \includegraphics[width=0.94\linewidth,height=0.94\textheight,keepaspectratio]{images/world-models/eclecticsheep_dreamerv2_worldmodel_arch.png}\\[0.08em]
     {\tiny World-model overview. Diagram credit: Belotti (2023)}
     \column{0.36\textwidth}
     \begin{itemize}\footnotesize
@@ -58,18 +67,24 @@
   \end{itemize}
   \vspace{-0.4em}
   \centering
-  \includegraphics[width=\linewidth,height=0.46\textheight,keepaspectratio]{assets/New-Lecture_World_Models/dreamerv3_arxiv2301_fig3_training_process.png}\\[0.03em]
+  \includegraphics[width=\linewidth,height=0.46\textheight,keepaspectratio]{images/world-models/dreamerv3_arxiv2301_fig3_training_process.png}\\[0.03em]
   {\scriptsize Hafner et al., \href{https://arxiv.org/pdf/2301.04104.pdf}{arXiv:2301.04104}.}
 \end{frame}
 
+% --- What actually makes V3 stable across domains ---
+\begin{frame}[t]{DreamerV3: What Makes It Stable}
+  The ``mathematical tricks'' behind one configuration for 150+ tasks:
+  \begin{itemize}\itemsep0.26em
+    \item \textbf{Symlog predictions:} inputs and regression targets pass through a signed-log transform, taming value scales that differ by orders of magnitude across domains.
+    \item \textbf{Two-hot return targets:} the critic predicts a distribution over discretized returns instead of a single scalar, which is more robust to outliers.
+    \item \textbf{KL balancing and free bits:} the world-model KL term is split and clipped so neither prior nor posterior collapses, and small KL values are not over-optimized.
+    \item \textbf{Percentile return normalization:} rewards are normalized by a running percentile range, so exploration behaves consistently across dense and sparse rewards.
+    \item Published in \emph{Nature} (2025); the headline demo is collecting diamonds in Minecraft from scratch, without human data.
+  \end{itemize}
+\end{frame}
 
-% \begin{frame}[t]{DreamerV3: results}
-%   \centering
-%   \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{assets/New-Lecture_World_Models/dreamerv3_arxiv2301_fig1_benchmark_summary.png}\\[0.06em]
-%   {\scriptsize Benchmark summary. a, Using fixed hyperparameters across all domains, Dreamer
-%   outperforms tuned expert algorithms across a wide range of benchmarks and data budgets. Dreamer
-%   also substantially outperforms a high-quality implementation of the widely applicable PPO algorithm.
-%   b, Applied out of the box, Dreamer learns to obtain diamonds in the popular video game Minecraft
-%   from scratch given sparse rewards, a long-standing challenge in artificial intelligence for which
-%   previous approaches required human data or domain-specific heuristics. Hafner et al., \href{https://arxiv.org/pdf/2301.04104.pdf}{arXiv:2301.04104}.}
-% \end{frame}
+\begin{frame}[t]{DreamerV3: results}
+  \centering
+  \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/world-models/dreamerv3_arxiv2301_fig1_benchmark_summary.png}\\[0.06em]
+  {\scriptsize Benchmark summary: with fixed hyperparameters across all domains, Dreamer outperforms tuned expert algorithms across a wide range of benchmarks and data budgets, and learns to obtain diamonds in Minecraft from scratch given sparse rewards. Hafner et al., \href{https://arxiv.org/pdf/2301.04104.pdf}{arXiv:2301.04104}.}
+\end{frame}

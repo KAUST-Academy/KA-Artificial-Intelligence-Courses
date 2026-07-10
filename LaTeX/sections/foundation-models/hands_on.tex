@@ -1,0 +1,8 @@
+% --- Hands-on: code, checkpoints, and exercise ---
+\begin{frame}{Hands-On: Code, Checkpoints, and Exercise}
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Hugging Face \texttt{transformers}:} CLIP (\texttt{openai/clip-vit-base-patch32}, zero-shot classification pipeline), SAM (\texttt{facebook/sam-vit-huge}), DINOv2 (\texttt{facebook/dinov2-base}), Depth Anything V2, and Grounding DINO (\texttt{IDEA-Research/grounding-dino-tiny}) all load in a few lines.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Official repos:} \href{https://github.com/facebookresearch/segment-anything}{facebookresearch/segment-anything}, \href{https://github.com/facebookresearch/sam2}{facebookresearch/sam2}, \href{https://github.com/IDEA-Research/GroundingDINO}{IDEA-Research/GroundingDINO}, \href{https://github.com/PriorLabs/TabPFN}{PriorLabs/TabPFN}.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Suggested exercise:} build an open-vocabulary segmentation pipeline: Grounding DINO turns a text prompt into boxes, SAM turns the boxes into masks. Compare against a DINOv2 encoder with a linear head on the same images.
+  \end{itemize}
+\end{frame}

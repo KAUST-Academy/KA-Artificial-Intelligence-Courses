@@ -1,34 +1,36 @@
 % --- Block 3 divider (from sections/diffusion/stable-diffusion-lecture/block3-extra.tex) ---
 \section{Latent Diffusion and Stable Diffusion}
 
-% \begin{frame}{Perceptual vs.\ semantic compression}
-%   Pixel-space diffusion is redundant: the U-Net spends capacity on imperceptible high-frequency detail.
-%   \textbf{Stable Diffusion} (Rombach et al., 2022) decouples:
-%   \begin{enumerate}
-%     \item \textbf{Perceptual compression (VAE):} $\mathcal{E}: \mathbf{x} \mapsto \mathbf{z}$---remove imperceptible spatial detail; preserve layout.
-%     \item \textbf{Semantic generation (LDM):} run diffusion on $\mathbf{z}$---lower memory, faster training.
-%     \item \textbf{Decode:} $\mathcal{D}(\mathbf{z}) \mapsto \mathbf{x}$---project back to pixels.
-%   \end{enumerate}
-%   Typical spatial downsampling: $8\times$ (e.g., $512 \times 512 \rightarrow 64 \times 64$ latents).
-% \end{frame}
+\begin{frame}{Perceptual vs.\ Semantic Compression}
+  Pixel-space diffusion is redundant: the U-Net spends capacity on imperceptible high-frequency detail.
+  \textbf{Stable Diffusion} (Rombach et al., 2022) decouples:
+  \begin{enumerate}
+    \item \textbf{Perceptual compression (VAE):} $\mathcal{E}: \mathbf{x} \mapsto \mathbf{z}$; remove imperceptible spatial detail, preserve layout.
+    \item \textbf{Semantic generation (LDM):} run diffusion on $\mathbf{z}$; lower memory, faster training.
+    \item \textbf{Decode:} $\mathcal{D}(\mathbf{z}) \mapsto \mathbf{x}$; project back to pixels.
+  \end{enumerate}
+  Typical spatial downsampling: $8\times$ (e.g., $512 \times 512 \times 3$ pixels $\rightarrow$ $64 \times 64 \times 4$ latents, a $\sim$48$\times$ reduction in dimensions).
+\end{frame}
 
-% \begin{frame}{Cross-attention: injecting text into the U-Net}
-%   \textbf{Pipeline:} CLIP text encoder $\rightarrow$ token embeddings $\mathbf{c} \in \mathbb{R}^{L \times d}$.
-%   \begin{itemize}
-%     \item \textbf{Self-attention:} Q, K, V from spatial latent features---global visual coherence.
-%     \item \textbf{Cross-attention:} Q from spatial features; K, V from text embeddings---align patches with prompt tokens.
-%   \end{itemize}
-%   \[
-%     \mathrm{Attention}(Q, K, V) = \mathrm{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right) V
-%   \]
-%   Scaling by $\sqrt{d_k}$ prevents softmax saturation in high dimensions.
-%   \footnotesize Token length $L \leq 77$ (CLIP); multi-head attention throughout U-Net ResNet blocks.
-% \end{frame}
+\begin{frame}{Cross-Attention: Injecting Text into the U-Net}
+  \textbf{Pipeline:} CLIP text encoder $\rightarrow$ token embeddings $\mathbf{c} \in \mathbb{R}^{L \times d}$.
+  \begin{itemize}
+    \item \textbf{Self-attention:} Q, K, V all come from spatial latent features; provides global visual coherence.
+    \item \textbf{Cross-attention:} Q from spatial features; K, V from the text embeddings; aligns image patches with prompt tokens.
+  \end{itemize}
+  \[
+    \mathrm{Attention}(Q, K, V) = \mathrm{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right) V
+  \]
+  Scaling by $\sqrt{d_k}$ prevents softmax saturation in high dimensions.\\[0.3em]
+  {\footnotesize Token length $L \leq 77$ (CLIP); multi-head attention throughout the U-Net blocks.}
+\end{frame}
 
 % --- Latent diffusion (from sections/diffusion/complete/latent-diffusion.tex) ---
-\section{Latent Diffusion Models (LDMs)}
-\begin{frame}{}
-    \LARGE Stable Diffusion: \textbf{A Latent Diffusion Model (LDM)}
+\begin{frame}[plain]
+    \centering
+    \vspace{2cm}
+    {\Huge \textcolor{blue}{Stable Diffusion:}\\[1em]
+     \textbf{A Latent Diffusion Model (LDM)}}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{What is a Latent Space?}

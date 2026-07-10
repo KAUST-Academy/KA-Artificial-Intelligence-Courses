@@ -11,7 +11,7 @@
     \item Pitch Predictor models the fundamental frequency ($F_0$); Energy Predictor models the loudness (from the spectrogram).
   \end{itemize}
   \centering
-  \includegraphics[width=0.92\textwidth,height=0.46\textheight,keepaspectratio]{assets/New-Lecture-TTS/fastspeech2_architecture_paper.png}
+  \includegraphics[width=0.92\textwidth,height=0.46\textheight,keepaspectratio]{images/tts/fastspeech2_architecture_paper.png}
   \slideimgsource{Ren et al., ``FastSpeech 2: Fast and High-Quality End-to-End Text to Speech,'' Fig.~1(a); \href{https://arxiv.org/abs/2006.04558}{arXiv:2006.04558} (cropped).}
 \end{frame}
 
@@ -23,7 +23,7 @@
     \item Unlike soft attention, MAS avoids alignment breaks, so the model works well on long utterances.
   \end{itemize}
   \centering
-  \includegraphics[width=0.90\textwidth,height=0.40\textheight,keepaspectratio]{assets/New-Lecture-TTS/glowtts_training_inference.png}
+  \includegraphics[width=0.90\textwidth,height=0.40\textheight,keepaspectratio]{images/tts/glowtts_training_inference.png}
   \slideimgsource{Kim et al., ``Glow-TTS: A Generative Flow for Text-to-Speech via Monotonic Alignment Search,'' Fig.~1; \href{https://arxiv.org/abs/2005.11129}{arXiv:2005.11129}.}
 \end{frame}
 
@@ -36,7 +36,7 @@
     \item Grad-TTS can sound good with as few as 10 steps, and it is faster and more robust than Tacotron~2.
   \end{itemize}
   \centering
-  \includegraphics[width=0.95\textwidth,height=0.38\textheight,keepaspectratio]{assets/New-Lecture-TTS/gradtts_fig2_inference.png}
+  \includegraphics[width=0.95\textwidth,height=0.38\textheight,keepaspectratio]{images/tts/gradtts_fig2_inference.png}
   \slideimgsource{Popov et al., ``Grad-TTS: A Diffusion Probabilistic Model for Text-to-Speech,'' Fig.~2; \href{https://arxiv.org/abs/2105.06337}{arXiv:2105.06337}.}
 \end{frame}
 
@@ -62,6 +62,6 @@
     \item At inference: text $\rightarrow$ text encoder + duration predictor $\rightarrow$ latent features $\rightarrow$ waveform decoder $\rightarrow$ audio (no separate vocoder).
   \end{itemize}
   \centering
-  \includegraphics[width=0.98\textwidth,height=0.36\textheight,keepaspectratio]{assets/New-Lecture-TTS/vits_fig1_architecture.png}
+  \includegraphics[width=0.98\textwidth,height=0.36\textheight,keepaspectratio]{images/tts/vits_fig1_architecture.png}
   \slideimgsource{Kim, Kong, and Son, ``Conditional Variational Autoencoder with Adversarial Learning for End-to-End Text-to-Speech'' (VITS), Fig.~1; \href{https://arxiv.org/abs/2106.06103}{arXiv:2106.06103}.}
 \end{frame}

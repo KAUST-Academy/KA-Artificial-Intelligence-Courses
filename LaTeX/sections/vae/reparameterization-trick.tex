@@ -1,5 +1,16 @@
+\subsection{Reparameterization Trick}
 \begin{frame}{}
 	\LARGE VAE: \textbf{Reparameterization Trick (Pathwise Derivative Estimator)}
+\end{frame}
+
+\begin{frame}{The Problem: Sampling Blocks Gradients}
+\begin{itemize}
+    \item The forward pass is clear: encoder outputs $\mu(x)$ and $\sigma(x)$, we \textbf{sample} $z \sim \mathcal{N}(\mu(x), \sigma^2(x))$, and the decoder reconstructs from $z$.
+    \item Training needs $\partial \mathcal{L} / \partial \mu$ and $\partial \mathcal{L} / \partial \sigma$, but the gradient path runs \textbf{through the sampling node}, and ``draw a random number'' is not a differentiable operation.
+    \item So the vanilla design of just predicting $\mu$ and $\sigma$ cannot be trained end-to-end by backpropagation as it stands.
+    \item Score-function (REINFORCE) estimators could work around this, but their gradients are extremely noisy.
+    \item The fix is to \textbf{move the randomness out of the way}: the reparameterization trick.
+\end{itemize}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Reparameterization Trick}
@@ -17,7 +28,7 @@ z = \mu + \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, I)
 \begin{figure}
 	\centering
 	\includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/reparam_trick.png}
-	\caption*{Reparameterization trick to make back propagation possible}
+	\caption*{Reparameterization trick to make backpropagation possible}
 \end{figure}
 
 \framebreak

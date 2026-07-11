@@ -48,6 +48,10 @@
 
 % Adaptive macro to convert a GIF into frames and animate it
 % Usage: \includeGIF{your.gif}{basename}{width}{fps}
+% Note: literal % characters for the shell commands must be written as
+% \@percentchar, otherwise they start TeX comments inside the definition
+% and eat the closing braces (runaway argument at end of file).
+\makeatletter
 \newcommand{\includeGIF}[4]{%
   % % Frame path prefix
   % \def\gifpath{gif_frames}%
@@ -88,8 +92,8 @@
 
   \IfFileExists{\frameprefix000.png}{}{%
     \immediate\write18{mkdir -p \gifpath}%
-    \immediate\write18{convert "\giffile" "\frameprefix%03d.png"}%
-    \immediate\write18{identify -format %%n "\giffile" > "\gifpath/\basename\_framecount.txt"}%
+    \immediate\write18{convert "\giffile" "\frameprefix\@percentchar03d.png"}%
+    \immediate\write18{identify -format \@percentchar n "\giffile" > "\gifpath/\basename\_framecount.txt"}%
   }%
 
   \newread\framecountfile%
@@ -109,6 +113,7 @@
   \animategraphics[loop,controls,width=\widthval]{\fpsval}{\frameprefix}{000}{\lastframepad}%
   \endgroup
 }
+\makeatother
 
 
 % Example box

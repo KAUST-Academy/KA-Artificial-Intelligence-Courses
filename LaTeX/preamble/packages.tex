@@ -22,7 +22,8 @@
 \usepackage{ifthen}
 \usepackage{hyperref}
 \usepackage{pgffor}
-\usepackage[margin=1in]{geometry}
+% geometry is loaded by beamer itself; loading it again with options caused
+% an "Option clash" error on every build (the margin option was never applied).
 \usepackage{pgfplots}
 \usepackage[acronym]{glossaries}
 \usepackage[style=ieee]{biblatex}

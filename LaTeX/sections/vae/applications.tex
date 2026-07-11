@@ -1,0 +1,14 @@
+\subsection{Applications}
+\begin{frame}{}
+	\LARGE VAE: \textbf{Applications}
+\end{frame}
+
+\begin{frame}{Where Are VAEs Used?}
+\begin{itemize}
+    \item \textbf{Generation and interpolation:} sample new data from the prior; walk the smooth latent space to morph between examples or do attribute arithmetic.
+    \item \textbf{Anomaly detection:} train on normal data; anomalous inputs reconstruct poorly, so the reconstruction error becomes an anomaly score (industrial inspection, medical imaging, fraud).
+    \item \textbf{Representation learning:} the latent code is a compact, structured feature vector for downstream tasks; $\beta$-VAEs push this toward disentangled factors.
+    \item \textbf{Scientific design:} molecule and drug design search the continuous latent space instead of discrete chemical space.
+    \item \textbf{Compression inside larger systems:} the autoencoder of \textbf{latent diffusion} (Stable Diffusion) is a VAE; it provides the compressed space the diffusion model works in (more in the diffusion lecture).
+\end{itemize}
+\end{frame}

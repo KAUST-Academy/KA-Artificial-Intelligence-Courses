@@ -8,7 +8,7 @@
     \item Autoencoders project data into a latent space $Z$.
     \item The latent space is not necessarily continuous or structured.
     \item<2-> \textit{What if we sample a new embedding vector from $Z$ and then have the decoder reconstruct the image from it?}
-    \item<3-> \textbf{Does not work}. Autoencoders just learn a function that maps input to output. The learned latent space is too discontinous to work as a generative model.
+    \item<3-> \textbf{Does not work}. Autoencoders just learn a function that maps input to output. The learned latent space is too discontinuous to work as a generative model.
     \item<4-> Sampling randomly from the latent space may result in invalid outputs.
     \item<4-> They do not maximize the likelihood of the data.
 \end{itemize}
@@ -25,7 +25,7 @@
 \begin{figure}
     \centering
     \includegraphics[height=0.75\textheight, width=\textwidth, keepaspectratio]{images/autoencoder/example_generative.png}
-    \caption*{Image generation with autoencoder trained on MNIST digits. Encoding vector sampled from latent space $Z$ and the passed to decoder.}
+    \caption*{Image generation with autoencoder trained on MNIST digits. Encoding vector sampled from latent space $Z$ and then passed to the decoder.}
 \end{figure}
 
 \end{frame}

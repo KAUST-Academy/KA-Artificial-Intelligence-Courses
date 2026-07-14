@@ -3,11 +3,20 @@
     \LARGE VAE: \textbf{Introduction}
 \end{frame}
 
+\begin{frame}{From a Point to a Distribution}
+\begin{itemize}
+    \item An \textbf{autoencoder} learns a mapping: each input $x$ lands on \textbf{one point} $z$ in latent space. We just saw why sampling that space fails: nothing controls what lies \emph{between} the points.
+    \item A \textbf{VAE} changes what the encoder outputs: instead of a point, it predicts the parameters of a \textbf{distribution}, a mean $\mu(x)$ and a standard deviation $\sigma(x)$, and $z$ is \textbf{sampled} from $\mathcal{N}(\mu(x), \sigma^2(x))$.
+    \item Decoding from a sampled \textbf{region} rather than a fixed point forces nearby latents to decode to similar outputs: the space becomes smooth by construction.
+    \item Everything that follows (reparameterization, the KL term, the ELBO) exists to make this simple idea trainable and useful.
+\end{itemize}
+\end{frame}
+
 
 \begin{frame}[allowframebreaks]{Introduction}
   \begin{itemize}
-    \item We want a \textbf{generative model}, which given a prior $\mathbf{z}$ outputs a new sample from data.
-    \item To make the latent space $Z$ continuous, let's choose it to be Gaussian
+    \item We want a \textbf{generative model}: given a latent $\mathbf{z}$ drawn from a prior, it outputs a new sample from the data distribution.
+    \item To make the latent space $Z$ continuous, let's choose it to be Gaussian.
     \item So now, we want to estimate the true parameters $\theta^*$ of this generative model.
     \begin{figure}
         \centering
@@ -70,7 +79,7 @@
 
 \framebreak
 
-\textbf{Why Use VAEs?}: 
+\textbf{Why Use VAEs?}
 \begin{itemize}
   \item Enable generative modeling: generate new samples by sampling from the latent distribution.
   \item Learn smooth, structured, and interpretable latent representations.

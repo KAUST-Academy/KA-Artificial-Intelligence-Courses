@@ -1,0 +1,29 @@
+\subsection{Perceptual Loss}
+\begin{frame}{}
+	\LARGE VAE: \textbf{Perceptual Loss}
+\end{frame}
+
+\begin{frame}{Pixel Losses See Pixels, Not Content}
+\begin{itemize}
+    \item MSE compares images \textbf{pixel by pixel}: shift an image by one pixel and the error explodes, yet a blurry average scores well.
+    \item Under uncertainty, the reconstruction that minimizes MSE is the \textbf{mean} of all plausible images, and the mean of sharp images is a blurry image.
+    \item \textbf{Perceptual loss} (Johnson et al., 2016): compare images in the \textbf{feature space of a pretrained network} (e.g.\ VGG) instead of pixel space:
+    \[
+    \mathcal{L}_{\mathrm{perc}}(x, \hat{x}) \;=\; \sum_{l} \lambda_l \left\| \phi_l(x) - \phi_l(\hat{x}) \right\|_2^2
+    \]
+    where $\phi_l$ are feature maps at chosen layers $l$.
+    \item Deep features respond to textures, edges, and object parts, so the loss judges \textbf{content similarity} rather than exact pixel agreement. \textbf{LPIPS} (Zhang et al., 2018) calibrates this distance against human judgments.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Perceptual Losses in VAEs}
+\begin{itemize}
+    \item \textbf{Deep Feature Consistent VAE} (Hou et al., 2017): replace the pixel reconstruction term with a perceptual one; the KL term stays unchanged. Reconstructions keep fine detail (the face results shown earlier use exactly this).
+    \item The loss becomes:
+    \[
+    \mathcal{L} \;=\; \mathcal{L}_{\mathrm{perc}}(x, \hat{x}) \;+\; D_{\mathrm{KL}}\!\left( q(z \mid x) \,\|\, p(z) \right)
+    \]
+    \item \textbf{Modern practice:} the autoencoders behind large generative systems (VQGAN, Stable Diffusion's VAE) combine pixel, \textbf{perceptual (LPIPS)}, and \textbf{adversarial} losses to stay sharp at strong compression.
+    \item \textbf{Trade-offs:} the objective is no longer a clean likelihood bound, and the pretrained network's biases decide what counts as ``similar''; but for visual quality the gain is large.
+\end{itemize}
+\end{frame}

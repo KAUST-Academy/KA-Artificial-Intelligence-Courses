@@ -1,4 +1,4 @@
-##  (2026-07-09)
+##  (2026-07-11)
 
 
 ### Features
@@ -52,6 +52,7 @@
 * **Slides:** Migrated stage 2 slides. ([553b1a2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/553b1a252b95ffcdf1db978265828f14c1887ec4))
 * **slides:** reorganize decks by course, switch to KAUST theme, 16:9 [minor] ([47db948](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/47db9487f00bb6fdf44917e5642eba73fb776ada))
 * **Slides:** Split SSL into two slides ([78e7564](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/78e756449ce8354d5affe8570daa8c8f8171931f))
+* **slides:** unify courses into one CV track, dedupe overlaps, and expand generative lectures ([d46b0cb](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d46b0cb644b16e242844bb6c6d2179046d3293f0))
 * **Slides:** Updated JEPA/Foundation/World slides ([d4d65ed](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d4d65ed0235670a6949428a6ed0fe7b20e2d1b2d))
 * **slides:** updated SD and NF slides ([d439894](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d439894c3fe9655d3f52ccf4fb21df3f151faf73))
 * **Slides:** World model slides ([ff5c523](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/ff5c523650721ae90e8f3848111877a0dbeb9666))

@@ -1,0 +1,73 @@
+\section{From Algorithms to Deployment}
+
+% Shared colour palette for this lecture's hand-built diagrams.
+% (No theme colour macros exist in the preamble; we use plain xcolor names
+%  plus this small section-local palette throughout the new TikZ.)
+\definecolor{sysblue}{RGB}{189,215,238}   % model / policy boxes
+\definecolor{mlgreen}{RGB}{169,208,142}   % positive / verifiable
+\definecolor{boxgreen}{RGB}{197,224,180}
+\definecolor{boxblue}{RGB}{180,199,231}
+\definecolor{boxred}{RGB}{244,177,177}    % warning / fragile
+\definecolor{boxtan}{RGB}{248,203,173}    % human / preference inputs
+\definecolor{accentred}{RGB}{192,0,0}     % punchline callouts
+
+% Source/citation footnote with no visible mark (suppresses the stray "0"
+% that \footnote[0] leaves behind). Counter is restored so numbering is unaffected.
+\newcommand{\srcnote}[1]{%
+  \begingroup
+  \renewcommand{\thefootnote}{}%
+  \footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup}
+
+% ---------------------------------------------------------------- Recap opener
+\begin{frame}{Where We Are: Eight Days of Algorithms}
+\begin{itemize}\itemsep0.5em
+    \item Days 1--8 built the \emph{machinery}: value-based methods, policy
+          gradients, actor--critic, continuous control, exploration, model-based
+          RL, and offline RL.
+    \item \textbf{Day 8 closed on one spine:} \emph{optimism} explores,
+          \emph{pessimism} stays safe; the sign of the uncertainty bonus was
+          the whole story. Offline RL learned a policy from a \emph{fixed dataset}
+          with no environment interaction.
+    \item Every method so far assumed one thing for free: \textbf{a reward
+          function we could write down.}
+\end{itemize}
+\vfill
+\begin{center}
+\itshape Today: where does all of this actually get deployed, and what breaks
+when the reward itself is the hard part?
+\end{center}
+\end{frame}
+
+% ---------------------------------------------------------------- Today's map
+\begin{frame}{RL in the Real World: Three Threads}
+\begin{itemize}\itemsep0.6em
+    \item \textbf{RLHF (the focus).} When reward is hard to specify, \emph{learn}
+          it from human (or AI, or verifiable) feedback. This is how modern
+          LLMs are aligned, the deep dive for today.
+    \item \textbf{Multi-Agent RL (overview).} What changes when other learning
+          agents share your environment and the ground keeps shifting underneath
+          you.
+    \item \textbf{Robotics (overview).} What breaks when the environment is
+          physical: sample cost, safety, resets, and the sim-to-real gap.
+\end{itemize}
+\end{frame}
+
+% ---------------------------------------------------------------- Learning outcomes
+\begin{frame}{Learning Outcomes}
+\textbf{RLHF: the deep dive.} By the end you should be able to:
+\begin{itemize}\itemsep0.25em
+    \item explain the RLHF pipeline: \textbf{SFT $\rightarrow$ reward model
+          $\rightarrow$ PPO/GRPO}, and the role of the KL-to-reference penalty;
+    \item explain \textbf{reward hacking} (over-optimization) and why the KL leash
+          exists;
+    \item \textbf{derive} the \textbf{RM $\leftrightarrow$ DPO} identity, and why
+          ``your LM is secretly a reward model'';
+    \item place \textbf{RLHF $\rightarrow$ RLAIF $\rightarrow$ RLVR} on the
+          scaling-oversight spectrum.
+\end{itemize}
+\vspace{0.5em}
+\textbf{MARL \& robotics: conceptual overviews.} Know \emph{why each is hard}
+and name 2--3 methods for each.
+\end{frame}

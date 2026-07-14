@@ -6,7 +6,7 @@
 \input{preamble/commands}
 \input{preamble/beamer_settings}
 
-\title[RL in the Real World]{Reinforcement Learning}
+\title[RL in the Real World]{RL in the Real World: RLHF, Multi-Agent RL \& Robotics}
 
 \usetikzlibrary{positioning,fit,shapes.geometric,arrows.meta,calc,backgrounds}
 
@@ -14,25 +14,27 @@
 
 \input{sections/cover}
 
-% Case study 1: Chip design (floorplanning / placement)
-\input{sections/rl-real-world/chip-design}
+\input{sections/toc}
 
-% Case study 2: Learning rewards from feedback (RLHF / RLAIF)
+% Framing: recap from Day 8, today's map, learning outcomes (defines shared palette)
+\input{sections/rl-real-world/intro}
+
+% Focus: Learning rewards from feedback (RLHF / RLAIF / RLVR)
 \input{sections/rl-real-world/rlhf}
 
-% Case study 3: Device placement
-\input{sections/rl-real-world/device-placement}
+% Overview: Multi-Agent RL
+\input{sections/rl-real-world/marl}
 
-% Case study 4: Resource management
-\input{sections/rl-real-world/resource-management}
-
-% Case study 5: Robotic reinforcement learning
+% Overview: Robotic reinforcement learning
 \input{sections/rl-real-world/robotics}
 
-% Case study 6: Real-time bidding
-\input{sections/rl-real-world/bidding}
+% Aside: RL for systems (one survey slide)
+\input{sections/rl-real-world/systems-survey}
 
-% Wrap-up
+% Wrap-up: summary + Day 10 hook
+\input{sections/rl-real-world/summary}
+
+% References
 \input{sections/rl-real-world/references}
 
 \end{document}

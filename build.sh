@@ -94,5 +94,6 @@ fi
 echo "Cleaning up auxiliary files..."
 latexmk -C */*.tex 2>/dev/null || true
 rm -f *.nav *.snm *.out *.toc *.aux *.bbl *.blg *.log *.fdb_latexmk *.fls *.vrb *.bcf *.run.xml *.synctex.gz 2>/dev/null || true
+echo "Auxiliary files cleaned."
 
 echo "Build completed successfully!" 

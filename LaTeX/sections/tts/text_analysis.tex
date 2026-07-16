@@ -1,0 +1,26 @@
+% ============================================================================
+\section{Text analysis front end}
+% ============================================================================
+
+\begin{frame}{Text Analysis: Normalization}
+  \begin{itemize}
+    \item Raw text is full of \textbf{non-standard words}: numbers, dates, times, currency, abbreviations, URLs.
+    \item The same string reads differently by context:
+      \begin{itemize}
+        \item ``Dr.\ Smith lives on King Dr.'' (doctor vs.\ drive)
+        \item ``1995'' as a year (nineteen ninety-five) or a quantity (one thousand nine hundred ninety-five)
+        \item ``3/4'' as a fraction (three quarters) or a date (March fourth)
+      \end{itemize}
+    \item Classical solution: rules and lexicons per category; a large share of production TTS bugs start here.
+    \item Modern systems use neural taggers or fold normalization into the model, but deployed stacks keep rule layers for safety.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Grapheme-to-Phoneme (G2P)}
+  \begin{itemize}
+    \item English spelling underdetermines pronunciation: \textit{though}, \textit{tough}, \textit{through}, and \textit{thought} share letters, not sounds.
+    \item \textbf{Homographs} need context to resolve: ``I \textit{read} it yesterday'' vs.\ ``I \textit{read} every day''; \textit{bass} the fish vs.\ \textit{bass} the instrument.
+    \item Standard pipeline: pronunciation lexicon lookup (CMUdict, about 134k ARPAbet entries) plus a neural G2P model for out-of-vocabulary words and names.
+    \item Phoneme input makes synthesis more stable; character-based models (Tacotron reads characters) learn G2P implicitly and can mispronounce rare words.
+  \end{itemize}
+\end{frame}

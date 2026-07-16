@@ -1,0 +1,37 @@
+\section{Activations and the feed-forward block}
+
+\begin{frame}{2017: The ReLU Feed-Forward Block (Recap)}
+  \begin{itemize}
+    \item[$\blacktriangleright$] Each Transformer block ends with a position-wise feed-forward network: two linear maps with a ReLU between them.
+  \end{itemize}
+
+  \vspace{0.5em}
+  \[
+    \mathrm{FFN}(x) = \max(0,\; x W_1 + b_1)\, W_2 + b_2
+  \]
+
+  \vspace{0.5em}
+  \begin{itemize}
+    \item[$\blacktriangleright$] The hidden width is typically $4 \times d_{\text{model}}$, so most of a Transformer's parameters sit in these blocks.
+    \item[$\blacktriangleright$] Attention mixes information across tokens; the feed-forward network transforms each token on its own, with the same weights at every position.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{2026: From ReLU to SwiGLU}
+  \textbf{Gated Linear Units} (Shazeer, 2020)\textbf{:} replace the single hidden activation with the product of a value path and a gate path.
+  \[
+    \mathrm{FFN}_{\text{SwiGLU}}(x) = \big(\mathrm{SiLU}(x W_1) \odot x W_3\big)\, W_2,
+    \qquad
+    \mathrm{SiLU}(z) = z \cdot \sigma(z)
+  \]
+
+  \vspace{0.4em}
+  \begin{itemize}
+    \item[$\blacktriangleright$] Three weight matrices instead of two; the hidden width shrinks to roughly $\tfrac{2}{3}$ of $4 \times d_{\text{model}}$ so the parameter count stays matched.
+    \item[$\blacktriangleright$] Small but consistent quality gains at equal parameters and compute. The paper offers no theory for why: ``we attribute their success, as all else, to divine benevolence.''
+    \item[$\blacktriangleright$] Bias terms are dropped at the same time: modern stacks remove $b$ from attention and feed-forward projections with no measurable quality loss.
+    \item[$\blacktriangleright$] LLaMA, Mistral, Qwen, and PaLM all use SwiGLU; ReLU feed-forward blocks have essentially disappeared from frontier models.
+  \end{itemize}
+  \vfill
+  {\scriptsize Shazeer, ``GLU Variants Improve Transformer,'' \href{https://arxiv.org/abs/2002.05202}{arXiv:2002.05202}.}
+\end{frame}

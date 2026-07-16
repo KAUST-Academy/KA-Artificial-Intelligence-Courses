@@ -1,4 +1,3 @@
-% --- Reinforcement Learning for Reasoning Skill Refinement (intro) ---
 \section{Reinforcement Learning for Reasoning Skill Refinement}
 \begin{frame}[allowframebreaks]{}
     \LARGE Reinforcement Learning for Reasoning Skill Refinement
@@ -32,4 +31,57 @@
             \item Balancing exploration and exploitation during training can be difficult.
         \end{itemize}
     \end{itemize}
+
+    \framebreak
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/lrm+moe/paper-rl-for-reasoning-llm.png}
+            \caption*{Source: \href{https://arxiv.org/pdf/2504.20571}{Wang et al. (2025)}}
+        \end{figure}
+    \framebreak
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/lrm+moe/rlvr-dataset-result.png}
+            \caption*{Source: \href{https://arxiv.org/pdf/2504.20571}{Wang et al. (2025)}}
+        \end{figure}
+    \framebreak
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/lrm+moe/rlvr-result.png}
+            \caption*{Model's response to training example $\pi_1$ and a selected MATH500 problem. Green/Red are used for marking Correct/Wrong answers. Source: \href{https://arxiv.org/pdf/2504.20571}{Wang et al. (2025)}}
+        \end{figure}
+    \framebreak
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/lrm+moe/rlvr-viability.png}
+            \caption*{1(few)-shot RLVR is viable for different models and RL algorithms. Source: \href{https://arxiv.org/pdf/2504.20571}{Wang et al. (2025)}}
+        \end{figure}
+    \framebreak
+    \begin{itemize}
+        \item \textbf{Applications}
+        \begin{itemize}
+            \item Can be applied to various reasoning tasks, such as logical reasoning, mathematical problem solving, and decision-making.
+            \item Useful in scenarios where reasoning skills are critical for task success.
+        \end{itemize}
+        \item \textbf{Advanced Techniques}
+        \begin{itemize}
+            \item Combining a reward model with a verifier model to ensure both performance and correctness.
+            \item Rewarding attributes such as truthfulness, logical soundness, or helpfulness during training.
+        \end{itemize}
+        \item \textbf{Future Directions}
+        \begin{itemize}
+            \item Further research is needed to improve the efficiency and effectiveness of reinforcement learning for reasoning skill refinement.
+            \item Exploring different reward structures and training paradigms to enhance model performance.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Outcome Rewards vs Process Rewards}
+  \begin{itemize}\itemsep0.4em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Outcome reward models (ORMs)} score only the final result: is the answer correct, do the tests pass?
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Process reward models (PRMs)} score every intermediate step of the reasoning trace. Training them requires step-level labels (Lightman et al., 2023, ``Let's Verify Step by Step'', with the PRM800K dataset of human step annotations).
+    \item[\textcolor{red}{$\blacktriangleright$}] PRMs give denser feedback and catch correct answers reached by invalid reasoning; ORMs are cheaper, and in verifiable domains need no trained model at all, since a rule or checker suffices.
+    \item[\textcolor{red}{$\blacktriangleright$}] PRMs carry their own risks: step labels are expensive, step correctness is hard to define outside mathematics, and step-level supervision can penalize unconventional but valid reasoning paths.
+    \item[\textcolor{red}{$\blacktriangleright$}] DeepSeek-R1 chose rule-based outcome rewards after finding that process rewards constrained exploration and invited reward hacking.
+  \end{itemize}
 \end{frame}

@@ -78,6 +78,46 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Tool Use and Function Calling}
+  \begin{itemize}
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Function calling} is how an LLM acts: each tool is described to the model as a function with a name, a description, and a JSON schema for its parameters.
+    \item[\textcolor{red}{$\triangleright$}] The model does not execute anything. It emits a structured call (function name + arguments); the runtime executes it and feeds the result back as a new message.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{The loop:} model receives the task $\rightarrow$ emits a call $\rightarrow$ runtime returns the result $\rightarrow$ model reasons over it $\rightarrow$ another call or a final answer.
+    \item[\textcolor{red}{$\triangleright$}] Modern APIs support \textbf{parallel calls} (several independent tools in one step) and \textbf{structured outputs} (forcing the reply itself into a schema).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Function Calling: Example}
+  \textbf{Tool definition given to the model:}
+  \begin{lstlisting}[language=Python]
+{"name": "get_weather",
+ "description": "Current weather for a city",
+ "parameters": {"type": "object",
+   "properties": {"city": {"type": "string"}},
+   "required": ["city"]}}
+  \end{lstlisting}
+  \textbf{User:} ``Do I need an umbrella in Jeddah today?''
+  \begin{lstlisting}[language=Python]
+Model  -> call: get_weather(city="Jeddah")
+Runtime-> result: {"condition": "rain", "temp_c": 24}
+Model  -> "Yes, take one: it is raining in Jeddah (24 C)."
+  \end{lstlisting}
+\end{frame}
+
+\begin{frame}{Agentic RAG}
+  \begin{itemize}
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Fixed RAG pipeline:} retrieve once for the raw query, then generate. Fails when the query is vague, multi-part, or needs information the first retrieval missed.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Agentic RAG} makes retrieval a tool the model controls:
+    \begin{itemize}
+      \item \textbf{Decide when:} answer directly from parametric knowledge, or retrieve.
+      \item \textbf{Rewrite the query:} decompose multi-part questions into targeted searches.
+      \item \textbf{Iterate:} retrieve, read, notice what is missing, retrieve again.
+      \item \textbf{Judge the evidence:} discard irrelevant passages before answering.
+    \end{itemize}
+    \item[\textcolor{red}{$\triangleright$}] Costs more latency and tokens per query; pays off on multi-hop questions and heterogeneous document collections.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Agentic RAG Workflow}
   \includegraphics[width=0.98\textwidth, height=0.98\textheight, keepaspectratio]{images/multimodal-nlp-agentic-ai/agentic_rag_reasoning_flow.png}
 \end{frame}

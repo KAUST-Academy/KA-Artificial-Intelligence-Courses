@@ -1,0 +1,147 @@
+\section{Evaluating Generated Text}
+
+\begin{frame}[allowframebreaks]{BLEU (Bilingual Evaluation Understudy)}
+
+\begin{itemize}
+    \item BLEU is an n-gram overlap metric commonly used to evaluate text generation tasks such as machine translation.
+    It compares generated text against reference text using precision of n-grams.
+
+    \item Formula:
+    \[
+        \text{BLEU} = \text{BP} \cdot \exp\Bigg(\sum_{n=1}^{N} w_n \log p_n \Bigg)
+    \]
+    where:
+    \begin{itemize}
+        \item $p_n$ = precision of n-grams
+        \item $w_n$ = weight for each n-gram order (usually uniform)
+        \item BP = brevity penalty to penalize short hypotheses
+    \end{itemize}
+\framebreak
+    \item How it works:
+    \begin{itemize}
+        \item BLEU evaluates how many n-grams in the hypothesis match the reference.
+        \item Missing or misordered words reduce the score.
+    \end{itemize}
+
+    \item Example:
+    \begin{itemize}
+        \item Reference: ``the cat is on the mat''
+        \item Hypothesis: ``the cat on mat''
+        \item Unigram precision = 4/4 = 1.0
+        \item Bigram precision = 1/3 $\approx$ 0.33
+        \item BLEU penalizes missing words via BP.
+    \end{itemize}
+
+    \item Why it matters:
+    \begin{itemize}
+        \item Easy to compute and widely adopted for automatic evaluation of generated text.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{ROUGE (Recall-Oriented Understudy for Gisting Evaluation)}
+
+\begin{itemize}
+    \item ROUGE is a recall-focused metric widely used in text summarization to evaluate how much of the reference content is captured by the generated text.
+
+    \item Common variants:
+    \begin{itemize}
+        \item \textbf{ROUGE-N:} recall of n-grams.
+        \item \textbf{ROUGE-L:} based on the longest common subsequence.
+    \end{itemize}
+
+    \item Formula (ROUGE-N):
+    \[
+        \text{ROUGE-N} = \frac{\sum_{\text{n-gram} \in \text{Ref}} \min(\text{count}_{\text{hyp}}, \text{count}_{\text{ref}})}{\sum_{\text{n-gram} \in \text{Ref}} \text{count}_{\text{ref}}}
+    \]
+\framebreak
+    \item Example:
+    \begin{itemize}
+        \item Reference: ``the cat sat on the mat''
+        \item Hypothesis: ``the cat sat on mat''
+        \item ROUGE-1 recall = 5/6 $\approx$ 83\%
+    \end{itemize}
+
+    \item Why it matters:
+    \begin{itemize}
+        \item Good for checking content coverage in summarization tasks.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{METEOR \& TER (Other Evaluation Metrics)}
+
+\begin{itemize}
+    \item \textbf{METEOR:}
+    Measures text generation quality considering not just exact word matches but also stemming, synonyms, and paraphrases.
+    Tends to correlate better with human judgment than BLEU.
+
+    \item \textbf{TER (Translation Edit Rate):}
+    Counts the minimum number of edits (insertions, deletions, substitutions, and shifts) needed to match the reference text.
+    Lower TER indicates better performance.
+
+    \item Why these metrics matter:
+    \begin{itemize}
+        \item Often used alongside BLEU and ROUGE to get a more complete evaluation of generated text quality.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Automated Metrics vs Human Evaluation}
+
+\begin{itemize}
+    \item \textbf{Automated Metrics} (e.g., BLEU, ROUGE):
+    \begin{itemize}
+        \item \textbf{Positive:} Cheap, fast, and reproducible.
+        \item \textbf{Negative:} Limited depth; may not capture fluency, naturalness, or true meaning.
+    \end{itemize}
+
+    \item \textbf{Human Evaluation:}
+    \begin{itemize}
+        \item \textbf{Positive:} Captures fluency, naturalness, and semantic meaning.
+        \item \textbf{Negative:} Expensive, slow, and less reproducible.
+    \end{itemize}
+
+    \item Why both matter:
+    \begin{itemize}
+        \item Automated metrics allow rapid iteration and benchmarking.
+        \item Human evaluation ensures quality aligns with real-world perception.
+        \item Best practice: combine both depending on the task.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}[allowframebreaks]{Example: BLEU vs ROUGE in Practice}
+
+\begin{itemize}
+    \item Reference: ``The cat sat on the mat.''
+
+    \item Hypotheses:
+    \begin{itemize}
+        \item Hypothesis A: ``The cat is on the mat.''
+        \item Hypothesis B: ``A feline rested on the rug.''
+    \end{itemize}
+
+    \item Metric evaluation:
+    \begin{itemize}
+        \item \textbf{BLEU:} A > B (closer word overlap with reference)
+        \item \textbf{ROUGE:} A > B (better recall of reference n-grams)
+        \item Hypothesis B is semantically correct, yet both metrics punish it.
+    \end{itemize}
+
+    \item Takeaway:
+    \begin{itemize}
+        \item Different metrics capture different aspects of quality.
+        \item Word overlap metrics may disagree with human or semantic judgment.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}

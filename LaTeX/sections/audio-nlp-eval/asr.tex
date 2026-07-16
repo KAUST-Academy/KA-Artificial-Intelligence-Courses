@@ -215,42 +215,6 @@
 \end{frame}
 
 
-\begin{frame}[allowframebreaks]{Evaluating ASR: Word Error Rate (WER)}
-
-\begin{itemize}
-    \item Word Error Rate (WER) is the most commonly used metric to evaluate ASR performance.  
-    \item It measures the proportion of words that are incorrect, considering substitutions, deletions, and insertions.
-
-    \item Formula:
-    \[
-        \text{WER} = \frac{S + D + I}{N}
-    \]
-    where:  
-    $S$ = substitutions, $D$ = deletions, $I$ = insertions, $N$ = total words in the reference.
-
-    \item Example:
-    \begin{itemize}
-        \item Reference: ``the cat sat on mat''  
-        \item Hypothesis: ``the cat sat mat''  
-        \item One deletion → WER = $1/5 = 20\%$
-    \end{itemize}
-
-    \item Why it matters:
-    \begin{itemize}
-        \item Standard, intuitive metric for ASR quality.
-        \item Provides a clear measure of accuracy across datasets.
-    \end{itemize}
-
-    \item Limitations:
-    \begin{itemize}
-        \item WER does not always reflect user satisfaction.
-        \item Some errors may be less critical than others depending on context.
-    \end{itemize}
-\end{itemize}
-
-\end{frame}
-
-
 \begin{frame}[allowframebreaks]{Factors Affecting ASR Performance}
 
 \begin{itemize}

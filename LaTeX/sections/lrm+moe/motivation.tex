@@ -1,37 +1,16 @@
 \section{Motivation}
-\begin{frame}[allowframebreaks]{Motivation}
+\begin{frame}{Motivation}
     \begin{itemize}
-        \item \textbf{Why study LRMs and MoE?}
+        \item \textbf{Why study Mixture of Experts?}
         \begin{itemize}
-            \item LLMs like GPT-3 and GPT-4 excel at generating text.
-            \item However, they often rely on \textbf{pattern matching}, not true reasoning.
-            \item Real-world applications like \textbf{math problem-solving}, \textbf{code synthesis}, and \textbf{scientific hypothesis generation} require multi-step reasoning.
-            \item Scaling LLMs is costly. \textbf{MoE models} allow for massive model sizes with lower computation per inference.
+            \item Scaling dense LLMs is costly: every parameter participates in every forward pass, so capacity and compute grow together.
+            \item \textbf{MoE models} break that link: massive total capacity with far lower computation per token, because only a few experts activate per input.
+            \item Many frontier systems are MoE models (e.g.\ DeepSeek-V3/R1 with 671B total but 37B active parameters; Mixtral; Switch Transformer).
         \end{itemize}
-        \item \textbf{Examples:}
+        \item \textbf{Example:}
         \begin{itemize}
-            \item \textit{GPT-3 can generate realistic text but fails at solving "If Alice has 3 apples and gives Bob 2, how many does she have?" unless prompted with reasoning steps.}
-            \item \textit{DeepMind’s AlphaCode uses reasoning and symbolic techniques to solve programming problems—pure LLMs fall short.}
+            \item \textit{A dense 671B model would be prohibitively expensive to serve; DeepSeek-R1 routes each token through a small subset of experts, giving 671B-scale capacity at roughly the inference cost of a 37B model.}
         \end{itemize}
+        \item Large Reasoning Models build directly on these architectures: several leading reasoning systems are trained and served as MoE models.
     \end{itemize}
-% \framebreak
-%     \begin{itemize}
-%         \item Deep reasoning in large language models (LLMs) is crucial for solving challenging tasks. 
-%         \begin{itemize}
-%             \item This is highlighted by emerging benchmarks in:
-%             \begin{itemize}
-%                 \item Mathematics
-%                 \item Commonsense reasoning
-%                 \item Multihop question answering
-%             \end{itemize}
-%         \end{itemize}
-%         \item There is a growing need to balance reasoning capabilities with computational efficiency.
-%         \begin{itemize}
-%             \item Advanced reasoning often requires significant compute resources.
-%         \end{itemize}
-%         \item Mixture-of-Experts (MoE) architectures offer a promising approach to scaling model capacity efficiently.
-%         \begin{itemize}
-%             \item Enables improved reasoning without a proportional increase in computation.
-%         \end{itemize}
-%     \end{itemize}
 \end{frame}

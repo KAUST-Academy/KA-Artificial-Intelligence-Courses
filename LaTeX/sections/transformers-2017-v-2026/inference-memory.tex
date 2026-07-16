@@ -1,49 +1,18 @@
-% ============================================================================
 \section{Inference memory and attention variants}
-% ============================================================================
-
-% --- MHA MQA GQA + table ---
-% \begin{frame}{MHA, MQA, and GQA: shrinking the KV cache}
-%   \begin{itemize}
-%     \item \textbf{MHA:} $h$ query heads each with their own $K,V$ projections: KV cache stores $h$ copies---memory-heavy for long contexts.
-%     \item \textbf{MQA:} single shared $K,V$ across heads (Shazeer et al.); cuts KV memory; may need re-tuning.
-%     \item \textbf{GQA:} group heads so each \textbf{group} shares KV (Ainslie et al.): quality--bandwidth trade-off; widely deployed (LLaMA~2/3-class stacks).
-%   \end{itemize}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.38\textheight,keepaspectratio]{images/transformers-2017-v-2026/report_crop_kv_attention_table.png}
-% \end{frame}
-
-\begin{frame}{Key-Value Caching}
-  \begin{columns}[T,onlytextwidth]
-    \column{0.48\textwidth}
-    \begin{itemize}\itemsep0.32em
-      \item[\textcolor{red}{$\blacktriangleright$}] In \textbf{decode}, the model emits \textbf{one token per step}, but that token still depends on the \textbf{key and value} tensors for \textbf{all} earlier positions.
-      \item[\textcolor{red}{$\blacktriangleright$}] Those positions include the \textbf{prompt} (K/V from \textbf{prefill}) plus any \textbf{new} K/V computed up to the current step.
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{KV caching} keeps these tensors in GPU memory so they are \textbf{not recomputed} at every step; each iteration \textbf{appends} the newly computed K/V to the cache for the next step.
-      \item[\textcolor{red}{$\blacktriangleright$}] In many stacks there is \textbf{one KV cache per transformer layer}.
-    \end{itemize}
-    \vspace{0.2em}
-    {\scriptsize Verma \& Vaidya, ``Mastering LLM Techniques: Inference Optimization,'' NVIDIA Technical Blog (2023). \href{https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/}{Article} --- Key-value caching (Figure~1).}
-
-    \column{0.5\textwidth}
-    \centering
-    \includegraphics[width=0.8\linewidth,height=0.78\textheight,keepaspectratio]{images/inference-optimisation/nvidia_blog_kv_caching_figure1.png}\\[-0.2em]
-    {\scriptsize Figure~1: illustration of the key-value caching mechanism.}
-  \end{columns}
-\end{frame}
 
 \begin{frame}{KV Cache Memory}
   \begin{columns}[T,onlytextwidth]
     \column{0.52\textwidth}
-    \begin{itemize}\itemsep0.28em
-      \item[\textcolor{red}{$\blacktriangleright$}] Major GPU memory uses for serving: \textbf{model weights} and the \textbf{KV cache} (self-attention tensors cached to skip redundant work).
-      \item[\textcolor{red}{$\blacktriangleright$}] Under batching, each request still needs a \textbf{separate} KV-cache allocation---often the limiting factor before weights alone.
-      \item[\textcolor{red}{$\blacktriangleright$}] Cost scales \textbf{linearly} with batch and length---caps throughput and long-context use; motivates MQA/GQA, paging (PagedAttention), KV quantisation, etc.
-      \end{itemize}
-    \column{0.47\textwidth}
+    \begin{itemize}\itemsep0.32em
+      \item[\textcolor{red}{$\blacktriangleright$}] In decode, each new token needs the key and value tensors of all earlier positions; caching them avoids recomputation, one cache per layer.
+      \item[\textcolor{red}{$\blacktriangleright$}] Serving memory consists of model weights plus the KV cache, and under batching every request needs its own cache, often the limiting factor before weights.
+      \item[\textcolor{red}{$\blacktriangleright$}] Cost grows linearly with batch size and context length, capping throughput and long-context use; MQA and GQA target this directly.
+    \end{itemize}
+
+    \column{0.45\textwidth}
     \centering
-    \includegraphics[width=0.8\linewidth,height=0.78\textheight,keepaspectratio]{images/inference-optimisation/nvidia_blog_kv_caching_figure1.png}\\[-0.2em]
-    {\scriptsize Figure~1: illustration of the key-value caching mechanism (from previous frame).}
+    \includegraphics[width=0.8\linewidth,height=0.72\textheight,keepaspectratio]{images/inference-optimisation/nvidia_blog_kv_caching_figure1.png}\\[-0.2em]
+    {\scriptsize Illustration of the key-value caching mechanism. Verma \& Vaidya, NVIDIA Technical Blog (2023).}
   \end{columns}
 \end{frame}
 
@@ -58,19 +27,33 @@
       \item GQA conceptually interpolates between multi-head and multi-query attention.
     \end{itemize}
   }
-  {\scriptsize \textit{Reference:} 
-    Ainslie et al., ``GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints,'' 
+  {\scriptsize \textit{Reference:}
+    Ainslie et al., ``GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints,''
     \href{https://arxiv.org/abs/2305.13245}{arXiv:2305.13245}.
   }
 \end{frame}
 
-% \begin{frame}{Multi-Head Latent Attention (MLA)}
-%   \begin{itemize}
-%     \item \textbf{Idea:} compress $K,V$ into a \textbf{low-rank latent} before cache storage; project back during attention. Targets the same bottleneck as MQA/GQA---KV memory---with a learned compression map.
-%     \item Reported serving stacks claim \textbf{smaller cache footprints} than GQA at similar or better quality on some large-model regimes (see DeepSeek-V3 technical report and follow-on discussions).
-%     \item Pedagogically: MLA is ``KV compression + multi-head expressivity,'' not only ``share heads.''
-%   \end{itemize}
-% \end{frame}
+\begin{frame}{Multi-Head Latent Attention (MLA)}
+  \begin{itemize}\itemsep0.15em
+    \item MQA and GQA shrink the cache by sharing key and value heads; aggressive sharing costs quality.
+    \item MLA (DeepSeek-V2, 2024) instead compresses keys and values into one low-rank latent per token, caches only the latent, and reconstructs per-head keys and values at attention time.
+    \item Expressivity stays close to full MHA with a far smaller cache: DeepSeek-V2 reports 93\% less KV memory than its MHA baseline; used across the DeepSeek family (V2, V3, R1).
+  \end{itemize}
+  \centering
+  \includegraphics[width=0.85\textwidth,height=0.34\textheight,keepaspectratio]{images/transformers-2017-v-2026/deepseek_v2_mla_vs_mha_gqa_mqa.png}\\[0.15em]
+  {\scriptsize DeepSeek-AI, ``DeepSeek-V2: A Strong, Economical, and Efficient Mixture-of-Experts Language Model,'' \href{https://arxiv.org/abs/2405.04434}{arXiv:2405.04434}, Figure 3.}
+\end{frame}
+
+\begin{frame}{Sliding-Window and Hybrid Attention}
+  \begin{itemize}\itemsep0.15em
+    \item Sliding-window attention (Mistral 7B, 2023): each token attends only to the previous $W$ positions ($W = 4096$ in Mistral), capping the per-layer KV cache at $W$ entries no matter how long the context grows.
+    \item Information still travels further than $W$: after $L$ layers the receptive field reaches $L \times W$ tokens.
+    \item The 2026 pattern is hybrid: stacks alternate windowed layers with occasional full-attention layers (Gemma, GPT-OSS), keeping long-range retrieval while most layers stay cheap.
+  \end{itemize}
+  \centering
+  \includegraphics[width=0.78\textwidth,height=0.36\textheight,keepaspectratio]{images/transformers-2017-v-2026/mistral_sliding_window_attention.png}\\[0.15em]
+  {\scriptsize Jiang et al., ``Mistral 7B,'' \href{https://arxiv.org/abs/2310.06825}{arXiv:2310.06825}, Figure 1.}
+\end{frame}
 
 % \begin{frame}{KV cache and PagedAttention}
 %   \begin{itemize}
@@ -80,27 +63,6 @@
 %     \item Systems stack: prefix caching, speculative decoding, expert parallelism for MoE---as important as raw model FLOPs.
 %   \end{itemize}
 % \end{frame}
-
-% \begin{frame}{Transformer Variants}
-%   \begin{itemize}
-%     \item[$\blacktriangleright$] \textbf{Encoder-only:} BERT, RoBERTa
-%     \item[$\blacktriangleright$] \textbf{Decoder-only:} GPT, LLaMA, Falcon
-%     \item[$\blacktriangleright$] \textbf{Encoder-Decoder:} T5, BART, mT5
-%   \end{itemize}
-%   \vspace{1em}
-%   \textbf{Modifications:}
-%   \begin{itemize}
-%     \item[$\blacktriangleright$] \textbf{Long-range:} Longformer, BigBird
-%     \item[$\blacktriangleright$] \textbf{Efficient:} Linformer, Performer
-%     \item[$\blacktriangleright$] \textbf{Sparse:} Sparse Transformer, Reformer
-%   \end{itemize}
-% \end{frame}
-
-\begin{frame}{The LLM Era -- Paradigm Shift in Machine Learning}
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_variants_bert_gpt_t5_timeline.png}
-\end{frame}
-
 
 \begin{frame}{Decoder-only LLMs (post-2017 trend)}
   \begin{itemize}

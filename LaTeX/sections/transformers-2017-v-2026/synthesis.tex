@@ -22,6 +22,10 @@
       \hline
       Parameter density & Dense (all parameters active per forward) & Sparse activation (e.g., Mixture-of-Experts) \\
       \hline
+      Attention span & Every token attends to all positions & Hybrid stacks: sliding-window layers + occasional full-attention layers \\
+      \hline
+      Inference compute & Fixed: one forward pass per token & Test-time scaling: thinking tokens on hard queries \\
+      \hline
     \end{tabular}
   \end{center}
 \end{frame}

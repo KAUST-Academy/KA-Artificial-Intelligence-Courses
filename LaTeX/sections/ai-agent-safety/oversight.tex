@@ -1,0 +1,39 @@
+% ============================================================================
+\section{Oversight, monitoring, and evaluation}
+% ============================================================================
+
+\begin{frame}{Logging and Monitoring Agent Actions}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Because an agent acts, its actions can be audited in a way a chatbot's reasoning cannot. Log every tool call, argument, and result.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Anomaly detection:} flag behavior that departs from the task, such as an agent asked to summarize email that suddenly sends one, or reads files it was never pointed at.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Monitoring depends on independence. If the same model that was hijacked also writes the summary of what it did, the log inherits the compromise.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Prefer monitors that watch the actions themselves, such as tool calls and network egress, over the agent's self-report.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Red-Teaming and Automated Attack Discovery}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Red-teaming:} deliberately attack your own agent by planting injections, crafting malicious pages, and probing tool misuse before an adversary does.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Manual red-teaming does not scale to every page an agent might read, so the attack search is increasingly automated: generate and mutate injections, then keep what works.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The persuasion-and-manipulation grid that TRAP uses to attack also serves as a test suite: run it against a candidate agent and measure the hijack rate.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Robustness is best treated as a number tracked across releases, not a one-time check.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Benchmarks for Agent Harm and Robustness}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{AgentHarm} measures misuse: will the agent execute an explicitly malicious multi-step task? It has 110 tasks across 11 harm categories.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{AgentDojo} measures adversarial robustness with a dynamic environment that pairs benign user tasks with injection attacks and candidate defenses.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{TRAP} measures indirect injection on web agents across realistic sites, including Amazon, Gmail, Calendar, LinkedIn, DoorDash, and Upwork.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Benchmarks cover the attacks we already know. A passing score is a lower bound on safety, not a guarantee.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Incident Response for Deployed Agents}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Assume something will go wrong in production, and plan the response in advance.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Contain:} a kill switch that halts the agent and revokes its credentials immediately.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Investigate:} action logs detailed enough to reconstruct what happened and what was affected.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Recover and learn:} reverse what can be reversed, notify affected parties, and turn the root cause into a new red-team test so it cannot recur silently.
+  \end{itemize}
+\end{frame}

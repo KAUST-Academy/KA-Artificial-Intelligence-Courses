@@ -14,7 +14,7 @@
   \vspace{0.5em}
     \begin{itemize}\itemsep0.32em
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Goal:} run larger models on \textbf{constrained} hardware with acceptable accuracy.
-      \item[\textcolor{red}{$\blacktriangleright$}] Lowering precision on \textbf{weights and/or activations} (e.g.\ FP32/FP16 $\rightarrow$ FP8) cuts \textbf{memory}, speeds \textbf{inference}, and reduces \textbf{energy}---at some accuracy cost; the right trade-off is use-case dependent.
+      \item[\textcolor{red}{$\blacktriangleright$}] Lowering precision on \textbf{weights and/or activations} (e.g.\ FP32/FP16 $\rightarrow$ FP8) cuts \textbf{memory}, speeds \textbf{inference}, and reduces \textbf{energy}, at some accuracy cost; the right trade-off is use-case dependent.
     \end{itemize}
 \end{frame}
 
@@ -22,7 +22,7 @@
   \begin{itemize}\itemsep0.32em
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Weights:} straightforward win on footprint; Llama~2 7B at FP16/BF16 $\approx$ \textbf{14\,GB} $\rightarrow$ FP8 weights $\approx$ \textbf{7\,GB} (blog numbers).
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Activations:} intermediate layer outputs; quantizing compute can exploit \textbf{tensor cores} at lower bit width for more throughput.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{KV cache} (decoder-only): grows with context, layers, and heads---often \textbf{several GB} at long context (e.g.\ 4096 tokens) alongside weights.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{KV cache} (decoder-only): grows with context, layers, and heads, often \textbf{several GB} at long context (e.g.\ 4096 tokens) alongside weights.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Deployment patterns:} weight-only INT8/INT4 for maximum weight memory savings (activations may stay higher precision); \textbf{KV cache quantization} when long context dominates.
   \end{itemize}
 \end{frame}
@@ -33,7 +33,7 @@
     \begin{itemize}\footnotesize
       \item[\textcolor{red}{$\blacktriangleright$}] Floating point formats use their bits to store three parts: \textbf{sign} (positive/negative), \textbf{exponent} (size/range), and \textbf{mantissa} (precision of the value). For example, FP8 E4M3 uses 4 bits for the exponent and 3 bits for the mantissa.
       \item[\textcolor{red}{$\blacktriangleright$}] These numbers are represented as $x = (-1)^{\mathrm{sign}} \cdot 2^{\mathrm{exponent}} \cdot \mathrm{mantissa}$.
-      \item[\textcolor{red}{$\blacktriangleright$}] Typical formats: FP32, FP16, BF16, FP8, and FP4. Main difference is how much range and precision you get—higher precision means more accurate numbers, but also more memory and compute. 
+      \item[\textcolor{red}{$\blacktriangleright$}] Typical formats: FP32, FP16, BF16, FP8, and FP4. Main difference is how much range and precision you get: higher precision means more accurate numbers, but also more memory and compute.
     \end{itemize}
     \column{0.52\textwidth}
     \centering
@@ -46,9 +46,9 @@
   \begin{columns}[T,onlytextwidth]
     \column{0.42\textwidth}
     \begin{itemize}\footnotesize
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Per-tensor / per-layer:} one $(s,z)$ for the whole tensor---simplest, smallest metadata, can mis-handle heterogeneous ranges.
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Per-channel:} separate parameters per channel (e.g.\ conv channels)---isolates \textbf{outliers} to their channel.
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Per-block / per-group:} parameters per sub-block---finer control when mass varies inside a tensor.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Per-tensor / per-layer:} one $(s,z)$ for the whole tensor: simplest, smallest metadata, can mis-handle heterogeneous ranges.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Per-channel:} separate parameters per channel (e.g.\ conv channels): isolates \textbf{outliers} to their channel.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Per-block / per-group:} parameters per sub-block: finer control when mass varies inside a tensor.
     \end{itemize}
     \column{0.56\textwidth}
     \centering

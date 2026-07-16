@@ -46,5 +46,28 @@
     \begin{itemize}
       \item Use of LSTM and GRU architectures
       \item Gradient Clipping
-      \end{itemize}    
+      \end{itemize}
+\end{frame}
+
+\begin{frame}{Teacher Forcing}
+  \textbf{The problem when training generative RNNs}
+  \begin{itemize}
+    \item A generating RNN predicts token $y_t$ from its own previous output $\hat{y}_{t-1}$.
+    \item Early in training the model's outputs are mostly wrong, so errors feed back as inputs and compound across the sequence.
+  \end{itemize}
+  \vspace{0.5em}
+  \textbf{Teacher forcing}
+  \begin{itemize}
+    \item During training, feed the ground-truth token $y_{t-1}$ as the input at step $t$, regardless of what the model predicted.
+    \item Every step is trained on a correct prefix, so learning is faster and more stable.
+    \item At inference there is no ground truth: the model must consume its own predictions.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Exposure Bias and Scheduled Sampling}
+  \begin{itemize}
+    \item \textbf{Exposure bias:} with teacher forcing, the model is trained only on ground-truth prefixes but tested on its own imperfect prefixes. One early mistake at inference can push it into states it never saw during training.
+    \item \textbf{Scheduled sampling} (Bengio et al., 2015): during training, feed the model its own prediction instead of the ground truth with some probability, and increase that probability over the course of training.
+    \item The model gradually learns to recover from its own mistakes while keeping the stability of teacher forcing early on.
+  \end{itemize}
 \end{frame}

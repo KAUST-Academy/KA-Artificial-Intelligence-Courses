@@ -1,0 +1,46 @@
+\section{Streaming ASR}
+
+\begin{frame}[plain]
+  \centering
+  \vspace{0.10\textheight}
+  {\LARGE \textbf{Streaming ASR}}
+
+  \vspace{0.08\textheight}
+  {\large Transcribing while the user is still speaking}
+\end{frame}
+
+\begin{frame}{Offline vs Streaming Recognition}
+  \begin{itemize}
+    \item \textbf{Offline (full-context):} the whole utterance is available before decoding starts. Best accuracy; fine for transcribing recordings.
+    \item \textbf{Streaming:} tokens must appear while audio is still arriving. Required for voice assistants, live captions, and dictation.
+    \item The core constraint: a streaming model may only use the \textbf{past} (and a small fixed lookahead), never the whole future of the utterance.
+    \item User-perceived latency comes from three places: acoustic lookahead, model computation, and the decision that the speaker has finished.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Making the Encoder Streamable}
+  \begin{itemize}
+    \item Full self-attention encoders (Conformer, Whisper) attend over the entire utterance, so they cannot stream as-is.
+    \item \textbf{Causal encoders:} restrict attention and convolutions to the past only. Cheapest latency, largest accuracy loss.
+    \item \textbf{Chunked attention:} process audio in fixed chunks with a small right-context window; each chunk sees a little of the future.
+    \item Chunk size is the latency-accuracy knob: bigger chunks recover offline accuracy, smaller chunks respond faster.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Why RNN-T Dominates Streaming}
+  \begin{itemize}
+    \item The RNN-Transducer is \textbf{frame-synchronous}: at each audio frame it either emits a token or a blank and moves on, so partial transcripts appear as audio arrives.
+    \item No attention over the full input and no need to wait for the end of the utterance, unlike encoder-decoder models with cross-attention.
+    \item The prediction network conditions on previously emitted tokens, giving language-model-like context without breaking streamability.
+    \item Production systems (mobile dictation, on-device assistants) are overwhelmingly RNN-T variants with causal or chunked encoders.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Endpointing}
+  \begin{itemize}
+    \item \textbf{Endpointing} is deciding that the speaker has finished, so the final result can be committed and the microphone closed.
+    \item Too eager: the system cuts users off mid-sentence. Too patient: every interaction feels slow.
+    \item Signals used: silence duration, the decoder's end-of-utterance probability, and prosodic cues.
+    \item Endpointing errors often dominate perceived quality even when word accuracy is high.
+  \end{itemize}
+\end{frame}

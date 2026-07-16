@@ -30,7 +30,7 @@
 \begin{frame}[t]{Training of Decoder-only LLMs --- Llama 2}
   \begin{itemize}
     \item \textbf{Auto-regressive Pre-training} \\
-      \textcolor{blue}{Train to predict the next token on very large scale corpora ($\sim$3 trillion tokens)}
+      \textcolor{blue}{Train to predict the next token on very large scale corpora ($\sim$2 trillion tokens)}
     \item \textbf{Instruction Fine-tuning / Supervised Fine-tuning (SFT)} \\
       \textcolor{blue}{Fine-tune the pre-trained model with pairs of (instruction + input, output) using a large dataset, then further with a small high-quality dataset}
   \end{itemize}
@@ -59,7 +59,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Instruction Tuning (Wei et. al. 2021)}
+\begin{frame}{Instruction Tuning (Wei et al. 2021)}
   \centering
   \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/large-language-models/llm_instruction_tuning_flan.png}
 \end{frame}

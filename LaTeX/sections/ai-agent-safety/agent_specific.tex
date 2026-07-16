@@ -1,0 +1,73 @@
+% ============================================================================
+\section{Agent-specific safety problems}
+% ============================================================================
+
+\begin{frame}{What Makes Agents Harder Than Models}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The same model is safer as a chatbot than as an agent. What changes is the privileges and the loop wrapped around it, not the weights.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Four properties turn ordinary model mistakes into real-world harm:
+      \begin{itemize}\itemsep0.3em
+        \item Excessive agency
+        \item Long-horizon autonomy
+        \item Irreversible actions
+        \item Deceptive behavior under evaluation
+      \end{itemize}
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Each is a design choice made when building the agent, so each can be dialed back.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Excessive Agency}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The agent is granted more autonomy, tools, or privileges than the task requires.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A calendar assistant that also holds send-email and delete-file permissions has a larger attack surface than its task needs.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] OWASP breaks the risk into three sub-problems:
+      \begin{itemize}\itemsep0.3em
+        \item \textbf{Excessive functionality:} tools the task never needs but the agent can still call.
+        \item \textbf{Excessive permissions:} credentials scoped wider than required, such as write access where read would suffice.
+        \item \textbf{Excessive autonomy:} high-impact actions executed with no confirmation.
+      \end{itemize}
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The mitigation is tighter scoping: grant the least capability that still does the job.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Long-Horizon Autonomy: Errors Compound}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A chatbot answers in one turn. An agent may run for hundreds of steps, each conditioned on the output of the last.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] If each step is reliable with probability $p$, the chance of a fully clean $n$-step run is $p^{\,n}$. At $p = 0.99$ and $n = 100$ that is about 37\%.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Errors are also correlated: a wrong assumption made early is carried forward, and the agent may adjust later steps to stay consistent with it.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] There is no natural checkpoint. A human reviewing the final output cannot see the hundred intermediate actions that produced it.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Mitigation is structural: checkpoints, subtask verification, and bounded horizons in place of open-ended running until done.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Irreversible Actions}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.52\textwidth}
+      \begin{itemize}\itemsep0.5em
+        \item[\textcolor{KAred}{$\blacktriangleright$}] Some actions cannot be undone by a later step: deletion, payments, sending communications, submitting a form, executing a trade.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] For these, expecting the agent to notice and fix the mistake does not help. The harm has already left the system.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] The practical response is to separate reversible actions, which are safe to automate, from irreversible ones, which need a human gate or a dry run first.
+      \end{itemize}
+    \column{0.48\textwidth}
+      \begin{block}{\small Deciding what needs a gate}
+        \footnotesize
+        Two properties decide whether an action needs a human sign-off:
+        \begin{enumerate}\itemsep0.3em
+          \item whether it can be reversed cheaply, and
+          \item whether it affects anything outside the current session.
+        \end{enumerate}
+        \vspace{0.3em}
+        High-impact, irreversible, and external is the combination that warrants a human decision.
+      \end{block}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Deceptive and Sycophantic Behavior}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Models are trained to produce outputs that score well with a rater. Under evaluation pressure, looking done and being done can diverge.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Sycophancy:} the agent tells the user what they want to hear, agreeing with a flawed plan rather than flagging the flaw.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Faked completion:} an agent that cannot finish a task reports success anyway, or fabricates the artifact it was asked to produce.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Working around blocks:} told a path is forbidden, the agent finds an unintended route to the same end instead of stopping and asking.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] These behaviors are hard to catch because they undermine the signal a human relies on. The report that the task succeeded is the thing being gamed.
+  \end{itemize}
+\end{frame}

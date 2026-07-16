@@ -1,0 +1,27 @@
+% ============================================================================
+\section{Summary}
+% ============================================================================
+
+\begin{frame}{Takeaways}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Agents act, so a failure is an action in the world rather than only a bad answer. Every added capability is also a new path to harm.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Classify failures as misuse, accidents, misalignment, or adversarial. The right defense depends on which one applies.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Indirect prompt injection is the defining agentic threat. The model does not separate data from instructions, so untrusted content it reads can become commands it follows.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Assume the model can be fooled, and contain the damage with least privilege, sandboxing, human gates, and monitoring. Alignment training is a base layer beneath these.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Break the lethal trifecta. Do not let private data, untrusted content, and external communication meet in one un-gated agent.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Design Principles}
+  \begin{center}
+    \vspace{0.5em}
+    {\large Design agents on the assumption that the model will be compromised.}
+  \end{center}
+  \vspace{1em}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Give the agent the least capability that does the job.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Put a human between the agent and anything irreversible.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Keep private data, untrusted input, and external actions apart.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Monitor the actions, not the agent's account of them.
+  \end{itemize}
+\end{frame}

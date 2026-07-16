@@ -3,10 +3,11 @@
     By the end of this session, you should be able to:
     \vspace{0.5em}
     \begin{itemize}
-        \item Define and distinguish Large Reasoning Models (LRMs) from simpler pattern-matching LLMs.
-        \item Understand advanced reasoning techniques, including Chain-of-Thought (CoT), Tree-of-Thought (ToT), and self-consistency methods.
-        \item Explain how instruction tuning and reinforcement learning (RL) can refine and enhance reasoning abilities in language models.
-        \item Grasp the core concepts of Mixture-of-Experts (MoE) architectures, including gating, routing mechanisms, trade-offs, benefits, and limitations.
-        \item Critically assess future directions and identify open problems in the field of reasoning with language models.
+        \item Explain the core idea of Mixture-of-Experts (MoE) architectures and why they decouple model capacity from per-token compute.
+        \item Contrast sparse and dense models and reason about their trade-offs.
+        \item Describe gating mechanisms, top-$k$ routing, and noisy gating.
+        \item Explain load balancing, the auxiliary loss, and expert-collapse failure modes.
+        \item Identify how MoE layers integrate into Transformers (Switch Transformer, GShard, Mixtral, DeepSeek) and how expert parallelism distributes them.
+        \item Assess the benefits and limitations of MoE models in practice.
     \end{itemize}
 \end{frame}

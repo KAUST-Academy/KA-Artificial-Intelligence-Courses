@@ -1,0 +1,9 @@
+\section{Motivation}
+\begin{frame}{Motivation}
+    \begin{itemize}\itemsep0.4em
+        \item Prompting techniques and instruction tuning can elicit reasoning, but by themselves they plateau.
+        \item The strongest reasoning models (o1/o3, DeepSeek-R1, QwQ) are made by reinforcement learning post-training: the model is rewarded for producing verifiably correct reasoning, not just plausible text.
+        \item Classic RLHF machinery (reward models + PPO) struggles at this scale: critics double memory, reward models get hacked, and long reasoning traces amplify per-token noise.
+        \item GRPO (critic-free, group-relative advantages, verifiable rewards) and GSPO (sequence-level optimization for long outputs and MoE models) address these problems; DeepSeek-R1 puts them together in a full training pipeline.
+    \end{itemize}
+\end{frame}

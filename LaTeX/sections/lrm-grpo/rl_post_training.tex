@@ -1,10 +1,5 @@
-% --- Reinforcement Learning and Post-Training (PPO, DPO) ---
-% ============================================================================
 \section{Reinforcement Learning and Post-Training}
-% Slides below adapted from earlier KAUST Academy lectures (see per-frame comments).
-% ============================================================================
 
-% --- Source: Lecture-1_Introduction_Reinforcement_Learning (sections/intro/policy.tex) ---
 \begin{frame}{What Is a Policy?}
   \begin{itemize}\itemsep0.4em
     \item[\textcolor{red}{$\blacktriangleright$}] A \textbf{policy} $\pi$ specifies how an agent (or model) chooses actions.
@@ -15,7 +10,6 @@
   \end{itemize}
 \end{frame}
 
-% --- Source: Lecture-3_Policy_Grad+REINFORCE+Actor_Critic (sections/policygrad+reinforce+actor/policy_gradient.tex) ---
 \begin{frame}{Policy Gradients: Learn the Policy Directly}
   \begin{itemize}\itemsep0.35em
     \item[\textcolor{red}{$\blacktriangleright$}] Value-based methods (Q-learning) can be hard in huge state spaces.
@@ -26,8 +20,7 @@
   \end{itemize}
 \end{frame}
 
-% --- Source: Lecture-4_Policy_Search (sections/policy-search/ppo.tex) ---
-\begin{frame}{Proximal Policy Optimization (PPO)}
+\begin{frame}{Proximal Policy Optimization (Recap)}
     \begin{itemize}\itemsep0.32em
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Problem:} large policy updates can collapse performance.
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Idea:} take the biggest safe improvement step on the current batch of data.
@@ -35,134 +28,28 @@
         \[
           \mathcal{L}^{\mathrm{CLIP}} = \mathbb{E}_t\Big[\min\big(r_t(\theta)\hat{A}_t,\; \mathrm{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon)\hat{A}_t\big)\Big]
         \]
-      \item[\textcolor{red}{$\blacktriangleright$}] $\epsilon$ is small (e.g., $0.2$)---limits how far the new policy can drift per update.
+      \item[\textcolor{red}{$\blacktriangleright$}] $\epsilon$ is small (e.g., $0.2$), which limits how far the new policy can drift per update.
     \end{itemize}
   \end{frame}
 
-% --- Source: Lecture-3_Policy_Grad+REINFORCE+Actor_Critic (sections/policygrad+reinforce+actor/actor_critic.tex) ---
-% % \begin{frame}{Actor--Critic Methods (Why PPO Needs a Critic)}
-% %   \begin{itemize}\itemsep0.35em
-% %     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Actor} = policy $\pi_\theta$ (chooses actions / generates tokens).
-% %     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Critic} = value or advantage estimator (judges how good actions were).
-% %     \item[\textcolor{red}{$\blacktriangleright$}] Advantage $\hat{A}_t$ measures whether an action beat expectation---used in PPO updates.
-% %     \item[\textcolor{red}{$\blacktriangleright$}] Classic RLHF-PPO keeps \textbf{policy + reference + reward + critic} in memory.
-% %     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{GRPO} later drops the critic by using group-relative rewards within a batch of completions.
-% %   \end{itemize}
-% % \end{frame}
-
-% % --- Source: Lecture-8_Fine_Tuning_LLM+RLHF (sections/llm-rlhf/reinforcement-learning-with-human-feedback-rlhf.tex) ---
-% \begin{frame}{RLHF: Why Not Stop at SFT?}
-%   \begin{itemize}\itemsep0.4em
-%     \item[\textcolor{red}{$\blacktriangleright$}] Supervised fine-tuning (SFT) teaches format and task following, not \textbf{what humans prefer}.
-%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{RLHF} (Reinforcement Learning from Human Feedback) adds reward learning and policy optimization.
-%     \item[\textcolor{red}{$\blacktriangleright$}] Standard pipeline (InstructGPT / ChatGPT era): SFT $\rightarrow$ reward model $\rightarrow$ PPO.
-%     \item[\textcolor{red}{$\blacktriangleright$}] Reasoning models (R1, o-series) often replace human preference rewards with \textbf{verifiable} rewards (RLVR) and use \textbf{GRPO}.
-%   \end{itemize}
-% \end{frame}
-
-% \begin{frame}{RL from Human Feedback (RLHF)}
-%   \begin{enumerate}\itemsep0.4em
-%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Supervised fine-tuning (SFT):} Fine-tune a language model using a dataset $D_{\mathrm{SFT}} = \{(x_i^{(0)}, y_i^*)\}_{i=1}^N$.
-    
-%     \quad \textit{Example:} $x$ is a prompt, $y$ is a human-written response.
-%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Reward modeling:} Train a reward model $r_\phi(x, y)$ using preference data $D_{\mathrm{RM}} = \{(x_j, y_j^+, y_j^-)\}_{j=1}^M$.
-    
-%     \quad \textit{Example:} $x$ is a prompt, $y$ is a model-generated response.
-%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Reinforcement learning (RL):} Further fine-tune the language model from step 1 (call it $p_\theta$) using a reinforcement learning algorithm:
-    
-%     \[
-%     p_\theta = \text{RL}(D_{\mathrm{RM}}, p_\theta^{\mathrm{SFT}})
-%     \]
-%     \quad \textit{Example:} as in this pipeline, PPO is the RL algorithm.
-%   \end{enumerate}
-% \end{frame}
-
-% \begin{frame}{RLHF Pipeline}
-%   \centering
-%   \includegraphics[width=0.92\textwidth,height=0.82\textheight,keepaspectratio]{images/llm-rlhf/rlhf_three_step_pipeline.png}\\[-0.2em]
-%   {\scriptsize Lecture-8\_Fine\_Tuning\_LLM+RLHF.}
-% \end{frame}
-
-% % --- Source: Lecture-8_Fine_Tuning_LLM+RLHF (sections/llm-rlhf/reward-model-rm.tex) ---
-% \begin{frame}{Reward Model (RM)}
-%   \begin{itemize}\itemsep0.35em
-%     \item[\textcolor{red}{$\blacktriangleright$}] Given two responses $y_A$, $y_B$ to the same prompt, humans pick the better one.
-%     \item[\textcolor{red}{$\blacktriangleright$}] Train $r_\phi$ so preferred responses score higher:
-%       \[
-%         L_{\mathrm{RM}} = -\log \sigma\big(r_\phi(y_A) - r_\phi(y_B)\big)
-%       \]
-%     \item[\textcolor{red}{$\blacktriangleright$}] The RM is a \textbf{proxy} for human judgment during PPO.
-%     \item[\textcolor{red}{$\blacktriangleright$}] For reasoning RLVR: the ``reward model'' is often a \textbf{rule} (math checker, unit tests)---no trainable RM needed.
-%   \end{itemize}
-% \end{frame}
-
-% % --- Source: Lecture-8_Fine_Tuning_LLM+RLHF (sections/llm-rlhf/rlhf-training-proximal-policy-optimization-ppo.tex) ---
-% \begin{frame}{PPO for RLHF}
-%   \small
-%   \begin{itemize}\itemsep0.3em
-%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Objective:} maximize reward from the RM.
-%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{PPO loss} (same clipped ratio as classic PPO):
-%       \[
-%         L_{\mathrm{PPO}} = \mathbb{E}\Big[\min\big(r_t(\theta)\hat{A}_t,\; \mathrm{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon)\hat{A}_t\big)\Big]
-%       \]
-%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{KL penalty:} $L_{\mathrm{KL}} = \beta\, \mathrm{KL}(\pi_\theta \,\|\, \pi_{\mathrm{SFT}})$ keeps the policy near the SFT checkpoint.
-%     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Pros:} stable; \textbf{cons:} expensive rollouts, sensitive to RM errors, four models in memory.
-%   \end{itemize}
-% \end{frame}
-
-\begin{frame}{PPO --- Pros and Cons}
+\begin{frame}{PPO Pros and Cons (Recap)}
   \begin{itemize}\itemsep0.4em
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Stable} optimization with clipped updates.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Stable:} clipped updates keep optimization well behaved.
     \item[\textcolor{red}{$\blacktriangleright$}] Encourages exploration of phrasings at each rollout.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Expensive:} many rollouts, critic + RM + reference in memory.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Sensitive} to reward-model mistakes and distribution shift.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Sensitive:} reward-model mistakes and distribution shift degrade it.
   \end{itemize}
 \end{frame}
 
-% --- Source: Lecture-8_Fine_Tuning_LLM+RLHF (sections/llm-rlhf/direct-preference-optimization-dpo.tex) ---
-\begin{frame}{Direct Preference Optimization (DPO)}
+\begin{frame}{Direct Preference Optimization (Recap)}
   \begin{itemize}\itemsep0.35em
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Bypasses} explicit RM training and RL rollouts (Rafailov et al., 2023).
-    \item[\textcolor{red}{$\blacktriangleright$}] Optimize the policy \textbf{directly} from preference pairs $(y^+, y^-)$.
+    \item[\textcolor{red}{$\blacktriangleright$}] Bypasses explicit RM training and RL rollouts (Rafailov et al., 2023).
+    \item[\textcolor{red}{$\blacktriangleright$}] Optimizes the policy directly from preference pairs $(y^+, y^-)$.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{DPO loss} (simplified form):
       \[
         L_{\mathrm{DPO}} = -\log \sigma\Big(\beta \log \tfrac{\pi_\theta(y^+)}{\pi_0(y^+)} - \beta \log \tfrac{\pi_\theta(y^-)}{\pi_0(y^-)}\Big)
       \]
     \item[\textcolor{red}{$\blacktriangleright$}] $\pi_0$ = frozen reference (SFT) policy; $\beta$ = temperature.
-    \item[\textcolor{red}{$\blacktriangleright$}] Often \textbf{simpler and more stable} than PPO for alignment---but still preference-based, not verifiable math/code rewards.
+    \item[\textcolor{red}{$\blacktriangleright$}] Often simpler and more stable than PPO for alignment, but still preference-based rather than driven by verifiable math or code rewards.
   \end{itemize}
 \end{frame}
-
-\begin{frame}{Direct Preference Optimization (DPO)}
-  \begin{figure}
-    \centering
-    \includegraphics[width=0.92\textwidth,height=0.82\textheight,keepaspectratio]{images/llm-rlhf/finetune_dpo_three_steps.png}
-    \caption*{DPO pipeline: pre-training, supervised fine-tuning, then direct preference optimization from human preference pairs. Source: Rafailov et al. (2023), \href{https://arxiv.org/abs/2305.18290}{arXiv:2305.18290}}
-  \end{figure}
-\end{frame}
-
-% \begin{frame}{From Alignment RL to Reasoning RL}
-%   \small
-%   \begin{tabular}{@{}lll@{}}
-%     \toprule
-%     \textbf{Method} & \textbf{Reward} & \textbf{Typical use} \\
-%     \midrule
-%     PPO + RM & Human preferences & Chat alignment \\
-%     DPO & Preference pairs & Chat alignment (no RL loop) \\
-%     GRPO & Verifiable outcome (RLVR) & Math, code, logic reasoning \\
-%     GSPO & Same as GRPO; sequence-level clip & Long chains, MoE scale \\
-%     \bottomrule
-%   \end{tabular}
-%   \vspace{0.5em}
-%   \begin{itemize}\itemsep0.3em
-%     \item[\textcolor{red}{$\blacktriangleright$}] DeepSeek-R1 uses \textbf{GRPO} with rule-based rewards, not classical RLHF.
-%     \item[\textcolor{red}{$\blacktriangleright$}] Next: \textbf{GRPO}, then \textbf{GSPO} for stable long-chain and MoE RL.
-%   \end{itemize}
-% \end{frame}
-
-% \begin{frame}[plain]
-%     \centering\vfill
-%     {\LARGE\bfseries Part 3: GRPO}\\[0.4em]
-%     {\large Group Relative Policy Optimization for reasoning}
-%     \vfill
-% \end{frame}

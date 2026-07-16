@@ -1,0 +1,9 @@
+\begin{frame}{Summary}
+    \begin{itemize}\itemsep0.45em
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Large reasoning models} differ from pattern-matching LLMs: they spend test-time compute on explicit multi-step reasoning traces.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Prompting techniques} (Chain-of-Thought, Tree-of-Thought, Self-Consistency) elicit reasoning from capable models without any training.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Instruction tuning} (FLAN and successors) teaches models to follow task descriptions and generalize to unseen tasks; CoT fine-tuning bakes reasoning into the weights.
+      \item[\textcolor{red}{$\blacktriangleright$}] The leading systems (o1/o3, DeepSeek-R1, Gemini Flash Thinking, QwQ) combine these ingredients with RL post-training.
+      \item[\textcolor{red}{$\blacktriangleright$}] Costs remain: verbose traces, prompt sensitivity, and inference compute overhead.
+    \end{itemize}
+\end{frame}

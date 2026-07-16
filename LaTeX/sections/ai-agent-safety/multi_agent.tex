@@ -1,0 +1,30 @@
+% ============================================================================
+\section{Multi-agent safety}
+% ============================================================================
+
+\begin{frame}{Trust Boundaries Between Agents}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Systems increasingly chain specialized agents: a planner delegates to a browser agent, a coder, and a reviewer. Each hand-off is a trust boundary.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The output of one agent becomes the input, and often the instructions, of the next. If an upstream agent is compromised, the injection propagates downstream as legitimate task content.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Assuming that a message is safe because it came from an internal agent is dangerous. Internal messages deserve the same scrutiny as external content.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] For each edge in the graph, consider the worst instruction an agent could pass on and what stops the receiver from acting on it.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Cascading Failures and Injection Worms}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Cascading failure:} one agent's mistake or compromise flows through the pipeline, and later agents amplify it instead of catching it.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Agent-to-agent injection:} a payload crafted so that when agent A relays it to agent B, B is hijacked and relays it onward.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Taken to its conclusion this is a worm, a self-replicating prompt that spreads through connected agents, such as an email assistant that injects the next assistant it writes to. Greshake described this as prompts as worms; later work demonstrated it end to end.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Containment follows classic security: authenticate messages between agents, limit each agent's reach, and rate-limit or gate the actions that let a payload propagate.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Emergent Behavior in Agent Collectives}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A group of agents can produce behavior none of them shows alone: feedback loops, herding toward a shared wrong belief, or collusion that defeats a check meant to be independent.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] If a critic agent shares the failure mode of the worker it reviews, the review adds confidence without adding safety.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] More agents means a larger combined attack surface and more places for an injection to enter and hide.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Favor diversity and independence in oversight roles, and test the collective as a whole rather than each agent in isolation.
+  \end{itemize}
+\end{frame}

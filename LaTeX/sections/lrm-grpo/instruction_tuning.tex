@@ -1,4 +1,3 @@
-% --- Instruction Tuning for Reasoning Tasks ---
 \section{Instruction Tuning for Reasoning Tasks}
 \begin{frame}[allowframebreaks]{}
     \LARGE Instruction Tuning for Reasoning Tasks
@@ -6,11 +5,14 @@
     \begin{figure}[h]
         \centering
         \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/lrm+moe/instruction-tuning.png}
-        \caption*{Three ways to use a language model: pretrain--finetune, prompting, and instruction tuning (FLAN). Source: Wei et al. (2022), \href{https://arxiv.org/abs/2109.01652}{arXiv:2109.01652}.}
     \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Instruction Tuning}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[height=0.9\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/paper-instruction-tuning.png}
+    \end{figure}
     \begin{itemize}
         \item \textbf{What is Instruction Tuning?}
         \begin{itemize}
@@ -58,6 +60,32 @@
             \end{itemize}
         \end{itemize}
     \end{block}
+    \framebreak
+    \textbf{Examples of Instruction Tuning in Practice}
+        \begin{itemize}
+            \item \textbf{FLAN-T5:}
+            \begin{itemize}
+                \item Instruction-tuned T5 models show strong improvements on reasoning benchmarks such as DROP (reading comprehension), ARC (science questions), and MultiRC (multi-sentence reasoning).
+                \item For example, when given instructions like ``Answer the following science question'' or ``Read the passage and answer the question,'' FLAN-T5 produces more accurate and relevant responses.
+                \item \textit{Example:}
+                \begin{itemize}
+                    \item \textbf{Instruction:} ``Read the passage and answer: What did the boy do after school?''
+                    \item \textbf{Passage:} ``The boy finished his homework and went to play soccer.''
+                    \item \textbf{FLAN-T5 Output:} ``He went to play soccer.''
+                \end{itemize}
+            \end{itemize}
+            \framebreak
+            \item \textbf{FLAN-MoE:}
+            \begin{itemize}
+                \item Mixture-of-Experts (MoE) models, when instruction-tuned, outperform larger dense models like PaLM on reasoning tasks, while using less computation.
+                \item FLAN-MoE can handle a wide range of instructions, such as translation, summarization, and logical reasoning, with high accuracy.
+                \item \textit{Example:}
+                \begin{itemize}
+                    \item \textbf{Instruction:} ``Translate this sentence to French: The cat is sleeping.''
+                    \item \textbf{FLAN-MoE Output:} ``Le chat dort.''
+                \end{itemize}
+            \end{itemize}
+        \end{itemize}
 \framebreak
     \begin{block}{Why Does Instruction Tuning Work?}
         \begin{itemize}
@@ -72,6 +100,63 @@
             \end{itemize}
         \end{itemize}
     \end{block}
+    \framebreak
+    \begin{block}{Instruction Tuning vs. Multi-Task Fine-Tuning (FLAN Ablation Study)}
+        \begin{itemize}
+            \item \textbf{Research Question:} Are the benefits of instruction tuning due to the instructions themselves, or just from fine-tuning on multiple tasks?
+            \item \textbf{Ablation Setups:}
+            \begin{itemize}
+                \item \textit{No Template:} Only input-output pairs, e.g., input: ``the dog runs'', output: ``le chien court''.
+                \item \textit{Dataset Name:} Input prepended with task and dataset, e.g., ``[Translation: WMT 14 to French] The dog runs''.
+                \item \textit{FLAN Instructions:} Full natural language instruction, e.g., ``Please translate this sentence to French: 'The dog runs.' ''
+            \end{itemize}
+            \item \textbf{Results:}
+            \begin{itemize}
+                \item Instruction-tuned models achieved over 18\% higher accuracy than ``no template'' and over 8\% higher than ``dataset name'' on zero-shot tasks.
+                \item \textbf{Conclusion:} Explicit instructions are crucial for improving zero-shot generalization, not just multi-task fine-tuning.
+            \end{itemize}
+        \end{itemize}
+    \end{block}
+    \framebreak
+    \begin{block}{Chain-of-Thought (CoT) Fine-Tuning}
+        \begin{itemize}
+            \item \textbf{How is it done?} This can be achieved by:
+            \begin{itemize}
+                \item Few-shot prompting with exemplars that demonstrate sequential reasoning.
+                \item Appending phrases like ``think step by step'' to prompts.
+            \end{itemize}
+            \item \textbf{Why is it important?}
+            \begin{itemize}
+                \item CoT prompting significantly enhances zero-shot performance on arithmetic, symbolic, and logical reasoning tasks.
+                \item Research (Chung et al., 2022) shows that instruction tuning without CoT tasks degrades performance on CoT evaluations.
+                \item Including CoT tasks in instruction tuning improves performance across all evaluations.
+            \end{itemize}
+            \item \textbf{Key Insight:} Fine-tuning on CoT tasks—both with and without few-shot exemplars—enables models to better perform step-by-step reasoning, rather than jumping to linguistically plausible answers.
+        \end{itemize}
+    \end{block}
+    \framebreak
+    \begin{figure}[h]
+        \centering
+        \includegraphics[height=0.84\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/self-refine-instruction-tuning.png}
+        \caption*{Instruction tuning process. Source: \href{https://arxiv.org/pdf/2405.00402}{Ranaldi et al. (2024)}}
+    \end{figure}
+    \framebreak
+    \begin{figure}[h]
+        \centering
+        \includegraphics[height=0.84\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/instruction-tuning-benchmark-result-1.png}
+        \caption*{Source: \href{https://arxiv.org/pdf/2405.00402}{Ranaldi et al. (2024)}}
+    \end{figure}
+    \framebreak
+    \begin{figure}[h]
+        \centering
+        \includegraphics[height=0.9\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/instruction-tuning-benchmark-result-2.png}
+    \end{figure}
+    \framebreak
+    \begin{figure}[h]
+        \centering
+        \includegraphics[height=0.84\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/instruction-tuning-result-3.png}
+        \caption*{Source: \href{https://arxiv.org/pdf/2405.00402}{Ranaldi et al. (2024)}}
+    \end{figure}
     \framebreak
     \textbf{Challenges and Limitations of Instruction Tuning}
         \begin{itemize}

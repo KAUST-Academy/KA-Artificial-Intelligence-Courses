@@ -1,0 +1,40 @@
+% ============================================================================
+\section{Governance and standards}
+% ============================================================================
+
+\begin{frame}{OWASP Top 10 for LLM Applications}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A community-maintained list of the most critical risks in LLM applications, widely used as a checklist in industry.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Prompt injection is ranked first (LLM01). The threats in this lecture map onto the list:
+      \begin{itemize}\footnotesize\itemsep0.25em
+        \item LLM01 Prompt Injection and LLM02 Sensitive Information Disclosure.
+        \item LLM06 Excessive Agency and LLM04 Data and Model Poisoning.
+        \item LLM05 Improper Output Handling and LLM08 Vector and Embedding Weaknesses.
+      \end{itemize}
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The list gives teams a shared vocabulary and a baseline of risks to test against before shipping.
+  \end{itemize}
+  \imgsrc{OWASP Top 10 for LLM Applications (2025), \href{https://genai.owasp.org/}{genai.owasp.org}.}
+\end{frame}
+
+\begin{frame}{NIST AI Risk Management Framework}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A voluntary US framework for managing AI risk across the lifecycle, organized around four functions:
+      \begin{itemize}\itemsep0.25em
+        \item \textbf{Govern:} policies, roles, and accountability for AI risk.
+        \item \textbf{Map:} identify the context and where harm could arise.
+        \item \textbf{Measure:} assess and track risks with tests and metrics.
+        \item \textbf{Manage:} prioritize, mitigate, and monitor over time.
+      \end{itemize}
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A companion Generative AI Profile (2024) adapts these functions to generative and agentic systems.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] It addresses how an organization governs the risk, complementing the specific vulnerabilities OWASP enumerates.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Provider Policies and Deployment Gates}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Model providers publish safety policies and tie the release of high-capability, high-autonomy features to safety evaluations passing first.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Capability thresholds:} the more autonomous or consequential the deployment, the stronger the required safeguards and review before launch.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Staged rollout:} start with a limited release, monitor real usage, then widen, rather than shipping full autonomy to everyone at once.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A deployment gate checks for the same technical safeguards covered in this lecture.
+  \end{itemize}
+\end{frame}

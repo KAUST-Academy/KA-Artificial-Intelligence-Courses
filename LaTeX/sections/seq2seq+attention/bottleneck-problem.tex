@@ -101,7 +101,7 @@
   \begin{itemize}
     \item The weighted average provided for the $k$th output word is:
     \begin{equation*}
-      c_t = \frac{1}{N} \sum_{i} w_i(t) h_i
+      c_t = \sum_{i} w_i(t) h_i
     \end{equation*}
   \end{itemize}
 \end{frame}
@@ -110,7 +110,7 @@
 \centering
 \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_context_per_step_hidden_notation.png}
 \begin{equation*}
-    c_t = \frac{1}{N} \sum_{i=1}^N w_i(t) h_i
+    c_t = \sum_{i=1}^N w_i(t) h_i
 \end{equation*}
 
 \begin{itemize}

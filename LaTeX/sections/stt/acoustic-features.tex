@@ -18,7 +18,7 @@
       \end{itemize}
     \end{column}
     \begin{column}{0.48\textwidth}
-      \begin{beamercolorbox}[rounded=true, leftskip=0.7em, rightskip=0.7em, sep=0.7em, colback=gray!10]{}
+      \begin{tcolorbox}[colback=gray!10, boxrule=0pt, arc=2mm, left=0.7em, right=0.7em, top=0.7em, bottom=0.7em]
       {\scriptsize
       \begin{description}
         \item[$Q = q_1, \ldots, q_T$] a set of $N$ states
@@ -28,29 +28,10 @@
         \item[$q_0$, $q_F$] a special \textbf{start state} and (\textbf{final}) \textbf{end state} that are not associated with observations, together with transition probabilities $a_{q_0i}$ out of the start state and $a_{j q_F}$ into the end state
       \end{description}
       }
-      \end{beamercolorbox}
+      \end{tcolorbox}
  
     \end{column}
   \end{columns}
-\end{frame}
-
-% --- Stanford CS224S lec9, slide 15 ---
-\begin{frame}{Hidden Markov Model (HMM) basics}
-  \begin{itemize}
-    \item \textbf{Objective function for DNN training: per-frame classification}
-    \item Supervised learning: minimize classification errors at each time frame.
-    \item \textbf{Standard choice: Cross entropy loss function}
-      \begin{itemize}
-        \item Extension of logistic loss for multiclass problems.
-        \item For $K$ classes, target label $y$, input $x$, model parameters $W, b$:
-        \[
-          \mathrm{Loss}(x, y; W, b) = - \sum_{k=1}^K \mathbb{I}(y = k) \log f(x)_k
-        \]
-        $f(x)_k$: predicted probability for class $k$ at input $x$
-      \end{itemize}
-    \item This is a \textbf{frame-wise} loss: uses a label for each acoustic frame (from forced alignment).
-    \item Other loss functions are possible, including ones that incorporate full-sequence or word error rate criteria, or deeper integration with HMMs.
-  \end{itemize}
 \end{frame}
 
 \begin{frame}{HMM-GMM Decoding Architecture: Main Components}
@@ -128,7 +109,7 @@
 
 
 % GMM Acoustic Models and Phonetic States
-\begin{frame}{Gaussians Mixtures for Acoustic Modeling}
+\begin{frame}{Gaussian Mixtures for Acoustic Modeling}
   \centering
   \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_gmm_gaussian_components.png}
 \end{frame}

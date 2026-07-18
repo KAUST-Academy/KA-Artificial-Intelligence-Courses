@@ -31,50 +31,47 @@
 \end{align*}
 
 \vspace{0.5em}
-\textbf{Attention:}
-\begin{align*}
-    \mathrm{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) = \mathrm{softmax}\left(\frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d_k}}\right) \mathbf{V}
-\end{align*}
+\textbf{Attention:} score $\mathbf{Q}$ against $\mathbf{K}$ with the scaled dot-product alignment, softmax the scores, and take the weighted sum of $\mathbf{V}$.
 \end{frame}
 
 % Slide 23
-\begin{frame}[Query, Key, Value (QKV) ]
+\begin{frame}{Query, Key, Value (QKV)}
   \centering
   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_formula_transformer.png}
 \end{frame}
 
 % Slide 24
-\begin{frame}[Query, Key, Value (QKV)]
+\begin{frame}{Query, Key, Value (QKV)}
   \centering
   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_formula_query_key_value.png}
 \end{frame}
 
 % Slide 25
-\begin{frame}[Query, Key, Value (QKV)]
+\begin{frame}{Query, Key, Value (QKV)}
   \centering
   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_database_key_value_store.png}
 \end{frame}
 
 % Slide 26
-\begin{frame}[Query, Key, Value (QKV)]
+\begin{frame}{Query, Key, Value (QKV)}
   \centering
   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_database_query_lookup.png}
 \end{frame}
 
 % Slide 27
-\begin{frame}[Query, Key, Value (QKV)]
+\begin{frame}{Query, Key, Value (QKV)}
   \centering
   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_database_query_matches.png}
 \end{frame}
 
 % Slide 28
-\begin{frame}[Query, Key, Value (QKV)]
+\begin{frame}{Query, Key, Value (QKV)}
   \centering
   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_database_two_queries.png}
 \end{frame}
 
 % Slide 29
-\begin{frame}[Query, Key, Value (QKV)]
+\begin{frame}{Query, Key, Value (QKV)}
   \centering
   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_database_two_matches_highlighted.png}
 \end{frame}

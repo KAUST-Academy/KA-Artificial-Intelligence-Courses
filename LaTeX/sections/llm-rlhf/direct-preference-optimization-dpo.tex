@@ -9,7 +9,7 @@
   \textbf{DPO Loss:}
   
   \[
-  L_{\mathrm{DPO}} = \log \frac{
+  L_{\mathrm{DPO}} = -\log \frac{
       \exp\left(\beta \log \frac{\pi(y^+)}{\pi_0(y^+)}\right)
     }{
       \exp\left(\beta \log \frac{\pi(y^+)}{\pi_0(y^+)}\right) + \exp\left(\beta \log \frac{\pi(y^-)}{\pi_0(y^-)}\right)

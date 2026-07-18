@@ -1,0 +1,48 @@
+% ============================================================================
+\section{System-level safeguards}
+% ============================================================================
+
+\begin{frame}{Two Layers of Defense}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{System level:} what we build around the model, including permissions, sandboxes, approval gates, input handling, and monitors. Most agent safety is won here.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Model level:} what we train into the model, including refusal behavior, alignment, and internal monitors.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The working assumption across the field is that the model can be fooled, so the system is designed such that a fooled model still cannot do catastrophic damage.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] No single layer is sufficient, so independent layers are stacked. This is defense in depth.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Least Privilege}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Give the agent the minimum tools, data, and permissions the task needs. This directly counters excessive agency.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Tool allowlists:} the agent can call only a fixed, reviewed set of tools, not an open-ended plugin surface.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Scoped credentials:} read-only where writing is not needed, one mailbox rather than the whole account, and short-lived tokens over standing access.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] With tight scoping, a fully hijacked agent is still bounded by what its credentials allow. The injection may succeed and reach nothing valuable.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Sandboxing}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Run the agent's actions in an isolated environment so their effects are contained and reversible.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Code execution:} a container or VM with no host access, no secrets mounted, and a network that is off by default or allowlisted.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Browsing:} an isolated browser profile, separate from the user's real cookies and sessions, so a malicious page cannot ride existing logins.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Sandboxing limits the blast radius. Together with least privilege, it keeps a compromise inside a disposable environment.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Human-in-the-Loop for Consequential Actions}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Require explicit human approval before any irreversible or high-impact action: payments, deletions, outbound messages, code deployment.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Let low-risk, reversible actions run automatically, and reserve the interrupt for the small set that matters, so approvals stay meaningful.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Approval fatigue} is the main failure mode. If the agent asks constantly, users approve reflexively and the gate stops working.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Effective gates show what will happen and why, in plain terms, so the human is actually deciding rather than rubber-stamping.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Handling Untrusted Data, and the Limits of Guardrails}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Mark untrusted input:} wrap retrieved content in delimiters and enforce an instruction hierarchy so tool and web text cannot outrank the user.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Guardrail classifiers:} separate models that screen inputs and outputs for injection attempts, policy violations, or data exfiltration.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Their limits:} classifiers can themselves be fooled, add latency, and raise false positives that push users to disable them. They lower risk without removing it.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Guardrails work as one layer among several. They sit on top of least privilege and sandboxing, which hold even when the classifier is bypassed.
+  \end{itemize}
+\end{frame}

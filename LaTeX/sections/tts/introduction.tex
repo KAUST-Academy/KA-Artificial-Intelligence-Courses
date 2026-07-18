@@ -78,7 +78,7 @@
 \begin{frame}{Snapshot: Task Oriented Dialogue Systems}
   \centering
   \includegraphics[width=0.92\textwidth,height=0.58\textheight,keepaspectratio]{images/tts/cs224s_compound_ai_pipeline.png}
-  \captionof{figure}{Architecture of dialogue-state system for task-oriented dialogue (William et al, 2016)}
+  \captionof{figure}{Architecture of dialogue-state system for task-oriented dialogue (Williams et al., 2016)}
 \end{frame}
 
 
@@ -98,15 +98,24 @@
 
 \begin{frame}{What is Text-to-Speech (TTS)?}
   \begin{itemize}
-    \item \textbf{Core difficulty:} Many-to-many mapping --- the same text admits many natural realizations (prosody, rate, emphasis).
-    \item \textbf{New variation:} Voice cloning --- TTS systems that mimic particular speakers with minimal training data.
+    \item \textbf{Core difficulty:} Many-to-many mapping: the same text admits many natural realizations (prosody, rate, emphasis).
+    \item \textbf{New variation:} Voice cloning: TTS systems that mimic particular speakers with minimal training data.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Prosody: Why the Same Text Sounds Different}
+  \begin{itemize}
+    \item \textbf{Prosody} covers everything the words alone do not fix: intonation (the pitch contour, $F_0$), duration and rhythm, and energy (stress).
+    \item Stress changes meaning: ``\textbf{I} never said she stole my money'' accuses differently than ``I never said she stole \textbf{my} money''. Seven words, seven readings, one spelling.
+    \item Intonation signals sentence type: statements tend to fall in pitch, yes/no questions tend to rise.
+    \item TTS systems model prosody implicitly (attention, latent variables) or explicitly (FastSpeech~2 predicts duration, pitch, and energy per phoneme).
   \end{itemize}
 \end{frame}
 
 % --- Source: Stanford CS224S, 224s.24.lec1.pdf, slide 30 ---
 \begin{frame}{TTS Overview}
   \begin{itemize}
-    \item Collect lots of speech (5--50 hours) from one speaker, transcribe very carefully, all the syllables and phones and whatnot.
+    \item Collect lots of speech (5--50 hours) from one speaker, transcribed carefully down to syllables and phones.
     \item Rapid recent progress in neural approaches.
     \item Modern systems are DNN-based, understandable, but not yet fully emotive.
     \item No longer require extensive data from a single speaker to make a TTS voice for them.
@@ -142,9 +151,9 @@
 
 \begin{frame}{TTS: Modular Pipeline}
   \begin{enumerate}
-    \item \textbf{Text analysis} --- normalization, tokenization, G2P
-    \item \textbf{Acoustic model} --- mel, latents, or codec codes over time
-    \item \textbf{Vocoder / decoder} --- waveform or neural codec inversion
+    \item \textbf{Text analysis:} normalization, tokenization, G2P
+    \item \textbf{Acoustic model:} mel, latents, or codec codes over time
+    \item \textbf{Vocoder / decoder:} waveform or neural codec inversion
   \end{enumerate}
   \centering
   \includegraphics[width=0.86\textwidth,keepaspectratio]{images/audio-nlp/tts_pipeline.png}

@@ -1,8 +1,5 @@
-% ============================================================================
 \section{Baseline (2017): encoder--decoder Transformer}
-% ============================================================================
 
-% --- 2017 baseline ---
 \begin{frame}{The 2017 Transformer}
   \centering
   \includegraphics[width=0.5\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_attention_overview_qkv_architecture.png}
@@ -20,235 +17,42 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Introduction to Transformers}
-  \begin{itemize}
-    \item[$\blacktriangleright$] \textbf{What is a Transformer?}
-    \begin{itemize}
-      \item Introduced by Vaswani et al.\ (2017) -- ``Attention is All You Need''
-    \end{itemize}
-    \vspace{0.6em}
-    \item[$\blacktriangleright$] \textbf{Key features:}
-    \begin{itemize}
-      \item No recurrence, all attention
-      \item Encoder-decoder structure
-      \item Enables parallel processing
-      \item Scales well with data and compute
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Transformer Architecture: Components Overview}
+\begin{frame}{The 2017 Building Blocks (Recap)}
   \begin{columns}
     \begin{column}{0.53\textwidth}
       \begin{itemize}
-        \item[$\blacktriangleright$] Tokenization
-        \item[$\blacktriangleright$] Input Embeddings
-        \item[$\blacktriangleright$] Position Encodings
-        \item[$\blacktriangleright$] Query, Key, \& Value
-        \item[$\blacktriangleright$] Attention
-        \item[$\blacktriangleright$] Self Attention
-        \item[$\blacktriangleright$] Multi-Head Attention
-        \item[$\blacktriangleright$] Feed Forward
-        \item[$\blacktriangleright$] Add \& Norm
-        \item[$\blacktriangleright$] Encoders
-        \item[$\blacktriangleright$] Masked Attention
-        \item[$\blacktriangleright$] Encoder Decoder Attention
-        \item[$\blacktriangleright$] Linear
-        \item[$\blacktriangleright$] Softmax
-        \item[$\blacktriangleright$] Decoders
-        \item[$\blacktriangleright$] Encoder-Decoder Models
+        \item[$\blacktriangleright$] Tokenization and input embeddings
+        \item[$\blacktriangleright$] Sinusoidal position encodings
+        \item[$\blacktriangleright$] Self-attention over Query, Key, Value
+        \item[$\blacktriangleright$] Multi-head attention
+        \item[$\blacktriangleright$] Feed-forward blocks with Add \& Norm
+        \item[$\blacktriangleright$] Encoder stack, decoder stack, masked and cross-attention
       \end{itemize}
-    \end{column}
+\end{column}
     \begin{column}{0.47\textwidth}
-      % Insert illustration of Transformer architecture here
       \centering
       \includegraphics[width=0.9\linewidth,height=0.9\textheight,keepaspectratio]{images/introduction-to-transformers/transformer_vaswani_encoder_decoder_diagram.png}
-      % (Placeholder: Transformer architecture diagram)
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Machine Translation}
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_translation_inputs_targets_example.png}
-\end{frame}
-
-\begin{frame}{Inputs}
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_processing_inputs_example.png}
-\end{frame}
-
-
-\begin{frame}{Self-Attention Mechanism}
-  \begin{itemize}
-    \item[$\blacktriangleright$] Computes contextual representation of a word using all other words
-    \item[$\blacktriangleright$] \textbf{Inputs:} Query (Q), Key (K), Value (V)
-    \item[$\blacktriangleright$] \textbf{Output:} Weighted sum of values
-  \end{itemize}
-
-  \vspace{0.5em}
-  \textbf{Attention formula:}
+\begin{frame}{Scaled Dot-Product and Multi-Head Attention (Recap)}
+  \textbf{Scaled dot-product attention:}
   \begin{align*}
     \text{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
   \end{align*}
 
   \vspace{0.5em}
-  \begin{itemize}
-    \item[$\blacktriangleright$] Enables each word to attend to all others
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Self-Attention Intuition: The ``Bank'' Analogy}
-  \begin{itemize}
-    \item[$\blacktriangleright$] \textbf{Query:} What we're looking for (e.g., the meaning of ``bank'' in context)
-    \item[$\blacktriangleright$] \textbf{Keys:} Tags or features associated with each word/sentence (e.g., ``river'', ``money'')
-    \item[$\blacktriangleright$] \textbf{Values:} Information linked to each key (e.g., context-specific meaning)
-    \item[$\blacktriangleright$] Uses dot-product similarity between Query and Keys to assign attention weights
-    \item[$\blacktriangleright$] Weighted sum of Values produces the contextual representation
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_attention_formula_with_encoder_diagram.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_example_sentence_tokens.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_coreference_resolution_it_question.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_self_attention_the_to_all_words.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_self_attention_animal_to_all_words.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_self_attention_it_to_all_words.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_self_attention_qkv_same_inputs.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-      \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_weight_matrices_wq_wk_wv_and_embeddings.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_qkv_projections_from_embeddings.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_softmax_qk_transpose_scaled.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_softmax_qk_complexity_annotation.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_softmax_qk_times_v_projection.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_softmax_qk_transpose_encoder_highlighted.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_coreference_resolution_solved_checkmark.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_nlp_tasks_questions_coreference_solved.png}
-\end{frame}
-
-\begin{frame}{Self Attention}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_weight_matrices_wq_wk_wv_embeddings_encoder.png}
-\end{frame}
-
-\begin{frame}{Multi-Head Attention}
-  \begin{itemize}
-    \item[$\blacktriangleright$] Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions.
-    \item[$\blacktriangleright$] It consists of multiple attention heads, each with its own set of parameters.
-    \item[$\blacktriangleright$] The outputs of all heads are concatenated and linearly transformed.
-  \end{itemize}
-
-  \vspace{0.7em}
-
-  \textbf{Formula:}
+  \textbf{Multi-head attention:}
   \[
-    \mathrm{MultiHead}(Q, K, V) = \mathrm{Concat}(\text{head}_1, \ldots, \text{head}_h) W^O
-  \]
-  where each head is defined as:
-  \[
+    \mathrm{MultiHead}(Q, K, V) = \mathrm{Concat}(\text{head}_1, \ldots, \text{head}_h) W^O,
+    \quad
     \text{head}_i = \mathrm{Attention}(Q W_i^Q, K W_i^K, V W_i^V)
   \]
 
   \vspace{0.5em}
   \begin{itemize}
-    \item[$\blacktriangleright$] $W_i^Q$, $W_i^K$, and $W_i^V$ are learned projection matrices for each head.
-    \item[$\blacktriangleright$] $W^O$ is the output projection matrix that combines the outputs of all heads.
+    \item[$\blacktriangleright$] Every token attends to every other token: quadratic cost in sequence length.
+    \item[$\blacktriangleright$] In 2017 every head carries its own full $K$ and $V$ projections; MQA and GQA later relax this.
   \end{itemize}
 \end{frame}
-
-\begin{frame}{Multi-Head Attention} 
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_nlp_tasks_all_solved_checkmarks.png}
-\end{frame}
-
-\begin{frame}{Multi-Head Attention} 
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_stacked_weight_matrices_dh.png}
-\end{frame}
-
-\begin{frame}{Multi-Head Attention} 
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_qkv_projections_per_head.png}
-\end{frame}
-
-\begin{frame}{Multi-Head Attention} 
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_softmax_attention_per_head.png}
-\end{frame}
-
-\begin{frame}{Multi-Head Attention} 
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_concat_z_heads.png}
-\end{frame}
-
-\begin{frame}{Multi-Head Attention} 
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_nlp_tasks_all_solved_final.png}
-\end{frame}
-
-\begin{frame}{Benefits of Multi-Head Attention}
-  \begin{itemize}
-    \item[$\blacktriangleright$] Enables the model to jointly attend to information from different representation subspaces at different positions.
-    \item[$\blacktriangleright$] Captures various linguistic and syntactic patterns by using multiple attention heads.
-    \item[$\blacktriangleright$] Improves the model's ability to represent complex relationships in the data.
-    \item[$\blacktriangleright$] Provides richer and more diverse feature representations.
-  \end{itemize}
-\end{frame}
-

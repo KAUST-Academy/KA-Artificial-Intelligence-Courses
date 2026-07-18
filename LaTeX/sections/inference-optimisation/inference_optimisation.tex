@@ -25,31 +25,68 @@
       \end{itemize}
     \column{0.47\textwidth}
     \centering
-    \includegraphics[width=0.8\linewidth,height=0.78\textheight,keepaspectratio]{images/inference-optimisation/nvidia_blog_kv_caching_figure1.png}\\[-0.2em]
-    {\scriptsize Figure: illustration of the key-value caching mechanism. Reference: Verma \& Vaidya, ``Mastering LLM Techniques: Inference Optimization,'' NVIDIA Technical Blog (2023).}
+    \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{images/inference-optimisation/vllm_paper_fig1_a100_memory_layout.png}\\[-0.1em]
+    {\scriptsize Serving a 13B model on an NVIDIA A100 (40\,GB): weights take 65\% of memory, the KV cache over 30\%. Kwon et al., \href{https://arxiv.org/abs/2309.06180}{arXiv:2309.06180}, Figure 1.}
   \end{columns}
+\end{frame}
+
+\begin{frame}{Batching: Static vs.\ Continuous}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{red}{$\blacktriangleright$}] A single decode stream is a matrix-vector workload that leaves most of the GPU idle; batching many requests turns it back into matrix-matrix work.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Static batching:} requests are grouped up front and the whole batch runs until its longest member finishes; short requests hold their slot while doing nothing.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Continuous batching:} scheduling happens per decode step; finished sequences leave the batch immediately and waiting requests join mid-flight (Yu et al., Orca, 2022).
+    \item[\textcolor{red}{$\blacktriangleright$}] Standard in modern serving stacks (vLLM, TensorRT-LLM, TGI): large throughput gains with no change to model outputs.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{KV Cache Fragmentation}
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\blacktriangleright$}] Early serving systems stored each request's KV cache as one contiguous tensor, allocated up front for the maximum possible sequence length.
+    \item[\textcolor{red}{$\blacktriangleright$}] Three kinds of waste follow: reserved slots not yet used, internal fragmentation (slots never used because the request ends early), and external fragmentation between buffers.
+    \item[\textcolor{red}{$\blacktriangleright$}] Measured effective KV memory utilisation in such systems can drop to about 20\%.
+  \end{itemize}
+  \centering
+  \includegraphics[width=\textwidth,height=0.34\textheight,keepaspectratio]{images/inference-optimisation/vllm_paper_fig3_kv_cache_fragmentation.png}\\[0.15em]
+  {\scriptsize Kwon et al., ``Efficient Memory Management for Large Language Model Serving with PagedAttention,'' \href{https://arxiv.org/abs/2309.06180}{arXiv:2309.06180}, Figure 3.}
+\end{frame}
+
+\begin{frame}{PagedAttention (vLLM)}
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\blacktriangleright$}] Borrow virtual memory from operating systems: split each request's KV cache into fixed-size blocks and allocate blocks on demand.
+    \item[\textcolor{red}{$\blacktriangleright$}] A block table maps logical positions to physical blocks, so the cache no longer needs to be contiguous; waste is limited to the last partially filled block, and blocks can be shared across sequences (parallel sampling, shared prefixes).
+    \item[\textcolor{red}{$\blacktriangleright$}] vLLM built on this achieves 2--4$\times$ the throughput of prior serving systems at the same latency.
+  \end{itemize}
+  \centering
+  \includegraphics[width=0.58\textwidth,height=0.4\textheight,keepaspectratio]{images/inference-optimisation/vllm_paper_fig6_block_table_paging.png}\\[0.15em]
+  {\scriptsize Block table translation. Kwon et al., \href{https://arxiv.org/abs/2309.06180}{arXiv:2309.06180}, Figure 6.}
+\end{frame}
+
+\begin{frame}{Speculative Decoding: The Idea}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{red}{$\blacktriangleright$}] Decode is memory-bound: for the large model, scoring $K$ proposed tokens in one forward pass costs about the same as generating a single token.
+    \item[\textcolor{red}{$\blacktriangleright$}] A small \textbf{draft model} proposes $K$ tokens autoregressively; the large \textbf{target model} then evaluates all $K$ positions in parallel.
+    \item[\textcolor{red}{$\blacktriangleright$}] Accept draft tokens while they are consistent with the target distribution; at the first rejection, resample that token from an adjusted distribution and discard the rest.
+    \item[\textcolor{red}{$\blacktriangleright$}] The output distribution is provably identical to decoding with the target model alone; the speed comes from accepting several tokens per target pass.
+    \item[\textcolor{red}{$\blacktriangleright$}] Reported speedups of 2--3$\times$ with no quality change (Leviathan et al., 2023; Chen et al., 2023).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Speculative Decoding: Acceptance in Practice}
+  \centering
+  \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/leviathan_speculative_decoding_accepted_tokens.png}\\[0.3em]
+  \begin{itemize}\footnotesize\itemsep0.2em
+    \item[\textcolor{red}{$\blacktriangleright$}] Each line is one iteration: green tokens were proposed by the draft model and accepted, red were rejected, and blue are the target model's corrections.
+    \item[\textcolor{red}{$\blacktriangleright$}] This 38-token sentence needed only 9 serial passes of the target model.
+    \item[\textcolor{red}{$\blacktriangleright$}] Gains are largest when the draft agrees with the target on the easy tokens, which is most of them.
+  \end{itemize}
+  {\scriptsize Leviathan, Kalman \& Matias, ``Fast Inference from Transformers via Speculative Decoding,'' \href{https://arxiv.org/abs/2211.17192}{arXiv:2211.17192}, Figure 1.}
 \end{frame}
 
 \begin{frame}{Other Inference Levers}
   \begin{itemize}
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Kernel fusion \& IO-aware attention} (e.g.\ FlashAttention-style): reduce HBM traffic.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Batching / continuous batching:} pack requests to improve GPU utilisation.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Prefix caching:} reuse the KV cache of shared prompt prefixes (system prompts, few-shot examples) across requests.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Weight sharing / low-rank adapters (LoRA):} smaller footprints where applicable.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Approximate attention} (long contexts): trade accuracy for sub-quadratic cost.
   \end{itemize}
 \end{frame}
-
-% \begin{frame}{Speculative Decoding}
-%   \begin{columns}[T,onlytextwidth]
-%     \column{0.44\textwidth}
-%     \begin{itemize}\itemsep0.3em
-%       \item[\textcolor{red}{$\blacktriangleright$}] Use a \textbf{small draft model} to propose several tokens; the \textbf{large target model} verifies in parallel.
-%       \item[\textcolor{red}{$\blacktriangleright$}] Accepts a prefix of draft tokens when probabilities align; \textbf{no change} in the target distribution when implemented correctly.
-%       \item[\textcolor{red}{$\blacktriangleright$}] Speedups when draft acceptance is high and verification is cheaper than serial decoding.
-%     \end{itemize}
-%     \column{0.54\textwidth}
-%     \centering
-%     \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{images/inference-optimisation/speculative_sampling_algorithms.png}\\[-0.2em]
-%     {\scriptsize Speculative sampling (Leviathan et al.; matching figure from PDF).}
-%   \end{columns}
-% \end{frame}

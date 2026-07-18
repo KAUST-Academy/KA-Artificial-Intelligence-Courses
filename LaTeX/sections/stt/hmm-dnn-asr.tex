@@ -19,7 +19,7 @@
       \end{itemize}
   \end{itemize}
   \[
-    Loss(x, y; W, b) = -\sum_{k=1}^{K} (y = k) \log f(x)_k
+    \mathrm{Loss}(x, y; W, b) = -\sum_{k=1}^{K} \mathbb{I}(y = k) \log f(x)_k
   \]
   \begin{itemize}
     \item This is a \textbf{frame-wise} loss. We use a label for each frame from a forced alignment

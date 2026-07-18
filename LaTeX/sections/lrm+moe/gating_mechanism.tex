@@ -62,31 +62,15 @@
             \begin{itemize}
                 \item \textbf{Compute Scores:} Calculate gating logits or probabilities ($P$).
                 \item \textbf{Select Top-k:} Identify indices $I = \{i_1, i_2, \dots, i_k\}$ for top $k$ values in $P$.
-                \item \textbf{Re-normalize Scores (Optional):}
-                \begin{itemize}
-                    \item $P_{sel}$: sub-vector of $P$ for selected indices $I$.
-                    \item Re-normalized weights $P'$:
-                    \[ P_j' = \frac{\exp(\text{logits}_{i_j})}{\sum_{l=1}^k \exp(\text{logits}_{i_l})} \quad \text{for } j=1 \dots k \]
-                \end{itemize}
-                \item \textbf{Compute Weighted Output:}
-                \begin{itemize}
-                    \item $y = \sum_{j=1}^k P_j' E_{i_j}(x)$
-                    \item Uses (re-normalized) probabilities as weights.
-                \end{itemize}
+                \item \textbf{Re-normalize Scores (Optional):} take $P_{sel}$, the sub-vector of $P$ for selected indices $I$, and re-normalize:
+                \[ P_j' = \frac{\exp(\text{logits}_{i_j})}{\sum_{l=1}^k \exp(\text{logits}_{i_l})} \quad \text{for } j=1 \dots k \]
+                \item \textbf{Compute Weighted Output:} $y = \sum_{j=1}^k P_j' E_{i_j}(x)$, using the (re-normalized) probabilities as weights.
             \end{itemize}
         \framebreak
             \item \textbf{Choice of $\boldsymbol{k}$}
             \begin{itemize}
-                \item $k=1$: Token routed to single expert.
-                \begin{itemize}
-                    \item Maximizes sparsity.
-                    \item Limits knowledge combination.
-                \end{itemize}
-                \item $k=2$: Token uses two experts.
-                \begin{itemize}
-                    \item Balances sparsity and representational capacity.
-                    \item Doubles computational cost vs. $k=1$.
-                \end{itemize}
+                \item $k=1$: Token routed to a single expert; maximizes sparsity but limits knowledge combination.
+                \item $k=2$: Token uses two experts; balances sparsity and representational capacity at double the computational cost of $k=1$.
                 \item $\boldsymbol{k}$ is a key hyperparameter affecting performance and cost.
             \end{itemize}
         \end{itemize}

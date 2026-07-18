@@ -1,0 +1,127 @@
+% ============================================================================
+\section{Adversarial threats}
+% ============================================================================
+
+\begin{frame}[plain, c]
+  \centering
+  \vspace{4em}
+  {\Huge Adversarial Threats}
+\end{frame}
+
+\begin{frame}{Direct vs.\ Indirect Prompt Injection}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Prompt injection (Recap):} untrusted text overrides the developer's intended instructions and hijacks the model's output. We saw this for chatbots in the prompting lecture.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Direct injection:} the attacker is the user, typing ``ignore your instructions'' into the prompt. The blast radius is the attacker's own session.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Indirect injection:} the attacker plants instructions in content the agent reads while carrying out an honest user's task, such as a web page, an email, a calendar invite, a document, or a tool result.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Indirect injection is the agentic threat. The victim asks for something legitimate, and the payload arrives inside the data the agent fetches to help them.
+  \end{itemize}
+  \imgsrc{Greshake et al., ``Not what you've signed up for,'' \href{https://arxiv.org/abs/2302.12173}{arXiv:2302.12173}.}
+\end{frame}
+
+\begin{frame}{Indirect Prompt Injection: The Threat Landscape}
+  \centering
+  \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{images/ai-agent-safety/greshake_indirect_prompt_injection_taxonomy.png}
+  \imgsrc{Greshake et al., ``Not what you've signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection,'' \href{https://arxiv.org/abs/2302.12173}{arXiv:2302.12173}, Fig.~2.}
+\end{frame}
+
+\begin{frame}{Root Cause: The Model Does Not Separate Data From Instructions}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A transformer sees one flat stream of tokens. The system prompt, the user request, and a fetched web page all arrive as the same kind of text.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Nothing in the architecture marks which tokens are trusted commands and which are data to be processed. If retrieved data says ``ignore previous instructions,'' the model may obey.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] For this reason, prompt injection is not a single bug to be patched. It follows from how instruction-following models read their input.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] One partial defense is to teach the model a privilege ordering, so that higher-authority instructions win when they conflict with lower-authority content.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{An Instruction Hierarchy}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.44\textwidth}
+      \begin{itemize}\footnotesize\itemsep0.45em
+        \item[\textcolor{KAred}{$\blacktriangleright$}] Assign each message a privilege level: system, then user, then model output, then tool output.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] Train the model to follow lower-privilege text only when it does not conflict with higher-privilege instructions.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] Tool and web content sit at the bottom, so an ``email the attacker'' string buried in a search result should be ignored.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] This raises the bar without closing the gap. Cleverly framed injections still get through.
+      \end{itemize}
+    \column{0.56\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.6\textheight,keepaspectratio]{images/ai-agent-safety/instruction_hierarchy_privilege_levels.png}
+      \imgsrc{Wallace et al.\ (OpenAI), ``The Instruction Hierarchy,'' \href{https://arxiv.org/abs/2404.13208}{arXiv:2404.13208}, Fig.~1.}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Anatomy of an Attack: Attacker Goal Meets User Task}
+  \centering
+  \includegraphics[width=\textwidth,height=0.6\textheight,keepaspectratio]{images/ai-agent-safety/agentdojo_attack_pipeline.png}
+  \imgsrc{Debenedetti et al., ``AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents,'' \href{https://arxiv.org/abs/2406.13352}{arXiv:2406.13352}, Fig.~1.}
+\end{frame}
+
+\begin{frame}{A Concrete Indirect Injection}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.4\textwidth}
+      \begin{itemize}\footnotesize\itemsep0.45em
+        \item[\textcolor{KAred}{$\blacktriangleright$}] The user asks a web agent to manage their calendar. The agent reads this event description as data.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] The injected text imitates an admin policy: legal-sounding, authoritative, with numbered reasoning steps that redirect the agent to click a link.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] The model is not hacked. The attack is social engineering aimed at the agent and carried by ordinary content.
+      \end{itemize}
+    \column{0.6\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{images/ai-agent-safety/trap_calendar_indirect_injection_example.png}
+  \end{columns}
+  \vspace{-0.2em}
+  \imgsrc{Korgul et al., ``It's a TRAP!,'' \href{https://arxiv.org/abs/2512.23128}{arXiv:2512.23128}.}
+\end{frame}
+
+\begin{frame}{Persuasion Makes Injection Worse}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.46\textwidth}
+      \begin{itemize}\footnotesize\itemsep0.45em
+        \item[\textcolor{KAred}{$\blacktriangleright$}] TRAP crosses classic persuasion principles (authority, social proof, scarcity, reciprocity) with LLM manipulation methods (role-play, chain-of-thought injection, override).
+        \item[\textcolor{KAred}{$\blacktriangleright$}] Framing the request persuasively raises the hijack rate over a blunt ``ignore previous instructions,'' among the least effective phrasings. TRAP also finds that small changes in wording or placement can double the success rate.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] Across six frontier models the average hijack rate is 25\%, from 13\% for GPT-5 to 43\% for DeepSeek-R1. No model is robust.
+      \end{itemize}
+    \column{0.54\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.7\textheight,keepaspectratio]{images/ai-agent-safety/trap_persuasion_hijack_rate_matrix.png}
+      \imgsrc{Korgul et al., ``It's a TRAP!,'' \href{https://arxiv.org/abs/2512.23128}{arXiv:2512.23128}.}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Injection Is Not Only Text: Malicious Image Patches}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+      \begin{itemize}\footnotesize\itemsep0.45em
+        \item[\textcolor{KAred}{$\blacktriangleright$}] Operating-system agents read the screen with a vision-language model, so anything on screen is potential input.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] A \textbf{Malicious Image Patch} is an adversarial image, hidden in a wallpaper or a social-media post, that makes the agent emit attacker-chosen low-level actions such as clicks and keystrokes.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] The patches generalize across user prompts and screen layouts, and can drive the agent to exfiltrate data.
+        \item[\textcolor{KAred}{$\blacktriangleright$}] The untrusted-input boundary therefore includes pixels, audio, and files, not only prompt text.
+      \end{itemize}
+    \column{0.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{images/ai-agent-safety/mip_os_agent_image_patch_hijack.png}
+      \imgsrc{Aichberger et al., ``MIP against Agent,'' NeurIPS 2025, \href{https://arxiv.org/abs/2503.10809}{arXiv:2503.10809}, Fig.~1.}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Memory and RAG Poisoning}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Retrieval and long-term memory make an injection persistent. Poison one document in the corpus, and every future query that retrieves it re-triggers the payload.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] If the agent writes its own memory, an injection can plant instructions that survive across sessions, after the malicious page is gone.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The attacker never has to reach the model directly. Contributing one crafted document to a trusted knowledge base is enough.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Defenses include provenance and trust scoring on retrieved content, treating memory writes as untrusted, and re-validating stored instructions before acting on them.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{The Dangerous Combination: The Lethal Trifecta}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Indirect injection becomes a data breach when one agent holds all three of:
+      \begin{enumerate}\itemsep0.3em
+        \item \textbf{Access to private data} (files, email, credentials).
+        \item \textbf{Exposure to untrusted content} (web pages, inbound email, documents).
+        \item \textbf{The ability to communicate externally} (send email, make requests, post).
+      \end{enumerate}
+    \item[\textcolor{KAred}{$\blacktriangleright$}] With all three, injected content can tell the agent to read a secret and send it to the attacker, an exfiltration path built entirely from ordinary features.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Each capability is reasonable on its own. The combination in a single agent is what creates the vulnerability.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The practical response is to break the trifecta: remove one leg, by isolating untrusted input, blocking the external channel, or scoping down the data, and the exfiltration cannot complete.
+  \end{itemize}
+  \imgsrc{Terminology after S.\ Willison, ``The lethal trifecta for AI agents'' (2025).}
+\end{frame}

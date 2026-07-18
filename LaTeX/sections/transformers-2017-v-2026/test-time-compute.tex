@@ -1,0 +1,22 @@
+\section{Test-time compute}
+
+\begin{frame}{Reasoning Models and Thinking Tokens (Recap)}
+  \begin{itemize}
+    \item[$\blacktriangleright$] A 2017 Transformer spends one forward pass per generated token: every query receives the same compute, easy or hard.
+    \item[$\blacktriangleright$] Reasoning models (OpenAI o1, DeepSeek-R1) generate a long chain of thought before the final answer, so hard questions receive more decode steps than easy ones.
+    \item[$\blacktriangleright$] Accuracy scales with test-time compute: thinking longer or sampling more candidate solutions buys accuracy without retraining.
+    \item[$\blacktriangleright$] R1 shows this allocation can be learned: reinforcement learning on verifiable rewards teaches the model when and how long to think.
+  \end{itemize}
+  \vfill
+  {\scriptsize DeepSeek-AI, ``DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning,'' \href{https://arxiv.org/abs/2501.12948}{arXiv:2501.12948}.}
+\end{frame}
+
+\begin{frame}{What Thinking Tokens Mean for the Architecture}
+  \begin{itemize}
+    \item[$\blacktriangleright$] \textbf{Cost model:} serving cost is now dominated by decode length, not just parameter count. A smaller model that thinks longer can beat a larger one that answers immediately.
+    \item[$\blacktriangleright$] \textbf{KV cache:} every thinking token adds cache entries, so long traces multiply the memory pressure that GQA, MLA, and sliding-window attention exist to relieve.
+    \item[$\blacktriangleright$] \textbf{Kernels:} attention runs over reasoning traces tens of thousands of tokens long, exactly the regime FlashAttention targets.
+    \item[$\blacktriangleright$] \textbf{Sparsity:} MoE keeps per-token FLOPs bounded, so capacity can grow without making each thinking token slower.
+    \item[$\blacktriangleright$] The 2026 design trade: spend compute at training time (a bigger model) or at inference time (longer thinking), tuned per deployment.
+  \end{itemize}
+\end{frame}

@@ -14,7 +14,7 @@
   \begin{itemize}
       \item Bigrams: $P(w_{2}|w_{1})=\frac{count(w_{1},w_{2})}{count(w_{1})}$
       \item Trigrams: $P(w_{3}|w_{1},w_{2})=\frac{count(w_{1},w_{2},w_{3})}{count(w_{1},w_{2})}$
-      \item $P(w_{1},w_{2},w_{3})=P(w_{1})\times P(w_{2}|w_{1})\times P(w_{3}|w_{2})$
+      \item $P(w_{1},w_{2},w_{3})=P(w_{1})\times P(w_{2}|w_{1})\times P(w_{3}|w_{1},w_{2})$
       \item \textbf{Limitations:} Large N-grams need significant space and RAM.
   \end{itemize}
 \end{frame}
@@ -60,7 +60,7 @@
 \end{frame}
 
 % Slide 12: Why Use RNNs?
-\begin{frame}[Why Use RNNs]
+\begin{frame}{Why Use RNNs}
   \centering
   \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_next_word_prediction_candidates.png}
 \end{frame}

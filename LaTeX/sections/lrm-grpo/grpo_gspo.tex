@@ -1,11 +1,9 @@
-% --- GRPO and GSPO ---
-% --- Source: Lecture-11-12\_NLP\_Recent\_Advancements (sections/recent-advance/deepseek-grpo.tex); DeepSeekMath / DeepSeek-R1 ---
 \begin{frame}{GRPO Overview}
     \begin{itemize}
         \item \textbf{GRPO}: Group Relative Policy Optimization, an evolution of PPO that is more stable, efficient, and converges faster
         \item Combines reward and preference signals, using single model for both
         \item \textcolor{blue}{Improves safety and alignment of open-weight models}
-        \item Introduced in DeepSeekMath, used in DeepSeek-MoE and other models
+        \item Introduced in DeepSeekMath, used in DeepSeek-V2, DeepSeek-V3, and DeepSeek-R1
     \end{itemize}
 \end{frame}
 
@@ -75,30 +73,28 @@
   \end{tabular}
   \vspace{0.5em}
   \begin{itemize}\itemsep0.3em
-    \item[\textcolor{red}{$\blacktriangleright$}] GRPO does \textbf{not} replace DPO---DPO still wins when you only have preference pairs and no verifier.
+    \item[\textcolor{red}{$\blacktriangleright$}] GRPO does not replace DPO; DPO still wins when only preference pairs are available and there is no verifier.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Motivation: Why GRPO Breaks at Scale}
     \begin{itemize}\itemsep0.35em
-      \item[\textcolor{red}{$\blacktriangleright$}] Long RL runs on huge models need \textbf{stable} updates---unstable RL $\Rightarrow$ \textbf{model collapse} (irreversible).
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{GRPO} uses \textbf{token-level} importance ratios and \textbf{per-token} clipping on long reasoning chains.
+      \item[\textcolor{red}{$\blacktriangleright$}] Long RL runs on huge models need stable updates; unstable RL leads to irreversible model collapse.
+      \item[\textcolor{red}{$\blacktriangleright$}] GRPO uses token-level importance ratios and per-token clipping on long reasoning chains.
       \item[\textcolor{red}{$\blacktriangleright$}] Clipping can still leave many tokens with skewed weights; effects compound over training.
-      \item[\textcolor{red}{$\blacktriangleright$}] On \textbf{MoE} models, token-level updates amplify \textbf{routing churn} (experts change mid-training)---often needs extra fixes (e.g.\ Routing Replay).
+      \item[\textcolor{red}{$\blacktriangleright$}] On MoE models, token-level updates amplify routing churn (experts change mid-training), often needing extra fixes such as Routing Replay.
     \end{itemize}
 \end{frame}
 
-% --- Source: Zheng et al.\ (2025) arXiv:2507.18071; Qwen blog https://qwen.ai/blog?id=gspo ---
-
 \begin{frame}{GSPO: Group Sequence Policy Optimization}
   \begin{itemize}\itemsep0.4em
-    \item[\textcolor{red}{$\blacktriangleright$}] Rewards are usually \textbf{sequence-level} (correct answer, tests passed)---optimization should match that granularity.
+    \item[\textcolor{red}{$\blacktriangleright$}] Rewards are usually sequence-level (correct answer, tests passed), so optimization should match that granularity.
     \item[\textcolor{red}{$\blacktriangleright$}] Same group-relative advantages as GRPO: compare $G$ completions on the same prompt.
     \item[\textcolor{red}{$\blacktriangleright$}] Design goals (\href{https://qwen.ai/blog?id=gspo}{Qwen blog}):
     \begin{itemize}\itemsep0.2em
-      \item \textbf{Stable}---especially for MoE RL;
-      \item \textbf{Efficient}---better compute-to-gain than GRPO;
-      \item \textbf{Infrastructure-friendly}---more robust to numeric precision issues in distributed RL.
+      \item Stable, especially for MoE RL;
+      \item Efficient, with better compute-to-gain than GRPO;
+      \item Infrastructure-friendly, more robust to numeric precision issues in distributed RL.
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -109,7 +105,7 @@
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Sample} a batch of prompts $x \sim \mathcal{D}$.
     \item[\textcolor{red}{$\blacktriangleright$}] For each $x$, draw a \textbf{group} $\{y_i\}_{i=1}^G$ from the old policy $\pi_{\theta_{\mathrm{old}}}$.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Reward} each full response (verifier / rule checker) $\Rightarrow$ group-relative advantage $\hat{A}_i$ (same formula as GRPO).
-    \item[\textcolor{red}{$\blacktriangleright$}] Build a \textbf{sequence-level} importance weight $s_i(\theta)$ from $\pi_\theta(y_i|x)$ vs.\ $\pi_{\theta_{\mathrm{old}}}(y_i|x)$.
+    \item[\textcolor{red}{$\blacktriangleright$}] Build a sequence-level importance weight $s_i(\theta)$ from $\pi_\theta(y_i|x)$ vs.\ $\pi_{\theta_{\mathrm{old}}}(y_i|x)$.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Clip and optimize once per sequence} (not token-by-token); optional KL to $\pi_{\mathrm{ref}}$ as in PPO/GRPO stacks.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Variant:} GSPO-token allows per-token advantages when needed (e.g.\ multi-turn RL).
   \end{enumerate}
@@ -131,6 +127,6 @@
   \end{tabular}
   \vspace{0.45em}
   \begin{itemize}\itemsep0.3em
-    \item[\textcolor{red}{$\blacktriangleright$}] GSPO can clip \textbf{more tokens} in aggregate yet train \textbf{more efficiently}---lower-variance signal.
+    \item[\textcolor{red}{$\blacktriangleright$}] GSPO can clip more tokens in aggregate yet train more efficiently, thanks to a lower-variance signal.
   \end{itemize}
 \end{frame}

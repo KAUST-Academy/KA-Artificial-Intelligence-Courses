@@ -1,0 +1,33 @@
+\section{Evaluating Language Models: Perplexity}
+
+\begin{frame}[allowframebreaks]{Perplexity}
+
+\begin{itemize}
+    \item Perplexity (PPL) measures how well a language model predicts a sequence of words.
+    Intuitively, it reflects ``on average, how many choices the model is unsure about'' per word.
+
+    \item Formula:
+    \[
+        \text{PPL}(W) = P(w_1, \dots, w_N)^{-\frac{1}{N}}
+        = \exp\Bigg(-\frac{1}{N} \sum_{i=1}^{N} \log P(w_i \mid w_1, \dots, w_{i-1}) \Bigg)
+    \]
+
+    \item How to interpret:
+    \begin{itemize}
+        \item Lower perplexity → model assigns higher probability to the test set sequences → better predictions.
+    \end{itemize}
+\framebreak
+    \item Why it matters:
+    \begin{itemize}
+        \item Standard metric for evaluating language models, from n-gram models to neural LMs.
+        \item Only compare perplexities of models that share the same vocabulary $V$.
+    \end{itemize}
+
+    \item Example:
+    \begin{itemize}
+        \item Bigram model on a test set → PPL = 200 (poor).
+        \item Transformer LM → PPL = 20 (much better).
+    \end{itemize}
+\end{itemize}
+
+\end{frame}

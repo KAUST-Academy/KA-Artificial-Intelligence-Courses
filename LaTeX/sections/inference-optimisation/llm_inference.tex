@@ -27,7 +27,7 @@
           \end{itemize}
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Token throughput caveat:}
           \begin{itemize}\itemsep0.25em
-            \item Different LLMs may use different \textbf{tokenizers}---so "tokens per second" is not always comparable across models, as token-to-character mappings vary.
+            \item Different LLMs may use different \textbf{tokenizers}, so ``tokens per second'' is not always comparable across models, as token-to-character mappings vary.
           \end{itemize}
       \end{itemize}
     \column{0.44\textwidth}
@@ -43,7 +43,7 @@
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Decode phase (generating outputs):}
           \begin{itemize}\itemsep0.25em
             \item Output tokens are generated \textbf{one at a time}, each conditioned on all previously generated tokens.
-            \item Computation now becomes a \textbf{matrix-vector} operation---less parallelizable, and typically \textbf{memory-bound}: moving weights/activations dominates speed, not raw compute.
+            \item Computation now becomes a \textbf{matrix-vector} operation, less parallelizable and typically \textbf{memory-bound}: moving weights/activations dominates speed, not raw compute.
             \item Optimising decode is crucial: efficient attention, key/value caching, and memory management are ongoing research topics.
           \end{itemize}
       \end{itemize}
@@ -59,6 +59,15 @@
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Training} is often one-off; \textbf{inference} is repeated at scale (cost, latency, energy).
     \item[\textcolor{red}{$\blacktriangleright$}] Large language models are \textbf{memory-bound} and \textbf{autoregressive}: each new token revisits all previous tokens.
     \item[\textcolor{red}{$\blacktriangleright$}] Goals: lower \textbf{latency} (interactive UX), higher \textbf{throughput} (serving many users), smaller \textbf{memory} (long contexts, edge).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Measuring Inference}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Time to first token (TTFT):} how long until the first output token appears; set by the prefill phase, which is compute-bound.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Time per output token (TPOT):} the gap between subsequent tokens; set by the decode phase, which is memory-bound.
+    \item[\textcolor{red}{$\blacktriangleright$}] Request latency $\approx$ TTFT $+$ TPOT $\times$ number of generated tokens.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Throughput:} total tokens per second across all requests. Batching raises throughput but can hurt per-request latency; serving systems balance the two.
   \end{itemize}
 \end{frame}
 

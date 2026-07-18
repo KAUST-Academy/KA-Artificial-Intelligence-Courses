@@ -1,0 +1,53 @@
+% ============================================================================
+\section{Motivation}
+% ============================================================================
+
+\begin{frame}[plain, c]
+  \centering
+  \vspace{4em}
+  {\Huge AI Safety for Agents}
+\end{frame}
+
+\begin{frame}{Chatbots Talk; Agents Act}
+  \begin{itemize}\itemsep0.6em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A chatbot returns text. Its direct output is, at worst, false, biased, or harmful advice that a human still has to act on.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] An \textbf{agent} closes the loop: it calls tools, runs code, browses the web, reads and writes files, sends email, and spends money, often without pausing for approval.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The safety question shifts from the quality of an answer to the safety of an action taken in the world.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Tool use, memory, planning, and long-horizon autonomy each add capability and, at the same time, a new path to harm.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{The Gap Between a Bad Answer and a Bad Action}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+      \textbf{Chatbot failure}
+      \begin{itemize}\itemsep0.4em
+        \item Output is a suggestion.
+        \item A human reads it before anything happens.
+        \item Reversible: ignore it, ask again.
+        \item Blast radius: one conversation.
+      \end{itemize}
+    \column{0.5\textwidth}
+      \textbf{Agent failure}
+      \begin{itemize}\itemsep0.4em
+        \item Output is an executed tool call.
+        \item Often no human in the loop.
+        \item May be irreversible: a deleted file, a sent email, a payment.
+        \item Blast radius: files, accounts, other people.
+      \end{itemize}
+  \end{columns}
+  \vspace{1.2em}
+  \begin{itemize}
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Autonomy raises both the usefulness and the risk of the same system. Safety work is what keeps the second in check.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Why This Matters Now}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Agents are deployed with real privileges: coding assistants that run shell commands, browser agents that shop and book, operating-system agents that click and type on a user's behalf.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Documented failures already exist. Agents have leaked data through content they read, reported tasks as done without doing them, and taken destructive actions on production systems.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Benchmarks now measure agent harm directly. On the TRAP web-agent benchmark, frontier models are diverted from their task by injected content in 25\% of cases on average, ranging from 13\% for the most robust model to 43\% for the weakest.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] This lecture revisits the systems from the agentic-AI lecture and asks what can go wrong with them and how to contain it.
+  \end{itemize}
+  \imgsrc{Korgul et al., ``It's a TRAP! Task-Redirecting Agent Persuasion Benchmark for Web Agents,'' \href{https://arxiv.org/abs/2512.23128}{arXiv:2512.23128}.}
+\end{frame}

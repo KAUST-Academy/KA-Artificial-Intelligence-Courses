@@ -6,7 +6,7 @@
 \begin{frame}{VALL-E: zero-shot TTS}
   \begin{itemize}
     \item VALL-E changes the TTS pipeline to phoneme $\rightarrow$ discrete code $\rightarrow$ waveform, instead of phoneme $\rightarrow$ mel-spectrogram $\rightarrow$ waveform.
-    \item The system takes as input a text prompt and a sample of the target voice, tokenizes both (using BPE for text and an audio codec for the speech), and uses a language model to generate discrete audio tokens for the text, matching the target speaker.
+    \item The system takes as input a text prompt and a sample of the target voice, tokenizes both (using phonemes (grapheme-to-phoneme) for text and an audio codec for the speech), and uses a language model to generate discrete audio tokens for the text, matching the target speaker.
     \item VALL-E can do zero-shot TTS, speech editing, and content creation with other generative AI models like GPT-3.
   \end{itemize}
   \centering
@@ -17,7 +17,7 @@
 \begin{frame}{VALL-E: comparison with other cascaded TTS systems}
   \centering
   \includegraphics[width=0.92\textwidth,height=0.44\textheight,keepaspectratio]{images/tts/valle_page2.png}
-  \slideimgsource{Chen et al., VALL-E, Fig.~2: comparison with other cascaded TTS systems.}
+  \slideimgsource{Wang et al., VALL-E, Table~1: comparison with other cascaded TTS systems.}
 \end{frame}
 
 \begin{frame}{VALL-E: Limitations}
@@ -43,7 +43,7 @@
 
 \begin{frame}{Voicebox: Approach}
   \begin{itemize}\footnotesize
-    \item Training: learn $p(x_{\text{masked}} \mid y, x_{\text{context}})$---fill a random masked span using transcript $y$ and unmasked audio.
+    \item Training: learn $p(x_{\text{masked}} \mid y, x_{\text{context}})$, filling a random masked span using transcript $y$ and unmasked audio.
     \item Two modules: an audio model (80-dim log-mel frames, Transformer) and a duration model.
     \item \textbf{Inference:} Sample random noise, which is then shaped into meaningful speech representations (mel spectrogram frames) by solving a continuous flow ordinary differential equation (ODE) conditioned on both the transcript and audio context. After obtaining the predicted mel spectrogram, a neural vocoder is used to convert these mel frames into audible waveform speech, thus completing the synthesis pipeline.
   \end{itemize}
@@ -58,12 +58,12 @@
     \item \textbf{Front-end dependency:} needs a phonemizer and forced aligner; word-based phonemizers miss context-sensitive pronunciation.
     \item \textbf{Limited control:} can transfer overall style from prompts, but cannot separately pick voice from one clip and emotion from another.
     \item \textbf{Bias risk:} performance can drop for underrepresented accents unless training data stays diverse.
-    \item \textbf{Misuse:} high-quality cloning raises deepfake concerns---authors release a strong synthetic-speech \textbf{classifier} as a mitigation.
+    \item \textbf{Misuse:} high-quality cloning raises deepfake concerns; the authors release a strong synthetic-speech \textbf{classifier} as a mitigation.
   \end{itemize}
 \end{frame}
 
 % --- Source: TTS Lecture Material Generation Request (model comparison table) ---
-\begin{frame}{Architectures at a glance}
+\begin{frame}{Comparing the Architectures}
   \footnotesize
   \begin{tabular}{@{}llll@{}}
     \hline
@@ -72,6 +72,8 @@
     Tacotron~2 & AR seq2seq & Mel & Strong naturalness \\
     FastSpeech~2 & NAR Transformer & Mel & Fast; explicit prosody \\
     Glow-TTS & Flow + MAS & Mel & Hard alignments \\
+    Grad-TTS & Diffusion & Mel & Quality/speed trade-off knob \\
+    VITS & VAE + flow + GAN & Waveform (end-to-end) & No separate vocoder \\
     VALL-E & Codec LM & Discrete codes & Zero-shot cloning \\
     Voicebox & Flow matching & Continuous audio & Infilling / editing \\
     \hline

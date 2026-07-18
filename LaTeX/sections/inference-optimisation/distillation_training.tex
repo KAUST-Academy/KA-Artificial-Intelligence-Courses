@@ -127,7 +127,7 @@
       The teacher shows the student the \textcolor{blue}{relations} between the different classes, based on what it \textcolor{blue}{learned} during its training stage.
 
       \vspace{0.6em}
-      From a dataset containing the original categories, the teaching outputs the \textcolor{blue}{normalized probabilities} for each example.
+      From a dataset containing the original categories, the teacher outputs the \textcolor{blue}{normalized probabilities} for each example.
 
     \column{0.46\textwidth}
       \centering
@@ -156,7 +156,7 @@
       To enhance the student's learning, the teacher \textcolor{blue}{softens} its output $z$ even more.
 
       \vspace{0.7em}
-      To do this, introduces the softmax function with temperature $T$:
+      To do this, it introduces the softmax function with temperature $T$:
 
       \begin{align*}
         q_i = \frac{\exp\left(z_i / T\right)}{\sum\limits_j \exp\left(z_j / T\right)}
@@ -311,11 +311,21 @@
 
   And our predictions
   \[
-    q_T(x, T) = [0.1,\ 0.45,\ 0.30,\ 0.15]
+    q_S(x, T) = [0.1,\ 0.45,\ 0.30,\ 0.15]
   \]
 
   The resulting loss value for this example is:
   \[
     -\Big[0.05 \cdot \log(0.1)\ +\ 0.3 \cdot \log(0.45)\ +\ 0.2 \cdot \log(0.30)\ +\ 0.005 \cdot \log(0.15)\Big]
   \]
+\end{frame}
+
+\begin{frame}{Distilling Reasoning Traces}
+  \begin{itemize}\itemsep0.4em
+    \item Classic distillation transfers the teacher's \textbf{output distribution}: the student matches softened logits, one prediction at a time.
+    \item For reasoning models the valuable signal is the \textbf{trace}: the chain of intermediate steps the teacher produces before its answer.
+    \item \textbf{Recipe:} generate many problems' worth of full reasoning traces with a large reasoning model, filter for correct answers, then fine-tune the small model on the traces with plain supervised learning. No logits, no RL.
+    \item DeepSeek distilled R1 traces into Qwen and Llama models from 1.5B to 70B this way; the distilled students beat much larger non-reasoning baselines on math and code benchmarks.
+    \item The trade: trace distillation is far cheaper than running RL on the small model, but the student inherits the teacher's reasoning style, including its mistakes.
+  \end{itemize}
 \end{frame}

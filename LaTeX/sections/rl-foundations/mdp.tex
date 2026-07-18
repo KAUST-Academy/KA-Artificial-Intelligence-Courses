@@ -18,11 +18,6 @@
         \item Assumes the \textbf{Markov property}: the next state depends only on the current state and action.
     \end{itemize}
 \framebreak
-    \begin{figure}
-        \centering
-        \fetchconvertimage{https://optimization.cbe.cornell.edu/images/thumb/e/e0/Markov_Decision_Process_Example_2.png/499px-Markov_Decision_Process_Example_2.png}{images/intro/mdp.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
-    \end{figure}
-\framebreak
     \begin{itemize}
         \item At time step $t = 0$, the environment samples the initial state $s_0 \sim p(s_0)$.
         \item Then, for $t = 0$ until termination:
@@ -65,44 +60,5 @@
     \item When Markov fails we are in a \textbf{Partially Observable MDP (POMDP)} --- the agent receives an observation $o_t$ rather than the true state $s_t$
     \item Common workaround: stack recent observations, or use recurrent networks to approximate the hidden state
     \item This will be relevant on Day 9 when we discuss RLHF for language models
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Real-World Problems that Fit the MDP Framework}
-    \begin{itemize}
-        \item Self-driving vehicles: choosing speed and steering to optimize safety and travel time
-        \item Playing chess: receiving a reward only at the end of the game
-        \item Complex logistical operations, such as managing movements in a warehouse
-        \item Enabling a humanoid robot to walk or run on challenging terrains
-        \item Managing an investment portfolio over time
-        \item Controlling a power station efficiently
-        \item Making optimal decisions during a football match
-        \item Developing strategies to win an election (a high-complexity MDP)
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Why Are These Problems Hard?}
-    \begin{itemize}
-        \item The state space can be large or complex (involving many variables).
-        \item Sometimes, the action space is also large or complex.
-        \item There is no direct feedback on "correct" actions (the only feedback is the reward).
-        \item Time-sequenced complexity: actions influence future states and actions.
-        \item Actions can have delayed consequences (delayed rewards).
-        \item The agent often does not know the model of the environment.
-        \item The "model" refers to the probabilities of state transitions and rewards.
-        \item Thus, the agent has to learn the model and solve for the optimal policy.
-        \item Agent actions need to trade off between "exploration" and "exploitation".
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Why Tabular Methods Break Down}
-\begin{itemize}
-    \item Q-learning stores a Q-value for every (state, action) pair in a table
-    \item Simple grid world: 12 states $\times$ 4 actions $=$ 48 entries --- completely feasible
-    \item Atari game: raw pixel input gives $\sim 10^{70000}$ possible states --- storing a table is impossible
-    \item Real robot with continuous joint angles and velocities: infinite state space
-    \item This is the \textbf{curse of dimensionality}
-    \item Solution: approximate $Q(s,a)$ with a parameterized function, e.g., a neural network $Q_\theta(s,a)$
-    \item This is exactly what \textbf{Deep Q-Networks (DQN)} do --- which we cover on Day 2
 \end{itemize}
 \end{frame}

@@ -41,9 +41,28 @@
 \end{frame}
 
 \begin{frame}{DDQN Algorithm}
-    \begin{figure}
-        \centering
-        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/dqn+sarsa/ddqn.png}
-    \end{figure}
-    \footnotetext{Van Hasselt, Guez \& Silver, \emph{Deep Reinforcement Learning with Double Q-learning}, AAAI 2016}
+    \begin{center}
+    \footnotesize
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+        \caption{Double DQN (DDQN)}
+        Initialize replay memory $\mathcal{D}$ to capacity $N$\;
+        Initialize online network $Q$ with random weights $\theta$\;
+        Initialize target network $\hat{Q}$ with weights $\theta^- \leftarrow \theta$\;
+        \For{$\text{episode} = 1$ \KwTo $M$}{
+            Observe initial state $s$\;
+            \For{$t = 1$ \KwTo $T$}{
+                With probability $\varepsilon$ select a random action $a$; otherwise $a = \arg\max_{a'} Q(s, a'; \theta)$\;
+                Execute $a$; observe reward $r$ and next state $s'$\;
+                Store transition $(s, a, r, s')$ in $\mathcal{D}$;\quad $s \leftarrow s'$\;
+                Sample a random minibatch of transitions $(s_i, a_i, r_i, s_i')$ from $\mathcal{D}$\;
+                $a_i^\star \leftarrow \arg\max_{a'} Q(s_i', a'; \theta)$ \tcp*{select with online net $\theta$}
+                Set $y_i = \begin{cases} r_i & \text{if } s_i' \text{ is terminal} \\ r_i + \gamma\, \hat{Q}(s_i', a_i^\star; \theta^-) & \text{otherwise} \end{cases}$ \tcp*{evaluate with target net $\theta^-$}
+                Take a gradient descent step on $\big(y_i - Q(s_i, a_i; \theta)\big)^2$ w.r.t.\ $\theta$\;
+                Every $C$ steps set $\theta^- \leftarrow \theta$\;
+            }
+        }
+    \end{algorithm}
+    \end{center}
+    \footnotetext{Van Hasselt, Guez \& Silver (2016), \emph{Deep Reinforcement Learning with Double Q-learning}, AAAI. Only the target line changes vs.\ DQN: action \emph{selection} ($\theta$) is split from action \emph{evaluation} ($\theta^-$).}
 \end{frame}

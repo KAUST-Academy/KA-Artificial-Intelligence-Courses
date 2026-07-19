@@ -1,11 +1,27 @@
 \section{DQN Algorithm}
 
 \begin{frame}{DQN Algorithm}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.9\textwidth,height=0.9\textheight,keepaspectratio]{images/dqn+sarsa/dqn.png}
-    \end{figure}
-    \footnotetext{$\varepsilon$-greedy exploration---covered in Day\,1. $\varepsilon$ is annealed from high to low over training.}
+    \begin{center}
+    \footnotesize
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+        \caption{Deep Q-Network (DQN) with Experience Replay}
+        Initialize replay memory $\mathcal{D}$ to capacity $N$\;
+        Initialize action-value network $Q$ with random weights $\theta$\;
+        \For{$\text{episode} = 1$ \KwTo $M$}{
+            Observe initial state $s$\;
+            \For{$t = 1$ \KwTo $T$}{
+                With probability $\varepsilon$ select a random action $a$; otherwise $a = \arg\max_{a'} Q(s, a'; \theta)$\;
+                Execute $a$; observe reward $r$ and next state $s'$\;
+                Store transition $(s, a, r, s')$ in $\mathcal{D}$;\quad $s \leftarrow s'$\;
+                Sample a random minibatch of transitions $(s_i, a_i, r_i, s_i')$ from $\mathcal{D}$\;
+                Set $y_i = \begin{cases} r_i & \text{if } s_i' \text{ is terminal} \\ r_i + \gamma \max_{a'} Q(s_i', a'; \theta) & \text{otherwise} \end{cases}$\;
+                Take a gradient descent step on $\big(y_i - Q(s_i, a_i; \theta)\big)^2$ w.r.t.\ $\theta$\;
+            }
+        }
+    \end{algorithm}
+    \end{center}
+    \footnotetext{$\varepsilon$-greedy exploration---covered in Day\,1. $\varepsilon$ is annealed from high to low over training. Prediction and target share the \emph{same} weights $\theta$---the instability this causes motivates the next slide.}
 \end{frame}
 
 \begin{frame}{DQN with Target Network}
@@ -20,9 +36,27 @@
 \end{frame}
 
 \begin{frame}{DQN with Target Network Algorithm}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.9\textwidth,height=0.9\textheight,keepaspectratio]{images/dqn+sarsa/dqn_target.png}
-    \end{figure}
-    \footnotetext{Minh et al. https://www.nature.com/articles/nature14236}
+    \begin{center}
+    \footnotesize
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+        \caption{DQN with a Target Network}
+        Initialize replay memory $\mathcal{D}$ to capacity $N$\;
+        Initialize online network $Q$ with random weights $\theta$\;
+        Initialize target network $\hat{Q}$ with weights $\theta^- \leftarrow \theta$\;
+        \For{$\text{episode} = 1$ \KwTo $M$}{
+            Observe initial state $s$\;
+            \For{$t = 1$ \KwTo $T$}{
+                With probability $\varepsilon$ select a random action $a$; otherwise $a = \arg\max_{a'} Q(s, a'; \theta)$\;
+                Execute $a$; observe reward $r$ and next state $s'$\;
+                Store transition $(s, a, r, s')$ in $\mathcal{D}$;\quad $s \leftarrow s'$\;
+                Sample a random minibatch of transitions $(s_i, a_i, r_i, s_i')$ from $\mathcal{D}$\;
+                Set $y_i = \begin{cases} r_i & \text{if } s_i' \text{ is terminal} \\ r_i + \gamma \max_{a'} \hat{Q}(s_i', a'; \theta^-) & \text{otherwise} \end{cases}$\;
+                Take a gradient descent step on $\big(y_i - Q(s_i, a_i; \theta)\big)^2$ w.r.t.\ $\theta$\;
+                Every $C$ steps set $\theta^- \leftarrow \theta$\;
+            }
+        }
+    \end{algorithm}
+    \end{center}
+    \footnotetext{Mnih et al.\ (2015), \href{https://www.nature.com/articles/nature14236}{Human-level control through deep reinforcement learning}, \emph{Nature}. The target $y_i$ now uses the frozen network $\hat{Q}(\cdot;\theta^-)$.}
 \end{frame}

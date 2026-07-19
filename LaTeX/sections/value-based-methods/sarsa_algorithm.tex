@@ -38,11 +38,11 @@
     \end{itemize}
     \pause
     \begin{equation*}
-        \textbf{Q-Learning:}\quad Q(s_t,a_t) \leftarrow Q(s_t,a_t) + \alpha \left[ r(s_t,a_t) + \gamma \max_{a'} Q(s_{t+1},a') - Q(s_t,a_t) \right]
+        \textbf{Q-Learning:}\quad Q(s,a) \leftarrow Q(s,a) + \alpha \left[ r + \gamma \max_{a'} Q(s',a') - Q(s,a) \right]
     \end{equation*}
     \pause
     \begin{equation*}
-        \textbf{SARSA:}\quad Q(s_t,a_t) \leftarrow Q(s_t,a_t) + \alpha \left[ r(s_t,a_t) + \gamma Q(s_{t+1},a_{t+1}) - Q(s_t,a_t) \right]
+        \textbf{SARSA:}\quad Q(s,a) \leftarrow Q(s,a) + \alpha \left[ r + \gamma Q(s',a') - Q(s,a) \right]
     \end{equation*}
 \end{frame}
 
@@ -56,12 +56,25 @@
 \end{frame}
 
 \begin{frame}{SARSA Algorithm}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.9\textwidth,height=0.9\textheight,keepaspectratio]{images/dqn+sarsa/sarsa.png}
-    \end{figure}
-
-    \footnotetext{Lockery \& Peters, \href{https://www.researchgate.net/publication/228410947_Adaptive_learning_by_a_target-tracking_system}{Adaptive learning by a target-tracking system}}
+    \begin{center}
+    \footnotesize
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+        \caption{SARSA (on-policy TD control)}
+        Initialize $Q(s, a)$ arbitrarily for all $s, a$; set step size $\alpha \in (0, 1]$ and discount $\gamma$\;
+        \For{each episode}{
+            Observe initial state $s$\;
+            Choose $a$ from $s$ using a policy derived from $Q$ (e.g.\ $\varepsilon$-greedy)\;
+            \Repeat{$s$ is terminal}{
+                Take action $a$; observe reward $r$ and next state $s'$\;
+                Choose $a'$ from $s'$ using a policy derived from $Q$ (e.g.\ $\varepsilon$-greedy)\;
+                $Q(s, a) \leftarrow Q(s, a) + \alpha \big[\, r + \gamma Q(s', a') - Q(s, a) \,\big]$\;
+                $s \leftarrow s'$;\quad $a \leftarrow a'$\;
+            }
+        }
+    \end{algorithm}
+    \end{center}
+    \footnotetext{Sutton \& Barto, \emph{Reinforcement Learning: An Introduction} (2018), Ch.\ 6. The next action $a'$ is chosen \emph{before} the update---this is what makes SARSA on-policy.}
 \end{frame}
 
 \begin{frame}{Q-Learning vs SARSA: Comparison Table}
@@ -74,7 +87,7 @@
             \hline
             Policy Type & Off-policy & On-policy \\
             Learns From & Others' or past experience & Own current experience \\
-            Target & $\max Q(s', a')$ & $Q(s', a')$ actually taken \\
+            Target & $\max_{a'} Q(s', a')$ & $Q(s', a')$ actually taken \\
             Exploration Aware & No & Yes \\
             Risk Sensitivity & More aggressive & More conservative \\
             Use Case & Goal-seeking behavior & Risk-aware behavior \\

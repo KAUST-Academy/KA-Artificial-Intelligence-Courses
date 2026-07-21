@@ -156,3 +156,27 @@
 \end{itemize}
 
 \end{frame}
+
+
+\begin{frame}{Truthfulness: The TruthfulQA Benchmark}
+  \begin{itemize}\itemsep0.45em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{TruthfulQA} (Lin et al., 2021) tests whether a model repeats common human \textbf{misconceptions}: 817 questions over 38 topics (health, law, finance, myths), written so a plausible but false ``imitative'' answer is tempting.
+    \item[\textcolor{red}{$\blacktriangleright$}] It targets a failure mode that accuracy benchmarks miss: a model that has read the whole web also absorbs its falsehoods.
+    \item[\textcolor{red}{$\blacktriangleright$}] Striking result: truthfulness \textbf{scales inversely} here. The largest models were often the \textit{least} truthful, because they are better at reproducing popular misconceptions.
+    \item[\textcolor{red}{$\blacktriangleright$}] Lesson: bigger is not automatically better, and honesty must be measured separately from helpfulness and fluency.
+  \end{itemize}
+  \vspace{0.3em}
+  {\scriptsize \textbf{Source:} Lin, Hilton, Evans, ``TruthfulQA: Measuring How Models Mimic Human Falsehoods,'' ACL 2022, \href{https://arxiv.org/abs/2109.07958}{arXiv:2109.07958}.}
+\end{frame}
+
+
+\begin{frame}{When Benchmarks Saturate: Frontier Exams}
+  \begin{itemize}\itemsep0.45em
+    \item[\textcolor{red}{$\blacktriangleright$}] Benchmarks have a shelf life. \textbf{MMLU} was the standard measure of broad knowledge for years; frontier models now score above 90\%, so it no longer separates them.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{GPQA} (2023) responds with 448 ``Google-proof'' graduate-level science questions: PhD experts reach about 65\%, while skilled non-experts with unrestricted web access manage only 34\%.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Humanity's Last Exam} (2025) goes further: 2{,}500 questions written by over 1{,}000 subject experts, designed as ``the final closed-ended academic benchmark of its kind.'' Frontier models scored below 10\% at release.
+    \item[\textcolor{red}{$\blacktriangleright$}] The pattern to remember: each exam is eventually saturated and a harder one replaces it, so a headline score only means something relative to when and how it was measured.
+  \end{itemize}
+  \vspace{0.3em}
+  {\scriptsize \textbf{Source:} Rein et al., ``GPQA: A Graduate-Level Google-Proof Q\&A Benchmark,'' 2023, \href{https://arxiv.org/abs/2311.12022}{arXiv:2311.12022}; Phan et al., ``Humanity's Last Exam,'' 2025, \href{https://arxiv.org/abs/2501.14249}{arXiv:2501.14249}.}
+\end{frame}

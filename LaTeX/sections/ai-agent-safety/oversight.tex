@@ -29,6 +29,15 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{The Limits of Agent Benchmarks}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Most web-agent benchmarks feed the model the page's \textbf{DOM or accessibility tree} as text. This is convenient but skips the vision-based, proprietary, and professional interfaces real users face.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A benchmark can therefore look near-saturated while the agent is still blind to anything that is not clean structured text.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] On harder, out-of-distribution professional tasks the gap is stark: humans succeed on the large majority, while current agents (open, closed, and closed-framework alike) succeed on far fewer.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] For safety this cuts both ways: today's agents are less capable than headlines suggest, but evaluation that overstates capability also \textbf{understates the failure modes} we must guard against.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Incident Response for Deployed Agents}
   \begin{itemize}\itemsep0.5em
     \item[\textcolor{KAred}{$\blacktriangleright$}] Assume something will go wrong in production, and plan the response in advance.

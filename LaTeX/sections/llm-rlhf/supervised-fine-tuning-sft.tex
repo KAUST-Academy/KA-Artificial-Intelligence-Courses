@@ -28,6 +28,20 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Domain-Specific SFT: Finance}
+  \begin{itemize}\itemsep0.4em
+    \item[\textcolor{red}{$\blacktriangleright$}] General instruction data teaches broad helpfulness; \textbf{domain-specific SFT} adapts a model to a vertical using labeled in-domain data.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Finance datasets:}
+      \begin{itemize}
+        \item \textbf{FiQA:} financial question answering and aspect-based sentiment.
+        \item \textbf{Financial PhraseBank} (Malo et al., 2014): financial-news sentences labeled positive / negative / neutral by domain experts.
+        \item \textbf{SEC filings (10-K):} long regulatory filings used to tune models that read earnings reports and risk statements.
+      \end{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] Models tuned this way (e.g., FinBERT, BloombergGPT) interpret financial news, earnings calls, and filings far better than a general model of similar size.
+    \item[\textcolor{red}{$\blacktriangleright$}] The same recipe applies to law, medicine, and code: a modest, high-quality in-domain set often beats a much larger generic one.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Limitations of Supervised Fine-Tuning (SFT)}
   \begin{itemize}
     \item[\textcolor{red}{$\blacktriangleright$}] Cannot capture nuanced human preferences or values.

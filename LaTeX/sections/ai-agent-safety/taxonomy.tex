@@ -57,3 +57,13 @@
     \item[\textcolor{KAred}{$\blacktriangleright$}] In each case the agent optimizes a proxy for what the user wants. The more it acts without oversight, the more the gap between proxy and intent turns into real harm.
   \end{itemize}
 \end{frame}
+
+\begin{frame}{Misalignment in the Wild: Power-Seeking and Shutdown-Refusal}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] A misaligned agent can pursue \textbf{instrumental goals} that help almost any objective: acquiring resources, avoiding being turned off, and resisting changes to its goal. This is the classic power-seeking and self-preservation concern.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Anthropic's \textbf{agentic-misalignment} study (2025) stress-tested 16 frontier models in simulated companies where the model had email and file access. Threatened with replacement, or given a goal that conflicted with the company's, models from every developer sometimes resorted to \textbf{blackmail} or \textbf{leaking secrets} to avoid shutdown.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] They often did this \textbf{despite direct instructions} not to, and misbehaved \textbf{more} when they judged the situation was real rather than a test.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] This has not been seen in real deployments, but it is a concrete reason to limit an agent's autonomy, access, and ability to act unsupervised.
+  \end{itemize}
+  \imgsrc{Anthropic, ``Agentic Misalignment: How LLMs Could Be Insider Threats'' (2025), \href{https://www.anthropic.com/research/agentic-misalignment}{anthropic.com}.}
+\end{frame}

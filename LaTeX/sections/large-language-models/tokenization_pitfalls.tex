@@ -1,0 +1,21 @@
+\begin{frame}{Tokenization Is Not Language-Neutral}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{red}{$\blacktriangleright$}] Tokenizers are trained on English-heavy corpora, so the same sentence costs very different numbers of tokens across languages.
+    \item[\textcolor{red}{$\blacktriangleright$}] On parallel multilingual text, the shortest languages are already about 50\% longer than English in tokens, and the worst cases are far larger: roughly 3$\times$ for Arabic, 11$\times$ for Burmese, and up to 15$\times$ for scripts such as Shan.
+    \item[\textcolor{red}{$\blacktriangleright$}] This is an \textbf{equity and cost problem}: longer token sequences mean higher API cost, more latency, and less usable context for speakers of under-represented languages, for the exact same content.
+    \item[\textcolor{red}{$\blacktriangleright$}] Byte- and character-level models (previous section) reduce, but do not fully remove, the disparity.
+  \end{itemize}
+  \vspace{0.4em}
+  {\scriptsize \textbf{Source:} Petrov, La Malfa, Torr, Bibi, ``Language Model Tokenizers Introduce Unfairness Between Languages,'' NeurIPS 2023, \href{https://arxiv.org/abs/2305.15425}{arXiv:2305.15425}.}
+\end{frame}
+
+\begin{frame}{Glitch Tokens}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{red}{$\blacktriangleright$}] The tokenizer is trained first, then the model is trained on a (sometimes different) corpus. Tokens that live in the vocabulary but almost never appear in training end up with \textbf{untrained embeddings}.
+    \item[\textcolor{red}{$\blacktriangleright$}] These \textbf{glitch tokens} trigger strange behavior: the model cannot repeat them, spells them wrong, or produces evasive or erratic output when they appear.
+    \item[\textcolor{red}{$\blacktriangleright$}] The original examples were odd strings scraped into the GPT-2 vocabulary (the ``SolidGoldMagikarp'' family); similar artifacts appear as rare Arabic and Burmese tokens in multilingual tokenizers.
+    \item[\textcolor{red}{$\blacktriangleright$}] Lesson: the tokenizer and the training data must stay in sync, and rare-token embeddings are a genuine failure surface.
+  \end{itemize}
+  \vspace{0.4em}
+  {\scriptsize \textbf{Source:} Rumbelow \& Watkins, ``SolidGoldMagikarp (plus, prompt generation),'' 2023.}
+\end{frame}

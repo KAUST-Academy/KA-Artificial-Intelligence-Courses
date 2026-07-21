@@ -1,12 +1,24 @@
 \begin{frame}{Why Stochastic Policies? The Aliased Grid World}
 \begin{figure}
 \centering
-\includegraphics[width=0.6\textwidth,height=0.33\textheight,keepaspectratio]{images/vanilla-policy-gradient/grid_world_3.png}
+\includegraphics[width=0.55\textwidth,height=0.34\textheight,keepaspectratio]{images/vanilla-policy-gradient/grid_world_3.png}
 \end{figure}
 \begin{itemize}
+    \setlength{\itemsep}{0.9em}
     \item Grey states are \textbf{aliased}: the agent observes the same features in multiple distinct positions
-    \item A deterministic policy must make the same choice in every grey state --- always go East or always go West --- causing the agent to get stuck in a loop and never reach the goal
+    \item \textbf{Key assumption --- why they look identical:} the agent perceives only \emph{local} features, not its absolute position. The two grey cells are equidistant from the goal and the danger squares and share the same surrounding walls, so every feature it can sense is identical --- it cannot tell them apart and must treat them as one state
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Aliased Grid World: Why Determinism Fails}
+\begin{figure}
+\centering
+\includegraphics[width=0.4\textwidth,height=0.22\textheight,keepaspectratio]{images/vanilla-policy-gradient/grid_world_3.png}
+\end{figure}
+\begin{itemize}
+    \setlength{\itemsep}{1em}
+    \item A \textbf{deterministic} policy must make the same choice in every grey state --- always go East or always go West --- so the agent gets stuck in a loop and never reaches the goal
     \item A \textbf{stochastic} 50/50 policy breaks the symmetry: the agent eventually reaches the goal with probability 1
-    \item This is the concrete motivation for the softmax and Gaussian parameterisations on the previous slide
+    \item This is the concrete motivation for the \textbf{softmax} and \textbf{Gaussian} policy parameterisations introduced earlier
 \end{itemize}
 \end{frame}

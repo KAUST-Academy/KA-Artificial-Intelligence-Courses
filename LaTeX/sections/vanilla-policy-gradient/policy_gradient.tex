@@ -3,15 +3,15 @@
     \LARGE Reinforcement Learning: \textbf{Policy Gradients}
 \end{frame}
 
-\begin{frame}{Policy Gradients}
+\begin{frame}{Policy Gradients: Why Learn a Policy Directly?}
     \begin{itemize}
-        \setlength{\itemsep}{1em}
-        \item {\large \textbf{What is the problem with Q-learning?}}
-        \item The Q-function can be very complex.
-        \item For example, a robot grasping an object may have a very high-dimensional state space. It can be difficult to learn the exact Q-value for every (state, action) pair.
+        \setlength{\itemsep}{0.9em}
+        \item {\large \textbf{To act well, you don't need the exact worth of every option --- you only need to pick the best one.}}
+        \item $Q(s,a)$ answers the \textbf{hard} question: \textit{``How much total future reward will I get for every action, in every state?''} --- a detailed, complicated function of the whole world.
+        \item $\pi(s)$ answers the \textbf{easy} question: \textit{``What should I do right now?''} --- often a simple rule.
         \pause
-        \item However, the policy itself can be much simpler; for instance, just closing the robot's hand.
-        \item Can we learn a policy directly, i.e., find the best policy from a set of possible policies?
+        \item \textbf{Grasping:} figuring out the exact long-term payoff of every possible gripper motion is hard. But the actual behavior --- ``close the hand once it's around the object'' --- is simple.
+        \item[$\Rightarrow$] So why solve the hard problem ($Q$) just to act? \textbf{Learn the policy directly.}
     \end{itemize}
 \end{frame}
 
@@ -46,12 +46,4 @@
         \item The Gaussian policy will be central to continuous-control algorithms (Days 5--6).
         \item Both are differentiable w.r.t.\ $\theta$, which is what makes gradient ascent possible.
     \end{itemize}
-\end{frame}
-
-\begin{frame}{Policy Gradients}
-    \begin{figure}
-        \centering
-        \includegraphics[width=\textwidth,height=0.85\textheight,keepaspectratio]{images/vanilla-policy-gradient/policy_gradient.png}
-    \end{figure}
-    \footnotetext{Note: this diagram uses $u$ for actions and $\pi(u|s)$; equivalent to $a$ and $\pi(a|s)$ throughout this course.}
 \end{frame}

@@ -27,7 +27,18 @@
       \end{itemize}
     \item[\textcolor{KAred}{$\blacktriangleright$}] A companion Generative AI Profile (2024) adapts these functions to generative and agentic systems.
     \item[\textcolor{KAred}{$\blacktriangleright$}] It addresses how an organization governs the risk, complementing the specific vulnerabilities OWASP enumerates.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] It is one piece of a wider US \textbf{patchwork}: no single federal AI law exists. Executive orders shift with administrations, states pass their own laws (Colorado was first, 2024), and export controls restrict the chips used to train frontier models.
   \end{itemize}
+\end{frame}
+
+\begin{frame}{Regulation: The EU AI Act}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] The \textbf{EU AI Act} (Regulation 2024/1689) is the first broad, binding AI law, often called ``GDPR for AI.'' It classifies systems by \textbf{risk}: unacceptable (banned), high (strict obligations), limited (transparency), and minimal.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Prohibited practices} include social scoring, untargeted face-scraping, and manipulative or exploitative systems; high-risk uses carry documentation, human-oversight, and robustness requirements.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Teeth:} fines up to \textbf{EUR 35 million or 7\% of global annual turnover} for prohibited practices, with lower tiers (EUR 15M / 3\%, EUR 7.5M / 1\%) for other breaches.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Unlike OWASP and NIST, which are voluntary, this is \textbf{law}: agentic and high-autonomy systems that touch EU users must comply.
+  \end{itemize}
+  \imgsrc{Regulation (EU) 2024/1689 (EU AI Act), Article 99; penalties apply from 2 Aug 2025.}
 \end{frame}
 
 \begin{frame}{Provider Policies and Deployment Gates}
@@ -36,5 +47,14 @@
     \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Capability thresholds:} the more autonomous or consequential the deployment, the stronger the required safeguards and review before launch.
     \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Staged rollout:} start with a limited release, monitor real usage, then widen, rather than shipping full autonomy to everyone at once.
     \item[\textcolor{KAred}{$\blacktriangleright$}] A deployment gate checks for the same technical safeguards covered in this lecture.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Open Problem: Dual-Use and the ``Born Secret'' Question}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Frontier models are \textbf{dual-use}: the capabilities that help research also help cyber-attacks or bio-design. This raises whether the most capable model weights should be openly released at all.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] One proposed analogy is the US Atomic Energy Act's \textbf{``born secret'' doctrine}, under which certain nuclear information is classified automatically at creation, regardless of who produced it.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Applying it to AI would mean classifying dangerous weights \textbf{at training time} rather than after review, trading openness and scientific freedom against security.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] There is no consensus. It sharpens the core tension: open weights spread capability and scrutiny widely, while closed weights concentrate both capability and control.
   \end{itemize}
 \end{frame}

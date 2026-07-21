@@ -7,3 +7,14 @@
     \textbf{Source:} Brown, Tom B. et al. ``Language Models are Few-Shot Learners.'' \textit{arXiv:2005.14165} (2020), Fig. 1, page 4.
   }
 \end{frame}
+
+\begin{frame}{What Transformers Learn In-Context}
+  \begin{itemize}\itemsep0.45em
+    \item[\textcolor{red}{$\blacktriangleright$}] Few-shot prompting works with no weight update, which raises the question: what is the model actually doing when it ``learns'' from the examples in its prompt?
+    \item[\textcolor{red}{$\blacktriangleright$}] On controlled tasks, transformers trained to do in-context learning can \textbf{implement a learning algorithm internally}: given input-output pairs from an unknown linear function, they effectively solve the linear system and predict new outputs, matching least-squares (Garg et al., 2022).
+    \item[\textcolor{red}{$\blacktriangleright$}] Follow-up work shows the forward pass can behave like \textbf{gradient descent} on an implicit objective built from the in-context examples (von Oswald et al., 2023).
+    \item[\textcolor{red}{$\blacktriangleright$}] Takeaway: in-context learning is not only pattern matching over memorized text; a trained transformer can run a small optimization at inference time.
+  \end{itemize}
+  \vspace{0.3em}
+  {\scriptsize \textbf{Sources:} Garg et al., \href{https://arxiv.org/abs/2208.01066}{arXiv:2208.01066} (2022); von Oswald et al., \href{https://arxiv.org/abs/2212.07677}{arXiv:2212.07677} (2023).}
+\end{frame}

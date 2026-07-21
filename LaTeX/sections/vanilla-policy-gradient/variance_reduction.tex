@@ -3,6 +3,19 @@
     \LARGE Reinforcement Learning: \textbf{Variance Reduction}
 \end{frame}
 
+\begin{frame}{First, Two Words We Will Use a Lot: Bias and Variance}
+Our gradient is estimated from \emph{sampled} trajectories, so it is never exact. There are two independent ways such an estimate can be wrong:
+\vspace{0.3em}
+\begin{block}{Variance --- how much it \emph{bounces}}
+Run the same policy again and you get different trajectories, hence a different gradient estimate. \textbf{High variance} = the estimate jumps around from one batch to the next $\Rightarrow$ you need many samples to average out the noise $\Rightarrow$ slow, unstable learning.
+\end{block}
+\begin{block}{Bias --- whether it points the \emph{right way on average}}
+\textbf{Unbiased} = averaged over infinitely many samples it equals the true gradient $\nabla_\theta \mathcal{J}$. \textbf{Biased} = systematically off, converging toward a slightly wrong direction \emph{even with infinite data}.
+\end{block}
+\vspace{0.2em}
+Dartboard picture: \textbf{variance} is how scattered the darts land; \textbf{bias} is whether they cluster off the bullseye. \emph{The whole game below:} accept a little bias if it buys a large drop in variance --- the net result learns faster.
+\end{frame}
+
 \begin{frame}{Variance Reduction}
 \begin{itemize}
     \item However, there is a problem.
@@ -23,10 +36,11 @@
 
 \begin{frame}{Variance Reduction}
 \begin{itemize}
-    \item The causality trick is \textbf{unbiased} --- removing past rewards is mathematically correct.
-    \item But Monte Carlo returns over full trajectories are still noisy --- \textbf{high variance remains}.
+    \item The causality trick is \textbf{unbiased} --- removing past rewards is mathematically correct, so on average the gradient is unchanged.
+    \item But the reward-to-go $\sum_{t' \geq t} r_{t'}$ is still a sum over an \emph{entire} future rollout, driven by many random action choices and random environment transitions. Run the \textbf{same} policy twice and this number can come out wildly different.
+    \item That swing is the \textbf{high variance}: the gradient estimate bounces from sample to sample, so it takes a huge number of trajectories to average out --- learning is slow and unstable.
     \pause
-    \item \textbf{Second idea:} Weight future rewards by $\gamma^{t'-t}$, so distant rewards contribute less. This introduces a small \textbf{bias} but significantly reduces variance:
+    \item \textbf{Second idea --- discounting:} weight future rewards by $\gamma^{t'-t}$, so distant, largely-unrelated rewards count for less. This trades a small \textbf{bias} for a large drop in variance:
     $$\nabla_\theta \mathcal{J}(\theta) \approx \sum_{t \geq 0} \left( \sum_{t' \geq t} \gamma^{t'-t} r_{t'} \right ) \nabla_\theta \log \pi_\theta (a_t|s_t) $$
 \end{itemize}
 \end{frame}
@@ -73,5 +87,26 @@
     \item It is unbiased, and it provides lower variance than a fixed moving-average baseline.
 \end{itemize}
 \vspace{0.5em}
-\textit{How to estimate $A^{\pi}$ in practice? We only need to learn $V_\phi$: the TD residual $r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$ approximates $A^{\pi}(s_t, a_t)$, so $Q^{\pi}$ never needs to be estimated explicitly. This is covered on Day 4.}
+\textit{But how do we actually estimate $A^{\pi}$? That --- learning a \textbf{critic} --- is exactly what Day 4 (Actor-Critic) is about.}
+\end{frame}
+
+\begin{frame}{The REINFORCE Algorithm}
+    \begin{center}
+    \footnotesize
+    \begin{algorithm}[H]
+        \DontPrintSemicolon
+        \caption{REINFORCE (Monte-Carlo Policy Gradient)}
+        Initialize policy network $\pi_\theta$ with random weights $\theta$; set step size $\alpha$ and discount $\gamma$\;
+        \For{$\text{episode} = 1$ \KwTo $M$}{
+            Run $\pi_\theta$ for one full episode of length $T$, producing\;
+            \quad $\tau = (s_0, a_0, r_0,\ s_1, a_1, r_1,\ \dots,\ s_{T-1}, a_{T-1}, r_{T-1})$\;
+            \For{$t = 0$ \KwTo $T-1$}{
+                Reward-to-go from step $t$:\quad $R_t = \sum_{t'=t}^{T-1} \gamma^{\,t'-t}\, r_{t'}$\;
+            }
+            Gradient \emph{ascent} update (reward-to-go minus baseline $b(s_t)$):\;
+            \quad $\theta \leftarrow \theta + \alpha \sum_{t=0}^{T-1} \big( R_t - b(s_t) \big)\, \nabla_\theta \log \pi_\theta(a_t \mid s_t)$\;
+        }
+    \end{algorithm}
+    \end{center}
+    \footnotetext{Williams (1992), \emph{Simple statistical gradient-following algorithms for connectionist reinforcement learning}, \emph{Machine Learning} 8. An episode of length $T$ has actions $a_0,\dots,a_{T-1}$ ($T$ in total); the terminal state $s_T$ has no action, so the sum stops at $T-1$. The baseline $b(s_t)$ is optional --- $b\equiv 0$ gives vanilla REINFORCE, and a running average of returns is a simple choice. We \emph{ascend} because we maximize expected return $\mathcal{J}(\theta)$, whereas Day 2 minimized an error (descent).}
 \end{frame}

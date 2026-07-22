@@ -2,10 +2,11 @@
 \begin{frame}{Learning Outcomes}
     \begin{itemize}
         \setlength{\itemsep}{0.8em}
-        \item Explain why $\arg\max_a Q(s,a)$ is intractable in continuous action spaces, motivating a learned deterministic actor
-        \item Derive the deterministic policy gradient from the stochastic policy gradient and identify the $\nabla_a Q$ term
-        \item Describe how DDPG combines DPG with the DQN tricks (replay buffer, target networks) into an off-policy actor-critic
-        \item Explain the role of soft target updates, batch normalisation, and added exploration noise (OU vs.\ Gaussian)
-        \item State DDPG's failure modes (Q-overestimation, brittleness) and how TD3's three fixes address them
+        \item Explain why you cannot take $\arg\max_a Q(s,a)$ over a continuous action space, and why that forces us to \emph{learn} a deterministic actor $\mu_\theta$
+        \item Explain why the Days 3--4 policy gradient stops working for a deterministic actor, and state the rule that replaces it: the critic supplies a \emph{direction} $\nabla_a Q_\phi$ rather than a score
+        \item Say what changes relative to Day 4's actor-critic: actor $\pi_\theta \to \mu_\theta$, critic $V_\phi(s) \to Q_\phi(s,a)$, on-policy rollouts $\to$ replay buffer
+        \item Read the DDPG algorithm and locate the replay buffer, the target networks, the soft update, the exploration noise, and the two update rules
+        \item Explain why DDPG's TD target needs no $\max_{a'}$, and what soft target updates and batch normalisation contribute to stability
+        \item State DDPG's failure modes (Q-overestimation, brittleness, weak exploration) and how TD3's three fixes address them
     \end{itemize}
 \end{frame}

@@ -28,14 +28,24 @@ REINFORCE $\;\rightarrow\;$ +baseline $\;\rightarrow\;$ +critic (A2C) $\;\righta
 \end{table}
 \end{frame}
 
-\begin{frame}{Summary}
+\begin{frame}{Summary (1/2): Getting a Good Advantage Estimate}
 \begin{itemize}
-    \item A \textbf{critic} $V_\phi$ learns to estimate state values via TD; the TD residual $\delta_t$ approximates $A^{\pi}$ cheaply
+    \item \textbf{TD learning} --- update a prediction using a later, better-informed one. The TD error $\delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$ is the same bracket you saw in Q-learning and SARSA; the critic is trained by minimising its \emph{square}
+    \item A \textbf{critic} $V_\phi$ turns Day 3's baseline into something learnable, and $\delta_t$ doubles as an online, low-variance estimate of the advantage --- one number, two jobs
+    \item \textbf{GAE} replaces the crude 1-step $\delta_t$ with a $\lambda$-weighted average over all lookahead lengths, computed backwards in one pass: $\hat{A}_t = \delta_t + \gamma\lambda \hat{A}_{t+1}$. Read $\lambda$ as ``how much do I trust my critic''
+    \item $\hat{A}_t$ is what \emph{every} algorithm from here on multiplies the log-probability gradient by
     \item \textbf{A2C} parallelises data collection with $N$ synchronous actors; A3C uses asynchronous workers (empirically A2C $\geq$ A3C)
-    \item \textbf{TRPO} guarantees monotonic improvement via a KL trust region but is expensive to compute
-    \item \textbf{PPO-Clip} approximates the trust region with a first-order method: clip $r_t(\theta)$ to $[1{-}\varepsilon, 1{+}\varepsilon]$ and take the $\min$ with the unclipped objective
-    \item PPO is the workhorse of modern on-policy RL: simple, stable, widely used in robotics, games, and RLHF
-    \item \textbf{GRPO} drops the critic and uses group-mean baselines --- now the default for LLM RL (DeepSeek-R1)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Summary (2/2): Taking a Safe Step}
+\begin{itemize}
+    \item A large step in \emph{weights} can be a catastrophic step in \emph{behaviour} --- and a collapsed policy collects bad data, so it rarely recovers
+    \item To take a step safely we must score a candidate policy \textbf{without running it}. The \textbf{surrogate objective} $\mathcal{L}(\theta) = \mathbb{E}_t[r_t(\theta)\,\hat{A}_t]$ does this by re-counting already-collected samples by the ratio $r_t(\theta) = \pi_\theta(a_t|s_t)/\pi_{\theta_\text{old}}(a_t|s_t)$
+    \item That score is only trustworthy while the two policies stay close --- hence every method below is ``maximize $\mathcal{L}$, but don't move far''
+    \item \textbf{TRPO} enforces this with a hard KL constraint. Correct, but it needs the Fisher matrix: second-order, expensive, painful to implement
+    \item \textbf{PPO-Clip} gets the same effect first-order: clip $r_t(\theta)$ to $[1{-}\varepsilon, 1{+}\varepsilon]$ and take the $\min$ with the unclipped term. One combined loss = clipped objective $-\,c_1\times$ critic error $+\,c_2\times$ entropy
+    \item \textbf{GRPO} drops the critic entirely, using a group-mean baseline --- now the default for LLM RL (DeepSeek-R1)
 \end{itemize}
 \end{frame}
 

@@ -17,21 +17,25 @@
 \input{sections/toc}
 \input{sections/policy-optimization/recap}
 \input{sections/policy-optimization/learning_outcomes}
-% Part 1: Actor-Critic
+% Part 1: Actor-Critic --- build the full 1-step algorithm first, then improve
+% the advantage estimate. (GAE used to land before students had seen the
+% algorithm at all, which made it read as an unmotivated detour.)
 \input{sections/policy-optimization/two_worlds}
 \input{sections/policy-optimization/baselines_to_critics}
+\input{sections/policy-optimization/td_learning}
 \input{sections/policy-optimization/td_advantage}
-\input{sections/policy-optimization/nstep_returns}
-\input{sections/policy-optimization/gae_preview}
 \input{sections/policy-optimization/actor_critic_algorithm}
 \input{sections/policy-optimization/why_actor_critic}
+% Part 1b: GAE --- motivated as the fix for the bias/variance dial
+\input{sections/policy-optimization/gae_motivation}
+\input{sections/policy-optimization/nstep_returns}
+\input{sections/policy-optimization/gae_preview}
 % Part 2: A2C/A3C overview
 \input{sections/policy-optimization/a2c}
 \input{sections/policy-optimization/a3c}
 % Part 3: Trust region motivation
 \input{sections/policy-optimization/step_size_matters}
 \input{sections/policy-optimization/surrogate_objective}
-\input{sections/policy-optimization/theoretical_foundations}
 % Part 4: TRPO overview
 \input{sections/policy-optimization/trpo}
 % Part 5: PPO focus
@@ -49,6 +53,7 @@
 
 % Appendix / backup slides (not in the main Table of Contents)
 \appendix
+\input{sections/policy-optimization/foundations_backup}
 \input{sections/policy-optimization/trpo_backup}
 
 \end{document}

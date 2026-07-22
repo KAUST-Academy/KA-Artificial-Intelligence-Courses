@@ -4,8 +4,19 @@
 \includegraphics[width=0.9\textwidth,height=0.55\textheight,keepaspectratio]{images/policy-optimization/ppo_2.png}
 \end{figure}
 \begin{itemize}
-    \item \textbf{Sample efficiency:} PPO runs multiple SGD epochs over the same rollout --- unlike A2C which discards data after one update
-    \item \textbf{Combined loss:} $\mathcal{L}(\theta,\phi) = \mathcal{L}^{\mathrm{CLIP}}(\theta) - c_1 \mathcal{L}^{V}(\phi) + c_2 \mathcal{H}(\pi_\theta)$ (entropy bonus encourages exploration)
-    \item GAE is used to compute $\hat{A}_t$; the entropy term will reappear in SAC (Day 6)
+    \item \textbf{Sample efficiency:} PPO runs multiple SGD epochs over the same rollout --- unlike A2C, which discards data after one update
+    \item GAE is used to compute $\hat{A}_t$ once per rollout, before the epoch loop
+\end{itemize}
+\end{frame}
+
+\begin{frame}{PPO: The Three Terms of One Loss}
+Actor and critic share one optimizer step, so their objectives are added into a single number to differentiate --- that is all ``combined loss'' means:
+$$\mathcal{L}(\theta,\phi) = \underbrace{\mathcal{L}^{\mathrm{CLIP}}(\theta)}_{\text{1. make good actions likelier}} \;-\; c_1 \underbrace{\mathcal{L}^{V}(\phi)}_{\text{2. train the critic}} \;+\; c_2 \underbrace{\mathcal{H}(\pi_\theta)}_{\text{3. stay exploratory}}$$
+\begin{itemize}
+    \item \textbf{1. $\mathcal{L}^{\mathrm{CLIP}}$} --- the clipped surrogate we just built. \emph{Maximized}, so it enters with $+$.
+    \item \textbf{2. $\mathcal{L}^{V} = \mathbb{E}_t[\delta_t^2]$} --- the critic's squared TD error. We \emph{minimize} it, hence the minus sign: subtracting it from a quantity we maximize is the same as minimizing it. $c_1 \approx 0.5$ balances the two scales.
+    \pause
+    \item \textbf{3. $\mathcal{H}(\pi_\theta)$} --- the \textbf{entropy} of the action distribution: high when the policy is still undecided, near zero when it always picks one action. Adding it \emph{rewards} indecision, which stops the policy from collapsing onto one action before it has explored. $c_2$ is small ($\approx 0.01$); the term reappears as a first-class citizen in SAC (Day 6).
+    \item In code this is three lines summed and passed to one \texttt{loss.backward()} --- no separate actor and critic updates.
 \end{itemize}
 \end{frame}

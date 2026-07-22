@@ -1,20 +1,71 @@
-\section{Surrogate Objective}
-\begin{frame}{Surrogate Objective \& Importance Sampling}
+\section{The Surrogate Objective}
+% Bridge frame: the relative-performance identity used to appear with no
+% motivation. The chain is: we want small safe steps -> to take a step we must
+% be able to *score* a candidate policy from old data -> identity + importance
+% sampling give us exactly that score -> it is only valid nearby -> constraint.
+\begin{frame}{What We Actually Need Before We Can Take a Safe Step}
 \begin{itemize}
-    \item \textbf{Relative policy performance identity:} the improvement of $\pi_{\theta}$ over $\pi_{\theta_\text{old}}$ can be written as:
-    $$\mathcal{J}(\theta) - \mathcal{J}(\theta_\text{old}) = \mathbb{E}_{\tau \sim \pi_\theta}\!\left[\sum_{t \geq 0} \gamma^t A^{\pi_{\theta_\text{old}}}(s_t, a_t)\right]$$
-    \item Since we collect data under $\pi_{\theta_\text{old}}$, re-weight via importance sampling. Define the probability ratio:\footnotemark
-    $$r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_\text{old}}(a_t|s_t)}$$
-    \item This gives the \textbf{surrogate objective}:
-    $$\mathcal{L}(\theta) = \mathbb{E}_t\!\left[ r_t(\theta)\, A^{\pi_{\theta_\text{old}}}(s_t, a_t) \right]$$
+    \item Last slide's conclusion: \emph{don't let the policy move too far in one update}. But to act on that we first need to answer a prior question:
+    \vspace{0.3em}
+    \item[] \begin{center}\textbf{Given a candidate $\pi_\theta$, how much better or worse is it than $\pi_{\theta_\text{old}}$ --- \emph{without running it}?}\end{center}
+    \vspace{0.3em}
+    \item Why we can't just run it: evaluating $\mathcal{J}(\theta)$ means collecting a fresh batch of rollouts for \emph{every} candidate $\theta$ we consider. That is prohibitively expensive --- and if the candidate is bad, we only find out by damaging the agent.
+    \vspace{0.3em}
+    \item[$\Rightarrow$] So we need a \textbf{score we can compute from the batch we already collected} --- a stand-in for $\mathcal{J}(\theta)$, called a \textbf{surrogate objective}. Next slide builds it from scratch.
 \end{itemize}
-\footnotetext{$r_t(\theta)$ here is the probability ratio, not the reward $r_t$ from earlier lectures --- distinguished by the $\theta$ argument.}
 \end{frame}
 
-\begin{frame}{Surrogate Objective: Why It Needs a Constraint}
+\begin{frame}{Building That Score Out of What the Batch Already Contains}
+\textbf{What the batch contains:} for every timestep, the state $s_t$, the action $a_t$ we took, and $\hat{A}_t$ --- whether that action turned out better ($+$) or worse ($-$) than usual.
 \begin{itemize}
-    \item \textbf{Problem:} if $\pi_\theta$ drifts far from $\pi_{\theta_\text{old}}$, the ratio $r_t(\theta)$ explodes and the estimate becomes unreliable
-    \item \textbf{Solution:} \textbf{constrain how far $\pi_\theta$ can move} from $\pi_{\theta_\text{old}}$
-    \item Next we make this precise: \textit{why} the surrogate is principled in the first place, and \textit{why} importance sampling specifically demands a constraint --- before turning to TRPO and PPO, which both implement the constraint in different ways
+    \item A candidate $\pi_\theta$ cannot change what happened. The \emph{only} thing it changes is \textbf{how likely each of those actions would have been}.
+    \pause
+    \item So the question collapses to: \emph{does $\pi_\theta$ put more probability on the actions that went well, and less on the ones that went badly?}
+    \pause
+    \item Measure that per action with the \textbf{probability ratio}:\footnotemark
+    $$r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_\text{old}}(a_t|s_t)} \qquad
+    \begin{array}{l} 1 : \text{would take } a_t \text{ just as often} \\ 2 : \text{twice as often} \quad 0.5 : \text{half as often} \end{array}$$
+    \pause
+    \item Score each sample by \textbf{(how much more the new policy wants it) $\times$ (how good it was)}, and average:
+    $$\mathcal{L}(\theta) = \mathbb{E}_t\!\left[\, r_t(\theta)\; \hat{A}_t \,\right]$$
+\end{itemize}
+\footnotetext{$r_t(\theta)$ is the probability ratio, not the reward $r_t$ from earlier lectures --- distinguished by the $\theta$ argument.}
+\end{frame}
+
+\begin{frame}{Why Multiply? A Two-Action Batch}
+Every column is a number we can just compute: $\hat{A}_t$ from the critic, the probabilities by evaluating each network on $(s_t,a_t)$.
+\begin{center}
+\small
+\begin{tabular}{lccccc}
+\hline
+ & $\hat{A}_t$ & $\pi_{\theta_\text{old}}(a_t|s_t)$ & $\pi_\theta(a_t|s_t)$ & $r_t(\theta)$ & $r_t(\theta)\,\hat{A}_t$ \\
+\hline
+went well      & $+2.0$ & $0.20$ & $0.40$ & $2.0$ & $+4.0$ \\
+went badly     & $-1.0$ & $0.50$ & $0.40$ & $0.8$ & $-0.8$ \\
+\hline
+\end{tabular}
+\end{center}
+\begin{itemize}
+    \item $\mathcal{L}(\theta) = \tfrac{1}{2}(4.0 - 0.8) = +1.6 > 0$: the candidate \textbf{doubles down on what worked, backs off what didn't}. Ascending $\mathcal{L}$ searches for exactly that.
+    \pause
+    \item \textbf{Why the ratio is the right multiplier:} the batch was collected by the \emph{old} policy, so each action appears about as often as \emph{it} would have chosen it. If the new policy would pick that action twice as often, the sample should count twice. That re-counting is all the ratio does.
+    \pause
+    \item At $\theta = \theta_\text{old}$ every $r_t = 1$, so $\mathcal{L}$ starts at $\approx 0$ and its gradient is exactly the Day 3 policy gradient. \textbf{This is the objective PPO maximizes.}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why the Surrogate Only Works Nearby}
+$\mathcal{L}(\theta)$ is an \emph{approximation} of the true improvement, and it degrades in two ways as $\pi_\theta$ moves away from $\pi_{\theta_\text{old}}$:
+\vspace{0.3em}
+\begin{block}{1. The re-weighting becomes statistically useless}
+If $\pi_{\theta_\text{old}}(a|s)$ is tiny where $\pi_\theta(a|s)$ is large, $r_t(\theta)$ blows up: one rare sample gets an enormous weight and swings the entire gradient. The estimate stays unbiased but its \textbf{variance explodes}.
+\end{block}
+\begin{block}{2. We quietly swapped the state distribution}
+Importance sampling corrects for the \emph{actions}, but we still evaluate them at the states $\pi_{\theta_\text{old}}$ happened to visit. A very different policy visits very different states --- so the surrogate scores the new policy on a world it will no longer see.
+\end{block}
+\vspace{0.3em}
+\begin{itemize}
+    \item Both errors are \textbf{small when the two policies are close}, and unbounded when they are not.
+    \item[$\Rightarrow$] This is the principled version of ``big steps break things''. Everything that follows --- TRPO and PPO --- is one idea: \textbf{maximize $\mathcal{L}(\theta)$ while keeping $\pi_\theta$ close to $\pi_{\theta_\text{old}}$}, differing only in how ``close'' is enforced.
 \end{itemize}
 \end{frame}

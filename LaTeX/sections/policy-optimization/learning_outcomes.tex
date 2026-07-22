@@ -1,11 +1,13 @@
 \section{Learning Outcomes}
 \begin{frame}{Learning Outcomes}
     \begin{itemize}
-        \setlength{\itemsep}{0.8em}
-        \item Explain why a learned critic reduces variance and enables online updates (Actor-Critic)
-        \item Derive the TD-residual advantage estimator and connect it to the Bellman equation
-        \item Describe A2C and A3C at a high level and identify when each is preferred
-        \item State the TRPO trust-region constraint and why it prevents policy collapse
-        \item Implement the PPO clipped objective and explain how clipping enforces the trust region
+        \setlength{\itemsep}{0.55em}
+        \item Explain \textbf{TD learning} --- what the TD error is, why the critic is trained on its \emph{square}, and how it connects to the Q-learning update from Days 1--2
+        \item Explain why a learned critic reduces variance and enables online updates (\textbf{Actor-Critic}), and derive the TD-residual estimate of the advantage
+        \item Use $\lambda$ (\textbf{GAE}) to trade bias against variance, and read $\hat{A}_t$ as ``how much better than usual this action turned out''
+        \item Describe \textbf{A2C} and A3C at a high level and identify when each is preferred
+        \item Explain why we need a \textbf{surrogate objective} $\mathcal{L}(\theta) = \mathbb{E}_t[r_t(\theta)\hat{A}_t]$ to score a candidate policy from already-collected data --- and why it is only trustworthy nearby
+        \item State the \textbf{TRPO} trust-region constraint, and why its cost is what motivates PPO
+        \item Implement the \textbf{PPO} clipped objective, and identify the three terms of its combined loss
     \end{itemize}
 \end{frame}

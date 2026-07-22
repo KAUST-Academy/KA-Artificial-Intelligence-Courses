@@ -1,13 +1,25 @@
 \begin{frame}{From Baselines to Critics}
 \begin{itemize}
-    \item Day 3: subtracting a \textbf{state-dependent baseline} $b(s)$ reduces variance with zero bias:
-    $$\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_t\!\left[\nabla_\theta \log \pi_\theta(a_t|s_t)\, \bigl(Q^{\pi}(s_t,a_t) - b(s_t)\bigr)\right]$$
-    \item The best choice of baseline is $b(s) = V^{\pi}(s)$, giving $A^{\pi}(s,a) = Q^{\pi}(s,a) - V^{\pi}(s)$
+    \item Day 3: subtracting a \textbf{state-dependent baseline} $b(s)$ from the reward-to-go reduces variance with zero bias:
+    $$\nabla_\theta \mathcal{J}(\theta) \approx \sum_{t \geq 0} \Bigl( \underbrace{\textstyle\sum_{t' \geq t} \gamma^{t'-t} r_{t'}}_{\text{reward-to-go}} - b(s_t) \Bigr)\, \nabla_\theta \log \pi_\theta(a_t|s_t)$$
     \pause
+    \item The reward-to-go is one \emph{sampled} rollout starting from $(s_t, a_t)$. Its \emph{expectation} is, by definition, the Q-value: $Q^{\pi}(s_t,a_t) = \mathbb{E}\!\left[\sum_{t' \geq t} \gamma^{t'-t} r_{t'} \mid s_t, a_t, \pi\right]$
+    \item So the same estimator, written in expectation, is:
+    $$\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_t\!\left[\bigl(Q^{\pi}(s_t,a_t) - b(s_t)\bigr)\, \nabla_\theta \log \pi_\theta(a_t|s_t)\right]$$
+    \item Best choice of baseline: $b(s) = V^{\pi}(s)$, giving the advantage $A^{\pi}(s,a) = Q^{\pi}(s,a) - V^{\pi}(s)$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{From Baselines to Critics}
+\begin{itemize}
+    \item So the ideal weight on each $\nabla_\theta \log \pi_\theta(a_t|s_t)$ is $A^{\pi}(s_t,a_t) = Q^{\pi}(s_t,a_t) - V^{\pi}(s_t)$
     \item But we don't know $V^{\pi}$ --- we have to \textbf{learn it}
     \item This turns the baseline into a \textbf{critic}: a second network $V_\phi(s)$ trained alongside the actor $\pi_\theta$
     \vspace{0.5em}
-    \item \textbf{Actor} $\pi_\theta(a|s)$: selects actions, updated by policy gradient
-    \item \textbf{Critic} $V_\phi(s)$: evaluates states, updated by TD learning
+    \item \textbf{Actor} $\pi_\theta(a|s)$: selects actions, updated by the policy gradient (Day 3)
+    \item \textbf{Critic} $V_\phi(s)$: evaluates states, updated by \textbf{TD learning} --- the subject of the next slide
+    \pause
+    \vspace{0.5em}
+    \item \textbf{Why only $V$, and not $Q$ as well?} $A^{\pi} = Q^{\pi} - V^{\pi}$ looks like it needs both. It doesn't: one observed reward plus the critic at the next state already stands in for $Q^{\pi}$. That is exactly what the TD error does.
 \end{itemize}
 \end{frame}

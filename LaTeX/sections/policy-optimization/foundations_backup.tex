@@ -1,0 +1,25 @@
+% Backup / appendix slides: the formal statements behind the surrogate objective.
+% These were previously a "Theoretical Foundations" section in the main flow, but
+% the intuition they carry now lives on the Surrogate Objective slides. Kept here
+% for students who want the named results and the variance algebra.
+\begin{frame}{Backup --- Performance Difference Lemma}
+\begin{itemize}
+    \item The relative performance identity is the \textbf{Performance Difference Lemma}\footnotemark[1]
+    $$\mathcal{J}(\theta) - \mathcal{J}(\theta_\text{old}) = \mathbb{E}_{\tau \sim \pi_\theta}\!\left[\sum_{t \geq 0} \gamma^t A^{\pi_{\theta_\text{old}}}(s_t, a_t)\right]$$
+    \item \textbf{Why it matters:} it makes the surrogate $\mathcal{L}(\theta)$ a \textbf{principled approximation} to the true objective $\mathcal{J}(\theta)$ --- not a heuristic
+    \item When $\pi_\theta \approx \pi_{\theta_\text{old}}$, the state distributions induced by the two policies are similar, so samples from $\pi_{\theta_\text{old}}$ can stand in for samples from $\pi_\theta$ with \emph{bounded} error --- TRPO makes this bound explicit in terms of the maximum KL divergence
+    \item As $\pi_\theta$ drifts away, the bound degrades. This is the theoretical reason for a trust region
+\end{itemize}
+\footnotetext[1]{Lemma originally due to Kakade \& Langford (2002); foundation of TRPO in Schulman et al.\ (2015).}
+\end{frame}
+
+\begin{frame}{Backup --- Importance Sampling Variance}
+\begin{itemize}
+    \item The IS-weighted estimator has variance
+    $$\mathrm{Var}\!\left[\tfrac{P(x)}{Q(x)}\, f(x)\right] = \mathbb{E}_{x \sim P}\!\left[\tfrac{P(x)}{Q(x)}\, f(x)^2\right] - \mathbb{E}[f]^2$$
+    \item It \textbf{explodes} when the ratio $\tfrac{P}{Q}$ is large where $f^2$ is large --- a single bad sample dominates the estimate
+    \item For \textbf{trajectory-level} IS: $\frac{p(\tau|\pi_\theta)}{p(\tau|\pi_{\theta_\text{old}})} = \prod_{t=0}^{T} r_t(\theta)$. Small per-step differences \textbf{compound multiplicatively} over $T$ steps --- the variance is hopeless
+    \item This is why TRPO and PPO use \textbf{single-step ratios} and constrain them to stay near $1$\footnotemark[2]
+\end{itemize}
+\footnotetext[2]{Full derivation in OpenAI's \href{https://spinningup.openai.com/en/latest/algorithms/trpo.html}{Spinning Up: TRPO} and Schulman et al.\ (2015).}
+\end{frame}

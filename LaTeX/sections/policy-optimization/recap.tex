@@ -5,12 +5,13 @@
 
 \begin{frame}{Recap: What Day 3 Established}
 \begin{itemize}
-    \item The policy gradient theorem gives us:
-    $$\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t \geq 0} \nabla_\theta \log \pi_\theta(a_t|s_t)\, A^{\pi}(s_t, a_t) \right]$$
-    \item $A^{\pi}(s,a) = Q^{\pi}(s,a) - V^{\pi}(s)$ is the \textbf{advantage function} --- the optimal baseline
+    \item \textbf{The objective is unchanged from Day 3} --- maximize the expected discounted return:
+    $$\mathcal{J}(\theta) = \mathbb{E} \left [ \sum_{t \geq 0} \gamma^t r_t \mid \pi_\theta \right ], \qquad \theta^{\star} = \arg\max_\theta \mathcal{J}(\theta)$$
+    \item Day 3 derived its gradient and, after variance reduction, ended at the estimator:
+    $$\nabla_\theta \mathcal{J}(\theta) \approx \sum_{t \geq 0} A^{\pi}(s_t, a_t)\, \nabla_\theta \log \pi_\theta(a_t|s_t)$$
+    \item $A^{\pi}(s,a) = Q^{\pi}(s,a) - V^{\pi}(s)$ is the \textbf{advantage function} --- the best baseline
     \item Using $A^{\pi}$ instead of raw returns reduces variance without introducing bias
-    \item \textbf{Unresolved question:} how do we estimate $A^{\pi}$ in practice?
-    \item Day 3 noted: we only need $V^{\pi}$, since the TD residual $\delta_t = r_t + \gamma V^{\pi}(s_{t+1}) - V^{\pi}(s_t)$ approximates $A^{\pi}$
+    \item \textbf{Unresolved question (Day 3's closing slide):} how do we actually estimate $A^{\pi}$?
 \end{itemize}
 \end{frame}
 
@@ -18,7 +19,8 @@
 \begin{itemize}
     \item \textbf{Today we cash that promise.}
     \item We learn a critic $V_\phi$ alongside the policy --- this is the \textbf{Actor-Critic} architecture
-    \item The critic is trained via TD learning; the TD residual $\delta_t$ serves as an online, low-variance estimate of $A^{\pi}$
+    \item Good news: we only need to learn $V^{\pi}$, not $Q^{\pi}$ --- one network, one output per state
+    \item The critic is trained by \textbf{TD learning} (which we unpack in a few slides); its one-step error is what gives us an online, low-variance estimate of $A^{\pi}$
     \item Then we scale up: A2C/A3C $\rightarrow$ trust region (TRPO) $\rightarrow$ clipped objective (PPO)
 \end{itemize}
 \end{frame}

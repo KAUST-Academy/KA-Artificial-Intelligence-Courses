@@ -1,12 +1,13 @@
 \begin{frame}{GAE: The Two Limits}
 \begin{itemize}
-    \item GAE gives a single knob $\lambda$ that interpolates the bias--variance trade-off:
-    $$\hat{A}^{\mathrm{GAE}(\gamma,\lambda)}_t = \sum_{l=0}^{\infty} (\gamma\lambda)^l\, \delta_{t+l}$$
+    \item The single knob $\lambda$ in $\hat{A}^{\mathrm{GAE}(\gamma,\lambda)}_t = \sum_{l \geq 0} (\gamma\lambda)^l\, \delta_{t+l}$ interpolates the bias--variance trade-off:
     \item $\lambda = 0$: pure 1-step TD --- low variance, biased
-    \item $\lambda = 1$: full Monte Carlo ($G_t - V_\phi(s_t)$) --- unbiased, high variance
+    \item $\lambda = 1$: full Monte Carlo ($R_t - V_\phi(s_t)$) --- unbiased, high variance
     \item $\lambda \approx 0.95$: standard in PPO implementations
+    \item \textbf{Read $\lambda$ as ``how much do I trust my critic?''} --- small $\lambda$ leans on $V_\phi$, large $\lambda$ leans on the observed rewards
     \pause
-    \item We write $\hat{A}_t$ for short: a \textbf{practical estimate} of the true advantage $A^{\pi}(s_t, a_t)$ from Day 1
-    \item \textbf{Used by PPO in the lab} --- we revisit this when implementing the algorithm
+    \item \textbf{Computed backwards in one pass} over a rollout --- the form you will implement:
+    $$\hat{A}_t = \delta_t + \gamma\lambda\, \hat{A}_{t+1}, \qquad \hat{A}_T = 0$$
+    \item We write $\hat{A}_t$ for short: our \textbf{practical estimate} of the true advantage $A^{\pi}(s_t,a_t)$
 \end{itemize}
 \end{frame}

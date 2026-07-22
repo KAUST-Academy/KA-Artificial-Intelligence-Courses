@@ -22,7 +22,8 @@ Initialise actor $\theta$, critic $\phi$\;
     \item \textbf{Actor} steps along the policy gradient, weighted by $\delta_t$
     \item \textbf{Critic} regresses $V_\phi(s_t)$ toward $r_t + \gamma V_\phi(s_{t+1})$
     \item The same $\delta_t$ drives \emph{both} updates --- no full trajectory needed
-    \item This is the pure \textbf{TD} form; batched A2C/PPO swap the single $\delta_t$ for a \textbf{GAE} estimate $\hat{A}_t$ over minibatches
+    \item Note the signs: the actor \emph{ascends} ($+$) to maximize return; the critic \emph{descends} ($-$) to minimize $\mathbb{E}[\delta_t^2]$
+    \item This is the pure \textbf{1-step TD} form. It is complete and it works --- but the single $\delta_t$ is a crude advantage estimate, which is what we fix next
 \end{itemize}
 \end{column}
 \end{columns}

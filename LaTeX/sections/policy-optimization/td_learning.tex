@@ -1,0 +1,42 @@
+% Introduces TD learning before it is used to train the critic.
+% Days 1-2 used TD updates (Q-learning, SARSA, DQN) without ever naming them,
+% so this slide names the idea and connects it to what students already ran.
+\begin{frame}{What Is TD Learning? (You Have Already Used It)}
+\textbf{Temporal Difference (TD) learning} = update a prediction using a \emph{later, better-informed} prediction, instead of waiting for the final outcome.
+\vspace{0.4em}
+\begin{itemize}
+    \item \textbf{Monte Carlo (Day 3):} to learn ``how good is $s_t$?'', play the episode to the end and use the actual \textbf{reward-to-go} $R_t = \sum_{t' \geq t} \gamma^{t'-t} r_{t'}$ --- the same quantity REINFORCE used. Correct on average, but you wait, and the answer swings wildly.
+    \item \textbf{TD:} take \emph{one} step. You now know the real reward $r_t$ and you can look up your own estimate of the next state. That combination is already a better estimate of $s_t$'s value than your current guess:
+    $$\underbrace{V_\phi(s_t)}_{\text{old guess}} \quad\text{vs.}\quad \underbrace{r_t + \gamma V_\phi(s_{t+1})}_{\text{TD target: 1 real reward + guess for the rest}}$$
+    \item The gap between them is the \textbf{TD error}:
+    $$\delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$$
+    \item Using your own later estimate inside the target is called \textbf{bootstrapping}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{TD Learning: Same Rule You Saw in Days 1--2}
+\begin{itemize}
+    \item Every value-based update in this course has been a TD update --- we simply had not named it:
+    \begin{align*}
+        \textbf{Q-learning (Day 1):}\quad & Q(s,a) \leftarrow Q(s,a) + \alpha \big[\, r + \gamma \max_{a'} Q(s',a') - Q(s,a) \,\big] \\
+        \textbf{SARSA (Day 2):}\quad & Q(s,a) \leftarrow Q(s,a) + \alpha \big[\, r + \gamma Q(s',a') - Q(s,a) \,\big] \\
+        \textbf{TD for our critic:}\quad & V_\phi(s_t) \leftarrow V_\phi(s_t) + \alpha \big[\, \underbrace{r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)}_{\delta_t} \,\big]
+    \end{align*}
+    \item Same shape every time: \emph{move the prediction a little toward the target}. Day 1 called the bracket the \textbf{Bellman error}; for a one-step sample it is the TD error.
+    \pause
+    \item \textbf{Why TD suits an actor-critic:} it gives a learning signal at \emph{every} timestep (no waiting for the episode to end), and it works in continuing tasks with no terminal state.
+    \item \textbf{The catch:} the target contains our own guess $V_\phi(s_{t+1})$. If the critic is wrong, we are chasing a wrong target --- TD is \textbf{biased} but \textbf{low variance}, the mirror image of Monte Carlo.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Training the Critic: Why the \emph{Squared} Error?}
+The critic is trained by gradient descent on the \emph{squared} TD error --- Day 2's DQN loss $\big(y_i - Q\big)^2$, applied to $V$:
+$$\mathcal{L}(\phi) = \mathbb{E}_t\!\left[\delta_t^2\right] = \mathbb{E}_t\!\left[\bigl(\underbrace{r_t + \gamma V_\phi(s_{t+1})}_{\text{target } y_t} - V_\phi(s_t)\bigr)^2\right]$$
+\begin{itemize}
+    \item \textbf{Why not just $\delta_t$?} It is signed --- over-estimates give $\delta_t < 0$, under-estimates $\delta_t > 0$ --- so over a batch they \emph{cancel}: a critic wrong in both directions would report a loss of zero.
+    \pause
+    \item \textbf{Why not $|\delta_t|$?} Non-negative too, but its gradient has constant magnitude (a tiny error and a huge one pull equally hard) and is undefined at $0$. Squaring gives $\nabla_\phi \mathcal{L} = -2\,\mathbb{E}[\delta_t\, \nabla_\phi V_\phi(s_t)]$: \textbf{the correction scales with the size of the mistake} --- the ``nudge by $\alpha\,\delta_t$'' rule above.
+    \pause
+    \item \textbf{The deeper reason:} $V^{\pi}(s)$ \emph{is} an expectation, and the minimizer of a squared error is exactly the mean of the target --- squared error is the loss whose optimum is the quantity we want. ($|\delta_t|$ would converge to the \emph{median} return.)
+\end{itemize}
+\end{frame}

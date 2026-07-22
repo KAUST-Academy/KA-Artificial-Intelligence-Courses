@@ -5,29 +5,49 @@
 
 \begin{frame}{Recap: What Day 4 Established}
 \begin{itemize}
-    \item \textbf{Actor-Critic} pairs a policy (actor) with a learned value function (critic) that supplies low-variance gradient signal
-    \item The on-policy policy gradient:
-    $$\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t} \nabla_\theta \log \pi_\theta(a_t|s_t)\, A^{\pi}(s_t, a_t) \right]$$
-    \item A2C/A3C $\rightarrow$ TRPO $\rightarrow$ \textbf{PPO}: the workhorse of stable on-policy RL
-    \item \textbf{Key limitation (the main one):} on-policy methods \emph{discard all experience after each update} --- extremely data-hungry in complex environments. Going \emph{off-policy} and reusing a replay buffer is the central win today
-    \item \emph{Secondary:} a \emph{deterministic} actor is more parsimonious for high-dimensional actuators --- no action distribution to sample or integrate over
+    \item \textbf{Actor-Critic}: an actor $\pi_\theta(a|s)$ updated by the policy gradient, plus a critic $V_\phi(s)$ trained by TD learning to supply a low-variance advantage estimate $\hat{A}_t$:
+    $$\nabla_\theta \mathcal{J}(\theta) = \mathbb{E}_t\!\left[ \nabla_\theta \log \pi_\theta(a_t|s_t)\, \hat{A}_t \right]$$
+    \item The family tree ran: A2C/A3C $\rightarrow$ +GAE $\rightarrow$ TRPO $\rightarrow$ \textbf{PPO} $\rightarrow$ \textbf{GRPO} (critic-free, group-mean baseline --- the current LLM-RL default)
+    \item \textbf{Key limitation (the one we attack today):} every method in that tree is \emph{on-policy} --- it \emph{discards all experience after each update}. Reusing a replay buffer is the central win today
+    \item \emph{Secondary:} the actor is always \emph{stochastic}. For a physical actuator you eventually just want one number per joint --- no distribution to sample or integrate over
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Recap: What Today Delivers}
 \begin{itemize}
     \item \textbf{Today we go off-policy and continuous.}
-    \item \textbf{DPG} \rref{4}: a policy-gradient update rule for \emph{deterministic} policies $\mu_\theta(s)$ over continuous action spaces
-    \item \textbf{DDPG} \rref{5}: DPG made deep, by importing the DQN \rref{6} tricks (replay buffer, target networks) --- off-policy, sample-reusing
-    \item The critic becomes an action-value $Q_\phi(s,a)$; the policy gradient flows \emph{through the critic}: $\nabla_\theta Q_\phi(s,\mu_\theta(s))$
-    \item We close with \textbf{TD3}, the direct fix for DDPG's overestimation and brittleness --- and the bridge to Day 6 (SAC)
+    \item \textbf{DPG} \rref{1}: a policy-gradient update rule for a \emph{deterministic} actor $\mu_\theta(s)$ over continuous action spaces
+    \item \textbf{DDPG} \rref{2}: DPG made deep, by importing the DQN \rref{3} tricks you already know --- replay buffer and target networks
+    \item The critic becomes an \emph{action}-value $Q_\phi(s,a)$, and the actor's gradient flows \emph{through the critic}: $\nabla_\theta Q_\phi(s, \mu_\theta(s))$
+    \item We close with \textbf{TD3} \rref{4}, the direct fix for DDPG's overestimation and brittleness --- and the bridge to Day 6 (SAC)
+    \vspace{0.4em}
+    \item[] \footnotesize \textcolor{red}{Scope note:} PPO already handles continuous actions \emph{on-policy}. ``Continuous Control I/II'' is specifically the \emph{off-policy} branch: deterministic policies (DDPG/TD3, today) and max-entropy stochastic policies (SAC, Day 6).
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Scope \& Notation}
-\begin{itemize}
-    \item \footnotesize \textcolor{red}{Note:} PPO already handles continuous actions \emph{on-policy}; ``Continuous Control I/II'' is specifically the \emph{off-policy, deterministic-policy} branch (DDPG/TD3 today) and the \emph{max-entropy} branch (SAC, Day 6).
-    \vspace{0.5em}
-    \item \textbf{Notation convention:} $\mu_\theta$ denotes the \emph{deterministic} actor, $\pi_\theta$ a \emph{stochastic} policy --- used consistently throughout.
-\end{itemize}
+\begin{frame}{Notation: What Carries Over, What Is New}
+\vspace{-0.2em}
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{lll}
+\hline
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Where you saw it} \\
+\hline
+$\mathcal{J}(\theta)$        & expected discounted return (the objective)   & Days 3--4 \\
+$\theta$                     & \textbf{actor} parameters                    & Days 3--4 \\
+$\phi$                       & \textbf{critic} parameters                   & Day 4 \\
+$\theta^{-},\ \phi^{-}$      & \emph{target} network parameters             & Day 2 (DQN) \\
+$\mathcal{D}$                & replay buffer                                & Day 2 (DQN) \\
+$\pi_\theta(a|s)$            & \emph{stochastic} actor                      & Days 3--4 \\
+$\mu_\theta(s)$              & \emph{deterministic} actor \; \textcolor{red}{(new today)} & Day 3, as the Gaussian mean \\
+$Q_\phi(s,a)$                & \emph{action}-value critic \; \textcolor{red}{(new today)} & Day 4's critic was $V_\phi(s)$ \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{0.5em}
+{\footnotesize
+\textbf{Why $\mu$ for the actor?} Day 3 already wrote the continuous-action policy as a Gaussian,
+$\pi_\theta(a|s) = \mathcal{N}\!\big(\mu_\theta(s),\, \sigma_\theta(s)^2\big)$.
+Today we keep the mean and throw the noise away: the actor \emph{is} $\mu_\theta(s)$. Same letter, same network --- we have simply deleted $\sigma_\theta$. Keeping $\pi$ and $\mu$ distinct also matters on Day 6, where SAC puts a stochastic actor back.}
 \end{frame}

@@ -1,19 +1,32 @@
-\begin{frame}{Deterministic Policy Gradient}
-\vspace{1em}
-\textbf{DPG} \rref{4}
-\begin{itemize}
-    \item[--] Finds deterministic policy
-    \item[--] Applicable to continuous action space
-\end{itemize}
-\end{frame}
+% The "The One Thing That Breaks: arg max_a Q(s,a)" build-up frames that used
+% to open this file are gone. The previous slide ("What is continuous
+% control?") already makes the point that you cannot enumerate a continuous
+% action set and so cannot take an arg max over it; re-deriving it in three
+% more frames was repetition. The one line that was worth keeping -- train a
+% network to output the maximising action -- is now the first bullet below.
 
-\begin{frame}{Deterministic Policy Gradient}
-\vspace{1em}
-\textbf{DPG} \rref{4}
+\begin{frame}{DPG and DDPG in One Slide}
+\vspace{0.3em}
+We cannot search for $\arg\max_a Q(s,a)$ any more. So we stop searching, and
+\textbf{train a second network to output that action for us:} $\mu_\theta(s) \approx \arg\max_a Q_\phi(s,a)$. One forward pass replaces the search. That network is the \textbf{actor}.
+\vspace{0.7em}
+\pause
+
+\textbf{DPG} (Deterministic Policy Gradient) \rref{1} --- tells us how to \emph{train} that actor
 \begin{itemize}
-    \item[--] Finds deterministic policy
-    \item[--] Applicable to continuous action space
-    \vspace{0.5em}
-    \item[--] Predates deep RL (linear function approximators) --- can we go \emph{deep}?
+    \item[--] Works over a \emph{continuous} action space
+    \item[--] But it predates deep RL --- linear function approximators only
 \end{itemize}
+\pause
+\vspace{0.6em}
+\textbf{DQN} (Deep Q-Network) \rref{3} --- Day 2
+\begin{itemize}
+    \item[--] Learns value functions with \emph{neural networks}, kept stable by a \textbf{replay buffer} and a \textbf{target network}
+    \item[--] But only over \emph{discrete} action spaces (it needs that $\max_{a'}$)
+\end{itemize}
+\pause
+\vspace{0.7em}
+\begin{center}
+\textcolor{red}{\textbf{DDPG} \rref{2} $=$ DPG $+$ DQN's tricks: a model-free, \emph{off-policy}, actor-critic algorithm\\ that learns a deterministic policy on a continuous action space.}
+\end{center}
 \end{frame}

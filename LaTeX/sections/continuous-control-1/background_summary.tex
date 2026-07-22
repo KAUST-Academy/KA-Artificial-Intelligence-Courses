@@ -1,47 +1,17 @@
+% Was four duplicate build-up frames; now one frame with \pause.
 \begin{frame}{Background Summary}
+\vspace{0.5em}
 \begin{itemize}
-    \item \textbf{DPG:} Formulates an update rule for deterministic policies, so that we can learn deterministic policy on continuous action domain
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Background Summary}
-\begin{itemize}
-    \item \textbf{DPG:} Formulates an update rule for deterministic policies, so that we can learn deterministic policy on continuous action domain
-    \vspace{0.5em}
-    \item \textbf{DQN:} Enables learning value functions with neural nets, with two tricks:
+    \setlength{\itemsep}{0.7em}
+    \item \textbf{DPG} \rref{1}: an update rule for \emph{deterministic} actors, so we can learn a policy on a continuous action domain without ever computing $\arg\max_a Q$
+    \\[0.2em] \textcolor{red}{$\Rightarrow$ model-free, actor-critic}
+    \pause
+    \item \textbf{DQN} \rref{3}: value functions with neural networks, made to converge by two tricks
     \begin{itemize}
-        \item Target Network
-        \item Replay Buffer
+        \item \textbf{Target network} --- a frozen copy supplies the TD target, so we are not chasing our own tail
+        \item \textbf{Replay buffer} --- decorrelates consecutive samples \; \textcolor{red}{$\Rightarrow$ off-policy}
     \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Background Summary}
-\begin{itemize}
-    \item \textbf{DPG:} Formulates an update rule for deterministic policies, so that we can learn deterministic policy on continuous action domain
-    \vspace{0.3em}
-    \\ \textcolor{red}{Model-Free, Actor-Critic}
-    \vspace{0.5em}
-    \item \textbf{DQN:} Enables learning value functions with neural nets, with two tricks:
-    \begin{itemize}
-        \item Target Network
-        \item Replay Buffer -- \textcolor{red}{Off-Policy}
-    \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Background Summary}
-\begin{itemize}
-    \item \textbf{DPG:} Formulates an update rule for deterministic policies, so that we can learn deterministic policy on continuous action domain
-    \vspace{0.3em}
-    \\ \textcolor{red}{Model-Free, Actor-Critic}
-    \vspace{0.5em}
-    \item \textbf{DQN:} Enables learning value functions with neural nets, with two tricks:
-    \begin{itemize}
-        \item Target Network
-        \item Replay Buffer -- \textcolor{red}{Off-Policy}
-    \end{itemize}
-    \vspace{0.5em}
-    \item \textbf{DDPG:} Learn both the policy and the value function in DPG with neural networks, with DQN tricks!
+    \pause
+    \item \textbf{DDPG} \rref{2}: learn \emph{both} the actor and the critic of DPG with neural networks, using the DQN tricks to keep it stable
 \end{itemize}
 \end{frame}

@@ -1,61 +1,26 @@
-\section{Motivation}
-\begin{frame}{Can reinforcement learning solve robotics?}
-\begin{columns}[T]
-\begin{column}{0.55\textwidth}
-\footnotesize
-\textbf{Alpha Go Zero}~\raisebox{-0.3em}{\includegraphics[height=1.1em]{images/continuous-control-1/figures/alpha-go-logo.jpg}}~\rref{1}
-\vspace{0.2em}
-
-\scriptsize selecting among possible moves for that piece. We represent the policy $\pi(a|s)$ by a $8 \times 8 \times 73$ stack of planes encoding a probability distribution over \fbox{4{,}672 possible moves}. Each of the $8 \times 8$ positions identifies the square from which to ``pick up'' a piece. The first 56 planes encode\ldots
-
-\vspace{0.6em}
-\footnotesize
-\textbf{OpenAI Five --- Dota 2}~\raisebox{-0.3em}{\includegraphics[height=1.1em]{images/continuous-control-1/figures/dota-logo.jpg}}~\rref{2}
-\vspace{0.2em}
-
-\scriptsize floats and categorical values with hundreds of possibilities) each time step. \fbox{We discretize the} action space; on an average timestep our model chooses among \fbox{8{,}000} to 80{,}000 actions (depending on hero). For comparison Chess requires around one thousand\ldots
-
-\vspace{0.6em}
-\footnotesize
-\textbf{Alpha Star}~\raisebox{-0.3em}{\includegraphics[height=1.1em]{images/continuous-control-1/figures/alpha-go-logo.jpg}}~\rref{3}
-\vspace{0.2em}
-
-\scriptsize observe and act next (Fig.~1a). This representation of actions in approximately \fbox{$10^{26}$ possible choices} at each step. Similar\ldots
-\end{column}
-\begin{column}{0.42\textwidth}
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/alpha-star.jpg}
-\end{figure}
-\end{column}
-\end{columns}
-\end{frame}
+\section{Continuous Action Spaces}
+% The old opening slide ("Can reinforcement learning solve robotics?") pasted
+% three cropped paper excerpts from AlphaGo Zero / OpenAI Five / AlphaStar just
+% to say "their action spaces are large but discrete". That single point is made
+% directly, in one bullet, on the slide below --- so the excerpt slide is gone.
 
 \begin{frame}{What is \emph{continuous control}?}
 \vspace{0.6em}
-\textbf{Control:} choosing actions over time to drive a dynamical system toward desired behaviour --- exactly the RL problem on an MDP $(\mathcal{S},\mathcal{A},P,r,\gamma)$.
+\textbf{Control:} choosing actions over time to drive a dynamical system toward desired behaviour --- exactly the RL problem on an MDP $(\mathcal{S},\mathcal{A},P,r,\gamma)$ from Day 1.
 \vspace{0.6em}
 \begin{itemize}
-    \item \textbf{Discrete control:} the action set $\mathcal{A}$ is a \emph{finite} list --- move left/right, one of 4{,}672 Go moves, an Atari button. The policy picks one entry.
+    \item \textbf{Discrete control} (Days 1--2): the action set $\mathcal{A}$ is a \emph{finite list} --- move left/right, an Atari button, one of Go's 4{,}672 legal moves. The policy picks one entry.
     \vspace{0.3em}
-    \item \textbf{Continuous control:} the action is a \emph{real-valued vector} $a \in \mathbb{R}^{d}$ (often bounded), e.g.\ $\mathcal{A} = [-1,1]^{d}$.
+    \item \textbf{Continuous control} (today): the action is a \emph{real-valued vector} $a \in \mathbb{R}^{d}$, usually bounded, e.g.\ $\mathcal{A} = [-1,1]^{d}$.
     \begin{itemize}
         \footnotesize
-        \item Robot arm: joint torques; Locomotion: motor commands; Driving: steering angle + throttle.
-        \item The set is \emph{uncountable} --- there is no ``list'' to enumerate or take $\arg\max_a Q(s,a)$ over.
+        \item Robot arm: joint torques. \quad Locomotion: motor commands. \quad Driving: steering angle + throttle.
+        \item The set is \emph{uncountable} --- there is no list to enumerate.
     \end{itemize}
+    \pause
+    \vspace{0.5em}
+    \item \textbf{Why this is not just a bigger discrete problem.} Go, Dota and StarCraft have \emph{enormous but still discrete} action sets ($10^{26}$ choices per step in StarCraft) --- you can in principle enumerate them and take an $\arg\max$. In continuous control you cannot enumerate at all.
 \end{itemize}
 \vspace{0.4em}
 \centering\footnotesize\textcolor{red}{This lecture: how to do RL when actions are continuous.}
-\end{frame}
-
-\begin{frame}{From huge \emph{discrete} spaces to \emph{continuous} control}
-\vspace{1em}
-\begin{itemize}
-    \item Go, Dota, and StarCraft have \emph{enormous but still discrete} action sets --- you can (in principle) enumerate and $\arg\max$ over them.
-    \vspace{0.4em}
-    \item Robotics and physical control are \emph{continuous}: joint torques, steering angles, velocities. The action set is uncountable --- enumeration and $\arg\max_a Q(s,a)$ are no longer possible.
-    \vspace{0.4em}
-    \item[$\Rightarrow$] We need a method that learns a policy \emph{directly} over a continuous action space --- a first ``deep'' crack at this is \textbf{DDPG} \rref{5}.
-\end{itemize}
 \end{frame}

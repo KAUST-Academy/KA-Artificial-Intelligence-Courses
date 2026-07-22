@@ -1,7 +1,7 @@
 \begin{frame}{The TD Residual as Advantage}
 \begin{itemize}
-    \item Given a critic $V_\phi$, define the \textbf{TD residual}:
-    $$\delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$$
+    \item We introduced $\delta_t$ as the critic's \emph{training} signal. Here is the second, less obvious role it plays --- the one that makes actor-critic work:
+    $$\delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t) \qquad \text{(the \textbf{TD residual})}$$
     \item When $V_\phi = V^{\pi}$ (a perfect critic), the \textbf{expected} TD residual equals the advantage:
     \begin{align*}
         \mathbb{E}\!\left[\delta_t \mid s_t, a_t\right]
@@ -13,6 +13,6 @@
     \item So we can use $\delta_t$ as a \textbf{low-variance, online} estimate of $A^{\pi}$ --- no full trajectory needed
     \item This is what Day 3 deferred: we now have a way to estimate $A^{\pi}$ at every timestep
     \vspace{0.5em}
-    \item \textbf{Critic update:} minimize the TD error squared: $\mathcal{L}(\phi) = \mathbb{E}_t\!\left[\delta_t^2\right]$
+    \item \textbf{One number, two jobs:} $\delta_t$ trains the critic (via $\mathcal{L}(\phi) = \mathbb{E}_t[\delta_t^2]$) \emph{and} weights the actor's gradient. That is the whole actor-critic loop.
 \end{itemize}
 \end{frame}

@@ -1,0 +1,47 @@
+% Motivates GAE. Without this, the n-step / GAE slides arrive with no stated
+% problem to solve; the question they answer is "how far do we look ahead
+% before handing off to the critic?".
+\section{Better Advantage Estimates (GAE)}
+\begin{frame}{}
+    \LARGE Policy Optimization: \textbf{Better Advantage Estimates}
+\end{frame}
+
+\begin{frame}{The Question We Have Been Dodging: How Far Do We Look Ahead?}
+The actor's update is only as good as the number $\hat{A}_t$ we multiply it by. We have met \textbf{two} ways to produce that number, and they are opposite extremes:
+\vspace{0.4em}
+\begin{columns}
+\begin{column}{0.48\textwidth}
+\begin{block}{Monte Carlo (Day 3)}
+$$\hat{A}_t = \underbrace{R_t}_{\text{all real rewards}} - V_\phi(s_t)$$
+\vspace{-0.9em}
+\begin{center}\footnotesize $R_t = \sum_{t' \geq t} \gamma^{t'-t} r_{t'}$ (reward-to-go)\end{center}
+Never trusts the critic beyond $s_t$.\\
+$\Rightarrow$ \textbf{unbiased}, but every random event in the rest of the episode is baked into the number: \textbf{huge variance}.
+\end{block}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{block}{1-step TD (this lecture)}
+$$\hat{A}_t = \delta_t = \underbrace{r_t}_{\text{1 real reward}} + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$$
+Trusts the critic completely after one step.\\
+$\Rightarrow$ \textbf{low variance}, but inherits every mistake $V_\phi$ makes: \textbf{biased}.
+\end{block}
+\end{column}
+\end{columns}
+\vspace{0.6em}
+\begin{itemize}
+    \item Neither is obviously right --- and \emph{which} is better changes \textbf{during training}: a freshly initialised critic is worthless (trust the real rewards), a well-trained one is excellent (trust the critic, keep the variance low).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why This Matters in Practice}
+\begin{itemize}
+    \item \textbf{Concrete failure of 1-step TD:} a robot knocks over a cup at step $t$, but the penalty only arrives at step $t{+}30$. The 1-step residual $\delta_t$ can only see that penalty \emph{through} $V_\phi(s_{t+1})$. If the critic has not learned about the delayed penalty yet, $\delta_t \approx 0$ --- the actor is told the disastrous action was fine.
+    \pause
+    \item \textbf{Concrete failure of Monte Carlo:} the same robot later gets a random $+100$ from an unrelated event at step $t{+}200$. That windfall is added to $\hat{A}_t$ for \emph{every} earlier action, good or bad --- pure noise drowning the real signal.
+    \pause
+    \vspace{0.4em}
+    \item[$\Rightarrow$] The real knob is: \textbf{how many real rewards do we look at before handing off to the critic?}
+    \item One step is one answer. The whole episode is another. \textbf{Everything in between is also allowed} --- and that family is what the next slide builds.
+    \item \textbf{Generalized Advantage Estimation (GAE)} is the standard way to navigate this family. It is not an exotic add-on: PPO, A2C, and nearly every modern on-policy implementation use it, and you will use it in the lab.
+\end{itemize}
+\end{frame}

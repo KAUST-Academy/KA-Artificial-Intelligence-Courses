@@ -4,12 +4,27 @@
 \end{frame}
 
 \begin{frame}{TRPO: KL Trust Region}
+TRPO writes ``improve, but don't move far'' as a \textbf{constrained optimization problem}:
+$$\underbrace{\max_\theta\; \mathcal{L}(\theta)}_{\text{what we want}} \quad \underbrace{\text{s.t.}}_{\text{``subject to''}} \quad \underbrace{\mathbb{E}_t\!\left[ D_{KL}\!\left(\pi_{\theta_\text{old}}(\cdot|s_t) \,\|\, \pi_\theta(\cdot|s_t)\right) \right] \leq \delta}_{\text{the rule the answer must obey}}$$
+\vspace{-0.5em}
 \begin{itemize}
-    \item TRPO formalises the constraint: maximize the surrogate objective subject to a KL-divergence bound:
-    $$\max_\theta\; \mathcal{L}(\theta) \quad \text{s.t.} \quad \mathbb{E}_t\!\left[ D_{KL}\!\left(\pi_{\theta_\text{old}}(\cdot|s_t) \,\|\, \pi_\theta(\cdot|s_t)\right) \right] \leq \delta$$
-    \item Keeps the new policy inside a \textbf{trust region} in policy space, not parameter space
-    \item Solved with conjugate gradient + backtracking line search (second-order): largest natural-gradient step that still satisfies the KL constraint
-    \item \textbf{Cost:} needs the Fisher information matrix --- expensive and hard to scale. \emph{This is exactly what motivates PPO.}
+    \item \textbf{Reading it:} ``pick the $\theta$ that maximizes the surrogate $\mathcal{L}$, \emph{among only those} $\theta$ whose policy stays within $\delta$ of the old one.'' Without the constraint the maximizer is unbounded --- $\mathcal{L}$ keeps rewarding a bigger ratio.
+    \item \textbf{$D_{KL}(p \,\|\, q)$ (KL divergence)} measures how different two probability distributions are: $0$ when identical, growing as they disagree. Here it compares the old and new \emph{action distributions} in the same state $s_t$ --- so it measures change in \textbf{behaviour}, not in weights.
+    \item \textbf{$\delta$ is our step-size budget}\footnotemark --- a small number we choose (typically $0.01$), the radius of the \textbf{trust region}. Bigger $\delta$ = faster but riskier updates.
+\end{itemize}
+\footnotetext{Unrelated to the TD residual $\delta_t$ from earlier today --- unfortunate but standard notation; the KL bound never carries a time subscript.}
+\end{frame}
+
+\begin{frame}{TRPO: Why Nobody Uses It}
+\begin{itemize}
+    \setlength{\itemsep}{0.7em}
+    \item The constraint is on \textbf{behaviour} (``the policy must not change much''), but the only thing we can actually turn is the \textbf{weights}. Those are not the same thing: some weights barely affect what the agent does, others flip it completely.
+    \item So before every update TRPO has to work out the \textbf{conversion rate} between ``changed the weights this much'' and ``changed the behaviour this much'' --- that conversion table is the \textbf{Fisher information matrix}.
+    \pause
+    \item \textbf{The problem:} that table has one entry for every \emph{pair} of weights. A modest 1M-parameter network needs $10^{12}$ of them --- it cannot be built, let alone solved.
+    \item TRPO has clever machinery to avoid ever building it, but each update still costs several extra passes over the data plus a search to check the constraint was respected.
+    \pause
+    \item[$\Rightarrow$] \textbf{Great theory, painful engineering:} hundreds of lines of second-order code for one policy update. \emph{PPO's question: can we get the same ``don't move too far'' effect with a one-line change to the loss?}
 \end{itemize}
 \end{frame}
 

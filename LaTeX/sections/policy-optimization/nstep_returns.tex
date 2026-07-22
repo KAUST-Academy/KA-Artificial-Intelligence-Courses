@@ -3,12 +3,23 @@
     \item Between 1-step TD and full Monte Carlo lies a whole family of \textbf{$n$-step advantage estimators}:
     $$\hat{A}^{(n)}_t = \underbrace{r_t + \gamma r_{t+1} + \dots + \gamma^{n-1} r_{t+n-1} + \gamma^{n} V_\phi(s_{t+n})}_{n\text{-step return}} \;-\; V_\phi(s_t)$$
     \begin{itemize}
-        \item Small $n$: low variance, high bias; large $n$: high variance, low bias
+        \item Take $n$ real rewards, then hand off to the critic. Small $n$: low variance, high bias; large $n$: high variance, low bias
+        \item $n=1$ recovers $\delta_t$; $n=\infty$ recovers Monte Carlo --- our two extremes are just members of this family
     \end{itemize}
     \pause
-    \item Each $\hat{A}^{(n)}_t$ telescopes into a sum of TD residuals: $\hat{A}^{(n)}_t = \sum_{l=0}^{n-1} \gamma^{l}\, \delta_{t+l}$
-    \item \textbf{GAE} avoids picking a single $n$: take an \textbf{exponentially-weighted average} over all $n$ with decay $\lambda$:
+    \item Each $\hat{A}^{(n)}_t$ telescopes into a sum of TD residuals we already compute:
+    $$\hat{A}^{(n)}_t = \sum_{l=0}^{n-1} \gamma^{l}\, \delta_{t+l}$$
+    \item \textbf{So which $n$?} Any single choice is a hard cutoff --- full trust in real rewards up to step $n$, then abrupt total trust in the critic --- and it is one more hyperparameter to tune per task.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{GAE: Don't Pick $n$ --- Average Over All of Them}
+\begin{itemize}
+    \item \textbf{Generalized Advantage Estimation} takes a \textbf{weighted average of every $\hat{A}^{(n)}_t$}, with weights decaying geometrically at rate $\lambda \in [0,1]$ so shorter (lower-variance) estimates count most:
     $$\hat{A}^{\mathrm{GAE}(\gamma,\lambda)}_t = (1-\lambda)\sum_{n=1}^{\infty} \lambda^{n-1}\, \hat{A}^{(n)}_t \;=\; \sum_{l=0}^{\infty} (\gamma\lambda)^l\, \delta_{t+l}$$
+    \pause
+    \item \textbf{Why an average helps:} no cliff at step $n$ --- the handover from real rewards to the critic is gradual, and no single $n$ has to be right.
+    \item \textbf{Why it is free:} the average looks expensive but --- via the telescoping on the previous slide --- collapses into \textbf{one discounted sum of the TD residuals we already have}. Same cost as 1-step TD.
     \item $\lambda$ smoothly tunes the bias--variance trade-off (next slide: the limits)
 \end{itemize}
 \end{frame}

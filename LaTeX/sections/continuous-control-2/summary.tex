@@ -29,7 +29,8 @@ $\rightarrow\;$ +max-entropy / stochastic actor $\;\rightarrow\;$ \textbf{SAC v1
 \begin{frame}{Summary: SAC}
 \begin{itemize}
     \item An \textbf{off-policy maximum-entropy} deep RL algorithm: sample-efficient, scales to high-dimensional observation/action spaces, robust to seeds and noise
-    \item \textbf{Theory:} convergence of soft policy iteration; the SAC objectives are its function-approximation instantiation
+    \item \textbf{``Soft'' in one line:} every hard $\max_a Q$ is replaced by $\alpha\log\sum_a\exp(Q/\alpha)$ --- equivalently, the greedy policy becomes the softmax policy $\pi \propto \exp(Q/\alpha)$, and the objective picks up $+\,\alpha\mathcal{H}$. Set $\alpha\to0$ and you are back to Days 1--5
+    \item \textbf{Theory:} soft policy iteration is ordinary policy iteration on the reward $r + \alpha\mathcal{H}$; the SAC objectives are its function-approximation instantiation
     \item \textbf{Algorithm:} soft critic (clipped double-Q) + reparameterised stochastic actor + automatic temperature --- everything from Day 5 reused
     \item \textbf{Empirically:} outperforms DDPG, PPO, TD3 and Soft Q-Learning in optimality, sample complexity and robustness
 \end{itemize}

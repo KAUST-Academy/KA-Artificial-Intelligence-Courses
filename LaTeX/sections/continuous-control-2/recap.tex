@@ -9,7 +9,7 @@
     \pause
     \item But DDPG is \textbf{fragile}:
     \begin{itemize}
-        \item deterministic actor $\Rightarrow$ \emph{no native exploration} (hand-tuned OU/Gaussian noise bolted on)
+        \item deterministic actor $\Rightarrow$ \emph{no native exploration} --- Gaussian noise has to be bolted on by hand, with its own scale and schedule to tune
         \item brittle to hyperparameters and random seeds
         \item mode collapse on multimodal $Q$-landscapes --- commits to one of several equally good actions
     \end{itemize}
@@ -27,9 +27,29 @@
 \end{frame}
 
 \begin{frame}{Scope \& Notation}
-\begin{itemize}
-    \item \footnotesize \textcolor{red}{Note:} ``Continuous Control II'' is the \emph{max-entropy} branch. PPO (Day 4) already handles continuous actions on-policy; DDPG/TD3 (Day 5) are the off-policy \emph{deterministic} branch; SAC is the off-policy \emph{stochastic, entropy-regularised} branch.
-    \vspace{0.5em}
-    \item \textbf{Notation:} $\pi_\phi$ stochastic actor, $Q_\theta$ soft critic, $\alpha$ entropy temperature, $\bar{\mathcal{H}}$ target entropy (used in SAC v2), $\mathcal{D}$ replay buffer --- used consistently throughout.
-\end{itemize}
+\vspace{-0.3em}
+{\footnotesize \textcolor{red}{Scope note:} ``Continuous Control II'' is the \emph{max-entropy} branch. PPO (Day 4) already handles continuous actions on-policy; DDPG/TD3 (Day 5) are the off-policy \emph{deterministic} branch; SAC is the off-policy \emph{stochastic, entropy-regularised} branch.}
+\vspace{-0.2em}
+\begin{center}
+\small
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{@{}lll@{}}
+\hline
+\textbf{Symbol} & \textbf{Meaning} & \textbf{Where you saw it} \\
+\hline
+$\theta$                        & \textbf{actor} parameters                         & Days 3--5 \\
+$\phi$                          & \textbf{critic} parameters                        & Days 4--5 \\
+$\pi_\theta(a\mid s)$           & \emph{stochastic} actor \;\textcolor{red}{(back today)} & Days 3--4 \\
+$\mu_\theta(s),\ \sigma_\theta(s)$ & mean and spread of that actor                  & Day 3 (Day 5 kept only $\mu_\theta$) \\
+$Q_\phi(s,a)$                   & \emph{soft} action-value critic                   & Day 5 (now with an entropy term) \\
+$\phi^{-}$                      & target critic parameters                          & Day 2 (DQN), Day 5 \\
+$\mathcal{D}$                   & replay buffer                                     & Day 2 (DQN), Day 5 \\
+$\alpha$                        & entropy \emph{temperature} \;\textcolor{red}{(new)} & --- \\
+$\mathcal{H}(\pi(\cdot\mid s))$ & entropy of the actor at state $s$ \;\textcolor{red}{(new)} & --- \\
+$\bar{\mathcal{H}}$             & \emph{target} entropy \;\textcolor{red}{(new, SAC v2)} & --- \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{0.3em}
+{\scriptsize \textbf{Day 5 said the noise would come back --- here it is.} Day 5 wrote the actor as a Gaussian $\pi_\theta(a|s)=\mathcal{N}(\mu_\theta(s),\sigma_\theta(s)^2)$, then \emph{deleted} $\sigma_\theta$ to get the deterministic $\mu_\theta$. SAC puts $\sigma_\theta$ back and \emph{learns} it. \;\textcolor{red}{Heads-up:} the SAC paper swaps the letters ($\phi$ actor, $\theta$ critic); we keep the course convention --- only the letters differ, every equation is identical.}
 \end{frame}

@@ -1,54 +1,78 @@
-\begin{frame}{Soft Policy Iteration: Policy Evaluation}
+% ---------------------------------------------------------------------------
+% Rewritten in the Day 6 review. The previous version led with "Lemma 1 /
+% Lemma 2 / Theorem 1" and the contraction-mapping vocabulary. The convergence
+% story is genuinely just "Day 2 policy iteration, unchanged", so it is now
+% told that way; the paper's numbering is kept only as a footnote pointer.
+% ---------------------------------------------------------------------------
+\begin{frame}{Soft Policy Iteration --- The Plan}
 \begin{itemize}
-    \item \textbf{policy evaluation:} compute value of $\pi$ according to Max Entropy RL Objective
-    \item modified Bellman backup operator $\mathcal{T}$:
+    \item You already know \textbf{policy iteration} from Day 2: alternate two steps until nothing moves
+    \begin{enumerate}
+        \item \textbf{evaluation:} given $\pi$, work out its $Q$
+        \item \textbf{improvement:} given $Q$, make $\pi$ greedier
+    \end{enumerate}
+    \vspace{0.6em}
+    \item \textbf{Soft policy iteration is the same loop with the dictionary applied} --- ``greedier'' becomes ``closer to the softmax of $Q$'', and the values carry the entropy bonus
+    \vspace{0.6em}
+    \item The next two slides do one step each. The only question worth asking is: \emph{does swapping $\max$ for soft max break the guarantees from Day 2?}
+    \item[$\Rightarrow$] \textcolor{red}{It does not.} And once we know that, we can go build the deep version (SAC) without worrying
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Step 1 --- Soft Policy Evaluation}
+\begin{itemize}
+    \item \textbf{Goal:} given a fixed $\pi$, compute its value \emph{under the MaxEnt objective}. Same Bellman backup as Day 2, with the entropy bonus folded into the value:
 \end{itemize}
 \begin{align*}
-\mathcal{T}^{\pi} Q(\mathbf{s}_t, \mathbf{a}_t) &\triangleq r(\mathbf{s}_t, \mathbf{a}_t) + \gamma\, \mathbb{E}_{\mathbf{s}_{t+1} \sim p}\!\left[\, \boxed{V(\mathbf{s}_{t+1})}\, \right] \\
-\boxed{V(\mathbf{s}_t)} &= \mathbb{E}_{\mathbf{a}_t \sim \pi}\!\left[ Q(\mathbf{s}_t, \mathbf{a}_t) - \boxed{\alpha \log \pi(\mathbf{a}_t \mid \mathbf{s}_t)} \right]
+\mathcal{T}^{\pi} Q(\mathbf{s}_t, \mathbf{a}_t) &= r(\mathbf{s}_t, \mathbf{a}_t) + \gamma\, \mathbb{E}_{\mathbf{s}_{t+1} \sim p}\!\left[\, V(\mathbf{s}_{t+1})\, \right] \\[0.3em]
+V(\mathbf{s}_t) &= \mathbb{E}_{\mathbf{a}_t \sim \pi}\!\big[\, Q(\mathbf{s}_t, \mathbf{a}_t) \; \textcolor{red}{-\; \alpha \log \pi(\mathbf{a}_t \mid \mathbf{s}_t)} \,\big]
+\;=\; \mathbb{E}_{\pi}[Q] + \alpha\,\mathcal{H}(\pi(\cdot\mid\mathbf{s}_t))
 \end{align*}
 \begin{itemize}
-    \item \textbf{Lemma 1:} Contraction Mapping for Soft Bellman Updates
-\end{itemize}
-\[
-Q^{k+1} = \mathcal{T}^{\pi} Q^{k} \quad \text{converges to the soft Q-function of } \pi
-\]
-\begin{itemize}
-    \item[] {\footnotesize\emph{Why:} the standard Bellman contraction argument, unchanged --- the extra entropy term $-\alpha\log\pi$ is bounded, so $\mathcal{T}^\pi$ is still a $\gamma$-contraction.}
+    \item \textbf{Does repeating this converge?} Yes --- and for a boring reason. Compare with Day 2:
+    \begin{itemize}
+        \item Day 2's proof only needed the backup to \emph{shrink differences} between value estimates by a factor $\gamma$ each sweep. That is what makes repeated application settle on one answer
+        \item The single new term $-\alpha\log\pi$ does not depend on $Q$ at all. It is just \textbf{an extra piece of reward}, and the Day 2 proof never cared what the reward was
+    \end{itemize}
+    \item[$\Rightarrow$] \textbf{Nothing new to prove.} Soft policy evaluation is ordinary policy evaluation on the reward $r + \alpha\mathcal{H}$
 \end{itemize}
 \end{frame}
-\begin{frame}{Soft Policy Iteration: Policy Improvement}
+
+\begin{frame}{Step 2 --- Soft Policy Improvement}
+\small
 \begin{itemize}
-    \item \textbf{policy improvement:} update policy towards the exponential of the new soft Q-function
-    \item modified Bellman backup operator $\mathcal{T}$:
-    \begin{itemize}
-        \item choose tractable family of distributions big $\Pi$
-        \item choose KL divergence to project the improved policy into big $\Pi$
-    \end{itemize}
+    \item \textbf{Day 2:} improve $\pi$ by making it greedy, $\pi \leftarrow \arg\max_a Q(s,a)$
+    \item \textbf{Today:} improve $\pi$ by moving it toward the \emph{softmax} of $Q$, $\;\pi \propto \exp(\tfrac1\alpha Q)$ --- the distribution we showed is optimal for ``value $+\,\alpha\,$entropy''
+    \vspace{0.4em}
+    \item \textcolor{red}{One practical snag:} $\exp(\tfrac1\alpha Q)$ can come out \emph{any shape at all}, and no network can output an arbitrary distribution. Whatever actor we build will only produce distributions from some limited family --- call it $\Pi$
+    \item So we settle for \emph{the closest member of $\Pi$}, and ``closest'' between two distributions means the KL divergence you met in TRPO (Day 4):
 \end{itemize}
 \[
-\pi_{\text{new}} = \arg\min_{\pi' \in \Pi} D_{\mathrm{KL}}\!\left( \pi'(\,\cdot \mid \mathbf{s}_t) \,\Big\|\, \frac{\exp\!\left( \tfrac{1}{\alpha} Q^{\pi_{\text{old}}}(\mathbf{s}_t, \,\cdot)\right)}{Z^{\pi_{\text{old}}}(\mathbf{s}_t)} \right)
+\pi_{\text{new}} = \arg\min_{\pi' \in \Pi} \; D_{\mathrm{KL}}\!\Big( \pi'(\,\cdot \mid \mathbf{s}_t) \,\Big\|\, \underbrace{\exp\!\big( \tfrac{1}{\alpha} Q^{\pi_{\text{old}}}(\mathbf{s}_t, \cdot)\big) \big/ Z(\mathbf{s}_t)}_{\text{the softmax policy we are aiming at}} \Big)
 \]
+\vspace{-0.3em}
 \begin{itemize}
-    \item \textbf{Lemma 2:} the KL projection cannot decrease the soft value
-\end{itemize}
-\[
-Q^{\pi_{\text{new}}}(\mathbf{s}_t, \mathbf{a}_t) \geq Q^{\pi_{\text{old}}}(\mathbf{s}_t, \mathbf{a}_t) \quad \text{for any state action pair}
-\]
-\begin{itemize}
-    \item[] {\footnotesize\emph{Why:} $\pi_{\text{old}}$ is feasible for the $\arg\min$, so the new policy's KL objective is no worse; expanding it and using KL\,$\geq 0$ gives the monotone improvement.}
+    \item[] {\footnotesize $\Pi$ stays abstract for now --- the theory works for \emph{any} choice; we pick a concrete one when we build SAC. $Z(\mathbf{s}_t)$ just makes the target sum to one, and drops out of the $\arg\min$ because it does not depend on $\pi'$.}
+    \vspace{0.4em}
+    \item \textbf{Does this actually improve anything?} Yes, and again for a simple reason: \emph{$\pi_{\text{old}}$ is itself one of the candidates} in the $\arg\min$. So $\pi_{\text{new}}$ is by construction no worse --- the soft value can only go up
 \end{itemize}
 \end{frame}
-\begin{frame}{Soft Policy Iteration}
+
+\begin{frame}{Putting It Together}
 \begin{itemize}
-    \item soft policy iteration: soft policy evaluation $\longleftrightarrow$ soft policy improvement
-    \vspace{0.5em}
-    \item \textbf{Theorem 1:} Repeated application of soft policy evaluation and soft policy improvement from any policy $\pi \in \Pi$ converges to the optimal MaxEnt policy among all policies in $\Pi$
+    \item \textbf{Soft policy iteration} $=$ alternate the two steps: evaluate $\longleftrightarrow$ improve
+    \vspace{0.4em}
+    \item \textbf{Why it lands somewhere:} improvement means the values only ever go \emph{up}; rewards and entropy are bounded so they cannot go up forever. Something that only climbs and cannot climb past a ceiling has to settle --- and where it settles is the best MaxEnt policy the network family can express
+    \vspace{0.6em}
+    \item \textcolor{red}{But we cannot run this loop as written.} It assumes we can sweep over \emph{every} state and action --- fine for a Day 2 gridworld, hopeless for a robot with continuous joints
+    \vspace{0.4em}
+    \item[$\Rightarrow$] Replace the two exact steps with two \textbf{neural networks trained by gradient descent}:
     \begin{itemize}
-        \item[] {\footnotesize\emph{Why:} Lemma 2 makes $\{Q^{\pi^k}\}$ monotonically increasing; bounded reward + entropy keeps it bounded above; a monotone bounded sequence converges, and Lemma 1 says each evaluation step reaches its fixed point.}
-        \item exact form applicable only in discrete case
-        \item need function approximation to represent Q-values in continuous domains
-        \item $\to$ Soft Actor-Critic (SAC)!
+        \item evaluation $\;\to\;$ a critic $Q_\phi$ fitting the soft Bellman target
+        \item improvement $\;\to\;$ an actor $\pi_\theta$ taking gradient steps on that KL
     \end{itemize}
+    \item[] \textcolor{red}{That is Soft Actor-Critic.}
 \end{itemize}
+\vspace{0.3em}
+{\footnotesize The two ``does it work'' arguments above are Lemmas 1--2 in the paper \rref{1}, and the last one is its Theorem 1 --- look there if you want them stated formally.}
 \end{frame}

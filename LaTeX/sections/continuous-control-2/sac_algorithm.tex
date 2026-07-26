@@ -1,6 +1,15 @@
+% ---------------------------------------------------------------------------
+% Day 6 review: this frame used to show the SAC v2 loop with BOTH the
+% automatic-temperature line and the clipped double-Q highlighted, before
+% either had been motivated. It now shows the base algorithm with a FIXED
+% alpha; the single extra v2 line is introduced in auto_temp_derivation.tex,
+% straight after the dual derivation that justifies it.
+% ---------------------------------------------------------------------------
 \begin{frame}{SAC: Algorithm}
 \begin{center}
-{\scriptsize\textbf{\textcolor{red}{Red}} = the two additions over SAC v1: \emph{clipped double-Q} (TD3, Day 5) and \emph{automatic temperature}.\quad Shorthand $Q^{\min}_\theta \triangleq \min_{i=1,2} Q_{\theta_i}$.}
+{\scriptsize\textbf{\textcolor{red}{Red}} $=$ the \textbf{two} things that differ from TD3 (Day 5): the actor is \emph{stochastic}, so actions are \textbf{sampled} from it, and the TD target carries the \emph{entropy term}.\\
+Shorthand: $Q^{\min}_{\phi^{-}}$ means $\min_{i=1,2} Q_{\phi^{-}_i}$.\quad $\alpha$ is a \textbf{fixed hyperparameter} here.\quad
+$\lambda_Q,\lambda_\pi$ are \textbf{learning rates} (Adam step sizes) for critic and actor; $\tau$ is the target-network mixing rate from Day 5.}
 \end{center}
 \begin{center}
 \resizebox{\textwidth}{!}{%
@@ -10,26 +19,24 @@
 \DontPrintSemicolon
 \LinesNotNumbered
 \setlength{\algomargin}{0pt}
-Initialize $\theta_1,\theta_2,\phi,\alpha$;\ \ targets $\bar\theta_i\!\leftarrow\!\theta_i$;\ \ replay $\mathcal{D}\leftarrow\emptyset$\;
+Initialize actor $\theta$, critics $\phi_1,\phi_2$;\ \ targets $\phi^{-}_i\!\leftarrow\!\phi_i$;\ \ replay $\mathcal{D}\leftarrow\emptyset$;\ \ choose $\alpha$\;
 \For{each iteration}{
   \For{each environment step}{
-    $\mathbf{a}_t\sim\pi_\phi(\,\cdot\mid\mathbf{s}_t)$;\ \ $\mathbf{s}_{t+1}\sim p$;\ \
+    \textcolor{red}{$\mathbf{a}_t\sim\pi_\theta(\,\cdot\mid\mathbf{s}_t)$}\ \ \emph{(sampled --- no injected noise)};\ \ $\mathbf{s}_{t+1}\sim p$;\ \
     $\mathcal{D}\leftarrow\mathcal{D}\cup\{(\mathbf{s}_t,\mathbf{a}_t,r_t,\mathbf{s}_{t+1})\}$\;
   }
   \For{each gradient step}{
-    sample minibatch from $\mathcal{D}$;\ \ $\tilde{\mathbf{a}}_{t+1}\sim\pi_\phi(\,\cdot\mid\mathbf{s}_{t+1})$\;
-    \textcolor{red}{$y = r_t + \gamma\big( Q^{\min}_{\bar\theta}(\mathbf{s}_{t+1},\tilde{\mathbf{a}}_{t+1}) - \alpha\log\pi_\phi(\tilde{\mathbf{a}}_{t+1}\mid\mathbf{s}_{t+1})\big)$}\;
-    $\theta_i \leftarrow \theta_i - \lambda_Q\,\hat\nabla_{\theta_i}\big[\tfrac12(Q_{\theta_i}(\mathbf{s}_t,\mathbf{a}_t)-y)^2\big]$,\ \ $i\in\{1,2\}$\;
-    $\phi \leftarrow \phi - \lambda_\pi\,\hat\nabla_\phi J_\pi(\phi)$ \ \ ($J_\pi$ critic term uses $Q^{\min}_\theta$)\;
-    \textcolor{red}{$\alpha \leftarrow \alpha - \lambda\,\hat\nabla_\alpha\big[\,-\alpha\big(\log\pi_\phi(\mathbf{a}_t\mid\mathbf{s}_t)+\bar{\mathcal{H}}\big)\,\big]$}\;
-    $\bar\theta_i \leftarrow \tau\theta_i+(1-\tau)\bar\theta_i$,\ \ $i\in\{1,2\}$\;
+    sample minibatch from $\mathcal{D}$;\ \ \textcolor{red}{$\tilde{\mathbf{a}}_{t+1}\sim\pi_\theta(\,\cdot\mid\mathbf{s}_{t+1})$}\ \ \emph{(sampled from the current actor)}\;
+    $y = r_t + \gamma\big( Q^{\min}_{\phi^{-}}(\mathbf{s}_{t+1},\tilde{\mathbf{a}}_{t+1}) \textcolor{red}{\;-\; \alpha\log\pi_\theta(\tilde{\mathbf{a}}_{t+1}\mid\mathbf{s}_{t+1})}\big)$\;
+    $\phi_i \leftarrow \phi_i - \lambda_Q\,\hat\nabla_{\phi_i}\big[\tfrac12(Q_{\phi_i}(\mathbf{s}_t,\mathbf{a}_t)-y)^2\big]$,\ \ $i\in\{1,2\}$\;
+    $\theta \leftarrow \theta - \lambda_\pi\,\hat\nabla_\theta J_\pi(\theta)$ \ \ ($J_\pi$ critic term uses $Q^{\min}_{\phi}$)\;
+    $\phi^{-}_i \leftarrow \tau\phi_i+(1-\tau)\phi^{-}_i$,\ \ $i\in\{1,2\}$\;
   }
 }
 \end{algorithm}
 \end{minipage}%
 }
 \end{center}
-\begin{flushleft}
-    \tiny Haarnoja et al.\ 2018b, \url{https://arxiv.org/abs/1812.05905}
-\end{flushleft}
+\vspace{-0.2em}
+{\scriptsize Black $=$ Day 5 unchanged: replay buffer, twin critics, clipped double-$Q$ target, Polyak target critics. \textbf{But the actor is not TD3's} --- it outputs a distribution $(\mu_\theta,\sigma_\theta)$, never a bare action, which is why SAC needs \emph{no target actor} and \emph{no smoothing noise}: TD3 needed both only because its actor was deterministic.}
 \end{frame}

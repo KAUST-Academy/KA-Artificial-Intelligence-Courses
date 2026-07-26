@@ -1,4 +1,4 @@
-\begin{frame}{SAC --- Parameterized soft Q-function}
+\begin{frame}{SAC --- The Two Networks}
 \renewcommand{\arraystretch}{1.8}
 \begin{center}
 \small
@@ -6,22 +6,24 @@
 \hline
 \textbf{Symbol} & \textbf{Meaning} & \textbf{Example} \\
 \hline
-$Q_\theta(\mathbf{s}_t, \mathbf{a}_t)$
-    & parameterized soft Q-function
+$Q_\phi(\mathbf{s}_t, \mathbf{a}_t)$
+    & parameterized soft $Q$-function (the \textbf{critic})
     & neural network \\
 \hline
-$\pi_\phi(\mathbf{a}_t \mid \mathbf{s}_t)$
-    & parameterized tractable policy
-    & Gaussian, mean/cov.\ from a network \\
+$\pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t)$
+    & parameterized tractable policy (the \textbf{actor})
+    & Gaussian, $\mu_\theta$ and $\sigma_\theta$ from a network \\
 \hline
-$J_Q(\theta),\ \hat{\nabla}_\theta J_Q(\theta)$
-    & soft Q-function objective \& its stochastic gradient
+$J_Q(\phi),\ \hat{\nabla}_\phi J_Q(\phi)$
+    & critic objective \& its stochastic gradient
     & minimize soft Bellman residual \\
 \hline
-$J_\pi(\phi),\ \hat{\nabla}_\phi J_\pi(\phi)$
-    & policy objective \& its stochastic gradient
+$J_\pi(\theta),\ \hat{\nabla}_\theta J_\pi(\theta)$
+    & actor objective \& its stochastic gradient
     & KL to $\exp(Q/\alpha)$, reparameterized \\
 \hline
 \end{tabular}
 \end{center}
+\vspace{0.4em}
+{\footnotesize \textcolor{red}{This is where we finally pick $\Pi$:} the actor's family is the \textbf{Gaussians} --- one mean and one spread per action dimension. That is the concrete choice policy improvement was left waiting on. Otherwise these are the same two networks as DDPG (Day 5): the critic now carries the entropy term, and the actor outputs a \emph{distribution} $(\mu_\theta,\sigma_\theta)$ instead of a single action $\mu_\theta$.}
 \end{frame}

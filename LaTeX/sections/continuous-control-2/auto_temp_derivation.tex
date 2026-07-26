@@ -12,10 +12,53 @@
 
 \textbf{In practice} --- one SGD step on a single scalar, jointly with the actor/critic updates:
 \[
-J(\alpha) = \mathbb{E}_{\mathbf{a}_t \sim \pi_\phi}\!\left[\, -\alpha\big(\log\pi_\phi(\mathbf{a}_t\mid\mathbf{s}_t) + \bar{\mathcal{H}}\big) \,\right],\quad
-\alpha \leftarrow \alpha - \lambda\,\hat\nabla_\alpha J(\alpha)
+J(\alpha) = \mathbb{E}_{\mathbf{a}_t \sim \pi_\theta}\!\left[\, -\alpha\big(\log\pi_\theta(\mathbf{a}_t\mid\mathbf{s}_t) + \bar{\mathcal{H}}\big) \,\right],\quad
+\alpha \leftarrow \alpha - \lambda_\alpha\,\hat\nabla_\alpha J(\alpha)
 \]
+\vspace{-0.4em}
+\begin{itemize}
+    \item[] {\footnotesize $\lambda_\alpha$ is just the learning rate for that one scalar --- same Adam step size as the actor and critic.}
+\end{itemize}
 \end{frame}
+\begin{frame}{SAC v2: The Same Loop, One Extra Line}
+\begin{center}
+{\scriptsize\textbf{\textcolor{red}{Red}} $=$ everything SAC v2 adds to the algorithm you already saw. $\alpha$ is now a \emph{learned} scalar, not a hyperparameter.\\
+$\lambda_Q,\lambda_\pi,\lambda_\alpha$ are \textbf{learning rates} (Adam step sizes) for the critic, the actor and the temperature --- all $3\times10^{-4}$ in the paper.}
+\end{center}
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{1.06\textwidth}
+\begin{algorithm}[H]
+\scriptsize
+\DontPrintSemicolon
+\LinesNotNumbered
+\setlength{\algomargin}{0pt}
+Initialize actor $\theta$, critics $\phi_1,\phi_2$;\ \ targets $\phi^{-}_i\!\leftarrow\!\phi_i$;\ \ replay $\mathcal{D}\leftarrow\emptyset$;\ \ \textcolor{red}{initialize $\alpha$;\ \ set target entropy $\bar{\mathcal{H}} = -\dim(\mathcal{A})$}\;
+\For{each iteration}{
+  \For{each environment step}{
+    $\mathbf{a}_t\sim\pi_\theta(\,\cdot\mid\mathbf{s}_t)$;\ \ $\mathbf{s}_{t+1}\sim p$;\ \
+    $\mathcal{D}\leftarrow\mathcal{D}\cup\{(\mathbf{s}_t,\mathbf{a}_t,r_t,\mathbf{s}_{t+1})\}$\;
+  }
+  \For{each gradient step}{
+    sample minibatch from $\mathcal{D}$;\ \ $\tilde{\mathbf{a}}_{t+1}\sim\pi_\theta(\,\cdot\mid\mathbf{s}_{t+1})$\;
+    $y = r_t + \gamma\big( Q^{\min}_{\phi^{-}}(\mathbf{s}_{t+1},\tilde{\mathbf{a}}_{t+1}) - \alpha\log\pi_\theta(\tilde{\mathbf{a}}_{t+1}\mid\mathbf{s}_{t+1})\big)$\;
+    $\phi_i \leftarrow \phi_i - \lambda_Q\,\hat\nabla_{\phi_i}\big[\tfrac12(Q_{\phi_i}(\mathbf{s}_t,\mathbf{a}_t)-y)^2\big]$,\ \ $i\in\{1,2\}$\;
+    $\theta \leftarrow \theta - \lambda_\pi\,\hat\nabla_\theta J_\pi(\theta)$ \ \ ($J_\pi$ critic term uses $Q^{\min}_{\phi}$)\;
+    \textcolor{red}{$\alpha \leftarrow \alpha - \lambda_\alpha\,\hat\nabla_\alpha\big[\,-\alpha\big(\log\pi_\theta(\mathbf{a}_t\mid\mathbf{s}_t)+\bar{\mathcal{H}}\big)\,\big]$}\;
+    $\phi^{-}_i \leftarrow \tau\phi_i+(1-\tau)\phi^{-}_i$,\ \ $i\in\{1,2\}$\;
+  }
+}
+\end{algorithm}
+\end{minipage}%
+}
+\end{center}
+\vspace{-0.2em}
+{\footnotesize \textbf{Read the new line:} if the actor is more decisive than the target ($\log\pi_\theta > -\bar{\mathcal{H}}$), $\alpha$ is pushed \emph{up} and exploration is bought back; if it is too random, $\alpha$ falls. One scalar, one gradient step, and the last brittle hyperparameter is gone.}
+\begin{flushleft}
+    \tiny Haarnoja et al.\ 2018b, \url{https://arxiv.org/abs/1812.05905}
+\end{flushleft}
+\end{frame}
+
 \begin{frame}{Implementation Cheatsheet}
 \renewcommand{\arraystretch}{1.6}
 \begin{center}
@@ -24,11 +67,11 @@ J(\alpha) = \mathbb{E}_{\mathbf{a}_t \sim \pi_\phi}\!\left[\, -\alpha\big(\log\p
 \hline
 \textbf{Setting} & \textbf{Default (Haarnoja 2018b)} \rref{2} \\
 \hline
-Policy parameterization & Squashed Gaussian:\ $\mathbf{a}=\tanh(\mu_\phi+\sigma_\phi\!\odot\!\epsilon)$ \\
+Policy parameterization & Squashed Gaussian:\ $\mathbf{a}=\tanh(\mu_\theta+\sigma_\theta\!\odot\!\epsilon)$ \\
 \hline
-Critic & Twin soft $Q_{\theta_1}, Q_{\theta_2}$; clipped double-$Q$ target \\
+Critic & Twin soft $Q_{\phi_1}, Q_{\phi_2}$; clipped double-$Q$ target \\
 \hline
-Target network update & Polyak: $\bar\theta_i \leftarrow \tau\theta_i + (1-\tau)\bar\theta_i$,\ \ $\tau = 0.005$ \\
+Target network update & Polyak: $\phi^{-}_i \leftarrow \tau\phi_i + (1-\tau)\phi^{-}_i$,\ \ $\tau = 0.005$ \\
 \hline
 Target entropy $\bar{\mathcal{H}}$ & $\bar{\mathcal{H}} = -\dim(\mathcal{A})$ (one nat per action dim) \\
 \hline

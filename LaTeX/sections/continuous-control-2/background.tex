@@ -10,17 +10,17 @@
 \text{Q-Learning: }\; Q(s,a) \leftarrow Q(s,a) + \alpha\big( r + \gamma \max_{a'} Q(s',a') - Q(s,a) \big)
 \]
 \[
-\textbf{DQN}~\rref{6}\text{: }\; \mathcal{L}(\theta) = \mathbb{E}_{(s,a,r,s') \sim U(\mathcal{D})}\!\left[ \big( r + \gamma \max_{a'} Q(s',a';\theta^{-}) - Q(s,a;\theta) \big)^{2} \right]
+\textbf{DQN}~\rref{6}\text{: }\; \mathcal{L}(\phi) = \mathbb{E}_{(s,a,r,s') \sim \mathcal{D}}\!\left[ \big( r + \gamma \max_{a'} Q_{\phi^{-}}(s',a') - Q_\phi(s,a) \big)^{2} \right]
 \]
 \vspace{-0.7em}
 \begin{itemize}
-    \item Replay buffer + target network $\theta^-$ stabilise off-policy TD --- but $\max_a$ doesn't scale to continuous actions
+    \item Replay buffer + target network $\phi^-$ stabilise off-policy TD --- but $\max_{a'}$ doesn't scale to continuous actions
 \end{itemize}
 \vspace{-0.3em}
 \textbf{Actor-critic (Days 4--5):}
 \[
-\nabla\mathcal{J}(\theta) = \mathbb{E}_{\pi_\theta}\!\left[\, \nabla\ln\pi(a\mid s,\theta)\, Q_\pi(s,a) \,\right] \qquad
-\text{DDPG: }\nabla_\theta Q(s,\mu_\theta(s))
+\nabla_\theta\mathcal{J}(\theta) = \mathbb{E}_{\pi_\theta}\!\left[\, \nabla_\theta\log\pi_\theta(a\mid s)\; \hat{A}(s,a) \,\right] \qquad
+\text{DDPG: }\; \nabla_\theta Q_\phi(s,\mu_\theta(s))
 \]
 \begin{itemize}
     \item DDPG/TD3 \rref{4}\rref{5}: deterministic actor $\mu_\theta$ --- replay + targets reused, but exploration is just injected noise

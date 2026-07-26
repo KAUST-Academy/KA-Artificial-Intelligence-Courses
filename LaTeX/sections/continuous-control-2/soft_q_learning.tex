@@ -1,27 +1,27 @@
 \begin{frame}{Prior Work: Soft Q-Learning}
 \small
 \begin{itemize}
-    \item \textbf{Soft Q-Learning} (Haarnoja et al., 2017) \rref{7}
+    \item \textbf{Soft Q-Learning} (Haarnoja et al., 2017) \rref{7} --- Q-learning with the dictionary applied
     \begin{itemize}
-        \item off-policy algorithms under MaxEnt RL objective
-        \item Learns $Q^{*}$ directly
-        \item Instead of taking max action, sample the action
-        \item use approximate inference to sample
-        \begin{itemize}
-            \item Stein variational gradient descent --- evolves a set of particles to match the soft-$Q$ Boltzmann distribution $\propto\exp(\tfrac1\alpha Q)$ without enumerating actions
-        \end{itemize}
-        \item not true actor-critic
+        \item off-policy, under the MaxEnt RL objective
+        \item learns $Q_{\text{soft}}$ directly; no separate actor network
+        \item acting is no longer $\arg\max$ --- you \emph{sample} from the softmax policy $\pi \propto \exp(\tfrac1\alpha Q_{\text{soft}})$
+        \item \textcolor{red}{the catch:} with continuous actions, sampling from that distribution is itself hard --- no closed form, and no actor network to ask. This is exactly the gap SAC closes
     \end{itemize}
 \end{itemize}
-\textbf{\footnotesize Standard Q-learning (for contrast):}
+\vspace{0.2em}
+\textbf{\footnotesize Standard Q-learning (Day 2), for contrast --- note the \emph{hard} $\max$:}
 \[
-Q(S_t, A_t) \leftarrow Q(S_t, A_t) + \alpha\big( R_{t+1} + \gamma \max_{a \in \mathcal{A}} Q(S_{t+1}, a) - Q(S_t, A_t) \big)
+Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha_{\text{lr}}\big[\, r_t + \gamma\, \textcolor{red}{\max_{a'}}\, Q(s_{t+1}, a') - Q(s_t, a_t) \,\big]
 \]
-\textbf{\footnotesize Soft versions ($\max \to$ soft-max via $\log\!\int\!\exp$):}
+\textbf{\footnotesize Soft version --- the \emph{only} change is $\max \;\to\;$ soft max:}
 \[
-Q_{\text{soft}}(\mathbf{s}_t, \mathbf{a}_t) \leftarrow r_t + \gamma\, \mathbb{E}_{\mathbf{s}_{t+1} \sim p_{\mathbf{s}}}\!\left[ V_{\text{soft}}(\mathbf{s}_{t+1}) \right], \quad \forall \mathbf{s}_t, \mathbf{a}_t
+Q_{\text{soft}}(\mathbf{s}_t, \mathbf{a}_t) \leftarrow r_t + \gamma\, \mathbb{E}_{\mathbf{s}_{t+1} \sim p_{\mathbf{s}}}\!\left[ V_{\text{soft}}(\mathbf{s}_{t+1}) \right]
+\qquad
+V_{\text{soft}}(\mathbf{s}_t) \leftarrow \textcolor{red}{\alpha \log \int_{\mathcal{A}} \exp\!\left( \tfrac{1}{\alpha} Q_{\text{soft}}(\mathbf{s}_t, \mathbf{a}') \right) d\mathbf{a}'}
 \]
-\[
-V_{\text{soft}}(\mathbf{s}_t) \leftarrow \alpha \log \int_{\mathcal{A}} \exp\!\left( \tfrac{1}{\alpha} Q_{\text{soft}}(\mathbf{s}_t, \mathbf{a}') \right) d\mathbf{a}',\quad \forall \mathbf{s}_t
-\]
+\vspace{-0.5em}
+\begin{itemize}
+    \item[] {\footnotesize This is the ``value'' row of the dictionary substituted into the Day 2 update, nothing more. The $\int$ instead of $\sum$ is only because the actions are continuous. \emph{(The learning rate $\alpha_{\text{lr}}$ here is unrelated to the temperature $\alpha$ --- clashing but standard notation.)}}
+\end{itemize}
 \end{frame}

@@ -2,10 +2,11 @@
 \begin{frame}{Learning Outcomes}
     \begin{itemize}
         \setlength{\itemsep}{0.8em}
-        \item Motivate the maximum-entropy RL objective and explain why the $-\log\pi$ bonus is principled (exploration, robustness, multimodality)
-        \item State soft policy iteration --- soft policy evaluation \& improvement --- and why it converges (Lemmas 1--2, Theorem 1)
+        \item Define entropy $\mathcal{H}$ and explain why the per-action bonus is $-\alpha\log\pi$ (exploration, robustness, multimodality)
+        \item Say what \textbf{``soft''} means in one sentence --- $\max$ replaced by $\alpha\log\sum\exp(\cdot/\alpha)$ --- and apply that substitution to a value, a policy, and a Bellman backup
+        \item Walk through soft policy iteration (evaluate $\leftrightarrow$ improve) and say why the Day 2 guarantees still hold
         \item Derive the SAC critic and (reparameterised) actor objectives, including the squashed-Gaussian Jacobian correction
-        \item Explain how SAC v2 = SAC v1 + TD3's clipped double-Q + \emph{automatic temperature tuning}, and what reward-scale sensitivity has to do with it
+        \item Explain how SAC v2 = SAC v1 + \emph{automatic temperature tuning} (the clipped double-$Q$ was already in v1), and what reward-scale sensitivity has to do with it
         \item Identify SAC's remaining limitations and place it in the algorithm family (REDQ / DroQ / TQC)
     \end{itemize}
 \end{frame}

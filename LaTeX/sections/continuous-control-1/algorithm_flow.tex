@@ -1,180 +1,287 @@
-% Slide 41: left-side diagram only (step 1)
-\begin{frame}{Method}
-\begin{flushleft}
-\hspace*{0.04\textwidth}%
-\begin{tikzpicture}
-  \node[inner sep=0] (diag) {\includegraphics[width=0.40\textwidth]{images/continuous-control-1/figures/method-flow-step1.jpg}};
-  \begin{scope}[shift={(diag.south west)}, x={($(diag.south east)-(diag.south west)$)}, y={($(diag.north west)-(diag.south west)$)}]
-    % Red dashed bounding rectangle around the trainable left diagram
-    \draw[red, line width=1pt, dashed] (-0.02, -0.04) rectangle (0.78, 1.05);
-  \end{scope}
-\end{tikzpicture}
+% Rewritten end to end.
+%
+% Previously every slide in this file was a screenshot -- the method-flow
+% diagram and the DDPG/DQN pseudocode from the papers -- with red rectangles
+% positioned by hard-coded fractions of the image, and all of it in the paper's
+% mu(s|theta^mu) / Q(s,a|theta^Q) notation. Both the diagram and the algorithm
+% are now drawn natively in course notation (theta = actor, phi = critic,
+% superscript minus = target, D = replay buffer), and the red boxes are attached
+% to the content rather than to pixel coordinates.
+
+% ---------------------------------------------------------------------------
+% The DDPG data-flow diagram, built in three stages.
+% #1 = stage (1 = acting only, 2 = + replay buffer, 3 = + learning loop)
+% ---------------------------------------------------------------------------
+\newcommand{\ddpgflow}[1]{%
+\begin{tikzpicture}[
+    font=\scriptsize,
+    ell/.style={ellipse, draw=blue!45!black, fill=blue!22,
+                inner sep=3pt, align=center},
+    buf/.style={rectangle, fill=orange!80!red, text=white, minimum width=2.6cm,
+                minimum height=0.66cm, align=center, font=\scriptsize\bfseries},
+    net/.style={rectangle, fill=yellow!75, draw=yellow!55!black,
+                minimum width=2.3cm, minimum height=1.35cm, align=center},
+    tgt/.style={rectangle, fill=green!35, draw=green!45!black,
+                minimum width=1.3cm, minimum height=0.75cm, align=center},
+    use/.style={rectangle, fill=blue!32, draw=blue!50!black,
+                minimum width=1.7cm, minimum height=1.05cm, align=center},
+    ar/.style={-{Latex[length=2mm]}, blue!55!black, line width=0.75pt},
+  ]
+  % Pin the bounding box so the three stages do not jump around.
+  \useasboundingbox (-2.0,-1.15) rectangle (13.5,5.0);
+
+  % --- Stage 1: acting in the environment --------------------------------
+  \node[net]  (actor)    at (1.5, 1.15) {$\mu_\theta(s)$\\[0.25em] DNN};
+  \node[tgt]  (actortgt) at (0.55,-0.45) {$\mu_{\theta^{-}}$\\ slow};
+  \node[ell]  (env)      at (-1.0, 3.1) {$s_t$};
+  \node[ell]  (trans)    at (4.0, 4.35) {$(s_t,\, a_t,\, r_t,\, s_{t+1})$};
+
+  \draw[ar] (env) -- (actor.130);
+  \draw[ar] (actor.55) -- node[left, pos=0.75, font=\scriptsize] {action} (trans.230);
+  \node[font=\scriptsize, anchor=west] at (2.55, 1.95) {$+\,\mathcal{N}_t$};
+
+  \ifnum#1=1
+    \draw[red, dashed, line width=0.9pt] (-1.95,-0.95) rectangle (5.9, 4.9);
+    \node[red, font=\scriptsize\bfseries, anchor=north west] at (6.2, 4.6)
+         {act with the actor, $+$ noise};
+  \fi
+
+  % --- Stage 2: the replay buffer ----------------------------------------
+  \ifnum#1>1
+    \node[buf] (buffer) at (9.2, 4.35) {Replay buffer $\mathcal{D}$};
+    \draw[ar] (trans) -- (buffer);
+    \node[font=\scriptsize, anchor=south] at (6.6, 3.32)
+         {Sample random mini-batches};
+    \draw[blue!55!black, line width=0.75pt] (buffer.south) -- (9.2, 3.25);
+    \draw[blue!55!black, line width=0.75pt] (4.5, 3.25) -- (11.4, 3.25);
+  \fi
+  \ifnum#1=2
+    \draw[red, dashed, line width=0.9pt] (1.9, 3.1) rectangle (11.0, 4.9);
+    \node[red, font=\scriptsize\bfseries, anchor=north west] at (2.0, 2.95)
+         {store every transition --- and reuse it};
+  \fi
+
+  % --- Stage 3: the learning loop ----------------------------------------
+  \ifnum#1>2
+    \node[align=center] (pgform) at (4.5, 2.62)
+         {$\nabla_\theta \mathcal{J} \approx \nabla_\theta \mu_\theta\, \nabla_a Q_\phi$};
+    \node[align=center] (yform)  at (11.4, 2.62)
+         {$y_i = r_i + \gamma\, Q_{\phi^{-}}\!\big(s_i',\, \mu_{\theta^{-}}(s_i')\big)$};
+    \draw[ar] (4.5, 3.25)  -- (pgform.north);
+    \draw[ar] (11.4, 3.25) -- (yform.north);
+
+    \node[use] (pgbox)  at (4.5, 1.15)  {use as\\ policy\\ gradient};
+    \node[use] (tgtbox) at (11.4, 1.15) {use as\\ target\\ value};
+    \node[net] (critic) at (8.5, 1.15)  {$Q_\phi(s,a)$\\[0.25em] DNN};
+    \node[tgt] (critictgt) at (7.55,-0.45) {$Q_{\phi^{-}}$\\ slow};
+
+    \draw[ar] (pgform.south)  -- (pgbox.north);
+    \draw[ar] (yform.south)   -- (tgtbox.north);
+    \draw[ar] (pgbox.west)    -- (actor.east);
+    \draw[ar] (tgtbox.west)   -- (critic.east);
+
+    % Same region the original slide boxed: everything except the raw state.
+    \draw[red, dashed, line width=0.9pt] (0.1,-0.95) rectangle (13.0, 4.9);
+  \fi
+\end{tikzpicture}}
+
+% ---------------------------------------------------------------------------
+\begin{frame}{Method: The DDPG Loop (1/3) --- Acting}
+\vspace{0.2em}
+\centering
+\resizebox{0.95\textwidth}{!}{\ddpgflow{1}}
+
+\vspace{0.5em}
+\begin{flushleft}\footnotesize
+The actor is a plain function $s \mapsto \mu_\theta(s)$. Being deterministic it would repeat itself forever, so exploration noise $\mathcal{N}_t$ is added before acting. Each step yields one transition.
 \end{flushleft}
-\begin{flushright}\tiny Adapted from \rref{14}\end{flushright}
 \end{frame}
 
-% Slide 42: build step --- reveal ONLY the top replay-buffer row
-% (matches the intended PPT build: (s,a,r,s') -> Replay buffer -> sample mini-batches)
-\begin{frame}{Method}
+\begin{frame}{Method: The DDPG Loop (2/3) --- Storing}
+\vspace{0.2em}
 \centering
-\begin{tikzpicture}
-  \node[inner sep=0] (diag) {\includegraphics[width=0.88\textwidth]{images/continuous-control-1/figures/method-flow-step3.jpg}};
-  \begin{scope}[shift={(diag.south west)}, x={($(diag.south east)-(diag.south west)$)}, y={($(diag.north west)-(diag.south west)$)}]
-    % Hide everything below the "Sample random mini-batches" line
-    \fill[white] (-0.05, -0.05) rectangle (1.05, 0.66);
-    % Red dashed box around the revealed top replay-buffer strip
-    \draw[red, line width=1pt, dashed] (0.10, 0.67) rectangle (0.86, 1.04);
-  \end{scope}
-\end{tikzpicture}
-\begin{flushright}\tiny Adapted from \rref{14}\end{flushright}
+\resizebox{0.95\textwidth}{!}{\ddpgflow{2}}
+
+\vspace{0.5em}
+\begin{flushleft}\footnotesize
+Transitions go into the replay buffer $\mathcal{D}$ rather than being used once and discarded --- the DQN trick from Day 2, and the reason DDPG needs far less environment interaction than PPO on the same task.
+\end{flushleft}
 \end{frame}
 
-% Slide 43: full method diagram
-\begin{frame}{Method}
+\begin{frame}{Method: The DDPG Loop (3/3) --- Learning}
+\vspace{0.2em}
 \centering
-\begin{tikzpicture}
-  \node[inner sep=0] (diag) {\includegraphics[width=0.88\textwidth]{images/continuous-control-1/figures/method-flow-step3.jpg}};
-  \begin{scope}[shift={(diag.south west)}, x={($(diag.south east)-(diag.south west)$)}, y={($(diag.north west)-(diag.south west)$)}]
-    % Red dashed rectangle around the right-side learning loop (matches original)
-    \draw[red, line width=1pt, dashed] (0.16, -0.04) rectangle (1.02, 1.04);
-  \end{scope}
-\end{tikzpicture}
-\begin{flushright}\tiny Adapted from \rref{14}\end{flushright}
+\resizebox{0.95\textwidth}{!}{\ddpgflow{3}}
+
+\vspace{0.3em}
+\begin{flushleft}\footnotesize
+One mini-batch drives \emph{both} updates: on the right the ``slow'' target networks build the TD target $y_i$ for the critic; on the left the critic's action-gradient becomes the actor's policy gradient. Nothing inside the dashed box asks which policy collected the data --- that is what off-policy means.
+\end{flushleft}
+\vspace{-0.4em}
+\begin{flushright}\tiny Diagram adapted from \rref{9}\end{flushright}
 \end{frame}
 
-% Slide 44: DDPG algorithm pseudocode (no annotations)
-\begin{frame}{Method}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.80\textwidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/ddpg-algorithm.jpg}
-\end{figure}
+% ---------------------------------------------------------------------------
+% The algorithm, boxing the same regions the paper screenshot used to
+% highlight. One frame per highlight rather than beamer overlays: algorithm2e's
+% environment is a float, and a float inside a multi-overlay frame breaks
+% hyperref's per-slide page anchors (\Hy@PageAnchorSlide).
+%
+% #1 selects which region is boxed:
+%   0 = none, 1 = replay buffer + soft target update, 2 = exploration noise,
+%   3 = value (critic) network update, 4 = policy (actor) network update.
+% ---------------------------------------------------------------------------
+\newcommand{\hlif}[3]{\ifnum#1=#2 \hlbox{red}{#3}\else\hlbox{none}{#3}\fi}
+
+\newcommand{\ddpgalgo}[1]{%
+\scriptsize
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\caption{DDPG --- Deep Deterministic Policy Gradient}
+Initialise critic $Q_\phi(s,a)$ and actor $\mu_\theta(s)$ with random weights $\phi,\ \theta$\;
+Initialise target weights $\phi^{-} \leftarrow \phi$ and $\theta^{-} \leftarrow \theta$\;
+\hlif{#1}{1}{Initialise replay buffer $\mathcal{D}$}\;
+\For{$\mathrm{episode} = 1$ \KwTo $M$}{
+    Observe initial state $s$\;
+    \For{$t = 1$ \KwTo $T$}{
+        \hlif{#1}{2}{Select action $a = \mu_\theta(s) + \mathcal{N}$ \quad \emph{(actor output $+$ exploration noise)}}\;
+        Execute $a$; observe reward $r$, next state $s'$, terminal flag $d$\;
+        \hlif{#1}{1}{Store transition $(s,a,r,s',d)$ in $\mathcal{D}$; \quad $s \leftarrow s'$}\;
+        \hlif{#1}{1}{Sample a minibatch of $N$ transitions $(s_i,a_i,r_i,s_i',d_i) \sim \mathcal{D}$}\;
+        \hlif{#1}{3}{Set $y_i = r_i + \gamma\,(1-d_i)\, Q_{\phi^{-}}\!\big(s_i',\, \mu_{\theta^{-}}(s_i')\big)$}\;
+        \hlif{#1}{3}{Update critic by descending $\nabla_\phi \tfrac{1}{N}\sum_i \big(y_i - Q_\phi(s_i,a_i)\big)^2$}\;
+        \hlif{#1}{4}{Update actor by ascending $\nabla_\theta \tfrac{1}{N}\sum_i Q_\phi\big(s_i,\, \mu_\theta(s_i)\big)$}\;
+        \hlif{#1}{1}{Soft-update targets: $\phi^{-} \leftarrow \tau\phi + (1-\tau)\phi^{-}$; \; $\theta^{-} \leftarrow \tau\theta + (1-\tau)\theta^{-}$}\;
+    }
+}
+\end{algorithm}}
+
+% Caption text reused under each copy of the listing.
+\newcommand{\ddpgalgofoot}{{\tiny In code the actor update is a single statement: maximise $\tfrac{1}{N}\sum_i Q_\phi(s_i,\mu_\theta(s_i))$ with $\phi$ held frozen. Autograd's chain rule then recovers the deterministic policy gradient, $\nabla_\theta \mu_\theta \cdot \nabla_a Q_\phi$.}}
+
+\begin{frame}{The DDPG Algorithm}
+\vspace{0.1em}
+\ddpgalgo{0}
 \end{frame}
 
-% Slide 45: replay buffer + soft target network update boxes
-\begin{frame}{Method}
-\begin{columns}[c]
-\begin{column}{0.18\textwidth}
-\centering
-\textbf{Replay buffer}\\[3em]
-\textbf{``Soft'' target network update}
+\begin{frame}{The DDPG Algorithm --- The Two DQN Tricks}
+\begin{columns}[T]
+\begin{column}{0.21\textwidth}
+\vspace{3.3em}
+\footnotesize
+\textbf{\textcolor{red}{Replay buffer}}\\[0.4em]
+{\scriptsize Collect once, learn from it many times.}
+\\[7.5em]
+\textbf{\textcolor{red}{``Soft'' target network update}}\\[0.4em]
+{\scriptsize Not DQN's hard copy every $C$ steps.}
 \end{column}
-\begin{column}{0.82\textwidth}
-\centering
-\begin{tikzpicture}
-\node[inner sep=0] (algo) {\includegraphics[width=\linewidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/ddpg-algorithm.jpg}};
-\begin{scope}[shift={(algo.south west)}, x={($(algo.south east)-(algo.south west)$)}, y={($(algo.north west)-(algo.south west)$)}]
-  \draw[red,line width=0.7pt] (0.03, 0.80) rectangle (0.30, 0.85);
-  \draw[red,line width=0.7pt] (0.18, 0.05) rectangle (0.78, 0.25);
-\end{scope}
-\end{tikzpicture}
+\begin{column}{0.79\textwidth}
+\ddpgalgo{1}
 \end{column}
 \end{columns}
 \end{frame}
 
-% Slide 45b: soft target update equations (spelled out)
-\begin{frame}{Method --- ``Soft'' target network update}
+% ---------------------------------------------------------------------------
+\begin{frame}{Method --- ``Soft'' Target Network Update}
 \vspace{0.5em}
-DQN copies the online weights into the target network \emph{periodically} (a hard update every $C$ steps). DDPG instead lets the targets \emph{slowly track} the online networks every step:
+Day 2's DQN copies the online weights into the target network \emph{periodically} --- a hard update every $C$ steps. DDPG instead lets the targets \emph{slowly track} the online networks at every step:
 \[
-\theta^{Q'} \leftarrow \tau\, \theta^{Q} + (1-\tau)\, \theta^{Q'}
+\phi^{-} \leftarrow \tau\, \phi + (1-\tau)\, \phi^{-}
 \qquad\qquad
-\theta^{\mu'} \leftarrow \tau\, \theta^{\mu} + (1-\tau)\, \theta^{\mu'}
+\theta^{-} \leftarrow \tau\, \theta + (1-\tau)\, \theta^{-}
 \]
 \vspace{0.2em}
 \begin{itemize}
-    \item $\tau \ll 1$ (typically $\tau = 10^{-3}$): targets change very slowly.
-    \item Constrains the TD target to move slowly $\Rightarrow$ greatly improves stability of learning, at the cost of slower value propagation.
+    \item $\tau \ll 1$ (typically $\tau = 10^{-3}$): the targets change very slowly --- an exponential moving average of the online weights rather than a snapshot of them.
+    \pause
+    \item \textbf{The cost:} value information propagates backwards through time more slowly. This is the usual stability-versus-speed trade.
 \end{itemize}
 \end{frame}
 
-% Slide 46: Add noise for exploration
-\begin{frame}{Method}
-\begin{columns}[c]
-\begin{column}{0.18\textwidth}
-\centering
-\textbf{Add noise for exploration}
+% ---------------------------------------------------------------------------
+\begin{frame}{The DDPG Algorithm --- Exploration}
+\begin{columns}[T]
+\begin{column}{0.21\textwidth}
+\vspace{5.7em}
+\footnotesize
+\textbf{\textcolor{red}{Add noise for exploration}}\\[0.4em]
+{\scriptsize A deterministic actor explores nothing on its own.}
 \end{column}
-\begin{column}{0.82\textwidth}
-\centering
-\begin{tikzpicture}
-\node[inner sep=0] (algo) {\includegraphics[width=\linewidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/ddpg-algorithm.jpg}};
-\begin{scope}[shift={(algo.south west)}, x={($(algo.south east)-(algo.south west)$)}, y={($(algo.north west)-(algo.south west)$)}]
-  \draw[red,line width=0.7pt] (0.06, 0.625) rectangle (0.95, 0.675);
-\end{scope}
-\end{tikzpicture}
+\begin{column}{0.79\textwidth}
+\ddpgalgo{2}
 \end{column}
 \end{columns}
 \end{frame}
 
-% Slide 46b: exploration noise --- OU vs Gaussian
-\begin{frame}{Method --- Exploration in a deterministic policy}
+% ---------------------------------------------------------------------------
+\begin{frame}{Method --- Exploration with a Deterministic Actor}
 \vspace{0.4em}
-A deterministic actor $\mu(s\mid\theta^{\mu})$ has \emph{no} exploration of its own. DDPG explores by adding noise to the behaviour policy:
+A deterministic actor has \emph{no} exploration of its own: the same state always yields the same action, forever. On Day 3--4 the policy was stochastic, so exploration came for free. Here we must add it by hand:
 \[
-a_t = \mu(s_t \mid \theta^{\mu}) + \mathcal{N}_t
+a_t = \mu_\theta(s_t) + \mathcal{N}_t, \qquad \mathcal{N}_t \sim \mathcal{N}(0, \sigma^2)
 \]
 \begin{itemize}
-    \item \textbf{DDPG} \rref{5}: $\mathcal{N}_t$ from an \emph{Ornstein--Uhlenbeck process} \rref{12} --- temporally \emph{correlated} noise, well suited to physical control with inertia/momentum.
-    \vspace{0.3em}
-    \item \textbf{Later finding (TD3 \rref{7}):} uncorrelated zero-mean \emph{Gaussian} noise works just as well and is simpler --- now the common default.
+    \item Zero-mean \textbf{Gaussian} noise added to the action, with $\sigma$ annealed over training --- the continuous-action analogue of annealing $\varepsilon$ in $\varepsilon$-greedy (Day 1).
+    \pause
+    \item \textbf{This is exploration only in the behaviour policy.} The stored actions include the noise; the actor being trained does not. Being off-policy is what allows that split.
+    \item \textbf{It is also DDPG's weakest point.} The noise is undirected --- it is a random jiggle, not a search. In sparse-reward tasks the agent may never stumble on a reward at all.
 \end{itemize}
 \end{frame}
 
-% Slide 47: Value Network Update
-\begin{frame}{Method}
-\begin{columns}[c]
-\begin{column}{0.18\textwidth}
-\centering
-\textbf{Value Network Update}
+% ---------------------------------------------------------------------------
+\begin{frame}{The DDPG Algorithm --- Value Network Update}
+\begin{columns}[T]
+\begin{column}{0.21\textwidth}
+\vspace{8.6em}
+\footnotesize
+\textbf{\textcolor{red}{Value network update}}\\[0.4em]
+{\scriptsize Squared TD error --- the same critic loss as Day 2 and Day 4.}
 \end{column}
-\begin{column}{0.82\textwidth}
-\centering
-\begin{tikzpicture}
-\node[inner sep=0] (algo) {\includegraphics[width=\linewidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/ddpg-algorithm.jpg}};
-\begin{scope}[shift={(algo.south west)}, x={($(algo.south east)-(algo.south west)$)}, y={($(algo.north west)-(algo.south west)$)}]
-  \draw[red,line width=0.7pt] (0.06, 0.43) rectangle (0.85, 0.54);
-\end{scope}
-\end{tikzpicture}
+\begin{column}{0.79\textwidth}
+\ddpgalgo{3}
 \end{column}
 \end{columns}
 \end{frame}
 
-% Slide 48: Policy Network Update
-\begin{frame}{Method}
-\begin{columns}[c]
-\begin{column}{0.18\textwidth}
-\centering
-\textbf{Policy Network Update}
+\begin{frame}{The DDPG Algorithm --- Policy Network Update}
+\begin{columns}[T]
+\begin{column}{0.21\textwidth}
+\vspace{11.5em}
+\footnotesize
+\textbf{\textcolor{red}{Policy network update}}\\[0.4em]
+{\scriptsize Climb the critic. This one line is the deterministic policy gradient.}
 \end{column}
-\begin{column}{0.82\textwidth}
-\centering
-\begin{tikzpicture}
-\node[inner sep=0] (algo) {\includegraphics[width=\linewidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/ddpg-algorithm.jpg}};
-\begin{scope}[shift={(algo.south west)}, x={($(algo.south east)-(algo.south west)$)}, y={($(algo.north west)-(algo.south west)$)}]
-  \draw[red,line width=0.7pt] (0.10, 0.25) rectangle (0.78, 0.36);
-\end{scope}
-\end{tikzpicture}
+\begin{column}{0.79\textwidth}
+\ddpgalgo{4}
 \end{column}
 \end{columns}
+\vspace{0.2em}
+\ddpgalgofoot
 \end{frame}
 
-% Slide 49: DQN algorithm pseudocode with epsilon-greedy box
-\begin{frame}{Method}
-\begin{tikzpicture}
-\node[inner sep=0] (dqn) {\includegraphics[width=0.85\textwidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/dqn-algorithm.jpg}};
-\begin{scope}[shift={(dqn.south west)}, x={($(dqn.south east)-(dqn.south west)$)}, y={($(dqn.north west)-(dqn.south west)$)}]
-  \draw[red,line width=0.7pt] (0.08, 0.52) rectangle (0.85, 0.66);
-\end{scope}
-\end{tikzpicture}
-\end{frame}
-
-% Slide 50: DQN algorithm annotated with DDPG callout
-\begin{frame}{Method}
-\begin{tikzpicture}
-\node[inner sep=0] (dqn) {\includegraphics[width=0.85\textwidth,height=0.85\textheight,keepaspectratio]{images/continuous-control-1/figures/dqn-algorithm.jpg}};
-\begin{scope}[shift={(dqn.south west)}, x={($(dqn.south east)-(dqn.south west)$)}, y={($(dqn.north west)-(dqn.south west)$)}]
-  \draw[red,line width=0.7pt] (0.08, 0.52) rectangle (0.85, 0.66);
-  \node[anchor=center,fill=white,inner sep=3pt,font=\footnotesize\bfseries,text=red] at (0.46, 0.59) {DDPG: Policy Network, learned with Deterministic Policy Gradient};
-\end{scope}
-\end{tikzpicture}
+% ---------------------------------------------------------------------------
+% Replaces the two DQN-pseudocode screenshots. Students saw DQN in full on
+% Day 2; reprinting the paper's algorithm made this look like a new topic. The
+% only thing that actually needed saying is the one-line difference in the
+% target, which is what this slide shows.
+\begin{frame}{One Line Separates DDPG from DQN}
+\vspace{0.6em}
+Both algorithms are the same off-policy loop: act, store in $\mathcal{D}$, sample a minibatch, regress $Q$ onto a bootstrapped target. They differ in \emph{how the next action in the target is chosen}.
+\vspace{0.8em}
+\begin{center}
+\renewcommand{\arraystretch}{2.1}
+\begin{tabular}{p{0.16\textwidth} p{0.52\textwidth} p{0.22\textwidth}}
+\hline
+ & \textbf{TD target} & \textbf{Next action from} \\
+\hline
+\textbf{DQN} (Day 2) & $y = r + \gamma\, \displaystyle\max_{a'} \hat{Q}(s',a';\theta^{-})$ & a \emph{search} over $\mathcal{A}$ \\
+\textbf{DDPG} (today) & $y = r + \gamma\, Q_{\phi^{-}}\!\big(s',\, \rbox{\mu_{\theta^{-}}(s')}\big)$ & a \emph{forward pass} \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{0.8em}
+\begin{itemize}
+    \item \textcolor{red}{\textbf{The target actor is the $\arg\max$.}} That single substitution is what carries DQN into continuous action spaces --- and it is why we needed the deterministic policy gradient: something has to \emph{train} $\mu_\theta$ to be that $\arg\max$.
+    \item Everything else --- replay buffer, target networks, squared TD error --- is unchanged from Day 2.
+\end{itemize}
 \end{frame}

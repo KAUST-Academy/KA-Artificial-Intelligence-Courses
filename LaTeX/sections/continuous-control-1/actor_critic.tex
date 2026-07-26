@@ -1,112 +1,50 @@
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Stochastic Policy Gradient (Actor-Critic)
-\end{itemize}
-\[
-\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
-\]
-\end{frame}
+% Rewritten twice. Originally nine frames re-introducing actor-critic from
+% scratch ("Actor: policy function pi_theta", "Critic: value function Q^w,
+% which provides guidance to improve the actor"), which Day 4 spends a whole
+% section on. Then two frames that were still too wordy. Now: one comparison
+% table, and one short slide answering the only structural question left
+% (why the critic changed from V to Q).
 
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Stochastic Policy Gradient (Actor-Critic)
-\end{itemize}
-\[
-\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
-\]
-
-\textbf{Actor:} Policy function $\pi_\theta$
-\end{frame}
-
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Stochastic Policy Gradient (Actor-Critic)
-\end{itemize}
-\[
-\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
-\]
-
-\textbf{Actor:} Policy function $\pi_\theta$
-
-\textbf{Critic:} Value function $Q^{w}$, which provides guidance to improve the actor
-\end{frame}
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Deterministic Policy Gradient (Actor-Critic)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Deterministic Policy Gradient (Actor-Critic)
-\end{itemize}
-\vspace{0.5em}
-\textbf{Objective:}
-\[
-J(\mu_\theta) = \int_{\mathcal{S}} \rho^{\mu}(s)\, r(s, \mu_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\mu}\!\left[ r(s, \mu_\theta(s)) \right]
-\]
-\end{frame}
-
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Deterministic Policy Gradient (Actor-Critic)
-\end{itemize}
-\textbf{Objective:}
-\[
-J(\mu_\theta) = \int_{\mathcal{S}} \rho^{\mu}(s)\, r(s, \mu_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\mu}\!\left[ r(s, \mu_\theta(s)) \right]
-\]
-\textbf{Policy Gradient:}
-\[
-\begin{aligned}
-\nabla_\theta J(\mu_\theta) &= \int_{\mathcal{S}} \rho^{\mu}(s)\, \nabla_\theta \mu_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\mu_\theta(s)}\, ds \\[2pt]
-&= \mathbb{E}_{s \sim \rho^\mu}\!\left[ \nabla_\theta \mu_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\mu_\theta(s)} \right]
-\end{aligned}
-\]
-\end{frame}
-
-\begin{frame}{Background -- DPG}
-\textbf{Deterministic Policy Gradient (Actor-Critic)}
-\vspace{0.5em}
-
-\textbf{Objective:}
-\[
-J(\mu_\theta) = \int_{\mathcal{S}} \rho^{\mu}(s)\, r(s, \mu_\theta(s))\, ds = \mathbb{E}_{s \sim \rho^\mu}\!\left[ \rbox{r(s, \mu_\theta(s))} \right]
-\]
-\textbf{Policy Gradient:}
-\[
-\begin{aligned}
-\nabla_\theta J(\mu_\theta) &= \int_{\mathcal{S}} \rho^{\mu}(s)\, \nabla_\theta \mu_\theta(s)\, \nabla_a \rbox{Q^{w}(s, a)\big|_{a=\mu_\theta(s)}}\, ds \\[2pt]
-&= \mathbb{E}_{s \sim \rho^\mu}\!\left[ \nabla_\theta \mu_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\mu_\theta(s)} \right]
-\end{aligned}
-\]
-\end{frame}
-\begin{frame}{Background -- DPG}
-\textbf{Stochastic Policy Gradient:}
-\[
-\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, \rbox{a \sim \pi_\theta}}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
-\]
-
-\textbf{Deterministic Policy Gradient:}
-\[
-\begin{aligned}
-\nabla_\theta J(\mu_\theta) &= \int_{\mathcal{S}} \rho^{\mu}(s)\, \nabla_\theta \mu_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\mu_\theta(s)}\, ds \\[2pt]
-&= \mathbb{E}_{s \sim \rho^\mu}\!\left[ \nabla_\theta \mu_\theta(s)\, \nabla_a Q^{w}(s, a)\big|_{a=\mu_\theta(s)} \right]
-\end{aligned}
-\]
-\end{frame}
-
-\begin{frame}{Background -- DPG}
-\textbf{Stochastic Policy Gradient:}
-\[
-\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, \rbox{a \sim \pi_\theta}}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q^{w}(s, a) \right]
-\]
-
-\textbf{Deterministic Policy Gradient:}
-\[
-\nabla_\theta J(\mu_\theta) = \mathbb{E}_{s \sim \rho^\mu}\!\left[ \nabla_\theta\, \rbox{\mu_\theta(s)}\, \nabla_a\, \rbox{Q^{w}(s, a)}\,\big|_{a=\mu_\theta(s)} \right]
-\]
-\vspace{0.8em}
+\begin{frame}{This Is Still Day 4's Actor-Critic --- Three Things Change}
+\vspace{-0.2em}
 \begin{center}
-\textcolor{red}{\textbf{DDPG: use deep learning to learn \emph{both} the actor $\mu_\theta(s)$ and the critic $Q^{w}(s,a)$.}}
+\small
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{p{0.22\textwidth} p{0.31\textwidth} p{0.37\textwidth}}
+\hline
+ & \textbf{Day 4 (A2C/PPO)} & \textbf{Today (DDPG)} \\
+\hline
+\textbf{Actor} & $\pi_\theta(a|s)$, stochastic & $\mu_\theta(s)$, deterministic \\
+\textbf{Critic} & $V_\phi(s)$ & $Q_\phi(s,a)$ \\
+\textbf{Actor update} & critic \emph{scores}: $\nabla_\theta \log \pi_\theta$ & critic \emph{points}: $\nabla_a Q_\phi$ \\
+\textbf{Data} & on-policy rollout, then discard & replay buffer $\mathcal{D}$ \\
+\hline
+\end{tabular}
 \end{center}
+\vspace{0.8em}
+\centering
+Everything else is the loop you already know: two networks trained together, the critic by squared TD error, the actor from what the critic says.
+\end{frame}
+
+\begin{frame}{Why the Critic Is Now $Q_\phi(s,a)$ Instead of $V_\phi(s)$}
+\vspace{0.6em}
+The new actor update asks the critic: \emph{if I change the action, does the value go up?}
+\vspace{0.4em}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item $V_\phi(s)$ has no action in it. There is nothing to differentiate. It can say ``this state is good'', but not ``turn the wheel left''.
+    \item So Day 4's trick of learning only $V$ does not survive.
+\end{itemize}
+\pause
+\vspace{0.9em}
+
+\textbf{The good news: $Q$ costs us nothing extra.} Building a TD target normally means finding the best next action --- but the actor already hands us one:
+\[
+y \;=\; r + \gamma\, Q_{\phi^{-}}\!\big(s',\, \rbox{\mu_{\theta^{-}}(s')}\big)
+\qquad\qquad
+\mathcal{L}(\phi) = \mathbb{E}\big[(y - Q_\phi(s,a))^2\big]
+\]
+\vspace{0.2em}
+\centering
+Same squared TD error as Days 2 and 4. Only the way we pick the next action has changed.
 \end{frame}

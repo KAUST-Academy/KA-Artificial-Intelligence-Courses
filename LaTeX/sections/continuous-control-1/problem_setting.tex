@@ -1,23 +1,19 @@
-\begin{frame}{DDPG Problem Setting}
-\vspace{1em}
+% Was three build-up frames using the paper's mu(s|theta^mu) / Q(s,a|theta^Q)
+% conditioning-bar notation. Now one frame in course notation: theta = actor
+% (Days 3-4), phi = critic (Day 4), superscript minus = target (Day 2).
+\begin{frame}{DDPG Problem Setting: Four Networks}
+\vspace{0.8em}
+\begin{center}
+\renewcommand{\arraystretch}{1.9}
 \begin{tabular}{ll}
-$\mu(s \mid \theta^{\mu})$ & \begin{tabular}{@{}l@{}}Policy (Actor) Network \\ Deterministic, Continuous Action Space\end{tabular}
+$\mu_\theta(s)$        & \begin{tabular}{@{}l@{}}\textbf{Actor} network --- deterministic, outputs an action in $\mathbb{R}^d$\end{tabular} \\
+$Q_\phi(s,a)$          & \textbf{Critic} network --- action-value \\
+$\mu_{\theta^{-}}(s)$  & \textbf{Target actor} --- a slowly-following copy of $\mu_\theta$ \\
+$Q_{\phi^{-}}(s,a)$    & \textbf{Target critic} --- a slowly-following copy of $Q_\phi$ \\
+$\mathcal{D}$          & \textbf{Replay buffer} of transitions $(s, a, r, s')$ \\
 \end{tabular}
-\end{frame}
-
-\begin{frame}{DDPG Problem Setting}
+\end{center}
 \vspace{1em}
-\begin{tabular}{ll}
-$\mu(s \mid \theta^{\mu})$ & \begin{tabular}{@{}l@{}}Policy (Actor) Network \\ Deterministic, Continuous Action Space\end{tabular} \\[1.2em]
-$Q(s, a \mid \theta^{Q})$ & Value (Critic) Network
-\end{tabular}
-\end{frame}
-
-\begin{frame}{DDPG Problem Setting}
-\vspace{1em}
-\begin{tabular}{ll}
-$\mu(s \mid \theta^{\mu})$ & \begin{tabular}{@{}l@{}}Policy (Actor) Network \\ Deterministic, Continuous Action Space\end{tabular} \\[1.2em]
-$Q(s, a \mid \theta^{Q})$ & Value (Critic) Network \\[1.2em]
-$\mu'(s \mid \theta^{\mu'}),\; Q'(s, a \mid \theta^{Q'})$ & Target Policy and Value Networks
-\end{tabular}
+\footnotesize
+Target networks appear twice because the TD target $y = r + \gamma\, Q_{\phi^{-}}(s', \mu_{\theta^{-}}(s'))$ uses \emph{both} of them --- DQN only needed one, because it had no actor.
 \end{frame}

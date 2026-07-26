@@ -8,13 +8,30 @@
 
 \title[DDPG]{Continuous Control I: Deterministic Policy Gradients \& DDPG}
 
-\usetikzlibrary{positioning,fit,shapes.geometric,arrows.meta,calc,backgrounds}
+\usetikzlibrary{positioning,fit,shapes.geometric,arrows.meta,calc,backgrounds,tikzmark}
 
 % Red-box annotation macro used in formula slides
 \newcommand{\rbox}[1]{%
   {\setlength{\fboxsep}{1pt}\setlength{\fboxrule}{0.7pt}%
    \fcolorbox{red}{white}{\ensuremath{#1}}}%
 }
+
+% --- Red annotation boxes over native pseudocode -------------------------
+% The algorithm slides used to be screenshots of the paper with hand-placed
+% rectangles at hard-coded image fractions. The listings are now typeset with
+% algorithm2e and \hlon draws the red rectangle around a chosen line on chosen
+% overlays. The "off" branch draws the same node with no stroke, so the listing
+% never shifts by a pixel between overlays.
+% The negative kerns cancel the node's inner xsep so a boxed pseudocode line
+% still starts at exactly the same x as the unboxed lines around it.
+\newcommand{\hlbox}[2]{%
+  \kern-2pt\begin{tikzpicture}[baseline=(hlnode.base)]
+    \node[inner xsep=2pt, inner ysep=1.5pt, outer sep=0pt,
+          draw=#1, line width=0.8pt] (hlnode) {#2};
+  \end{tikzpicture}\kern-2pt%
+}
+% \hlon{<overlay spec>}{content} --- e.g. \hlon{<2>}{$a = \mu_\theta(s)$}
+\newcommand{\hlon}[2]{\alt#1{\hlbox{red}{#2}}{\hlbox{none}{#2}}}
 
 % Clickable reference citation: [n] jumps to the matching bibliography entry.
 % Kept in normal text colour (like the Day 1--4 footnote markers) rather than
@@ -23,22 +40,22 @@
 
 \begin{document}
 
-% Title pages
+% Title page.
+% (A standalone teaser slide used to sit here showing the full DDPG method-flow
+% diagram before students knew what any of its symbols meant --- removed, the
+% same way Day 4's duplicate a2c teaser was.)
 \input{sections/cover}
-\input{sections/continuous-control-1/cover}
 \input{sections/toc}
 
 % Recap & learning outcomes
 \input{sections/continuous-control-1/recap}
 \input{sections/continuous-control-1/learning_outcomes}
 
-% Motivation and DDPG overview
+% Motivation: what continuous control is, and what breaks
 \input{sections/continuous-control-1/intro}
 \input{sections/continuous-control-1/dpg_motivation}
-\input{sections/continuous-control-1/ddpg_overview}
 
-% Background: Q-learning, the SPG-to-DPG derivation, and summary
-\input{sections/continuous-control-1/q_learning_motivation}
+% Background: SPG -> DPG, and what changes vs Day 4's actor-critic
 \input{sections/continuous-control-1/policy_gradient_derivation}
 \input{sections/continuous-control-1/actor_critic}
 \input{sections/continuous-control-1/background_summary}

@@ -1,177 +1,80 @@
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item \textbf{Goal:}
-    \vspace{0.5em}
-    \\ Derive a gradient update rule to learn deterministic policy
-\end{itemize}
+% Rewritten twice.
+%
+% First pass replaced twelve CS285-notation build-up frames with a shorter
+% derivation. That version was still too talky: "score-function trick",
+% "delta(a - mu_theta(s))", "differentiable chain", "discounted state-visitation
+% distribution". This pass strips the jargon and keeps the intuition. DPG gets
+% three frames -- it is background, not the point of the lecture.
+
+\section{Deterministic Policy Gradients (DPG)}
+\begin{frame}{}
+    \LARGE Continuous Control: \textbf{Deterministic Policy Gradients}
 \end{frame}
 
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item \textbf{Goal:}
-    \vspace{0.5em}
-    \\ Derive a gradient update rule to learn deterministic policy
-    \vspace{1em}
-    \item \textbf{Idea:}
-    \vspace{0.5em}
-    \\ Adapt the stochastic policy gradient formulation for deterministic policies
-\end{itemize}
-\end{frame}
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Vanilla Stochastic Policy Gradient:
-\end{itemize}
-\vfill
-\begin{flushright}
-    \tiny Source: \rref{13}
-\end{flushright}
-\end{frame}
+% ---------------------------------------------------------------------------
+\begin{frame}{The Day 3--4 Update Rule Stops Working}
+\vspace{0.6em}
+This is how we have trained every actor so far:
+\[
+\nabla_\theta \mathcal{J}(\theta) \;=\; \mathbb{E}\!\left[\, \nabla_\theta \log \pi_\theta(a_t \mid s_t)\; \hat{A}_t \,\right]
+\]
+It works by changing \textbf{probabilities}: make good actions more likely, bad actions less likely.
+\pause
+\vspace{1.2em}
 
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Vanilla Stochastic Policy Gradient:
-\end{itemize}
-\[
-\theta^{\star} = \arg\max_{\theta} \underbrace{\mathbb{E}_{\tau \sim p_\theta(\tau)}\!\left[ \sum_t r(\mathbf{s}_t, \mathbf{a}_t) \right]}_{J(\theta)}
-\]
-\vfill
-\begin{flushright}
-    \tiny Source: \rref{13}
-\end{flushright}
-\end{frame}
-
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Vanilla Stochastic Policy Gradient:
-\end{itemize}
-\[
-\theta^{\star} = \arg\max_{\theta} \underbrace{\mathbb{E}_{\tau \sim p_\theta(\tau)}\!\left[ \sum_t r(\mathbf{s}_t, \mathbf{a}_t) \right]}_{J(\theta)}
-\]
-\[
-\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
-\]
-\vfill
-\begin{flushright}
-    \tiny Source: \rref{13}
-\end{flushright}
-\end{frame}
-
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Vanilla Stochastic Policy Gradient:
-\end{itemize}
-\[
-\theta^{\star} = \arg\max_{\theta} \underbrace{\mathbb{E}_{\tau \sim p_\theta(\tau)}\!\left[ \sum_t r(\mathbf{s}_t, \mathbf{a}_t) \right]}_{J(\theta)}
-\]
-\[
-\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
-\]
-\[
-\theta \leftarrow \theta + \alpha \nabla_\theta J(\theta)
-\]
-\vfill
-\begin{flushright}
-    \tiny Source: \rref{13}
-\end{flushright}
-\end{frame}
-
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Vanilla Stochastic Policy Gradient:
-\end{itemize}
-\[
-\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
-\]
-\vspace{1em}
-
-\large model-free
+\textcolor{red}{\textbf{But a deterministic actor has no probabilities.}}
 \vspace{0.5em}
-
-\textcolor{red}{\large Not trivial to compute!}
-\vfill
-\begin{flushright}
-    \tiny Source: \rref{13}
-\end{flushright}
-\end{frame}
-\begin{frame}{Background -- DPG}
 \begin{itemize}
-    \item Vanilla Stochastic Policy Gradient with Monte-Carlo Sampling:
+    \setlength{\itemsep}{0.45em}
+    \item $\mu_\theta(s)$ returns \emph{one} action. It is already certain --- there is no ``make it more likely''.
+    \item So $\log \pi_\theta(a_t|s_t)$ has nothing to compute, and the expectation has nothing to average over.
 \end{itemize}
-\[
-\nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^{N} \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_{i,t} \mid \mathbf{s}_{i,t}) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_{i,t}, \mathbf{a}_{i,t}) \right)
-\]
-\vfill
-\begin{flushright}
-    \tiny Source: \rref{13}
-\end{flushright}
+\vspace{0.8em}
+\centering
+We need a different way to answer one question: \textbf{which way should I change $\theta$?}
 \end{frame}
 
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Vanilla Stochastic Policy Gradient with Monte-Carlo Sampling:
-\end{itemize}
-\[
-\nabla_\theta J(\theta) \approx \frac{1}{N} \sum_{i=1}^{N} \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_{i,t} \mid \mathbf{s}_{i,t}) \right) \rbox{\left( \sum_{t=1}^{T} r(\mathbf{s}_{i,t}, \mathbf{a}_{i,t}) \right)}
-\]
-\vspace{1em}
+% ---------------------------------------------------------------------------
+\begin{frame}{DPG: Let the Critic \emph{Point} \rref{1}}
+\vspace{0.4em}
+Feed the actor's action into the critic: $Q_\phi\big(s, \mu_\theta(s)\big)$. That number says how good the actor's choice was. \textbf{We want it bigger} --- so climb it.
+\pause
+\vspace{0.7em}
 
-\textcolor{red}{Problem: Point Estimate -- High Variance!}
-\vfill
-\begin{flushright}
-    \tiny Source: \rref{13}
-\end{flushright}
-\end{frame}
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Vanilla Stochastic Policy Gradient:
-\end{itemize}
+Two questions, one after the other:
+\begin{enumerate}
+    \setlength{\itemsep}{0.35em}
+    \item Which way should the \textbf{action} move to raise the value? \hfill $\rightarrow\;\; \nabla_a Q_\phi(s,a)$
+    \item Which way should the \textbf{weights} move to move the action that way? \hfill $\rightarrow\;\; \nabla_\theta \mu_\theta(s)$
+\end{enumerate}
+\pause
+\vspace{0.6em}
+Multiply them. That is the \textbf{deterministic policy gradient}:
 \[
-\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
+\nabla_\theta \mathcal{J}(\mu_\theta) \;=\; \mathbb{E}_{s \sim \mathcal{D}}\!\left[\;
+\rbox{\nabla_\theta \mu_\theta(s)} \;\cdot\; \rbox{\nabla_a Q_\phi(s,a)\big|_{a=\mu_\theta(s)}}
+\;\right]
 \]
-\vfill
-\begin{flushright}
-    \tiny Source: \rref{13}
-\end{flushright}
+\vspace{0.2em}
+\centering
+\textbf{In code this is one line:} maximise $Q_\phi\big(s,\mu_\theta(s)\big)$ with $\phi$ held fixed. Autograd does both steps.
 \end{frame}
 
-\begin{frame}{Background -- DPG}
+% ---------------------------------------------------------------------------
+\begin{frame}{Old Rule vs.\ New Rule}
+\vspace{0.4em}
+\textbf{Stochastic (Days 3--4):}
+\[
+\nabla_\theta \mathcal{J}(\pi_\theta) = \mathbb{E}_{s,\; \rbox{a \sim \pi_\theta}}\!\left[\, \nabla_\theta \log \pi_\theta(a \mid s)\; Q_\phi(s, a) \right]
+\]
+\textbf{Deterministic (today):}
+\[
+\nabla_\theta \mathcal{J}(\mu_\theta) = \mathbb{E}_{s \sim \rbox{\mathcal{D}}}\!\left[\, \nabla_\theta \mu_\theta(s)\; \nabla_a Q_\phi(s, a)\big|_{a=\mu_\theta(s)} \right]
+\]
+\vspace{0.4em}
 \begin{itemize}
-    \item Vanilla Stochastic Policy Gradient:
+    \setlength{\itemsep}{0.5em}
+    \item The critic used to give a \textbf{score} --- a number saying how hard to push. Now it gives a \textbf{direction} --- which way to move the action.
+    \item The old rule needs actions drawn from the \emph{current} policy ($a \sim \pi_\theta$). \textbf{That is what forced it to be on-policy.}
 \end{itemize}
-\[
-\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
-\]
-{\footnotesize Grouping the causal return-to-go and recognising it as the action-value $Q^{\pi_\theta}(s_t,a_t)=\mathbb{E}\!\left[\sum_{t'\geq t} r \mid s_t,a_t\right]$ (Day 3):}
-\[
-= \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, \rbox{Q^{\pi_\theta}(s, a)} \right]
-\]
-\vspace{0.5em}
-
-True value function is still not trivial to compute
-\vfill
-\begin{flushright}
-    \tiny Source: \rref{13}
-\end{flushright}
-\end{frame}
-
-\begin{frame}{Background -- DPG}
-\begin{itemize}
-    \item Vanilla Stochastic Policy Gradient:
-\end{itemize}
-\[
-\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta(\tau)}\!\left[ \left( \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(\mathbf{a}_t, \mathbf{s}_t) \right) \left( \sum_{t=1}^{T} r(\mathbf{s}_t, \mathbf{a}_t) \right) \right]
-\]
-{\footnotesize Grouping the causal return-to-go and recognising it as the action-value $Q^{\pi_\theta}(s_t,a_t)=\mathbb{E}\!\left[\sum_{t'\geq t} r \mid s_t,a_t\right]$ (Day 3):}
-\[
-= \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, \rbox{Q^{\pi_\theta}(s, a)} \right]
-\]
-
-True value function is still not trivial to compute, but we can approximate it with a parameterized function:
-\[
-\nabla_\theta J(\pi_\theta) = \mathbb{E}_{s \sim \rho^\pi,\, a \sim \pi_\theta}\!\left[ \nabla_\theta \log \pi_\theta(a \mid s)\, \rbox{Q^{w}(s, a)} \right]
-\]
-\vfill
-\begin{flushright}
-    \tiny Source: \rref{13}
-\end{flushright}
 \end{frame}

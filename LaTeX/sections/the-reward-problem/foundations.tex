@@ -88,40 +88,15 @@
 \end{itemize}
 \end{frame}
 
-% --- MAB as MDP, split into 3 (view 1 / view 2 / big-picture) ---
-\begin{frame}{Is the MAB Problem a Markov Decision Process? (1/2)}
+% --- MAB as MDP: one slide. Keeps only what later slides actually use. ---
+\begin{frame}{Is a Bandit an MDP?}
 \begin{itemize}
     \setlength{\itemsep}{0.55em}
-    \item The environment doesn't have a notion of state --- pulling an arm just samples from a distribution
-    \item But the \emph{agent} might maintain a statistic of history as its own state
-    \item The action is then a (policy) function of this agent-state
-    \item So the agent's arm-selection strategy is \emph{a policy} --- the MAB can be viewed as a (degenerate) MDP
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Is the MAB Problem a Markov Decision Process? (2/2)}
-\begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item In practice, most MAB algorithms \emph{don't} take this formal MDP view
-    \item Instead, they rely on heuristic methods that don't aim to optimize the full MDP
-    \item They simply strive for ``good'' cumulative rewards in expectation
-    \item Even in the simplest heuristics, $a_t$ is a random variable --- it's a function of the past (random) rewards
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Big Picture: Bandits Are MDPs in Disguise}
-\begin{center}
-\renewcommand{\arraystretch}{1.5}
-\large
-\begin{tabular}{ll}
-A bandit             & $=$ a \emph{one-state} MDP \\
-A contextual bandit  & $=$ a \emph{one-step} MDP \\
-Tomorrow's full RL   & $=$ the \emph{multi-step} case \\
-\end{tabular}
-\end{center}
-\vspace{0.8em}
-\begin{itemize}
-    \item So everything we derive today \emph{lifts} to MDPs --- a bridge we'll revisit at the end of the lecture.
+    \item The \emph{environment} has no state --- pulling an arm just samples from $\mathcal{R}^a$, and nothing you do changes what the next pull looks like
+    \item So a bandit is a \textbf{one-state MDP}: no transitions, no credit assignment, no discounting to reason about\\
+          \textcolor{gray}{Everything hard about RL is switched off except one thing --- \emph{exploration}. That is exactly why we study it here.}
+    \item What the agent still has is \emph{history}. Bandit algorithms keep a statistic of it --- counts $N_t(a)$, sample means $\hat{Q}_t(a)$, or a full posterior --- and choose $a_t$ from that statistic
+    \item \textcolor{red}{Consequence we use constantly:} $a_t$ is a \emph{random variable} --- it depends on past rewards, which were random. Every statement we make about performance is therefore an \emph{expectation} over that randomness
 \end{itemize}
 \end{frame}
 
@@ -132,6 +107,7 @@ Tomorrow's full RL   & $=$ the \emph{multi-step} case \\
     \[
         Q(a) = \mathbb{E}[r \mid a]
     \]
+    \item \emph{This is Day 1's $Q^\pi(s,a) = \mathbb{E}[\sum_t \gamma^t r_t]$ with the sum collapsed} --- one state, one step, so the return is just $r$
     \item The Optimal Value $V^*$ is the best of these:
     \[
         V^* = Q(a^*) = \max_{a \in \mathcal{A}} Q(a)
@@ -147,16 +123,18 @@ Tomorrow's full RL   & $=$ the \emph{multi-step} case \\
 
 \begin{frame}{Counting Regret: Counts and Gaps}
 \begin{itemize}
-    \setlength{\itemsep}{0.5em}
+    \setlength{\itemsep}{0.35em}
     \item Let $N_t(a) = $ number of times $a$ has been selected by step $t$
-    \item Let $\Delta_a = V^* - Q(a)$ be the \emph{gap} between action $a$ and the optimal action
-    \item Then total regret decomposes cleanly:
+    \item Let $\Delta_a = V^* - Q(a)$ be the \emph{gap} for arm $a$ --- the \emph{same} quantity as $l_t$, indexed by \textbf{arm} instead of by \textbf{time}: $l_t = \mathbb{E}[\Delta_{a_t}]$
+    \item So total regret decomposes cleanly:
     \[
         L_T \;=\; \sum_{a \in \mathcal{A}} \mathbb{E}[N_T(a)] \cdot \Delta_a
     \]
     \item \textcolor{red}{A good algorithm ensures small counts for large gaps}
-    \item \emph{Catch:} we don't know the gaps in advance --- they're properties of the unknown reward distribution
+    \item \emph{Catch:} $\Delta_a = \max_{a'} \mathbb{E}_{\mathcal{R}^{a'}}[r] - \mathbb{E}_{\mathcal{R}^{a}}[r]$ --- every term is a mean of an \emph{unknown} distribution, so the gaps are fixed numbers baked into the problem before we act
+    \item That makes this a tool for \emph{analysing} algorithms, not for building them --- ``pull the smallest-gap arm'' is not something you can run
 \end{itemize}
+\centering\small\textcolor{gray}{($\Delta_a$ is Day 1's advantage, sign-flipped and measured against the \emph{best} action.)}
 \end{frame}
 
 \begin{frame}{Linear or Sublinear Total Regret?}

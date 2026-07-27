@@ -2,10 +2,11 @@
 
 \begin{frame}{Greedy Algorithm}
 \begin{itemize}
-    \item For each arm, maintain a \textbf{sample-mean estimate} of its value --- average the rewards seen from that arm so far:
+    \item For each arm, keep a \textbf{sample mean}: add up the rewards that arm actually returned, divide by how many times we pulled it
     \[
-        \hat{Q}_t(a) \;\stackrel{\text{def}}{=}\; \frac{1}{N_t(a)} \sum_{s=1}^{t} r_s \cdot \mathbf{1}_{a_s = a} \;\;\approx\;\; Q(a)
+        \hat{Q}_t(a) \;=\; \frac{1}{N_t(a)} \sum_{\,s \,\leq\, t \;:\; a_s = a} r_s
     \]
+    \item \textcolor{gray}{$Q(a)$ is the true mean we cannot see; $\hat{Q}_t(a)$ is our current guess at it.}
     \item Pick the action with highest estimate:
     \[
         a_t = \operatorname*{arg\,max}_{a \in \mathcal{A}} \hat{Q}_{t-1}(a)
@@ -16,17 +17,20 @@
 
 \begin{frame}{$\epsilon$-Greedy Algorithm}
 \begin{itemize}
-    \setlength{\itemsep}{0.5em}
+    \setlength{\itemsep}{0.35em}
     \item Force a small amount of exploration at every step. At time $t$:
     \begin{itemize}
         \item With probability $1 - \epsilon$, select $a_t = \operatorname*{arg\,max}_{a} \hat{Q}_{t-1}(a)$
         \item With probability $\epsilon$, select a uniformly random action
     \end{itemize}
-    \item Constant $\epsilon$ ensures a minimum per-step regret proportional to the mean gap:
-    \[
-        l_t \;\geq\; \frac{\epsilon}{|\mathcal{A}|} \sum_{a \in \mathcal{A}} \Delta_a
-    \]
-    \item \textcolor{red}{Therefore $\epsilon$-Greedy also has \textbf{linear total regret}}
+    \item \textbf{What does this cost?} Split the step into its two branches:
+    \begin{itemize}
+        \item \emph{Exploit branch} (prob.\ $1-\epsilon$): at best we pick $a^*$ and pay nothing
+        \item \emph{Explore branch} (prob.\ $\epsilon$): we pick at random, so we often pay a gap $\Delta_a$
+    \end{itemize}
+    \item So even if the exploit branch became \emph{perfect}, the explore branch still spends an $\epsilon$ fraction of every step on arms we already know are worse
+    \item That waste is the \emph{same on step 1{,}000{,}000 as on step 10} --- $\epsilon$ never shrinks, so the cost per step never falls and simply adds up over $T$ steps
+    \item \textcolor{red}{Therefore $\epsilon$-Greedy also has \textbf{linear total regret}} --- the fix is not better estimates, but letting exploration \emph{fade} as we learn (next slide)
 \end{itemize}
 \end{frame}
 
@@ -68,32 +72,3 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{The Lai-Robbins Lower Bound: Setup}
-\textbf{What is a ``lower bound''?} A statement that \emph{no algorithm, however clever}, can do better than a certain regret growth rate --- it tells us the best we can ever hope for.
-\vspace{0.5em}
-\begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item \textbf{Goal:} an algorithm with \emph{sublinear} total regret $L_T = \sum_{t=1}^T l_t$ for any MAB, without knowing the reward distributions $\mathcal{R}^a$ in advance
-    \item Two quantities will appear:
-    \begin{itemize}
-        \item \textbf{Gap} $\Delta_a = V^* - Q(a)$: how much value we lose \emph{each time} we pull suboptimal arm $a$
-        \item \textbf{KL-divergence} $\mathrm{KL}(\mathcal{R}^a \,\|\, \mathcal{R}^{a^*})$: a statistical distance between two distributions --- \emph{how easy is it to tell arm $a$ apart from the best arm $a^*$ from samples?} \\
-              Small KL $\Rightarrow$ distributions look almost identical $\Rightarrow$ need many samples to distinguish
-    \end{itemize}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{The Lai-Robbins Lower Bound: The Theorem}
-\begin{block}{Theorem (Lai \& Robbins, 1985)}
-For any reasonable\footnote{\scriptsize ``consistent'': sub-polynomial regret on every problem instance} bandit algorithm, asymptotically:
-\[
-    \lim_{T \to \infty} \frac{L_T}{\log T} \;\;\geq\;\; \sum_{a \mid \Delta_a > 0} \frac{\Delta_a}{\mathrm{KL}(\mathcal{R}^a \,\|\, \mathcal{R}^{a^*})}
-\]
-\end{block}
-\begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item \textbf{Reading it.} Each suboptimal arm contributes regret proportional to its \emph{gap}, scaled \emph{inversely} by how easy it is to tell apart from the best
-    \item \textbf{The worst kind of arm:} large gap (expensive to pull) \emph{and} small KL (hard to distinguish, so we keep pulling it) --- exactly what you'd expect
-    \item \textcolor{red}{The best regret growth any algorithm can achieve is $\mathcal{O}(\log T)$} --- UCB (next) and Thompson sampling both match this rate
-\end{itemize}
-\end{frame}

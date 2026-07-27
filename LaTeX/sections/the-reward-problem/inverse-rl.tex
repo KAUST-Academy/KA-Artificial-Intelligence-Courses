@@ -51,20 +51,23 @@
 \end{frame}
 
 \begin{frame}{Maximum-Entropy IRL: The Principle}
-\textbf{Among all policy distributions consistent with the expert's behavior, pick the one with maximum entropy.}
-\vspace{0.6em}
+\textbf{Among all trajectory distributions that match the expert's behaviour, pick the one with maximum entropy.}
+\vspace{0.3em}
 \begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item Trajectory distribution under reward $R_\theta$:
+    \setlength{\itemsep}{0.4em}
+    \item Written out, that is a \emph{constrained} problem:
+    \[
+        \max_{P} \; H(P)
+        \quad \text{s.t.} \quad
+        \mathbb{E}_{P}\big[\text{feature counts}\big] = \text{expert's feature counts}
+    \]
+    \item \textcolor{red}{Solving it gives the exponential form} --- higher-reward trajectories become exponentially more likely:
     \[
         P_\theta(\tau) \;\propto\; \exp\!\Big(\textstyle\sum_t R_\theta(s_t, a_t)\Big)
     \]
-    \item Higher-reward trajectories are exponentially more likely, but the entropy term keeps the distribution from collapsing
-    \item Train $\theta$ by maximum likelihood of expert trajectories:
-    \[
-        \max_\theta \;\sum_{\tau^E} \log P_\theta(\tau^E)
-    \]
-    \item Uniquely resolves the ambiguity; matches expert feature-counts in expectation
+    \item \textcolor{gray}{So there is no entropy \emph{term} to point at in that formula --- the entropy has already been solved out, and the $\theta$ are the Lagrange multipliers of the matching constraint}
+    \item Train $\theta$ by maximum likelihood on expert trajectories: $\;\max_\theta \sum_{\tau^E} \log P_\theta(\tau^E)$
+    \item Exactly \emph{one} distribution satisfies both conditions --- which is what makes the choice unique
 \end{itemize}
 \end{frame}
 
@@ -79,7 +82,22 @@
     \item In SAC (Day 6): adds exploration to the policy
     \item In MaxEnt IRL: resolves reward ambiguity
     \item \textbf{Same principle, two different jobs.}
+    \item \textcolor{gray}{Different mechanics, though: SAC \emph{adds} $\alpha\mathcal{H}(\pi)$ to the objective, so you can point at the term. MaxEnt IRL imposes entropy as the \emph{selection rule}, which is why it disappears into the exponential form}
     \item Cite: \textbf{Ziebart, Maas, Bagnell \& Dey, AAAI 2008} --- \emph{Maximum Entropy Inverse Reinforcement Learning}
+\end{itemize}
+\end{frame}
+
+% Bridges the 2008 -> today gap: how MaxEnt IRL became deep-learning-scale.
+\begin{frame}{From 2008 to Today: How IRL Scaled}
+\textbf{The catch with MaxEnt IRL as stated:} it needs hand-designed feature counts and a tractable normaliser --- fine for a tabular gridworld, hopeless for pixels.
+\vspace{0.3em}
+\begin{itemize}
+    \setlength{\itemsep}{0.4em}
+    \item \textbf{Guided Cost Learning} (Finn et al., 2016): estimate that normaliser by \emph{sampling} instead of enumerating $\Rightarrow$ neural-network rewards
+    \item \textcolor{red}{Then the surprise:} running a \textbf{GAN} on this problem optimises \emph{the same objective} as MaxEnt IRL --- the discriminator plays the role of the reward, the generator the policy
+    \item \textbf{GAIL} (Ho \& Ermon, 2016) and \textbf{AIRL} (Fu et al., ICLR 2018) are that idea made practical: learn reward and policy \emph{adversarially}, straight from demonstrations
+    \item \textcolor{gray}{Meanwhile robotics largely went the other way --- large-scale \emph{behaviour cloning} (Diffusion Policy, VLAs) is now the dominant way to learn from demonstrations there}
+    \item \textcolor{red}{\textbf{IRL's centre of gravity moved to language models}} --- which is where the next two slides are heading
 \end{itemize}
 \end{frame}
 
@@ -123,6 +141,8 @@
     \item The reward model in RLHF is the $R_\theta$ from the previous slide
     \item The only thing that changes is the policy class: $\pi_\theta$ becomes a large language model
     \item The optimizer (PPO) and the pipeline (SFT $\to$ RM $\to$ PPO) are the same machinery
+    \item \textcolor{red}{Read the other way:} training a reward model \emph{is} an inverse-RL problem --- inferring a reward from human data rather than writing one down
+    \item \textcolor{gray}{And the loop closes: 2025 work runs adversarial IRL on expert chain-of-thought to recover \emph{process-level} reasoning rewards, instead of imitating the traces}
     \item Day 9 picks up exactly here.
 \end{itemize}
 \end{frame}

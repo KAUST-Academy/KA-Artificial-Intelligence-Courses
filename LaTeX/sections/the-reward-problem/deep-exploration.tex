@@ -1,4 +1,4 @@
-\section{Deep Exploration in MDPs}
+\section{Deep Exploration: From MDPs to LLMs}
 
 \begin{frame}{}
     \LARGE Exploration: \textbf{From Bandits to Deep RL}
@@ -7,7 +7,7 @@
 \begin{frame}{Why Bandit Exploration Doesn't Scale Naively}
 \begin{itemize}
     \setlength{\itemsep}{0.55em}
-    \item Bandits gave us \emph{optimism} (UCB), \emph{posterior sampling} (Thompson), and \emph{policy gradient with stochastic policy} --- in one step
+    \item Bandits gave us \emph{optimism} (UCB) and \emph{posterior sampling} (Thompson) --- both in a single step, with no state to worry about
     \item In an MDP with sparse rewards, none of these scale naively:
     \begin{itemize}
         \item Visiting every $(s,a)$ enough times is infeasible
@@ -24,12 +24,14 @@
 \end{center}
 \vspace{0.6em}
 \begin{itemize}
-    \setlength{\itemsep}{0.5em}
+    \setlength{\itemsep}{0.45em}
     \item \textbf{Vanilla DQN:} $\sim 0$ points (extrinsic reward is essentially never reached)
     \item \textbf{Pseudo-counts (2016):} first dramatic progress
     \item \textbf{Random Network Distillation (2018):} first above-human, no demonstrations
+    \item \textbf{Go-Explore (2019, Nature 2021):} $>2{,}000{,}000$ points --- solves \emph{all} levels
+    \item \textbf{Agent57 (2020):} above human on \emph{all 57} Atari games, Montezuma included
 \end{itemize}
-\vspace{0.8em}
+\vspace{0.5em}
 \centering\small\textcolor{gray}{This is the single benchmark we'll use to anchor every method in this section.}
 \end{frame}
 
@@ -42,8 +44,6 @@
     \item Combines with any off-policy algorithm
     \item Cite: \textbf{Andrychowicz et al., NeurIPS 2017} --- \emph{Hindsight Experience Replay}
 \end{itemize}
-\vspace{0.4em}
-\centering\small\textcolor{gray}{(Forward-referenced from Day 5.)}
 \end{frame}
 
 \begin{frame}{Bootstrapped DQN: Thompson Sampling for MDPs}
@@ -56,41 +56,43 @@
 
 \begin{frame}{Bootstrapped DQN: How It Approximates the Posterior}
 \begin{itemize}
-    \setlength{\itemsep}{0.5em}
-    \item \textbf{$K$ parallel Q-heads}: $K$ separate output layers on top of a single shared convolutional trunk, each predicting its own Q-function
-    \item Each head trained on its own \textbf{bootstrap-sampled} (with replacement) subset of replay --- the standard statistical-bootstrap trick; different heads see different data, so they disagree
-    \item \emph{Each episode}: pick one head uniformly at random and act greedily by it for the whole episode
-    \item Disagreement across heads $\approx$ posterior uncertainty over the true Q-function
-    \item Cite: \textbf{Osband, Blundell, Pritzel \& Van Roy, NeurIPS 2016} --- \emph{Deep Exploration via Bootstrapped DQN}
-    \item \textcolor{red}{Thompson sampling lifted to MDPs} --- same bandit method, with a Q-function instead of an arm-reward.
+    \setlength{\itemsep}{0.32em}
+    \item \textbf{$K$ parallel Q-heads}: $K$ output layers on one shared trunk, each with its own Q-function
+    \item \textcolor{gray}{``Replay'' is DQN's \textbf{replay buffer} from Day 2 --- the stored $(s,a,r,s')$ transitions so far}
+    \item Each transition is assigned to only \emph{some} of the $K$ heads, so every head trains on a different slice of experience
+    \item \emph{Each episode}: pick one head at random and act greedily by it throughout
+    \item \textbf{Where data is thin the heads disagree; where it is plentiful they converge} --- that spread \emph{is} the posterior estimate
+    \item \textcolor{red}{So disagreement is the product, not a defect to train away.} Heads that were all good everywhere would make sampling identical to greedy --- plain DQN, no exploration
+    \item More coverage $\Rightarrow$ heads converge $\Rightarrow$ exploration fades by itself. \textcolor{gray}{Thompson sampling lifted to MDPs: $K$ point-samples instead of a curve (Osband et al., 2016)}
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Count-Based Exploration: The Idea}
+\textbf{The shape every method here shares.} We do not change the algorithm --- we change the reward it optimises:
+\[
+    r_t^+ \;=\; \underbrace{r_t}_{\text{real reward from the env}} \;+\; \beta \cdot \underbrace{\frac{1}{\sqrt{N(s,a)}}}_{\text{novelty bonus}}
+\]
 \begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item \emph{Tabular intuition:} a UCB-style exploration bonus
-    \[
-        r_t^+ \;=\; r_t \;+\; \beta \cdot \frac{1}{\sqrt{N(s,a)}}
-    \]
-    encourages visiting under-counted $(s,a)$ pairs
-    \item Provably good in tabular MDPs --- a direct lift of UCB1 from bandits
-    \item \emph{Problem in deep RL:} pixels are essentially never visited twice; $N(s,a) = 1$ almost always, and the bonus becomes uninformative
-    \item Need a \emph{generalizable} notion of ``count''
+    \setlength{\itemsep}{0.4em}
+    \item \textcolor{red}{The bonus is simply \emph{added} to the real reward}, and PPO/DQN/SAC run unchanged --- from here on, only the \textbf{bonus term} differs between methods
+    \item A direct lift of UCB1, with $\beta$ trading exploration against the real task
+    \item \emph{Problem once the state is an image} (Atari, a camera feed): the state is the \textbf{whole frame}, so two states match only if \emph{every pixel} does
+    \item So $N(s,a) = 1$ forever and the bonus is constant everywhere. We need a \emph{generalizable} count --- one that calls two \emph{similar} frames both familiar
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Pseudo-Counts: UCB in Pixel Space}
+\textbf{A density model} $\rho$ answers one question: \emph{``how likely is this frame?''} It is trained on the frames seen so far, so familiar-looking screens get high $\rho$ and never-seen ones get low $\rho$.
+\vspace{0.3em}
 \begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item Use a density model $\rho$ over states. Let $\rho'(s)$ be its prediction \emph{after} one more observation of $s$
-    \item Define a \emph{pseudo-count}:
+    \setlength{\itemsep}{0.45em}
+    \item \textbf{The trick:} train the model on \emph{one more copy of $s$} and see how much its answer for $s$ moves.
     \[
-        \hat{N}(s) \;=\; \frac{\rho(s)\,(1 - \rho'(s))}{\rho'(s) - \rho(s)}
+        \hat{N}(s) \;=\; \frac{\rho(s)\,\big(1 - \rho'(s)\big)}{\rho'(s) - \rho(s)}
     \]
-    A novel state has small $\rho(s)$, hence small $\hat{N}(s)$, hence large bonus
-    \item Cite: \textbf{Bellemare et al., NeurIPS 2016} --- \emph{Unifying Count-Based Exploration and Intrinsic Motivation}
-    \item \textbf{Result on Montezuma:} \emph{first dramatic progress}
+    \item \textcolor{red}{$\rho'(s)$ is not the next state.} It is the \emph{same} state $s$, scored by the model \emph{after} that extra training step --- ``before'' and ``after'', not ``now'' and ``next''
+    \item \textbf{Why this is a count:} a model that has seen $s$ a million times barely budges, so the denominator is tiny and $\hat{N}$ is huge. A model seeing $s$ for the first time jumps, so $\hat{N}$ is small --- and the bonus is large
+    \item Cite: \textbf{Bellemare et al., NeurIPS 2016}. \textbf{Result on Montezuma:} \emph{first dramatic progress}
 \end{itemize}
 \end{frame}
 
@@ -98,13 +100,13 @@
 \textbf{Intrinsic reward $=$ ``surprise''} --- the agent is rewarded for finding observations it can't yet predict.
 \begin{itemize}
     \setlength{\itemsep}{0.55em}
-    \item Embed states into a feature space: $\phi(s) \in \mathbb{R}^d$ (a learned encoder)
+    \item Embed states into a feature space: $\phi(s) \in \mathbb{R}^d$
     \item Train a \textbf{forward-dynamics model} $f$ to predict the \emph{next-state features} from the current features and action:
     \[
         \hat{\phi}(s_{t+1}) \;=\; f\!\big(\phi(s_t),\, a_t\big)
     \]
     (so $\hat{\phi}(s_{t+1})$ is the model's \emph{predicted} embedding of $s_{t+1}$; $\phi(s_{t+1})$ is the actual one observed)
-    \item Intrinsic reward $=$ how wrong the prediction was:
+    \item The bonus is how wrong that prediction was --- \textcolor{red}{added to the real reward as before}, $r_t^+ = r_t + \beta\, r_t^i$:
     \[
         r_t^i \;=\; \tfrac{1}{2}\big\|\,\hat{\phi}(s_{t+1}) \,-\, \phi(s_{t+1})\,\big\|^2
     \]
@@ -130,7 +132,7 @@
     \setlength{\itemsep}{0.55em}
     \item Pick a \emph{fixed, randomly-initialized} target network $f^*$
     \item Train a predictor $f_\theta$ to match $f^*(s)$ on visited states
-    \item Intrinsic reward: $r_t^i = \|f_\theta(s_t) - f^*(s_t)\|^2$
+    \item Bonus: $r_t^i = \|f_\theta(s_t) - f^*(s_t)\|^2$, again \textcolor{red}{added to the real reward}, $r_t^+ = r_t + \beta\, r_t^i$
 \end{itemize}
 \vspace{0.6em}
 \begin{itemize}
@@ -141,31 +143,71 @@
 
 \begin{frame}{RND: Results and Caveat}
 \begin{itemize}
-    \setlength{\itemsep}{0.6em}
+    \setlength{\itemsep}{0.55em}
     \item Cite: \textbf{Burda, Edwards, Storkey, Klimov, ICLR 2019} --- \emph{Exploration by Random Network Distillation}
     \item \textbf{Result on Montezuma:} \emph{first above-human performance without demonstrations or game-state access}
     \item \emph{Caveat:} still subject to the noisy-TV issue in principle; in practice works because randomly-initialized networks aren't very sensitive to stochastic pixel noise
+    \item \textcolor{red}{Still the default intrinsic-reward baseline in 2026} --- simple, cheap, and reliable. Recent work refines rather than replaces it (Distributional RND; Random Distribution Distillation, 2025)
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Mapping Bandits $\longrightarrow$ Deep RL}
+\begin{frame}{Go-Explore: Remember Where You Have Been}
+\textbf{A different diagnosis.} The problem isn't only \emph{finding} novel states --- it's that agents \emph{forget} promising ones and can never get back to them.
+\vspace{0.4em}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item Keep an \textbf{archive} of visited states. Each iteration: pick a promising one, \emph{return} to it directly, then explore \emph{from} there --- ``first return, then explore''
+    \item Exploration effort is never wasted re-deriving a path you already found
+    \item \textbf{Result:} $>2{,}000{,}000$ on Montezuma and all levels solved --- two orders of magnitude past RND
+    \item \emph{The catch:} returning to an archived state originally needed simulator save/restore, a much stronger assumption than RND's. That is why both are ``state of the art'' in different senses
+    \item Cite: \textbf{Ecoffet, Huizinga, Lehman, Stanley \& Clune} --- \emph{Go-Explore} (2019); \emph{First Return, Then Explore}, Nature 2021
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Episodic vs.\ Lifelong Novelty}
+\textbf{A distinction the methods so far miss.} RND asks ``have I \emph{ever} seen this?'' But within a single episode you also want to avoid re-treading the same room --- even if you have seen it many times before.
+\vspace{0.4em}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item \textbf{Never Give Up (NGU, 2020)} combines both signals: an \emph{episodic} novelty bonus (reset each episode) multiplied by a \emph{lifelong} one (RND-style, across all training)
+    \item \textbf{Agent57 (2020)} adds a meta-controller that \emph{learns} how much to weight exploration versus exploitation, and over what horizon --- first agent above human on all 57 Atari games
+    \item \textbf{E3B (2022)} is the modern count-based descendant: an episodic bonus for states that are \emph{diverse} under an inverse-dynamics embedding --- ICM's noisy-TV fix combined with UCB's count bonus, extended to continuous spaces
+    \item \textcolor{red}{The pattern:} no single novelty signal is enough --- current systems \emph{combine} them at different timescales
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exploration Did Not Go Away --- It Moved to LLMs}
+\textbf{The same dilemma, today's frontier.} When you train a reasoning model with RL (Day 9), it faces exactly the trade-off we opened this morning with.
+\vspace{0.4em}
+\begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \item \textbf{Entropy collapse:} the policy sharpens onto a few reasoning paths early in training. In-distribution accuracy keeps rising while out-of-distribution performance \emph{degrades} --- pure exploitation, and the model stops discovering
+    \item \textbf{How it is measured:} \emph{pass@k} --- can the model solve the problem in $k$ tries? Collapse shows up as pass@1 improving while pass@k falls. Training directly on pass@k restores exploration
+    \item \textbf{Today's fixes are today's bandit ideas:} entropy bonuses aimed at the most uncertain tokens (Day 6's $-\log\pi$), and \textcolor{red}{count-based bonuses of the form $Q + \alpha\sqrt{U}$} --- literally UCB's $1/\sqrt{N}$, applied to reasoning states
+\end{itemize}
+\vspace{0.3em}
+\centering\small\textcolor{gray}{The 1985 bandit question --- ``is this worth trying again?'' --- is an open problem in 2026 LLM training.}
+\end{frame}
+
+\begin{frame}{Mapping Bandits $\longrightarrow$ Deep RL $\longrightarrow$ LLMs}
 \begin{center}
-\renewcommand{\arraystretch}{1.55}
-\small
-\begin{tabular}{p{0.35\textwidth}p{0.52\textwidth}}
+\renewcommand{\arraystretch}{1.4}
+\footnotesize
+\begin{tabular}{p{0.28\textwidth}p{0.60\textwidth}}
 \hline
-\textbf{Bandit method} & \textbf{Deep-RL descendant} \\
+\textbf{Bandit idea} & \textbf{Descendants} \\
 \hline
-UCB / $1/\sqrt{N}$ bonus & Count-based / pseudo-counts (Bellemare 2016) \\
+UCB / $1/\sqrt{N}$ bonus & Pseudo-counts (2016), E3B (2022); \textcolor{red}{count bonuses in LLM RL (2025)} \\
 Thompson sampling     & Bootstrapped DQN / PSRL (Osband 2016) \\
-Gradient bandits      & \textcolor{blue}{Entropy bonus --- SAC (Day 6)} \\
-\emph{(new in deep RL)} & Curiosity / ICM (Pathak 2017); RND (Burda 2018) \\
+Stochastic policies   & \textcolor{blue}{Entropy bonus --- SAC (Day 6)}; entropy control in RLVR \\
+\emph{(new in deep RL)} & Curiosity / ICM (2017); RND (2018); NGU / Agent57 (2020); Go-Explore (2021) \\
 \hline
 \end{tabular}
 \end{center}
-\vspace{0.7em}
+\vspace{0.5em}
 \begin{itemize}
-    \item \textcolor{red}{\textbf{Entropy is one answer to exploration.}} Optimism, posterior sampling, and curiosity are the others.
-    \item Day 6's $-\log\pi$ bonus is the gradient-bandit descendant --- now we have the full family.
+    \setlength{\itemsep}{0.45em}
+    \item \textcolor{red}{\textbf{Entropy is only one answer to exploration.}} Optimism, posterior sampling, novelty, and archiving are the others
+    \item \textbf{What actually survived:} RND is still the default baseline; the $1/\sqrt{N}$ bonus keeps reappearing; $\epsilon$-greedy is still what most people try first
 \end{itemize}
 \end{frame}

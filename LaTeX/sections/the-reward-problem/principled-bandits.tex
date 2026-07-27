@@ -21,178 +21,79 @@
 
 \begin{frame}{Upper Confidence Bounds (UCB)}
 \begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item Idea: be optimistic --- use an upper confidence bound $\hat{U}_t(a)$ such that
-    \[
-        Q(a) \;\leq\; \hat{Q}_t(a) + \hat{U}_t(a) \quad \text{with high probability}
-    \]
-    \item The bound should shrink as the arm is tried more:
-    \begin{itemize}
-        \item Small $N_t(a)$ $\Rightarrow$ large $\hat{U}_t(a)$ (uncertain)
-        \item Large $N_t(a)$ $\Rightarrow$ small $\hat{U}_t(a)$ (accurate)
-    \end{itemize}
-    \item Select the action with the highest UCB:
-    \[
-        a_{t+1} = \operatorname*{arg\,max}_{a \in \mathcal{A}} \big\{ \hat{Q}_t(a) + \hat{U}_t(a) \big\}
-    \]
-\end{itemize}
-\end{frame}
-
-% --- Hoeffding -> UCB compressed: state the bound, jump to the result ---
-\begin{frame}{Hoeffding's Inequality: How Concentrated is the Mean?}
-\textbf{The question we need answered.} If we've pulled an arm $n$ times and seen a sample mean $\bar{X}_n$, how confident can we be that the true mean isn't much higher? That gap \emph{is} the UCB bonus we want.
-\vspace{0.4em}
-\begin{block}{Hoeffding's Inequality}
-For i.i.d.\ random variables $X_1,\ldots,X_n \in [0,1]$ with sample mean $\bar{X}_n$, and any $u \geq 0$:
-\[
-    \mathbb{P}\!\big[\mathbb{E}[\bar{X}_n] > \bar{X}_n + u\big] \;\leq\; e^{-2 n u^2}
-\]
-\end{block}
-\begin{itemize}
     \setlength{\itemsep}{0.45em}
-    \item \emph{The probability the true mean exceeds our estimate by more than $u$ decays exponentially in $n\cdot u^2$}
-    \item More pulls $\Rightarrow$ tighter concentration; the $e^{-2nu^2}$ factor is exactly what will make the bonus shrink as $1/\sqrt{n}$
-    \item No prior on the distribution required --- only bounded support
-\end{itemize}
-\end{frame}
-
-\begin{frame}{From Hoeffding's Inequality to UCB1}
-\textbf{Plan.} Use the Hoeffding bound to define a confidence bonus $\hat{U}_t(a)$ that holds with high probability, then act optimistically by it.
-\vspace{0.4em}
-\begin{itemize}
-    \setlength{\itemsep}{0.5em}
-    \item Apply Hoeffding to arm $a$ with $n = N_t(a)$ and $u = \hat{U}_t(a)$
-    \item Choose a failure probability that shrinks with $t$:\; $p = t^{-\alpha}$
-    \item Set the Hoeffding bound equal to $p$ and solve for the bonus:
+    \item Two things per arm: $Q(a)$, the \emph{true} mean we can never see, and $\hat{Q}_t(a)$, our \emph{sample-mean estimate} of it after $N_t(a)$ pulls
+    \item Idea: be optimistic --- add a margin $\hat{U}_t(a)$ wide enough that the truth is very likely below it, then act on the sum:
     \[
-        e^{-2 N_t(a)\, \hat{U}_t(a)^2} \;=\; t^{-\alpha}
-        \;\;\Longrightarrow\;\;
-        \hat{U}_t(a) \;=\; \sqrt{\frac{\alpha \log t}{2\, N_t(a)}}
+        Q(a) \;\leq\; \underbrace{\hat{Q}_t(a)}_{\text{what we measured}} + \underbrace{\hat{U}_t(a)}_{\text{room for error}},
+        \qquad a_{t+1} = \operatorname*{arg\,max}_{a} \big\{ \hat{Q}_t(a) + \hat{U}_t(a) \big\}
     \]
-    \item \textcolor{red}{The square-root bonus comes directly from Hoeffding} --- not a heuristic, an actual high-probability bound.
+    \item $\hat{U}_t(a)$ is \emph{large} when $N_t(a)$ is small (we know little) and \emph{shrinks} as the arm is pulled more
+    \item \textcolor{red}{So UCB never asks ``which arm \emph{is} best?'' --- it asks ``which arm \emph{could} be best?''} A barely-tried arm that currently looks bad still gets pulled, because its true value could plausibly still be high
 \end{itemize}
 \end{frame}
 
 \begin{frame}{The UCB1 Algorithm}
-\textbf{UCB1} (for arbitrary-distribution arms bounded in $[0,1]$):
+\textbf{``UCB'' is the recipe; UCB1 fills it in} --- assume rewards bounded in $[0,1]$:
 \[
     a_{t+1} = \operatorname*{arg\,max}_{a \in \mathcal{A}} \left\{ \hat{Q}_t(a) + \sqrt{\frac{\alpha \log t}{2 N_t(a)}} \right\}
 \]
-\begin{block}{Theorem (Auer, Cesa-Bianchi \& Fischer, 2002)}
-UCB1 achieves \emph{logarithmic} total regret:
-\[
-    L_T \leq \sum_{a \mid \Delta_a > 0} \frac{4\alpha \log T}{\Delta_a} \;+\; \frac{2\alpha \Delta_a}{\alpha - 1}
-\]
-\end{block}
-\vspace{0.4em}
-\centering\small\textcolor{gray}{Matches the Lai-Robbins lower bound up to constants. \href{https://github.com/TikhonJelvis/RL-book/tree/master/rl/chapter14/ucb1.py}{Educational Code}.}
-\end{frame}
-
-% --- Bayesian Bandits & Thompson Sampling ---
-\begin{frame}{Bayesian Bandits}
 \begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item UCB makes \emph{no} assumption about $\mathcal{R}$ (just bounded support)
-    \item \emph{Bayesian} bandits exploit prior knowledge of the reward distribution $\mathbb{P}[\mathcal{R}]$
-    \item Maintain a \emph{posterior} $\mathbb{P}[\mathcal{R} \mid h_t]$ as data arrives, where $h_t = a_1, r_1, \ldots, a_t, r_t$
-    \item Use the posterior to guide exploration:
-    \begin{itemize}
-        \item Bayesian UCB --- be optimistic on the posterior
-        \item Thompson sampling --- sample from the posterior
-    \end{itemize}
-    \item Better performance when the prior is accurate
+    \setlength{\itemsep}{0.5em}
+    \item \textcolor{gray}{The \emph{shape} is what matters: the bonus shrinks like $\mathbf{1/\sqrt{N_t(a)}}$ --- remember it, it reappears all afternoon}
+    \item It grows slowly with the clock $t$, so an arm left alone long enough is revisited: exploration is \textbf{automatic}, no $\epsilon$ and no schedule
+    \item \textbf{Unlike optimistic initialisation}, the bonus is recomputed \emph{every step} --- an arm unlucky early is never written off for good
+    \item \textcolor{red}{Regret grows as $\mathcal{O}(\log T)$} (Auer et al., 2002) --- \textbf{sublinear at last}, provably the best possible rate. \href{https://github.com/TikhonJelvis/RL-book/tree/master/rl/chapter14/ucb1.py}{Educational Code}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Bayesian UCB: Independent Gaussians}
-\begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item Assume each arm's reward is Gaussian: $\mathcal{R}^a = \mathcal{N}(\mu_a, \sigma_a^2)$
-    \item As data arrives, update the posterior over $\mu_a, \sigma_a^2$ (Gaussian-Gaussian conjugacy)
-    \item Pick the action with the highest expected ``$c$ std-errors above the mean'':
-    \[
-        a_{t+1} = \operatorname*{arg\,max}_{a \in \mathcal{A}} \;\mathbb{E}_{\mathbb{P}[\mu_a, \sigma_a \mid h_t]}\!\left[\,\mu_a + \frac{c \cdot \sigma_a}{\sqrt{N_t(a)}}\,\right]
-    \]
-    \item \emph{Same UCB philosophy, with a Bayesian uncertainty estimate instead of Hoeffding's}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Probability Matching \& Thompson Sampling}
-\textbf{Probability matching:} pick action $a$ with probability that $a$ is actually the optimal arm under the posterior.
-\begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item Optimistic in the face of uncertainty: uncertain arms have higher probability of being best
-    \item \textcolor{red}{Computing this probability directly is intractable in general}
-    \item \textbf{Thompson sampling} is the clean trick that implements it:
-    \begin{enumerate}
-        \item Sample one reward distribution $\mathcal{D}_t$ from the posterior $\mathbb{P}[\mathcal{R} \mid h_t]$
-        \item Estimate $\hat{Q}_t(a) = \mathbb{E}_{\mathcal{D}_t}[r \mid a]$ from the sample
-        \item Pick $a_{t+1} = \operatorname*{arg\,max}_a \hat{Q}_t(a)$
-    \end{enumerate}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Thompson Sampling: Why It Works}
-\begin{itemize}
-    \setlength{\itemsep}{0.6em}
-    \item Sampling from the posterior gives each arm probability of selection equal to its probability of being optimal --- this \emph{is} probability matching, by construction
-    \item No upper-confidence-bound calculation needed --- just sampling
-    \item \textcolor{red}{Thompson sampling achieves the Lai-Robbins lower bound} --- asymptotically optimal regret
-    \item Educational code:
-    \begin{itemize}
-        \item \href{https://github.com/TikhonJelvis/RL-book/tree/master/rl/chapter14/ts_gaussian.py}{Gaussian rewards}
-        \item \href{https://github.com/TikhonJelvis/RL-book/tree/master/rl/chapter14/ts_bernoulli.py}{Bernoulli rewards}
-    \end{itemize}
-\end{itemize}
-\end{frame}
-
-% --- Gradient Bandits: keep the policy + result; cut the derivation chain rule and the unbiasedness proof ---
-\begin{frame}{Gradient Bandits: The Setup}
-\begin{itemize}
-    \setlength{\itemsep}{0.45em}
-    \item Optimize score parameters $s_a$ for $a \in \mathcal{A}$ via \emph{stochastic gradient ascent}
-    \item Objective: expected reward under a stochastic (softmax) policy
-    \[
-        J(s_{a_1}, \ldots, s_{a_m}) = \sum_{a \in \mathcal{A}} \pi(a) \cdot \mathbb{E}[r \mid a]
-    \]
-    \item Softmax policy over scores:
-    \[
-        \pi(a) = \frac{e^{s_a}}{\sum_{b \in \mathcal{A}} e^{s_b}}
-    \]
-    \item Scores represent the relative value of actions based on seen rewards
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Gradient Bandits: The Update Rule}
-\textbf{Policy gradient} (standard chain rule + softmax calculus) gives:
-\[
-    \frac{\partial J}{\partial s_a} \;=\; \mathbb{E}_{a' \sim \pi,\, r \sim \mathcal{R}^{a'}}\!\big[\, r \cdot (\mathbf{1}_{a = a'} - \pi(a))\,\big]
-\]
-\begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item Use a \emph{baseline} $B = \bar{r}_t$ (average reward so far) to reduce variance --- can be shown unbiased
-    \item \textbf{Sample-based update rule:}
-    \[
-        s_{t+1}(a) = s_t(a) + \alpha \cdot (r_t - \bar{r}_t) \cdot (\mathbf{1}_{a = a_t} - \pi_t(a))
-    \]
-    \item \href{https://github.com/TikhonJelvis/RL-book/tree/master/rl/chapter14/gradient_bandits.py}{Educational Code}
-\end{itemize}
-\end{frame}
-
-% Day-3 callback (kept --- this is the clean version)
-\begin{frame}{Gradient Bandits Are REINFORCE in Disguise}
-\vspace{0.5em}
+% --- Bayesian bandits: 2 slides merged into 1, Gaussian conjugacy dropped ---
+\begin{frame}{Bayesian Bandits: Keep a Curve, Not a Number}
+\vspace{-0.3em}
 \begin{center}
-\textcolor{red}{\textbf{This is exactly the REINFORCE estimator from Day 3,}}\\
-applied to a \emph{one-state} MDP.
+\begin{tikzpicture}
+\begin{axis}[
+    width=0.80\textwidth, height=0.38\textheight,
+    xlabel={\small this arm's true click rate}, ylabel={\small belief},
+    xmin=0, xmax=1, ymin=0, ymax=9.6,
+    ytick=\empty, xtick={0,0.3,0.5,1},
+    axis lines=left, samples=200, domain=0:1,
+    legend style={at={(0.99,0.99)},anchor=north east,draw=none,fill=none,font=\scriptsize},
+    every axis plot/.append style={very thick},
+]
+\addplot[gray,dashed] {1};                        \addlegendentry{before any data}
+\addplot[blue]  {1320*x^3*(1-x)^7};               \addlegendentry{10 shows, 3 clicks}
+\addplot[red]   {1.617e14*x^15*(1-x)^35};         \addlegendentry{50 shows, 15 clicks}
+\end{axis}
+\end{tikzpicture}
 \end{center}
-\vspace{0.8em}
+\vspace{-0.3em}
 \begin{itemize}
-    \setlength{\itemsep}{0.6em}
-    \item Same softmax policy
-    \item Same score-function gradient $r \cdot \nabla \log \pi(a)$
-    \item Same baseline-for-variance technique
-    \item The bandit is where policy gradient is \emph{cleanest} to derive --- no trajectories, no discounting, just one $\pi(a)$ and one reward.
+    \setlength{\itemsep}{0.3em}
+    \item The curve is our \textbf{belief} about that one arm. Flat means ``could be anything'' --- that is the \textbf{prior}, and it is a complete answer to ``I know nothing''
+    \item Each reward reshapes it into the \textbf{posterior}: the peak moves to what we have seen, and the curve \emph{narrows} as evidence piles up
+    \item \textcolor{red}{The width \emph{is} the uncertainty} --- measured, not bounded from above like UCB's $\hat{U}$ --- and unlike a single number, a curve can be \emph{sampled} from
 \end{itemize}
 \end{frame}
 
+% --- Thompson: 2 slides merged into 1, idea before the jargon ---
+\begin{frame}{Thompson Sampling}
+\textbf{One line:} draw a \emph{plausible} value for each arm from its curve; pull whichever wins the draw.
+\vspace{-0.2em}
+\begin{block}{The whole algorithm, for click / no-click rewards}
+\vspace{-0.2em}
+Per arm, \emph{two counters}: $s_a$ (clicks), $f_a$ (misses). Repeat:
+\begin{enumerate}
+    \item Draw $\theta_a \sim \mathrm{Beta}(1+s_a,\; 1+f_a)$ for every arm \hfill \textcolor{gray}{$\leftarrow$ that Beta \emph{is} the curve}
+    \item Pull $a_t = \operatorname*{arg\,max}_a \theta_a$, and increment $s_{a_t}$ or $f_{a_t}$ by the outcome
+\end{enumerate}
+\vspace{-0.1em}
+{\footnotesize\textcolor{gray}{No integrals anywhere --- the posterior \emph{is} those two integers.}}
+\end{block}
+\begin{itemize}
+    \setlength{\itemsep}{0.3em}
+    \item \textbf{Why this explores:} a barely-tried arm has a wide curve, so its draw is sometimes high --- and it gets pulled. A well-measured mediocre arm has a narrow curve and almost never wins
+    \item \textcolor{red}{Same $\mathcal{O}(\log T)$ regret as UCB1}, usually better in practice; the standard bandit algorithm in production personalisation (Netflix, Lyft)
+\end{itemize}
+\centering\small\textcolor{gray}{Formally \emph{probability matching}. \href{https://github.com/TikhonJelvis/RL-book/tree/master/rl/chapter14/ts_bernoulli.py}{Bernoulli} / \href{https://github.com/TikhonJelvis/RL-book/tree/master/rl/chapter14/ts_gaussian.py}{Gaussian} code.}
+\end{frame}

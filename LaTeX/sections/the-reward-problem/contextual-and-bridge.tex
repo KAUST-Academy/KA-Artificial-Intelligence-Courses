@@ -1,68 +1,43 @@
 \section{Contextual Bandits and the Bridge to MDPs}
 
-\begin{frame}{Contextual Bandits: The Setup}
-\begin{itemize}
-    \setlength{\itemsep}{0.55em}
-    \item A contextual bandit is a 3-tuple $(\mathcal{A}, \mathcal{S}, \mathcal{R})$:
-    \begin{itemize}
-        \item $\mathcal{A}$: known set of $m$ actions (``arms'')
-        \item $\mathcal{S}$: distribution over states (``contexts'')
-        \item $\mathcal{R}^a_s$: reward distribution \emph{conditional} on $(s, a)$
-    \end{itemize}
-    \item \textcolor{red}{Same as MAB, but the agent now sees a context $s$ before choosing}
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Contextual Bandits: The Interaction}
-At each step $t$:
-\begin{enumerate}
-    \setlength{\itemsep}{0.5em}
-    \item Environment generates a context $s_t \sim \mathcal{S}$
-    \item Agent selects an action $a_t \in \mathcal{A}$
-    \item Environment generates a reward $r_t \sim \mathcal{R}^{a_t}_{s_t}$
-\end{enumerate}
-\vspace{0.7em}
-\begin{itemize}
-    \item Goal as before: maximize $\sum_{t=1}^{T} r_t$
-    \item Bandit algorithms extend naturally: $Q(a) \;\to\; Q(s, a)$
-\end{itemize}
-\end{frame}
-
-\begin{frame}{LinUCB: The Intuition}
-\textbf{Setting.} Each (context, action) pair has a feature vector $x_{s,a} \in \mathbb{R}^d$ (e.g.\ user features $\otimes$ article features).
-\begin{itemize}
-    \setlength{\itemsep}{0.6em}
-    \item Model the mean reward as \textbf{linear in the features}: $\mathbb{E}[r \mid s, a] = x_{s,a}^\top \theta_a$
-    \item Estimate each arm's parameter $\theta_a$ by \emph{ridge regression} on its past pulls $\Rightarrow$ get not just a point estimate $\hat{\theta}_a$ but a \emph{confidence ellipsoid} around it
-    \item \emph{Same UCB philosophy:} pick the action whose \textbf{optimistic} reward estimate is highest --- mean estimate $+$ how far the true $\theta_a$ could plausibly be from $\hat{\theta}_a$ in direction $x_{s,a}$
-    \item Reduces to UCB1 if the features are just one-hot per arm (i.e.\ no context)
-\end{itemize}
-\end{frame}
-
-\begin{frame}{LinUCB: The Algorithm}
-\textbf{For each arm $a$,} maintain $A_a$ (the $d\times d$ Gram matrix of past feature vectors pulled for that arm) and $\hat{\theta}_a = A_a^{-1} b_a$ (the ridge-regression coefficient).
+% --- Setup + interaction merged into one slide ---
+\begin{frame}{Contextual Bandits}
+\textbf{The one change:} before choosing, the agent is shown a \emph{context} $s$ --- a user profile, a time of day, a search query.
 \vspace{0.4em}
 \begin{itemize}
-    \setlength{\itemsep}{0.5em}
-    \item Action choice at step $t$:
-    \[
-        a_t = \operatorname*{arg\,max}_{a} \Big\{\; \underbrace{x_{s_t, a}^\top \hat{\theta}_a}_{\text{linear estimate}} \;+\; \alpha\,\underbrace{\sqrt{x_{s_t, a}^\top A_a^{-1} x_{s_t, a}}}_{\text{confidence-ellipsoid radius}} \;\Big\}
-    \]
-    \item Same shape as UCB1: \emph{mean estimate} $+$ \emph{bonus that shrinks as more data accumulates in direction $x_{s,a}$}
+    \setlength{\itemsep}{0.55em}
+    \item Each step: the environment draws a context $s_t$ $\;\to\;$ the agent picks $a_t$ $\;\to\;$ the reward comes from $\mathcal{R}^{a_t}_{s_t}$, which now depends on \emph{both}
+    \item The best arm is no longer a single answer --- it \textbf{depends on the context}. Every quantity from today gains an $s$: $Q(a) \to Q(s,a)$
+    \item \textbf{Is the context a state?} \textcolor{red}{Yes --- but a one-step one.} In an MDP your action changes what you see next, $s_{t+1} \sim P(\cdot \mid s_t, a_t)$. Here the next context is drawn \emph{independently of what you did}: your action moves the reward, never the future
+    \item That is exactly why there is no credit assignment and no Bellman equation here --- and why contextual bandits are deployed far more widely than full RL
+    \item \textcolor{gray}{News recommendation, ad selection, treatment assignment --- the right answer is almost never the same for everyone.}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{LinUCB in the Wild}
+% --- LinUCB: 3 slides collapsed to 1, motivated by the sparsity table ---
+\begin{frame}{LinUCB: Sharing Data Across Contexts}
+\textbf{The problem.} One estimate per (context, action) cell is hopeless --- the table is almost entirely empty.
+\begin{center}
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{tabular}{lccc}
+\hline
+\textbf{User} & \textbf{Article A} & \textbf{Article B} & \textbf{Article C} \\
+\hline
+sports, 25, US   & 4 / 50 & --- & --- \\
+sports, 27, UK   & ---    & --- & --- \\
+finance, 51, US  & ---    & 1 / 12 & --- \\
+\hline
+\end{tabular}\\[0.2em]
+{\scriptsize\textcolor{gray}{Cells show \emph{clicks / times shown}; ``---'' means never shown.}}
+\end{center}
 \begin{itemize}
-    \setlength{\itemsep}{0.6em}
-    \item \textbf{Industrially dominant case of contextual bandits}: deployed at scale on \emph{Yahoo Front Page news recommendation}
-    \begin{itemize}
-        \item 33M-event dataset
-        \item 12.5\% click lift over the context-free baseline
-    \end{itemize}
-    \item Cite: \textbf{Li, Chu, Langford \& Schapire, WWW 2010}
-    \item LinUCB and its successors power a huge fraction of online recommendation systems today
+    \setlength{\itemsep}{0.3em}
+    \item \textbf{The move:} describe each cell by \emph{features} $x_{s,a}$ and model the mean reward as linear, $\mathbb{E}[r \mid s,a] = x_{s,a}^\top\theta_a$. Rows 1 and 2 are nearly the same feature vector, so row 1's clicks now inform row 2
+    \item \textcolor{gray}{Not copying cells across --- we fit \emph{one weight vector per arm} on all the data at once, and read every cell off those weights}
+    \item \textbf{Same optimism as UCB1}, but the bonus is large in \emph{feature directions} short of data: we are uncertain about \emph{finance readers}, not about one empty cell
 \end{itemize}
+\centering\small\textcolor{gray}{Yahoo front page (Li et al., WWW 2010): 33M events, 12.5\% click lift over a context-free baseline.}
 \end{frame}
 
 \begin{frame}{Bandits $\longrightarrow$ MDPs}

@@ -2,15 +2,15 @@
 \begin{frame}[allowframebreaks]{References}
 \textbf{Course materials adapted from:}
 \begin{itemize}
-    \item Ashwin Rao, \href{https://web.stanford.edu/class/cme241/}{Stanford CME241: Foundations of Reinforcement Learning with Applications in Finance}
-    \item David Silver, \href{https://www.davidsilver.uk/teaching/}{DeepMind UCL Course on RL} --- exploration / bandits lecture
+    \item Ashwin Rao, \href{https://cme241.stanford.edu/}{Stanford CME241: Foundations of Reinforcement Learning with Applications in Finance}
+    \item David Silver, \href{https://www.davidsilver.uk/teaching/}{UCL Course on RL} --- Lecture 9, \emph{Exploration and Exploitation}
 \end{itemize}
 
 \textbf{Bandits \& classical exploration:}
 \begin{itemize}
-    \item T.~L.~Lai \& H.~Robbins (1985). \emph{Asymptotically efficient adaptive allocation rules.}
-    \item P.~Auer, N.~Cesa-Bianchi, P.~Fischer (2002). \emph{Finite-time analysis of the multi-armed bandit problem.} --- UCB1
-    \item W.~R.~Thompson (1933). \emph{On the likelihood that one unknown probability exceeds another \ldots} --- original Thompson sampling
+    \item P.~Auer, N.~Cesa-Bianchi, P.~Fischer (2002). \emph{Finite-time Analysis of the Multiarmed Bandit Problem.} Machine Learning 47, 235--256. --- UCB1
+    \item T.~L.~Lai \& H.~Robbins (1985). \emph{Asymptotically efficient adaptive allocation rules.} Advances in Applied Mathematics 6, 4--22. --- the $\Omega(\log T)$ regret lower bound (further reading)
+    \item W.~R.~Thompson (1933). \emph{On the Likelihood that One Unknown Probability Exceeds Another in View of the Evidence of Two Samples.} Biometrika 25, 285--294. --- original Thompson sampling
     \item L.~Li, W.~Chu, J.~Langford, R.~E.~Schapire (2010). \emph{A Contextual-Bandit Approach to Personalized News Article Recommendation.} WWW. \href{https://arxiv.org/abs/1003.0146}{arXiv:1003.0146} --- LinUCB
 \end{itemize}
 
@@ -21,6 +21,19 @@
     \item D.~Pathak, P.~Agrawal, A.~A.~Efros, T.~Darrell (2017). \emph{Curiosity-driven Exploration by Self-supervised Prediction.} ICML. \href{https://arxiv.org/abs/1705.05363}{arXiv:1705.05363} --- ICM
     \item Y.~Burda, H.~Edwards, A.~Storkey, O.~Klimov (2019). \emph{Exploration by Random Network Distillation.} ICLR. \href{https://arxiv.org/abs/1810.12894}{arXiv:1810.12894}
     \item M.~Andrychowicz et al.\ (2017). \emph{Hindsight Experience Replay.} NeurIPS. \href{https://arxiv.org/abs/1707.01495}{arXiv:1707.01495}
+    \item A.~P.~Badia et al.\ (2020). \emph{Never Give Up: Learning Directed Exploration Strategies.} ICLR. \href{https://arxiv.org/abs/2002.06038}{arXiv:2002.06038} --- NGU
+    \item A.~P.~Badia et al.\ (2020). \emph{Agent57: Outperforming the Atari Human Benchmark.} ICML. \href{https://arxiv.org/abs/2003.13350}{arXiv:2003.13350}
+    \item A.~Ecoffet, J.~Huizinga, J.~Lehman, K.~O.~Stanley, J.~Clune (2019). \emph{Go-Explore: a New Approach for Hard-Exploration Problems.} \href{https://arxiv.org/abs/1901.10995}{arXiv:1901.10995}
+    \item A.~Ecoffet, J.~Huizinga, J.~Lehman, K.~O.~Stanley, J.~Clune (2021). \emph{First Return, Then Explore.} Nature 590, 580--586. \href{https://arxiv.org/abs/2004.12919}{arXiv:2004.12919}
+    \item M.~Henaff, R.~Raileanu, M.~Jiang, T.~Rockt\"aschel (2022). \emph{Exploration via Elliptical Episodic Bonuses.} NeurIPS. \href{https://arxiv.org/abs/2210.05805}{arXiv:2210.05805} --- E3B
+\end{itemize}
+
+\textbf{Exploration in LLM RL (current frontier):}
+\begin{itemize}
+    \item \emph{Pass@k Training for Adaptively Balancing Exploration and Exploitation of Large Reasoning Models} (2025). \href{https://arxiv.org/abs/2508.10751}{arXiv:2508.10751}
+    \item \emph{MERCI: Motivating Exploration in LLM Reasoning with Count-based Intrinsic Rewards} (2025). \href{https://arxiv.org/abs/2510.16614}{arXiv:2510.16614} --- UCB-style count bonuses for reasoning
+    \item M.~Yuan et al.\ (2024). \emph{RLeXplore: Accelerating Research in Intrinsically-Motivated RL.} \href{https://arxiv.org/abs/2405.19548}{arXiv:2405.19548} --- reference implementations of 8 intrinsic-reward methods
+    \item C.~Lu et al.\ (2025). \emph{Intelligent Go-Explore.} ICLR. \href{https://arxiv.org/abs/2405.15143}{arXiv:2405.15143} --- Go-Explore driven by foundation models
 \end{itemize}
 
 \textbf{Reward design, hacking, and inverse RL:}
@@ -31,6 +44,12 @@
     \item A.~Y.~Ng \& S.~Russell (2000). \emph{Algorithms for Inverse Reinforcement Learning.} ICML.
     \item P.~Abbeel \& A.~Y.~Ng (2004). \emph{Apprenticeship Learning via Inverse Reinforcement Learning.} ICML.
     \item B.~D.~Ziebart, A.~Maas, J.~A.~Bagnell, A.~K.~Dey (2008). \emph{Maximum Entropy Inverse Reinforcement Learning.} AAAI. \href{https://www.cs.cmu.edu/~bziebart/publications/maximum-entropy-inverse-reinforcement-learning.html}{CMU PDF}
+    \item C.~Finn, S.~Levine, P.~Abbeel (2016). \emph{Guided Cost Learning: Deep Inverse Optimal Control via Policy Optimization.} ICML. \href{https://arxiv.org/abs/1603.00448}{arXiv:1603.00448}
+    \item C.~Finn, P.~Christiano, P.~Abbeel, S.~Levine (2016). \emph{A Connection between GANs, Inverse RL, and Energy-Based Models.} \href{https://arxiv.org/abs/1611.03852}{arXiv:1611.03852}
+    \item J.~Ho \& S.~Ermon (2016). \emph{Generative Adversarial Imitation Learning.} NeurIPS. \href{https://arxiv.org/abs/1606.03476}{arXiv:1606.03476} --- GAIL
+    \item J.~Fu, K.~Luo, S.~Levine (2018). \emph{Learning Robust Rewards with Adversarial Inverse Reinforcement Learning.} ICLR. \href{https://arxiv.org/abs/1710.11248}{arXiv:1710.11248} --- AIRL
     \item P.~Christiano, J.~Leike, T.~B.~Brown, M.~Martic, S.~Legg, D.~Amodei (2017). \emph{Deep Reinforcement Learning from Human Preferences.} NeurIPS. \href{https://arxiv.org/abs/1706.03741}{arXiv:1706.03741}
+    \item \emph{Inverse Reinforcement Learning Meets Large Language Models} (2025). \href{https://arxiv.org/abs/2507.13158}{arXiv:2507.13158} --- reward modelling in RLHF as an IRL problem
+    \item \emph{Learning Reasoning Rewards from Expert Demonstrations with Inverse RL} (2025). \href{https://arxiv.org/abs/2510.01857}{arXiv:2510.01857} --- R-AIRL
 \end{itemize}
 \end{frame}

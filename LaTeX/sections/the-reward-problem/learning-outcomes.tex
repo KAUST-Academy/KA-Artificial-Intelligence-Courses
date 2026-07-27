@@ -1,17 +1,18 @@
 \section{Learning Outcomes}
 \begin{frame}{Learning Outcomes}
     \begin{itemize}
-        \setlength{\itemsep}{0.8em}
+        \setlength{\itemsep}{0.7em}
         \item Frame ``the reward problem'' and distinguish its three faces:
               \emph{exploration vs.\ exploitation}, \emph{reward design}, and \emph{reward learning}
-        \item State the multi-armed bandit problem, regret, and the Lai-Robbins
-              lower bound; \emph{derive} UCB1 from Hoeffding's inequality
-        \item Place $\epsilon$-greedy, UCB, Thompson sampling, and gradient bandits
-              on a single map of bandit exploration strategies
-        \item Scale these ideas to deep RL: \emph{bootstrapped DQN as approximate
-              posterior sampling (PSRL)}, pseudo-counts, ICM, and RND ---
-              the answer for the hard-exploration tasks SAC's entropy bonus struggles on
-        \item Motivate \emph{inverse RL} and \emph{preference-based reward learning}
-              as the conceptual ancestor of RLHF on Day 9
+        \item State the multi-armed bandit problem and \emph{regret}; explain why
+              $\epsilon$-greedy is provably wasteful while UCB and Thompson sampling are not
+        \item Scale these ideas to deep RL --- \emph{bootstrapped DQN as posterior
+              sampling}, pseudo-counts, ICM, RND, and the episodic-vs-lifelong novelty of
+              NGU / Agent57 / Go-Explore --- and recognise UCB's $1/\sqrt{N}$ bonus wherever it reappears
+        \item Recognise the \emph{same} dilemma in today's LLM training: entropy collapse
+              and pass@k in RL for reasoning models
+        \item Motivate \emph{inverse RL} and \emph{preference-based reward learning}, and
+              trace the line from MaxEnt IRL through adversarial IRL to the reward model
+              in RLHF on Day 9
     \end{itemize}
 \end{frame}

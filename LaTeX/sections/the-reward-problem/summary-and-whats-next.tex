@@ -8,9 +8,9 @@
     \setlength{\itemsep}{0.7em}
     \item \textbf{Face 1 --- Find the reward.}
     \begin{itemize}
-        \item Bandits formalize explore vs.\ exploit; UCB / Thompson / gradient bandits give principled, near-optimal-regret algorithms
-        \item Scaled to deep RL: bootstrapped DQN $\equiv$ posterior sampling, pseudo-counts $\equiv$ UCB in pixel space, curiosity / RND are genuinely new
-        \item Entropy (SAC, Day 6) is the gradient-bandit descendant --- now we have the full family
+        \item Bandits formalize explore vs.\ exploit; UCB and Thompson give principled, $\mathcal{O}(\log T)$-regret algorithms
+        \item Scaled to deep RL: bootstrapped DQN $\equiv$ posterior sampling, pseudo-counts $\equiv$ UCB in pixel space, curiosity / RND / Go-Explore are genuinely new
+        \item The same dilemma is live in LLM RL today --- entropy collapse and pass@k (Day 9)
     \end{itemize}
     \item \textbf{Face 2 --- The reward is wrong.}
     \begin{itemize}
@@ -25,9 +25,9 @@
     \setlength{\itemsep}{0.7em}
     \item \textbf{Face 3 --- Can't write the reward.}
     \begin{itemize}
-        \item \textbf{Inverse RL} learns it from demonstrations (MaxEnt IRL, Ziebart 2008)
+        \item \textbf{Inverse RL} learns it from demonstrations --- MaxEnt IRL (2008) $\to$ GAIL / AIRL (2016--18) $\to$ today's reward models
         \item \textbf{Preference-based learning} learns it from comparisons (Christiano 2017)
-        \item This is the \emph{direct ancestor of RLHF} on Day 9
+        \item Read the other way, \emph{training a reward model is an IRL problem} --- the \emph{direct ancestor of RLHF} on Day 9
     \end{itemize}
     \item \textbf{One unifying theme:} every algorithm today is a different way to recover the optimal policy when the reward is unknown, partially known, or hard to specify
 \end{itemize}
@@ -35,18 +35,20 @@
 
 \begin{frame}{Algorithm Map}
 \begin{center}
-\renewcommand{\arraystretch}{1.45}
+\renewcommand{\arraystretch}{1.3}
 \footnotesize
-\begin{tabular}{p{0.40\textwidth}p{0.52\textwidth}}
+\begin{tabular}{p{0.37\textwidth}p{0.55\textwidth}}
 \hline
 \textbf{Setting} & \textbf{Algorithm family (today)} \\
 \hline
-One-state bandit                          & $\epsilon$-greedy, UCB1, Thompson, gradient bandits \\
+One-state bandit                          & $\epsilon$-greedy, UCB1, Thompson sampling \\
 Contextual bandit                         & LinUCB and successors (recommendation) \\
 Deep RL, sparse reward                    & PSRL / Bootstrapped DQN, pseudo-counts, ICM, RND, HER \\
+Deep RL, hard exploration                 & NGU / Agent57, E3B, Go-Explore \\
+LLM RL, reasoning                         & Entropy control, pass@k, count bonuses (Day 9) \\
 Reward is shapeable                       & Potential-based shaping (policy-invariant) \\
-Reward unwritable; demonstrations available & Maximum-entropy IRL \\
-Reward unwritable; comparisons available  & Bradley--Terry preference learning $\to$ RLHF (Day 9) \\
+Reward unwritable; demonstrations         & MaxEnt IRL; adversarial IRL (GAIL, AIRL) \\
+Reward unwritable; comparisons            & Bradley--Terry preference learning $\to$ RLHF (Day 9) \\
 \hline
 \end{tabular}
 \end{center}

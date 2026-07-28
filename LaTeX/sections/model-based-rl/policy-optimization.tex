@@ -61,3 +61,48 @@
           keep model error from compounding
 \end{itemize}
 \end{frame}
+
+% === Why not just use the env? (motivation the algorithm assumes) ========
+\begin{frame}{But We Go Back to the Env Anyway --- Why Bother?}
+\begin{itemize}
+    \item Fair question: step 1 still collects real data. So why not skip the
+          model and just take \emph{more gradient steps} on the real replay
+          buffer? Those are free too
+\end{itemize}
+\end{frame}
+
+\begin{frame}{But We Go Back to the Env Anyway --- Why Bother?}
+\begin{itemize}
+    \item Fair question: step 1 still collects real data. So why not skip the
+          model and just take \emph{more gradient steps} on the real replay
+          buffer? Those are free too
+    \item Because the buffer only holds actions the \emph{old} policy took
+    \item A changing $\pi_\theta$ needs $Q(s,a)$ at the \emph{new} actions
+          $a \sim \pi_\theta$ --- and there is no data there. The critic must
+          extrapolate (we will name this failure in Part 2)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{But We Go Back to the Env Anyway --- Why Bother?}
+\begin{itemize}
+    \item Fair question: step 1 still collects real data. So why not skip the
+          model and just take \emph{more gradient steps} on the real replay
+          buffer? Those are free too
+    \item Because the buffer only holds actions the \emph{old} policy took
+    \item A changing $\pi_\theta$ needs $Q(s,a)$ at the \emph{new} actions
+          $a \sim \pi_\theta$ --- and there is no data there. The critic must
+          extrapolate (we will name this failure in Part 2)
+    \item A buffer can only be \textbf{replayed}. A model can be
+          \textbf{queried}: hand it $(s, a_{\text{new}})$, it hands back
+          $(r, s')$
+\end{itemize}
+\vspace{0.2em}
+\begin{center}
+\emph{The model answers counterfactuals --- ``what if I had done \emph{this}
+instead?'' --- which logged data cannot.}
+\end{center}
+\begin{itemize}
+    \item The env visit is only to keep the model honest \emph{where the policy
+          now goes}; the model does the rest
+\end{itemize}
+\end{frame}

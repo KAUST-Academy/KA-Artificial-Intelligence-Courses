@@ -31,6 +31,10 @@
         {MCTS $\to$ AlphaZero $\to$ \textbf{MuZero}};
     \node[box, draw=mborange, fill=mborange!6, below=0.7cm of imag] (dr)
         {World Models $\to$ \textbf{Dreamer}};
+    \node[below=2mm of mz, align=center, font=\tiny, mbgreen!50!black] (mzc)
+        {model used at \emph{act} time\\[-1pt]expensive per decision};
+    \node[below=2mm of dr, align=center, font=\tiny, mborange!60!black] (drc)
+        {model used at \emph{train} time\\[-1pt]cheap per decision};
     \draw[->] (root) -- (plan);
     \draw[->] (root) -- (imag);
     \draw[->] (plan) -- (mz);
@@ -64,7 +68,13 @@
     \item Its model is trained to \textbf{reconstruct what the world looks like}
           (predict the next observation), the opposite choice from MuZero's
           ``predict only what matters''
-    \item \textbf{Dreamer / DreamerV3}: one fixed configuration solves 150+ tasks.
-          Full treatment in the dedicated \emph{World Models} lecture
+    \item \textbf{Dreamer / DreamerV3}: one fixed configuration solves 150+ tasks
+          across Atari, continuous control, and Minecraft, with no per-task tuning
 \end{itemize}
+\vspace{0.3em}
+\begin{center}
+\emph{Two opposite bets on what a model is \emph{for}: MuZero --- don't waste
+capacity on pixels. Dreamer --- pixels are a free, task-agnostic training
+signal. Both won.}
+\end{center}
 \end{frame}

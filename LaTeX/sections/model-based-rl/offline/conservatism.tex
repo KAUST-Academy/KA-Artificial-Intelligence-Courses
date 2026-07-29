@@ -33,16 +33,27 @@
 \end{frame}
 
 % === CQL objective ======================================================
+% The annotated objective is repeated verbatim across this build so the
+% formula never jumps position between frames.
+\newcommand{\cqlobjective}{%
+  {\small
+  \[ \min_Q\;\; \alpha\,\mathbb{E}_{s\sim\mathcal{D}}\Big[
+      \underbrace{\mathbb{E}_{a\sim\pi(\cdot\mid s)}\!\left[Q(s,a)\right]}
+        _{\substack{\text{what $Q$ \emph{claims} $\pi$}\\[-1pt]\text{can get (often OOD)}}}
+      \;-\;
+      \underbrace{\mathbb{E}_{a\sim\pi_\beta(\cdot\mid s)}\!\left[Q(s,a)\right]}
+        _{\substack{\text{what $Q$ says about}\\[-1pt]\text{actions we really saw}}}
+    \Big] + \mathcal{L}_{\mathrm{Bellman}} \]}}
+
 \begin{frame}{Conservative Q-Learning (CQL)}
 \begin{itemize}
     \item Train $Q$ with an extra penalty that makes unfamiliar (OOD) actions
           \emph{look bad on purpose}
-    \item[] {\small
-      \[ \min_Q\;\; \alpha\big(
-          \mathbb{E}_{a\sim\pi}[Q(s,a)] - \mathbb{E}_{a\sim\mathcal{D}}[Q(s,a)]
-        \big) + \mathcal{L}_{\mathrm{Bellman}} \]}
+    \item[] \cqlobjective
     \item $\min_Q$ = train $Q$ (tune its weights) to make this whole expression
-          small
+          small. Both expectations are at the \emph{same} $s$; $\pi_\beta$ is the
+          behavior policy from before --- the actions the dataset actually
+          logged at $s$
 \end{itemize}
 \end{frame}
 
@@ -50,16 +61,27 @@
 \begin{itemize}
     \item Train $Q$ with an extra penalty that makes unfamiliar (OOD) actions
           \emph{look bad on purpose}
-    \item[] {\small
-      \[ \min_Q\;\; \alpha\big(
-          \mathbb{E}_{a\sim\pi}[Q(s,a)] - \mathbb{E}_{a\sim\mathcal{D}}[Q(s,a)]
-        \big) + \mathcal{L}_{\mathrm{Bellman}} \]}
-    \item $\min_Q$ = train $Q$ to make this small. The penalty is a
-          \emph{difference}, so lowering it forces $Q$ \emph{down} on $\pi$'s (OOD)
-          actions and \emph{up} on the data's actions
+    \item[] \cqlobjective
+    \item Reads as: \emph{``how much better does $Q$ claim I can do by leaving
+          the data?''} --- a per-state measure of the phantom
     \item $\alpha$ = how hard to push ($\alpha{=}0$ is plain Q-learning);
           $\mathcal{L}_{\mathrm{Bellman}}$ = the normal TD loss, fitting $Q$ to
           $r + \gamma \max_{a'} Q(s',a')$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Conservative Q-Learning (CQL)}
+\begin{itemize}
+    \item Train $Q$ with an extra penalty that makes unfamiliar (OOD) actions
+          \emph{look bad on purpose}
+    \item[] \cqlobjective
+    \item Reads as: \emph{``how much better does $Q$ claim I can do by leaving
+          the data?''} --- a per-state measure of the phantom
+    \item \textbf{Why the subtraction?} Lowering $Q$ \emph{everywhere} changes no
+          $\arg\max$, so it changes no policy. The gap is shift-invariant: it can
+          only shrink by \emph{tilting} $Q$ down on OOD actions \emph{relative to}
+          in-data ones
+    \item If $\pi = \pi_\beta$ the penalty is $0$: no punishment for staying home
 \end{itemize}
 \end{frame}
 

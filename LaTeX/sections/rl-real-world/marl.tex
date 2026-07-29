@@ -55,7 +55,7 @@ changes when \emph{other learning agents} share your environment.}
 % CTDE - TikZ
 \begin{frame}{Centralized Training, Decentralized Execution (CTDE)}
 \centering
-\resizebox{0.92\linewidth}{!}{%
+\resizebox{0.78\linewidth}{!}{%
 \begin{tikzpicture}[font=\footnotesize,
     ag/.style={draw, rounded corners, minimum width=1.8cm, minimum height=0.9cm, align=center, fill=sysblue},
     cr/.style={draw, rounded corners, minimum width=4.2cm, minimum height=1.0cm, align=center, fill=boxtan},
@@ -84,11 +84,12 @@ changes when \emph{other learning agents} share your environment.}
   \node[font=\scriptsize, above=0.05cm of e2] {local obs.};
 \end{tikzpicture}%
 }
-\vfill
-\begin{itemize}\itemsep0.25em\small
+\vspace{0.4em}
+\begin{itemize}\itemsep0.2em\small
     \item \textbf{At training:} a centralized critic sees every agent's
           observations and actions. Because it accounts for what the others did,
-          each agent's learning signal becomes \emph{stationary} during training, directly defusing the non-stationarity problem from the last slide.
+          each agent's learning signal becomes \emph{stationary}, defusing the
+          non-stationarity problem from the last slide.
     \item \textbf{At execution:} each agent keeps only its \emph{own actor} acting
           on its \emph{local observation}; the critic is gone.
     \item This is the dominant MARL paradigm, the key idea to remember.

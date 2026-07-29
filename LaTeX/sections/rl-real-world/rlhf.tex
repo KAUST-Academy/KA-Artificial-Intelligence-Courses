@@ -53,34 +53,6 @@ says so.}
 \end{itemize}
 \end{frame}
 
-% ================================================================ 3.2
-% Deep RL from Human Preferences (Christiano 2017) - one clear goal
-\begin{frame}{This Idea Was Proven Before LLMs (2017)}
-\textbf{The point of this slide:} the recipe works, and works with surprisingly
-little human input.
-\vspace{0.3em}
-\begin{columns}[c]
-\begin{column}{0.52\textwidth}
-\begin{itemize}\itemsep0.4em\small
-    \item Christiano et al.\ gave the agent \emph{no} reward function at all.
-    \item A human just watched \emph{pairs of short clips} and clicked which one
-          looked better.
-    \item From those clicks alone, labeling \empr{under 1\%} of the agent's
-          experience, it learned to play Atari games and make a simulated robot
-          do backflips.
-\end{itemize}
-\vspace{0.4em}
-{\footnotesize \textbf{Takeaway:} learning a reward from \emph{comparisons} is
-enough to train complex behaviour. RLHF scales this exact idea up to language.}
-\end{column}
-\begin{column}{0.48\textwidth}
-\centering
-\includegraphics[width=\linewidth, keepaspectratio]{images/rl-real-world/figures/prefs-schematic.jpg}
-\end{column}
-\end{columns}
-\srcnote{\scriptsize Christiano, Leike, Brown, Martic, Legg, Amodei. \href{https://arxiv.org/abs/1706.03741}{Deep Reinforcement Learning from Human Preferences}. NeurIPS 2017.}
-\end{frame}
-
 % ---------------------------------------------------------------- Divider: into LLMs
 \begin{frame}{}
 \vfill
@@ -203,6 +175,29 @@ likelihood). The negative log-likelihood is the \textbf{reward-model loss}:
 \end{itemize}
 \end{frame}
 
+% ---------------------------------------------------------------- 3.3 aside: why the sigmoid
+\begin{frame}{Why a Sigmoid? Why Not Just Subtract the Scores?}
+\textbf{Because we need a probability, and the gap is not one.}
+\vspace{0.6em}
+\begin{itemize}\itemsep0.45em\small
+    \item Each label is a \emph{binary event}: the human clicked $y^+$. Fitting by
+          \textbf{maximum likelihood} means choosing $\phi$ to make the clicks we
+          actually observed as likely as possible under the model, i.e.\ maximizing
+          \[
+              \prod_{\text{comparisons}} P_\phi(\text{the choice the human made})
+          \]
+    \item \empr{Every factor in that product has to be a probability.} If the model
+          emits an unbounded number instead, the product is not a likelihood of
+          anything: it has no maximum (push the number up forever), and its $\log$ is
+          undefined once it goes negative. There is nothing to fit.
+    \item So the model must output $P\in[0,1]$ per comparison, while the score gap
+          $r(y^+)-r(y^-)$ is a free real number. $\sigma$ is the monotone map
+          $\mathbb{R}\to(0,1)$ with the right endpoints: gap $0 \to 0.5$
+          (a coin flip, the model is indifferent), gap $\to+\infty \to 1$,
+          gap $\to-\infty \to 0$.
+\end{itemize}
+\end{frame}
+
 % ---------------------------------------------------------------- 3.3 RM architecture aside
 \begin{frame}{What Is the Reward Model, Concretely?}
 \vspace{0.8em}
@@ -287,11 +282,11 @@ The RL objective is the reward-model score minus a leash to the reference policy
     r_{\text{total}} \;=\; r_\phi
         \;-\; \beta\, D_{\text{KL}}\!\left(\pi_\theta \, \|\, \pi_{\text{ref}}\right)
 \]
-\vspace{-0.4em}
+\vspace{-0.8em}
 \begin{columns}[c]
 \begin{column}{0.54\textwidth}
 \centering
-\resizebox{\linewidth}{!}{%
+\resizebox{0.88\linewidth}{!}{%
 \begin{tikzpicture}[font=\footnotesize]
   % axes
   \draw[-{Stealth[length=2mm]}] (0, 0) -- (7, 0) node[right]{\scriptsize KL from $\pi_{\text{ref}}$};
@@ -321,13 +316,14 @@ while the \emph{real} objective collapses, \empr{Goodhart's law}.
 \begin{itemize}\itemsep0.2em
     \item Proxy reward (RM) keeps rising.
     \item True reward rises, then \emph{falls}.
-    \item \textbf{Why the leash works:} the penalty subtracts reward that grows with
-          KL distance, so each step away from $\pi_{\text{ref}}$ costs more. Past the
-          peak, the extra proxy gain is outweighed by the penalty, so the
-          best-scoring policy sits \emph{near the peak}, not in the hacked region.
+    \item \textbf{Why the leash works:} the penalty grows with KL distance, so each
+          step away from $\pi_{\text{ref}}$ costs more. Past the peak, the extra
+          proxy gain is outweighed by the penalty, so the best-scoring policy sits
+          \emph{near the peak}, not in the hacked region.
 \end{itemize}
 \end{column}
 \end{columns}
+\vspace{-0.3em}
 \srcnote{\scriptsize Gao, Schulman, Hilton. \href{https://arxiv.org/abs/2210.10760}{Scaling Laws for Reward Model Overoptimization}, 2022.}
 \end{frame}
 
@@ -476,29 +472,99 @@ reference model.
 \end{itemize}
 \end{frame}
 
+% ---------------------------------------------------------------- 3.6 derivation: Step 1 -> 2
+\begin{frame}{Step 1 $\rightarrow$ Step 2, part (a): Setting It Up}
+Fix one prompt $x$ and just \emph{solve} Step 1: maximize over the numbers
+$\pi(y)$. But $\pi$ is not free, it must be a distribution: $\sum_y \pi(y) = 1$.
+\vspace{0.4em}
+\begin{itemize}\itemsep0.25em\small
+    \item \textbf{Where the $\lambda$ term comes from.} The standard tool for
+          ``maximize $f$ \emph{subject to} $g=0$'' is a \textbf{Lagrange multiplier}:
+          add $\lambda\, g$ to the objective, then set derivatives to zero. Here
+          $g(\pi) = \sum_y \pi(y) - 1$, which is zero exactly when $\pi$ is a valid
+          distribution.
+    \item \textbf{Why that is allowed:} on the feasible set $g=0$, so
+          $\lambda\,g$ adds \emph{nothing} to the objective, whatever $\lambda$ is.
+          We lose nothing; what we gain is that the constraint now appears in the
+          derivative. ($\lambda$ is an unknown number, and we will never need its
+          value.)
+\end{itemize}
+\vspace{0.3em}
+So we maximize, written out as sums:
+\vspace{-0.2em}
+\[
+    J(\pi) \;=\; \sum_y \pi(y)\, r(y)
+    \;-\; \beta \sum_y \pi(y)\log\frac{\pi(y)}{\pi_{\text{ref}}(y)}
+    \;+\; \lambda\Big(\sum_y \pi(y) - 1\Big)
+\]
+\vspace{-0.6em}
+
+Differentiate with respect to one $\pi(y)$ and set to zero, using
+$\frac{d}{dp}\big[p\log\frac{p}{q}\big] = \log\frac{p}{q} + 1$:
+\vspace{-0.3em}
+\[
+    r(y) \;-\; \beta\Big[\log\tfrac{\pi(y)}{\pi_{\text{ref}}(y)} + 1\Big] \;+\; \lambda
+    \;=\; 0
+\]
+\end{frame}
+
+% ---------------------------------------------------------------- 3.6 derivation: Step 1 -> 2 (b)
+\begin{frame}{Step 1 $\rightarrow$ Step 2, part (b): Solving It}
+Rearrange to get $\pi(y)$ \emph{alone on the left}, no $\pi$ on the right: that
+is what ``solve for the policy'' means.
+\begin{align*}
+    \beta\log\frac{\pi(y)}{\pi_{\text{ref}}(y)} &= r(y) + \lambda - \beta
+        && \text{\scriptsize(collect the log on one side)}\\[0.05em]
+    \log\frac{\pi(y)}{\pi_{\text{ref}}(y)} &= \frac{r(y)}{\beta}
+        \;+\; \underbrace{\Big(\tfrac{\lambda}{\beta} - 1\Big)}_{\textstyle \triangleq\, c}
+        && \text{\scriptsize(divide \emph{both sides} by $\beta$)}\\[0.05em]
+    \pi(y) &= \pi_{\text{ref}}(y)\; e^{\,r(y)/\beta}\cdot e^{\,c}
+        && \text{\scriptsize(exponentiate both sides)}
+\end{align*}
+\vspace{-1.1em}
+\begin{itemize}\itemsep0.1em\footnotesize
+    \item \textbf{Nothing went missing.} $r(y)$ became $r(y)/\beta$ when we divided
+          through by $\beta$, which is also why $\beta$ lands in a denominator; and
+          $\lambda$ folded into $c=\lambda/\beta-1$. Neither has a $y$ in it, so
+          neither can depend on the response.
+    \item \empr{That is where the exponential is born:} the KL made us solve for a
+          \emph{log}-probability, so undoing the log puts $r/\beta$ in an exponent.
+    \item $e^{\,c}$ is one number per prompt, pinned by the constraint
+          $\sum_y\pi(y)=1$:
+          $e^{\,c} = 1/\sum_y \pi_{\text{ref}}(y)e^{\,r(y)/\beta} \triangleq 1/Z(x)$.
+          \textbf{That is all $Z$ ever is.}
+    \item This $\pi$ is \emph{the} maximizer, so Step 2 renames it
+          \empr{$\pi^\star$}: the star only means ``the optimal one''.
+\end{itemize}
+\end{frame}
+
 % ---------------------------------------------------------------- 3.6 derivation: Step 2
 \begin{frame}{Where DPO Comes From (Step 2 of 5): The Optimal Policy}
-The \textbf{Step-1 objective} (maximize reward minus the $\beta$-KL leash) has a
-known closed-form maximizer, a one-line result you can get with a single
-Lagrange-multiplier calculation; we'll just use it:
+So the \textbf{Step-1 objective} (maximize reward minus the $\beta$-KL leash) has a
+closed-form maximizer, the one we just built:
 \[
     \pi^\star(y\mid x) \;=\; \frac{1}{Z(x)}\;\pi_{\text{ref}}(y\mid x)\;
         e^{\, r(y)/\beta},
     \qquad
     Z(x) \;=\; \sum_{y}\pi_{\text{ref}}(y\mid x)\, e^{\, r(y)/\beta}
 \]
-\begin{itemize}\itemsep0.4em\small
-    \item \textbf{What:} $\pi^\star$ is the policy that \emph{maximizes Step 1}.
-          $Z(x)$ is a \emph{normalizer} (partition function) that makes the
+\begin{itemize}\itemsep0.3em\small
+    \item \textbf{What:} $\pi^\star$ is the policy that \emph{maximizes Step 1}, the
+          one we just solved for; the star is only notation for ``the optimal one'',
+          as opposed to a generic candidate $\pi$.
+          $Z(x)$ is the \emph{normalizer} (partition function) that makes the
           probabilities sum to 1; it depends \emph{only} on the prompt $x$.
-          Remember that.
-    \item \textbf{Why:} we don't have to run RL to know what the optimum looks like; the maths hands it to us directly.
+          Remember that. Equivalently
+          $Z(x)=\mathbb{E}_{y\sim\pi_{\text{ref}}}\big[e^{\,r(y)/\beta}\big]$:
+          intractable, but not mysterious.
     \item \textbf{How / reading the formula:} take the reference policy and reweight
-          each response by $e^{\, r(y)/\beta}$. The exponential turns the (possibly
-          negative) reward into a \emph{positive multiplier}, so higher-reward
-          responses get up-weighted; $\beta$ sets how sharply. This $\pi_{\text{ref}}
-          \cdot e^{\, r/\beta}$ shape (Gibbs/Boltzmann) is exactly what
-          ``reward minus KL'' always produces.
+          each response by $e^{\, r(y)/\beta}$: higher-reward responses get
+          up-weighted, and $\beta$ sets how sharply. $\beta\!\to\!\infty$ gives
+          $\pi^\star\!=\!\pi_{\text{ref}}$ (leash tight, don't move);
+          $\beta\!\to\!0$ collapses onto the single best response.
+    \item \textbf{Nothing here is specific to language.} This $\pi_{\text{ref}}\cdot
+          e^{\,r/\beta}$ shape (Gibbs/Boltzmann) is what ``reward minus KL''
+          \emph{always} produces, whatever the policy is over.
 \end{itemize}
 \end{frame}
 
@@ -514,14 +580,21 @@ Take $\log$ of Step 2's formula, then solve for $r(y)$ (just algebra):
         \;+\; \beta\log Z(x)
         && \text{\scriptsize(move terms, multiply by $\beta$)}
 \end{align*}
-\begin{itemize}\itemsep0.4em\small
-    \item \textbf{What:} the reward now sits alone on the left, written entirely in
-          terms of the policies.
-    \item \textbf{Why:} we want the reward \emph{expressed through the policy}: if
-          reward is just a function of $\pi^\star$, maybe we never need a separate
-          reward model.
-    \item \textbf{How:} the only snag is $\beta\log Z(x)$, and $Z(x)$ sums over
-          \emph{all possible responses}, so it is impossible to compute. Step 4
+\begin{itemize}\itemsep0.15em\small
+    \item \textbf{What:} $r(y)$ is the same \emph{reward} as in Steps 1--2, \emph{not}
+          a probability ratio; and $\pi_{\text{ref}}$ is the \textbf{frozen SFT
+          model}, \emph{not} PPO's $\pi_{\text{old}}$ (total displacement from the
+          base model, not one trust-region step).
+    \item \textbf{Intuition, and it is the whole idea:} Step 2 said the optimum is
+          $\pi_{\text{ref}}$ \emph{tilted} by $e^{\,r/\beta}$, so \empr{the tilt is
+          the reward}: see how much $\pi^\star$ up-weighted a response, take the log,
+          multiply by $\beta$. Behaviour reveals the objective: \textbf{inverse RL}
+          from Day 7, in closed form.
+    \item \textbf{Scale check ($\beta=0.1$):} a response made $e^{10}\!\approx\!
+          22{,}000\times$ more likely $\Rightarrow$ reward $+1.0$; one \emph{halved}
+          $\Rightarrow$ $-0.07$. Nothing moved $\Rightarrow$ $r$ constant: nothing is
+          preferred over anything.
+    \item \textbf{How:} the snag is $\beta\log Z(x)$, impossible to compute. Step 4
           removes it.
 \end{itemize}
 \end{frame}
@@ -545,6 +618,10 @@ of rewards appears:
     \item \textbf{How:} that single cancellation is the whole reason DPO is
           possible: the intractable term vanishes, leaving an expression in
           $\pi^\star$ and $\pi_{\text{ref}}$ only.
+    \item \textbf{Not luck.} $\beta\log Z(x)$ is a per-prompt constant, so absolute
+          reward was never recoverable from a policy in the first place: the same
+          ``\emph{only the gap matters, the scale is free}'' we saw in
+          Bradley--Terry. The term \emph{had} to cancel.
 \end{itemize}
 \end{frame}
 

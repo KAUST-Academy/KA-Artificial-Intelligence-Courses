@@ -57,13 +57,18 @@ when the reward itself is the hard part?
 % ---------------------------------------------------------------- Learning outcomes
 \begin{frame}{Learning Outcomes}
 \textbf{RLHF: the deep dive.} By the end you should be able to:
-\begin{itemize}\itemsep0.25em
+\begin{itemize}\itemsep0.2em\small
     \item explain the RLHF pipeline: \textbf{SFT $\rightarrow$ reward model
           $\rightarrow$ PPO/GRPO}, and the role of the KL-to-reference penalty;
+    \item turn human comparisons into a trainable loss with \textbf{Bradley--Terry},
+          and say why the preference model needs a \emph{sigmoid} rather than a raw
+          score gap;
     \item explain \textbf{reward hacking} (over-optimization) and why the KL leash
           exists;
-    \item \textbf{derive} the \textbf{RM $\leftrightarrow$ DPO} identity, and why
-          ``your LM is secretly a reward model'';
+    \item show that ``reward minus $\beta$-KL'' is maximized by $\pi_{\text{ref}}$
+          \emph{tilted} by $e^{\,r/\beta}$, and \textbf{derive} the
+          \textbf{RM $\leftrightarrow$ DPO} identity from it, so ``your LM is
+          secretly a reward model'';
     \item place \textbf{RLHF $\rightarrow$ RLAIF $\rightarrow$ RLVR} on the
           scaling-oversight spectrum.
 \end{itemize}

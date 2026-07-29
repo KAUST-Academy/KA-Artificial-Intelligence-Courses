@@ -4,12 +4,14 @@
 \begin{frame}{Summary: Three Threads}
 \begin{itemize}\itemsep0.45em
     \item \textbf{RLHF (the focus).} When reward is hard to specify, learn it:
-          \textbf{SFT $\rightarrow$ RM $\rightarrow$ PPO/GRPO}. The KL leash exists
-          because the RM is a \emph{proxy} (reward hacking). \textbf{DPO} folds the
-          RM into the policy, the same $-\log\sigma(\Delta)$ loss. The frontier
-          climbs the oversight spectrum: \textbf{RLHF $\rightarrow$ RLAIF
-          $\rightarrow$ RLVR} (verifiable rewards, how reasoning models like
-          DeepSeek-R1 are trained).
+          \textbf{SFT $\rightarrow$ RM $\rightarrow$ PPO/GRPO}. Comparisons become a
+          loss through \textbf{Bradley--Terry}; the KL leash exists because the RM is
+          a \emph{proxy} (reward hacking). Solving ``reward minus $\beta$-KL'' gives
+          $\pi_{\text{ref}}$ tilted by $e^{\,r/\beta}$, and reading that tilt
+          backwards is \textbf{DPO}: no RM, no RL loop, the same
+          $-\log\sigma(\Delta)$ loss. The frontier climbs the oversight spectrum:
+          \textbf{RLHF $\rightarrow$ RLAIF $\rightarrow$ RLVR} (verifiable rewards,
+          how reasoning models like DeepSeek-R1 are trained).
     \item \textbf{Multi-Agent RL.} The environment is \emph{non-stationary} as
           others learn; \textbf{CTDE} is the dominant fix; \textbf{self-play}
           builds an automatic curriculum.

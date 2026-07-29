@@ -6,7 +6,7 @@
 % Slide 33Introduction to Attention Mechanism
 \begin{frame}{Introduction to Attention Mechanism}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_core_idea.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_core_idea.png}
 \end{frame}
 
 % Slide 34
@@ -77,7 +77,7 @@
 % Slide 38
 \begin{frame}{Requirement on attention weights}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_weight_softmax_formula.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_weight_softmax_formula.png}
   % \begin{itemize}
   %     \item The weights must be positive and sum to 1.0 (i.e., be a distribution).
   %     \item Ideally, they must be high for the most relevant inputs for the $i$-th output and low elsewhere.
@@ -111,29 +111,31 @@
 % Slide 41
 \begin{frame}{Requirement on attention weights}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_scoring_function_question.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_scoring_function_question.png}
 \end{frame}
 
 % Slide 42
 \begin{frame}{Attention weights}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_scoring_function_options.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_scoring_function_options.png}
 \end{frame}
 
 \begin{frame}{Attention weights}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_conversion_example.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_conversion_example.png}
 \end{frame}
 
 \begin{frame}{Converting an input: Inference}
   \centering
   \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_encoder_hidden_states_only.png}
-  Pass the input through the encoder to produce hidden representations $h_{i}$
+  \begin{itemize}
+    \item[] \textbf{Pass the input through the encoder to produce hidden representations $\pmb{h_i}$}
+  \end{itemize}
 \end{frame}
 
 % Slide 45
 \begin{frame}{Converting an input: Inference}
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_initial_state_options.png}
+  \includegraphics[width=0.6\paperwidth,height=0.6\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_initial_state_options.png}
   \begin{itemize}
     \item[] \textbf{Pass the input through the encoder to produce hidden representations $\pmb{h_i}$}
   \end{itemize}
@@ -142,44 +144,44 @@
 % Slide 46
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_first_context_c0.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_first_context_c0.png}
 \end{frame}
 
 % Slide 47
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_first_output_distribution.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_first_output_distribution.png}
 \end{frame}
 
 % Slide 48
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_sample_first_word.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_sample_first_word.png}
 \end{frame}
 
 % Slide 49
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_second_context_c1.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_second_context_c1.png}
 \end{frame}
 
 % Slide 50
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_second_output_distribution.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_second_output_distribution.png}
 \end{frame}
 
 % Slide 51
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_sample_second_word.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_sample_second_word.png}
 \end{frame}
 
 
 % Slide 52
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_third_context_c2.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_third_context_c2.png}
 \end{frame}
 
 % Slide 53
@@ -191,13 +193,13 @@
 % Slide 54
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_final_step_c5.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_final_step_c5.png}
 \end{frame}
 
 % Slide 55
 \begin{frame}{Attention-based Decoding}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_all_contexts_summary.png}
+  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_all_contexts_summary.png}
 \end{frame}
 
 % Slide 56

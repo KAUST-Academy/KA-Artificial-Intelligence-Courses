@@ -1,0 +1,144 @@
+\section{Multi-Task Reinforcement Learning}
+
+% ---------------------------------------------------------------- Divider
+\begin{frame}{}
+    \LARGE Multi-Task \textbf{Reinforcement Learning}
+\end{frame}
+
+% ---------------------------------------------------------------- What & why (repurposed S36)
+\begin{frame}{What is multi-task RL?}
+\begin{columns}[c]
+\begin{column}{0.5\textwidth}
+\begin{itemize}\footnotesize\itemsep0.5em
+    \item One policy that solves a \textbf{fixed set} of tasks --- the task identity is
+          usually \empr{given} as part of the input.
+    \item Formally: fold the task into the state. Sample an MDP at the start, then act:
+          \[ \pi_\theta(a_t \mid s_t,\, \text{task}) \]
+    \item Contrast \textbf{meta-RL} (just now): there the context $\phi_i$ is
+          \empr{inferred} from experience, because the task is \emph{new}. Here it is
+          handed to you.
+    \item Why bother? \empy{shared structure} --- one network reuses skills and
+          representations across tasks.
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize, >={Stealth[length=1.6mm]}]
+    \node[align=center] (pick) at (0,0) {pick MDP randomly\\ in first state};
+    \node (ps) at (2.5,0) {$p(s_0)$};
+    \node[anchor=west] (r0) at (4.0,0.85)  {$s_0 \xrightarrow{\;\pi(a_0|s_0,\text{task})\;} s_1 \rightarrow$ \;task 0};
+    \node[anchor=west] (r1) at (4.0,0.0)   {$s_0 \xrightarrow{\;\pi(a_0|s_0,\text{task})\;} s_1 \rightarrow$ \;task 1};
+    \node[anchor=west] (r2) at (4.0,-0.85) {$s_0 \xrightarrow{\;\pi(a_0|s_0,\text{task})\;} s_1 \rightarrow$ \;task 2};
+    \draw[->] (ps) -- node[above,font=\tiny,sloped]{sample} (r0.west);
+    \draw[->] (ps) -- node[above,font=\tiny]{sample} (r1.west);
+    \draw[->] (ps) -- node[below,font=\tiny,sloped]{sample} (r2.west);
+\end{tikzpicture}}
+\vspace{0.6em}
+
+{\footnotesize\itshape one policy, many tasks, task-ID conditioned}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- multi-agent != multi-task (Day 9 payoff)
+\begin{frame}{Do not confuse: multi-\emph{agent} vs multi-\emph{task}}
+\begin{center}\footnotesize
+The single most confusable pair in the course --- and exactly the distinction Day 9
+promised to settle.
+\end{center}
+\vspace{0.4em}
+\begin{columns}[t]
+\begin{column}{0.48\textwidth}
+\begin{tcolorbox}[colback=boxred!30, colframe=accentred, title=\textbf{Multi-agent RL} \;(Day 9)]
+\footnotesize
+\begin{itemize}\itemsep0.3em
+    \item \textbf{Many} agents, \textbf{one} environment.
+    \item They act at the same time; each one's learning makes the environment
+          \empr{non-stationary} for the others.
+    \item Core problem: a \emph{moving target}. Fixes: CTDE, self-play.
+\end{itemize}
+\end{tcolorbox}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{tcolorbox}[colback=mlgreen!25, colframe=mlgreen!60!black, title=\textbf{Multi-task RL} \;(today)]
+\footnotesize
+\begin{itemize}\itemsep0.3em
+    \item \textbf{One} agent, \textbf{many} tasks.
+    \item Tasks are separate MDPs; the agent solves each, reusing
+          \empr{shared structure}.
+    \item Core problem: tasks \emph{competing} over shared parameters (next slide).
+\end{itemize}
+\end{tcolorbox}
+\end{column}
+\end{columns}
+\vfill
+\begin{center}\footnotesize
+Many agents / one world \; $\neq$ \; one agent / many worlds.
+\end{center}
+\end{frame}
+
+% ---------------------------------------------------------------- Architectures + negative transfer
+\begin{frame}{Architectures --- and the central pathology}
+\begin{columns}[c]
+\begin{column}{0.5\textwidth}
+\begin{itemize}\footnotesize\itemsep0.5em
+    \item Standard recipe: a \textbf{shared trunk} plus \textbf{per-task heads}, or a
+          goal-/task-conditioned policy $\pi(a\mid s,\text{task})$.
+    \item The hope: tasks \emph{help} each other (positive transfer).
+    \item The reality: \empr{negative transfer / gradient conflict} --- task gradients
+          point in \emph{opposing} directions and fight over the shared weights.
+    \item Net effect: joint training can be \emph{worse} than training each task alone.
+\end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+\centering
+\resizebox{0.95\linewidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize,
+    hd/.style={draw, rounded corners, minimum width=1.2cm, minimum height=0.45cm},
+    ar/.style={-{Stealth[length=1.6mm]}}]
+  % shared trunk + heads
+  \node[draw, fill=sysblue!45, rounded corners, minimum width=2.4cm,
+        minimum height=0.7cm] (trunk) {shared trunk};
+  \node[hd, fill=boxgreen!55, above left=6mm and -0.2cm of trunk] (h1) {task 1};
+  \node[hd, fill=boxtan!55, above=6mm of trunk] (h2) {task 2};
+  \node[hd, fill=boxred!45, above right=6mm and -0.2cm of trunk] (h3) {task 3};
+  \draw[ar] (trunk) -- (h1); \draw[ar] (trunk) -- (h2); \draw[ar] (trunk) -- (h3);
+  % gradient conflict inset
+  \begin{scope}[shift={(0,-2.4cm)}]
+    \node at (0,0.9) {\textbf{gradient conflict}};
+    \coordinate (o) at (0,0);
+    \draw[ar, line width=1.4pt, mlgreen!60!black] (o) -- ++(1.3,0.5)
+          node[right, black]{$\nabla$ task A};
+    \draw[ar, line width=1.4pt, accentred] (o) -- ++(-1.3,0.5)
+          node[left, black]{$\nabla$ task B};
+    \draw[dashed] (-1.5,0) -- (1.5,0);
+  \end{scope}
+\end{tikzpicture}}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- Methods survey
+\begin{frame}{Methods: making tasks share nicely}
+\begin{itemize}\footnotesize\itemsep0.55em
+    \item \textbf{PCGrad (gradient surgery).} When two task gradients conflict, \emph{project}
+          one onto the normal plane of the other before summing --- remove only the
+          fighting component. \srcnote{\tiny Yu, Kumar, Gupta, Levine, Hausman, Finn.
+          Gradient Surgery for Multi-Task Learning. NeurIPS 2020.}
+    \item \textbf{Distral.} Learn a shared ``distilled'' policy and regularise each task's
+          policy \emph{toward} it --- share behaviour, not raw gradients.
+          \srcnote{\tiny Teh et al. Distral: Robust Multitask Reinforcement Learning. NeurIPS 2017.}
+    \item \textbf{Policy distillation} (the general tool): train specialists, then compress
+          them into one multi-task student.
+    \item \textbf{Benchmark: Meta-World} --- 50 robot-manipulation tasks, the canonical
+          test-bed for \emph{both} multi-task and meta-RL (it bridges back to the last
+          section). \srcnote{\tiny Yu, Quillen, He, Julian, Hausman, Finn, Levine.
+          Meta-World. CoRL 2019.}
+\end{itemize}
+\vfill
+\begin{center}\footnotesize\itshape
+One policy across many tasks is also the seed of the ``generalist agent'' trend --- which
+turns into a \emph{scaling} open problem later today.
+\end{center}
+\end{frame}

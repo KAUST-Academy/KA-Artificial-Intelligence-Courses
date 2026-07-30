@@ -1,0 +1,126 @@
+% ============================================================================
+% In-context RL: the 2020s update to meta-RL (meta-RL via sequence models).
+% Kept under the "Meta Reinforcement Learning" section.
+% ============================================================================
+
+% ---------------------------------------------------------------- In-context framing
+\begin{frame}{Meta-RL, 2020s: just swap the RNN for a transformer}
+\begin{columns}[c]
+\begin{column}{0.54\textwidth}
+\begin{itemize}\footnotesize\itemsep0.5em
+    \item Recall the crucial point: the RNN hidden state is \textbf{not reset between
+          episodes} --- the policy reads its \emph{whole} interaction history.
+    \item That is exactly \empr{in-context learning}. Replace the RNN with a
+          \textbf{transformer} and the history becomes the \textbf{context window}.
+    \item At meta-test time: \textbf{no gradient updates.} The model adapts by
+          \emph{reading} more experience, like few-shot prompting in an LLM.
+    \item Same objective as before ($\phi_i = f_\theta(\mathcal{M}_i)$) --- only the
+          architecture of $f_\theta$ changed.
+\end{itemize}
+\end{column}
+\begin{column}{0.46\textwidth}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize,
+    tok/.style={draw, rounded corners, minimum width=1.55cm, minimum height=0.5cm,
+                fill=boxtan!45},
+    ar/.style={-{Stealth[length=1.6mm]}}]
+  \node[tok] (t1) at (0,0) {$s_1,a_1,r_1$};
+  \node[tok, right=3mm of t1] (t2) {$s_2,a_2,r_2$};
+  \node[tok, right=3mm of t2] (t3) {$\;\cdots\;s_t$};
+  \node[draw, fill=sysblue!45, rounded corners, minimum width=5.6cm,
+        minimum height=0.7cm, below=6mm of t2] (tf) {\textbf{Transformer} (causal)};
+  \draw[ar] (t1.south) -- (tf.north -| t1);
+  \draw[ar] (t2.south) -- (tf.north);
+  \draw[ar] (t3.south) -- (tf.north -| t3);
+  \node[draw, fill=mlgreen!55, rounded corners, minimum width=1.4cm,
+        below=6mm of tf] (a) {$a_t$};
+  \draw[ar] (tf.south) -- (a.north);
+  \node[right=2mm of tf, text width=1.7cm, align=left]
+        {\itshape history \\ \itshape as context};
+\end{tikzpicture}}
+\vspace{0.6em}
+
+{\footnotesize\itshape the hidden state became a context window}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- Decision Transformer
+\begin{frame}{Decision Transformer: RL as conditional sequence modelling}
+\begin{columns}[c]
+\begin{column}{0.55\textwidth}
+\begin{itemize}\footnotesize\itemsep0.45em
+    \item \textbf{Idea:} treat a trajectory like a \emph{sentence}. Its ``tokens'' are
+          $(\hat R_t,\, s_t,\, a_t)$ in time order; train a transformer to
+          \textbf{predict the next action} --- an ordinary next-token loss. No Bellman, no
+          policy gradient.
+    \item $\hat R_t$ $=$ \textbf{return-to-go}: how much reward you still want from here on.
+    \item \textbf{Use it:} at test time \emph{prompt} it with a big desired return $\hat R$
+          and the current state; it outputs the action that tends to reach that return.
+    \item Learns from a \textbf{fixed dataset} (offline, Day 8) --- it just imitates,
+          \emph{conditioned on the outcome}.
+    \item \empy{Intuition:} like an LLM predicting the next \emph{word} --- here it predicts
+          the next \emph{action}, told ``how well I want to do''.
+\end{itemize}
+\end{column}
+\begin{column}{0.45\textwidth}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize,
+    r/.style={draw, minimum width=0.9cm, minimum height=0.5cm, fill=boxred!45},
+    s/.style={draw, minimum width=0.9cm, minimum height=0.5cm, fill=sysblue!45},
+    a/.style={draw, minimum width=0.9cm, minimum height=0.5cm, fill=mlgreen!55},
+    ar/.style={-{Stealth[length=1.5mm]}}]
+  \foreach \i/\x in {1/0,2/2.6}{
+    \node[r] (r\i) at (\x,0) {$\hat R_{\i}$};
+    \node[s] (s\i) at (\x+0.85,0) {$s_{\i}$};
+    \node[a] (a\i) at (\x+1.7,0) {$a_{\i}$};
+  }
+  \node[draw, fill=sysblue!30, rounded corners, minimum width=4.9cm,
+        minimum height=0.6cm, below=6mm of s1, xshift=1.3cm] (tf) {transformer};
+  \foreach \n in {r1,s1,a1,r2,s2}{ \draw[ar] (\n.south) -- (\n.south |- tf.north); }
+  \draw[ar, thick, accentred] (tf.south -| a1) ++(0,-0.0) -- ++(0,-0.5)
+        node[below, black]{predict $a_t$};
+\end{tikzpicture}}
+\vspace{0.8em}
+
+{\footnotesize\itshape condition on the return you want}
+\end{column}
+\end{columns}
+\srcnote{\tiny Chen et al. Decision Transformer: RL via Sequence Modeling. NeurIPS 2021.}
+\end{frame}
+
+% ---------------------------------------------------------------- Algorithm Distillation
+\begin{frame}{Algorithm Distillation: learning to learn, in-context}
+\begin{columns}[c]
+\begin{column}{0.56\textwidth}
+\begin{itemize}\footnotesize\itemsep0.4em
+    \item Decision Transformer copies \emph{good behaviour}; Algorithm Distillation copies
+          the \textbf{act of getting better}.
+    \item \textbf{Recipe:} run an ordinary RL agent on many tasks and \emph{log its whole
+          training} --- clumsy early episodes through skilled late ones. Train a transformer
+          to predict \emph{``what did it do next?''} across that log.
+    \item So the transformer soaks up the \empr{improvement itself}, not any one policy.
+    \item \textbf{Payoff:} on a \emph{new} task, as its context fills with episodes it
+          \textbf{keeps getting better on its own} --- same curve, \empr{no weight updates}.
+    \item The cleanest ``\empy{learning to learn $=$ in-context learning}'' --- the same
+          few-shot mechanism students see in LLMs.
+\end{itemize}
+\end{column}
+\begin{column}{0.44\textwidth}
+\centering
+\resizebox{0.95\linewidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize]
+  \draw[-{Stealth[length=1.8mm]}] (0,0) -- (4.4,0) node[right]{episodes (context)};
+  \draw[-{Stealth[length=1.8mm]}] (0,0) -- (0,3.0) node[above, rotate=90, anchor=south east, xshift=-1.2cm]{return};
+  \draw[accentred, line width=1.4pt, smooth]
+        plot coordinates {(0.2,0.3) (1.0,0.8) (1.8,1.6) (2.6,2.2) (3.4,2.55) (4.2,2.7)};
+  \node[accentred] at (3.1,1.55) {\itshape in-context};
+  \node[align=center, font=\scriptsize] at (2.2,-0.7)
+        {\emph{no gradient steps} --- \\ the curve is produced by reading experience};
+\end{tikzpicture}}
+\end{column}
+\end{columns}
+\srcnote{\tiny Laskin et al. In-context RL with Algorithm Distillation. ICLR 2023.}
+\end{frame}

@@ -1,0 +1,52 @@
+\section{Course Wrap}
+
+% ---------------------------------------------------------------- The through-line
+\begin{frame}{Today, in one line}
+\begin{center}\large
+Everything today was about RL \empy{generalising beyond one fixed MDP}.
+\end{center}
+\vspace{0.8em}
+\begin{columns}[t]
+\begin{column}{0.32\textwidth}
+\begin{tcolorbox}[colback=sysblue!20, colframe=sysblue!70!black, title=\textbf{Meta-RL}]
+\footnotesize adapt to a \emph{new} task from a little experience --- context
+\empr{inferred} (RL$^2$, PEARL, in-context RL).
+\end{tcolorbox}
+\end{column}
+\begin{column}{0.32\textwidth}
+\begin{tcolorbox}[colback=mlgreen!20, colframe=mlgreen!60!black, title=\textbf{Multi-task RL}]
+\footnotesize one policy over \emph{many} tasks --- context \empr{given}; beware negative
+transfer (PCGrad, Distral).
+\end{tcolorbox}
+\end{column}
+\begin{column}{0.32\textwidth}
+\begin{tcolorbox}[colback=boxtan!30, colframe=boxtan!80!black, title=\textbf{Hierarchical RL}]
+\footnotesize reason over \emph{skills} across time-scales (options, HIRO, Option-Critic,
+SayCan).
+\end{tcolorbox}
+\end{column}
+\end{columns}
+\vfill
+\begin{center}\footnotesize
+Across tasks \; $\rightarrow$ \; to new tasks \; $\rightarrow$ \; across time. \quad And a
+field still wide open: stability, sample cost, where supervision comes from, and how
+abstractions are discovered.
+\end{center}
+\end{frame}
+
+% ---------------------------------------------------------------- Send-off
+\begin{frame}{Ten days: from one MDP to the frontier}
+\begin{itemize}\itemsep0.5em
+    \item You built the machinery (value, policy gradient, actor--critic, continuous
+          control), learned where \emph{reward and data} come from (exploration, IRL,
+          model-based, offline), took it to the \emph{real world} (RLHF, MARL, robotics),
+          and today looked \emph{past a single problem} entirely.
+    \item The recurring lesson: \empy{the algorithm is rarely the hard part} --- the
+          problem formulation, the reward, and the data usually are.
+\end{itemize}
+\vfill
+% TODO(owner): replace with your own personal send-off to the cohort.
+\begin{center}\itshape
+Thank you --- go build something that uses RL's \emph{chaos} to somehow reach \emph{order}.
+\end{center}
+\end{frame}

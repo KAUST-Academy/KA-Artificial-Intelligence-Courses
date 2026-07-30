@@ -1,0 +1,114 @@
+\section{Frontiers: Beyond a Single MDP}
+
+% Shared colour palette for this lecture's hand-built diagrams.
+% (No theme colour macros exist in the preamble; we use plain xcolor names
+%  plus this small deck-local palette throughout the new TikZ. Names match
+%  Day 9 for visual continuity across the two closing decks.)
+\definecolor{sysblue}{RGB}{189,215,238}   % model / policy boxes
+\definecolor{mlgreen}{RGB}{169,208,142}   % positive / shared structure
+\definecolor{boxgreen}{RGB}{197,224,180}
+\definecolor{boxblue}{RGB}{180,199,231}
+\definecolor{boxred}{RGB}{244,177,177}    % warning / conflict / fragile
+\definecolor{boxtan}{RGB}{248,203,173}    % task / human inputs
+\definecolor{accentred}{RGB}{192,0,0}     % punchline callouts
+
+% Source/citation footnote with no visible mark (suppresses the stray "0"
+% that \footnote[0] leaves behind). Counter is restored so numbering is unaffected.
+\newcommand{\srcnote}[1]{%
+  \begingroup
+  \renewcommand{\thefootnote}{}%
+  \footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup}
+
+% ---------------------------------------------------------------- Recap from Day 9
+\begin{frame}{Where We Left Off: Day 9}
+\begin{itemize}\itemsep0.5em
+    \item Yesterday put RL in the \textbf{real world}: \textbf{RLHF} (learn the reward
+          when you can't write it down), \textbf{multi-agent RL}, and \textbf{robotics}.
+    \item Day 9 closed on a warning we pay off today:
+          \begin{itemize}
+              \item \textbf{multi-\emph{agent}} RL $=$ many agents sharing \emph{one}
+                    environment (non-stationarity);
+              \item \textbf{multi-\emph{task}} RL $=$ \emph{one} agent across \emph{many}
+                    tasks. \empr{These are not the same thing.}
+          \end{itemize}
+    \item It also flagged two live frontiers: \textbf{emergent complexity} from self-play,
+          and \textbf{verifiable rewards} (RLVR) for reasoning agents.
+\end{itemize}
+\vfill
+\begin{center}
+\itshape Every method in Days 1--9 optimised \emph{one} fixed MDP. Today: what happens when
+we let go of that assumption?
+\end{center}
+\end{frame}
+
+% ---------------------------------------------------------------- Today's map
+\begin{frame}{Today: Four Ways RL Generalises Past One MDP}
+\footnotesize Here a \emph{task} means one MDP: its own dynamics and reward (a specific
+maze, a specific robot skill).\par\normalsize
+\vspace{0.5em}
+\begin{itemize}\itemsep0.5em
+    \item \textbf{Meta-RL} --- \emph{learning to learn}: adapt to a \emph{new} task from a
+          little experience (context \empr{inferred}).
+    \item \textbf{Multi-task RL} --- one policy over a \emph{fixed set} of tasks (context
+          \empr{given}); where negative transfer comes from.
+    \item \textbf{Hierarchical RL} --- reasoning over \emph{skills}, not primitive actions:
+          generalising across \emph{time-scales}.
+    \item \textbf{Open problems} --- what still breaks, and a reflective close on where the
+          field is going.
+\end{itemize}
+\vfill
+\begin{center}
+The thread: \empy{generalising beyond a single fixed problem} --- across tasks, to new
+tasks, and across time.
+\end{center}
+\end{frame}
+
+% ---------------------------------------------------------------- Learning outcomes
+\begin{frame}{Learning Outcomes}
+This is an \textbf{overview} day. By the end you should be able to:
+\begin{itemize}\itemsep0.3em
+    \item \textbf{define and place} meta-RL, multi-task RL, and hierarchical RL --- and say
+          precisely how they differ;
+    \item explain the core idea of meta-RL --- \empr{learning a \emph{learner}} $f_\theta$
+          --- and how RNNs and transformers (\emph{in-context RL}) implement it;
+    \item explain \textbf{why} each frontier is hard (exploration as a learned skill,
+          negative transfer, discovering abstractions);
+    \item name \textbf{representative methods} (RL$^2$ / Decision Transformer, PCGrad, the
+          options framework) and articulate the main \textbf{open problems}, linking back to
+          Days 1--9.
+\end{itemize}
+\vspace{0.4em}
+\begin{center}\footnotesize\itshape
+Goal: to \emph{recognise and situate} these frontiers, not to implement each from scratch.
+\end{center}
+\end{frame}
+
+% ---------------------------------------------------------------- Course arc
+\begin{frame}{The Whole Journey: Ten Days}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+    font=\footnotesize,
+    node distance=0pt,
+    stage/.style={draw, rounded corners, minimum height=1.05cm, align=center,
+                  inner xsep=5pt, text width=2.1cm},
+    ar/.style={-{Stealth[length=2mm]}, line width=1pt, black!55}]
+  \node[stage, fill=sysblue]  (d1) {\textbf{1--2}\\ foundations\\ value / DQN};
+  \node[stage, fill=sysblue, right=6mm of d1] (d3) {\textbf{3--4}\\ policy gradient\\ A2C / PPO};
+  \node[stage, fill=boxgreen, right=6mm of d3] (d5) {\textbf{5--6}\\ continuous\\ DDPG / SAC};
+  \node[stage, fill=boxgreen, right=6mm of d5] (d7) {\textbf{7}\\ exploration\\ \& reward / IRL};
+  \node[stage, fill=boxtan, right=6mm of d7] (d8) {\textbf{8}\\ model-based\\ \& offline};
+  \node[stage, fill=boxtan, right=6mm of d8] (d9) {\textbf{9}\\ real world\\ RLHF / robots};
+  \node[stage, fill=accentred, text=white, right=6mm of d9] (d10) {\textbf{10}\\ \textbf{frontiers}\\ today};
+  \draw[ar] (d1)--(d3); \draw[ar] (d3)--(d5); \draw[ar] (d5)--(d7);
+  \draw[ar] (d7)--(d8); \draw[ar] (d8)--(d9); \draw[ar] (d9)--(d10);
+\end{tikzpicture}}
+\vfill
+\begin{center}\footnotesize
+From \emph{how to optimise one MDP} (Days 1--6) $\rightarrow$ \emph{where the reward and
+data come from} (Days 7--8) $\rightarrow$ \emph{the real world} (Day 9) $\rightarrow$
+\emph{past a single MDP entirely} (today).
+\end{center}
+\end{frame}

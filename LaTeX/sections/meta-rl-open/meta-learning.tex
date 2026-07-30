@@ -4,23 +4,27 @@
 \begin{frame}{What is meta-learning?}
 \begin{columns}[c]
 \begin{column}{0.62\textwidth}
-\begin{itemize}
-    \item If you've learned 100 tasks already, can you figure out how to learn more
-          efficiently?
-    \begin{itemize}\item Now having multiple tasks is a huge advantage!\end{itemize}
-    \item Meta-learning $=$ learning to learn
-    \item In practice, very closely related to multi-task learning
-    \item Many formulations
+\begin{itemize}\itemsep0.4em
+    \item \textbf{Meta-learning $=$ learning to learn:} use \emph{many} training tasks to
+          learn a \emph{learning procedure} that adapts to a \emph{new} task fast.
+    \item Having already solved 100 tasks isn't a burden --- it's the \empr{signal} we
+          learn from. (Closely related to multi-task learning.)
+    \item \textbf{What could ``the learner'' be?} Three recipes for the same goal:
     \begin{itemize}
-        \item Learning an optimizer
-        \item Learning an RNN that ingests experience
-        \item Learning a representation
+        \item a \textbf{learned optimizer} --- replace hand-tuned SGD with a \emph{learned}
+              update rule (the figure);
+        \item a \textbf{sequence model (RNN)} that reads past experience and adapts with
+              \emph{no extra gradient steps} --- \empr{the route we follow today};
+        \item a \textbf{representation} that a few fine-tuning steps adapt to any task
+              (e.g.\ MAML).
     \end{itemize}
 \end{itemize}
 \end{column}
 \begin{column}{0.38\textwidth}
 \centering
-\includegraphics[width=\linewidth]{images/meta-rl-open/figures/meta-learn-bird.jpg}
+\includegraphics[width=\linewidth]{images/meta-rl-open/figures/meta-learn-bird.jpg}\\[0.3em]
+{\scriptsize A \emph{learned optimizer}: having seen many loss landscapes, it recognises
+``I've seen this before'' and navigates a new one better than plain gradient descent.}
 \end{column}
 \end{columns}
 \end{frame}
@@ -41,129 +45,156 @@
 \end{itemize}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 10
-\begin{frame}{Meta-learning with supervised learning}
-\vfill
-\centering
-\includegraphics[width=0.85\linewidth]{images/meta-rl-open/figures/few-shot.jpg}
-\vfill
-{\scriptsize image credit: Ravi \& Larochelle '17}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 11
-\begin{frame}{Meta-learning with supervised learning}
+% ---------------------------------------------------------------- Slide 10 (step 1: the setup)
+\begin{frame}{Warm-up: ``learning to learn'' in supervised learning}
 \begin{columns}[c]
 \begin{column}{0.5\textwidth}
-\centering
-\includegraphics[width=\linewidth]{images/meta-rl-open/figures/few-shot.jpg}\\[0.6em]
-\includegraphics[width=0.95\linewidth]{images/meta-rl-open/figures/rnn-11.jpg}
+\footnotesize
+The cleanest place to see the idea --- \textbf{few-shot image classification}:
+\begin{itemize}\itemsep3pt
+   \item you are shown a handful of labelled images of classes you have \emph{never seen}
+         --- the \empr{support set} (a tiny training set $\mathcal{D}^{\text{tr}}$);
+   \item then you must label a \emph{new} image --- the \empr{query} $x$.
+\end{itemize}
+\vspace{0.4em}
+Ordinary learning trains \emph{once} on one big dataset. Here each \textbf{task} gives only
+a \emph{few} examples --- but there are \textbf{many} tasks to learn the \emph{trick} from.
 \end{column}
 \begin{column}{0.5\textwidth}
 \centering
-\resizebox{\linewidth}{!}{%
-\begin{tikzpicture}[font=\small, inner sep=1pt,
-    ar/.style={-{Stealth[length=1.6mm]}, shorten >=1pt}]
-    \node (sl) {supervised learning:\; $f($};
-    \node[right=0pt of sl] (x) {$x$};
-    \node[right=0pt of x] (r1) {$) \rightarrow$};
-    \node[right=2pt of r1] (y) {$y$};
-    \node[below=0.9cm of x, font=\scriptsize, xshift=-1.0cm] (inp) {input (e.g., image)};
-    \node[below=0.9cm of y, font=\scriptsize, xshift=1.2cm] (out) {output (e.g., label)};
-    \draw[ar] (inp) -- (x);
-    \draw[ar] (out) -- (y);
+{\footnotesize one concrete task --- classes ``A'' vs ``B'':}\\[0.2em]
+\resizebox{0.82\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize,
+    cir/.style={circle, draw, fill=sysblue!55, minimum size=0.42cm, inner sep=0},
+    sq/.style={draw, fill=boxtan!85, minimum size=0.4cm, inner sep=0},
+    ar/.style={-{Stealth[length=1.3mm]}}]
+   \node[anchor=west, font=\scriptsize] at (-2.6,2.0) {\textbf{support set} $\mathcal{D}^{\text{tr}}$ (you are shown):};
+   \node[cir] (a1) at (-2.0,1.25) {}; \node[anchor=west] at (-1.65,1.25) {$\to$ ``A''};
+   \node[sq]  (a2) at (0.9,1.25) {};  \node[anchor=west] at (1.25,1.25) {$\to$ ``B''};
+   \node[cir] (a3) at (-2.0,0.55) {}; \node[anchor=west] at (-1.65,0.55) {$\to$ ``A''};
+   \node[sq]  (a4) at (0.9,0.55) {};  \node[anchor=west] at (1.25,0.55) {$\to$ ``B''};
+   \node[align=left, font=\scriptsize, anchor=west] (an) at (-2.6,-0.35)
+        {a \emph{labelled example} $(x,y)$: image $x$ $\to$ label $y$};
+   \node[anchor=west, font=\scriptsize] at (-2.6,-1.15) {\textbf{query} $x$ (new, unlabelled):};
+   \node[cir] (qx) at (-1.7,-1.85) {};
+   \draw[ar] (qx) -- (-0.5,-1.85);
+   \node[anchor=west, mlgreen!45!black] at (-0.45,-1.85) {predicts ``A'' \cmark};
 \end{tikzpicture}}
+\vspace{0.4em}
 
-\vspace{1.4em}
+{\footnotesize $\underbrace{f(\,\mathcal{D}^{\text{tr}},\; x\,)}_{\text{read support set, then classify }x} \rightarrow y$}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- Slide 11 (step 2: the mechanism)
+\begin{frame}{How? A sequence model reads the support set}
+\begin{columns}[c]
+\begin{column}{0.45\textwidth}
+\footnotesize
+One network, three steps:
+\begin{enumerate}\itemsep4pt
+   \item feed the labelled examples $(x_1,y_1),(x_2,y_2),\dots$ into an \textbf{RNN}, one at
+         a time;
+   \item its \textbf{hidden state} $h$ builds a \emph{summary} of the support set --- what
+         each class looks like;
+   \item feed the \textbf{query} $x$; conditioned on $h$, the RNN outputs the label $y$.
+\end{enumerate}
+\vspace{0.5em}
+\textbf{Why an RNN?} it can swallow \emph{any number} of examples and condition its answer
+on all of them --- \empr{no separate training run, no gradient steps at test time}.
+\end{column}
+\begin{column}{0.55\textwidth}
+\centering
 \resizebox{\linewidth}{!}{%
-\begin{tikzpicture}[font=\small, inner sep=1pt,
-    ar/.style={-{Stealth[length=1.6mm]}, shorten >=1pt}]
-    \node (ml) {supervised meta-learning:\; $f($};
-    \node[right=0pt of ml] (D) {$\mathcal{D}^{\text{tr}}$};
-    \node[right=0pt of D] (r2) {$,x) \rightarrow y$};
-    \node[below=0.7cm of D, font=\scriptsize] (ts) {training set};
-    \draw[ar] (ts) -- (D);
+\begin{tikzpicture}[bx/.style={draw, minimum width=0.8cm, minimum height=0.6cm, fill=sysblue!25},
+    ar/.style={-{Stealth[length=1.5mm]}}]
+   \node[bx] (a) {}; \node[bx, right=6mm of a] (b) {}; \node[bx, right=6mm of b] (c) {};
+   \node[bx, right=11mm of c, fill=mlgreen!45] (d) {};
+   \draw[ar] (a)--(b); \draw[ar] (b)-- node[above,font=\scriptsize]{$h$} (c);
+   \draw[ar] (c)-- node[above,font=\scriptsize]{$h$} (d);
+   \node[below=1pt of a, font=\scriptsize] {$(x_1,y_1)$};
+   \node[below=1pt of b, font=\scriptsize] {$(x_2,y_2)$};
+   \node[below=1pt of c, font=\scriptsize] {$(x_3,y_3)$};
+   \node[below=1pt of d, font=\scriptsize] {query $x$};
+   \draw[ar] (d.north) -- ++(0,0.6) node[above, font=\scriptsize] {label $y$};
+   \draw[decorate, decoration={brace, amplitude=3pt, mirror}]
+        ([yshift=-0.55cm]a.south west) -- ([yshift=-0.55cm]c.south east)
+        node[midway, below=3pt, font=\scriptsize] {read the support set (steps 1--2)};
 \end{tikzpicture}}
+\vspace{0.6em}
 
-\vspace{1.0em}
-\begin{itemize}
-    \item How to read in training set?
-    \begin{itemize}
-        \item Many options, RNNs can work
-        \item More on this later
-    \end{itemize}
+{\scriptsize the green cell (step 3) is where it actually predicts --- after ``reading''
+everything before it.}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- Slide 12 (step 3: what's learned)
+\begin{frame}{What is actually learned? Two kinds of parameters}
+The network carries \textbf{two} kinds of parameters:
+\vspace{0.4em}
+\begin{itemize}\itemsep0.7em
+   \item \empr{meta-weights} $\theta$ --- the RNN's weights, \textbf{shared across all
+         tasks} and \emph{trained} so the RNN behaves like a good learning algorithm.
+         \emph{Slow}, learned once (over thousands of tasks).
+   \item \empr{hidden state} $h_i$ --- formed \textbf{per task} by reading that task's
+         support set. \emph{Fast}, no gradient, different every task.
+\end{itemize}
+\vfill
+\begin{center}
+{\large $\phi_i = [\,\underbrace{h_i}_{\text{fast, per-task}},\ \underbrace{\theta_p}_{\text{slow, shared}}\,]$}
+\end{center}
+\vfill
+\begin{center}\footnotesize
+\textbf{Training} $=$ show the RNN \emph{thousands} of tasks; tune $\theta$ so that, after
+reading each support set, it predicts the query well.
+\end{center}
+\end{frame}
+
+% ---------------------------------------------------------------- The big idea: a learned learner
+\begin{frame}{The big idea: learn a \emph{learner}, not a solution}
+\begin{columns}[c]
+\begin{column}{0.5\textwidth}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize,
+   box/.style={draw, rounded corners, minimum height=0.75cm, minimum width=1.6cm, align=center},
+   ar/.style={-{Stealth[length=1.6mm]}, line width=0.9pt}]
+  % ordinary
+  \node[box, fill=boxtan!50] (d) {data};
+  \node[box, fill=sysblue!45, right=24mm of d] (th) {solution $\theta$};
+  \draw[ar] (d) -- node[above,font=\scriptsize]{learn} (th);
+  \node[font=\scriptsize, left=2mm of d] {\textbf{ordinary}};
+  % meta
+  \node[box, fill=boxtan!50, below=1.6cm of d] (mt) {\emph{many} tasks};
+  \node[box, fill=mlgreen!55, right=24mm of mt] (f) {learner $f_\theta$};
+  \node[box, fill=sysblue!45, right=24mm of f] (sol) {solution};
+  \draw[ar] (mt) -- node[above,font=\scriptsize]{meta-learn} (f);
+  \draw[ar] (f) -- node[above,font=\scriptsize]{$+$ new task} (sol);
+  \node[font=\scriptsize, left=2mm of mt] {\textbf{meta}};
+\end{tikzpicture}}
+\end{column}
+\begin{column}{0.5\textwidth}
+\footnotesize
+Normally we learn a \textbf{solution}: data $\to$ weights that solve \emph{this} task ---
+then throw them away for the next one.
+\vspace{0.4em}
+
+\empr{Meta-learning learns a \emph{learner}} $f_\theta$: a function that turns a new task's
+experience \emph{into} a good solution. \textbf{That} is what we keep.
+\vspace{0.5em}
+
+Everything ahead just \emph{builds} $f_\theta$:
+\begin{itemize}\itemsep1pt
+   \item an RNN reading a support set (just now);
+   \item an RNN reading experience in an MDP (next);
+   \item a transformer reading a history (in-context RL, later).
 \end{itemize}
 \end{column}
 \end{columns}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 12
-\begin{frame}{What is being ``learned''?}
-\begin{columns}[c]
-\begin{column}{0.55\textwidth}
-\centering
-\includegraphics[width=\linewidth]{images/meta-rl-open/figures/rnn-12.jpg}
-\end{column}
-\begin{column}{0.45\textwidth}
-supervised meta-learning:
-\[ f(\mathcal{D}^{\text{tr}}, x) \rightarrow y \]
-\end{column}
-\end{columns}
 \vfill
-\begin{columns}[t]
-\begin{column}{0.5\textwidth}
-\centering\footnotesize ``Generic'' learning:
-\begin{align*}
-    \theta^\star &= \arg\min_\theta \mathcal{L}(\theta, \mathcal{D}^{\text{tr}})\\
-    &= f_{\text{learn}}(\mathcal{D}^{\text{tr}})
-\end{align*}
-\end{column}
-\begin{column}{0.5\textwidth}
-\centering\footnotesize ``Generic'' meta-learning:
-\begin{align*}
-    \theta^\star &= \arg\min_\theta \sum_{i=1}^{n} \mathcal{L}\!\left(\phi_i, \mathcal{D}^{\text{ts}}_i\right)\\
-    \text{where } \phi_i &= f_\theta(\mathcal{D}^{\text{tr}}_i)
-\end{align*}
-\end{column}
-\end{columns}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 13
-\begin{frame}{What is being ``learned''?}
-\begin{columns}[t]
-\begin{column}{0.5\textwidth}
-\centering\footnotesize ``Generic'' learning:
-\begin{align*}
-    \theta^\star &= \arg\min_\theta \mathcal{L}(\theta, \mathcal{D}^{\text{tr}})\\
-    &= f_{\text{learn}}(\mathcal{D}^{\text{tr}})
-\end{align*}
-\end{column}
-\begin{column}{0.5\textwidth}
-\centering\footnotesize ``Generic'' meta-learning:
-\begin{align*}
-    \theta^\star &= \arg\min_\theta \sum_{i=1}^{n} \mathcal{L}\!\left(\phi_i, \mathcal{D}^{\text{ts}}_i\right)\\
-    \text{where } \phi_i &= f_\theta(\mathcal{D}^{\text{tr}}_i)
-\end{align*}
-\end{column}
-\end{columns}
-\vfill
-\begin{columns}[c]
-\begin{column}{0.55\textwidth}
-\centering
-\includegraphics[width=\linewidth]{images/meta-rl-open/figures/rnn-13.jpg}
-\end{column}
-\begin{column}{0.45\textwidth}
-\centering
-\begin{tikzpicture}[inner sep=1pt, ar/.style={-{Stealth[length=1.8mm]}}]
-    \node (phi) {$\phi_i = [\,$};
-    \node[right=0pt of phi] (h) {$h_i$};
-    \node[right=0pt of h] (cm) {$,\;$};
-    \node[right=0pt of cm] (th) {$\theta_p$};
-    \node[right=0pt of th] (rb) {$\,]$};
-    \node[above=0.95cm of h, font=\scriptsize, align=center, xshift=-0.7cm] (rnnh) {RNN hidden\\ state};
-    \node[above=0.95cm of th, font=\scriptsize, align=center, xshift=0.9cm] (mlw) {meta-learned\\ weights};
-    \draw[ar] (rnnh) -- (h);
-    \draw[ar] (mlw) -- (th);
-\end{tikzpicture}
-\end{column}
-\end{columns}
+\begin{center}\footnotesize
+We don't learn the answer --- we learn \empy{how to produce answers}.
+\end{center}
 \end{frame}

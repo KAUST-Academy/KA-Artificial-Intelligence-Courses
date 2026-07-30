@@ -1,0 +1,164 @@
+\section{Hierarchical Reinforcement Learning}
+
+% ---------------------------------------------------------------- Divider
+\begin{frame}{}
+    \LARGE Hierarchical \textbf{Reinforcement Learning}
+\end{frame}
+
+% ---------------------------------------------------------------- Why
+\begin{frame}{Why hierarchy? Flat RL and the long horizon}
+\begin{columns}[c]
+\begin{column}{0.52\textwidth}
+\begin{itemize}\footnotesize\itemsep0.5em
+    \item Flat RL chooses a \textbf{primitive action every step}. Over a long,
+          sparse-reward task that is a needle in an astronomically large haystack.
+    \item Think \textbf{Montezuma's Revenge} (Day 7): thousands of steps before any
+          reward --- random exploration essentially never stumbles on it.
+    \item Humans don't plan at the muscle-twitch level. We reason over \empr{skills}
+          (``get the key'', ``open the door'').
+    \item \textbf{Temporal abstraction:} a high-level policy picks \emph{sub-goals /
+          skills}; a low-level policy executes them over many steps.
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize,
+    prim/.style={draw, circle, minimum size=3.2mm, inner sep=0, fill=black!12},
+    ar/.style={-{Stealth[length=1.4mm]}}]
+  % primitive trajectory
+  \foreach \i in {0,...,11}{ \node[prim] (p\i) at (\i*0.5,0) {}; }
+  \foreach \i [evaluate=\i as \j using int(\i+1)] in {0,...,10}{ \draw[ar] (p\i)--(p\j); }
+  \node[left=2mm of p0, align=right] {primitive\\ actions};
+  % high-level chunks
+  \node[draw, rounded corners, fill=sysblue!45, minimum width=1.8cm, above=1.1cm of p1] (g1) {skill A};
+  \node[draw, rounded corners, fill=boxgreen!55, minimum width=1.8cm, above=1.1cm of p5] (g2) {skill B};
+  \node[draw, rounded corners, fill=boxtan!55, minimum width=1.8cm, above=1.1cm of p9] (g3) {skill C};
+  \draw[ar, thick] (g1)--(g2); \draw[ar, thick] (g2)--(g3);
+  \node[left=2mm of g1, align=right] {high-level\\ sub-goals};
+  \foreach \g/\p in {g1/p1, g2/p5, g3/p9}{ \draw[densely dotted] (\g.south) -- (\p.north); }
+\end{tikzpicture}}
+\vspace{0.5em}
+
+{\footnotesize\itshape a few decisions instead of hundreds}
+\end{column}
+\end{columns}
+\end{frame}
+
+% ---------------------------------------------------------------- Options framework
+\begin{frame}{The classic framework: options}
+\begin{columns}[c]
+\begin{column}{0.52\textwidth}
+\footnotesize
+An \textbf{option} is a temporally-extended action --- a mini-policy with a start and a
+stop. Formally a triple:
+\vspace{0.3em}
+
+\begin{tcolorbox}[colback=sysblue!15, colframe=sysblue!70!black]
+\footnotesize
+\begin{itemize}\itemsep0.25em
+    \item \textbf{Initiation set} $\mathcal{I}$ --- where the option can be started;
+    \item \textbf{Intra-option policy} $\pi_o(a\mid s)$ --- how it acts while running;
+    \item \textbf{Termination} $\beta_o(s)\in[0,1]$ --- probability of stopping here.
+\end{itemize}
+\end{tcolorbox}
+\vspace{0.3em}
+
+\begin{itemize}\itemsep0.3em
+    \item The policy-over-options picks an option; it runs for \emph{several} steps; then
+          control returns to the top.
+    \item This turns the MDP into a \empr{semi-MDP} (actions take variable, extended time).
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\centering
+\resizebox{0.95\linewidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize, ar/.style={-{Stealth[length=1.6mm]}}]
+  \node[draw, rounded corners, fill=boxtan!55, minimum width=2.6cm] (hi) {policy over options};
+  \node[draw, rounded corners, fill=sysblue!45, below=1.1cm of hi, minimum width=2.6cm] (op) {option $o$: $\pi_o,\ \beta_o$};
+  \node[draw, rounded corners, fill=mlgreen!45, below=1.1cm of op, minimum width=2.6cm] (env) {environment};
+  \draw[ar] (hi.south) -- node[right, font=\tiny]{choose $o$} (op.north);
+  \draw[ar] (op.south) -- node[right, font=\tiny]{$a_t\sim\pi_o$ (many steps)} (env.north);
+  \draw[ar] (env.west) -- ++(-0.8,0) |- (op.west);
+  \node[left, font=\tiny, align=center] at ($(env.west)!0.5!(op.west) + (-0.8,0)$) {$s_{t+1},$\\ $r_t$};
+  \draw[ar] (op.east) -- ++(0.8,0) |- (hi.east);
+  \node[right, font=\tiny, align=center] at ($(op.east)!0.5!(hi.east) + (0.8,0)$) {on $\beta_o$:\\ return};
+\end{tikzpicture}}
+\end{column}
+\end{columns}
+\srcnote{\tiny Sutton, Precup, Singh. The options framework. \emph{Artificial Intelligence}, 1999.}
+\end{frame}
+
+% ---------------------------------------------------------------- Learning the hierarchy
+\begin{frame}{Learning the hierarchy, not hand-designing it}
+\begin{columns}[t]
+\begin{column}{0.48\textwidth}
+\begin{tcolorbox}[colback=mlgreen!20, colframe=mlgreen!60!black,
+      title=\textbf{HIRO} --- goals \emph{are} states]
+\footnotesize
+\begin{itemize}\itemsep0.3em
+    \item A \textbf{manager} outputs a \emph{goal state} $g$ every $k$ steps.
+    \item A \textbf{worker} is rewarded for \emph{getting closer to} $g$
+          (distance in state space).
+    \item Most intuitive form of hierarchy; off-policy, so sample-efficient enough for
+          real robots.
+\end{itemize}
+\end{tcolorbox}
+\end{column}
+\begin{column}{0.48\textwidth}
+\begin{tcolorbox}[colback=sysblue!15, colframe=sysblue!70!black,
+      title=\textbf{Option-Critic} --- learn options end-to-end]
+\footnotesize
+\begin{itemize}\itemsep0.3em
+    \item Learn the intra-option policies \emph{and} their terminations \emph{and} the
+          policy-over-options --- all by policy gradient.
+    \item The payoff: \empr{no hand-designed options}; the hierarchy is discovered from
+          reward.
+    \item (FeUdal Networks: same manager/worker idea with goals in a \emph{learned latent}
+          space.)
+\end{itemize}
+\end{tcolorbox}
+\end{column}
+\end{columns}
+\vfill
+\begin{center}\footnotesize
+Manager sets the \emph{goal}; worker earns reward for \emph{reaching} it.
+\end{center}
+\srcnote{\tiny Nachum et al. HIRO. NeurIPS 2018. \;\textbullet\; Bacon, Harb, Precup. Option-Critic. AAAI 2017.}
+\end{frame}
+
+% ---------------------------------------------------------------- Modern angle + still-open
+\begin{frame}{The 2020s angle: LLMs as the high-level planner}
+\begin{columns}[c]
+\begin{column}{0.55\textwidth}
+\begin{itemize}\footnotesize\itemsep0.5em
+    \item Why teach hierarchy \emph{after} Day 9? Because the hottest instance is an
+          \textbf{LLM planning over learned skills}.
+    \item \textbf{SayCan:} the LLM proposes a plausible high-level step (``pick up the
+          sponge''); a learned \emph{value/affordance} function grounds it in what the
+          robot can \emph{actually do} right now.
+    \item \empr{Say} (language prior, what's useful) $\times$ \empr{Can} (RL value, what's
+          feasible) $\rightarrow$ the next skill to run.
+    \item This \emph{is} a hierarchy: language plan on top, RL skill-policies underneath.
+\end{itemize}
+\end{column}
+\begin{column}{0.45\textwidth}
+\centering
+\resizebox{0.62\linewidth}{!}{%
+\begin{tikzpicture}[font=\scriptsize, ar/.style={-{Stealth[length=1.6mm]}}]
+  \node[draw, rounded corners, fill=boxtan!55, minimum width=3.0cm] (llm) {LLM: propose steps};
+  \node[draw, rounded corners, fill=boxred!40, below=6mm of llm, minimum width=3.0cm] (val) {RL value: is it feasible?};
+  \node[draw, rounded corners, fill=mlgreen!50, below=6mm of val, minimum width=3.0cm] (skill) {run skill policy};
+  \draw[ar] (llm) -- node[right,font=\tiny]{Say} (val);
+  \draw[ar] (val) -- node[right,font=\tiny]{Can} (skill);
+\end{tikzpicture}}
+\srcnote{\tiny Ahn et al. Do As I Can, Not As I Say: Grounding Language in Robotic
+Affordances (SayCan). CoRL 2022.}
+\end{column}
+\end{columns}
+\vfill
+\begin{center}\footnotesize
+\empy{Still open:} \emph{automatically discovering good abstractions} remains unsolved ---
+most wins still lean on hand-designed or task-specific hierarchies.
+\end{center}
+\end{frame}

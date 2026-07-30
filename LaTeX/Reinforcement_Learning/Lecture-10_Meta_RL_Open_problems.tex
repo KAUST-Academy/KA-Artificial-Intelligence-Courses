@@ -6,13 +6,19 @@
 \input{preamble/commands}
 \input{preamble/beamer_settings}
 
-\title[Meta-RL \& Open Problems]{Reinforcement Learning}
+\title[RL Frontiers]{RL Frontiers: Meta-RL, Multi-task RL, Hierarchical RL, Open Problems}
 
 \usetikzlibrary{positioning,fit,shapes.geometric,arrows.meta,calc,backgrounds,decorations.pathreplacing,tikzmark}
 
 \begin{document}
 
 \input{sections/cover}
+
+\input{sections/toc}
+
+% ===================== Framing =====================
+% Recap from Day 9, today's map, learning outcomes, course arc (defines palette)
+\input{sections/meta-rl-open/framing}
 
 % ===================== Part 1: Meta-Reinforcement Learning =====================
 % Transfer learning: framing and challenges
@@ -24,23 +30,26 @@
 % Meta-RL: recurrent policies, the meta-RL problem, architectures
 \input{sections/meta-rl-open/meta-rl}
 
-% ===================== Part 2: Challenges and Open Problems =====================
+% Modern meta-RL: in-context RL via sequence models (Decision Transformer, AD)
+\input{sections/meta-rl-open/in-context-rl}
+
+% ===================== Part 2: Multi-Task RL =====================
+\input{sections/meta-rl-open/multitask}
+
+% ===================== Part 3: Hierarchical RL =====================
+\input{sections/meta-rl-open/hrl}
+
+% ===================== Part 4: Challenges and Open Problems =====================
 % Core challenges: stability, sample complexity, generalization, formulation
 \input{sections/meta-rl-open/challenges}
 
-% RL as an engineering tool
-\input{sections/meta-rl-open/engineering}
+% Reflective close: engineering tool, real world, universal learning, the cake
+\input{sections/meta-rl-open/reflective}
 
-% RL and the real world
-\input{sections/meta-rl-open/real-world}
+% ===================== Course wrap =====================
+\input{sections/meta-rl-open/wrap}
 
-% RL as "universal" learning (offline RL + data)
-\input{sections/meta-rl-open/universal}
-
-% Bigger picture
-\input{sections/meta-rl-open/bigger-picture}
-
-% Wrap-up
+% References
 \input{sections/meta-rl-open/references}
 
 \end{document}

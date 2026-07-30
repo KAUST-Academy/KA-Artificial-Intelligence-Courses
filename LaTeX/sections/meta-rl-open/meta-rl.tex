@@ -5,242 +5,229 @@
     \LARGE Meta \textbf{Reinforcement Learning}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 15
+% ---------------------------------------------------------------- Slide 15 (merged maze, native)
 \begin{frame}{Meta-RL Example: Maze Navigation}
+\footnotesize\emph{Same shape as few-shot (slides 14--16) --- only now the agent must first
+\textbf{earn} its own training set by exploring, then use it to solve.}\normalsize
+\vspace{0.2em}
 \begin{columns}[c]
-\begin{column}{0.1\textwidth}
-\textbf{Goal:}
+\begin{column}{0.55\textwidth}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[
+   wall/.style={line width=1.4pt},
+   ex/.style={densely dashed, line width=1pt, boxred!85!black, -{Stealth[length=1.5mm]}},
+   so/.style={line width=1.7pt, mlgreen!55!black, -{Stealth[length=2mm]}},
+   sg/.style={font=\bfseries}]
+ % ---- maze 1: explore ----
+ \begin{scope}
+   \draw[gray!25] (0,0) grid (4,4);
+   \draw[wall] (0,0) rectangle (4,4);
+   \draw[wall] (1,0)--(1,3); \draw[wall] (2,1)--(2,4); \draw[wall] (3,0)--(3,3);
+   \node[sg] at (0.5,0.5) {S};
+   \node[sg, mlgreen!45!black] at (3.5,3.5) {G};
+   \draw[ex] (0.5,0.5)--(0.5,3.5)--(1.5,3.5)--(1.5,1.5);
+   \node[align=center] at (2,-0.75) {\textbf{explore}\\ collect $\mathcal{D}_{\text{tr}}\sim\pi^{\text{exp}}$};
+ \end{scope}
+ % ---- maze 2: solve ----
+ \begin{scope}[xshift=5.4cm]
+   \draw[gray!25] (0,0) grid (4,4);
+   \draw[wall] (0,0) rectangle (4,4);
+   \draw[wall] (1,0)--(1,3); \draw[wall] (2,1)--(2,4); \draw[wall] (3,0)--(3,3);
+   \node[sg] at (0.5,0.5) {S};
+   \node[sg, mlgreen!45!black] at (3.5,3.5) {G};
+   \draw[so] (0.5,0.5)--(0.5,3.5)--(1.5,3.5)--(1.5,0.5)--(2.5,0.5)--(2.5,3.5)--(3.5,3.5);
+   \node[align=center] at (2,-0.75) {\textbf{solve}\\ $\mathcal{D}_{\text{tr}}\rightarrow\pi^{\text{task}}$};
+ \end{scope}
+ \draw[-{Stealth[length=3mm]}, line width=1.2pt] (4.3,2) -- (5.1,2);
+\end{tikzpicture}}
 \end{column}
 \begin{column}{0.45\textwidth}
-\centering
-{\footnotesize Collect small amount of experience in new MDP}\\[0.4em]
-\includegraphics[height=0.42\textheight]{images/meta-rl-open/figures/maze-collect.jpg}\\[0.4em]
-Collect $\mathcal{D}_{\text{tr}} \sim \pi^{\text{exp}}$
-\end{column}
-\begin{column}{0.45\textwidth}
-\centering
-{\footnotesize Learn policy that solves that MDP}\\[0.4em]
-\includegraphics[height=0.42\textheight]{images/meta-rl-open/figures/maze-learn.jpg}\\[0.4em]
-$\mathcal{D}_{\text{tr}} \rightarrow \pi^{\text{task}}$
-\end{column}
-\end{columns}
-\vfill
-{\scriptsize diagram adapted from Duan et al.\ '17}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 16
-\begin{frame}{Meta-RL Example: Maze Navigation}
-\begin{columns}[t]
-\begin{column}{0.4\textwidth}
-\textbf{Meta-Train Time:}\\
-{\footnotesize Learn how to efficiently explore \& solve many MDPs:}\\[0.4em]
-\centering
-\includegraphics[height=0.26\textheight]{images/meta-rl-open/figures/maze-metatrain.jpg}\hfill
-\includegraphics[height=0.22\textheight]{images/meta-rl-open/figures/maze-metatrain2.jpg}\hfill
-\raisebox{2.2em}{$\cdots$ {\footnotesize\,meta-training tasks}}\\[0.4em]
-{\footnotesize Meta-train $\pi^{\text{exp}},\, \pi^{\text{task}}$}
-\end{column}
-\begin{column}{0.58\textwidth}
-\textbf{Meta-Test Time:}
+\footnotesize
+\textbf{Meta-train:} learn an explorer $\pi^{\text{exp}}$ and a solver $\pi^{\text{task}}$
+over \emph{many} mazes.
 \vspace{0.3em}
 
-\begin{columns}[t]
-\begin{column}{0.5\textwidth}
 \centering
-{\scriptsize Collect small amount of experience in new MDP}\\[0.3em]
-\includegraphics[height=0.26\textheight]{images/meta-rl-open/figures/maze-collect16.jpg}\\[0.3em]
-{\footnotesize Collect $\mathcal{D}_{\text{tr}} \sim \pi^{\text{exp}}$}
-\end{column}
-\begin{column}{0.5\textwidth}
-\centering
-{\scriptsize Learn policy that solves that MDP}\\[0.3em]
-\includegraphics[height=0.26\textheight]{images/meta-rl-open/figures/maze-learn16.jpg}\\[0.3em]
-{\footnotesize $\mathcal{D}_{\text{tr}} \rightarrow \pi^{\text{task}}$}
+\begin{tikzpicture}[mz/.style={draw, minimum size=0.7cm},
+   dot/.style={circle, fill, inner sep=0.7pt}]
+   \foreach \i in {0,1,2}{
+     \node[mz, fill=boxtan!40] (m\i) at (\i*0.95,0) {};
+     \node[dot] at ([shift={(-0.22,-0.22)}]m\i.center) {};
+     \node[dot, mlgreen!50!black] at ([shift={(0.22,0.22)}]m\i.center) {};
+   }
+   \node at (2.85,0) {$\cdots$};
+   \node[mz, fill=sysblue!35] (mt) at (4.1,0) {};
+   \node[dot] at ([shift={(-0.22,-0.22)}]mt.center) {};
+   \node[dot, mlgreen!50!black] at ([shift={(0.22,0.22)}]mt.center) {};
+   \node[font=\scriptsize] at (0.95,-0.65) {meta-train mazes};
+   \node[font=\scriptsize] at (4.1,-0.65) {meta-test};
+\end{tikzpicture}
+
+\raggedright\vspace{0.3em}
+\textbf{Meta-test:} a \emph{new} maze --- explore a little, then solve.
+\vspace{0.4em}
+
+\begin{tcolorbox}[colback=boxred!18, colframe=accentred, boxsep=2pt, left=3pt, right=3pt, top=2pt, bottom=2pt]
+\scriptsize\textbf{Key assumption:} train \& test mazes are drawn from the \emph{same
+distribution} --- otherwise there is no reason adaptation should generalize.
+\end{tcolorbox}
 \end{column}
 \end{columns}
-\end{column}
-\end{columns}
-\vfill
-\begin{center}\footnotesize
-\textbf{Key assumption:} Meta-training \& meta-testing MDPs come from the same
-distribution (so that we can expect generalization).
-\end{center}
-{\scriptsize diagram adapted from Duan et al.\ '17}
+\srcnote{\tiny Maze meta-RL setup: Duan et al. '17.}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 17
-\begin{frame}{The meta reinforcement learning problem}
+% ---------------------------------------------------------------- Slide 16 (problem analogy, annotated)
+\begin{frame}{The meta-RL problem: an analogy}
 \begin{columns}[t]
 \begin{column}{0.5\textwidth}
 \centering ``Generic'' learning:
-\begin{align*}
-    \theta^\star &= \arg\min_\theta \mathcal{L}(\theta, \mathcal{D}^{\text{tr}})\\
-    &= f_{\text{learn}}(\mathcal{D}^{\text{tr}})
-\end{align*}
-\vspace{0.5em}
+\[ \theta^\star = \arg\min_\theta \mathcal{L}(\theta, \mathcal{D}^{\text{tr}})
+   = f_{\text{learn}}(\mathcal{D}^{\text{tr}}) \]
+\vspace{0.1em}
 
 \centering Reinforcement learning:
-\begin{align*}
-    \theta^\star &= \arg\max_\theta \mathbb{E}_{\pi_\theta}\!\left[R(\tau)\right]\\
-    &= f_{\text{RL}}(\mathcal{M}) \qquad \mathcal{M}=\{\mathcal{S},\mathcal{A},\mathcal{P},r\}
-\end{align*}
-\hspace{2.0em}\begin{tikzpicture}[baseline, inner sep=1pt,
-    ar/.style={-{Stealth[length=1.6mm]}}]
-    \node[font=\footnotesize\itshape] (lab) at (0,0) {MDP};
-    \draw[ar] (lab.north) to[bend right=18] (0.5,0.75);
-\end{tikzpicture}
+\[ \theta^\star = \arg\max_\theta \mathbb{E}_{\pi_\theta}\!\left[R(\tau)\right]
+   = f_{\text{RL}}(\mathcal{M}) \]
+{\scriptsize \empr{RL is itself a function}: an MDP
+$\mathcal{M}=\{\mathcal{S},\mathcal{A},\mathcal{P},r\}$ goes \emph{in}, an optimal policy
+comes \emph{out}.}
 \end{column}
 \begin{column}{0.5\textwidth}
 \centering ``Generic'' meta-learning:
-\begin{align*}
-    \theta^\star &= \arg\min_\theta \sum_{i=1}^{n} \mathcal{L}\!\left(\phi_i, \mathcal{D}^{\text{ts}}_i\right)\\
-    \text{where } \phi_i &= f_\theta(\mathcal{D}^{\text{tr}}_i)
-\end{align*}
-\vspace{0.5em}
+\[ \theta^\star = \arg\min_\theta \sum_{i} \mathcal{L}\!\left(\phi_i, \mathcal{D}^{\text{ts}}_i\right),
+   \;\; \phi_i = f_\theta(\mathcal{D}^{\text{tr}}_i) \]
+\vspace{0.1em}
 
 \centering Meta-reinforcement learning:
-\begin{align*}
-    \theta^\star &= \arg\max_\theta \sum_i \mathbb{E}_{\pi_{\phi_i}}\!\left[R(\tau)\right]\\
-    \text{where } \phi_i &= f_\theta(\mathcal{M}_i)
-\end{align*}
-\hspace{3.0em}\begin{tikzpicture}[baseline, inner sep=1pt,
-    ar/.style={-{Stealth[length=1.6mm]}}]
-    \node[font=\footnotesize\itshape] (lab) at (0,0) {MDP for task $i$};
-    \draw[ar] (lab.north) to[bend right=18] (-0.2,0.75);
-\end{tikzpicture}
+\[ \theta^\star = \arg\max_\theta \sum_i \mathbb{E}_{\pi_{\phi_i}}\!\left[R(\tau)\right],
+   \;\; \phi_i = f_\theta(\mathcal{M}_i) \]
+{\scriptsize \empr{learn the adapter} $f_\theta$: it turns an MDP $\mathcal{M}_i$ into a
+good policy, and we train it across \emph{many} MDPs.}
 \end{column}
 \end{columns}
+\vfill
+\begin{center}
+{\footnotesize $f_\theta$ is the \empr{meta-learner}: it maps a \emph{task}
+$\mathcal{M}_i \mapsto$ \emph{policy parameters} $\phi_i$; we train $\theta$ so it does this
+well across many tasks.}\\[2pt]
+{\scriptsize (The parallel: the dataset $\mathcal{D}^{\text{tr}}$ becomes an MDP
+$\mathcal{M}$; ``adapt, then score'' is the same recipe --- the loss just becomes a return.)}
+\end{center}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 18
-\begin{frame}{The meta reinforcement learning problem}
+% ---------------------------------------------------------------- Slide 17 (task distribution, annotated)
+\begin{frame}{The meta-RL problem: a distribution of tasks}
 \begin{columns}[c]
-\begin{column}{0.5\textwidth}
-\[\resizebox{\linewidth}{!}{$\displaystyle
-    \theta^\star = \arg\max_\theta \sum_i \mathbb{E}_{\pi_{\phi_i}}\!\left[R(\tau)\right],
-        \;\; \phi_i = f_\theta(\mathcal{M}_i)$}\]
+\begin{column}{0.48\textwidth}
+\[ \theta^\star = \arg\max_\theta \sum_i \mathbb{E}_{\pi_{\phi_i}}\!\left[R(\tau)\right],
+   \;\; \phi_i = f_\theta(\mathcal{M}_i) \]
 \footnotesize
-assumption:\quad $\mathcal{M}_i \sim p(\mathcal{M})$
-\vspace{0.6em}
+\textbf{assumption:} $\mathcal{M}_i \sim p(\mathcal{M})$ --- tasks are \empr{drawn from a
+distribution}; train and test tasks must \emph{share} it, or there is nothing to
+generalise from.
+\vspace{0.5em}
 
-meta test-time:\quad sample $\mathcal{M}_{\text{test}} \sim p(\mathcal{M})$,
-get $\phi_i = f_\theta(\mathcal{M}_{\text{test}})$
-\vspace{0.8em}
+\textbf{meta-test} (the real exam): drop the trained learner into a \emph{brand-new} task
+$\mathcal{M}_{\text{test}} \sim p(\mathcal{M})$; it must adapt,
+$\phi = f_\theta(\mathcal{M}_{\text{test}})$, from a little experience.
+\vspace{0.9em}
 
+\centering
 \begin{tikzpicture}[inner sep=1pt, ar/.style={-{Stealth[length=1.8mm]}}]
     \node (set) {$\{\mathcal{M}_1, \dots, \mathcal{M}_n\}$};
     \node[below left=0.55cm and -0.4cm of set, font=\scriptsize\itshape] (lbl) {meta-training MDPs};
     \draw[ar] (lbl) -- (set.south west);
 \end{tikzpicture}
 \end{column}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.52\textwidth}
 \centering
-\footnotesize Some examples:\\[0.3em]
-\includegraphics[width=\linewidth]{images/meta-rl-open/figures/examples-18.jpg}
+{\footnotesize here $p(\mathcal{M})$ $=$ a distribution over \emph{target running speeds}:}\\[0.5em]
+\includegraphics[width=\linewidth]{images/meta-rl-open/figures/examples-cheetah.jpg}\\[0.4em]
+{\scriptsize each task rewards a different velocity; a new task is just a new target speed.}
 \end{column}
 \end{columns}
+\vfill
+\begin{center}\footnotesize
+That pins down the \textbf{problem}. Building the adapter $f_\theta$ now takes three steps:\;
+\empr{(1)} which task am I in? \;\; \empr{(2)} how to implement it? \;\; \empr{(3)} why does it explore?
+\end{center}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 19
-\begin{frame}{Contextual policies and meta-learning}
+% ---------------------------------------------------------------- Slide 18 (contextual, annotated)
+\begin{frame}{Building the meta-learner (1/3): which task am I in?}
 \begin{columns}[c]
-\begin{column}{0.38\textwidth}
+\begin{column}{0.36\textwidth}
 \centering
-$\displaystyle \theta^\star = \arg\max_\theta \sum_{i=1}^{n} \mathbb{E}_{\pi_{\phi_i}(\tau)}\!\left[R(\tau)\right]$\\[0.5em]
+$\displaystyle \theta^\star = \arg\max_\theta \sum_{i} \mathbb{E}_{\pi_{\phi_i}}\!\left[R(\tau)\right]$\\[0.4em]
 where $\phi_i = f_\theta(\mathcal{M}_i)$
 \end{column}
 \begin{column}{0.06\textwidth}
-{\Large\color{green!55!black}$\boldsymbol{\Rightarrow}$}
+{\Large\color{mlgreen!60!black}$\boldsymbol{\Rightarrow}$}
 \end{column}
-\begin{column}{0.56\textwidth}
+\begin{column}{0.58\textwidth}
 \centering
-$\displaystyle \theta^\star = \arg\max_\theta \sum_{i=1}^{n} \mathbb{E}_{\pi_\theta}\!\left[R(\tau)\right]$\\[0.4em]
-$\pi_\theta\big(a_t \mid \underbrace{s_t, s_1,a_1,r_1,\dots,s_{t-1},a_{t-1},r_{t-1}}\big)$\\[0.2em]
-{\scriptsize context used to infer whatever we need to solve $\mathcal{M}_i$,\\
-i.e., $z_t$ or $\phi_i$ (which are really the same thing)}
+feed the whole history as \empr{context}:\\[0.3em]
+$\pi_\theta\big(a_t \mid s_t,\ \underbrace{s_1,a_1,r_1,\dots,s_{t-1},a_{t-1},r_{t-1}}_{\text{history so far}\,=\,\text{context}}\big)$\\[0.4em]
+{\scriptsize \empr{how we use it:} the policy reads its \emph{own} past experience. With an
+\emph{empty} history it must \emph{explore}; with a \emph{rich} one it can \emph{exploit}
+--- same weights $\theta$, behaviour driven by the context.}
 \end{column}
 \end{columns}
 \vfill
-\begin{columns}[c]
-\begin{column}{0.6\textwidth}
-\footnotesize
-in meta-RL, the \emph{context} is inferred from experience from $\mathcal{M}_i$
-\vspace{0.4em}
-
-in multi-task RL, the context is typically given
-\end{column}
-\begin{column}{0.4\textwidth}
-\centering
-\begin{tikzpicture}[inner sep=1pt, ar/.style={-{Stealth[length=1.8mm]}}]
-    \node (pi) {$\pi_\theta(a_t \mid s_t,$};
-    \node[right=0pt of pi] (ph) {$\phi_i$};
-    \node[right=0pt of ph] (rb) {$)$};
-    \node[below right=0.6cm and -0.2cm of ph, font=\scriptsize] (c) {``context''};
-    \draw[ar] (c) -- (ph);
-\end{tikzpicture}
-\end{column}
-\end{columns}
+\begin{center}\footnotesize
+\empy{meta-RL:} context is \emph{inferred} from experience.\quad
+\empy{multi-task RL:} context $\phi_i$ is \emph{given}.\quad
+(how to \emph{carry} a growing history? $\to$ an RNN, \textbf{next}.)
+\end{center}
 \vfill
 \begin{columns}[c]
 \begin{column}{0.33\textwidth}\centering
-\includegraphics[height=0.22\textheight]{images/meta-rl-open/figures/ctx-stack.jpg}\\
-{\footnotesize $\phi$: stack location}
+\includegraphics[height=0.16\textheight]{images/meta-rl-open/figures/ctx-stack.jpg}\\
+{\scriptsize $\phi$: stack location}
 \end{column}
 \begin{column}{0.33\textwidth}\centering
-\includegraphics[height=0.22\textheight]{images/meta-rl-open/figures/ctx-walk.jpg}\\
-{\footnotesize $\phi$: walking direction}
+\includegraphics[height=0.16\textheight]{images/meta-rl-open/figures/ctx-walk.jpg}\\
+{\scriptsize $\phi$: walking direction}
 \end{column}
 \begin{column}{0.33\textwidth}\centering
-\includegraphics[height=0.22\textheight]{images/meta-rl-open/figures/ctx-puck.jpg}\\
-{\footnotesize $\phi$: where to hit puck}
+\includegraphics[height=0.16\textheight]{images/meta-rl-open/figures/ctx-puck.jpg}\\
+{\scriptsize $\phi$: where to hit puck}
 \end{column}
 \end{columns}
+\begin{center}{\scriptsize the photos show \emph{what varies across tasks} --- what the context $\phi$ must encode}\end{center}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 20
-\begin{frame}{Meta-RL with recurrent policies}
-\begin{columns}[T]
-% ===================== left =====================
+% ---------------------------------------------------------------- Slide 19 (recurrent, merged, native)
+\begin{frame}{Building the meta-learner (2/3): use a recurrent policy}
+\begin{columns}[c]
 \begin{column}{0.42\textwidth}
 \centering
-$\displaystyle \theta^\star = \arg\max_\theta \sum_{i=1}^{n} \mathbb{E}_{\pi_{\phi_i}(\tau)}\!\left[R(\tau)\right]$\\[0.3em]
-\tikz[baseline]{\node[draw=red, ellipse, inner sep=2pt]{where $\phi_i = f_\theta(\mathcal{M}_i)$};}
-\vspace{0.8em}
-
-\begin{tikzpicture}[ic/.style={inner sep=0},
-    ba/.style={-{Stealth[length=3mm]}, line width=2.5pt, blue!45!black}]
-    \node[ic] (ea) at (0,0)   {\includegraphics[height=1.5cm]{images/meta-rl-open/figures/icons/earth.jpg}};
-    \node[ic] (rb) at (2.6,0) {\includegraphics[height=1.5cm]{images/meta-rl-open/figures/icons/robot.jpg}};
-    \draw[ba] (ea.north) to[bend left=40] (rb.north);
-    \draw[ba] (rb.south) to[bend left=40] (ea.south);
-    \node[font=\footnotesize] at (1.3,1.5) {$r_t\quad s_{t+1}$};
-    \node[font=\footnotesize] at (1.3,-1.5) {pick $a_t \sim \pi_\theta(a_t|s_t)$};
-\end{tikzpicture}
-
-\vspace{0.3em}
-{\footnotesize use $(s_t,a_t,s_{t+1},r_t)$ to improve $\pi_\theta$}
+\begin{tikzpicture}[font=\footnotesize,
+   nd/.style={draw, rounded corners, minimum width=2.3cm, minimum height=0.7cm},
+   ar/.style={-{Stealth[length=2mm]}, line width=1pt}]
+   \node[nd, fill=sysblue!40] (ag) {agent $\pi_\theta$};
+   \node[nd, fill=mlgreen!40, below=1.0cm of ag] (env) {environment};
+   \draw[ar] (ag.west) to[bend right=55] node[left]{$a_t$} (env.west);
+   \draw[ar] (env.east) to[bend right=55] node[right]{$s_{t+1},\,r_t$} (ag.east);
+\end{tikzpicture}\\[0.4em]
+{\footnotesize\raggedright so\dots\ we just train an \textbf{RNN policy}? \empr{yes} --- the
+recurrent state \emph{is} the adapter, $\phi_i=[\,h_i,\ \theta_\pi\,]$.}
 \end{column}
-% ===================== right =====================
 \begin{column}{0.58\textwidth}
-\footnotesize
-main question: how to implement $f_\theta(\mathcal{M}_i)$? what should $f_\theta(\mathcal{M}_i)$ do?
-\vspace{0.4em}
-
-\tikz[baseline]{\node[draw=red, rounded corners, inner sep=3pt, align=left]{%
-1.\ improve policy with experience from $\mathcal{M}_i$:\\
-\hspace{1em}$\{(s_1,a_1,s_2,r_1),\dots,(s_T,a_T,s_{T+1},r_T)\}$};}
-\vspace{0.3em}
-
-2.\ (new in RL): choose how to interact, i.e.\ choose $a_t$ ---
-meta-RL must also \emph{choose} how to \emph{explore!}
-\vspace{0.5em}
-
+\footnotesize $f_\theta(\mathcal{M}_i)$ must do two jobs:
+\begin{enumerate}\itemsep2pt
+   \item \textbf{improve} the policy from experience $\{(s_1,a_1,s_2,r_1),\dots\}$;
+   \item \textbf{choose how to interact} --- so meta-RL must also \emph{choose how to
+         explore}.
+\end{enumerate}
+\vspace{0.2em}
 \centering
-\begin{tikzpicture}[bx/.style={draw, minimum width=0.6cm, minimum height=0.42cm},
+\begin{tikzpicture}[bx/.style={draw, minimum width=0.6cm, minimum height=0.42cm, fill=sysblue!25},
     ar/.style={-{Stealth[length=1.3mm]}}, th/.style={-{Stealth[length=2mm]}, line width=1.1pt}]
     \node[bx] (b1) at (0,0) {}; \node[bx] (b2) at (1.75,0) {}; \node[bx] (b3) at (3.5,0) {};
-    \node[bx] (b4) at (5.3,0) {};
-    \node[font=\scriptsize] (t) at (0.1,1.1) {$\theta^\star$};
+    \node[bx, fill=mlgreen!45] (b4) at (5.3,0) {};
+    \node[font=\scriptsize] (t) at (0.1,0.85) {$\theta^\star$};
     \draw[th] (t) to[out=-80,in=90] (0.9,0.12);
     \draw[th] (t) to[out=0,in=90]   (2.6,0.12);
     \draw[th] (t) to[out=0,in=90]   (4.0,0.12);
@@ -249,109 +236,58 @@ meta-RL must also \emph{choose} how to \emph{explore!}
     \node[below=1pt of b1, font=\tiny] {$(s_1,a_1,s_2,r_1)$};
     \node[below=1pt of b2, font=\tiny] {$(s_2,a_2,s_3,r_2)$};
     \node[below=1pt of b3, font=\tiny] {$(s_3,a_3,s_4,r_3)$};
-    \draw[ar] (b4.north)-- node[right,font=\scriptsize]{$a$} ++(0,0.55);
-    \draw[ar] ([yshift=-0.55cm]b4.south)-- node[right,font=\scriptsize]{$s$} (b4.south);
-    \node[below=0.6cm of b4, font=\scriptsize] {$\pi_{\phi_i}(a|s)$};
-\end{tikzpicture}
-
-\vspace{0.3em}
-{\footnotesize as before, $\phi_i = [\,h_i,\ \theta_\pi\,]$}
-\end{column}
-\end{columns}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 21
-\begin{frame}{Meta-RL with recurrent policies}
-\begin{columns}[T]
-\begin{column}{0.42\textwidth}
-\centering
-$\displaystyle \theta^\star = \arg\max_\theta \sum_{i=1}^{n} \mathbb{E}_{\pi_{\phi_i}(\tau)}\!\left[R(\tau)\right]$\\[0.4em]
-where $\phi_i = f_\theta(\mathcal{M}_i)$
-\vspace{0.8em}
-
-\raggedright so\dots\ we just train an RNN policy?\\ yes!
-\end{column}
-\begin{column}{0.58\textwidth}
-\centering
-\begin{tikzpicture}[bx/.style={draw, minimum width=0.6cm, minimum height=0.42cm},
-    ar/.style={-{Stealth[length=1.3mm]}}, th/.style={-{Stealth[length=2mm]}, line width=1.1pt}]
-    \node[bx] (b1) at (0,0) {}; \node[bx] (b2) at (1.4,0) {}; \node[bx] (b3) at (2.8,0) {};
-    \node[bx] (b4) at (4.4,0) {};
-    \node[font=\scriptsize] (t) at (0.1,1.1) {$\theta^\star$};
-    \draw[th] (t) to[out=-80,in=90] (0.7,0.12);
-    \draw[th] (t) to[out=0,in=90]   (2.1,0.12);
-    \draw[th] (t) to[out=0,in=90]   (3.5,0.12);
-    \draw[ar] (b1)--(b2); \draw[ar] (b2)--(b3);
-    \draw[ar] (b3) -- node[above,font=\scriptsize]{$h_i$} (b4);
-    \node[below=1pt of b1, font=\tiny] {$(s_1,a_1,s_2,r_1)$};
-    \node[below=1pt of b2, font=\tiny] {$(s_2,a_2,s_3,r_2)$};
-    \node[below=1pt of b3, font=\tiny] {$(s_3,a_3,s_4,r_3)$};
-    \draw[ar] (b4.north)-- node[right,font=\scriptsize]{$a$} ++(0,0.5);
-    \draw[ar] ([yshift=-0.5cm]b4.south)-- node[right,font=\scriptsize]{$s$} (b4.south);
-    \node[below=0.55cm of b4, font=\scriptsize] {$\pi_{\phi_i}(a|s)$};
+    \draw[ar] (b4.north)-- node[right,font=\scriptsize]{$a$} ++(0,0.4);
+    \draw[ar] ([yshift=-0.4cm]b4.south)-- node[right,font=\scriptsize]{$s$} (b4.south);
+    \node[below=0.45cm of b4, font=\scriptsize] {$\pi_{\phi_i}(a|s)$};
 \end{tikzpicture}
 \end{column}
 \end{columns}
 \vfill
-\begin{center}
-\textbf{crucially}, RNN hidden state is \textbf{not} reset between episodes!
+\begin{center}\footnotesize
+\textbf{crucially, the RNN hidden state is \empr{not reset} between episodes:}
 \end{center}
-\vfill
-\begin{center}
-\includegraphics[width=0.95\linewidth]{images/meta-rl-open/figures/s21-unroll.jpg}
-\end{center}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 22
-\begin{frame}{Why recurrent policies learn to explore}
-\begin{columns}[T]
-\begin{column}{0.4\textwidth}
 \centering
-\resizebox{\linewidth}{!}{%
-\begin{tikzpicture}[bx/.style={draw, minimum width=0.55cm, minimum height=0.4cm},
-    ar/.style={-{Stealth[length=1.3mm]}}, th/.style={-{Stealth[length=2mm]}, line width=1.1pt}]
-    \node[bx] (b1) at (0,0) {}; \node[bx] (b2) at (1.25,0) {}; \node[bx] (b3) at (2.5,0) {};
-    \node[bx] (b4) at (3.9,0) {};
-    \node[font=\scriptsize] (t) at (0.1,1.05) {$\theta^\star$};
-    \draw[th] (t) to[out=-80,in=90] (0.62,0.12);
-    \draw[th] (t) to[out=0,in=90]   (1.88,0.12);
-    \draw[th] (t) to[out=0,in=90]   (3.1,0.12);
-    \draw[ar] (b1)--(b2); \draw[ar] (b2)--(b3);
-    \draw[ar] (b3) -- node[above,font=\scriptsize]{$h_i$} (b4);
-    \node[below=1pt of b1, font=\tiny] {$(s_1,a_1,s_2,r_1)$};
-    \node[below=1pt of b2, font=\tiny] {$(s_2,a_2,s_3,r_2)$};
-    \node[below=1pt of b3, font=\tiny] {$(s_3,a_3,s_4,r_3)$};
-    \draw[ar] (b4.north)-- node[right,font=\scriptsize]{$a$} ++(0,0.5);
-    \draw[ar] ([yshift=-0.5cm]b4.south)-- node[right,font=\scriptsize]{$s$} (b4.south);
-    \node[below=0.55cm of b4, font=\scriptsize] {$\pi_{\phi_i}(a|s)$};
+\resizebox{0.64\linewidth}{!}{%
+\begin{tikzpicture}[bx/.style={draw, minimum width=0.7cm, minimum height=0.5cm, fill=sysblue!25},
+    ar/.style={-{Stealth[length=1.4mm]}}]
+   \node[bx] (c1) at (1.5,0) {}; \node[bx] (c2) at (3.0,0) {}; \node[bx] (c3) at (4.5,0) {};
+   \node[bx] (c4) at (6.8,0) {}; \node[bx] (c5) at (8.3,0) {}; \node[bx] (c6) at (9.8,0) {};
+   \draw[ar] (c1)--(c2); \draw[ar] (c2)--(c3);
+   \draw[ar] (c4)--(c5); \draw[ar] (c5)--(c6);
+   \foreach \c in {c1,c2,c3,c4,c5,c6}{
+     \draw[ar] ([yshift=-0.32cm]\c.south) -- (\c.south);
+     \draw[ar] (\c.north) -- ++(0,0.28);
+   }
+   \draw[densely dashed, gray] (5.65,-0.72) -- (5.65,1.05);
+   \node[font=\scriptsize] at (3.0,-0.95) {episode 1};
+   \node[font=\scriptsize] at (8.3,-0.95) {episode 2};
+   \draw[ar, accentred, line width=1.2pt] (c3) -- (c4);
+   \node[accentred, font=\scriptsize] at (5.65,0.72) {$h$ carried over};
 \end{tikzpicture}}
-\end{column}
-\begin{column}{0.6\textwidth}
-\footnotesize
-\begin{enumerate}
-    \item improve policy with experience from $\mathcal{M}_i$:\\
-          \resizebox{0.95\linewidth}{!}{$\{(s_1,a_1,s_2,r_1),\dots,(s_T,a_T,s_{T+1},r_T)\}$}
-    \item (new in RL): choose how to interact, i.e.\ choose $a_t$\\
-          meta-RL must also \emph{choose} how to \emph{explore!}
-\end{enumerate}
-\[ \theta^\star = \arg\max_\theta \mathbb{E}_{\pi_\theta}\!\left[\sum_{t=0}^{T} r(s_t,a_t)\right] \]
-\end{column}
-\end{columns}
-\vfill
+\end{frame}
+
+% ---------------------------------------------------------------- Slide 20 (why explore, native)
+\begin{frame}{Building the meta-learner (3/3): why it explores}
 \begin{columns}[c]
-\begin{column}{0.14\textwidth}
-\centering
-\includegraphics[width=\linewidth]{images/meta-rl-open/figures/s22-maze.jpg}
+\begin{column}{0.52\textwidth}
+\footnotesize
+The RNN is trained to maximise reward over the \textbf{whole meta-episode} --- many
+episodes back-to-back, hidden state never reset:
+\[ \theta^\star = \arg\max_\theta \mathbb{E}_{\pi_\theta}\!\Big[\,
+   \underbrace{\textstyle\sum_{t=0}^{T} r(s_t,a_t)}_{\text{summed across \emph{all} episodes}}\,\Big] \]
+So \empr{spending early steps exploring pays off}: what the agent learns now earns more
+reward later in the \emph{same} meta-episode. Exploration becomes \emph{optimal behaviour},
+not a bolt-on.
 \end{column}
-\begin{column}{0.46\textwidth}
+\begin{column}{0.48\textwidth}
 \centering
-\resizebox{\linewidth}{!}{%
+{\footnotesize one meta-episode $=$ several episodes:}\\[0.8em]
+\resizebox{0.95\linewidth}{!}{%
 \begin{tikzpicture}[font=\scriptsize,
-    g/.style={-{Stealth[length=2.4mm]}, line width=2.5pt, green!60!black},
-    b/.style={-{Stealth[length=2.4mm]}, line width=2.5pt, blue!70},
-    yl/.style={-{Stealth[length=2.4mm]}, line width=2.5pt, yellow!85!black},
+    g/.style={-{Stealth[length=2.4mm]}, line width=2.5pt, mlgreen!60!black},
+    b/.style={-{Stealth[length=2.4mm]}, line width=2.5pt, sysblue!70!black},
+    yl/.style={-{Stealth[length=2.4mm]}, line width=2.5pt, boxtan!85!black},
     br/.style={decorate, decoration={brace, amplitude=4pt, mirror}}]
-    % episode / meta-episode arrows
     \draw[g] (0.0,0.5)--(0.9,0.5);
     \draw[g] (1.9,0.5)--(1.0,0.5);
     \draw[b] (2.3,0.1)--(2.3,0.9);
@@ -362,12 +298,12 @@ where $\phi_i = f_\theta(\mathcal{M}_i)$
     \draw[br] (-0.05,-0.9)--(5.35,-0.9) node[midway,below=4pt]{meta-episode};
 \end{tikzpicture}}
 \end{column}
-\begin{column}{0.37\textwidth}
-\footnotesize
-optimizing total reward over the entire \textbf{meta-episode} with RNN policy
-\textbf{automatically} learns to explore!
-\end{column}
 \end{columns}
+\vfill
+\begin{center}\footnotesize
+\empr{Contrast Day 7:} there exploration was a bolt-on \emph{bonus} (count-based, RND);
+here the meta-learner \emph{learns} an exploration strategy end-to-end.
+\end{center}
 \end{frame}
 
 % ---------------------------------------------------------------- Slide 23
@@ -401,19 +337,48 @@ mazes, test on held-out small mazes and large mazes}
 Meta-Learner. ICLR 2018}
 \end{frame}
 
-% ---------------------------------------------------------------- Slide 25
-\begin{frame}{Meta-RL with recurrent policies}
-\centering
-\includegraphics[width=\linewidth,height=0.66\textheight,keepaspectratio]{images/meta-rl-open/figures/arch-papers.jpg}
-\vfill
-{\tiny Heess et al. Memory-based control with recurrent neural networks. 2015. \;\textbullet\;
-Wang et al. Learning to Reinforcement Learn. 2016. \;\textbullet\;
-Duan, Schulman, Chen, Bartlett, Sutskever, Abbeel. RL$^2$: Fast Reinforcement Learning
-via Slow Reinforcement Learning. 2016.}
-\end{frame}
-
-% ---------------------------------------------------------------- Slide 26
+% ---------------------------------------------------------------- Slide 24 (merged 25+26)
 \begin{frame}{Architectures for meta-RL}
-\centering
-\includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{images/meta-rl-open/figures/arch-meta-rl.jpg}
+\begin{center}\footnotesize
+All implement the same $f_\theta(\mathcal{M}_i)$: read a history of experience
+$\rightarrow$ produce context $\phi_i$. They differ in \emph{how they read it}.
+\end{center}
+\vspace{0.4em}
+\begin{columns}[t]
+\begin{column}{0.32\textwidth}
+\begin{tcolorbox}[colback=sysblue!35, colframe=sysblue!80!black, title=\footnotesize\textbf{Recurrent} (RL$^2$)]
+\footnotesize
+Roll history through an \textbf{RNN}; hidden state $h_i$ \emph{is} the context.
+\vspace{0.3em}
+
+\empy{$+$} simple, general\\
+\empy{$-$} long-horizon memory is hard
+\end{tcolorbox}
+\end{column}
+\begin{column}{0.32\textwidth}
+\begin{tcolorbox}[colback=boxgreen!45, colframe=boxgreen!70!black, title=\footnotesize\textbf{Attentive} (SNAIL)]
+\footnotesize
+\textbf{Temporal convolutions} $+$ \textbf{attention} over the whole history.
+\vspace{0.3em}
+
+\empy{$+$} pinpoints relevant past steps\\
+\empy{$-$} heavier, context-window bound
+\end{tcolorbox}
+\end{column}
+\begin{column}{0.32\textwidth}
+\begin{tcolorbox}[colback=boxtan!50, colframe=boxtan!80!black, title=\footnotesize\textbf{Context encoder} (PEARL)]
+\footnotesize
+Encode experience into a \textbf{latent} $z$ (\emph{permutation-invariant}); condition
+the policy on $z$.
+\vspace{0.3em}
+
+\empy{$+$} off-policy, sample-efficient\\
+\empy{$-$} decouples explore vs.\ solve
+\end{tcolorbox}
+\end{column}
+\end{columns}
+\vfill
+{\tiny Duan et al. RL$^2$. 2016. \;\textbullet\; Wang et al. Learning to Reinforcement Learn. 2016.
+\;\textbullet\; Mishra et al. SNAIL (A Simple Neural Attentive Meta-Learner). ICLR 2018.
+\;\textbullet\; Rakelly et al. PEARL (Efficient Off-Policy Meta-RL via Probabilistic Context Variables). ICML 2019.}
 \end{frame}

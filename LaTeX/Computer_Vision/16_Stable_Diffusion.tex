@@ -1,10 +1,19 @@
-% Frames extracted from the source PPTX->PDF
 \documentclass[10pt,aspectratio=169]{beamer}
 
 % Include project preamble files for consistency
 \input{preamble/packages}
 \input{preamble/commands}
 \input{preamble/beamer_settings}
+
+% Source credit at the foot of a frame. Plain \footnotetext prints the
+% (never incremented) footnote counter as a stray superscript zero.
+\newcommand{\srcnote}[1]{%
+  \begingroup
+  \renewcommand{\thefootnote}{}%
+  \footnotetext{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
 
 \title[Stable Diffusion]{Stable Diffusion}
 

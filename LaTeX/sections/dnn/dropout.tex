@@ -1,7 +1,7 @@
 \begin{frame}{Dropout}
     \begin{itemize}
     \item \textbf{Dropout} is a regularization technique used to prevent overfitting in neural networks.
-    \item During training, it randomly drops (set to 0) a fraction of neurons in each layer based on a specified probability for every forward pass.
+    \item During training, it randomly drops (sets to 0) a fraction of neurons in each layer based on a specified probability for every forward pass.
 \end{itemize}
     \begin{figure}
     \centering
@@ -40,9 +40,10 @@
 \end{figure}
 \begin{itemize}
     \item We drop neurons during training, but what should we do during inference?
-    \item \textbf{During inference:} We use all neurons. 
+    \item \textbf{During inference:} We use all neurons.
 \end{itemize}
 But...
+\footnotetext{\href{https://jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf}{Srivastava JMLR 2014}}
 \end{frame}
 
 \begin{frame}{Dropout}
@@ -56,22 +57,19 @@ But...
 \begin{frame}{Dropout}
 \begin{itemize}
     \item \textbf{Problem:} Having inconsistent values during inference compared to training can cause the network to produce worse results.
-    \item \textbf{Solution:} Scale the output during inference by $(p)$ to keep the same expected activation as in training.
+    \item \textbf{Solution:} Scale the output during inference by the \textbf{keep probability} $p$ (the chance a neuron stays active) to keep the same expected activation as in training.
     \item \textbf{Example:}
     \begin{itemize}
-  \item \textbf{During training (p=0.1)}: 
+  \item \textbf{During training (keep probability $p=0.1$)}:
     \begin{itemize}
       \item Activation value = 2
-      \item Active only 10\% of the time 
+      \item Active only 10\% of the time
       \item $\Rightarrow$ Effective contribution = $2 \times 0.1 = 0.2$
     \end{itemize}
-  \item \textbf{During inference}: 
+  \item \textbf{During inference}:
     \begin{itemize}
       \item Always active ($\Rightarrow$ Activation value = 2)
-      \item Scale by $(p) = 0.1$
-      \[
-        2 \times 0.1 = 0.2
-      \]
+      \item Scale by $p = 0.1$ $\Rightarrow$ $2 \times 0.1 = 0.2$
     \end{itemize}
   \item Result: Consistent activation scale between training and inference.
 \end{itemize}
@@ -85,12 +83,22 @@ But...
         \texttt{\small
         \# Training Mode: Enables dropout\\
         model.train() \\
-        output = model(input) \\
-        \\
-        \# Evaluation Mode: Disables dropout, scales activations\\
+        output = model(input) \\[1em]
+        \# Evaluation Mode: Disables dropout (no scaling needed;\\
+        \# PyTorch already scales by 1/(1-p) during training)\\
         model.eval() \\
         output = model(input)
         }
     \end{block}
+        \item \textbf{Note:} \texttt{nn.Dropout(p)} takes the \textit{drop} probability, so a keep probability of $0.1$ is written \texttt{nn.Dropout(0.9)}.
     \end{itemize}
+\end{frame}
+
+\begin{frame}{Dropout in Practice}
+    \begin{itemize}
+        \item \textbf{How much to drop:} a keep probability of $p = 0.5$ on the hidden layers is close to optimal across most networks and tasks, and the test error stays flat for $0.4 \leq p \leq 0.8$. Input layers want a higher keep probability, around $0.8$.
+        \item \textbf{It costs training time:} a dropout network typically takes 2 to 3 times longer to train than the same architecture without it, because each update is computed on a different thinned network and so is much noisier.
+        \item \textbf{It does not always help:} with very little training data the network can memorise the training set even through the dropout noise. On MNIST subsets of 100 and 500 images, dropout gave no improvement.
+    \end{itemize}
+\footnotetext{\href{https://jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf}{Srivastava JMLR 2014}, Sections 7.3, 7.4 and 11}
 \end{frame} 

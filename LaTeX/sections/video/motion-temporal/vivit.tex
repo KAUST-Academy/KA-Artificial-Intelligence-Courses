@@ -1,14 +1,14 @@
 \subsection{Vision Transformers for Video}
 \begin{frame}[allowframebreaks]{Vision Transformers for Video}
-    \textbf{Vision Transformers (ViTs)} adapt the Transformer architecture for video data by treating video frames as sequences of patches, enabling the capture of long-range dependencies across both spatial and temporal dimensions.
+    \textbf{Vision Transformers (ViTs)} extend to video by treating a clip as a sequence of tokens, so self-attention can relate patches across both space and time.
 
     \begin{itemize}
-        \item \textbf{Patch Embedding:} Each video frame is divided into patches, which are then linearly embedded into a sequence.
-        \item \textbf{Temporal Encoding:} Positional encodings are added to capture temporal information.
-        \item \textbf{Self-Attention Mechanism:} Allows the model to focus on different parts of the video sequence simultaneously.
-        \item \textbf{Benefits:} Captures global context and long-range dependencies effectively.
-        \item \textbf{Costs:} Computationally expensive due to quadratic complexity with respect to sequence length.
+        \item \textbf{Patch Embedding:} Each frame is divided into patches that are linearly embedded; ViViT's \emph{tubelet embedding} instead embeds spatio-temporal tubes spanning several frames, so each token already carries motion information.
+        \item \textbf{Temporal Encoding:} Positional encodings are extended to the time dimension to preserve frame order.
+        \item \textbf{Factorised Variants:} ViViT factorises the encoder into spatial then temporal stages, and pooling-based designs such as MViT progressively reduce the number of tokens, cutting the cost of full spatio-temporal attention.
     \end{itemize}
+    \vspace{0.5em}
+    {\footnotesize [Arnab et al., ``ViViT: A Video Vision Transformer,'' ICCV 2021]}
 \framebreak
     \begin{figure}
         \centering
@@ -17,6 +17,7 @@
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_39_1_img.jpg}
+        \includegraphics[width=1\textwidth,height=0.82\textheight,keepaspectratio]{images/video/slide_39_1_img.jpg}
+        \caption*{\tiny [Source: UMich EECS 498 (2022), Lecture 24: Videos, slide 81]}
     \end{figure}
 \end{frame}

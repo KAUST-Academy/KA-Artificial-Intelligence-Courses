@@ -9,8 +9,8 @@
 \end{frame}
 
 % --- Background: Masked Autoencoders (MAE) ---
-% Students skipped the Autoencoders lecture; this grounds the "generative / reconstruction"
-% family that JEPA is contrasted against throughout this lecture.
+% MAE itself is not taught elsewhere in the course; this grounds the
+% "generative / reconstruction" family that JEPA is contrasted against.
 \begin{frame}{Background: Masked Autoencoders (MAE)}
   \begin{itemize}\itemsep0.25em
     \item \textbf{MAE} (He et al., 2022): mask a large fraction ($\sim$75\%) of image patches; the encoder sees \textbf{only visible patches}; a lightweight decoder reconstructs the \textbf{pixels} of the masked ones.
@@ -55,7 +55,7 @@
 \begin{frame}{The Collapse Problem and How JEPA Avoids It}
   \begin{itemize}\itemsep0.25em
     \item \textbf{Representation collapse:} if both encoders output a \emph{constant} vector for every input, any similarity or prediction loss is minimized without learning anything.
-    \item Three families of \textbf{anti-collapse mechanisms} (Lecture on Contrastive Methods):
+    \item Three families of \textbf{anti-collapse mechanisms} (covered earlier):
     \begin{itemize}\itemsep0.15em
       \item \textbf{Contrastive negatives:} push non-matching pairs apart (SimCLR, MoCo).
       \item \textbf{Information regularization:} keep per-dimension \textbf{variance} up and \textbf{covariance} down (VICReg, Barlow Twins).

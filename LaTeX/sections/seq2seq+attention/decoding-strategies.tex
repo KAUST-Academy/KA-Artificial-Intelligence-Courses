@@ -40,7 +40,7 @@
   \begin{itemize}
     \item \textbf{Wider beams} cost more compute and give diminishing returns; very wide beams can even hurt quality by surfacing short, generic outputs.
     \item \textbf{Length bias:} summing log-probabilities makes every added token lower the score, so beam search favors short outputs.
-    \item \textbf{Length normalization} divides the score by $T^{\alpha}$ (with $\alpha \approx 0.6$ in Wu et al., 2016) so hypotheses of different lengths compete fairly.
+    \item \textbf{Length normalization} divides the score by a length penalty so hypotheses of different lengths compete fairly. Wu et al.\ (2016) use $lp(Y) = \big((5 + |Y|)/6\big)^{\alpha}$, with $\alpha$ tuned on held-out data ($\alpha = 0.2$ in that work).
     \item Beam search suits tasks with a well-defined target (translation, summarization). For open-ended generation it tends to produce repetitive, generic text, which is why sampling-based decoding is used there instead.
   \end{itemize}
 \end{frame}

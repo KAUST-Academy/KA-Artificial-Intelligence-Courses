@@ -12,18 +12,19 @@
         \item \textbf{Language-guided query selection} to initialize decoder queries on relevant regions.
         \item \textbf{Cross-modality decoder head} for iterative region-text refinement.
       \end{itemize}
-    \item \textbf{Result:} strong transfer to unseen categories and prompts; the text encoder builds on the CLIP-style grounding idea from the previous section.
+    \item \textbf{Result:} strong transfer to unseen categories and prompts; the text branch is a BERT encoder trained with GLIP-style grounded pre-training (region-word alignment), a different route from CLIP's contrastive image-text objective.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Grounding DINO: How It Works}
   \centering
-  \includegraphics[width=0.8\textwidth]{images/foundation-models/grounding_dino_example.png}
+  \includegraphics[width=0.8\textwidth,height=0.80\textheight,keepaspectratio]{images/foundation-models/grounding_dino_example.png}\\[0.1em]
+  {\scriptsize Liu et al., ``Grounding DINO,'' ECCV 2024, Fig.~3.}
 \end{frame}
 
 \begin{frame}{DINOv2: A Vision-Only Foundation Backbone}
   \begin{itemize}\itemsep0.28em
-    \item Scales the \textbf{self-distillation} recipe from the contrastive-methods lecture (DINO image-level loss + iBOT masked-token loss) into a foundation model.
+    \item Scales the \textbf{self-distillation} recipe covered earlier (DINO image-level loss + iBOT masked-token loss) into a foundation model.
     \item \textbf{Curated data instead of raw web data:} LVD-142M is built by retrieving images similar to curated seed datasets from a large web pool, with deduplication. Data curation is a core part of the recipe.
     \item Train a large ViT ($\sim$1.1B parameters), then \textbf{distill} it into smaller ViTs for deployment.
     \item \textbf{Frozen features} transfer to classification, segmentation, depth, and retrieval without fine-tuning; Depth Anything (later this lecture) uses a DINOv2 encoder.
@@ -33,10 +34,12 @@
 
 \begin{frame}{DINOv2: Self-Supervised Training at Scale}
   \centering
-  \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/dino_self_supervised_training.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/foundation-models/dino_self_supervised_training.png}\\[0.1em]
+  {\scriptsize Stanford BIODS 276, Lecture 1 (S.\ Yeung-Levy); diagram from Caron et al.\ 2021 / Oquab et al.\ 2023.}
 \end{frame}
 
 \begin{frame}{DINOv2: One Frozen Backbone, Many Downstream Tasks}
   \centering
-  \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/dinov2_backbone_downstream_tasks.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/foundation-models/dinov2_backbone_downstream_tasks.png}\\[0.1em]
+  {\scriptsize Stanford BIODS 276, Lecture 1 (S.\ Yeung-Levy); visualizations from Caron et al.\ 2021 / Oquab et al.\ 2023.}
 \end{frame}

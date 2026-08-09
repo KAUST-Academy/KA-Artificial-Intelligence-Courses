@@ -2,11 +2,12 @@
 \section{Roadmap: 2017 to 2026}
 % ============================================================================
 
-\begin{frame}{Four Key Engineering Changes (2017 $\to$ 2026)}
-  \begin{enumerate}
+\begin{frame}{Five Key Engineering Changes (2017 $\to$ 2026)}
+  \begin{enumerate}\itemsep0.2em
+    \item \textbf{New defaults inside the block:} relative positions (RoPE), normalization moved before each sublayer and simplified to RMSNorm, gated feed-forward blocks (SwiGLU), and biases dropped.
     \item \textbf{Bandwidth matters more than just speed:} New attention methods like FlashAttention focus on moving data efficiently and using memory well.
-    \item \textbf{From fixed to flexible compute:} Models now adjust their computation and memory use based on the input (using tools like sparse MoE and adaptive resolution).
+    \item \textbf{From fixed to flexible compute:} Models now adjust their computation and memory use based on the input (using tools like sparse MoE).
     \item \textbf{From separate to unified input streams:} Instead of having different pieces for text, images, etc., everything is processed together in one sequence, with new practical challenges.
-    \item \textbf{More thinking during use:} Some new models use extra internal steps ("thinking tokens") for harder questions, shifting cost to longer decoding instead of just bigger models.
+    \item \textbf{More thinking during use:} Some new models use extra internal steps (``thinking tokens'') for harder questions, shifting cost to longer decoding instead of just bigger models.
   \end{enumerate}
 \end{frame}

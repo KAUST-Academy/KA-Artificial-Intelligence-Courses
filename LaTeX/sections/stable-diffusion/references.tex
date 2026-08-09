@@ -1,13 +1,13 @@
-% --- References (Stable Diffusion lecture) ---
 \section{References}
 \begin{frame}[allowframebreaks]{References}
 \textbf{Tutorials and Surveys}
 \begin{itemize}
-    \item Binxu Wang: \href{https://binxuw.scholars.harvard.edu/sites/g/files/omnuum11221/files/binxuw/files/stable_diffusion_a_tutorial.pdf}{Stable Diffusion: A Tutorial (Harvard ML from Scratch)} --- U-Net, time embedding, CLIP conditioning.
+    \item Binxu Wang \& John Vastola (2022). \href{https://binxuw.scholars.harvard.edu/sites/g/files/omnuum11221/files/binxuw/files/stable_diffusion_a_tutorial.pdf}{Stable Diffusion: A Tutorial (Harvard ML from Scratch)}: U-Net, time embedding, CLIP conditioning.
     \item Kreis, K., Gao, R., \& Vahdat, A.: \href{https://cvpr2022-tutorial-diffusion-models.github.io/}{CVPR 2022 Tutorial: Diffusion Models}
     \item Rogge, N., \& Rasul, K.: \href{https://huggingface.co/blog/annotated-diffusion}{The Annotated Diffusion Model}
     \item Lilian Weng: \href{https://lilianweng.github.io/posts/2021-07-11-diffusion-models/}{What are Diffusion Models?}
-    \item Yang Song: \href{https://yang-song.github.io/blog/2021/score/}{Score-Based Generative Modeling: A Brief Overview}
+    \item Yang Song: \href{https://yang-song.net/blog/2021/score/}{Score-Based Generative Modeling: A Brief Overview}
+    \item Binxu Wang: \href{https://github.com/Animadversio/DiffusionFromScratch}{DiffusionFromScratch}: companion code that rebuilds Stable Diffusion in a single script.
 \end{itemize}
 
 \framebreak
@@ -24,8 +24,9 @@
 
 \textbf{Stable Diffusion: Core Papers}
 \begin{itemize}
-    \item Rombach, R., et al.\ (2022). \href{https://arxiv.org/abs/2112.10752}{High-Resolution Image Synthesis with Latent Diffusion Models} --- Stable Diffusion / LDM (VAE + U-Net + conditioning).
-    \item Radford, A., et al.\ (2021). \href{https://arxiv.org/abs/2103.00020}{Learning Transferable Visual Models From Natural Language Supervision (CLIP)} --- text encoder and cross-attention conditioning.
+    \item Rombach, R., et al.\ (2022). \href{https://arxiv.org/abs/2112.10752}{High-Resolution Image Synthesis with Latent Diffusion Models}: Stable Diffusion / LDM (VAE + U-Net + conditioning).
+    \item CompVis (2022). \href{https://github.com/CompVis/stable-diffusion}{CompVis/stable-diffusion}: the original open code and weight release of the paper above; source of the text-to-image sample strip.
+    \item Radford, A., et al.\ (2021). \href{https://arxiv.org/abs/2103.00020}{Learning Transferable Visual Models From Natural Language Supervision (CLIP)}: text encoder and cross-attention conditioning.
 \end{itemize}
 
 \framebreak
@@ -51,12 +52,12 @@
     \item Ramesh, A., et al.\ (2022). \href{https://arxiv.org/abs/2204.06125}{Hierarchical Text-Conditional Image Generation with CLIP Latents (DALL·E~2)}
     \item Saharia, C., et al.\ (2022). \href{https://arxiv.org/abs/2205.11487}{Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding (Imagen)}
     \item Blattmann, A., et al.\ (2023). \href{https://arxiv.org/abs/2311.15127}{Stable Video Diffusion: Scaling Latent Video Diffusion Models to Large Datasets}
-    \item Podell, D., et al.\ (2023). \href{https://arxiv.org/abs/2307.01952}{SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis}, ICLR 2024.
+    \item Podell, D., et al.\ (2024). \href{https://arxiv.org/abs/2307.01952}{SDXL: Improving Latent Diffusion Models for High-Resolution Image Synthesis}, ICLR 2024.
     \item Peebles, W., \& Xie, S. (2023). \href{https://arxiv.org/abs/2212.09748}{Scalable Diffusion Models with Transformers (DiT)}, ICCV 2023.
     \item Esser, P., et al.\ (2024). \href{https://arxiv.org/abs/2403.03206}{Scaling Rectified Flow Transformers for High-Resolution Image Synthesis (Stable Diffusion 3)}, ICML 2024.
-    \item Black Forest Labs (2024). \href{https://blackforestlabs.ai/announcing-black-forest-labs/}{Announcing Black Forest Labs (FLUX.1)}
-    \item Lopez, J. (2022). \href{https://stability.ai/news-updates/stable-diffusion-v2-release}{Stable Diffusion 2.0 Release} --- OpenCLIP, upscaler, depth2img, inpainting (Stability AI blog).
-    \item Stability AI (2024). \href{https://stability.ai/news-updates/introducing-stable-diffusion-3-5}{Introducing Stable Diffusion 3.5} --- SD~3.5 Large / Large Turbo / Medium (Stability AI blog).
-    \item Raisinghani, A. (2026). \href{https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/}{Nano Banana 2: Combining Pro capabilities with lightning-fast speed} (Google DeepMind blog).
+    \item Black Forest Labs (2024). \href{https://bfl.ai/announcing-black-forest-labs/}{Announcing Black Forest Labs (FLUX.1)}
+    \item Lopez, J. (2022). \href{https://stability.ai/news-updates/stable-diffusion-v2-release}{Stable Diffusion 2.0 Release}: OpenCLIP, upscaler, depth2img, inpainting (Stability AI blog).
+    \item Stability AI (2024). \href{https://stability.ai/news-updates/introducing-stable-diffusion-3-5}{Introducing Stable Diffusion 3.5}: SD~3.5 Large / Large Turbo / Medium (Stability AI blog).
+    \item Raisinghani, N. (2026). \href{https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/}{Nano Banana 2: Combining Pro capabilities with lightning-fast speed} (The Keyword, Google blog).
 \end{itemize}
 \end{frame}

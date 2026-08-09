@@ -30,6 +30,8 @@
 \begin{frame}{A problem with this framework}
   \begin{center}
     \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_bottleneck_two_separate_rnns.png}
+
+    {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~16.}
   \end{center}  
   \begin{itemize}
       \item In reality: All hidden values carry information.
@@ -43,6 +45,8 @@
 \begin{frame}{A problem with this framework}
   \begin{center}
     \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_bottleneck_cross_attention_links.png}
+
+    {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~17.}
   \end{center}  
   \begin{itemize}
       \item Every output is related to the input directly.
@@ -69,6 +73,8 @@
 \begin{frame}{Using all input hidden states}
   \begin{center}
     \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_context_average_hidden_states.png}
+
+    {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~18.}
   \end{center}  
   \begin{itemize}
       \item Simple solution: Compute the average of all encoder hidden states.
@@ -81,6 +87,8 @@
 \begin{frame}{Using all input hidden states}
   \begin{center}
     \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_context_average_broadcast.png}
+
+    {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~19.}
   \end{center}  
   \begin{itemize}
       \item Problem: The average applies the same weight to every input.
@@ -95,11 +103,13 @@
 \begin{frame}{Using all input hidden states}
   \begin{center}
     \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_context_per_step_weighted.png}
+
+    {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~20.}
   \end{center}
 
   \textcolor{red}{\textbf{Solution:} Use a \textit{different} weighted average for each output word}
   \begin{itemize}
-    \item The weighted average provided for the $k$th output word is:
+    \item The weighted average provided for the $t$-th output word is:
     \begin{equation*}
       c_t = \sum_{i} w_i(t) h_i
     \end{equation*}
@@ -109,14 +119,16 @@
 \begin{frame}{Using all input hidden states}
 \centering
 \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_context_per_step_hidden_notation.png}
+
+{\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~27.}
 \begin{equation*}
     c_t = \sum_{i=1}^N w_i(t) h_i
 \end{equation*}
 
 \begin{itemize}
-    \item This solution will work if the weights $w_{ki}$ can somehow be made to “focus” on the right input word
+    \item This solution will work if the weights $w_i(t)$ can somehow be made to “focus” on the right input word
         \begin{itemize}
-            \item E.g., when predicting the word “apfel”, $w_3(4)$, the weight for “apple” must be high while the rest must be low
+            \item E.g., when predicting the word “apfel”, $w_3(3)$, the weight for “apple” must be high while the rest must be low
         \end{itemize}
     \item How do we generate such weights??
 \end{itemize}

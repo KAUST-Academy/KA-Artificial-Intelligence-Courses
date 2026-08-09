@@ -4,9 +4,10 @@
     \vspace{0.5em}
     \begin{itemize}
         \item Define and distinguish Large Reasoning Models (LRMs) from simpler pattern-matching LLMs.
+        \item Name the kinds of reasoning an LRM is asked to perform, and recognise which one a given task calls for.
         \item Understand advanced reasoning techniques, including Chain-of-Thought (CoT), Tree-of-Thought (ToT), and self-consistency methods.
         \item Explain how instruction tuning and reinforcement learning (RL) can refine and enhance reasoning abilities in language models.
-        \item Critically assess future directions and identify open problems in the field of reasoning with language models.
+        \item Critically assess the limits of current reasoning models, including whether a reasoning trace can be read as an account of how the answer was reached.
     \end{itemize}
 \end{frame}
 
@@ -19,35 +20,31 @@
         \end{itemize}
         \vspace{1em}
         \item \textbf{Key Examples:}
-        % Add a horizontal space to push the content to the right
-        \hspace*{1cm}%
-        % Create a minipage container that is narrower than the full width
-        \begin{minipage}{\dimexpr\textwidth-1cm\relax}
-            \begin{columns}[T] % Using [T] for top-alignment is good practice
-                \begin{column}{0.48\linewidth} % Use \linewidth here
-                    \begin{itemize}
-                        \item OpenAI: o1, o3
-                        \item Google: Gemini 2.0 (Flash mode)
-                        \item DeepSeek: R1, V3
-                    \end{itemize}
-                \end{column}
-                \begin{column}{0.48\linewidth} % Use \linewidth here
-                    \begin{itemize}
-                        \item QwQ (Alibaba)
-                        \item Claude 3.5
-                        \item Codestral (Mistral)
-                    \end{itemize}
-                \end{column}
-            \end{columns}
+        % Paired minipages rather than beamer columns: columns inside an itemize are
+        % measured against \textwidth and run past the list indent.
+        \par\vspace{0.3em}
+        \begin{minipage}[t]{0.48\linewidth}
+            \begin{itemize}
+                \item OpenAI: o1, o3
+                \item Google: Gemini 2.0 Flash Thinking
+                \item DeepSeek: R1
+            \end{itemize}
+        \end{minipage}\hfill
+        \begin{minipage}[t]{0.48\linewidth}
+            \begin{itemize}
+                \item QwQ (Alibaba)
+                \item Claude 3.7 Sonnet (extended thinking)
+                \item Magistral (Mistral)
+            \end{itemize}
         \end{minipage}
     \framebreak
         \item \textbf{Distinctive Behavior:}
         \begin{itemize}
-            \setlength{\itemsep}{0.5em} % Adjust item spacing
-            \item “Thinking internally” 
-            \item Producing hidden or explicit reasoning traces
+            \setlength{\itemsep}{0.5em}
+            \item ``Thinking'' before answering rather than emitting the answer directly
+            \item Intermediate reasoning traces, either shown to the user or kept hidden
             \item Step-by-step intermediate computations
-            \item Intermediate reasoning traces (explicit or latent)
+            \item More decode steps spent on a hard question than an easy one
             \item Better performance on symbolic tasks and math
             \item Often paired with advanced prompting or finetuning
         \end{itemize}
@@ -56,12 +53,12 @@
         \begin{itemize}
             \setlength{\itemsep}{0.5em} 
             \item \textbf{PaLM + CoT Prompting:} \\
-                Google’s PaLM + CoT prompt significantly improved accuracy on GSM8K (grade-school math) from approx 18\% to 58\%.
-            \item \textbf{Gemini 2.0 Flash mode:} \\
-                Provides transparent reasoning steps for decision-making.
+                Chain-of-Thought prompting raised PaLM 540B on GSM8K (grade-school math) from 17.9\% to 56.9\%, without changing a single weight.
+            \item \textbf{Gemini 2.0 Flash Thinking:} \\
+                Exposes the reasoning steps behind an answer instead of hiding them.
             \item \textbf{DeepSeek R1:} \\
-                Combines expert models for efficient coding and debugging. \\
-                Claimed to achieve "Aha!" moments, solving reasoning tasks using structured thinking steps, not just memorization.
+                Trained with large-scale reinforcement learning on problems whose answers can be checked automatically. \\
+                Its predecessor R1-Zero developed an ``aha moment'' during training: it began pausing mid-solution to re-examine its own approach, without ever being shown an example of doing so.
         \end{itemize}
     \end{itemize}
 
@@ -104,9 +101,11 @@
 
 \subsection{How Do LRMs Work?}
 \begin{frame}[allowframebreaks]{How Do LRMs Work?}
-    \begin{center}
-        \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/lrm+moe/lrm-2.png}
-    \end{center}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[height=0.62\textheight, width=\textwidth, keepaspectratio]{images/lrm+moe/lrm-2.png}
+        \caption*{The reward loop behind the RL stage below: a candidate answer is checked, rewarded when the reasoning holds up, and revised when it does not. Source: \href{https://medium.com/@bhanuchaddha/large-reasoning-models-ai-guide-ccaaad2a36a1}{Chaddha (2025)}, ``Large Reasoning Models: The AI That Solves Problems Like a Human (But 10x Faster),'' Medium; the author's own illustrative diagram, not from a paper.}
+    \end{figure}
 \framebreak
     LRMs use a combination of training methods and prompt strategies to enhance the reasoning capabilities of LLMs. 
     \vspace{0.5em}

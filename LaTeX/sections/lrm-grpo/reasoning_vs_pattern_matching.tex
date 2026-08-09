@@ -48,12 +48,15 @@
             \item In logic puzzles, pattern-based models tend to contradict earlier premises \\[1em]
             Reasoning-aware models (e.g., using Chain-of-Thought prompting) remain consistent and logical.
         \end{itemize}
+    \end{itemize}
     \framebreak
-        \begin{figure}[h]
-            \centering
-            \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/lm-spatial-reasoning.png}
-        \end{figure}
+    \begin{figure}[h]
+        \centering
+        \includegraphics[height=0.72\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/lm-spatial-reasoning.png}
+        \caption*{Spatial reasoning is a case where the split is visible task by task: models remain poor on abstract figures and on drawing diagrams, and are improving on scenes and real maps. Source: \href{https://towardsdatascience.com/language-models-and-spatial-reasoning-whats-good-what-is-still-terrible-and-what-is-improving-175d2099eb4c/}{Bos (2024)}, Towards Data Science: the author's own informal testing of GPT-4 and Claude 3.5 Sonnet, July 2024, not a benchmark.}
+    \end{figure}
     \framebreak
+    \begin{itemize}
         \item \textbf{Empirical Separation: When Does Reasoning Matter?}
         \begin{itemize}
             \item On simple factual questions, both model types may perform well.

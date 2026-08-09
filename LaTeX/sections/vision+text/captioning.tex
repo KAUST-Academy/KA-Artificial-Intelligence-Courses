@@ -9,7 +9,8 @@
     \end{itemize}
     \begin{figure}
         \centering
-        \fetchconvertimage{https://hips.hearstapps.com/popularmechanics/assets/16/38/1474656063-screen-shot-2016-09-23-at-24044-pm.png}{images/vision+text/captioning-1.png}{width=\textwidth,height=0.8\textheight,keepaspectratio}
+        \fetchconvertimage{https://hips.hearstapps.com/popularmechanics/assets/16/38/1474656063-screen-shot-2016-09-23-at-24044-pm.png}{images/vision+text/captioning-1.png}{width=\textwidth,height=0.72\textheight,keepaspectratio}
+        \caption*{Source: Google Research Blog, ``Show and Tell: image captioning open sourced in TensorFlow'', 2016.}
     \end{figure}
 \framebreak
     \begin{itemize}
@@ -38,14 +39,14 @@
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=0.8\textwidth]{images/vision+text/captioning-pipeline.png}
-        \caption*{Typical image captioning pipeline.}
+        \includegraphics[width=0.72\textwidth,height=0.42\textheight,keepaspectratio]{images/vision+text/captioning-pipeline.png}
+        \caption*{Convnet features fed to the LSTM at every step (Liu, Guo \& Lew, MMM 2017).}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
         \includegraphics[width=0.8\textwidth,height=0.8\textheight,keepaspectratio]{images/vision+text/captioning-active-learning.png}
-        \caption*{Active Learning in Image Captioning}
+        \caption*{Attention-based image captioning (Show, Attend and Tell, Xu et al., ICML 2015)}
     \end{figure}
 \end{frame}
 
@@ -64,12 +65,13 @@
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1.08\textwidth,height=0.9\textheight,keepaspectratio]{images/vision+text/show-and-tell-2.png}
+        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/vision+text/show-and-tell-2.png}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1.08\textwidth,height=0.9\textheight,keepaspectratio]{images/vision+text/show-and-tell-result.png}
+        \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/vision+text/show-and-tell-result.png}
+        \caption*{A selection of evaluation results, grouped by human rating (Vinyals et al., CVPR 2015, Fig.~5).}
     \end{figure}
 \end{frame}
 
@@ -93,17 +95,19 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.85\textwidth]{images/vision+text/video-captioning-pipeline.png}
-        \caption*{Dense-Captioning Events in Videos (Hendricks et al., 2017)}
+        \caption*{Dense-Captioning Events in Videos (Krishna et al., ICCV 2017)}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \fetchconvertimage{https://www.researchgate.net/publication/348510533/figure/fig2/AS:11431281179131504@1691159020381/DVC-Net-model-for-dense-video-captioning-DVC-dense-video-captioning.png}{images/vision+text/video-captioning-1.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+        \fetchconvertimage{https://www.researchgate.net/publication/348510533/figure/fig2/AS:11431281179131504@1691159020381/DVC-Net-model-for-dense-video-captioning-DVC-dense-video-captioning.png}{images/vision+text/video-captioning-1.png}{width=\textwidth,height=0.8\textheight,keepaspectratio}
+        \caption*{DVC-Net model for dense video captioning (Lee \& Kim, \emph{IET Computer Vision} 15(1), 2021, Fig.~2).}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth]{images/vision+text/video-captioning-2.png}
+        \caption*{One video, five time-localised events described in natural language (Lee \& Kim, \emph{IET Computer Vision} 15(1), 2021).}
     \end{figure}
 \end{frame}
 
@@ -114,7 +118,7 @@
         \item \textbf{Context Understanding:} Captions need to capture context and semantics accurately.
         \item \textbf{Temporal Dynamics:} In video captioning, capturing the dynamics of actions and events over time is crucial.
         \item \textbf{Data Scarcity:} High-quality annotated datasets for training captioning models are limited.
-        \item \textbf{Evaluation Metrics:} Evaluating caption quality is subjective and often relies on metrics like BLEU, METEOR, or CIDEr, which may not align with human judgment.
+        \item \textbf{Evaluation Metrics:} Evaluating caption quality is subjective. The usual scores compare a generated caption against human references: BLEU on n-gram precision, METEOR on stem and synonym matches weighted towards recall, CIDEr on TF-IDF weighted n-gram similarity. None of them tracks human judgment closely.
     \end{itemize}
 \end{frame}
     
@@ -122,42 +126,44 @@
 \subsection{Recent Advances and Datasets}
 \begin{frame}[allowframebreaks]{Recent Advances in Captioning}
     \textbf{Image Captioning Advances:}
-\framebreak
-    \textbf{OSCAR:} Object-Semantics Aligned Pre-training for Vision-and-Language Tasks.
+
+    \textbf{Oscar:} Object-Semantics Aligned Pre-training for Vision-Language Tasks.
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.7\textheight,keepaspectratio]{images/vision+text/captioning-oscar.png}
+        \includegraphics[width=1\textwidth,height=0.62\textheight,keepaspectratio]{images/vision+text/oscar_pretraining_pipeline.png}
+        \caption*{Oscar pre-training and fine-tuning pipeline (Li et al., ECCV 2020, Fig.~1).}
     \end{figure}
 \framebreak
-    \textbf{OSCAR:} Object-Semantics Aligned Pre-training for Vision-and-Language Tasks.
+    \textbf{Oscar:} Object tags anchor image regions to the words that name them.
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.8\textheight,keepaspectratio]{images/vision+text/captioning-oscar-2.png}
+        \includegraphics[width=1\textwidth,height=0.62\textheight,keepaspectratio]{images/vision+text/oscar_word_tag_region.png}
+        \caption*{Word tokens, object tags and region features share one Transformer (Li et al., ECCV 2020, Fig.~3).}
     \end{figure}
 \framebreak
-    \textbf{VinVL:} Large-scale pre-training with improved object-visual representations.
+    \textbf{VinVL:} A stronger object detector supplies richer region features than the bottom-up detector Oscar used.
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.8\textheight,keepaspectratio]{images/vision+text/captioning-vinvl.png}
+        \includegraphics[width=1\textwidth,height=0.7\textheight,keepaspectratio]{images/vision+text/captioning-vinvl-2.png}
+        \caption*{Regions found by the previous detector (left) and by the VinVL detector (right) (Zhang et al., CVPR 2021, Fig.~1).}
     \end{figure}
 \framebreak
-    \textbf{VinVL:} Large-scale pre-training with improved object-visual representations.
+    \textbf{BLIP:} Bootstrapping Language-Image Pre-training for unified vision-language understanding and generation.
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.8\textheight,keepaspectratio]{images/vision+text/captioning-vinvl-2.png}
+        \includegraphics[width=1\textwidth,height=0.68\textheight,keepaspectratio]{images/vision+text/captioning-blip.png}
+        \caption*{BLIP (Li et al., ICML 2022).}
     \end{figure}
 \framebreak
-    \textbf{BLIP:} Bootstrapped Language-Image Pretraining for unified vision-language understanding and generation.
-    \begin{figure}
-        \centering
-        \includegraphics[width=1\textwidth,height=0.8\textheight,keepaspectratio]{images/vision+text/captioning-blip.png}
-    \end{figure}
-\framebreak
+    \textbf{Image Captioning Advances (continued):}
+        \begin{itemize}
+            \item \textbf{ClipCap:} A small mapping network turns a CLIP image embedding into a prefix for a GPT-2 language model, which writes the caption (Mokady et al., 2021).
+        \end{itemize}
+    \vspace{0.5em}
     \textbf{Video Captioning Advances:}
         \begin{itemize}
-            \item \textbf{MARN:} Multi-modal Attentive Recurrent Network for video captioning.
-            \item \textbf{STG-KD:} Spatio-Temporal Graph Knowledge Distillation for video captioning.
-            \item \textbf{ClipCap:} Zero-shot image-to-text generation using CLIP and language models.
+            \item \textbf{MARN:} Memory-Attended Recurrent Network for video captioning (Pei et al., CVPR 2019).
+            \item \textbf{STG-KD:} Spatio-Temporal Graph for Video Captioning with Knowledge Distillation (Pan et al., CVPR 2020).
         \end{itemize}
 \framebreak
     \textbf{Key Datasets}

@@ -4,15 +4,16 @@
 \end{frame}
 
 \begin{frame}[allowframebreaks]{YOLO Family}
-    \textbf{YOLO: A Game-Changer}
+    \textbf{YOLO: One Network, One Pass}
 
     \begin{itemize}
-        \item \textbf{Motivation:} All previous methods were too slow for real time. YOLO does detection in one pass.
-        \item \textbf{Impact:} Became the basis for real-time vision everywhere.
+        \item \textbf{Motivation:} the region-proposal detectors above run a classifier once per proposal, which is too slow for real time. YOLO predicts every box and class in a single forward pass.
+        \item \textbf{Impact:} became the standard starting point for real-time detection on video and embedded hardware.
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=1.08\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/yolo-family.png}
+        \includegraphics[width=1.0\textwidth,height=0.62\textheight,keepaspectratio]{images/object-detect/yolo-family.png}
+        \caption*{\tiny Source: Roboflow, ``YOLO Greatest Hits'' timeline, from ``What Is YOLO? The Guide to YOLO Models'', blog.roboflow.com (cropped).}
     \end{figure}
 \end{frame}
 
@@ -21,8 +22,7 @@
 \input{sections/object-detect/yolo-family/yolo-v3}
 \input{sections/object-detect/yolo-family/yolo-v4}
 \input{sections/object-detect/yolo-family/yolo-v5}
-% \input{sections/object-detect/yolo-family/yolo-v6}
-% \input{sections/object-detect/yolo-family/yolo-v7}
+\input{sections/object-detect/yolo-family/yolo-v6-v7}
 \input{sections/object-detect/yolo-family/yolo-v8}
-\input{sections/object-detect/yolo-family/yolo-nas}
+\input{sections/object-detect/yolo-family/beyond-v8}
 

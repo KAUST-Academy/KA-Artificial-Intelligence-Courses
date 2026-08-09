@@ -1,15 +1,21 @@
+\section{Activation Functions}
+\begin{frame}{}
+    \LARGE CNN Layer: \textbf{Activation Functions}
+\end{frame}
+
 \begin{frame}{Activation}
 
 \begin{itemize}
     \item Just like Fully-Connected Neural Networks, we can apply an activation over convolutional layer outputs
     \item It helps break linearity
-    \item For example, Rectified Linear Unit (ReLU): $\sigma(x) = max(0,x)$
+    \item For example, Rectified Linear Unit (ReLU): $f(x) = \max(0,x)$
 \end{itemize}
 
 
 \begin{figure}
 \centering
-\includegraphics[width=1.0\textwidth,height=0.6\textheight,keepaspectratio]{images/cnn/activation.png}
+\includegraphics[width=1.0\textwidth,height=0.42\textheight,keepaspectratio]{images/cnn/activation.png}
+\caption*{\scriptsize [Source: \url{https://medium.com/@nathanbendich/introduction-to-convolutional-neural-networks-deep-learning-12febe285b12}]}
 \end{figure}
 
 \end{frame}
@@ -42,6 +48,7 @@ x = F.leaky_relu(x, 0.1)   # Leaky ReLU
 \begin{frame}{Activation Functions}
     \begin{figure}
     \centering
-    \includegraphics[width=0.95\textwidth,height=0.95\textheight,keepaspectratio]{images/cnn/activation-functions.png}
+    \includegraphics[width=0.95\textwidth,height=0.76\textheight,keepaspectratio]{images/cnn/activation-functions.png}
+    \caption*{\scriptsize [Source: \url{https://medium.com/@vidixha/from-neurons-to-networks-ep-2-part-get-set-activate-activation-functions-1627c46984d4}]}
     \end{figure}
 \end{frame}

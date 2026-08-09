@@ -5,9 +5,10 @@
 
   \vspace{0.5em}
 
+  \normalsize
   \textbf{What:} Where speech interfaces are essential.
   \begin{itemize}
-    \item Voice assistants (e.g., Amazon Echo)
+    \item Voice assistants (e.g., Amazon Echo, Siri, Google Assistant)
     \item Accessibility: captions, screen readers
     \item Hands-free operation (cars, IoT)
     \item Multilingual interaction \& translation
@@ -16,17 +17,13 @@
   \textbf{Why:} Speech enables more intuitive and inclusive interaction.
 
 \framebreak
-  
-  \fetchconvertimage{https://i.gzn.jp/img/2017/03/05/alexa-siri-cortana-all-female/00.png}{images/audio-nlp-eval/echo_dot.png}{width=1.05\linewidth,height=0.9\textheight,keepaspectratio}
-\end{frame}
 
-\begin{frame}{Motivation}
-    \begin{itemize}
-        \setlength{\itemsep}{1em}
-        \item Audio data is abundant and diverse, encompassing speech, music, and environmental sounds.
-        \item Traditional NLP methods focus on text, but audio data requires specialized techniques for processing.
-        \item Many NLP systems now start from speech, not just text (e.g., live captions, real-time translation).
-        \item The rise of voice assistants and audio-based applications highlights the need for effective audio processing in NLP.
-        \item Audio signals contain rich information that can enhance understanding and interaction in various applications.
-    \end{itemize}
+  \textbf{Why audio needs its own toolkit.}
+  \begin{itemize}
+    \setlength{\itemsep}{1em}
+    \item Audio data is abundant and diverse, encompassing speech, music, and environmental sounds.
+    \item Text-oriented methods do not apply directly: audio arrives as a continuous waveform with no tokens, no word boundaries, and thousands of samples per second.
+    \item Many NLP systems now start from speech, not just text (e.g., live captions, real-time translation).
+    \item The signal carries information text discards: speaker identity, prosody, emotion, and overlapping speakers.
+  \end{itemize}
 \end{frame}

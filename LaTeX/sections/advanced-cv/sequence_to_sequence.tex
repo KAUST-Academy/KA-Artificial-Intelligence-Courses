@@ -6,85 +6,99 @@
 \begin{frame}[allowframebreaks]{Sequence-to-Sequence with RNNs}
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/rnn_5.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/rnn_5.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}  
 \framebreak
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/rnn_6.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/rnn_6.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}  
 \framebreak
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/rnn_7.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/rnn_7.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}     
 \end{frame}
 
 \begin{frame}{Introduction to Attention}
     \begin{itemize}
-        \item \textbf{Key idea:} “Don’t process everything — just focus on the most relevant parts.”
-        \item Attention helps models decide where to look in a sequence.
+        \item \textbf{Problem:} the encoder squeezes the whole input into one final hidden state, and the decoder never sees anything else.
+        \item \textbf{Key idea:} let the decoder look back at all of the encoder's hidden states, and decide at each step which ones matter.
     \end{itemize}
-    \vspace{1em}
-    \textbf{Equation (simplified):}
+    \vspace{0.6em}
+    Given encoder hidden states $h_1, \dots, h_N$ and decoder state $s_{t-1}$:
     \begin{align*}
-        \text{Attention}(Q, K, V) = \mathrm{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
+        e_{t,i} = f_{\text{att}}(s_{t-1}, h_i), \qquad
+        a_{t,i} = \frac{\exp(e_{t,i})}{\sum_{j=1}^{N} \exp(e_{t,j})}, \qquad
+        c_t = \sum_{i=1}^{N} a_{t,i}\, h_i
     \end{align*}
     \begin{itemize}
-        \item $Q$ = Queries
-        \item $K$ = Keys
-        \item $V$ = Values
+        \item $e_{t,i}$ scores how well input $i$ matches what the decoder needs now; $f_{\text{att}}$ is a small trained network.
+        \item The weights $a_{t,i}$ are positive and sum to 1, so the context vector $c_t$ is a weighted average of encoder states.
+        \item Introduced for machine translation by Bahdanau et al.\ (2015).
     \end{itemize}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Sequence-to-Sequence with RNNs and Attention}
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_1.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/attention_1.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}  
 \framebreak
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_2.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/attention_2.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}  
 \framebreak
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_3.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/attention_3.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}  
 \framebreak
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_4.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/attention_4.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}  
 \framebreak
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_5.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/attention_5.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}  
 \framebreak
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_6.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/attention_6.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}  
 \framebreak
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_7.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/attention_7.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}  
 \framebreak
     \begin{itemize}
         \item Use a different context vector at each timestep of the decoder.
         \item The input sequence is not bottlenecked through a single vector.
-        \item At each timestep of the decoder, the context vector "looks at" different parts of the input sequence.
+        \item At each timestep of the decoder, the context vector ``looks at'' different parts of the input sequence.
     \end{itemize}
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=0.6\textheight,keepaspectratio]{images/advanced-cv/attention_8.png}
+    \includegraphics[width=0.92\textwidth,height=0.45\textheight,keepaspectratio]{images/advanced-cv/attention_8.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}  
 \framebreak
     \begin{figure}
     \centering
-    \includegraphics[width=1.05\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_9.png}
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/attention_9.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure} 
 \end{frame}

@@ -43,7 +43,7 @@
         \begin{itemize}
             \item Uses RNNs along the rows of the image:
             \begin{itemize}
-                \item \textbf{Row LSTM:} Processes one row at a time from left to right.
+                \item \textbf{Row LSTM:} Processes the image row by row, top to bottom, computing a whole row at once with a 1D convolution.
                 \item \textbf{Diagonal BiLSTM:} Processes diagonals in the image to improve context.
             \end{itemize}
         \end{itemize}
@@ -64,7 +64,8 @@ subsampled image pixels (in light blue). Right: Diagram of the
 connectivity inside a masked convolution. In the first layer, each
 of the RGB channels is connected to previous channels and to the
 context, but is not connected to itself. In subsequent layers, the
-channels are also connected to themselves.}
+channels are also connected to themselves. \\
+        \scriptsize Source: van den Oord, Kalchbrenner \& Kavukcuoglu, ``Pixel Recurrent Neural Networks'', ICML 2016, Fig.~2.}
     \end{figure}
 
     \framebreak
@@ -77,7 +78,7 @@ channels are also connected to themselves.}
                 \item \textbf{Row LSTM:}
                 \begin{itemize}
                     \item Applies a 1D LSTM across each row.
-                    \item Information flows left-to-right in each row.
+                    \item Each row is computed in one step; the recurrence runs top to bottom.
                     \item Maintains the autoregressive structure.
                 \end{itemize}
 
@@ -91,8 +92,9 @@ channels are also connected to themselves.}
         \begin{column}{0.6\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width=1.1\textwidth,keepaspectratio]{images/autoregressive/pixel-rnn-networks.png}
-                \caption*{PixelRNN architecture with Row LSTM and Diagonal BiLSTM. The model processes pixels in a raster-scan order, ensuring that each pixel is conditioned on all previously generated pixels.}
+                \includegraphics[width=\textwidth,keepaspectratio]{images/autoregressive/pixel-rnn-networks.png}
+                \caption*{PixelRNN architecture with Row LSTM and Diagonal BiLSTM. The model processes pixels in a raster-scan order, ensuring that each pixel is conditioned on all previously generated pixels. \\
+                \scriptsize Source: P. Dahal, ``PixelRNN'' (notes), parasdahal.com; annotated after van den Oord, Kalchbrenner \& Kavukcuoglu, ``Pixel Recurrent Neural Networks'', ICML 2016, Fig.~4.}
             \end{figure}
         \end{column}
     \end{columns}
@@ -108,7 +110,8 @@ channels are also connected to themselves.}
     \begin{figure}
         \centering
         \includegraphics[width=\textwidth,keepaspectratio]{images/autoregressive/example-pixel-rnn.png}
-        \caption*{Image completions sampled from a PixelRNN.}
+        \caption*{Image completions sampled from a PixelRNN. \\
+        \scriptsize Source: van den Oord, Kalchbrenner \& Kavukcuoglu, ``Pixel Recurrent Neural Networks'', ICML 2016, Fig.~1.}
     \end{figure}
 
     \framebreak
@@ -121,6 +124,6 @@ channels are also connected to themselves.}
     \textbf{Cons:}
     \begin{itemize}
         \item Computationally intensive due to sequential processing of pixels.
-        \item Slower inference compared to parallelizable models like PixelCNN.
+        \item Slower training than PixelCNN, whose convolutions parallelize training; sampling is sequential for both.
     \end{itemize}
 \end{frame}

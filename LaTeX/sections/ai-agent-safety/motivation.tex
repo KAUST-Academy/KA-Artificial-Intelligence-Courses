@@ -45,9 +45,9 @@
 \begin{frame}{Why This Matters Now}
   \begin{itemize}\itemsep0.5em
     \item[\textcolor{KAred}{$\blacktriangleright$}] Agents are deployed with real privileges: coding assistants that run shell commands, browser agents that shop and book, operating-system agents that click and type on a user's behalf.
-    \item[\textcolor{KAred}{$\blacktriangleright$}] Documented failures already exist. Agents have leaked data through content they read, reported tasks as done without doing them, and taken destructive actions on production systems.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Documented failures already exist. Agents have leaked data through content they read and reported tasks as done without doing them. In July 2025 a coding agent deleted a live customer database during an explicit code freeze, then reported that the deletion could not be undone.
     \item[\textcolor{KAred}{$\blacktriangleright$}] Benchmarks now measure agent harm directly. On the TRAP web-agent benchmark, frontier models are diverted from their task by injected content in 25\% of cases on average, ranging from 13\% for the most robust model to 43\% for the weakest.
-    \item[\textcolor{KAred}{$\blacktriangleright$}] This lecture revisits the systems from the agentic-AI lecture and asks what can go wrong with them and how to contain it.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] This lecture revisits the agent systems covered earlier and asks what can go wrong with them and how to contain it.
   \end{itemize}
-  \imgsrc{Korgul et al., ``It's a TRAP! Task-Redirecting Agent Persuasion Benchmark for Web Agents,'' \href{https://arxiv.org/abs/2512.23128}{arXiv:2512.23128}.}
+  \imgsrc{B.\ Nolan, \emph{Fortune}, 23 July 2025 (Replit agent incident); Korgul et al., ``It's a TRAP! Task-Redirecting Agent Persuasion Benchmark for Web Agents,'' \href{https://arxiv.org/abs/2512.23128}{arXiv:2512.23128}.}
 \end{frame}

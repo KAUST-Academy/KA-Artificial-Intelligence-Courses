@@ -3,18 +3,22 @@
   \LARGE \textbf{Introduction to Attention Mechanism}
 \end{frame}
 
-% Slide 33Introduction to Attention Mechanism
 \begin{frame}{Introduction to Attention Mechanism}
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_core_idea.png}
+  \textbf{Core Idea:} Let the decoder \textbf{focus on different parts of the input} sequence at each step of decoding.
+  \vspace{1em}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] At each decoding step, compute a \textbf{weighted sum} over all encoder hidden states.
+    \item[\textcolor{red}{$\blacktriangleright$}] Weights reflect \textbf{relevance} of each input word to the current output word.
+  \end{itemize}
+  \vspace{1em}
+  \textcolor{teal}{\textbf{``Soft search'' over inputs $\rightarrow$ more context-awareness.}}
 \end{frame}
 
-% Slide 34
 \begin{frame}{Mathematical Formulation of Attention}
   \begin{flushleft}
     \textbf{1. Alignment Score:}
     \begin{equation*}
-      e_{t,s} = \text{score}(h_t^{\text{dec}}, h_s^{\text{enc}})
+      e_{t,s} = \text{score}(h_{t-1}^{\text{dec}}, h_s^{\text{enc}})
     \end{equation*}
 
     \textbf{2. Attention Weights (Softmax):}
@@ -27,17 +31,18 @@
       c_t = \sum_s \alpha_{t, s} h_s^{\text{enc}}
     \end{equation*}
 
-    \textbf{4. Decoder Input:}
+    \textbf{4. Decoder Step:}
     \begin{equation*}
       y_t = \text{Decoder}(y_{t-1}, h_{t-1}^{\text{dec}}, c_t)
     \end{equation*}
   \end{flushleft}
 \end{frame}
 
-% --- PAGE 35 ---
 \begin{frame}{Attention Models}
   \centering
   \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_context_decoder_states.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~28.}
   \begin{itemize}
       \item \textbf{Attention weights:} The weights are dynamically computed as functions of decoder state.
       \item \textbf{Expectation:} if the model is well-trained, this will automatically ``highlight'' the correct input.
@@ -45,10 +50,11 @@
   \end{itemize}
 \end{frame}
 
-% --- PAGE 36 ---
 \begin{frame}{Attention weights at time $t$}
   \centering
-  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_weighted_sum_context.png}  
+  \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_weighted_sum_context.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~29.}
   \begin{itemize}
       \item The ``attention'' weights $w_i(t)$ must be computed from available information at time $t$.
       \item The primary information is $s_{t-1}$ (the state at time $t-1$).
@@ -59,13 +65,14 @@
   \end{equation*}
 \end{frame}
 
-% --- PAGE 37-38 ---
 \begin{frame}{Requirement on attention weights}
   \centering
   \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_weights_distribution.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~30.}
   \begin{itemize}
       \item The weights must be positive and sum to 1.0 (i.e., be a distribution).
-      \item Ideally, they must be high for the most relevant inputs for the $i$-th output and low elsewhere.
+      \item Ideally, they must be high for the inputs most relevant to the current output and low elsewhere.
       \item \textbf{Solution: A two step weight computation}
       \begin{itemize}
           \item First compute raw weights (which could be +ve or –ve).
@@ -74,22 +81,13 @@
   \end{itemize}
 \end{frame}
 
-% Slide 38
 \begin{frame}{Requirement on attention weights}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_weight_softmax_formula.png}
-  % \begin{itemize}
-  %     \item The weights must be positive and sum to 1.0 (i.e., be a distribution).
-  %     \item Ideally, they must be high for the most relevant inputs for the $i$-th output and low elsewhere.
-  %     \item \textbf{Solution: A two step weight computation}
-  %     \begin{itemize}
-  %         \item First compute raw weights (which could be +ve or –ve).
-  %         \item Then softmax them to convert them to a distribution.
-  %     \end{itemize}
-  % \end{itemize}
+  \includegraphics[width=0.8\paperwidth,height=0.66\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_weight_softmax_formula.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~31.}
 \end{frame}
 
-% Slide 39
 \begin{frame}{Quiz: Attention Framework}
   \begin{enumerate}
       \item The attention framework computes a different ``context'' vector at each output step?
@@ -98,7 +96,6 @@
   \end{enumerate}
 \end{frame}
 
-% Slide 40
 \begin{frame}{Quiz: Answer}
   \begin{enumerate}
       \item The attention framework computes a different ``context'' vector at each output step? \textbf{True}
@@ -107,105 +104,114 @@
   \end{enumerate}
 \end{frame}
 
-
-% Slide 41
 \begin{frame}{Requirement on attention weights}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_scoring_function_question.png}
-\end{frame}
+  \includegraphics[width=0.8\paperwidth,height=0.66\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_scoring_function_question.png}
 
-% Slide 42
-\begin{frame}{Attention weights}
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_scoring_function_options.png}
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~34.}
 \end{frame}
 
 \begin{frame}{Attention weights}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_conversion_example.png}
+  \includegraphics[width=0.8\paperwidth,height=0.66\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_scoring_function_options.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~35.}
+\end{frame}
+
+\begin{frame}{Attention weights}
+  \centering
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_conversion_example.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~36.}
 \end{frame}
 
 \begin{frame}{Converting an input: Inference}
   \centering
   \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_encoder_hidden_states_only.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~37.}
   \begin{itemize}
     \item[] \textbf{Pass the input through the encoder to produce hidden representations $\pmb{h_i}$}
   \end{itemize}
 \end{frame}
 
-% Slide 45
 \begin{frame}{Converting an input: Inference}
   \includegraphics[width=0.6\paperwidth,height=0.6\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_initial_state_options.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~38.}
   \begin{itemize}
     \item[] \textbf{Pass the input through the encoder to produce hidden representations $\pmb{h_i}$}
   \end{itemize}
 \end{frame}
 
-% Slide 46
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_first_context_c0.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_first_context_c0.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~39.}
 \end{frame}
 
-% Slide 47
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_first_output_distribution.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_first_output_distribution.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~40.}
 \end{frame}
 
-% Slide 48
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_sample_first_word.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_sample_first_word.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~41.}
 \end{frame}
 
-% Slide 49
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_second_context_c1.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_second_context_c1.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~42.}
 \end{frame}
 
-% Slide 50
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_second_output_distribution.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_second_output_distribution.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~43.}
 \end{frame}
 
-% Slide 51
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_sample_second_word.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_sample_second_word.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~44.}
 \end{frame}
 
-
-% Slide 52
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_third_context_c2.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_third_context_c2.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~45.}
 \end{frame}
 
-% Slide 53
-% \begin{frame}{Converting an input: Inference}
-%   \centering
-%   \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_conversion_inference.png}
-% \end{frame}
-
-% Slide 54
 \begin{frame}{Converting an input: Inference}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_final_step_c5.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_final_step_c5.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~56.}
 \end{frame}
 
-% Slide 55
 \begin{frame}{Attention-based Decoding}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_all_contexts_summary.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_all_contexts_summary.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~57.}
 \end{frame}
 
-% Slide 56
 \begin{frame}{Recap: Sequence to Sequence Models}
   \centering
   \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_teacher_forcing.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~98.}
 \begin{itemize}
   \item The input sequence feeds into a recurrent structure
   \item The input sequence is terminated by an explicit \textless eos\textgreater{} symbol
@@ -216,10 +222,11 @@
 \end{itemize}
 \end{frame}
 
-% Slide 57
 \begin{frame}{Recap: Attention Models}
   \centering
   \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_all_contexts_distinct.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~99.}
 \begin{itemize}
   \item Encoder recurrently produces hidden representations of input word sequence
   \item Decoder recurrently generates output word sequence
@@ -229,10 +236,11 @@
 \end{itemize}
 \end{frame}
 
-% Slide 58
 \begin{frame}{Recap: Attention Models}
   \centering
   \includegraphics[width=0.4\paperwidth,height=0.4\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_attention_backprop_through_encoder.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~100.}
 \begin{itemize}
   \item \textbf{Problem:} Because of the recurrence, the hidden representation for any word is also influenced by \emph{all} preceding words
     \begin{itemize}

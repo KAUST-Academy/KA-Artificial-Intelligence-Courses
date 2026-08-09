@@ -5,7 +5,7 @@
 \textbf{The one change:} before choosing, the agent is shown a \emph{context} $s$ --- a user profile, a time of day, a search query.
 \vspace{0.4em}
 \begin{itemize}
-    \setlength{\itemsep}{0.55em}
+    \setlength{\itemsep}{0.5em}
     \item Each step: the environment draws a context $s_t$ $\;\to\;$ the agent picks $a_t$ $\;\to\;$ the reward comes from $\mathcal{R}^{a_t}_{s_t}$, which now depends on \emph{both}
     \item The best arm is no longer a single answer --- it \textbf{depends on the context}. Every quantity from today gains an $s$: $Q(a) \to Q(s,a)$
     \item \textbf{Is the context a state?} \textcolor{red}{Yes --- but a one-step one.} In an MDP your action changes what you see next, $s_{t+1} \sim P(\cdot \mid s_t, a_t)$. Here the next context is drawn \emph{independently of what you did}: your action moves the reward, never the future
@@ -32,7 +32,7 @@ finance, 51, US  & ---    & 1 / 12 & --- \\
 {\scriptsize\textcolor{gray}{Cells show \emph{clicks / times shown}; ``---'' means never shown.}}
 \end{center}
 \begin{itemize}
-    \setlength{\itemsep}{0.3em}
+    \setlength{\itemsep}{0.25em}
     \item \textbf{The move:} describe each cell by \emph{features} $x_{s,a}$ and model the mean reward as linear, $\mathbb{E}[r \mid s,a] = x_{s,a}^\top\theta_a$. Rows 1 and 2 are nearly the same feature vector, so row 1's clicks now inform row 2
     \item \textcolor{gray}{Not copying cells across --- we fit \emph{one weight vector per arm} on all the data at once, and read every cell off those weights}
     \item \textbf{Same optimism as UCB1}, but the bonus is large in \emph{feature directions} short of data: we are uncertain about \emph{finance readers}, not about one empty cell

@@ -4,7 +4,8 @@
 \framebreak
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/lrm+moe/instruction-tuning.png}
+        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/lrm+moe/instruction-tuning.png}
+        \caption*{Instruction tuning next to the two paradigms it draws on: task-specific finetuning and few-shot prompting. Source: \href{https://arxiv.org/abs/2109.01652}{Wei et al. (2022)}, Fig.~2.}
     \end{figure}
 \end{frame}
 
@@ -77,8 +78,8 @@
             \framebreak
             \item \textbf{FLAN-MoE:}
             \begin{itemize}
-                \item Mixture-of-Experts (MoE) models, when instruction-tuned, outperform larger dense models like PaLM on reasoning tasks, while using less computation.
-                \item FLAN-MoE can handle a wide range of instructions, such as translation, summarization, and logical reasoning, with high accuracy.
+                \item Mixture-of-Experts (MoE) models, when instruction-tuned, outperform larger dense models on reasoning tasks while using less computation: FLAN-MoE-32B beats FLAN-PaLM-62B on four benchmarks at a third of the FLOPs.
+                \item Sparsity and instruction tuning compound: the gain from instruction tuning is larger for MoE models than for their dense counterparts.
                 \item \textit{Example:}
                 \begin{itemize}
                     \item \textbf{Instruction:} ``Translate this sentence to French: The cat is sleeping.''
@@ -110,10 +111,10 @@
                 \item \textit{Dataset Name:} Input prepended with task and dataset, e.g., ``[Translation: WMT 14 to French] The dog runs''.
                 \item \textit{FLAN Instructions:} Full natural language instruction, e.g., ``Please translate this sentence to French: 'The dog runs.' ''
             \end{itemize}
-            \item \textbf{Results:}
+            \item \textbf{Results:} zero-shot accuracy averaged over four held-out task clusters.
             \begin{itemize}
-                \item Instruction-tuned models achieved over 18\% higher accuracy than ``no template'' and over 8\% higher than ``dataset name'' on zero-shot tasks.
-                \item \textbf{Conclusion:} Explicit instructions are crucial for improving zero-shot generalization, not just multi-task fine-tuning.
+                \item FLAN instructions 55.2\%, dataset name 46.6\%, no template 37.3\%: a gap of 8.6 and 17.9 points respectively.
+                \item \textbf{Conclusion:} Most of the benefit comes from the instructions themselves, not from multi-task fine-tuning alone.
             \end{itemize}
         \end{itemize}
     \end{block}
@@ -131,31 +132,41 @@
                 \item Research (Chung et al., 2022) shows that instruction tuning without CoT tasks degrades performance on CoT evaluations.
                 \item Including CoT tasks in instruction tuning improves performance across all evaluations.
             \end{itemize}
-            \item \textbf{Key Insight:} Fine-tuning on CoT tasks—both with and without few-shot exemplars—enables models to better perform step-by-step reasoning, rather than jumping to linguistically plausible answers.
+            \item \textbf{Key Insight:} Fine-tuning on CoT tasks, both with and without few-shot exemplars, enables models to better perform step-by-step reasoning, rather than jumping to linguistically plausible answers.
+        \end{itemize}
+    \end{block}
+    \framebreak
+    \begin{block}{Instruction Tuning a Small Model on a Large One's Reasoning}
+        \begin{itemize}
+            \setlength{\itemsep}{0.5em}
+            \item FLAN instruction-tunes on human-written task templates. A cheaper route is to let a strong model write the training data: prompt a teacher LLM with Zero-shot CoT, then instruction-tune a small student on the resulting reasoning chains.
+            \item Ranaldi \& Freitas call this \textit{Self-refine Instruction-tuning} and add a second phase: the student generates its own answers and is then tuned on preferences over them with Direct Preference Optimization.
+            \item Both phases matter: adding self-refinement significantly outperforms instruction tuning alone, both on the tuned tasks and on held-out ones, bringing the small students closer to the reasoning ability of the much larger teachers.
         \end{itemize}
     \end{block}
     \framebreak
     \begin{figure}[h]
         \centering
-        \includegraphics[height=0.84\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/self-refine-instruction-tuning.png}
-        \caption*{Instruction tuning process. Source: \href{https://arxiv.org/pdf/2405.00402}{Ranaldi et al. (2024)}}
+        \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/self-refine-instruction-tuning.png}
+        \caption*{Source: \href{https://arxiv.org/abs/2405.00402}{Ranaldi \& Freitas (2024)}, Fig.~1.}
     \end{figure}
     \framebreak
     \begin{figure}[h]
         \centering
-        \includegraphics[height=0.84\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/instruction-tuning-benchmark-result-1.png}
-        \caption*{Source: \href{https://arxiv.org/pdf/2405.00402}{Ranaldi et al. (2024)}}
+        \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/instruction-tuning-benchmark-result-2.png}
+        \caption*{Source: \href{https://arxiv.org/abs/2405.00402}{Ranaldi \& Freitas (2024)}, Tables~2--3.}
     \end{figure}
     \framebreak
     \begin{figure}[h]
         \centering
-        \includegraphics[height=0.9\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/instruction-tuning-benchmark-result-2.png}
+        \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/instruction-tuning-result-3.png}
+        \caption*{Source: \href{https://arxiv.org/abs/2405.00402}{Ranaldi \& Freitas (2024)}, Table~6.}
     \end{figure}
     \framebreak
     \begin{figure}[h]
         \centering
-        \includegraphics[height=0.84\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/instruction-tuning-result-3.png}
-        \caption*{Source: \href{https://arxiv.org/pdf/2405.00402}{Ranaldi et al. (2024)}}
+        \includegraphics[height=0.8\textheight,width=\textwidth,keepaspectratio]{images/lrm+moe/instruction-tuning-benchmark-result-1.png}
+        \caption*{Source: \href{https://arxiv.org/abs/2405.00402}{Ranaldi \& Freitas (2024)}, Fig.~2. Dashed lines mark the much larger teacher models.}
     \end{figure}
     \framebreak
     \textbf{Challenges and Limitations of Instruction Tuning}

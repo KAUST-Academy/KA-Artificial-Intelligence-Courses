@@ -18,6 +18,8 @@
   \end{itemize}
   \begin{center}
     \includegraphics[width=0.45\linewidth, height=0.45\paperheight, keepaspectratio]{images/large-language-models/llm_scaling_perplexity_vs_parameters.png}
+
+    {\scriptsize Source: Radford et al., ``Language Models are Unsupervised Multitask Learners'' (GPT-2), OpenAI 2019, Fig.~4.}
   \end{center}
 \end{frame}
 
@@ -27,6 +29,8 @@
   \end{itemize}
   \begin{center}
     \includegraphics[width=0.45\linewidth, height=0.45\paperheight, keepaspectratio]{images/large-language-models/llm_generalization_error_regions.png}
+
+    {\scriptsize Source: Hestness et al., ``Deep Learning Scaling is Predictable, Empirically'', 2017, Fig.~6.}
   \end{center}
 \end{frame}
 
@@ -37,6 +41,8 @@
   \end{itemize}
   \begin{center}
     \includegraphics[width=0.7\linewidth, height=0.7\paperheight, keepaspectratio]{images/large-language-models/llm_scaling_test_loss_vs_dataset_size.png}
+
+    {\scriptsize Source: Hestness et al., 2017, Fig.~6 (left); Kaplan et al., ``Scaling Laws for Neural Language Models'', 2020, Fig.~1 (right).}
   \end{center}
 \end{frame}
 
@@ -66,9 +72,23 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Compute-Optimal Scaling -- \textnormal{(Hoffmann, 2022)}}
+  \begin{itemize}\itemsep0.25em
+    \item Kaplan's split favours parameters: $10\times$ the compute buys $5.5\times$ the parameters but only $1.8\times$ the tokens.
+    \item \textbf{DeepMind Study:} \href{https://arxiv.org/abs/2203.15556}{\textcolor{red}{Training Compute-Optimal Large Language Models}} (\href{https://arxiv.org/abs/2203.15556}{Hoffmann et al., 2022}) refit the laws over 400+ models (70M--16B parameters, 5B--500B tokens).
+    \item \textbf{Result:} $N$ and $D$ should scale \emph{equally}: double the model, double the tokens, or about 20 training tokens per parameter.
+    \item \textbf{Chinchilla vs.\ Gopher,} at the same compute budget:
+      \begin{itemize}
+        \item Gopher: 280B parameters, 300B tokens
+        \item Chinchilla: 70B parameters, 1.4T tokens, and it outperforms Gopher
+      \end{itemize}
+    \item \textbf{Takeaway:} those models were undertrained, not too small. A scaling law is an empirical fit, and can be refit when the experiment is run more carefully.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Scaling Effects}
   \begin{itemize}
-    \item The effect of some hyperparameters on large language models (LMs) can be predicted before full training---such as optimizer choice (Adam vs.\ SGD), model depth, and architecture (LSTM vs.\ Transformer).
+    \item The effect of some hyperparameters on large language models (LMs) can be predicted before full training: optimizer choice (Adam vs.\ SGD), model depth, and architecture (LSTM vs.\ Transformer).
   \end{itemize}
   \vspace{0.9em}
   Idea:
@@ -84,6 +104,8 @@
 \begin{frame}{Model Scaling: GPT-3}
   \centering
   \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/large-language-models/llm_model_size_growth_gpt3.png}
+
+  {\scriptsize Source: Leo Gao, ``Why GPT-3 Matters'', 2020 (chart edited by WillStats).}
 \end{frame}
 
 \begin{frame}{Emergent Abilities with GPT-3 -- \textnormal{Wei et al., 2022}}

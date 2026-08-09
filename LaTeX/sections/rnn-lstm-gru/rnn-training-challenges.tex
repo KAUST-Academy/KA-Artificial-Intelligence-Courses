@@ -1,11 +1,14 @@
 \section{RNN Training Challenges}
-\begin{frame}{RNN Training Challenges}
+\begin{frame}{}
   \LARGE RNN : \textbf{Challenges}
 \end{frame}
 
 \begin{frame}{RNN Basic Structure}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_long_sequence_goal_prediction.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_long_sequence_goal_prediction.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 3 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{RNN Training Challenges}
@@ -18,22 +21,31 @@
 
 \begin{frame}{RNN: Backpropagation through time}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_bptt_forward_backward.png}
+  \includegraphics[width=\linewidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_bptt_forward_backward.png}
 \end{frame}
 
 \begin{frame}{Backpropagation through time}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_gradient_product_chain.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\paperwidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_gradient_product_chain.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 3 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Backpropagation through time}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_gradient_distance_dependence.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_gradient_distance_dependence.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 3 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Backpropagation through time}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_vanishing_exploding_gradient.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\paperwidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/rnn_vanishing_exploding_gradient.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 3 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{RNN Training Challenges}
@@ -42,7 +54,7 @@
     \item \textbf{Vanishing Gradients:} Gradients shrink as they are propagated back, making it hard to learn long-term dependencies.
     \item \textbf{Exploding Gradients:} Gradients grow exponentially, leading to unstable updates.
     \end{itemize}
-    \textbf{Solutions Preview (covered in future modules)}
+    \textbf{Solutions (covered next)}
     \begin{itemize}
       \item Use of LSTM and GRU architectures
       \item Gradient Clipping

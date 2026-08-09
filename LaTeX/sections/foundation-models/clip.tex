@@ -1,17 +1,17 @@
 % --- CLIP: joint image--text representation learning ---
-% Students skipped the Vision+Text lecture, so CLIP is introduced from scratch here.
 \begin{frame}{CLIP: Learning Vision from Natural Language}
   \begin{itemize}\itemsep0.3em
-    \item \textbf{CLIP} (Radford et al., 2021): trained on \textbf{400 million} image--text pairs collected from the web; no class labels at all.
+    \item \textbf{CLIP} (Radford et al., 2021; covered earlier): trained on \textbf{400 million} image--text pairs collected from the web; no class labels at all. Here we look at how it works and why it became infrastructure.
     \item Two encoders: an \textbf{image encoder} (ResNet or ViT) and a \textbf{text encoder} (transformer), each mapping its input to a shared embedding space.
     \item Training pulls each image toward \emph{its own caption} and away from the other captions in the batch.
-    \item Same contrastive idea as SimCLR from the contrastive-methods lecture, but the two ``views'' come from \textbf{different modalities}: an image and its natural-language description.
+    \item Same contrastive idea as SimCLR (covered earlier), but the two ``views'' come from \textbf{different modalities}: an image and its natural-language description.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{CLIP: Contrastive Pre-training}
   \centering
-  \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/clip_contrastive_pretraining.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/foundation-models/clip_contrastive_pretraining.png}\\[0.1em]
+  {\scriptsize Radford et al., ``Learning Transferable Visual Models From Natural Language Supervision,'' ICML 2021, Fig.~1.}
 \end{frame}
 
 \begin{frame}{CLIP: The Objective}
@@ -32,7 +32,8 @@
 
 \begin{frame}{CLIP: Objective in Practice}
   \centering
-  \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/clip_contrastive_objective_training.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/foundation-models/clip_contrastive_objective_training.png}\\[0.1em]
+  {\scriptsize Stanford BIODS 276, Lecture 1 (S.\ Yeung-Levy); diagram from Radford et al., ICML 2021, Fig.~1.}
 \end{frame}
 
 \begin{frame}{CLIP: Zero-Shot Classification via Prompts}
@@ -46,7 +47,8 @@
 
 \begin{frame}{CLIP: Zero-Shot Classification}
   \centering
-  \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/clip_zero_shot_classification.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/foundation-models/clip_zero_shot_classification.png}\\[0.1em]
+  {\scriptsize Stanford BIODS 276, Lecture 1 (S.\ Yeung-Levy); diagram from Radford et al., ICML 2021, Fig.~1.}
 \end{frame}
 
 \begin{frame}{CLIP as Infrastructure}

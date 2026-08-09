@@ -4,13 +4,33 @@
 \end{frame}
 
 \begin{frame}{The Problem: Long-Term Dependencies}
-    \begin{itemize}
-        \item Vanilla RNNs repeatedly multiply by the same weight matrix at every step.
-        \item Gradients tend to \textbf{vanish} (shrink to zero) or \textbf{explode} over
-              long sequences.
-        \item As a result, plain RNNs struggle to connect information across many time steps.
-        \item \textbf{Idea:} add gating mechanisms that let the network \emph{choose} what to keep, forget, and output.
-    \end{itemize}
+    \begin{columns}
+        \begin{column}{0.46\textwidth}
+            The vanilla (Elman) RNN written out:
+            \begin{align*}
+                h_t & = \tanh(W_{hh} h_{t-1} + W_{xh} x_t + b_h) \\
+                y_t & = W_{hy} h_t + b_y
+            \end{align*}
+            \begin{itemize}
+                \item The same $W_{hh}$, $W_{xh}$, $W_{hy}$ are reused at every time step.
+                \item Backpropagating from $h_T$ back to $h_1$ multiplies by $W_{hh}^{\top}$ once per step.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.54\textwidth}
+            \begin{itemize}
+                \item That product of $T-1$ copies of one matrix decides whether the gradient survives:
+                      \begin{itemize}
+                          \item largest singular value of $W_{hh} > 1$: \textbf{exploding} gradients;
+                          \item largest singular value $< 1$: \textbf{vanishing} gradients.
+                      \end{itemize}
+                \item Exploding gradients have a cheap fix, \textbf{gradient clipping}: rescale the
+                      gradient whenever its norm exceeds a threshold.
+                \item Vanishing gradients do not, so plain RNNs struggle to connect information across
+                      many time steps.
+                \item \textbf{Idea:} add gating mechanisms that let the network \emph{choose} what to keep, forget, and output.
+            \end{itemize}
+        \end{column}
+    \end{columns}
 \end{frame}
 
 \begin{frame}{Long Short-Term Memory (LSTM)}
@@ -70,7 +90,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.8\textwidth,height=0.8\textheight,keepaspectratio]{images/rnn-lstm-gru/lstm_gru_cells.png}
-        \caption*{\tiny Source: \href{https://medium.com/data-science/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21}{Illustrated Guide to LSTM's and GRU's: A step by step explanation}}
+        \caption*{\tiny Source: Michael Phi, \href{https://medium.com/data-science/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21}{Illustrated Guide to LSTM's and GRU's: A step by step explanation}}
     \end{figure}
 \end{frame}
 
@@ -92,7 +112,7 @@
     \vspace{0.5cm}
     \begin{itemize}
         \item Both dramatically outperform vanilla RNNs on long-range dependencies.
-        \item The choice is empirical --- GRU is a strong, cheaper default; LSTM can edge
+        \item The choice is empirical: GRU is a strong, cheaper default, while LSTM can edge
               ahead on hard tasks.
     \end{itemize}
 \end{frame}

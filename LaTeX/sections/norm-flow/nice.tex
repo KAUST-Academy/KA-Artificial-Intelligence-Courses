@@ -1,5 +1,5 @@
 \begin{frame}[allowframebreaks]{}
-    \LARGE Normalizing Flow Models: \\[1.5ex] \textbf{NICE: Nonlinear Independent Components Estimation}
+    \LARGE Normalizing Flow Models: \\[1.5ex] \textbf{NICE: Non-linear Independent Components Estimation}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{NICE}
@@ -7,18 +7,20 @@
     \item \textbf{Overview:} Introduced by Dinh et al. (2014), NICE employs additive coupling layers for constructing invertible transformations.
     \item \textbf{Additive Coupling Layers:}
     \begin{itemize}
-        \begin{itemize}
             \item Partition the variables $z$ into two disjoint subsets:
             \item $x_{1:d} = z_{1:d}$
             \item $x_{d+1:n} = z_{d+1:n} + H(z_{1:d})$,
             where $H$ is a neural network.
-            \begin{figure}
-                    \centering
-                    \includegraphics[height=0.4\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_nice.png}
-            \end{figure}
-        \end{itemize}
         \item The Jacobian determinant of this transformation is 1, which simplifies density computation.
     \end{itemize}
+    \framebreak
+    \begin{minipage}{\linewidth}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.7\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_nice.png}
+        \caption*{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~2, slide~15}
+    \end{figure}
+    \end{minipage}
     \framebreak
     \item Multiple additive coupling layers are composed together, with different partitions in each layer.
     \item \textbf{Limitation:} The transformation is volume-preserving and cannot model changes in volume, which limits expressiveness.
@@ -33,16 +35,16 @@
 \begin{frame}[allowframebreaks]{NICE - Results}
 \begin{figure}
     \centering
-    \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_nice_mnist.png}
-    \caption*{NICE generated samples when trained on the MNIST digits dataset.}
+    \includegraphics[height=0.72\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_nice_mnist.png}
+    \caption*{NICE generated samples when trained on the MNIST digits dataset.\\{\tiny Source: Dinh et al., ``NICE: Non-linear Independent Components Estimation,'' arXiv:1410.8516, 2014, Fig.~5(a).}}
 \end{figure}
 
 \framebreak
 
 \begin{figure}
     \centering
-    \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_nice_cifar.png}
-    \caption*{NICE generated samples when trained on the CIFAR-10 dataset.}
+    \includegraphics[height=0.72\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_nice_cifar.png}
+    \caption*{NICE generated samples when trained on the CIFAR-10 dataset.\\{\tiny Source: Dinh et al., ``NICE: Non-linear Independent Components Estimation,'' arXiv:1410.8516, 2014, Fig.~5(d).}}
 \end{figure}
     
 \end{frame}

@@ -1,5 +1,4 @@
 % --- RSSM / PlaNet ---
-% % --- Part C: RSSM (thread from Bierling 2025 Medium; figures from PlaNet PDF) ---
 \begin{frame}[t]{RSSM: Motivation}
   \begin{itemize}\itemsep0.38em
     \item Purely deterministic RNNs (e.g., GRUs, LSTMs) struggle to represent multiple plausible futures in complex, stochastic environments.
@@ -22,6 +21,8 @@
 
 \begin{frame}[t]{RSSM: Dynamics}
   \begin{itemize}
+    \item \textbf{Deterministic recurrence:} the GRU carries memory and the \textbf{action} forward,
+    \[ h_t = f(h_{t-1}, z_{t-1}, a_{t-1}) \]
     \item \textbf{Posterior transition (training):} Updates stochastic state using real observation
     \[ z_t \sim q_\phi(z_t \mid h_t, x_t) \]
     \item \textbf{Prior transition (imagination):} Predicts next latent state without observation,
@@ -43,7 +44,7 @@
   \begin{itemize}\itemsep0.25em
     \item \textbf{Reconstruction} grounds the latent state in observations.
     \item The \textbf{reward head} makes latent rollouts useful for planning and RL.
-    \item The \textbf{KL term} pulls the prior (used during imagination) toward the posterior (informed by real observations), so imagined futures stay realistic.
+    \item The \textbf{KL term} keeps the prior (used during imagination) and the posterior (informed by real observations) close together, so imagined futures stay realistic; how to weight its two directions is revisited by DreamerV2's KL balancing.
   \end{itemize}
 \end{frame}
 
@@ -52,7 +53,7 @@
   \begin{itemize}\itemsep0.28em
     \item \textbf{PlaNet} (Hafner et al., 2019) pairs the RSSM with \textbf{online planning}; there is no policy network at all.
     \item At each step: sample candidate action sequences, roll them out in \textbf{latent space}, score them with the predicted rewards, and refine with the \textbf{cross-entropy method (CEM)}; execute the first action and replan.
-    \item This is the same CEM / model-predictive-control loop V-JEPA 2-AC used in the JEPA lecture; PlaNet did it with an ELBO-trained generative model and a reward head instead of goal images.
+    \item This is the same CEM / model-predictive control (\textbf{MPC}) loop that V-JEPA 2-AC uses (covered earlier); PlaNet did it with an ELBO-trained generative model and a reward head instead of goal images.
     \item Learns image-based control tasks with far fewer environment interactions than model-free baselines.
     \item Two costs: planning at every step is expensive, and CEM has no value estimate beyond its horizon. \textbf{Dreamer} fixes both.
   \end{itemize}

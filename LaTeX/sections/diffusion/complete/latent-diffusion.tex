@@ -7,11 +7,12 @@
     \begin{figure}
         \centering
         \fetchconvertimage{https://nvlabs.github.io/LSGM/assets/pipelinefig.png}{images/diffusion/latent-space-diffusion.png}{width=\textwidth,height=0.5\textheight,keepaspectratio}
+        \caption*{\scriptsize Vahdat, Kreis \& Kautz, \href{https://arxiv.org/abs/2106.05931}{Score-based Generative Modeling in Latent Space}, NeurIPS 2021, Fig.~1}
     \end{figure}
     \begin{itemize}
         \setlength{\itemsep}{-0.5em}
         \item A \textbf{latent space} is an abstract, compressed space where high-dimensional data (like images) is represented in a lower-dimensional form.
-        \item Think of it as a hidden layer of meaning—each point in this space represents a potential image or concept.
+        \item Think of it as a hidden layer of meaning: each point in this space represents a potential image or concept.
         \item In classical models like GANs or VAEs, the latent space is directly sampled from (e.g., a vector $\mathbf{z}$), and the generator turns it into an image.
         \item \textbf{Latent} space = ``Hidden space of ideas or features''
     \end{itemize}
@@ -35,7 +36,8 @@
 \framebreak
     \begin{figure}
         \centering
-        \fetchconvertimage{https://towardsdatascience.com/wp-content/uploads/2022/09/1WTe5olMSFC-T6No0Y_gKWg.png}{images/diffusion/latent-space-diffusion-explained.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+        \fetchconvertimage{https://towardsdatascience.com/wp-content/uploads/2022/09/1WTe5olMSFC-T6No0Y_gKWg.png}{images/diffusion/latent-space-diffusion-explained.png}{width=\textwidth,height=0.72\textheight,keepaspectratio}
+        \caption*{\scriptsize Annotated by J. R. Siddiqui, \href{https://towardsdatascience.com/what-are-stable-diffusion-models-and-why-are-they-a-step-forward-for-image-generation-aa1182801d46/}{Towards Data Science}, 2022; base diagram: Rombach et al., CVPR 2022}
     \end{figure}
 \framebreak
     \textbf{Why Latent Diffusion?}
@@ -51,5 +53,4 @@
             \item Image editing by modifying specific parts of the latent.
             \item Inversion: map a real image to latent, edit, then decode back.
         \end{itemize}
-    \end{itemize}
 \end{frame}

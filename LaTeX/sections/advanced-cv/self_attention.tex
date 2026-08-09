@@ -1,6 +1,6 @@
-\section{Self Attention Layer}
+\section{Self-Attention Layer}
 \begin{frame}{}
-    \LARGE Advanced Computer Vision: \textbf{Self Attention Layer}
+    \LARGE Transformers: \textbf{Self-Attention Layer}
 \end{frame}
 
 \begin{frame}{Self-Attention Mechanism}
@@ -14,38 +14,41 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Self Attention Layer}
+\begin{frame}{Self-Attention Layer}
 \begin{columns}
     
-    \begin{column}{0.6\textwidth}
+    \begin{column}{0.55\textwidth}
     \only<1>{
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_27.png}
+    \includegraphics[width=1.0\textwidth,height=0.85\textheight,keepaspectratio]{images/advanced-cv/attention_27.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}
     }
 
     \only<2>{
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_28.png}
+    \includegraphics[width=1.0\textwidth,height=0.85\textheight,keepaspectratio]{images/advanced-cv/attention_28.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}
     }
 
     \only<3>{
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_29.png}
+    \includegraphics[width=1.0\textwidth,height=0.85\textheight,keepaspectratio]{images/advanced-cv/attention_29.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}
     }
         
     \end{column}
 
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.45\textwidth}
     \only<1-2>{
     \begin{itemize}
         \item Recall that the query vector is a function of the input vectors.
-        \item We can calculate the query vectors from the input vectors, thus defining a "self-attention" layer.
+        \item We can calculate the query vectors from the input vectors, thus defining a ``self-attention'' layer.
         \item There are no input query vectors anymore.
         \item Instead, query vectors are calculated using a fully connected (FC) layer.
     \end{itemize}
@@ -55,7 +58,8 @@
     \only<3>{
     \begin{figure}
     \centering
-    \includegraphics[width=0.5\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/attention_30.png}
+    \includegraphics[width=0.5\textwidth,height=0.85\textheight,keepaspectratio]{images/advanced-cv/attention_30.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 11: Attention and Transformers}
     \end{figure}
     }
     

@@ -7,7 +7,7 @@
 \begin{frame}{Motivation for RAG}
     \begin{itemize}
         \setlength{\itemsep}{1em}
-        \item LLMs are fixed after training---their knowledge cannot be easily updated.
+        \item LLMs are fixed after training: their knowledge cannot be easily updated.
         \item Updating facts or adding new information requires retraining or fine-tuning, which is costly and slow.
         \item Retrieval-Augmented Generation (RAG) addresses this by combining:
         \begin{itemize}
@@ -20,18 +20,22 @@
 
 
 \begin{frame}{RAG Architecture}
-    \begin{itemize}
-        \setlength{\itemsep}{1em}
-        \item \textbf{Retriever:} Fetches relevant documents from a corpus (e.g., via vector search).
-        \item \textbf{Reader:} LLM generates answers based on the retrieved documents.
-    \end{itemize}
-    \vspace{1em}
     \textbf{Two main components:}
+    \small
     \begin{itemize}
-        \setlength{\itemsep}{1em}
-        \item \textbf{Dense retriever:} Learns to encode queries and documents into vectors for similarity search (e.g., DPR, ColBERT).
-        \item \textbf{Generator:} Produces final answers conditioned on retrieved context (e.g., GPT, BART).
+        \setlength{\itemsep}{0.4em}
+        \item \textbf{Retriever:} Encodes the query and the documents into vectors and fetches the closest passages from the corpus by similarity search (e.g., DPR, ColBERT).
+        \item \textbf{Generator} (also called the \textbf{reader})\textbf{:} An LLM that produces the final answer conditioned on the retrieved passages (e.g., BART, GPT).
     \end{itemize}
+    \vspace{0.3em}
+    \begin{center}
+        \includegraphics[width=0.95\textwidth]{images/prompting-rag/rag_lewis2020_architecture.png}
+    \end{center}
+    \vspace{0.1em}
+    {\scriptsize
+        \color{gray!75!black}
+        Source: Lewis et al., NeurIPS 2020, Fig.~1.
+    }
 \end{frame}
 
 

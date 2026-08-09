@@ -5,24 +5,25 @@
 \begin{frame}[allowframebreaks]{Text-Conditioned Diffusion Models}
     \begin{figure}
         \centering
-        \includegraphics[width=0.5,height=0.5,keepaspectratio]{images/adv-img-gen/conditioning.png}
+        \includegraphics[width=0.5\textwidth,height=0.5\textheight,keepaspectratio]{images/adv-img-gen/conditioning.png}
+        \caption*{\scriptsize Diagram after Rombach et al., ``High-Resolution Image Synthesis with Latent Diffusion Models,'' CVPR 2022, Fig.~3.}
     \end{figure}
     \framebreak
 \begin{itemize}
-    \item \textbf{Overview:} Text-conditioned diffusion models enable the generation of highly specific images from textual prompts, such as \emph{"a cat wearing sunglasses standing in Times Square"}. These models leverage powerful text encoders, such as CLIP or transformer-based architectures, to extract semantic representations from the input text.
+    \item \textbf{Overview:} Text-conditioned diffusion models enable the generation of highly specific images from textual prompts, such as \emph{``a cat wearing sunglasses standing in Times Square''}. These models use a pretrained text encoder, such as CLIP or a transformer language model, to extract semantic representations from the input text.
 
     \item \textbf{Text Conditioning:}
     \begin{itemize}
         \item The text encoder maps the prompt $y$ to an embedding $e_y = \mathrm{TextEncoder}(y)$.
-        \item This embedding is injected into the denoising UNet via cross-attention layers (the mechanism is detailed in the Stable Diffusion lecture).
+        \item This embedding is injected into the denoising U-Net via \textbf{cross-attention}: the general attention layer covered earlier, with the queries taken from the image feature map and the keys and values taken from $e_y$. Each spatial position therefore attends to the tokens of the prompt.
+        \item The details of where these layers sit inside the U-Net are covered later.
     \end{itemize}
 
-    \item \textbf{The only change to the diffusion recipe:} everything from the Diffusion Models lecture carries over; the noise predictor simply takes the text embedding as an extra input, $\epsilon_\theta(x_t, t, e_y)$, in both the training objective and every denoising step.
+    \item \textbf{The only change to the diffusion recipe:} everything from the base denoising recipe covered earlier carries over; the noise predictor simply takes the text embedding as an extra input, $\epsilon_\theta(x_t, t, e_y)$, in both the training objective and every denoising step.
 
-    \item \textbf{Effect of Conditioning:} By conditioning the denoising process on $e_y$, the model generates images that faithfully reflect the textual description. The cross-attention mechanism in the UNet ensures that relevant parts of the text influence corresponding regions in the image, enabling complex and coherent scene synthesis.
+    \item \textbf{Effect of Conditioning:} By conditioning the denoising process on $e_y$, the model generates images that faithfully reflect the textual description. Cross-attention ensures that relevant parts of the text influence corresponding regions in the image, enabling complex and coherent scene synthesis.
 \end{itemize}
 \end{frame}
 
-% GLIDE / DALL-E 2 / Imagen application showcases are taught in the Diffusion
-% Models lecture (14) and the Stable Diffusion lineage (16); the duplicated
-% inputs that lived here were removed.
+% Scope: GLIDE / DALL-E 2 / Imagen showcases belong to the base diffusion and
+% Stable Diffusion lectures, so this section stays on the conditioning mechanism.

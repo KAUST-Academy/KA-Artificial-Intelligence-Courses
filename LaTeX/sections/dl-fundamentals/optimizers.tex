@@ -149,7 +149,7 @@ We go the \textbf{opposite direction} to decrease it.
     
     \end{tikzpicture}
     
-    \vspace{1em}
+    \vspace{0.2em}
     
     % Text Columns
     \begin{columns}[t]
@@ -423,7 +423,7 @@ E[g^2]_t = \underbrace{\alpha E[g^2]_{t-1}}_{\text{decayed past gradients}} + \u
 \end{frame}
 
 % --- Adam: Math ---
-\begin{frame}{Adam: Update Rule}
+\begin{frame}[allowframebreaks]{Adam: Update Rule}
 \textbf{Maintain two moving averages:}
 \[
 m_t = \underbrace{\beta_1 m_{t-1}}_{\text{past momentum}} + \underbrace{(1 - \beta_1) g_t}_{\text{new gradient}} \quad \text{(momentum)}
@@ -437,6 +437,8 @@ v_t = \underbrace{\beta_2 v_{t-1}}_{\text{past variance}} + \underbrace{(1 - \be
 \hat m_t = \frac{m_t}{1 - \beta_1^t}, \qquad \hat v_t = \frac{v_t}{1 - \beta_2^t}
 \]
 {\footnotesize As $t \to \infty$, $\beta^t \to 0$, so correction factor $\to 1$ (no correction needed later)}
+
+\framebreak
 
 \textbf{Update:}
 \[
@@ -467,7 +469,7 @@ v_t = \underbrace{\beta_2 v_{t-1}}_{\text{past variance}} + \underbrace{(1 - \be
     \node[box, fill=green!15] (adamw) at (0, -0.5) {\textbf{AdamW}\\Weight decay applied directly to $\theta$\\(decoupled, cleaner)};
 \end{tikzpicture}
 
-\vspace{0.8em}
+\vspace{0.2em}
 \textbf{Result:} Better generalization, especially for large models (current best practice for training modern neural networks!)
 \end{frame}
 

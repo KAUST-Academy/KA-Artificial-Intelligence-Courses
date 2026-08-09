@@ -25,6 +25,7 @@
     \centering
     \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_81_1_img.jpg}
 \end{figure}
+{\footnotesize Source: Grill et al., ``Bootstrap Your Own Latent: A New Approach to Self-Supervised Learning,'' NeurIPS 2020, Fig.~2.}
 
 \framebreak
 
@@ -41,15 +42,17 @@
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_82_1_img.png}
+    \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{images/contrastive/slide_82_1_img.png}
 \end{figure}
+{\footnotesize Source: ResearchGate, ``BYOL neural architecture'' (\url{https://www.researchgate.net/figure/BYOL-neural-architecture_fig5_368988438}).}
 
 \framebreak
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_83_1_img.jpg}
+    \includegraphics[width=\linewidth,height=0.76\textheight,keepaspectratio]{images/contrastive/slide_83_1_img.jpg}
 \end{figure}
+{\footnotesize Source: Grill et al., ``Bootstrap Your Own Latent: A New Approach to Self-Supervised Learning,'' NeurIPS 2020, Fig.~1.}
 
 \framebreak
 
@@ -57,6 +60,7 @@
     \centering
     \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_84_1_img.png}
 \end{figure}
+{\footnotesize Source: Grill et al., ``Bootstrap Your Own Latent: A New Approach to Self-Supervised Learning,'' NeurIPS 2020, Table~1.}
 
 \framebreak
 
@@ -64,12 +68,13 @@
     \centering
     \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_85_1_img.png}
 \end{figure}
+{\footnotesize Source: Grill et al., ``Bootstrap Your Own Latent: A New Approach to Self-Supervised Learning,'' NeurIPS 2020, Table~3.}
 
 \framebreak
 
 \textbf{What's special about BYOL?}
 \begin{itemize}
-    \item Even though there are no explicit negatives, the difference between the online and target networks acts like a source of "negative" information.
+    \item Even though there are no explicit negatives, the asymmetry between the online and target networks (the predictor plus the slowly updated target) prevents collapse.
     \item This means we don't need huge batch sizes or to search for negative samples.
     \item BYOL makes self-supervised learning simpler and more efficient!
 \end{itemize}

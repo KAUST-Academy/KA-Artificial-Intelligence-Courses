@@ -27,10 +27,10 @@
   \end{itemize}
 \end{frame}
 
-% --- Stanford CS224S lec10, slides 10--14: neural acoustic modeling ---
 \begin{frame}{Neural nets for acoustic modeling goes back to early speech}
   \centering
-  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/stt/stt_mlp_phone_train_recog.png}
+  \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{images/stt/stt_mlp_phone_train_recog.png}
+  \slideimgsource{Renals, Morgan, Bourlard, Cohen \& Franco, ``Connectionist Probability Estimators in HMM Speech Recognition,'' IEEE Trans.\ Speech and Audio Processing, 1994; via Stanford CS224S, Lecture 10 (2025 Spring), slide 10.}
 \end{frame}
 
 \begin{frame}
@@ -38,19 +38,21 @@
   \large
   \textit{Speech tasks motivated some of the original backpropagation work}
   \centering
-  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/stt/stt_tdnn_early_neural_asr.png}
+  \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{images/stt/stt_tdnn_early_neural_asr.png}
+  \slideimgsource{Left: Waibel, Hanazawa, Hinton, Shikano \& Lang, ``Phoneme Recognition Using Time-Delay Neural Networks,'' IEEE Trans.\ ASSP, 1989. Right: McClelland \& Elman, ``The TRACE Model of Speech Perception,'' Cognitive Psychology, 1986. Via Stanford CS224S, Lecture 10 (2025 Spring), slide 11.}
 \end{frame}
 
 \begin{frame}{Hybrid systems took over ASR around 2012-2015}
-  \begin{itemize}
+  \begin{itemize}\footnotesize
     \item DNN--HMM hybrids (Hinton et al., 2012) rapidly replaced GMM--HMM on large-vocabulary tasks.
     \item Sets the stage for deeper encoders, sequence training, and later end-to-end models.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/stt/stt_dnn_hmm_wer_comparison.png}
+  \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{images/stt/stt_dnn_hmm_wer_comparison.png}
+  \slideimgsource{Hinton et al., ``Deep Neural Networks for Acoustic Modeling in Speech Recognition,'' IEEE Signal Processing Magazine 29(6), 2012, Table~3.}
 \end{frame}
 
-\begin{frame}{What’s made modern DNNs successful?}
+\begin{frame}{What's made modern DNNs successful?}
   \begin{itemize}
     \item Context-dependent HMM states
     \item Deeper nets improve on single hidden layer nets
@@ -68,12 +70,14 @@
 
 \begin{frame}{Recurrent DNN hybrid acoustic models}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_dnn_hmm_hybrid_states.png}
+  \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/stt/stt_dnn_hmm_hybrid_states.png}
+  \slideimgsource{Stanford CS224S, Lecture 10 (2025 Spring), slide 15.}
 \end{frame}
 
 \begin{frame}{Deep recurrent networks}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_rnn_recurrent_equations.png}
+  \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/stt/stt_rnn_recurrent_equations.png}
+  \slideimgsource{Stanford CS224S, Lecture 10 (2025 Spring), slide 16.}
 \end{frame}
 
 \begin{frame}{How can we improve upon HMM-DNN?}

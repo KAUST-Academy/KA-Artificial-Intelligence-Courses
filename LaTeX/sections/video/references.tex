@@ -1,16 +1,40 @@
 \section{References}
 \begin{frame}{}
-    \LARGE Video Learning \& Generation: \textbf{References}
+    \LARGE Learning from Videos: \textbf{References}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{References}
     \small
-    \begin{thebibliography}{13}
+    \begin{thebibliography}{18}
         \bibitem{tran2015c3d}
         D. Tran, L. Bourdev, R. Fergus, L. Torresani, and M. Paluri,
-        \newblock ``Learning Spatiotemporal Features with 3D ConvNets,''
+        \newblock ``Learning Spatiotemporal Features with 3D Convolutional Networks,''
         \newblock in \emph{ICCV}, 2015.
         \newblock \href{https://arxiv.org/abs/1412.0767}{arxiv.org/abs/1412.0767}
+
+        \bibitem{wu2015shapenets}
+        Z. Wu, S. Song, A. Khosla, F. Yu, L. Zhang, X. Tang, and J. Xiao,
+        \newblock ``3D ShapeNets: A Deep Representation for Volumetric Shapes,''
+        \newblock in \emph{CVPR}, 2015.
+        \newblock \href{https://arxiv.org/abs/1406.5670}{arxiv.org/abs/1406.5670}
+
+        \bibitem{simonyan2014twostream}
+        K. Simonyan and A. Zisserman,
+        \newblock ``Two-Stream Convolutional Networks for Action Recognition in Videos,''
+        \newblock in \emph{NIPS}, 2014.
+        \newblock \href{https://arxiv.org/abs/1406.2199}{arxiv.org/abs/1406.2199}
+
+        \bibitem{wang2016tsn}
+        L. Wang, Y. Xiong, Z. Wang, Y. Qiao, D. Lin, X. Tang, and L. Van Gool,
+        \newblock ``Temporal Segment Networks: Towards Good Practices for Deep Action Recognition,''
+        \newblock in \emph{ECCV}, 2016.
+        \newblock \href{https://arxiv.org/abs/1608.00859}{arxiv.org/abs/1608.00859}
+
+        \bibitem{ballas2016delving}
+        N. Ballas, L. Yao, C. Pal, and A. Courville,
+        \newblock ``Delving Deeper into Convolutional Networks for Learning Video Representations,''
+        \newblock in \emph{ICLR}, 2016.
+        \newblock \href{https://arxiv.org/abs/1511.06432}{arxiv.org/abs/1511.06432}
 
         \bibitem{carreira2017i3d}
         J. Carreira and A. Zisserman,
@@ -18,8 +42,14 @@
         \newblock in \emph{CVPR}, 2017.
         \newblock \href{https://arxiv.org/abs/1705.07750}{arxiv.org/abs/1705.07750}
 
-        \bibitem{wang2019slowfast}
+        \bibitem{wang2018nonlocal}
         X. Wang, R. Girshick, A. Gupta, and K. He,
+        \newblock ``Non-local Neural Networks,''
+        \newblock in \emph{CVPR}, 2018.
+        \newblock \href{https://arxiv.org/abs/1711.07971}{arxiv.org/abs/1711.07971}
+
+        \bibitem{feichtenhofer2019slowfast}
+        C. Feichtenhofer, H. Fan, J. Malik, and K. He,
         \newblock ``SlowFast Networks for Video Recognition,''
         \newblock in \emph{ICCV}, 2019.
         \newblock \href{https://arxiv.org/abs/1812.03982}{arxiv.org/abs/1812.03982}
@@ -27,58 +57,94 @@
         \bibitem{bertasius2021timesformer}
         G. Bertasius, H. Wang, and L. Torresani,
         \newblock ``Is Space-Time Attention All You Need for Video Understanding?''
-        \newblock in \emph{NeurIPS}, 2021.
+        \newblock in \emph{ICML}, 2021.
         \newblock \href{https://arxiv.org/abs/2102.05095}{arxiv.org/abs/2102.05095}
 
-        \bibitem{sun2022ego4d}
-        H. Sun et al.,
+        \bibitem{arnab2021vivit}
+        A. Arnab, M. Dehghani, G. Heigold, C. Sun, M. Lu\v{c}i\'c, and C. Schmid,
+        \newblock ``ViViT: A Video Vision Transformer,''
+        \newblock in \emph{ICCV}, 2021.
+        \newblock \href{https://arxiv.org/abs/2103.15691}{arxiv.org/abs/2103.15691}
+
+        \bibitem{neimark2021vtn}
+        D. Neimark, O. Bar, M. Zohar, and D. Asselmann,
+        \newblock ``Video Transformer Network,''
+        \newblock \emph{arXiv preprint arXiv:2102.00719}, 2021.
+        \newblock \href{https://arxiv.org/abs/2102.00719}{arxiv.org/abs/2102.00719}
+
+        \bibitem{fan2021mvit}
+        H. Fan, B. Xiong, K. Mangalam, Y. Li, Z. Yan, J. Malik, and C. Feichtenhofer,
+        \newblock ``Multiscale Vision Transformers,''
+        \newblock in \emph{ICCV}, 2021.
+        \newblock \href{https://arxiv.org/abs/2104.11227}{arxiv.org/abs/2104.11227}
+
+        \bibitem{li2022mvitv2}
+        Y. Li, C.-Y. Wu, H. Fan, K. Mangalam, B. Xiong, J. Malik, and C. Feichtenhofer,
+        \newblock ``MViTv2: Improved Multiscale Vision Transformers for Classification and Detection,''
+        \newblock in \emph{CVPR}, 2022.
+        \newblock \href{https://arxiv.org/abs/2112.01526}{arxiv.org/abs/2112.01526}
+
+        \bibitem{yang2022tubedetr}
+        A. Yang, A. Miech, J. Sivic, I. Laptev, and C. Schmid,
+        \newblock ``TubeDETR: Spatio-Temporal Video Grounding with Transformers,''
+        \newblock in \emph{CVPR}, 2022.
+        \newblock \href{https://arxiv.org/abs/2203.16434}{arxiv.org/abs/2203.16434}
+
+        \bibitem{gu2018ava}
+        C. Gu, C. Sun, D. A. Ross, et al.,
+        \newblock ``AVA: A Video Dataset of Spatio-temporally Localized Atomic Visual Actions,''
+        \newblock in \emph{CVPR}, 2018.
+        \newblock \href{https://arxiv.org/abs/1705.08421}{arxiv.org/abs/1705.08421}
+
+        \bibitem{grauman2022ego4d}
+        K. Grauman et al.,
         \newblock ``Ego4D: Around the World in 3,000 Hours of Egocentric Video,''
         \newblock in \emph{CVPR}, 2022.
         \newblock \href{https://ego4d-data.org/}{ego4d-data.org}
 
-        \bibitem{radford2021clip}
-        A. Radford et al.,
-        \newblock ``Learning Transferable Visual Models From Natural Language Supervision,''
-        \newblock in \emph{ICML}, 2021.
-        \newblock \href{https://arxiv.org/abs/2103.00020}{arxiv.org/abs/2103.00020}
+        \bibitem{misra2016shuffle}
+        I. Misra, C. L. Zitnick, and M. Hebert,
+        \newblock ``Shuffle and Learn: Unsupervised Learning using Temporal Order Verification,''
+        \newblock in \emph{ECCV}, 2016.
+        \newblock \href{https://arxiv.org/abs/1603.08561}{arxiv.org/abs/1603.08561}
 
-        \bibitem{esser2021vqgan}
-        P. Esser, R. Rombach, and B. Ommer,
-        \newblock ``Taming Transformers for High-Resolution Image Synthesis,''
-        \newblock in \emph{CVPR}, 2021.
-        \newblock \href{https://arxiv.org/abs/2012.09841}{arxiv.org/abs/2012.09841}
+        \bibitem{wang2019cycletime}
+        X. Wang, A. Jabri, and A. A. Efros,
+        \newblock ``Learning Correspondence from the Cycle-Consistency of Time,''
+        \newblock in \emph{CVPR}, 2019.
+        \newblock \href{https://arxiv.org/abs/1903.07593}{arxiv.org/abs/1903.07593}
 
-        \bibitem{ho2022videodiff}
-        J. Ho, W. Chan, C. Saharia, et al.,
-        \newblock ``Video Diffusion Models,''
-        \newblock in \emph{NeurIPS}, 2022.
-        \newblock \href{https://arxiv.org/abs/2204.03458}{arxiv.org/abs/2204.03458}
+        \bibitem{dwibedi2019tcc}
+        D. Dwibedi, Y. Aytar, J. Tompson, P. Sermanet, and A. Zisserman,
+        \newblock ``Temporal Cycle-Consistency Learning,''
+        \newblock in \emph{CVPR}, 2019.
+        \newblock \href{https://arxiv.org/abs/1904.07846}{arxiv.org/abs/1904.07846}
 
-        \bibitem{yang2023videocrafter}
-        L. Yang et al.,
-        \newblock ``VideoCrafter: Open Diffusion Models for High-Quality Video Generation,''
-        \newblock 2023.
-        \newblock \href{https://arxiv.org/abs/2309.08485}{arxiv.org/abs/2309.08485}
+        \bibitem{jabri2020walk}
+        A. Jabri, A. Owens, and A. A. Efros,
+        \newblock ``Space-Time Correspondence as a Contrastive Random Walk,''
+        \newblock in \emph{NeurIPS}, 2020.
+        \newblock \href{https://arxiv.org/abs/2006.14613}{arxiv.org/abs/2006.14613}
 
-        \bibitem{khandelwal2023trajdiffuser}
-        S. Khandelwal, A. Jain, S. Choudhury, et al.,
-        \newblock ``TrajDiffuser: Diffusion for Trajectory Prediction,''
-        \newblock in \emph{NeurIPS}, 2023.
-        \newblock \href{https://arxiv.org/abs/2306.08694}{arxiv.org/abs/2306.08694}
+        \bibitem{benaim2020speednet}
+        S. Benaim, A. Ephrat, O. Lang, I. Mosseri, W. T. Freeman, M. Rubinstein, M. Irani, and T. Dekel,
+        \newblock ``SpeedNet: Learning the Speediness in Videos,''
+        \newblock in \emph{CVPR}, 2020.
+        \newblock \href{https://arxiv.org/abs/2004.06130}{arxiv.org/abs/2004.06130}
 
         \bibitem{cs231n}
         F.-F. Li, Y. Li, and R. Gao,
-        \newblock ``Stanford CS231n: Deep Learning for Computer Vision,'' 
+        \newblock ``Stanford CS231n: Deep Learning for Computer Vision,''
         \newblock \href{https://cs231n.stanford.edu/}{cs231n.stanford.edu}
 
         \bibitem{waicdl4cv}
         A. Shocher, S. Bagon, M. Galun, and T. Dekel,
         \newblock ``WAIC DL4CV: Deep Learning for Computer Vision: Fundamentals and Applications,''
-        \newblock \href{https://www.cs.tau.ac.il/~assafshocher/WAIC-DL4CV/}{WAIC-DL4CV}
+        \newblock \href{https://dl4cv.github.io/}{WAIC-DL4CV}
 
         \bibitem{umichdlcv}
         J. Johnson,
         \newblock ``UMich EECS 498.008/598.008: Deep Learning for Computer Vision,''
-        \newblock \href{https://web.eecs.umich.edu/~justincj/teaching/eecs498/WI2024/}{UMich DL4CV}
+        \newblock \href{https://web.eecs.umich.edu/~justincj/teaching/eecs498/WI2022/}{UMich DL4CV}
     \end{thebibliography}
 \end{frame}

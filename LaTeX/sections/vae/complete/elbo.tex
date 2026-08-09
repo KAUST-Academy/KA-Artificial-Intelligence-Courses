@@ -33,37 +33,38 @@
 Looking at Lower bound $L$
 \begin{equation*}
     \begin{split}
-        L & = \sum_z q(z) log \frac{p(x,z)}{q(z)}\\
-        & = \sum_z q(z) log \frac{p(x|z)p(z)}{q(z)}\\
-        & = \sum_z q(z) \left [log \, p(x|z) + log \frac{p(z)}{q(z)} \right ]\\
-        & = \underbrace{\sum_z q(z) log \, p(x|z)}_{\text {Expectation} \, E_{q(z)}(log \, p(x|z))} + \underbrace{\sum_z q(z) log \frac{p(z)}{q(z)}}_{-KL(q(z)||p(z)} \\
+        L & = \sum_z q(z) \log \frac{p(x,z)}{q(z)}\\
+        & = \sum_z q(z) \log \frac{p(x|z)p(z)}{q(z)}\\
+        & = \sum_z q(z) \left [\log \, p(x|z) + \log \frac{p(z)}{q(z)} \right ]\\
+        & = \underbrace{\sum_z q(z) \log \, p(x|z)}_{\text {Expectation} \, E_{q(z)}(\log \, p(x|z))} + \underbrace{\sum_z q(z) \log \frac{p(z)}{q(z)}}_{-KL(q(z)||p(z))} \\
     \end{split}
 \end{equation*}
 So,
-$$L = E_{q(z)}(log \, p(x|z)) - KL(q(z)||p(z))$$
+$$L = E_{q(z)}(\log \, p(x|z)) - KL(q(z)||p(z))$$
 
 \framebreak
 \begin{itemize}
-    \item $E_{q(z)}(log \, p(x|z))$ is conceptually reconstruction
-    \item We can assume $z$ to be Standard Normal Distribution
+    \item $E_{q(z)}(\log \, p(x|z))$ is conceptually reconstruction
+    \item We choose the prior $p(z)$ to be the standard normal distribution
 \end{itemize}
 \vspace{1em}
 \begin{figure}
     \centering
     \includegraphics[height=0.5\textheight, width=\textwidth, keepaspectratio]{images/vae/architecture.png}
-    \caption*{Variational Autoencoder Architecture}
+    \caption*{Variational Autoencoder Architecture\\ {\scriptsize Source: K. Frans, \href{https://kvfrans.com/variational-autoencoders-explained/}{``Variational Autoencoders Explained''}, 2016; the $q(z|x)$, $p(x|z)$ and $z$ labels were added later.}}
 \end{figure}
 
 \framebreak
 \begin{figure}
     \centering
     \includegraphics[height=0.3\textheight, width=\textwidth, keepaspectratio]{images/vae/architecture.png}
+    \caption*{\scriptsize Source: K. Frans, \href{https://kvfrans.com/variational-autoencoders-explained/}{``Variational Autoencoders Explained''}, 2016.}
 \end{figure}
-$$p(x|\hat{x}) = e^{-|x-\hat{x}|^2}$$
-$$log \, e^{-|x-\hat{x}|^2} = -|x-\hat{x}|^2$$
+$$p(x|z) \propto e^{-|x-\hat{x}|^2}$$
+$$\log \, e^{-|x-\hat{x}|^2} = -|x-\hat{x}|^2$$
 $$L = E_{q(z)}(-|x-\hat{x}|^2) - KL(q(z)||p(z))$$
-$$\min |x-\hat{x}| + KL(q(z|x)||\mathcal{N}(0,1))$$
-$$\min |x-\hat{x}| - 0.5 * (1 + log \, \sigma^2 - \sigma^2 - \mu^2)$$
+$$\min |x-\hat{x}|^2 + KL(q(z|x)||\mathcal{N}(0,1))$$
+$$\min |x-\hat{x}|^2 - 0.5 * (1 + \log \, \sigma^2 - \sigma^2 - \mu^2)$$
 
 For full derivation of KL Loss, read \href{https://deepai.org/publication/tutorial-deriving-the-standard-variational-autoencoder-vae-loss-function}{here}
 \end{frame}

@@ -8,7 +8,7 @@
 \end{frame}
 
 \newcommand{\binxuwSdCaption}{%
-  {\scriptsize Binxu Wang, \href{https://binxuw.scholars.harvard.edu/sites/g/files/omnuum11221/files/binxuw/files/stable_diffusion_a_tutorial.pdf}{Stable Diffusion: A Tutorial (Harvard ML from Scratch)}.}%
+  {\scriptsize Binxu Wang \& John Vastola, \href{https://binxuw.scholars.harvard.edu/sites/g/files/omnuum11221/files/binxuw/files/stable_diffusion_a_tutorial.pdf}{Stable Diffusion: A Tutorial (Harvard ML from Scratch)}, 2022.}%
 }
 
 \begin{frame}{Refresher: Convolutional Neural Network}
@@ -57,7 +57,7 @@
     \footnotesize
     \textbf{The score function is \textit{time-dependent}.}
     \begin{itemize}
-      \item[] Target: $s(x, t) = \nabla_x \log p(x, t)$
+      \item[] Target: $s(x, t) = \nabla_x \log p_t(x)$, the score of the noised marginal at time $t$. It is the same object the noise predictor learns, up to a scale: $s(x,t) \approx -\epsilon_\theta(x,t)/\sigma_t$.
     \end{itemize}
     \vspace{0.7em}
     \textbf{Add time dependency}
@@ -71,7 +71,6 @@
     \end{itemize}
     \column{0.46\textwidth}
       \centering
-      % Image (from slide) showing Conv tensor, add time embedding, Fourier features
       \includegraphics[width=0.96\linewidth,height=0.7\textheight,keepaspectratio]{images/stable-diffusion/add_time_dimension.png}\\[0.25em]
       \binxuwSdCaption
   \end{columns}
@@ -80,8 +79,7 @@
 \begin{frame}[allowframebreaks]{U-Net in Stable Diffusion}
   \begin{columns}[T,onlytextwidth]
     \column{0.44\textwidth}
-      % Placeholder for image:
-      \includegraphics[width=0.99\linewidth,keepaspectratio]{images/stable-diffusion/attention.png}\\[0.25em]
+      \includegraphics[width=0.99\linewidth,height=0.74\textheight,keepaspectratio]{images/stable-diffusion/attention.png}\\[0.25em]
       \binxuwSdCaption
     \column{0.56\textwidth}
       \scriptsize
@@ -107,6 +105,7 @@
     \column{0.50\textwidth}
       \centering
       \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{images/stable-diffusion/contextual_word_vectors.png}\\[0.25em]
+      \binxuwSdCaption
   \end{columns}
 \end{frame}
 
@@ -122,6 +121,7 @@
     \column{0.50\textwidth}
       \centering
       \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{images/stable-diffusion/learning_word_vectors_gpt_bert_clip.png}\\[0.25em]
+      \binxuwSdCaption
   \end{columns}
 \end{frame}
 
@@ -145,7 +145,7 @@
 
 \begin{frame}{Choice of Text Encoding}
       \begin{itemize}
-        \item Encoder in Stable Diffusion: pre-trained CLIP ViT-L/14 text encoder.
+        \item Encoder in Stable Diffusion v1: frozen, pre-trained CLIP ViT-L/14 text encoder. Later versions differ: SD~2 uses OpenCLIP ViT-H/14, SDXL two encoders, SD~3 adds T5-XXL.
         \item Word vectors can also be randomly initialized and learned online.
         \item \textbf{Other conditional signals:}
         \begin{itemize}

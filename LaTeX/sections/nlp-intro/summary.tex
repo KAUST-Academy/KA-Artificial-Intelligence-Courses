@@ -5,7 +5,7 @@
 
 \begin{frame}{Beyond N-grams}
     \begin{itemize}
-        \item Neural Language Models (e.g., Word2Vec, LSTMs)
+        \item Word Embeddings (Word2Vec) and Neural Language Models (RNNs, LSTMs)
         \item Transformer-based Models (BERT, GPT)
         \item Subword Tokenization (Byte-Pair Encoding)
         \item Pretrained Language Models
@@ -19,6 +19,8 @@
         \item N-grams model word sequences simply and effectively
         \item Sequence notation and probability estimation are essential
         \item Start/end/UNK tokens improve modeling and robustness
+        \item Smoothing keeps unseen contexts from collapsing a sentence to probability zero
+        \item Perplexity scores a model on held-out text, given a fixed vocabulary
         \item N-gram models are limited $\rightarrow$ neural models offer solutions
     \end{itemize}
 \end{frame}

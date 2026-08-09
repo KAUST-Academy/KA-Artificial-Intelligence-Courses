@@ -34,7 +34,6 @@
         \begin{itemize}
             \item Most widely used in speech/audio tasks.
             \item Roughly linear spacing below 1 kHz, logarithmic above.
-            \item Wikipedia reference: \texttt{Mel scale page}.
         \end{itemize}
     \end{itemize}
 \end{frame}
@@ -54,7 +53,7 @@
         \[
             f = 700 \, \left(10^{\tfrac{m}{2595}} - 1\right)
         \]
-        \item Source: \texttt{Wikipedia}.
+        \item The constant $2595$ is not arbitrary: it is chosen so that $1000$~Hz lands on $1000$~mels.
     \end{itemize}
 
     \item \textbf{How:}
@@ -81,8 +80,9 @@
 
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp-eval/melscale-curve.png}
-        \caption*{Plots of pitch mel scale versus hertz scale. Source: Wikipedia}
+        \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{images/audio-nlp-eval/melscale-curve.png}
+        \caption*{Plots of pitch mel scale versus hertz scale.\\
+        {\scriptsize Source: Wikipedia, ``Mel scale'' (Wikimedia Commons, \texttt{File:Mel-Hz plot.svg}, by Krishna Vedala, CC BY-SA 3.0).}}
     \end{figure}
 
 \end{frame}
@@ -99,7 +99,9 @@
 
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp/mel-scaled-filterbanks.png}
+        \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{images/audio-nlp/mel-scaled-filterbanks.png}
+        \caption*{Mel filterbank basis functions, here using 20 Mel-filters over 0--7000\,Hz.\\
+        {\scriptsize Source: Yusnita M.~A., Paulraj M.~P., S.~Yaacob, R.~Yusuf and Shahriman A.~B., ``Analysis of Accent-Sensitive Words in Multi-Resolution Mel-Frequency Cepstral Coefficients for Classification of Accents in Malaysian English,'' \emph{International Journal of Automotive and Mechanical Engineering}, vol.~7, pp.~1053--1073, 2013, Fig.~3.}}
     \end{figure}
 
 \framebreak
@@ -177,7 +179,8 @@
 \begin{figure}
         \centering
         \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio]{images/audio-nlp-eval/mel-filter-bank.png}
-        \caption*{Mel filter bank. Source: Wikipedia}
+        \caption*{Reversed-mel (left) and mel (right) filter banks.\\
+        {\scriptsize Source: Wikimedia Commons, \texttt{File:Mel RMel.png}, by Ghasemzadehh, CC BY-SA 4.0.}}
     \end{figure}
 
 \end{frame}
@@ -211,9 +214,8 @@
 
     \item Applications:
     \begin{itemize}
-        \item Ubiquitous in modern \textbf{TTS systems} (e.g., WaveNet-style neural vocoders).
-        \item Widely used in speech recognition pipelines.
-        \item References: \texttt{arXiv}, Tacotron 2 project.
+        \item Ubiquitous in modern \textbf{TTS systems}: log-mel spectrograms are the interface between the acoustic model and the vocoder (e.g., Tacotron~2 predicts log-mel frames, WaveNet turns them into a waveform).
+        \item Widely used in speech recognition pipelines: Whisper takes 80-channel log-mel input.
     \end{itemize}
 \end{itemize}
 

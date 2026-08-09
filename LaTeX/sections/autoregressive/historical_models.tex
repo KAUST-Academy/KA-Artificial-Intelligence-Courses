@@ -27,11 +27,11 @@
     \begin{itemize}
         \item What if the output variable is not binary? For example, we have to predict pixel value between 0 and 255.
         \item One solution: Let $\mathbf{\hat{x}}_i$ parameterize a categorical distribution
-        \begin{align}
-            h_i = \sigma(\mathbf{W}_{.,<i} x_{<i} + c)\\
-            \mathcal{P}(x_i | x_1, \cdots, x_{i-1}) = \text{Cat}(p_i^1, \cdots, p_i^K)\\
-            \mathbf{\hat{x}}_i = (p_i^1, \cdots, p_i^K) = \text{softmax} (A_i h_i + b_i)
-        \end{align}
+        \begin{align*}
+            h_i &= \sigma(\mathbf{W}_{.,<i} x_{<i} + c)\\
+            \mathcal{P}(x_i | x_1, \cdots, x_{i-1}) &= \text{Cat}(p_i^1, \cdots, p_i^K)\\
+            \mathbf{\hat{x}}_i = (p_i^1, \cdots, p_i^K) &= \text{softmax} (A_i h_i + b_i)
+        \end{align*}
         \item Softmax generalizes the sigmoid function $\sigma(\cdot)$ and transforms a vector of K numbers into a vector of K probabilities (non-negative, sum to 1).
 
     \end{itemize}

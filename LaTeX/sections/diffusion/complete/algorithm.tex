@@ -9,6 +9,7 @@
        \begin{figure}
             \centering
             \includegraphics[height=0.7\textheight, width=\textwidth, keepaspectratio]{images/diffusion/diff_5.png}
+            \caption*{[Ho et al., 2020]}
         \end{figure}
     \end{column}
     \begin{column}{0.5\textwidth}
@@ -31,6 +32,7 @@
         \begin{figure}
             \centering
             \includegraphics[height=0.7\textheight, width=\textwidth, keepaspectratio]{images/diffusion/diff_6.png}
+            \caption*{[Ho et al., 2020]}
         \end{figure}
     \end{column}
     \begin{column}{0.5\textwidth}
@@ -42,7 +44,7 @@
                 \item Predict noise $\epsilon_\theta(x_t, t)$.
                 \item Compute posterior mean $\mu_\theta(x_t, t)$.
                 \item Sample $x_{t-1}$ from the Gaussian posterior.
-                \item (Optional) Apply guidance (e.g., classifier-free) for improved results.
+                \item (Optional) Apply guidance for improved results (covered later in the course).
             \end{enumerate}
         \end{enumerate}
     \end{column}

@@ -5,8 +5,12 @@
 
 \begin{frame}{Open Problems and Research Directions}
   \begin{itemize}
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Multimodal grounding in real-world environments:} How can agents robustly connect language, vision, and action in dynamic, noisy settings?
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{World model integration:} Combining temporal and spatial memory for persistent, context-aware reasoning.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Multimodal grounding in real-world environments:} How
+      can agents connect language, vision, and action in dynamic, noisy settings? SayCan is one line of
+      attack: score what the language model \emph{wants} to do against what the robot can actually do here.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{World model integration:} Give the agent a learned
+      internal model of how its environment evolves, so it can plan against predicted states rather than only
+      react to observed ones.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Agent collaboration:} Enabling effective communication and coordination in multi-agent systems.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Scaling memory-efficient agents:} Designing architectures that scale to long-term, large-scale memory without prohibitive costs.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Robust reward models:} Developing reliable reward and feedback mechanisms for open-ended, real-world tasks.

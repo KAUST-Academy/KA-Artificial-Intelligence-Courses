@@ -10,218 +10,179 @@
     \begin{thebibliography}{99}
 
 % Key Textbooks
-\bibitem{jurafsky2023slp3}
-Jurafsky, D., \& Martin, J. H. (2023). \textit{Speech \& Language Processing (3rd edition draft)}. \url{https://web.stanford.edu/~jurafsky/slp3/}
+\bibitem{jurafsky2026slp3}
+Jurafsky, D., \& Martin, J. H. (2026). \textit{Speech \& Language Processing} (3rd edition draft). \url{https://web.stanford.edu/~jurafsky/slp3/}
 
 \bibitem{rabiner1993fundamentals}
 Rabiner, L., \& Juang, B.-H. (1993). \textit{Fundamentals of Speech Recognition}. Prentice Hall.
 
-\bibitem{deng2013deep}
-Deng, L., \& Li, X. (2013). \textit{Deep Learning for Speech and Language}. Springer.
+\bibitem{deng2013paradigms}
+Deng, L., \& Li, X. (2013). Machine learning paradigms for speech recognition: An overview. \textit{IEEE Transactions on Audio, Speech, and Language Processing, 21}(5), 1060--1089.
 
 \bibitem{bishop2006pattern}
 Bishop, C. M. (2006). \textit{Pattern Recognition and Machine Learning}. Springer.
 
-% Seminal Papers (ASR & SLU)
+% Features & Signal Processing
+\bibitem{kubichek1993mcd}
+Kubichek, R. F. (1993). Mel-cepstral distance measure for objective speech quality assessment. \textit{IEEE Pacific Rim Conference on Communications, Computers and Signal Processing (PACRIM)}, 125--128.
+
+% Seminal Papers (ASR)
 \bibitem{rabiner1989tutorial}
-Rabiner, L. (1989). A tutorial on hidden Markov models and selected applications in speech recognition. \textit{Proceedings of the IEEE, 77}(2), 257–286.
+Rabiner, L. (1989). A tutorial on hidden Markov models and selected applications in speech recognition. \textit{Proceedings of the IEEE, 77}(2), 257--286.
 
 \bibitem{graves2006ctc}
-Graves, A., Fernandez, S., Gomez, F., \& Schmidhuber, J. (2006). Connectionist temporal classification: Labelling unsegmented sequence data with recurrent neural networks. \textit{ICML}.
+Graves, A., Fernández, S., Gomez, F., \& Schmidhuber, J. (2006). Connectionist temporal classification: Labelling unsegmented sequence data with recurrent neural networks. \textit{ICML}, 369--376.
+
+\bibitem{hannun2017ctc}
+Hannun, A. (2017). Sequence modeling with CTC. \textit{Distill}. \url{https://distill.pub/2017/ctc/}
 
 \bibitem{graves2012rnn}
 Graves, A. (2012). Sequence transduction with recurrent neural networks. \textit{arXiv preprint arXiv:1211.3711}.
 
+\bibitem{chan2016las}
+Chan, W., Jaitly, N., Le, Q. V., \& Vinyals, O. (2016). Listen, attend and spell: A neural network for large vocabulary conversational speech recognition. \textit{ICASSP}, 4960--4964. arXiv:1508.01211.
+
+\bibitem{park2019specaugment}
+Park, D. S., Chan, W., Zhang, Y., Chiu, C.-C., Zoph, B., Cubuk, E. D., \& Le, Q. V. (2019). SpecAugment: A simple data augmentation method for automatic speech recognition. \textit{Interspeech}, 2613--2617. arXiv:1904.08779.
+
 \bibitem{gulati2020conformer}
-Gulati, A., Qin, J., Chiu, C.-C., et al. (2020). Conformer: Convolution-augmented transformer for speech recognition. \textit{Interspeech}.
+Gulati, A., Qin, J., Chiu, C.-C., et al. (2020). Conformer: Convolution-augmented transformer for speech recognition. \textit{Interspeech}, 5036--5040. arXiv:2005.08100.
+
+\bibitem{rekesh2023fastconformer}
+Rekesh, D., Koluguri, N. R., Kriman, S., et al. (2023). Fast Conformer with linearly scalable attention for efficient speech recognition. \textit{IEEE ASRU}, 1--8. arXiv:2305.05084.
+
+\bibitem{majumdar2021citrinet}
+Majumdar, S., Balam, J., Hrinchuk, O., Lavrukhin, V., Noroozi, V., \& Ginsburg, B. (2021). Citrinet: Closing the gap between non-autoregressive and autoregressive end-to-end models for automatic speech recognition. \textit{arXiv preprint arXiv:2104.01721}.
 
 \bibitem{radford2022whisper}
-Radford, A., et al. (2022). Robust speech recognition via large-scale weak supervision. \textit{arXiv preprint arXiv:2212.04356}.
+Radford, A., Kim, J. W., Xu, T., Brockman, G., McLeavey, C., \& Sutskever, I. (2022). Robust speech recognition via large-scale weak supervision. \textit{arXiv preprint arXiv:2212.04356}.
+
+% Self-Supervised Speech Representations
+\bibitem{baevski2020wav2vec2}
+Baevski, A., Zhou, H., Mohamed, A., \& Auli, M. (2020). wav2vec 2.0: A framework for self-supervised learning of speech representations. \textit{NeurIPS 33}. arXiv:2006.11477.
+
+\bibitem{hsu2021hubert}
+Hsu, W.-N., Bolte, B., Tsai, Y.-H. H., Lakhotia, K., Salakhutdinov, R., \& Mohamed, A. (2021). HuBERT: Self-supervised speech representation learning by masked prediction of hidden units. \textit{IEEE/ACM Transactions on Audio, Speech, and Language Processing, 29}, 3451--3460. arXiv:2106.07447.
+
+\bibitem{chen2022wavlm}
+Chen, S., Wang, C., Chen, Z., et al. (2022). WavLM: Large-scale self-supervised pre-training for full stack speech processing. \textit{IEEE Journal of Selected Topics in Signal Processing, 16}(6), 1505--1518. arXiv:2110.13900.
 
 % Seminal Papers (TTS)
 \bibitem{wang2017tacotron}
 Wang, Y., et al. (2017). Tacotron: Towards end-to-end speech synthesis. \textit{arXiv preprint arXiv:1703.10135}.
 
 \bibitem{shen2018tacotron2}
-Shen, J., et al. (2018). Natural TTS synthesis by conditioning WaveNet on mel spectrogram predictions. \textit{ICASSP}.
-
-\bibitem{ren2019fastspeech}
-Ren, Y., et al. (2019). FastSpeech: Fast, robust and controllable text to speech. \textit{arXiv preprint arXiv:1905.09263}.
-
-\bibitem{kim2021vits}
-Kim, J., et al. (2021). VITS: Conditional variational autoencoder with adversarial learning for end-to-end text-to-speech. \textit{arXiv preprint arXiv:2106.06103}.
+Shen, J., Pang, R., Weiss, R. J., et al. (2018). Natural TTS synthesis by conditioning WaveNet on mel spectrogram predictions. \textit{ICASSP}, 4779--4783. arXiv:1712.05884.
 
 \bibitem{oord2016wavenet}
 van den Oord, A., et al. (2016). WaveNet: A generative model for raw audio. \textit{arXiv preprint arXiv:1609.03499}.
 
-% Evaluation Metrics
+\bibitem{ren2021fastspeech2}
+Ren, Y., Hu, C., Tan, X., Qin, T., Zhao, S., Zhao, Z., \& Liu, T.-Y. (2021). FastSpeech 2: Fast and high-quality end-to-end text to speech. \textit{ICLR}. arXiv:2006.04558.
+
+\bibitem{kong2020hifigan}
+Kong, J., Kim, J., \& Bae, J. (2020). HiFi-GAN: Generative adversarial networks for efficient and high fidelity speech synthesis. \textit{NeurIPS 33}. arXiv:2010.05646.
+
+\bibitem{popov2021gradtts}
+Popov, V., Vovk, I., Gogoryan, V., Sadekova, T., \& Kudinov, M. (2021). Grad-TTS: A diffusion probabilistic model for text-to-speech. \textit{ICML}, PMLR 139, 8599--8608. arXiv:2105.06337.
+
+\bibitem{kim2021vits}
+Kim, J., Kong, J., \& Son, J. (2021). VITS: Conditional variational autoencoder with adversarial learning for end-to-end text-to-speech. \textit{ICML}. arXiv:2106.06103.
+
+% Diarization, Emotion & Visual Speech
+\bibitem{park2022diarization}
+Park, T. J., Kanda, N., Dimitriadis, D., Han, K. J., Watanabe, S., \& Narayanan, S. (2022). A review of speaker diarization: Recent advances with deep learning. \textit{Computer Speech \& Language, 72}, 101317. arXiv:2101.09624.
+
+\bibitem{lin2020diarization}
+Lin, Q., Hou, Y., \& Li, M. (2020). Self-attentive similarity measurement strategies in speaker diarization. \textit{Interspeech}, 284--288.
+
+\bibitem{bredin2020pyannote}
+Bredin, H., Yin, R., Coria, J. M., et al. (2020). pyannote.audio: Neural building blocks for speaker diarization. \textit{ICASSP}, 7124--7128.
+
+\bibitem{busso2008iemocap}
+Busso, C., Bulut, M., Lee, C.-C., et al. (2008). IEMOCAP: Interactive emotional dyadic motion capture database. \textit{Language Resources and Evaluation, 42}(4), 335--359.
+
+\bibitem{chen2023wav2vec2ser}
+Chen, L.-W., \& Rudnicky, A. (2023). Exploring wav2vec 2.0 fine tuning for improved speech emotion recognition. \textit{ICASSP}, 1--5. arXiv:2110.06309.
+
+\bibitem{ma2024emotion2vec}
+Ma, Z., Zheng, Z., Ye, J., Li, J., Gao, Z., Zhang, S., \& Chen, X. (2024). emotion2vec: Self-supervised pre-training for speech emotion representation. \textit{Findings of ACL 2024}, 15747--15760. arXiv:2312.15185.
+
+\bibitem{assael2016lipnet}
+Assael, Y. M., Shillingford, B., Whiteson, S., \& de Freitas, N. (2016). LipNet: End-to-end sentence-level lipreading. \textit{arXiv preprint arXiv:1611.01599}.
+
+\bibitem{chung2017lrs}
+Chung, J. S., Senior, A., Vinyals, O., \& Zisserman, A. (2017). Lip reading sentences in the wild. \textit{CVPR}. arXiv:1611.05358.
+
+% Toolkits
+\bibitem{ravanelli2021speechbrain}
+Ravanelli, M., et al. (2021). SpeechBrain: A general-purpose speech toolkit. \textit{arXiv preprint arXiv:2106.04624}.
+
+\bibitem{rivadocs}
+NVIDIA Riva, ASR models reference. \url{https://docs.nvidia.com/deeplearning/riva/user-guide/docs/reference/models/asr.html}
+
+% Evaluation
+\bibitem{itu800}
+ITU-T Recommendation P.800 (1996). \textit{Methods for Subjective Determination of Transmission Quality}. International Telecommunication Union, Geneva.
+
 \bibitem{papineni2002bleu}
-Papineni, K., Roukos, S., Ward, T., \& Zhu, W.-J. (2002). BLEU: a method for automatic evaluation of machine translation. \textit{ACL}.
-
-\bibitem{lin2004rouge}
-Lin, C.-Y. (2004). ROUGE: A package for automatic evaluation of summaries. \textit{ACL Workshop on Text Summarization}.
-
-\bibitem{banerjee2005meteor}
-Banerjee, S., \& Lavie, A. (2005). METEOR: An automatic metric for MT evaluation with improved correlation with human judgments. \textit{ACL Workshop on Intrinsic and Extrinsic Evaluation Measures}.
-
-\bibitem{snover2006ter}
-Snover, M., et al. (2006). A study of translation edit rate with targeted human annotation. \textit{Association for Machine Translation in the Americas (AMTA)}.
-
-% LLM Judges
-\bibitem{liu2023geval}
-Liu, Y., et al. (2023). G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment. \textit{arXiv preprint arXiv:2303.16634}.
-
-\bibitem{zheng2023llmjudge}
-Zheng, L., et al. (2023). Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena. \textit{arXiv preprint arXiv:2306.05685}.
-
-\bibitem{chiang2023mtbench}
-Chiang, W.-L., et al. (2024). Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference. \textit{arXiv preprint arXiv:2403.04132}.
+Papineni, K., Roukos, S., Ward, T., \& Zhu, W.-J. (2002). BLEU: A method for automatic evaluation of machine translation. \textit{ACL}.
 
 % Speech Datasets (ASR)
 \bibitem{panayotov2015librispeech}
-Panayotov, V., Chen, G., Povey, D., \& Khudanpur, S. (2015). Librispeech: An ASR corpus based on public domain audio books. \textit{ICASSP}.
+Panayotov, V., Chen, G., Povey, D., \& Khudanpur, S. (2015). LibriSpeech: An ASR corpus based on public domain audio books. \textit{ICASSP}.
 
-\bibitem{ardila2019commonvoice}
-Ardila, R., et al. (2019). CommonVoice: A massively-multilingual speech corpus. \textit{arXiv preprint arXiv:1912.06670}.
+\bibitem{ardila2020commonvoice}
+Ardila, R., et al. (2020). Common Voice: A massively-multilingual speech corpus. \textit{LREC}, 4218--4222. arXiv:1912.06670.
 
 \bibitem{hernandez2018tedlium}
-Hernandez, F., et al. (2018). TED-LIUM 3:  Speech recognition corpus. \textit{SPECOM}.
+Hernandez, F., Nguyen, V., Ghannay, S., Tomashenko, N., \& Estève, Y. (2018). TED-LIUM 3: Twice as much data and corpus repartition for experiments on speaker adaptation. \textit{Speech and Computer (SPECOM)}, LNCS 11096, 198--208. Springer.
 
 \bibitem{carletta2005ami}
-Carletta, J., et al. (2005). The AMI meeting corpus: A pre-announcement. \textit{MLMI}.
+Carletta, J., et al. (2005). The AMI meeting corpus: A pre-announcement. \textit{MLMI}, LNCS 3869, 28--39. Springer.
 
 % Speech Datasets (TTS & SLU)
 \bibitem{ljspeech}
 LJSpeech dataset. \url{https://keithito.com/LJ-Speech-Dataset/}
 
 \bibitem{vctk}
-VCTK Corpus. \url{https://datashare.ed.ac.uk/handle/10283/3443}
+CSTR VCTK Corpus (version 0.92). \url{https://datashare.ed.ac.uk/handle/10283/3443}
 
-\bibitem{hifi-tts}
-HiFi-TTS dataset. \url{https://github.com/NVIDIA/NeMo}
+\bibitem{hifitts}
+Bakhturina, E., Lavrukhin, V., Ginsburg, B., \& Zhang, Y. (2021). Hi-Fi multi-speaker English TTS dataset. \textit{arXiv preprint arXiv:2104.01497}. Download: \url{https://www.openslr.org/109/}
 
 \bibitem{atis}
-ATIS dataset. \url{https://www.kaggle.com/datasets/renanaferreira/atis-airline-travel-information-system-dataset}
+ATIS intent/slot dataset. \url{https://www.kaggle.com/datasets/siddhadev/ms-cntk-atis}
 
 \bibitem{slurp}
-SLURP dataset. \url{https://github.com/pswietojanski/slurp}
+SLURP dataset (audio hosted on Zenodo). \url{https://github.com/pswietojanski/slurp}
 
 % Online Demos
 \bibitem{whisperdemo}
 Whisper ASR Demo. \url{https://huggingface.co/spaces/openai/whisper}
 
 \bibitem{tacotron2demo}
-Tacotron2 + WaveGlow Demo. \url{https://colab.research.google.com/github/tugstugi/dl-colab-notebooks/blob/master/notebooks/NVidia_Tacotron2_Waveglow.ipynb}
+Tacotron 2 + WaveGlow Demo. \url{https://colab.research.google.com/github/NVIDIA/DeepLearningExamples/blob/master/PyTorch/SpeechSynthesis/Tacotron2/notebooks/Tacotron2.ipynb}
 
 \bibitem{googlets}
-Google TTS API demo. \url{https://cloud.google.com/text-to-speech}
+Google Cloud Text-to-Speech. \url{https://cloud.google.com/text-to-speech}
 
 \bibitem{coquitts}
-Coqui TTS. \url{https://github.com/coqui-ai/tts}
+Coqui TTS (maintained fork). \url{https://github.com/idiap/coqui-ai-TTS}
 
 % Surveys
-\bibitem{li2020asr}
-Li, J. (2020). Recent advances in end-to-end ASR.
+\bibitem{li2022asr}
+Li, J. (2022). Recent advances in end-to-end automatic speech recognition. \textit{APSIPA Transactions on Signal and Information Processing, 11}(1), e8. arXiv:2111.01690.
 
-\bibitem{qian2021slu}
-Qin, Libo, et al. (2021). A survey on spoken language understanding: Recent advances and new frontiers. \textit{IJCAI-21}.
+\bibitem{prabhavalkar2024e2e}
+Prabhavalkar, R., Hori, T., Sainath, T. N., Schlüter, R., \& Watanabe, S. (2024). End-to-end speech recognition: A survey. \textit{IEEE/ACM Transactions on Audio, Speech, and Language Processing, 32}, 325--351. arXiv:2303.03329.
+
+\bibitem{qin2021slu}
+Qin, L., Xie, T., Che, W., \& Liu, T. (2021). A survey on spoken language understanding: Recent advances and new frontiers. \textit{IJCAI}, 4577--4584. arXiv:2103.03095.
 
 \bibitem{tan2021tts}
-Tan, X., et al. (2021). A Survey on Neural Speech Synthesis. \textit{arXiv preprint arXiv:2106.15561}.
-
-\bibitem{chiang2023llmsurvey}
-Gu, J., et al. (2024). A Survey on LLM-as-a-Judge. \textit{arXiv preprint arXiv:2411.15594}.
+Tan, X., Qin, T., Soong, F., \& Liu, T.-Y. (2021). A survey on neural speech synthesis. \textit{arXiv preprint arXiv:2106.15561}.
 
 \end{thebibliography}
 
-
 \end{frame}
-
-% \begin{frame}[allowframebreaks]{References \& Further Reading}
-
-% \begin{block}{Key Textbooks}
-% \begin{itemize}
-%     \item \textbf{Speech & Language Processing} – Jurafsky \& Martin (3rd ed. draft) \\
-%     \url{https://web.stanford.edu/~jurafsky/slp3/}
-%     \item \textbf{Fundamentals of Speech Recognition} – Rabiner \& Juang (classic HMM/ASR text)
-%     \item \textbf{Deep Learning for Speech and Language} – Deng \& Li (2013)
-%     \item \textbf{Pattern Recognition \& Machine Learning} – Bishop (for HMMs, probabilistic models)
-% \end{itemize}
-% \end{block}
-% \framebreak
-% \begin{block}{Seminal Papers (ASR \& SLU)}
-% \begin{itemize}
-%     \item HMM-based ASR: L. Rabiner, “A Tutorial on Hidden Markov Models” (1989)
-%     \item CTC: Graves et al., “Connectionist Temporal Classification” (2006)
-%     \item RNN Transducer: Graves (2012)
-%     \item Conformer: Gulati et al., “Conformer: Convolution-augmented Transformer for Speech Recognition” (2020)
-%     \item Whisper: Radford et al., “Robust Speech Recognition via Large-Scale Weak Supervision” (2022)
-% \end{itemize}
-% \end{block}
-% \framebreak
-% \begin{block}{Seminal Papers (TTS)}
-% \begin{itemize}
-%     \item Tacotron: Wang et al., “Tacotron: Towards End-to-End Speech Synthesis” (2017)
-%     \item Tacotron 2: Shen et al., “Natural TTS Synthesis by Conditioning WaveNet on Mel Spectrogram Predictions” (2017)
-%     \item FastSpeech: Ren et al. (2019)
-%     \item VITS: Kim et al. (2021)
-%     \item WaveNet: van den Oord et al. (2016)
-% \end{itemize}
-% \end{block}
-% \framebreak
-% \begin{block}{Evaluation Metrics References}
-% \begin{itemize}
-%     \item BLEU: Papineni et al. (2002)
-%     \item ROUGE: Lin (2004)
-%     \item METEOR: Banerjee \& Lavie (2005)
-%     \item TER: Snover et al. (2006)
-% \end{itemize}
-% \end{block}
-% \framebreak
-% \begin{block}{LLM Judges}
-% \begin{itemize}
-%     \item Liu et al., “G-Eval” (2023)
-%     \item Zheng et al., “Judging LLM-as-a-Judge” (2023)
-%     \item Chiang et al., “MT-Bench \& Chatbot Arena” (2023)
-% \end{itemize}
-% \end{block}
-% \framebreak
-% \begin{block}{Speech Datasets (ASR)}
-% \begin{itemize}
-%     \item LibriSpeech: ~1000 hrs read English speech
-%     \item CommonVoice (Mozilla): crowd-sourced, multilingual
-%     \item TED-LIUM: TED talks
-%     \item AMI Meeting Corpus: multi-speaker meeting recordings
-%     \item Switchboard: conversational telephone speech
-% \end{itemize}
-% \end{block}
-% \framebreak
-% \begin{block}{Speech Datasets (TTS \& SLU)}
-% \begin{itemize}
-%     \item LJSpeech: ~24h single-speaker English
-%     \item VCTK: multi-speaker English
-%     \item HiFi-TTS: high-quality multi-speaker dataset
-%     \item ATIS: Airline Travel Information System (classic SLU)
-%     \item SLURP dataset: modern SLU benchmark
-% \end{itemize}
-% \end{block}
-% \framebreak
-% \begin{block}{Online Demos}
-% \begin{itemize}
-%     \item Whisper ASR Demo: \url{https://huggingface.co/spaces/openai/whisper}
-%     \item Tacotron 2 + WaveGlow Demo: \url{https://colab.research.google.com/github/NVIDIA/DeepLearningExamples/blob/master/PyTorch/SpeechSynthesis/Tacotron2/notebooks/Tacotron2_WaveGlow_Inference.ipynb}
-%     \item Google TTS API demo: \url{https://cloud.google.com/text-to-speech}
-%     \item Coqui TTS (open-source): \url{https://coqui.ai}
-% \end{itemize}
-% \end{block}
-% \framebreak
-% \begin{block}{Further Readings (Surveys)}
-% \begin{itemize}
-%     \item ASR Survey: Li et al., “Recent Advances in End-to-End ASR” (2020)
-%     \item SLU Survey: Qian et al., “Recent Advances in Spoken Language Understanding” (2021)
-%     \item TTS Survey: Tan et al., “A Survey on Neural Speech Synthesis” (2021)
-%     \item LLM Judges Survey: Chiang et al., “LLM-as-a-Judge: Survey” (2023)
-% \end{itemize}
-% \end{block}
-
-% \end{frame}

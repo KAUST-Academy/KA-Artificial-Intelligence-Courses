@@ -3,18 +3,19 @@
     \LARGE CNN Architectures: \textbf{InceptionNet}
 \end{frame}
 
-% InceptionNet
 \begin{frame}[allowframebreaks]{InceptionNet}
     \begin{itemize}
         \item InceptionNet goes \textbf{deeper} with 22 layers.
-        \item It is much more \textbf{efficient}: only 5 million parameters.
+        \item It is much more \textbf{efficient}: about 6.8 million parameters, far fewer than AlexNet's 60M.
         \item Uses a special building block called the \textbf{Inception module}.
         \item Adds \textbf{1x1 convolutions} (bottleneck layers) to make the network faster and smarter.
+        \item Won the ILSVRC 2014 classification task with 6.7\% top-5 error.
     \end{itemize}
 
     \begin{figure}
         \centering
-        \includegraphics[width=1.0\textwidth,height=0.5\textheight,keepaspectratio]{images/cnn/inceptionnet_1.png}
+        \includegraphics[width=1.0\textwidth,height=0.4\textheight,keepaspectratio]{images/cnn/inceptionnet_1.png}
+        \caption*{\scriptsize GoogLeNet architecture. Figure: Stanford CS231n, Lecture~9, after Szegedy et al., 2014, Fig.~3.}
     \end{figure}
 
 \framebreak
@@ -22,6 +23,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=1.0\textwidth,height=0.8\textheight,keepaspectratio]{images/cnn/inception-prob-1.png}
+        \caption*{\scriptsize Source: Andrew Ng, Deep Learning Specialization (deeplearning.ai).}
     \end{figure}
 
 \framebreak
@@ -29,17 +31,20 @@
     \begin{figure}
         \centering
         \includegraphics[width=1.0\textwidth,height=0.8\textheight,keepaspectratio]{images/cnn/inception-sol-1.png}
+        \caption*{\scriptsize Source: Andrew Ng, Deep Learning Specialization (deeplearning.ai).}
     \end{figure}
 
 \framebreak
 
     \begin{itemize}
-        \item \textbf{Inception module:} Uses multiple filter sizes ($1\times1$, $3\times3$, $5\times5$), in parallel, to capture different features, then combines their outputs.
+        \item \textbf{Inception module:} Runs $1\times1$, $3\times3$ and $5\times5$ convolutions and a $3\times3$ max-pooling branch in parallel, then concatenates their outputs along the channel axis.
+        \item The naive version (a) is expensive, so GoogLeNet uses (b): a $1\times1$ convolution shrinks the channel count before each $3\times3$ and $5\times5$ convolution, and after the pooling branch.
     \end{itemize}
 
     \begin{figure}
         \centering
-        \includegraphics[width=1.0\textwidth,height=0.8\textheight,keepaspectratio]{images/cnn/inception_mod.png}
+        \includegraphics[width=1.0\textwidth,height=0.55\textheight,keepaspectratio]{images/cnn/inception_module_naive_vs_reduced.png}
+        \caption*{\scriptsize Source: Szegedy et al., ``Going Deeper with Convolutions'', CVPR 2015, Fig.~2.}
     \end{figure}
 
 \framebreak
@@ -47,7 +52,6 @@
     \begin{figure}
         \centering
         \includegraphics[width=1.0\textwidth,height=0.8\textheight,keepaspectratio]{images/cnn/inception-block.png}
+        \caption*{\scriptsize Source: Andrew Ng, Deep Learning Specialization (deeplearning.ai).}
     \end{figure}
-    \vspace{2em}
-    [Szegedy et al. 2014. Going deeper with convolutions]
 \end{frame}

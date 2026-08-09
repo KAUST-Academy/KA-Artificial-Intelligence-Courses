@@ -60,7 +60,6 @@
         \item \textbf{Discrete idea:}
         \begin{itemize}
             \item DFT of windowed frame at each time step.
-            \item Sources: \texttt{Wikipedia}, \texttt{courses.physics.illinois.edu}
         \end{itemize}
 \framebreak
         \item \textbf{How:}
@@ -78,16 +77,23 @@
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp/stft-diagram.png}
-        \caption*{STFT process: Signal divided into frames, each transformed into frequency domain.}
+        \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{images/audio-nlp/stft-diagram.png}
+        \caption*{STFT process: Signal divided into frames, each transformed into frequency domain.\\
+        {\scriptsize Source: H.~Jeon, Y.~Jung, S.~Lee and Y.~Jung, ``Area-Efficient Short-Time Fourier Transform Processor for Time-Frequency Analysis of Non-Stationary Signals,'' \emph{Applied Sciences} 10(20):7208, 2020, Fig.~1 (CC BY 4.0).}}
     \end{figure}
 \framebreak
     \begin{itemize}
-        \item The STFT is computed as:
+        \item Written out, the STFT is a function of \emph{two} variables: frame position $n$ and frequency $f$,
         \[
-            STFT(x[n]) = \sum_{m=-\infty}^{\infty} x[m] w[n-m] e^{-j2\pi f m}
+            X(n, f) = \sum_{m=-\infty}^{\infty} x[m]\, w[m-n]\, e^{-j2\pi f m}
         \]
-        where $w[n-m]$ is a window function applied to each frame.
+        where $w[m-n]$ is the analysis window centred on frame $n$, and $f$ is in cycles per sample.
+        \item What is actually computed is a framed DFT: with frame length $N$ and hop $H$,
+        \[
+            X[n, k] = \sum_{m=0}^{N-1} x[m + nH]\, w[m]\, e^{-j2\pi k m / N},
+            \qquad k = 0, \dots, N-1
+        \]
+        so the output is indexed by frame $n$ and frequency bin $k$.
     \end{itemize}
 \framebreak
     \begin{itemize}
@@ -95,11 +101,17 @@
         \item The magnitude of the STFT gives the amplitude of each frequency at each time step.
         \item The phase of the STFT provides information about the timing of the frequency components.
     \end{itemize}
-    \begin{figure}
+
+    \framebreak
+
+    \begin{center}
+    \begin{minipage}{\textwidth}
         \centering
-        \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{images/audio-nlp/stft-magnitude-phase.png}
-        \caption*{Magnitude and phase of STFT: Magnitude shows amplitude, phase shows timing of frequencies.}
-    \end{figure}
+        \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{images/audio-nlp/stft-magnitude-phase.png}\\[0.3em]
+        {\scriptsize Magnitude vs.\ phase for a clean source (top) and a mixture (bottom). Harmonic and formant structure is visible in the magnitude; the demodulated phase looks close to noise, which is why most pipelines feed magnitude only.\\
+        Source: N.~Takahashi, P.~Agrawal, N.~Goswami and Y.~Mitsufuji, ``PhaseNet: Discretized Phase Modeling with Deep Neural Networks for Audio Source Separation,'' Interspeech 2018, Fig.~1.}
+    \end{minipage}
+    \end{center}
 \end{frame}
 
 \subsection{Spectrograms}
@@ -135,8 +147,9 @@
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp/spectrogram-example.png}
-        \caption*{Example of a spectrogram: Time vs Frequency representation of an audio signal.}
+        \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{images/audio-nlp/spectrogram-example.png}
+        \caption*{Example of a spectrogram: waveform (left) and time--frequency representation (right) of the same utterance, clean, noisy and denoised.\\
+        {\scriptsize Source: H.~Ye, G.~Deng, S.~J.~Mauger, A.~A.~Hersbach, P.~W.~Dawson and J.~M.~Heasman, ``A Wavelet-Based Noise Reduction Algorithm and Its Clinical Evaluation in Cochlear Implants,'' \emph{PLOS ONE} 8(9):e75662, 2013, Fig.~7 (CC BY).}}
     \end{figure}
     \begin{itemize}
         \item Spectrograms can be computed using various window functions (e.g., Hamming, Hanning) and different frame sizes.
@@ -145,6 +158,6 @@
     \begin{figure}
         \centering
         \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{images/audio-nlp/spectrogram-variations.png}
-        \caption*{Spectrogram variations: Different window functions and frame sizes affect the appearance of the spectrogram.}
+        \caption*{The same signal under a Hanning, Hamming, and Blackman window (dashed): each tapers the frame edges to zero, trading main-lobe width against side-lobe leakage.}
     \end{figure}
 \end{frame}

@@ -6,13 +6,13 @@
 \textbf{Concept:}
 
 \begin{itemize}
-    \item Split the input $\mathbf{x}$ into two parts: $\mathbf{x} = [\mathbf{x}_1, \mathbf{x}_2]$.
-    \item Apply a transformation to one part conditioned on the other:
+    \item Split the input $z$ into two parts: $z = [z_{1:d},\, z_{d+1:n}]$.
+    \item Copy one part through unchanged and transform the other conditioned on it:
     \begin{align*}
-        \mathbf{y}_1 &= \mathbf{x}_1 \\
-        \mathbf{y}_2 &= \mathbf{x}_2 \odot \exp\big(s(\mathbf{x}_1)\big) + t(\mathbf{x}_1)
+        x_{1:d} &= z_{1:d} \\
+        x_{d+1:n} &= \beta \odot z_{d+1:n} + \gamma, \qquad \beta = F(z_{1:d}), \;\; \gamma = H(z_{1:d})
     \end{align*}
-    where $s$ and $t$ are scale and translation functions, respectively.
+    where $F$ and $H$ are the scale and translation networks. RealNVP will instead have $F$ output the \emph{log}-scale, $\beta = \exp(F(z_{1:d}))$, which keeps $\beta$ positive.
 \end{itemize}
 
 \textbf{Advantages:}
@@ -23,28 +23,32 @@
 \end{itemize}
 \begin{figure}
     \centering
-    \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/coupling_layer_1.png}
+    \includegraphics[height=0.78\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/coupling_layer_1.png}
+    \caption*{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~2, slide~7; after Hung-yi Lee, ``Flow-based Generative Model'' (NTU)}
 \end{figure}
 
 \framebreak
 
 \begin{figure}
     \centering
-    \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/coupling_layer_2.png}
+    \includegraphics[height=0.78\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/coupling_layer_2.png}
+    \caption*{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~2, slide~8; after Hung-yi Lee, ``Flow-based Generative Model'' (NTU)}
 \end{figure}
 
 \framebreak
 
 \begin{figure}
     \centering
-    \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/coupling_layer_3.png}
+    \includegraphics[height=0.78\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/coupling_layer_3.png}
+    \caption*{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~2, slide~10; after Hung-yi Lee, ``Flow-based Generative Model'' (NTU)}
 \end{figure}
 
 \framebreak
 
 \begin{figure}
     \centering
-    \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/coupling_layer_4.png}
+    \includegraphics[height=0.78\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/coupling_layer_4.png}
+    \caption*{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~2, slide~12; after Hung-yi Lee, ``Flow-based Generative Model'' (NTU)}
 \end{figure}
     
 \end{frame}

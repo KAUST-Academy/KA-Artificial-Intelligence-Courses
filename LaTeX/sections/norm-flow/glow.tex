@@ -8,7 +8,7 @@
 Introduced by Kingma and Dhariwal (2018), Glow incorporates:
 \begin{itemize}
     \item \textbf{Invertible $1\times1$ convolutions} for channel mixing.
-    \item \textbf{ActNorm layers} for data-dependent normalization.
+    \item \textbf{ActNorm layers} for per-channel normalization with data-dependent initialization.
     \item \textbf{Affine coupling layers} similar to RealNVP.
 \end{itemize}
 
@@ -28,13 +28,15 @@ Introduced by Kingma and Dhariwal (2018), Glow incorporates:
 \begin{figure}
     \centering
     \includegraphics[height=0.4\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_glow.png}
+    \caption*{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~2, slide~23}
 \end{figure}
 
 \framebreak
 
 \begin{figure}
     \centering
-    \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_glow_1.png}
+    \includegraphics[height=0.78\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_glow_1.png}
+    \caption*{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~2, slide~24; after Hung-yi Lee, ``Flow-based Generative Model'' (NTU)}
 \end{figure}
 \end{frame}
 
@@ -42,7 +44,7 @@ Introduced by Kingma and Dhariwal (2018), Glow incorporates:
 \begin{figure}
     \centering
     \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_glow_results_1.png}
-    \caption*{Glow generated samples}
+    \caption*{Glow generated samples\\{\tiny Source: Kingma \& Dhariwal, ``Glow: Generative Flow with Invertible 1x1 Convolutions,'' NeurIPS 2018, Fig.~1.}}
 \end{figure}
 
 \framebreak
@@ -50,6 +52,6 @@ Introduced by Kingma and Dhariwal (2018), Glow incorporates:
 \begin{figure}
     \centering
     \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_glow_results_2.png}
-    \caption*{Linear interpolation in latent space between real images with Glow}
+    \caption*{Linear interpolation in latent space between real images with Glow\\{\tiny Source: Kingma \& Dhariwal, ``Glow: Generative Flow with Invertible 1x1 Convolutions,'' NeurIPS 2018, Fig.~5.}}
 \end{figure}
 \end{frame}

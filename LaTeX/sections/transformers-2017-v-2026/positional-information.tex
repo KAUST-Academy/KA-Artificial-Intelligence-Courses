@@ -26,7 +26,7 @@
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Rotary Position Embeddings (RoPE)} (Su et al., 2021): instead of adding a position vector at the input, rotate each query and key by a position-dependent angle inside every attention layer.
     \begin{itemize}
       \item The dot product between a query at position $m$ and a key at position $n$ then depends only on the offset $m-n$: relative position, injected at every layer.
-      \item Rotary frequencies can be rescaled after training (position interpolation, YaRN) to stretch the context window.
+      \item Rotary frequencies can be rescaled after training to stretch the context window: position interpolation compresses the position indices (Chen et al., 2023), and YaRN rescales the frequency bands unevenly (Peng et al., 2023).
       \item RoPE is the dominant choice in 2026: LLaMA, Mistral, and Qwen all use it.
     \end{itemize}
     \vspace{0.4em}

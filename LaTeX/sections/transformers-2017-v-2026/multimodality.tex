@@ -2,12 +2,11 @@
 \section{Multimodality}
 % ============================================================================
 
-% --- Vision--Language Models (VLMs): Rohit Bandaru blog tour ---
-\begin{frame}[t]{Vision--Language Models: why pair vision with language?}
-  \begin{itemize}
-    \item Strong \textbf{image embeddings} are useful, but many tasks still need a way to \textbf{say what you want} in words (``what species of bird is this?'', ``read the sign in the corner'').
-    \item \textbf{Language} makes it easy to specify new tasks without collecting a fresh classification label set for every concept---a path to flexible, user-steerable vision AI.
-    \item \textbf{Nomenclature (informal):} an \textbf{LLM} is language-first; a \textbf{VLM} adds a \textbf{vision encoder} so the stack can \textbf{condition on images}; an \textbf{MLLM} usually means several modalities (image, video, audio) in one family.
+\begin{frame}[t]{Vision--Language Models: naming and motivation (Recap)}
+  \begin{itemize}\itemsep0.4em
+    \item As covered earlier, pairing vision with language lets a user specify a new task in words (``what species of bird is this?'', ``read the sign in the corner'') instead of collecting a fresh label set for every concept.
+    \item Nomenclature (informal): an \textbf{LLM} is language-first; a \textbf{VLM} adds a vision encoder so the stack can condition on images; an \textbf{MLLM} usually means several modalities (image, video, audio) in one family.
+    \item The architectural question this section answers is narrower: at what point in the stack do image tokens meet the language model, and what does each answer cost?
   \end{itemize}
   \vfill
   {\scriptsize Bandaru, \textit{Vision Language Models} (blog, Aug.\ 2025), \href{https://rohitbandaru.github.io/blog/Vision-Language-Models/}{rohitbandaru.github.io/blog/Vision-Language-Models/}.}
@@ -15,101 +14,51 @@
 
 \begin{frame}[t]{Fusion Patterns: Where do image tokens meet the LLM?}
   \begin{itemize}
-    \item Early fusion: build one long token sequence (visual tokens + text tokens) and run attention over the mixture---what most ``native'' VLMs aim for today.
-    \item Middle fusion: insert vision cross-attention inside some transformer blocks (common when adapting a legacy text-only stack such as early LLaMA~3.2).
-    \item Late fusion: combine modalities only at the end---usually too weak for open-ended captioning/VQA because the LLM never gets rich visual state early enough.
+    \item Early fusion: build one long token sequence (visual tokens + text tokens) and run attention over the mixture. This is what most ``native'' VLMs aim for today.
+    \item Middle fusion: insert vision cross-attention inside some transformer blocks. This is the usual choice when retrofitting vision onto a stack that was already trained on text alone.
+    \item Late fusion: encode each modality separately and compare the two embeddings at the end. Right for retrieval and zero-shot scoring, as in CLIP, but too weak for open-ended captioning or VQA, because the language model never receives rich visual state.
     \item Images create many tokens; good designs compress visual length (pooling, grouping, tiling) before the LLM sees them.
   \end{itemize}
 \end{frame}
 
-\begin{frame}[t]{Early Fusion approaches: MLP Adapter}
+\begin{frame}[t]{Early fusion: linear or MLP projector}
   \begin{itemize}
-    \item Freeze (or lightly train) a strong ViT; map its patch tokens through a small MLP projector into the LLM embedding width, then concatenate with text tokens.
-    \item Simple, stable, and very common in open recipes (LLaVA, LLaMA~4-style early fusion, PaliGemma~2, DeepSeek-VL, \ldots).
+    \item Freeze (or lightly train) a strong ViT; map its patch tokens through a small projector into the LLM embedding width, then concatenate with text tokens.
+    \item Simple, stable, and very common in open recipes. The projector is a single linear map in LLaVA~v1 and PaliGemma~2, and a two-layer MLP in LLaVA-1.5, DeepSeek-VL, and LLaMA~4.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_llava_architecture.png}
-  \vspace{0.15em}
-  {\scriptsize Diagram from Bandaru. Paper: Liu et al., LLaVA, \href{https://arxiv.org/abs/2304.08485}{arXiv:2304.08485}.}
+  \includegraphics[width=0.92\textwidth,height=0.46\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_llava_architecture.png}\\[0.15em]
+  {\scriptsize Liu et al., LLaVA, \href{https://arxiv.org/abs/2304.08485}{arXiv:2304.08485}, Figure~1; via Bandaru, \textit{Vision Language Models} (blog).}
 \end{frame}
 
-\begin{frame}[t]{Early Fusion approaches: Cross-Attention}
+\begin{frame}[t]{Early fusion: cross-attention adapter}
   \begin{itemize}
-    \item A small \textbf{adapter} uses learned query vectors that \textbf{cross-attend} to ViT tokens and output a \textbf{fixed small} set of visual summaries for the LLM.
+    \item A small adapter uses learned query vectors that cross-attend to the ViT tokens and emit a fixed, short set of visual summaries (256 in Qwen-VL) that are then concatenated with the text tokens.
+    \item The cross-attention lives in the adapter, outside the language model, so the LLM stack is unchanged and still sees one mixed sequence. That is what keeps this early rather than middle fusion.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_qwen_vl_adapter.png}
+  \includegraphics[width=\textwidth,height=0.40\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_qwen_vl_adapter.png}
   \vfill
-  {\scriptsize Diagram from Bandaru (Qwen-VL ``position-aware'' adapter).}
+  {\scriptsize Bai et al., Qwen-VL, \href{https://arxiv.org/abs/2308.12966}{arXiv:2308.12966}, Figure~3 (multi-task pre-training stage); via Bandaru, \textit{Vision Language Models} (blog).}
 \end{frame}
 
-% \begin{frame}[t]{Unified image \emph{tokens}: Chameleon-style early fusion}
-%   \begin{itemize}
-%     \item Some stacks \textbf{quantize} images to discrete codes (VQ-VAE), then treat them like extra \textbf{text-like tokens} inside one decoder.
-%     \item Nice for \textbf{tight multimodal reasoning}; heavier data and training pipeline than ``ViT patches + adapter.''
-%   \end{itemize}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.55\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_chameleon_architecture.png}
-%   \vspace{0.15em}
-%   {\scriptsize Diagram from Bandaru. Paper: Meta Chameleon, \href{https://arxiv.org/abs/2405.09818}{arXiv:2405.09818}.}
-% \end{frame}
-
-\begin{frame}[t]{Middle Fusion Approaches: Flamingo}
+\begin{frame}[t]{Middle fusion: Flamingo}
   \begin{itemize}
-    \item Keep a pretrained ViT and LLM frozen; insert Perceiver resamplers (compress variable tokens $\to$ fixed count) and gated cross-attention blocks inside the LLM stack.
+    \item Keep the pretrained vision encoder and LLM frozen; insert Perceiver resamplers (compress a variable number of vision features to a fixed 64 tokens) and gated cross-attention blocks inside the LLM stack.
+    \item The vision encoder here is an NFNet-F6, not a ViT: Flamingo predates the convention of pairing every LLM with a vision transformer.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_flamingo_architecture.png}
+  \includegraphics[width=\textwidth,height=0.50\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_flamingo_architecture.png}
   \vfill
-  {\scriptsize Diagram from Bandaru. Paper: Alayrac et al., Flamingo, \href{https://arxiv.org/abs/2204.14198}{arXiv:2204.14198}.}
+  {\scriptsize Alayrac et al., Flamingo, \href{https://arxiv.org/abs/2204.14198}{arXiv:2204.14198}, Figure~3; via Bandaru, \textit{Vision Language Models} (blog).}
 \end{frame}
 
-\begin{frame}[t]{Mid Fusion Approaches: LLaMA 3}
-  \begin{itemize}
-    \item \textbf{ViT encoder:} 32-layer ViT trained CLIP-style for image-text alignment; features extracted from multiple layers.
-    \item \textbf{Decoder:} Image cross attention in every fourth block (no gating on cross attention).
-    \item \textbf{Mid fusion} suits LLaMA 3's text-first design; LLaMA 4 moves to early fusion (MLP adapter) for true multimodal training.
+\begin{frame}[t]{Middle fusion: LLaMA 3}
+  \begin{itemize}\itemsep0.4em
+    \item \textbf{ViT encoder:} ViT-H/14 (630M parameters, 32 blocks) trained CLIP-style for image--text alignment; features are taken from several intermediate layers, not only the last.
+    \item \textbf{Decoder:} a cross-attention layer after every fourth self-attention layer, tanh-gated with the gates initialized to zero so the vision path starts as a no-op and is learned in. The language weights are never updated.
+    \item \textbf{Why middle fusion:} it suits LLaMA 3's text-first design, since vision is added to a finished language model. LLaMA 4 moves to early fusion so that text and image tokens can be trained together from the start.
   \end{itemize}
+  \vfill
+  {\scriptsize Grattafiori et al., ``The Llama 3 Herd of Models,'' \href{https://arxiv.org/abs/2407.21783}{arXiv:2407.21783}, Sec.~7.}
 \end{frame}
-
-
-% \begin{frame}[t]{Training in stages (example: BLIP-2)}
-%   \begin{itemize}
-%     \item Stage~1 trains a \textbf{Q-Former} adapter with several objectives (contrastive, matching, captioning) while LLM weights stay \textbf{frozen}.
-%     \item Stage~2 \textbf{concatenates} Q-Former outputs to the LLM inputs and finetunes for generation---a template many recipes echo (alignment $\to$ instruction).
-%   \end{itemize}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.52\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_blip2_training_stages.png}
-%   \vspace{0.15em}
-%   {\scriptsize Diagram from Bandaru. Paper: Li et al., BLIP-2, \href{https://arxiv.org/abs/2301.12597}{arXiv:2301.12597}.}
-% \end{frame}
-
-% \begin{frame}[t]{Scaling training (example: Qwen-VL pipeline)}
-%   \begin{itemize}
-%     \item Large open recipes often: \textbf{massive image--text pretrain} $\to$ multitask midtrain $\to$ short, high-quality \textbf{instruction} finetuning (sometimes freezing ViT at the end).
-%     \item Later variants add \textbf{video}, \textbf{dynamic resolution}, and \textbf{long-context} stages---each step uses fewer examples but higher signal.
-%   \end{itemize}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_qwen_vl_training_stages.png}
-%   \vspace{0.15em}
-%   {\scriptsize Diagram from Bandaru (Qwen-VL training stages).}
-% \end{frame}
-
-% \begin{frame}[t]{Video: token counts explode (and why compression matters)}
-%   \begin{itemize}
-%     \item Naively tokenizing \textbf{every frame} at full FPS produces enormous context (cost scales like attention length).
-%     \item Practical systems \textbf{subsample in time}, use \textbf{3D patch} encoders to merge frames, or learn \textbf{content-aware} compressors (example below: run-length style redundancy).
-%   \end{itemize}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{images/transformers-2017-v-2026/bandaru_vlm_rlt_video_compression.png}
-%   \vspace{0.15em}
-%   {\scriptsize Diagram from Bandaru (Run-Length Tokenization sketch). Paper: Choudhury et al., \href{https://arxiv.org/abs/2411.05222}{arXiv:2411.05222}.}
-% \end{frame}
-
-% \begin{frame}[t]{Instruction-tuned VLM (LLaVA paper figure)}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/transformers-2017-v-2026/llava_vlm_example.png}
-%   \vfill
-%   {\scriptsize Liu et al., ``Visual Instruction Tuning'' (LLaVA), \href{https://arxiv.org/abs/2304.08485}{arXiv:2304.08485}.}
-% \end{frame}
-

@@ -5,7 +5,7 @@
 
 \begin{frame}[allowframebreaks]{Latent Variable Models}
 \begin{itemize}
-    \item \textbf{Autoregressive models + Flows}: All random variables are observed.
+    \item \textbf{Fully observed models}: every random variable is observed.
     \item \textbf{Latent Variable Models (LVMs)}: Some random variables are hidden -- we do not get to observe them.
 \end{itemize}
 \vspace{1em}
@@ -13,16 +13,19 @@
         \begin{column}{0.6\linewidth}
             \begin{figure}
                 \centering
-                \includegraphics[height=0.6\textheight]{images/vae/latent-graph-1.png}
+                \includegraphics[height=0.48\textheight]{images/vae/latent-graph-1.png}
             \end{figure}
         \end{column}
         \begin{column}{0.4\linewidth}
             \begin{figure}
                 \centering
-                \includegraphics[height=0.6\textheight]{images/vae/latent-graph-2.png}
+                \includegraphics[height=0.48\textheight]{images/vae/latent-graph-2.png}
             \end{figure}
         \end{column}
     \end{columns}
+    \begin{center}
+        {\scriptsize Source: \href{https://sites.google.com/view/berkeley-cs294-158-sp20/home}{UC Berkeley CS294-158 Deep Unsupervised Learning, Spring 2020, L4 Latent Variable Models} (Abbeel, Chen, Ho, Srinivas, Li, Yan), slide 2.}
+    \end{center}
 
 \framebreak
 
@@ -50,6 +53,7 @@
     \begin{figure}
         \centering
         \includegraphics[height=0.5\textheight]{images/vae/why-latent.png}
+        \caption*{\scriptsize Source: UC Berkeley CS294-158 Deep Unsupervised Learning, Spring 2020, L4 Latent Variable Models (Abbeel, Chen, Ho, Srinivas, Li, Yan).}
     \end{figure}
 
     \framebreak
@@ -64,8 +68,8 @@
 
     \begin{itemize}
         \item Sometimes, it’s possible to design a latent variable model with an understanding of the causal process that generates data
-        \item In general, we don’t know what are the latent variables and how they interact with observations
-        \item Most popular models make little assumption about what are the latent variables
+        \item In general, we don’t know what the latent variables are and how they interact with observations
+        \item Most popular models make few assumptions about what the latent variables are
         \item Best way to specify latent variables is still an active area of research
     \end{itemize}
 \end{frame}
@@ -74,5 +78,6 @@
     \begin{figure}
         \centering
         \includegraphics[width=\linewidth]{images/vae/latent-variable-model.png}
+        \caption*{\scriptsize Source: UC Berkeley CS294-158 Deep Unsupervised Learning, Spring 2020, L4 Latent Variable Models (Abbeel, Chen, Ho, Srinivas, Li, Yan).}
     \end{figure}
 \end{frame}

@@ -2,17 +2,26 @@
 
 \begin{frame}[allowframebreaks]{Seq2Seq ASR with Attention}
 
-\textbf{Encoder–Decoder Overview:}
+\textbf{Encoder--Decoder Overview:}
 \begin{itemize}
     \item \textbf{Encoder:} Processes the input acoustic features (e.g., Mel-spectrograms) and encodes them into a sequence of hidden representations.
     \item \textbf{Decoder:} Generates the output transcription, one token at a time, conditioned on the encoder outputs and previous decoder states.
     \item \textbf{Attention Mechanism:} Allows the decoder to focus on relevant parts of the input sequence at each decoding step, improving alignment and performance.
+    \item Unlike CTC, nothing forces the alignment to be monotonic and no independence assumption is made across output tokens: the decoder is free to attend anywhere.
+\end{itemize}
+
+\framebreak
+
+\textbf{Listen, Attend and Spell (LAS):} the canonical instance of this design.
+\begin{itemize}
+    \item The \textbf{listener} is a pyramidal BLSTM encoder that shortens the frame sequence $\mathbf{x}$ (length $T$) into $\mathbf{h}$ (length $U \leq T$).
+    \item The \textbf{speller} is an attention-based decoder emitting characters $y_i$ one at a time.
 \end{itemize}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp/seq2seq_attention_architecture.png}
-    \caption*{Seq2Seq ASR with Attention: Encoder-Decoder Architecture}
+    \includegraphics[width=\textwidth,height=0.62\textheight,keepaspectratio]{images/audio-nlp/las_architecture_chan2016.png}
+    \caption*{\scriptsize Source: Chan et al., ``Listen, Attend and Spell'', ICASSP 2016, Fig.~1.}
 \end{figure}
 
 \framebreak
@@ -27,26 +36,20 @@ At each decoder time step $t$, the attention mechanism computes a context vector
 
 where $e_{t,s}$ is the attention score (e.g., computed via a feedforward network) between decoder state at time $t$ and encoder output at position $s$.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp/attention_alignment.png}
-    \caption*{Visualization of Attention Alignment}
-\end{figure}
-
 \framebreak
 
-\textbf{Example: Listen, Attend and Spell (LAS) on ``hello world''}
+\textbf{What the alignment looks like in practice}
 
 \begin{itemize}
-    \item The encoder processes the audio features for the phrase ``hello world''.
-    \item At each decoding step, the attention mechanism aligns the decoder to the relevant audio frames.
-    \item The decoder outputs the transcription character by character (or subword by subword), e.g., ``h'', ``e'', ``l'', ``l'', ``o'', `` '', ``w'', ``o'', ``r'', ``l'', ``d''.
+    \item Plotting $\alpha_{t,s}$ for every output character gives a heatmap of decoder step against audio frame.
+    \item For speech it comes out close to diagonal, because speech is produced in order, even though nothing in the model enforces that.
+    \item Where the model is unsure the mass spreads out: below, ``woodchuck'' draws a diluted band because ``woodchuck'' and ``chuck'' sound alike.
 \end{itemize}
 
-% \begin{figure}[h]
-%     \centering
-%     \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp/las_hello_world_example.png}
-%     \caption*{LAS Attention Alignment for ``hello world''}
-% \end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth,height=0.6\textheight,keepaspectratio]{images/audio-nlp/las_attention_alignment_chan2016.png}
+    \caption*{\scriptsize Alignment for the utterance ``how much would a woodchuck chuck''. Source: Chan et al., ``Listen, Attend and Spell'', ICASSP 2016, Fig.~2.}
+\end{figure}
 
 \end{frame}

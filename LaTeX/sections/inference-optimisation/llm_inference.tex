@@ -1,5 +1,4 @@
 % --- LLM inference: prefill vs.\ decode ---
-% ========== Part 1: Inference optimisation ==========
 \begin{frame}{Understanding LLM Inference}
   \begin{columns}[T,onlytextwidth]
     \column{0.52\textwidth}
@@ -12,7 +11,8 @@
       \end{itemize}
     \column{0.46\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{images/introduction-to-transformers/transformer_variant_decoder_only_alt_highlighted.png}
+      \includegraphics[width=\linewidth,height=0.74\textheight,keepaspectratio]{images/introduction-to-transformers/transformer_variant_decoder_only_alt_highlighted.png}\\[-0.2em]
+      {\scriptsize Highlighted: the stack a decoder-only LLM keeps. Vaswani et al., ``Attention Is All You Need,'' \href{https://arxiv.org/abs/1706.03762}{arXiv:1706.03762}, Figure 1.}
   \end{columns}
 \end{frame}
 
@@ -23,7 +23,7 @@
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Prefill phase (input processing):}
           \begin{itemize}\itemsep0.25em
             \item All input tokens are processed together to compute \textbf{keys and values} (attention states) for the prompt.
-            \item The entire input sequence is known in advance, enabling a highly parallel \textbf{matrix-matrix} computation that fully leverages the GPU's throughput.
+            \item The entire input sequence is known in advance, enabling a highly parallel \textbf{matrix-matrix} computation that fully uses the GPU's throughput.
           \end{itemize}
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Token throughput caveat:}
           \begin{itemize}\itemsep0.25em
@@ -32,7 +32,21 @@
       \end{itemize}
     \column{0.44\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.8\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_variant_decoder_only_alt_highlighted.png}
+      \vspace{1.2em}
+      \begin{tikzpicture}[font=\sffamily\scriptsize, >=latex, scale=0.82,
+          every node/.style={transform shape},
+          tok/.style={draw, fill=yellow!25, minimum width=0.72cm, minimum height=0.5cm, rounded corners=0.07cm},
+          pass/.style={draw, fill=gray!12, minimum width=3.3cm, minimum height=0.6cm, rounded corners=0.1cm},
+          kvbox/.style={draw, fill=cyan!18, minimum width=3.3cm, minimum height=0.6cm, rounded corners=0.1cm}]
+        \foreach \i/\x in {1/0, 2/0.82, 3/1.64, 4/2.46}
+          {\node[tok] (t\i) at (\x,1.85) {$x_{\i}$};}
+        \node[font=\sffamily\tiny, anchor=west] at (2.95,1.85) {prompt};
+        \node[pass] (p) at (1.23,0.95) {one forward pass};
+        \node[kvbox] (kv) at (1.23,0.05) {$K,V$ for positions $1$ to $4$};
+        \foreach \i in {1,...,4}{\draw[->] (t\i.south) -- (t\i.south |- p.north);}
+        \foreach \i in {1,...,4}{\draw[->] (t\i.south |- p.south) -- (t\i.south |- kv.north);}
+      \end{tikzpicture}\\[0.4em]
+      {\scriptsize All prompt positions are computed in a single pass.}
   \end{columns}
 \end{frame}
 
@@ -49,7 +63,25 @@
       \end{itemize}
     \column{0.45\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_variant_decoder_only_alt_highlighted.png}
+      \vspace{1.2em}
+      \begin{tikzpicture}[font=\sffamily\scriptsize, >=latex, scale=0.82,
+          every node/.style={transform shape},
+          tok/.style={draw, fill=yellow!25, minimum width=0.9cm, minimum height=0.5cm, rounded corners=0.07cm},
+          new/.style={draw, fill=green!20, minimum width=0.9cm, minimum height=0.5cm, rounded corners=0.07cm},
+          cache/.style={draw, dashed, fill=cyan!18, minimum width=3.2cm, minimum height=0.6cm, rounded corners=0.1cm},
+          pass/.style={draw, fill=gray!12, minimum width=3.2cm, minimum height=0.6cm, rounded corners=0.1cm}]
+        \node[cache] (c) at (0,2.0) {$K,V$ for positions $1$ to $t$};
+        \node[tok] (xt) at (-1.15,1.1) {$x_t$};
+        \node[pass] (p) at (0,0.25) {one forward pass};
+        \node[new] (xn) at (0,-0.75) {$x_{t+1}$};
+        \draw[->] (c.south) -- (p.north);
+        \draw[->] (xt.south) -- (xt.south |- p.north);
+        \draw[->] (p.south) -- (xn.north);
+        % Feedback edge: the pass appends its own K,V and the new token re-enters as input.
+        \draw[->, rounded corners=0.18cm] (xn.east) -- ++(2.0,0) |- (c.east)
+          node[midway, anchor=west, font=\sffamily\tiny, align=left, xshift=0.12cm] {append\\$k_{t+1},v_{t+1}$};
+      \end{tikzpicture}\\[0.4em]
+      {\scriptsize One position per pass; the cache grows every step.}
   \end{columns}
 \end{frame}
 
@@ -70,35 +102,3 @@
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Throughput:} total tokens per second across all requests. Batching raises throughput but can hurt per-request latency; serving systems balance the two.
   \end{itemize}
 \end{frame}
-
-% \begin{frame}{Transformer Inference: Prefill vs.\ Decode}
-%   \begin{columns}[T,onlytextwidth]
-%     \column{0.52\textwidth}
-%     \begin{itemize}\itemsep0.35em
-%       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Prefill:} process the prompt in parallel (one forward pass over context length).
-%       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Decode:} generate one token at a time; each step attends over \emph{all} past keys and values.
-%       \item[\textcolor{red}{$\blacktriangleright$}] Decode dominates cost for long outputs; attention complexity grows with sequence length.
-%     \end{itemize}
-%     \column{0.46\textwidth}
-%     \centering
-%     \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{images/inference-optimisation/transformer_scaled_dotproduct_multihead_attention.png}\\[-0.2em]
-%     {\scriptsize Transformer block (Vaswani et al., 2017).}
-%   \end{columns}
-% \end{frame}
-
-% \begin{frame}{Inference Optimisation: Key-Value Caching}
-%   \begin{columns}[T,onlytextwidth]
-%     \column{0.48\textwidth}
-%     \begin{itemize}\itemsep0.35em
-%       \item[\textcolor{red}{$\blacktriangleright$}] For each layer, cache \textbf{key} and \textbf{value} projections for past tokens.
-%       \item[\textcolor{red}{$\blacktriangleright$}] Reuse them at decode time instead of recomputing from hidden states.
-%       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Cost:} memory $\propto$ layers $\times$ heads $\times$ head dim $\times$ sequence length $\times$ batch.
-%       \item[\textcolor{red}{$\blacktriangleright$}] Motivates \textbf{quantized KV} (e.g.\ INT8/INT4) and algorithms like TurboQuant (Part~4).
-%     \end{itemize}
-%     \column{0.5\textwidth}
-%     \centering
-%     \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{images/inference-optimisation/transformer_architecture_encoder_decoder.png}\\[-0.2em]
-%     {\scriptsize Scaled dot-product attention (Vaswani et al., 2017).}
-%   \end{columns}
-% \end{frame}
-

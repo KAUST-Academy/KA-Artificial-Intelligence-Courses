@@ -6,7 +6,7 @@
 \begin{frame}[fragile]{Padding \& Strides}
 \begin{block}{Padding:}
     \begin{itemize}
-        \item “same” preserves spatial size by adding zeros around input;
+        \item “same” preserves spatial size by adding zeros around the input.
         \item “valid” reduces spatial size by not adding any padding.
         \item Padding is used to control the spatial size of the output feature map.
         \item Padding is added to the input image before applying the convolution operation.
@@ -25,16 +25,16 @@
 \begin{lstlisting}[language=Python, caption={Code snippet (PyTorch)}, basicstyle=\ttfamily\footnotesize]
 import torch.nn as nn
 
-conv_valid = nn.Conv2d(3, 16, 3, stride=2, padding=0) # “Valid”: no padding (padding=0)
-conv_same  = nn.Conv2d(3, 16, 3, stride=1, padding=1) # “Same”: preserve size
+conv_valid = nn.Conv2d(3, 16, 3, stride=2, padding=0) # "Valid": no padding (padding=0)
+conv_same  = nn.Conv2d(3, 16, 3, stride=1, padding=1) # "Same": preserve size
 \end{lstlisting}
 \end{frame}  
 
-% Add 4 images in a row with captions at the bottom
 \begin{frame}{Padding \& Strides}
     \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth,height=1\textheight,keepaspectratio]{images/cnn/padding-stride.png}
+    \includegraphics[width=1\textwidth,height=0.7\textheight,keepaspectratio]{images/cnn/padding-stride.png}
+    \caption*{\scriptsize Source: Dumoulin \& Visin, \textit{A guide to convolution arithmetic for deep learning}, arXiv:1603.07285.}
     \end{figure}
 \end{frame}
 
@@ -46,7 +46,8 @@ conv_same  = nn.Conv2d(3, 16, 3, stride=1, padding=1) # “Same”: preserve siz
 
     \begin{figure}
         \centering
-        \includegraphics[width=1.0\textwidth,height=0.8\textheight,keepaspectratio]{images/cnn/dilated.png}
+        \includegraphics[width=1.0\textwidth,height=0.7\textheight,keepaspectratio]{images/cnn/dilated.png}
+        \caption*{\scriptsize [Source: \url{https://medium.com/@mohamedhedifkir/convolutional-neural-network-23a6acb08d6a}]}
     \end{figure}
 
 \end{frame}
@@ -65,6 +66,8 @@ conv_same  = nn.Conv2d(3, 16, 3, stride=1, padding=1) # “Same”: preserve siz
             \item \(K\) = kernel size
             \item \(S\) = stride
         \end{itemize}
+        \item This assumes a dilation of 1. With dilation \(D\), replace \(K\) by the effective
+        kernel size \(K' = D(K-1) + 1\), so a dilated \(3 \times 3\) kernel with \(D = 2\)
+        spans a \(5 \times 5\) area.
     \end{itemize}
-    
 \end{frame}

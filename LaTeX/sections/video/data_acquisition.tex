@@ -1,6 +1,6 @@
 \section{Data Acquisition \& Challenges}
 \begin{frame}{}
-    \LARGE Video Learning \& Generation: \textbf{Data Acquisition \& Challenges}
+    \LARGE Learning from Videos: \textbf{Data Acquisition \& Challenges}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Data Acquisition}
@@ -30,7 +30,7 @@
         \item \textbf{Metadata and tags:} Videos are often accompanied by metadata (timestamps, GPS, tags) that facilitate search, retrieval, and organization.
     \end{itemize}
 \framebreak
-    \item \textbf{Popular Video Datasets:}
+    \textbf{Popular Video Datasets:}
     \begin{itemize}
         \item \textbf{UCF101:} 13,000+ video clips covering 101 human action categories.
         \item \textbf{Kinetics-700:} 650,000 video clips annotated with 700 action classes.
@@ -41,13 +41,8 @@
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_18_1_img.jpg}
-    \end{figure}
-\framebreak
-    \begin{figure}
-        \centering
-        \includegraphics[width=1\textwidth,height=0.83\textheight,keepaspectratio]{images/video/dataset.png}
-        \caption*{[Source: \url{https://paperswithcode.com/datasets?mod=videos}]}
+        \includegraphics[width=1\textwidth,height=0.75\textheight,keepaspectratio]{images/video/dataset.png}
+        \caption*{[Source: \url{https://huggingface.co/datasets?task_categories=task_categories:video-classification}]}
     \end{figure}
 \end{frame}
 
@@ -64,12 +59,14 @@
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_6_1_img.jpg}
+        \includegraphics[width=1\textwidth,height=0.82\textheight,keepaspectratio]{images/video/slide_6_1_img.jpg}
+        \caption*{\tiny [Source: UMich EECS 498 (2022), Lecture 24: Videos, slide 10]}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_7_1_img.jpg}
+        \includegraphics[width=1\textwidth,height=0.82\textheight,keepaspectratio]{images/video/slide_7_1_img.jpg}
+        \caption*{\tiny [Source: UMich EECS 498 (2022), Lecture 24: Videos, slide 11]}
     \end{figure}
 \framebreak
     \begin{itemize}
@@ -78,7 +75,7 @@
             \item \textbf{Compression \& Sampling:} Techniques like keyframe extraction and frame sampling help reduce storage and computational requirements.
             \item \textbf{Data Augmentation:} Methods such as frame dropout and temporal jittering increase data diversity and robustness.
             \item \textbf{Synthetic Data:} Simulated environments (e.g., CARLA, AirSim) generate realistic video data for training and testing.
-            \item \textbf{Weak \& Self-Supervision:} Leveraging unlabeled or partially labeled data reduces reliance on expensive manual annotations.
+            \item \textbf{Weak \& Self-Supervision:} Using unlabeled or partially labeled data reduces reliance on expensive manual annotations.
         \end{itemize}
     \end{itemize}
 \end{frame}

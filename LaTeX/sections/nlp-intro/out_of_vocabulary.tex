@@ -7,7 +7,7 @@
     \textbf{Problem:} Many words in a language are not present in the training corpus, leading to OOV issues. \\
     \vspace{1em}
     \pause
-    \textbf{Example:} The word "quokka" might not be in the training data. \\
+    \textbf{Example:} The word ``quokka'' might not be in the training data. \\
     \vspace{1em}
     \pause
     \textbf{Impact:} OOV words can lead to poor model performance and inaccurate predictions. \\
@@ -51,6 +51,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/nlp-intro/oov-unk.png}
+        \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
     \end{figure}
 \end{frame}
 
@@ -62,6 +63,7 @@
     \end{itemize}
     \vspace{1em}
     \textbf{Use \texttt{<UNK>} Sparingly:} Choose $f$ and $|V|$ to minimize the number of words replaced by \texttt{<UNK>}, while keeping the vocabulary manageable.
+
     \vspace{1em}
-    \textbf{Perplexity:} Only compare language models that use the same vocabulary $V$ to ensure fair evaluation.
+    \textbf{Caution:} A large \texttt{<UNK>} rate makes a model look good on its own terms, because predicting one frequent token is easy. Two models are only comparable if they were built with the same vocabulary $V$.
 \end{frame}

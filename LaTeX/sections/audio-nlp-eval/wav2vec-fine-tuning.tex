@@ -16,16 +16,22 @@
 \begin{frame}[allowframebreaks]{Fine-tuning Results}
     \begin{itemize}
         \item \textbf{Small labeled data:} Only 10 minutes of transcribed speech.
-        \item \textbf{Performance:}
+        \item \textbf{Performance:} Word Error Rate (WER) 4.8\% (test-clean) / 8.2\% (test-other).
+        \item \textbf{Read the small print.} That headline number needs all three of:
         \begin{itemize}
-            \item Word Error Rate (WER): 4.8\% (clean) / 8.2\% (other)
+            \item the \textsc{Large} model ($\sim$317M parameters),
+            \item pre-training on 53k hours of unlabeled LibriVox audio (LV-60k),
+            \item a Transformer language model at decoding time.
         \end{itemize}
-        \item \textbf{Efficient:} High accuracy with minimal supervision.
+        Swap the LM for a 4-gram and the same model gives 6.6\% / 10.3\%; decode with no LM at all and it is around 40\%. The \textsc{Base} model at 10 minutes gives 6.9\% / 12.9\%.
+        \item \textbf{Efficient:} High accuracy with minimal \emph{supervision}, not with minimal compute or data.
     \end{itemize}
 \framebreak
     \begin{center}
-        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/audio-nlp/wav2vec2-wer-results.png}
+        \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/audio-nlp/wav2vec2-wer-results.png}
     \end{center}
+    \vspace{-0.5em}
+    {\scriptsize Source: Baevski et al., ``wav2vec 2.0'', NeurIPS 2020, Table~1 (extract).}
 \end{frame}
 
 \begin{frame}[fragile]{PyTorch Fine-tuning Example}
@@ -50,7 +56,7 @@ print(transcription)
 
 \begin{frame}{Decoding: Beam Search / Viterbi}
     \begin{columns}[T,onlytextwidth]
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.36\textwidth}
             \begin{itemize}
                 \item \textbf{CTC Decoding:}
                 \begin{itemize}
@@ -65,9 +71,11 @@ print(transcription)
                 \]
             \end{itemize}
         \end{column}
-        \begin{column}{0.75\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{center}
-                \includegraphics[width=\textwidth]{images/audio-nlp/ctc-decoding.png}
+                \includegraphics[width=\textwidth]{images/audio-nlp/ctc-decoding.png}\\
+                {\scriptsize The same sum-over-paths (likelihood) vs.\ max-over-paths (Viterbi) choice, drawn on an HMM trellis.\\
+                Source: H.~Shimodaira and S.~Renals, ``Hidden Markov Models and Gaussian Mixture Models,'' Automatic Speech Recognition Lectures 4--5, University of Edinburgh.}
             \end{center}
         \end{column}
     \end{columns}

@@ -12,87 +12,31 @@
   \end{quote}
 \end{frame}
 
-
-% --- Source: Stanford CS224S, 224s.24.lec1.pdf (2024 Spring), slide 4 ---
-\begin{frame}{Exciting Recent Developments have Disrupted the Field}
+\begin{frame}{A decade of voice technology in products}
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/tts/tts_history_timeline.png}
+  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/tts/tts_history_timeline.png}
+  \slideimgsource{Stanford CS224S, Lecture 1 (2024 Spring), slide 4. The 2015 label is a typo for SOTA, state of the art.}
 \end{frame}
 
-% --- Source: Stanford CS224S, 224s.24.lec1.pdf, slide 5 ---
-% \begin{frame}{Voice AI in the public eye (I)}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/tts/tts_voice_clone_news_imran_khan.png}
-%   \slideimgsource{Stanford CS224S, Lecture 1 (2024 Spring), slide 5 (Verge article).}
-% \end{frame}
-
-
-% --- Source: Stanford CS224S, 224s.24.lec1.pdf, slide 24 ---
-% \begin{frame}{Why conversational speech is harder}
-%   \begin{itemize}
-%     \item Utterances are often \textbf{under-specified without context}---prosody and phrasing disambiguate intent.
-%     \item TTS must eventually convey that context implicitly through timing, emphasis, and intonation.
-%   \end{itemize}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{images/tts/tts_conversational_speech_context.png}
-%   \slideimgsource{Stanford CS224S, Lecture 1 (2024 Spring), slide 24.}
-% \end{frame}
-
-% % --- Source: Stanford CS224S, 224s.24.lec1.pdf, slide 25 ---
-% \begin{frame}{Human vs.\ machine speech recognition errors}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/tts/tts_human_vs_machine_errors.png}
-%   \slideimgsource{Stanford CS224S, Lecture 1 (2024 Spring), slide 25 (SWB/CH error analysis).}
-% \end{frame}
-
-% % --- Source: Stanford CS224S, 224s.24.lec1.pdf, slide 26 ---
-% \begin{frame}{Why accents are hard}
-%   \begin{itemize}
-%     \item The same word in isolation vs.\ in context illustrates how \textbf{coarticulation} and accent shift pronunciations.
-%     \item TTS and ASR both struggle when training data under-represent a dialect or L2 accent.
-%   \end{itemize}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.68\textheight,keepaspectratio]{images/tts/tts_accents_word_context.png}
-%   \slideimgsource{Stanford CS224S, Lecture 1 (2024 Spring), slide 26.}
-% \end{frame}
-
-% % --- Source: Stanford CS224S, 224s.24.lec1.pdf, slide 27 ---
-% \begin{frame}{Is speech recognition solved?}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/tts/tts_is_asr_solved.png}
-%   \slideimgsource{Stanford CS224S, Lecture 1 (2024 Spring), slide 27.}
-% \end{frame}
-
-% % --- Source: Stanford CS224S, 224s.24.lec1.pdf, slide 28 ---
-% \begin{frame}{ASR design intuition (feeds the full spoken stack)}
-%   \begin{itemize}
-%     \item Classic view: build a statistical speech-to-words model from \textbf{large transcribed corpora}.
-%     \item TTS is the \textbf{inverse problem}---words to speech---but shares front-end and robustness concerns.
-%   \end{itemize}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.65\textheight,keepaspectratio]{images/tts/tts_asr_design_intuition.png}
-%   \slideimgsource{Stanford CS224S, Lecture 1 (2024 Spring), slide 28.}
-% \end{frame}
-
-% --- Source: CS224S, Lecture 1, slide 22 ---
-\begin{frame}{Snapshot: Task Oriented Dialogue Systems}
+\begin{frame}{Where TTS sits: the spoken dialogue pipeline}
+  \begin{itemize}\footnotesize
+    \item A task-oriented dialogue system recognizes speech, tracks what the user wants, decides what to say, and speaks the answer. TTS is the last stage, and the only one the user actually hears.
+  \end{itemize}
   \centering
-  \includegraphics[width=0.92\textwidth,height=0.58\textheight,keepaspectratio]{images/tts/cs224s_compound_ai_pipeline.png}
-  \captionof{figure}{Architecture of dialogue-state system for task-oriented dialogue (Williams et al., 2016)}
+  \includegraphics[width=0.92\textwidth,height=0.52\textheight,keepaspectratio]{images/tts/cs224s_compound_ai_pipeline.png}
+  \slideimgsource{Architecture of a dialogue-state system for task-oriented dialogue, after Williams et al.\ (2016); Stanford CS224S, Lecture 1 (2024 Spring), slide 19.}
 \end{frame}
 
-
-% --- Source: Stanford CS224S, 224s.24.lec1.pdf, slides 29--31 ---
 \begin{frame}{What is Text-to-Speech (TTS)?}
   \begin{itemize}
     \item \textbf{What:} Produce speech from a text input (\textbf{Input:} text, optionally with speaker, language, style, or acoustic prompt; \textbf{Output:} waveform or codec tokens perceived as speech).
-    \item \textbf{Applications:} 
+    \item \textbf{Applications:}
       \begin{itemize}
         \item Accessibility (screen readers, assistive tech)
         \item Personal Assistants (Apple Siri, Microsoft Cortana, Google Assistant)
         \item Navigation, games, announcements/voice-overs, audiobooks, dubbing, AR/VR
         \item Synthetic data for ASR
-      \end{itemize}     
+      \end{itemize}
     \end{itemize}
 \end{frame}
 
@@ -112,7 +56,6 @@
   \end{itemize}
 \end{frame}
 
-% --- Source: Stanford CS224S, 224s.24.lec1.pdf, slide 30 ---
 \begin{frame}{TTS Overview}
   \begin{itemize}
     \item Collect lots of speech (5--50 hours) from one speaker, transcribed carefully down to syllables and phones.
@@ -135,20 +78,6 @@
   \end{itemize}
 \end{frame}
 
-% % --- Source: Stanford CS224S, 224s.24.lec1.pdf, slide 6 ---
-% \begin{frame}{Voice AI in the public eye (II)}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/tts/tts_deepfake_robocall_news.png}
-%   \slideimgsource{Stanford CS224S, Lecture 1 (2024 Spring), slide 6 (Wired article).}
-% \end{frame}
-
-% % --- Source: Stanford CS224S, 224s.24.lec1.pdf, slide 7 ---
-% \begin{frame}{Voice AI in the public eye (III)}
-%   \centering
-%   \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/tts/tts_voice_cloning_ethics_discussion.png}
-%   \slideimgsource{Stanford CS224S, Lecture 1 (2024 Spring), slide 7 (The Verge, with samples).}
-% \end{frame}
-
 \begin{frame}{TTS: Modular Pipeline}
   \begin{enumerate}
     \item \textbf{Text analysis:} normalization, tokenization, G2P
@@ -156,10 +85,10 @@
     \item \textbf{Vocoder / decoder:} waveform or neural codec inversion
   \end{enumerate}
   \centering
-  \includegraphics[width=0.86\textwidth,keepaspectratio]{images/audio-nlp/tts_pipeline.png}
+  \includegraphics[width=0.86\textwidth,height=0.5\textheight,keepaspectratio]{images/audio-nlp/tts_pipeline.png}
+  \slideimgsource{H.-T.~Luong, ``Deep learning based voice cloning framework for a unified system of text-to-speech and voice conversion,'' PhD thesis, SOKENDAI, 2020, Fig.~2.1.}
 \end{frame}
 
-% --- Source: TTS Lecture Material Generation Request (report body: Historical Taxonomy) ---
 \begin{frame}{Three eras of text-to-speech}
   \begin{itemize}
     \item \textbf{Pre-2016:} concatenative unit selection and statistical parametric (HMM/GMM) synthesis.
@@ -169,7 +98,6 @@
   \end{itemize}
 \end{frame}
 
-% --- Source: TTS Lecture Material Generation Request (report table); CMU intro / SPSS (Works cited 6--7) ---
 \begin{frame}{Three eras of text-to-speech}
   \footnotesize
   {\scriptsize

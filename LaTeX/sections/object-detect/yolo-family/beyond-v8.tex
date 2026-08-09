@@ -1,0 +1,34 @@
+\subsection{Beyond v8: YOLOv9--YOLOv12}
+\begin{frame}{}
+    \LARGE Object Detection: \textbf{Beyond v8: YOLOv9--YOLOv12}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Beyond v8: YOLOv9--YOLOv12}
+    \textbf{YOLOv9 (2024):}
+    \begin{itemize}
+        \item Introduces PGI (Programmable Gradient Information) and GELAN (Generalized Efficient Layer Aggregation Network) for improved gradient flow.
+        \item Achieves better parameter efficiency and accuracy.
+    \end{itemize}
+
+    \textbf{YOLOv10 (May 2024):}
+    \begin{itemize}
+        \item NMS-free detection using dual-assignment strategy.
+        \item Incorporates partial self-attention for enhanced feature representation.
+        \item YOLOv10-S runs 1.8$\times$ faster than RT-DETR-R18 at comparable AP.
+    \end{itemize}
+
+\framebreak
+
+    \textbf{YOLOv11 (Sept 2024):}
+    \begin{itemize}
+        \item Utilizes C3k2 and C2PSA blocks with a refined multi-scale detection head.
+        \item Supports oriented bounding boxes and segmentation tasks.
+        \item Gains between 0.5 and 2.2 mAP over the matching YOLOv8 model, with 16--42\% fewer parameters.
+    \end{itemize}
+
+    \textbf{YOLOv12 (Feb 2025):}
+    \begin{itemize}
+        \item Attention-centric design with Area Attention and R-ELAN modules.
+        \item YOLOv12-N reports 40.6\% mAP on COCO at 1.64\,ms per image on a T4.
+    \end{itemize}
+\end{frame}

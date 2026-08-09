@@ -1,16 +1,4 @@
-% --- Foundation Models vs. Large Language Models (LLMs): Overview ---
-% % Figures from Bommasani et al., arXiv:2108.07258 (Stanford CRFM).
-% \begin{frame}{Foundation Models vs. LLMs: Overview}
-%   \begin{itemize}
-%     \item \textbf{Definition:} A \emph{foundation model} is trained on \textbf{broad and diverse data} (often with \textbf{self-supervision} at scale) to learn universal representations, and can then be \textbf{adapted} (through fine-tuning, prompting, etc.) to a wide range of downstream tasks and modalities. Rather than being built for a single end-task, the same pretrained backbone can be specialized for applications such as QA, captioning, recognition, and more across different domains.
-%     \item \textbf{LLMs:} Text-centric foundation models (e.g.\ BERT, GPT) whose pretraining is dominated by language modeling; many multimodal systems today \emph{add} vision or audio encoders on top of an LLM.
-%     \item \textcolor{KAUSTred}{\bf Key point:} \textit{LLMs are foundation models for language; not every foundation model is an LLM.}
-%   \end{itemize}
-%   \vspace{0.15cm}
-% \end{frame}
-
 % --- Foundation models vs.\ LLMs and ecosystem implications ---
-% --- Key Differences: Modalities, Tasks, and Architecture ---
 \begin{frame}{Key Differences: Modalities, Tasks, and Adaptation}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.48\textwidth}
@@ -26,7 +14,7 @@
       \begin{itemize}\footnotesize
         \item \textbf{Language-first:} data are primarily text; core loss is usually autoregressive or masked LM.
         \item \textbf{Downstream:} generation, QA, summarization, code; multimodal \textbf{variants} pair an LLM with other encoders.
-        \item Same ``pretrain then adapt'' pattern, but the \textbf{scope of pretraining data} is narrower than full multi-modal foundation models.
+        \item Same ``pretrain then adapt'' pattern, but the \textbf{scope of pretraining data} is narrower than that of full multi-modal foundation models.
       \end{itemize}
     \end{column}
   \end{columns}

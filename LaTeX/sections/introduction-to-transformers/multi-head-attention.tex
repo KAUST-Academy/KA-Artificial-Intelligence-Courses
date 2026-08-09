@@ -25,32 +25,44 @@
 
 \begin{frame}{Multi-Head Attention} 
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_nlp_tasks_all_solved_checkmarks.png}
+  \includegraphics[width=\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_nlp_tasks_all_solved_checkmarks.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 80.}
 \end{frame}
 
 \begin{frame}{Multi-Head Attention} 
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_stacked_weight_matrices_dh.png}
+  \includegraphics[width=\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_stacked_weight_matrices_dh.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 76.}
 \end{frame}
 
 \begin{frame}{Multi-Head Attention} 
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_qkv_projections_per_head.png}
+  \includegraphics[width=0.9\paperwidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_qkv_projections_per_head.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 77.}
 \end{frame}
 
 \begin{frame}{Multi-Head Attention} 
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_softmax_attention_per_head.png}
+  \includegraphics[width=\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_softmax_attention_per_head.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 78.}
 \end{frame}
 
 \begin{frame}{Multi-Head Attention} 
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_concat_z_heads.png}
+  \includegraphics[width=\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_multihead_concat_z_heads.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 79.}
 \end{frame}
 
 \begin{frame}{Multi-Head Attention} 
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_nlp_tasks_all_solved_final.png}
+  \includegraphics[width=\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_nlp_tasks_all_solved_final.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 80.}
 \end{frame}
 
 \begin{frame}{Benefits of Multi-Head Attention}
@@ -59,6 +71,7 @@
     \item[$\blacktriangleright$] Captures various linguistic and syntactic patterns by using multiple attention heads.
     \item[$\blacktriangleright$] Improves the model's ability to represent complex relationships in the data.
     \item[$\blacktriangleright$] Provides richer and more diverse feature representations.
+    \item[$\blacktriangleright$] Costs no more than single-head attention: each head uses $d_k = d_v = d_{\text{model}}/h$, so the $h$ heads together take the same width as one full-size head.
   \end{itemize}
 \end{frame}
 

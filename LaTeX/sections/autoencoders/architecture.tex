@@ -4,22 +4,14 @@
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Autoencoders: Architecture}
-% \begin{figure}
-%     \centering
-%     \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/autoencoder/architecture.png}
-%     \caption{Autoencoder architecture}
-% \end{figure}
-
-% \framebreak
-
 \textbf{Design Considerations}:
 \small
 \begin{itemize}
     \item \textbf{How deep?} More layers can learn more, but also make training harder and risk overfitting.
     \item \textbf{How wide?} More neurons per layer can help, but too many may just copy the input instead of learning.
-    \item \textbf{Symmetry:} Encoder and decoder can look the same, but don’t have to—sometimes different shapes work better.
+    \item \textbf{Symmetry:} Encoder and decoder can look the same, but don’t have to; sometimes different shapes work better.
     \item \textbf{Regularization:} Tricks like dropout or weight penalties help prevent the model from just memorizing.
-    \item \textbf{Latent size:} The “bottleneck” size is key—too small loses info, too big doesn’t compress.
+    \item \textbf{Latent size:} The “bottleneck” size is key: too small loses info, too big doesn’t compress.
     \item \textbf{Activation:} Functions like ReLU or sigmoid help the network learn complex patterns.
 \end{itemize}
 \normalsize
@@ -81,7 +73,7 @@ Training & Involves minimizing reconstruction error using gradient-based optimiz
 \begin{figure}
     \centering
     \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/autoencoder/sample.png}
-    \caption*{Sample Autoencoder}
+    \caption*{Sample Autoencoder\\ {\scriptsize Source: J. Despois, \href{https://medium.com/hackernoon/autoencoders-deep-learning-bits-1-11731e200694}{``Autoencoders --- Deep Learning bits \#1''}, HackerNoon, 2017.}}
 \end{figure}
 \end{frame}
 

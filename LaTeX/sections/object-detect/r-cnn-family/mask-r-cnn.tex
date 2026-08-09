@@ -16,49 +16,48 @@
         \begin{itemize}
             \item Predicts object mask for each candidate
         \end{itemize}
-        \item Performs both \textbf{Semantic} and \textbf{Instance Segmentation}
+        \item Performs \textbf{Instance Segmentation} (per-object masks; extensible to keypoint/pose estimation)
     \end{itemize}
 
 \framebreak
 
-    \only<1>{
-        \begin{figure}
-        \centering
-        \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/ins_6.png}
-        \footnotetext{He et al, “Mask R-CNN”, ICCV 2017}
-        \end{figure}
-    }
-    
-    \only<2>{
-        \begin{figure}
-        \centering
-        \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/ins_7.png}
-        \end{figure}
-    }
+    \begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth,height=0.85\textheight,keepaspectratio]{images/object-detect/ins_6.png}
+    \caption*{\scriptsize He et al., “Mask R-CNN”, ICCV 2017.}
+    \end{figure}
+
+\framebreak
+
+    \begin{figure}
+    \centering
+    \includegraphics[width=1.0\textwidth,height=0.85\textheight,keepaspectratio]{images/object-detect/ins_7.png}
+    \caption*{\tiny Source: UMich EECS 498 (2022), Lecture 15: Image Segmentation, slide 79 (figure from He et al., ``Mask R-CNN'', ICCV 2017)}
+    \end{figure}
 
 \framebreak
 
     \textbf{Advantages of Mask R-CNN}
     \begin{itemize}
         \item \textbf{Simplicity}: Simple to train
-        \item \textbf{Performance}: Outperforms previous methods, works almost in real-time
+        \item \textbf{Performance}: Outperforms previous methods, at 5 fps (195\,ms per image on a Tesla M40)
         \item \textbf{Efficiency}: Very efficient, small overhead compared to Faster R-CNN
         \item \textbf{Flexibility}: Can perform detection and estimation tasks simultaneously
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Mask R-CNN: Example Training Targets}
-    \only<2>{
-        \begin{figure}
-            \centering
-            \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/ins_8.png}
-        \end{figure}
-    }
+    \begin{figure}
+        \centering
+        \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/ins_8.png}
+        \caption*{\tiny Source: UMich EECS 498 (2022), Lecture 15: Image Segmentation, slide 83 (figure from He et al., ``Mask R-CNN'', ICCV 2017)}
+    \end{figure}
 \end{frame}
 
 \begin{frame}{Mask R-CNN: Very Good Results!}
     \begin{figure}
         \centering
         \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/ins_9.png}
+        \caption*{\tiny Source: UMich EECS 498 (2022), Lecture 15: Image Segmentation, slide 84 (figure from He et al., ``Mask R-CNN'', ICCV 2017)}
     \end{figure}
 \end{frame}

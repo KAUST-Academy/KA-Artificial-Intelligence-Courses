@@ -2,9 +2,13 @@
 \section{End-to-end ASR}
 % ============================================================================
 
-% --- Stanford CS224S lec10, slides 24--30, 32: Connectionist Temporal Classification ---
-\begin{frame}{Connectionist Temporal Classification (CTC)}
-  \textbf{End-to-end alternative to hybrid HMM--DNN:} map audio directly to transcript tokens (characters, phonemes, BPE).
+\begin{frame}[plain]
+  \centering
+  \vspace{0.10\textheight}
+  {\LARGE \textbf{End-to-End ASR}}
+
+  \vspace{0.08\textheight}
+  {\large An alternative to hybrid HMM-DNN: map audio directly\\to transcript tokens (characters, phonemes, BPE)}
 \end{frame}
 
 \begin{frame}{HMM-free recognition with CTC}
@@ -12,34 +16,37 @@
     \item DNN approximates $P(a \mid x)$ over output tokens; no separate HMM state topology for alignment.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/stt/stt_ctc_character_alignment.png}
+  \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{images/stt/stt_ctc_character_alignment.png}
+  \slideimgsource{Stanford CS224S, Lecture 10 (2025 Spring), slide 25.}
 \end{frame}
 
 \begin{frame}{CTC output assumptions}
-  \textbf{CTC output assumptions}
-
   \begin{itemize}\footnotesize
     \item Each timestep $t$ the model outputs $P(a \mid X_{1:T})$, which can either be an output token (character, phoneme) or ``blank''.
     \item \emph{Assume:} Input sequence (length $T$) $\geq$ output sequence length (safe assumption in ASR).
     \item \textbf{Collapsing rule:} Ignore all blank tokens, and ignore repeated outputs of the same token.
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/stt/stt_ctc_collapse_dinner.png}
+  \includegraphics[width=\textwidth,height=0.54\textheight,keepaspectratio]{images/stt/stt_ctc_collapse_dinner.png}
+  \slideimgsource{Jurafsky \& Martin, \textit{Speech and Language Processing} (3rd ed.\ draft), ASR chapter.}
 \end{frame}
 
 \begin{frame}{CTC collapsing. Sum over all possible alignments}
   \centering
-  \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/stt/stt_ctc_alignment_summation.png}
+  \includegraphics[width=\textwidth,height=0.74\textheight,keepaspectratio]{images/stt/stt_ctc_alignment_summation.png}
+  \slideimgsource{Jurafsky \& Martin, \textit{Speech and Language Processing} (3rd ed.\ draft), ASR chapter: the collapsing function $B$ and further legitimate alignments for \textit{dinner}.}
 \end{frame}
 
 \begin{frame}{Real example. Full utterance with blank token}
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/stt/stt_ctc_greedy_decoding_example.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/stt/stt_ctc_greedy_decoding_example.png}
+  \slideimgsource{Stanford CS224S, Lecture 10 (2025 Spring), slide 28.}
 \end{frame}
 
 \begin{frame}{Example CTC results. No word lexicon or LM (WSJ corpus)}
   \centering
-  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/stt/stt_ctc_transcription_examples.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/stt/stt_ctc_transcription_examples.png}
+  \slideimgsource{Stanford CS224S, Lecture 10 (2025 Spring), slide 29.}
 \end{frame}
 
 \begin{frame}{CTC loss function}
@@ -62,6 +69,9 @@
       \begin{itemize}
         \item Blank + collapsing enables efficient, exact summation over all alignments.
       \end{itemize}
+    \item \textbf{But it cuts both ways:} because the outputs are conditionally independent, CTC cannot model
+      dependencies between output tokens. It has no language model of its own, so accurate decoding leans on
+      an \textbf{external} LM. This is the gap the RNN-Transducer closes.
   \end{itemize}
 \end{frame}
 
@@ -77,19 +87,20 @@
     \end{column}
     \begin{column}{0.48\textwidth}
       \centering
-      % Placeholder for image
-      \includegraphics[width=\textwidth,keepaspectratio]{images/stt/stt_las_encoder_subsampling.png}
+      \includegraphics[width=\textwidth,keepaspectratio]{images/stt/stt_ctc_inference_encoder.png}
+      \slideimgsource{Jurafsky \& Martin, \textit{Speech and Language Processing} (3rd ed.\ draft), Ch.~15 ``Automatic Speech Recognition,'' Fig.~15.15.}
     \end{column}
   \end{columns}
 \end{frame}
 
-% --- Stanford CS224S lec10, slide 47 ---
 \begin{frame}{Improving on CTC: RNN-Transducer (RNN-T) output model}
   \begin{itemize}\footnotesize
+    \item \textbf{What it fixes:} a \textbf{prediction network} conditions on the tokens already emitted, so the model carries its own language model instead of depending on an external one
     \item Add network that reasons over sequence of non-blank characters/tokens and input sequence
     \item Decoding outputs each transcript token only once. Optional blanks between. Variation on CTC
     \item Prediction network often pre-trained with CTC. Encoder provides transformed features for each $t$
   \end{itemize}
   \centering
-  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/stt/stt_rnnt_architecture.png}
+  \includegraphics[width=\textwidth,height=0.46\textheight,keepaspectratio]{images/stt/stt_rnnt_architecture.png}
+  \slideimgsource{Jurafsky \& Martin, \textit{Speech and Language Processing} (3rd ed.\ draft), ASR chapter.}
 \end{frame}

@@ -20,12 +20,18 @@
   \end{itemize}
 \end{frame}
 
-% Slide 33
-  \begin{frame}{Attention-Based Decoding}
+\begin{frame}{Attention-Based Decoding}
   \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_rnn_context_per_step.png}\end{frame}
+  \includegraphics[width=0.7\paperwidth,height=0.49\paperheight,keepaspectratio]{images/attention-deep-dive/attention_rnn_context_per_step.png}
 
-% Slide 34
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slides~28 and~31.}
+
+  \begin{itemize}
+    \item[$\blacktriangleright$] Every encoder state $h_i$ is scored against the previous decoder state, $e_i(t) = g(h_i, s_{t-1})$, and the scores are softmaxed into weights $w_i(t)$.
+    \item[$\blacktriangleright$] Those weights already form a distribution, so the context is the plain weighted sum $c_t = \sum_i w_i(t)\, h_i$.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Decoding - Steps}
   \begin{enumerate}
     \item \textbf{Compute query}: Generate a query vector from the current decoder hidden state.
@@ -36,167 +42,149 @@
   \end{enumerate}
 \end{frame}
 
-% Slide 35
 \begin{frame}{Attention}
   \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_matrix_query_key_value.png}\end{frame}
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_matrix_query_key_value.png}
 
-% Slide 36
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_two_query_rows.png}\end{frame}
-
-% Slide 37
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_parallel_same_time.png}\end{frame}
-
-% Slide 38
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_parallel_formula.png}\end{frame}
-
-% Slides 46--56 from lec19.transformers.pdf as pdf_page_039.png--049.png
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_input_embeddings_tokens.png}
-\end{frame}
-
-% Slide 40
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_projections_per_token.png}
-\end{frame}
-
-% Slide 41
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_score_e11_dotproduct.png}
-\end{frame}
-
-% Slide 42
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_softmax_alpha11.png}
-\end{frame}
-
-% Slide 43
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_weighted_value_first.png}
-\end{frame}
-
-% Slide 44
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_two_scores_alpha12.png}
-\end{frame}
-
-% Slide 45
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_three_scores_alpha13.png}
-\end{frame}
-
-% Slide 46
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_four_scores_alpha14.png}
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~42.}
 \end{frame}
 
 \begin{frame}{Attention}
   \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_five_scores_alpha15.png}
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_two_query_rows.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~43.}
 \end{frame}
 
-% Slide 48
 \begin{frame}{Attention}
   \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_weighted_sum_z1.png}
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_parallel_same_time.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~44.}
 \end{frame}
 
-% Slide 49
 \begin{frame}{Attention}
   \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_self_attention_parallelized.png}
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_parallel_formula.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~45.}
 \end{frame}
 
-% Slide 50
-\begin{frame}{Attention}
-  \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_decoder_key_value_query.png}
+\begin{frame}{Self-Attention and Cross-Attention}
+  The same scoring machinery serves two arrangements, distinguished only by where $\mathbf{Q}$, $\mathbf{K}$ and $\mathbf{V}$ are projected from.
+  \begin{itemize}
+    \item[$\blacktriangleright$] \textbf{Cross-attention:} the query comes from the decoder state and the keys and values from the encoder states, so the decoder reads the source sentence. This is the arrangement used so far.
+    \item[$\blacktriangleright$] \textbf{Self-attention:} query, key and value are all projected from one and the same sequence, so every token is re-expressed as a weighted sum of its neighbours.
+  \end{itemize}
+  \vspace{0.5em}
+  The next slides trace self-attention over the input ``I ate an apple \textless eos\textgreater'', one score at a time. No token's output depends on another token's output, so every position can be computed at once: this is what makes the mechanism parallelizable.
 \end{frame}
 
-% Slide 51
 \begin{frame}{Attention}
   \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_decoder_context_formula.png}
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_input_embeddings_tokens.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~46.}
 \end{frame}
 
-% Slide 52
 \begin{frame}{Attention}
   \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_special_case_kv_equals_h.png}\end{frame}
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_projections_per_token.png}
 
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_qkv_projections_per_token.png}\end{frame}
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~47.}
+\end{frame}
 
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_score_e11_dotproduct.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_softmax_alpha11.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_weighted_value_first.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_two_scores_alpha12.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_three_scores_alpha13.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_four_scores_alpha14.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_five_scores_alpha15.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_weighted_sum_z1.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_self_attention_parallelized.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_decoder_key_value_query.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_decoder_context_formula.png}\end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/attention-deep-dive/attention_special_case_kv_equals_h.png}\end{frame}
-
-% Slide 53
 \begin{frame}{Attention}
   \centering
-  \includegraphics[width=0.7\paperwidth,height=0.7\paperheight,keepaspectratio]{images/attention-deep-dive/attention_decoder_pseudocode.png}\end{frame}
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_score_e11_dotproduct.png}
 
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~48.}
+\end{frame}
 
-% Slide 54
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_softmax_alpha11.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~49.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_weighted_value_first.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~50.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_two_scores_alpha12.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~51.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_three_scores_alpha13.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~52.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_four_scores_alpha14.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~53.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_five_scores_alpha15.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~54.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_weighted_sum_z1.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~55.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_self_attention_parallelized.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~56.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_decoder_key_value_query.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~58.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_decoder_context_formula.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~59.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_special_case_kv_equals_h.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~60.}
+\end{frame}
+
+\begin{frame}{Attention}
+  \centering
+  \includegraphics[width=0.7\paperwidth,height=0.66\paperheight,keepaspectratio]{images/attention-deep-dive/attention_decoder_pseudocode.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~61.}
+\end{frame}
+
 \begin{frame}{Decoding -- Example: Translation}
 \textbf{Example: English to French Translation}
 

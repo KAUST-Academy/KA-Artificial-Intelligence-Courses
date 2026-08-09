@@ -13,7 +13,7 @@
 
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\textwidth,keepaspectratio]{images/gan/dcgan-architecture.png}
+        \includegraphics[width=\textwidth,keepaspectratio]{images/gan/dcgan-architecture.png}
         \small [Radford et al 2016]
     \end{figure}
 
@@ -27,7 +27,7 @@
                 \item Standard supervised CNNs are not directly usable for GANs.
                 \item Remove max-pooling and mean-pooling layers.
                 \item Generator upsamples using transposed convolutions.
-                \item Discriminator downsamples with strided convolutions and average pooling.
+                \item Discriminator downsamples with strided convolutions (no pooling layers).
                 \item Non-linearity: ReLU for generator (except output), LeakyReLU (slope 0.2) for discriminator.
                 \item Output non-linearity: \texttt{tanh} for generator, \texttt{sigmoid} for discriminator.
                 \item Batch normalization is used to prevent mode collapse, but not applied at the output of G or input of D.
@@ -41,15 +41,15 @@
     Good samples on datasets with 3M images (Faces, Bedrooms) for the first time
     \begin{figure}
         \centering
-        \includegraphics[width=0.9\textwidth,keepaspectratio]{images/gan/dcgan-result-1.png}
+        \includegraphics[width=0.8\textwidth,keepaspectratio]{images/gan/dcgan-result-1.png}
     \end{figure}
-    \footnotesize{Reference: Radford, Metz, and Chintala, "Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks", ICLR 2016}
+    {\footnotesize Reference: Radford, Metz, and Chintala, ``Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks,'' ICLR 2016}
 
     \framebreak
 
     \begin{figure}
         \centering
-        \includegraphics[height=0.8\textheight,keepaspectratio]{images/gan/dcgan-result-2.png}
+        \includegraphics[height=0.7\textheight,keepaspectratio]{images/gan/dcgan-result-2.png}
         \caption*{[Radford et al 2016]} 
     \end{figure}
 
@@ -58,7 +58,7 @@
     Smooth interpolations in high dimensions
     \begin{figure}
         \centering
-        \includegraphics[height=0.8\textheight,keepaspectratio]{images/gan/dcgan-result-3.png}
+        \includegraphics[height=0.7\textheight,keepaspectratio]{images/gan/dcgan-result-3.png}
         \caption*{[Radford et al 2016]}
     \end{figure}
 
@@ -67,7 +67,7 @@
     Imagenet samples (32x32)
     \begin{figure}
         \centering
-        \includegraphics[height=0.8\textheight,keepaspectratio]{images/gan/dcgan-result-4.png}
+        \includegraphics[height=0.7\textheight,keepaspectratio]{images/gan/dcgan-result-4.png}
         \caption*{[Radford et al 2016]}
     \end{figure}
 
@@ -76,7 +76,7 @@
     Vector Arithmetic
     \begin{figure}
         \centering
-        \includegraphics[height=0.75\textheight,keepaspectratio]{images/gan/dcgan-result-5.png}
+        \includegraphics[height=0.7\textheight,keepaspectratio]{images/gan/dcgan-result-5.png}
         \caption*{[Radford et al 2016]}
     \end{figure}
 
@@ -84,7 +84,7 @@
 
     \begin{figure}
         \centering
-        \includegraphics[height=0.8\textheight,keepaspectratio]{images/gan/dcgan-result-6.png}
+        \includegraphics[height=0.7\textheight,keepaspectratio]{images/gan/dcgan-result-6.png}
         \caption*{[Radford et al 2016]}
     \end{figure}
 
@@ -92,7 +92,7 @@
 
     \begin{figure}
         \centering
-        \includegraphics[height=0.8\textheight,keepaspectratio]{images/gan/dcgan-result-7.png}
+        \includegraphics[height=0.7\textheight,keepaspectratio]{images/gan/dcgan-result-7.png}
         \caption*{[Radford et al 2016]}
     \end{figure}
 
@@ -101,7 +101,7 @@
     Representation Learning 
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\textwidth,keepaspectratio]{images/gan/dcgan-result-table.png}
+        \includegraphics[width=\textwidth,keepaspectratio]{images/gan/dcgan-result-table.png}
         \caption*{[Radford et al 2016]}
     \end{figure}
 \end{frame}

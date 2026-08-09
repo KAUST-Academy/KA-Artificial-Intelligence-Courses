@@ -10,7 +10,7 @@
 
 
 \begin{frame}{World Models: Motivation}
-  \textbf{Intuition:} a baseball batter reacts in milliseconds---action is tied to a \textbf{predictive}, action-conditioned internal model, not to slow deliberate search.
+  \textbf{Intuition:} a baseball batter has milliseconds to decide how to swing, shorter than the time visual signals take to reach the brain. Action must be driven by a \textbf{predictive}, action-conditioned internal model rather than by slow deliberate search.
   \centering
   \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{images/world-models/mccloud_baseball.jpeg}\\[-0.1em]
   {\scriptsize Scott McCloud excerpt (time--space in comics).}      
@@ -38,14 +38,6 @@
   \end{itemize}
 \end{frame}
 
-% \begin{frame}{World Models: Definition}
-%   \begin{itemize}
-%     \item A \textbf{world model} is a learned map that summarizes experience so we can predict (or sample) \textbf{what happens next} and sometimes \textbf{counterfactuals}: ``if I had pushed left \ldots''
-%     \item An \textbf{agent} chooses actions $a_t$ and receives observations $o_t$ and rewards $r_t$. Planning and learning are easier if we can \textbf{imagine} plausible futures without acting in the real environment.
-%     \item Core tension: predict \textbf{everything in pixels} (high-dimensional, noisy) vs.\ predict in a \textbf{compact latent space} (lose detail but gain stability and generalization).
-%   \end{itemize}
-% \end{frame}
-
 \begin{frame}{World Models: Definition}
       % TikZ block for shaded definition box
       \begin{center}
@@ -72,7 +64,7 @@
 
 \begin{frame}{World Models: Overview}
     \centering
-    \includegraphics[width=0.95\linewidth,height=0.88\textheight,keepaspectratio]{images/world-models/worldmodels_githubio_rollout_schematic.png}\\[0.15em]
+    \includegraphics[width=0.95\linewidth,height=0.84\textheight,keepaspectratio]{images/world-models/worldmodels_githubio_rollout_schematic.png}\\[0.15em]
     {\scriptsize World model overview.\\
     \textit{Source: Ha \& Schmidhuber (2018); }\href{https://arxiv.org/abs/1803.10122}{arXiv:1803.10122}.}
 \end{frame}
@@ -82,7 +74,7 @@
     \column{0.44\textwidth}
     \begin{itemize}\itemsep0.26em
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Goal:} learn an abstract, compressed representation of each observed input frame.
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{VAE:} first stage of a two-stage sequence model---similar in spirit to modern tokenizers, but trained with classic VAE objective.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{VAE:} first stage of a two-stage sequence model, similar in spirit to modern tokenizers but trained with the classic VAE objective.
     \end{itemize}
     \column{0.54\textwidth}
     \centering
@@ -111,7 +103,7 @@
 \begin{frame}{Controller module: decision-making (C)}
     \begin{itemize}\itemsep0.26em
       \item[\textcolor{red}{$\blacktriangleright$}] The \textbf{Controller (C)} selects actions to maximize expected cumulative reward during agent rollout.
-      \item[\textcolor{red}{$\blacktriangleright$}] Designed to be as simple and small as possible; trained \textbf{separately} from the Vision (V) and Memory (M) modules.
+      \item[\textcolor{red}{$\blacktriangleright$}] Designed to be as simple and small as possible; trained \textbf{separately} from V and M. Because C holds so few parameters it is \textbf{evolved with CMA-ES} (Covariance-Matrix Adaptation Evolution Strategy) on cumulative reward, not backpropagated end-to-end.
       \item[\textcolor{red}{$\blacktriangleright$}] Most agent complexity is thus concentrated in the world model (V and M).
       \item[\textcolor{red}{$\blacktriangleright$}] C is a \textbf{single-layer linear} model that maps the latent vector $z_t$ and RNN hidden state $h_t$ directly to the action $a_t$ at each time step:
     \end{itemize}
@@ -125,7 +117,6 @@
       \item[\textcolor{red}{$\blacktriangleright$}] Here, $W_c$ and $b_c$ are the weight matrix and bias; $[z_t; h_t]$ is the concatenated latent and memory state.
       \item[\textcolor{red}{$\blacktriangleright$}] Output vector $a_t$ is the action taken by the agent.
     \end{itemize}
-    % Optionally: say evolved with CMA-ES, not trained end-to-end.
 \end{frame}
 
 \begin{frame}{World model: Putting Everything Together}
@@ -134,18 +125,3 @@
   {\scriptsize Agent-environment flow (observation $\rightarrow$ $z_t$, RNN state $h_t$, action $a_t$, next step).\\
   \textit{Source: Ha \& Schmidhuber (2018); }\href{https://arxiv.org/abs/1803.10122}{arXiv:1803.10122}.}
 \end{frame}
-
-
-% \begin{frame}[plain]
-%   \centering
-%   \vspace{0.1em}
-%   \includegraphics[width=\linewidth,height=0.88\textheight,keepaspectratio]{images/world-models/cmu10423_lecture26_world_models_slide08.png}\\[0.32em]
-%   {\scriptsize Same deck --- slide 8 (data modalities: image/video/3D/text/audio/multimodal).}
-% \end{frame}
-
-% \begin{frame}[plain]
-%   \centering
-%   \vspace{0.1em}
-%   \includegraphics[width=\linewidth,height=0.88\textheight,keepaspectratio]{images/world-models/cmu10423_lecture26_world_models_slide09.png}\\[0.32em]
-%   {\scriptsize Same deck --- slide 9 (three paradigms: 3D scene+render; interactive video; latent representations).}
-% \end{frame}

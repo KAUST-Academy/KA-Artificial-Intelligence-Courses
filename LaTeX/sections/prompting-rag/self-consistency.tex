@@ -67,12 +67,11 @@ Many examples were generated but\\the model kept responding 35 as the answer
         text=gray!88!black
       ] (mainbox) at (0,0) {%
 \textbf{Q:} There are 25 trees in the grove. Grove workers will plant trees in the grove today. When they are done, there will be 34 trees. How many trees did the grove workers plant today?\\
-\textbf{A:} 34 - 25 = \textcolor{orange!80!black}{9}.\\[0.5em]
-\textbf{Q:} At school, Livia has 12 tulips. Her friend Liana has 8 tulips. The difference must be the number of extra they planted. So, they must have planted 12 - 8 = \textcolor{orange!80!black}{4}.\\[0.4em]
-\textbf{Q:} If there are 3 cars in the parking lot and 2 more cars arrive, how many cars are now in parking lot?\\
-There were 3 cars and 2 arrived, so 3 + 2 = \textcolor{orange!80!black}{5}.\\[0.4em]
+\textbf{A:} We start with 25 trees and later have 34. The difference must be the number they planted, so they planted 34 - 25 = \textcolor{orange!80!black}{9} trees.\\[0.4em]
+\textbf{Q:} If there are 3 cars in the parking lot and 2 more cars arrive, how many cars are now in the parking lot?\\
+\textbf{A:} There were 3 cars and 2 arrived, so 3 + 2 = \textcolor{orange!80!black}{5} cars.\\[0.4em]
 \textbf{Q:} Olivia has \$23. She bought five bagels for \$3 each. How much money does she have left?\\
-She bought 5 bagels for \$3 each. This means she spent 5 $\times$ 3 = \$15. So, 23 - 15 = \textcolor{orange!80!black}{8}.\\[0.4em]
+\textbf{A:} She bought 5 bagels for \$3 each. This means she spent 5 $\times$ 3 = \$15. So, 23 - 15 = \textcolor{orange!80!black}{8} dollars.\\[0.4em]
 \textbf{Q:} When I was 6 my sister was half my age. Now I'm 70, how old is my sister?%
       };
  
@@ -119,7 +118,7 @@ She bought 5 bagels for \$3 each. This means she spent 5 $\times$ 3 = \$15. So, 
         text=black,
         anchor=north west
       ] (a3) at ([yshift=-0.25em]a2.south west) {%
-\texttt{When the narrator was 6, his sister was half his age, which is 3. Now that the narrator is 70, his sister would be 3 years younger, so 70 - 3 = 67 years old.}
+\texttt{When I was 6 my sister was half my age, so she was 3. Now I am 70, so she is 70 / 2 = 35 years old.}
       };
 
       % Vertical "Sampled Outputs" label (rotated)
@@ -135,13 +134,12 @@ She bought 5 bagels for \$3 each. This means she spent 5 $\times$ 3 = \$15. So, 
       \draw[draw=blue!60, thick, rounded corners=4pt]
         ([xshift=-0.12cm,yshift=0.20cm]mainbox.north west) rectangle ([xshift=0.13cm,yshift=-0.24cm]a3.south east);
 
-      % KAUST & LMH logo box (approximated, top right)
-      \node[
-        anchor=north east,
-        inner sep=2pt
-      ] at ([xshift=0.04cm]mainbox.north east)
-      {\includegraphics[height=0.7cm]{images/kaust_logo.png}};
-
     \end{tikzpicture}
   \end{center}
+  \vspace{-0.3em}
+  {\footnotesize
+    Two of the three sampled paths answer \textbf{67} and one answers 35, so the majority vote
+    returns 67. Marginalising over reasoning paths recovers the correct answer even when
+    individual paths are wrong.
+  }
 \end{frame}

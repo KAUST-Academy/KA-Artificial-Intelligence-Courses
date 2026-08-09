@@ -1,17 +1,16 @@
-% ============================================================================
 \section{Stable Diffusion overview}
-% ============================================================================
 
 \begin{frame}[allowframebreaks]{Stable Diffusion}
     \textbf{What is Stable Diffusion?}
     \begin{itemize}
-        \item A state-of-the-art text-to-image generative model.
-        \item Released by Stability AI and collaborators (2022).
-        \item Open-source, enabling wide adoption and customization.
+        \item The model that made high-quality text-to-image generation openly available (2022).
+        \item Built by the CompVis group (Ommer lab) with Runway, trained on a compute donation from Stability AI.
+        \item Open weights, which is what enabled the wide adoption and customization that followed.
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=1.06\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_99_1_img.png}
+        \includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{images/adv-img-gen/sd_sample_images_strip.png}
+        \caption*{\scriptsize Text-to-image samples from Stable Diffusion. Source: CompVis, \href{https://github.com/CompVis/stable-diffusion}{stable-diffusion} repository README (\texttt{merged-0007.png}).}
     \end{figure}
     
     \framebreak
@@ -20,7 +19,7 @@
     \begin{itemize}
         \item High-quality, diverse image generation.
         \item Efficient training and inference due to latent space operations.
-        \item Open-source and extensible for research and applications.
+        \item Open weights, so the model can be inspected, fine-tuned and redistributed.
     \end{itemize}
 
     \framebreak
@@ -35,20 +34,3 @@
     \vspace{1em}
     \textit{Making a ‘good’ generative model is about making all these parts work together well!}
 \end{frame}
-
-
-
-
-
-
-% % --- Frontiers (from sections/diffusion/stable-diffusion-lecture/block4-frontiers.tex) ---
-% \begin{frame}{Beyond imagery: applied frontiers}
-%   \begin{itemize}
-%     \item \textbf{AlphaFold3:} diffusion over 3D molecular coordinates from sequence data.
-%     \item \textbf{Diffusion Policy:} action-trajectory generation for robotics from demonstrations.
-%     \item \textbf{ControlNet / SDXL:} spatial conditioning and higher-fidelity open models.
-%     \item \textbf{Stable Video Diffusion:} temporal layers on top of image LDM backbone.
-%   \end{itemize}
-%   \vspace{0.5em}
-%   Diffusion is now a general-purpose framework for structured generation across modalities.
-% \end{frame}

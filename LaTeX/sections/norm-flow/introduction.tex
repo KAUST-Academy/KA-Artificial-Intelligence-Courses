@@ -3,9 +3,9 @@
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Introduction}
-We continue on our quest for likelihood based generative model.
+We continue on our quest for likelihood-based generative models.
 
-So far, we have studied two different type of generative model:
+So far, we have studied two different types of generative models:
 \begin{itemize}
     \item \textbf{Autoregressive Models}: $p_\theta(x) = \prod^N_{i=1} p_\theta(x_i|x_{<i})$
     \begin{itemize}
@@ -13,7 +13,7 @@ So far, we have studied two different type of generative model:
         \item But have no direct mechanism for learning features
         \item Slow generation process
     \end{itemize}
-    \item \textbf{Variational Autoencoders}: $p_\theta(x) = \int_z p_\theta(x|z) p_\theta(z)$
+    \item \textbf{Variational Autoencoders}: $p_\theta(x) = \int_z p_\theta(x|z) p_\theta(z) \, dz$
     \begin{itemize}
         \item Has intractable marginal likelihood
         \item Can learn feature representation

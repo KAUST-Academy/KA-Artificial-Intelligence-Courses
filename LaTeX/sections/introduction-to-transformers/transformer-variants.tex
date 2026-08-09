@@ -21,7 +21,7 @@
         \item \textbf{Pre-training Corpora:}
           \begin{itemize}
             \item English Wikipedia (\textasciitilde2.5B words)
-            \item BookCorpus (\textasciitilde800M words)
+            \item BooksCorpus (\textasciitilde800M words)
           \end{itemize}
         \item \textbf{Pre-training Tasks:}
           \begin{itemize}
@@ -37,8 +37,9 @@
     \end{column}
     \begin{column}{0.42\textwidth}
       \centering
-      % BERT diagram or architecture image
-      \includegraphics[width=0.98\textwidth]{images/introduction-to-transformers/transformer_variant_encoder_only_highlighted.png}
+      \includegraphics[width=0.98\textwidth,height=0.68\textheight,keepaspectratio]{images/introduction-to-transformers/transformer_variant_encoder_only_highlighted.png}
+
+      {\scriptsize Diagram: Vaswani et al., NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -65,9 +66,10 @@
     \end{column}
     \begin{column}{0.43\textwidth}
       \centering
-      % BERT architecture/diagram placeholder
       \vspace{-0.5em}
-      \includegraphics[width=\textwidth]{images/introduction-to-transformers/transformer_variant_encoder_only_alt_highlighted.png}
+      \includegraphics[width=\textwidth,height=0.64\textheight,keepaspectratio]{images/introduction-to-transformers/transformer_variant_encoder_only_alt_highlighted.png}
+
+      {\scriptsize Diagram: Vaswani et al., NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -77,7 +79,7 @@
     \begin{column}{0.60\textwidth}
       \textbf{GPT Pre-Training Corpus:}
       \begin{itemize}
-        \item Similarly, BooksCorpus and English Wikipedia
+        \item BooksCorpus only (over 7,000 unpublished books), no Wikipedia
       \end{itemize}
       \vspace{1.0em}
       \textbf{GPT Pre-Training Tasks:}
@@ -88,15 +90,17 @@
       \vspace{1.0em}
       \textbf{GPT Pre-Training Results:}
       \begin{itemize}
-        \item GPT -- 117M Params
-        \item Similarly competitive on GLUE and SQuAD
+        \item GPT -- 117M Params (12 blocks, 768 dims, 12 heads)
+        \item GLUE score of 72.8, up from a previous best of 68.9
+        \item Best results on 9 of the 12 tasks studied
       \end{itemize}
     \end{column}
     \begin{column}{0.38\textwidth}
       \centering
-      % Diagram: GPT architecture (placeholder)
       \vspace{0.5em}
-      \includegraphics[width=0.98\textwidth]{images/introduction-to-transformers/transformer_variant_decoder_only_highlighted.png}
+      \includegraphics[width=0.98\textwidth,height=0.66\textheight,keepaspectratio]{images/introduction-to-transformers/transformer_variant_decoder_only_highlighted.png}
+
+      {\scriptsize Diagram: Vaswani et al., NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -119,15 +123,18 @@
     \end{column}
     \begin{column}{0.35\textwidth}
       \centering
-      % GPT architecture/diagram placeholder
       \vspace{0.5em}
-      \includegraphics[width=\textwidth]{images/introduction-to-transformers/transformer_variant_decoder_only_alt_highlighted.png}
+      \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{images/introduction-to-transformers/transformer_variant_decoder_only_alt_highlighted.png}
+
+      {\scriptsize Diagram: Vaswani et al., NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}
 
 \begin{frame}{The LLM Era -- Paradigm Shift in Machine Learning}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_variants_bert_gpt_t5_timeline.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_variants_bert_gpt_t5_timeline.png}
+
+  {\scriptsize Architecture diagram: Vaswani et al., ``Attention Is All You Need,'' NeurIPS 2017, Fig.~1.}
 \end{frame}
 

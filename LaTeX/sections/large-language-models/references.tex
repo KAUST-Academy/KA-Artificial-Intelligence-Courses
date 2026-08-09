@@ -2,34 +2,47 @@
   \begin{flushleft}
     These slides have been adapted from:
     \begin{itemize}
-      \item[$\blacktriangleright$] Younes Mourri \& Lukasz Kaiser, 
+      \item[$\blacktriangleright$] Younes Mourri \& Lukasz Kaiser,
         \href{https://www.deeplearning.ai/courses/natural-language-processing-specialization/}{Natural Language Processing Specialization. DeepLearning.AI}
       \item[$\blacktriangleright$] Bhiksha Raj \& Rita Singh,
-        \href{https://deeplearning.cs.cmu.edu/}{11-785 Introduction to Deep Learning, CMU}
+        \href{https://deeplearning.cs.cmu.edu/}{11-785 Introduction to Deep Learning, CMU} (Spring 2024), Lecture~19: \textit{Transformers and Newer Architectures}
     \end{itemize}
   \end{flushleft}
 \end{frame}
 
 \begin{frame}{References}
-  % \scriptsize
-  \begin{enumerate}
-    \item Kaplan et al., ``Scaling Laws for Neural Language Models'', 2020.
-    \item Devlin et al., ``BERT: Pre-training of Deep Bidirectional Transformers'', 2018.
-    \item Brown et al., ``Language Models are Few-Shot Learners (GPT-3)'', 2020.
-    \item Xue et al., ``ByT5: Towards a token-free future with pre-trained byte-to-byte models'', 2022.
-    \item Petrov, La Malfa, Torr, Bibi, ``Language Model Tokenizers Introduce Unfairness Between Languages'', NeurIPS 2023.
-    \item Beltagy et al., ``Longformer: The Long-Document Transformer'', 2020.
-    \item Tay et al., ``Efficient Transformers: A Survey'', 2020.
-    \item OpenAI, ``Technical Report on GPT-4'', 2023.
+  \scriptsize
+  \begin{enumerate}\itemsep0.15em
+    \item Vaswani et al., ``\href{https://arxiv.org/abs/1706.03762}{Attention Is All You Need}'', NeurIPS 2017.
+    \item Devlin et al., ``\href{https://arxiv.org/abs/1810.04805}{BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding}'', NAACL-HLT 2019.
+    \item Radford et al., ``Language Models are Unsupervised Multitask Learners (GPT-2)'', OpenAI, 2019.
+    \item Brown et al., ``\href{https://arxiv.org/abs/2005.14165}{Language Models are Few-Shot Learners (GPT-3)}'', NeurIPS 2020.
+    \item Kaplan et al., ``\href{https://arxiv.org/abs/2001.08361}{Scaling Laws for Neural Language Models}'', 2020.
+    \item Hoffmann et al., ``\href{https://arxiv.org/abs/2203.15556}{Training Compute-Optimal Large Language Models}'' (Chinchilla), NeurIPS 2022.
+    \item Hestness et al., ``\href{https://arxiv.org/abs/1712.00409}{Deep Learning Scaling is Predictable, Empirically}'', 2017.
+    \item Wei et al., ``\href{https://arxiv.org/abs/2206.07682}{Emergent Abilities of Large Language Models}'', TMLR 2022.
+    \item Wei et al., ``\href{https://arxiv.org/abs/2109.01652}{Finetuned Language Models Are Zero-Shot Learners}'' (FLAN), ICLR 2022.
+    \item Touvron et al., ``\href{https://arxiv.org/abs/2307.09288}{Llama 2: Open Foundation and Fine-Tuned Chat Models}'', 2023.
+    \item OpenAI, ``\href{https://arxiv.org/abs/2303.08774}{GPT-4 Technical Report}'', 2023.
   \end{enumerate}
 \end{frame}
 
 \begin{frame}{References}
-  % \scriptsize
-  \begin{enumerate}
-    \setcounter{enumi}{7}
-    \item Google Research Blog: Scaling Transformer Models.
-    \item Anthropic, ``Claude 3.5 Release Notes'', 2024.
-    \item Dao et al., ``\href{https://arxiv.org/abs/2205.14135}{FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness}'', 2022.
+  \scriptsize
+  \begin{enumerate}\itemsep0.05em
+    \setcounter{enumi}{11}
+    \item Xue et al., ``\href{https://arxiv.org/abs/2105.13626}{ByT5: Towards a Token-Free Future with Pre-trained Byte-to-Byte Models}'', TACL 10, 2022.
+    \item Clark et al., ``\href{https://arxiv.org/abs/2103.06874}{CANINE: Pre-training an Efficient Tokenization-Free Encoder for Language Representation}'', TACL 10, 2022.
+    \item Tay et al., ``\href{https://arxiv.org/abs/2106.12672}{Charformer: Fast Character Transformers via Gradient-based Subword Tokenization}'', ICLR 2022.
+    \item Yu et al., ``\href{https://arxiv.org/abs/2305.07185}{MEGABYTE: Predicting Million-byte Sequences with Multiscale Transformers}'', NeurIPS 2023.
+    \item Pagnoni et al., ``\href{https://arxiv.org/abs/2412.09871}{Byte Latent Transformer: Patches Scale Better Than Tokens}'', 2024.
+    \item Petrov, La Malfa, Torr, Bibi, ``\href{https://arxiv.org/abs/2305.15425}{Language Model Tokenizers Introduce Unfairness Between Languages}'', NeurIPS 2023.
+    \item Land \& Bartolo, ``\href{https://arxiv.org/abs/2405.05417}{Fishing for Magikarp: Automatically Detecting Under-trained Tokens in Large Language Models}'', EMNLP 2024.
+    \item Raschka, ``\href{https://www.manning.com/books/build-a-large-language-model-from-scratch}{Build a Large Language Model (From Scratch)}'', Manning, 2024.
+    \item Qarah \& Alsanoosy, ``\href{https://doi.org/10.3390/app14135696}{A Comprehensive Analysis of Various Tokenizers for Arabic Large Language Models}'', Applied Sciences 14(13), 2024.
+    \item Beltagy et al., ``\href{https://arxiv.org/abs/2004.05150}{Longformer: The Long-Document Transformer}'', 2020.
+    \item Tay et al., ``\href{https://arxiv.org/abs/2009.06732}{Efficient Transformers: A Survey}'', 2020.
+    \item Dao et al., ``\href{https://arxiv.org/abs/2205.14135}{FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness}'', NeurIPS 2022.
+    \item Anthropic, ``\href{https://www.anthropic.com/news/claude-3-5-sonnet}{Introducing Claude 3.5 Sonnet}'', 2024.
   \end{enumerate}
 \end{frame}

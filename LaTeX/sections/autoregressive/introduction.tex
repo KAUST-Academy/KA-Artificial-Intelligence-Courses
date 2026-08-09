@@ -10,14 +10,14 @@
         \[
         p(x_1, x_2, \ldots, x_n) = \prod_{i=1}^n p(x_i \mid x_{<i})
         \]
-        This allows us to model complex data one element (or "token") at a time, conditioned on previously generated elements.
+        This allows us to model complex data one element (or ``token'') at a time, conditioned on previously generated elements.
     \end{itemize}
 
     \framebreak
     
     \textbf{Why not just model everything at once?}
         \begin{itemize}
-            \item \textcolor{red}{Real-world data (like images or text) has lots of parts working together—modeling all of them at once is super hard.}
+            \item \textcolor{red}{Real-world data (like images or text) has lots of parts working together, so modeling all of them at once is super hard.}
             \item \textcolor[rgb]{0,0.5,0}{Autoregressive models break this big problem into smaller, easier steps.}
         \end{itemize}
     \vspace{2em}

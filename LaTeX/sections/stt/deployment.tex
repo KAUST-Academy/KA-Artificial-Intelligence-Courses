@@ -13,32 +13,35 @@
     \item \textbf{Which language are you looking to transcribe or translate?}
     \begin{itemize}
       \item If the model is well represented in Whisper, it is a strong baseline, especially for translation into English.
-      \item If you’d like to translate into another language, you will need your own model.
+      \item If you'd like to translate into another language, you will need your own model.
     \end{itemize}
     \framebreak
     \item \textbf{What is your compute budget?}
     \begin{itemize}
-      \item If you don’t have any compute budget, using the best model you can find may be the best way forward.
+      \item If you don't have any compute budget, using the best model you can find may be the best way forward.
       \item If you have a small compute budget, finetuning a small model variant could outperform a larger model out-of-the-box.
       \item If you have a large compute budget (and large enough dataset) you can consider finetuning a larger model variant.
     \end{itemize}
   \end{itemize}
 \end{frame}
 
-% % --- Source: STT Lecture Material Generation report (segment 6; Stanford L12; Koenecke et al.) ---
 \begin{frame}{Real-world factors and fairness}
-  \begin{itemize}
+  \begin{itemize}\footnotesize
     \item Noise, codecs, mic quality, overlap, and domain mismatch dominate field WER.
-    \item Demographic bias in accents and dialects---audit before justice, hiring, or grading use cases.
+    \item \textbf{Demographic bias is measured, not hypothetical.} Across five commercial systems (Amazon, Apple, Google, IBM, Microsoft), average WER was \textbf{0.35} for Black speakers against \textbf{0.19} for white speakers on age- and gender-matched interview audio.
+    \item The gap held on identical phrases spoken by both groups, which traces it to the acoustic models rather than to language or topic.
+    \item Audit before deploying in justice, hiring, or grading use cases.
     \item Voice is biometric: consent, retention, on-device options, and transparent API error rates.
   \end{itemize}
+  \slideimgsource{Koenecke et al., ``Racial disparities in automated speech recognition,'' \textit{PNAS} 117(14):7684--7689, 2020.}
 \end{frame}
 
 \begin{frame}{Benchmarks and open tooling}
   \begin{itemize}
-    \item \textbf{Datasets:} LibriSpeech, GigaSpeech, Common Voice, AMI, CHiME, Fleurs---match to deployment domain.
+    \item \textbf{Datasets:} LibriSpeech, GigaSpeech, Common Voice, AMI, CHiME, FLEURS. Match to deployment domain.
     \item \textbf{Toolkits:} ESPnet, NeMo/Riva, Fairseq, SpeechBrain, Hugging Face \texttt{transformers}.
   \end{itemize}
   \centering
-  \includegraphics[width=0.78\textwidth,keepaspectratio]{images/stt/espnet_logo_wide.png}
+  \includegraphics[width=0.70\textwidth,keepaspectratio]{images/stt/espnet_logo_wide.png}
+  \slideimgsource{ESPnet logo from \href{https://github.com/espnet/espnet}{github.com/espnet/espnet}; Watanabe et al., ``ESPnet: End-to-End Speech Processing Toolkit,'' Interspeech 2018; \href{https://arxiv.org/abs/1804.00015}{arXiv:1804.00015}.}
 \end{frame}

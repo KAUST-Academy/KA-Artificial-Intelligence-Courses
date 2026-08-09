@@ -20,7 +20,7 @@
   \begin{itemize}
     \item English spelling underdetermines pronunciation: \textit{though}, \textit{tough}, \textit{through}, and \textit{thought} share letters, not sounds.
     \item \textbf{Homographs} need context to resolve: ``I \textit{read} it yesterday'' vs.\ ``I \textit{read} every day''; \textit{bass} the fish vs.\ \textit{bass} the instrument.
-    \item Standard pipeline: pronunciation lexicon lookup (CMUdict, about 134k ARPAbet entries) plus a neural G2P model for out-of-vocabulary words and names.
+    \item Standard pipeline: pronunciation lexicon lookup (CMUdict, about 134k entries written in ARPAbet, an ASCII phone alphabet for American English) plus a neural G2P model for out-of-vocabulary words and names.
     \item Phoneme input makes synthesis more stable; character-based models (Tacotron reads characters) learn G2P implicitly and can mispronounce rare words.
   \end{itemize}
 \end{frame}

@@ -22,7 +22,9 @@
 
 \begin{frame}{Monitoring the Model's Internals}
   \begin{columns}[T,onlytextwidth]
-    \column{0.48\textwidth}
+    % 0.46+0.52 leaves a gutter: at 0.48+0.52 the source line below the figure
+    % butts straight against the last bullet of the left column.
+    \column{0.46\textwidth}
       \begin{itemize}\footnotesize\itemsep0.45em
         \item[\textcolor{KAred}{$\blacktriangleright$}] Rather than reading only the output, inspect the model's \textbf{activations} to catch a harmful request before it acts.
         \item[\textcolor{KAred}{$\blacktriangleright$}] A linear probe on hidden states is cheap but coarse. Truncated Polynomial Classifiers add higher-order terms and spend more compute only on hard cases.

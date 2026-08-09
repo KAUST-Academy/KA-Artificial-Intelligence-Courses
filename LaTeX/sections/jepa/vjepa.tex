@@ -8,26 +8,11 @@
   \end{itemize}
 \end{frame}
 
-% --- V-JEPA: Latent-space prediction (Meta blog) ---
-\begin{frame}{V-JEPA: Learning in Representation Space}
-  \begin{columns}[T,onlytextwidth]
-    \column{0.42\textwidth}
-    \begin{itemize}\itemsep0.35em
-      \item Encoder trained by predicting masked spatio-temporal regions in a \textbf{learned latent space}, analogous to I-JEPA comparing abstract image embeddings rather than pixels.
-      \item Self-supervised pre-training on diverse video; task labels used only after pre-training.
-    \end{itemize}
-    \column{0.56\textwidth}
-    \centering
-    \includegraphics[width=0.9\linewidth, height=0.9\textheight, keepaspectratio]{images/jepa/vjepa_encoder_training.png}\\[0.25em]
-    {\scriptsize Encoder trained by predicting masked regions in latent space (not pixels). Reference: \href{https://arxiv.org/abs/2404.08471}{V-JEPA paper (Bardes et al., 2024)}.}
-  \end{columns}
-\end{frame}
-
 % --- V-JEPA: Spatiotemporal masking (Meta blog) ---
 \begin{frame}{V-JEPA: Masking in Space \emph{and} Time}
   \centering
   \includegraphics[width=0.8\linewidth, height=0.8\textheight, keepaspectratio]{images/jepa/vjepa_blog_spatiotemporal_figure.png}\\[0.25em]
-  {\scriptsize Spatio-temporal context and masking. Reference: Meta V-JEPA blog.}
+  {\scriptsize Decorative Meta AI illustration (hero art of the \href{https://ai.meta.com/blog/muavic-audio-visual-speech-translation-benchmark/}{MuAViC blog post}, 2023); not a V-JEPA figure.}
   \begin{itemize}\footnotesize
     \item Masking must be hard enough: \textbf{sparse random patches} make the task too easy, and little is learned about dynamics.
     \item If a region is masked only at \textbf{one instant} while adjacent frames stay visible, the model can ``cheat'' from neighboring time steps.
@@ -41,24 +26,15 @@
     \column{0.44\textwidth}
   \begin{itemize}
         \item \textbf{Context path:} encodes visible video patches; \textbf{predictor} maps to the target representation space (JEPA-style).
-        \item \textbf{Target path:} encodes masked regions for the training target (with stop-gradient); loss matches predicted and target embeddings.
+        \item \textbf{Target path:} an EMA encoder processes the full unmasked clip; targets are its output tokens at the masked positions (stop-gradient). Loss matches predicted and target embeddings.
         \item Same high-level recipe as I-JEPA, extended to \textbf{3D} patch tokens over space and time.
   \end{itemize}
     \column{0.56\textwidth}
       \centering
       \includegraphics[width=0.95\linewidth, height=0.9\textheight, keepaspectratio]{images/jepa/vjepa_encoder_training.png}\\[0.25em]
-      {\scriptsize Reference: \href{https://arxiv.org/abs/2404.08471}{V-JEPA paper (Bardes et al., 2024)}.}
+      {\scriptsize Reference: \href{https://ai.meta.com/blog/v-jepa-yann-lecun-ai-model-video-joint-embedding-predictive-architecture/}{Meta V-JEPA blog}, 2024 (blog graphic).}
   \end{columns}
 \end{frame}
-
-% --- V-JEPA: Training Specifics ---
-% \begin{frame}{V-JEPA: Training and Implementation}
-%   \begin{itemize}
-%     \item Built on \textbf{3D ViT}-style backbones and large-scale \textbf{unlabeled} video.
-%     \item Augmentations and masking are designed for \textbf{temporal coherence}, motion, and scene continuity---aligned with the space--time masking strategy.
-%     \item Predictions in embedding space emphasize \textbf{higher-level} content (e.g., who does what) rather than irrelevant pixel detail (e.g., every leaf on a tree).
-%   \end{itemize}
-% \end{frame}
 
 % --- V-JEPA: Frozen evaluation (Meta blog) ---
 \begin{frame}{V-JEPA: Frozen Evaluation Across Tasks}
@@ -71,24 +47,9 @@
     \column{0.56\textwidth}
     \centering
     \includegraphics[width=0.95\linewidth, height=0.9\textheight, keepaspectratio]{images/jepa/vjepa_downstream_tasks.png}\\[0.25em]
-    {\scriptsize Reusing frozen representations for downstream video understanding. Reference: \href{https://arxiv.org/abs/2404.08471}{V-JEPA paper (Bardes et al., 2024)}.}
+    {\scriptsize Reusing frozen representations for downstream video understanding. Reference: \href{https://ai.meta.com/blog/v-jepa-yann-lecun-ai-model-video-joint-embedding-predictive-architecture/}{Meta V-JEPA blog}, 2024 (blog graphic).}
   \end{columns}
 \end{frame}
-
-% --- V-JEPA: Low-shot frozen evaluation (Meta blog) ---
-% \begin{frame}{V-JEPA: Results}
-%   \begin{columns}[T,onlytextwidth]
-%     \column{0.38\textwidth}
-%     \begin{itemize}\itemsep0.3em
-%       \item \textbf{Frozen evaluation:} probes trained on a fraction of labels (e.g., 5\%, 10\%, 50\% of the training set per class) on Kinetics-400 and Something-Something-v2, with multiple random splits.
-%       \item As supervision gets scarcer, the gap between V-JEPA and baselines tends to \textbf{grow}---strong sample efficiency for the frozen encoder.
-%     \end{itemize}
-%     \column{0.6\textwidth}
-%     \centering
-%     \includegraphics[width=0.8\linewidth, height=0.8\textheight, keepaspectratio]{images/jepa/vjepa_blog_eval_chart.png}\\[0.25em]
-%     {\scriptsize Low-shot frozen evaluation on K400 / SSv2. Reference: Meta V-JEPA blog.}
-%   \end{columns}
-% \end{frame}
 
 % --- V-JEPA: Capabilities and Evaluation ---
 \begin{frame}{V-JEPA: Results and Limitations}

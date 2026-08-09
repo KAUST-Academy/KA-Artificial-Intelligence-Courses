@@ -3,8 +3,8 @@
     \begin{column}{0.7\textwidth}
        \begin{figure}
             \centering
-            \includegraphics[width=1.05\textwidth,keepaspectratio]{images/dul/gene-datapoints.png}
-            \caption{Original Points}
+            \includegraphics[width=\textwidth,keepaspectratio]{images/dul/gene-datapoints.png}
+            \caption{Gene expression matrix (genes $\times$ cells)}
         \end{figure}
         \vspace{1em}
         \begin{itemize}
@@ -17,10 +17,12 @@
         \begin{figure}
             \centering
             \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/gene-datapoints-plot.png}
-            \caption{Clusters identified by DBSCAN}
+            \caption{Cells projected to 2D, coloured by group}
         \end{figure}
     \end{column}
 \end{columns}
+\centering
+{\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 \end{frame}
 
 
@@ -49,6 +51,8 @@
         \end{figure}
     \end{column}
 \end{columns}
+\centering
+{\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 \end{frame}
 
 \input{sections/dul/dim-reduce/pca}

@@ -20,6 +20,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/nlp-intro/sos-token.png}
+        \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
     \end{figure}
 \end{frame}
 
@@ -27,6 +28,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/nlp-intro/sos-token-ngram.png}
+        \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
     \end{figure}
 \end{frame}
 
@@ -35,6 +37,7 @@
         \begin{figure}
             \centering
             \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/eos-token-\i.png}
+            \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
         \end{figure}
 
         \framebreak
@@ -45,6 +48,7 @@
     \begin{figure}
         \centering
         \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/eos-token-soln.png}
+        \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
     \end{figure}
 \end{frame}
 
@@ -52,26 +56,42 @@
     \begin{figure}
         \centering
         \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/eos-token-ngram.png}
+        \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
     \end{figure}
 \end{frame}
 
 \begin{frame}{Example - bigram}
-    \begin{figure}
-        \centering
-        \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/eos-bigram.png}
-    \end{figure}
+    \textbf{Corpus:}
+    \begin{itemize}
+        \setlength{\itemsep}{0.1em}
+        \item \texttt{<s> Lyn drinks chocolate </s>}
+        \item \texttt{<s> John drinks tea </s>}
+        \item \texttt{<s> Lyn eats chocolate </s>}
+    \end{itemize}
+
+    \vspace{0.5em}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \[ P(\text{Lyn} \mid \text{\texttt{<s>}}) = \frac{2}{3} \]
+            \[ P(\text{drinks} \mid \text{Lyn}) = \frac{1}{2} \]
+            \[ P(\text{chocolate} \mid \text{eats}) = \frac{1}{1} \]
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \[ P(\text{John} \mid \text{\texttt{<s>}}) = \frac{1}{3} \]
+            \[ P(\text{chocolate} \mid \text{drinks}) = \frac{1}{2} \]
+            \[ P(\text{\texttt{</s>}} \mid \text{tea}) = \frac{1}{1} \]
+        \end{column}
+    \end{columns}
+
+    \vspace{0.5em}
+    Multiplying along \texttt{<s> Lyn drinks chocolate </s>} gives
+    $\frac{2}{3} \times \frac{1}{2} \times \frac{1}{2} \times \frac{2}{2} = \frac{1}{6}$.
 \end{frame}
 
 \begin{frame}{Quiz}
     \begin{figure}
         \centering
         \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/quiz-sos-eos.png}
+        \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
     \end{figure}
 \end{frame}
-
-% \begin{frame}{Language Model}
-%     \begin{figure}
-%         \centering
-%         \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/language-model.png}
-%     \end{figure}
-% \end{frame}

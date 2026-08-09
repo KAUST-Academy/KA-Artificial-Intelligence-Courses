@@ -30,10 +30,11 @@
       \end{itemize}
     \end{column}
     \begin{column}{0.38\textwidth}
-      % Placeholder for corresponding schematic/diagram
       \vspace{1em}
       \centering
       \includegraphics[width=0.8\linewidth]{images/large-language-models/llm_transformer_architecture.png}
+
+      {\scriptsize Diagram: Vaswani et al., NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -60,10 +61,11 @@
       \end{itemize}
 \end{column}
     \begin{column}{0.38\textwidth}
-      % Placeholder for BERT architecture diagram
       \vspace{0.5em}
       \centering
       \includegraphics[width=0.8\linewidth]{images/large-language-models/llm_transformer_architecture.png}
+
+      {\scriptsize Diagram: Vaswani et al., NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -71,11 +73,15 @@
 \begin{frame}{BERT -- Bidirectional Encoder Representations}
   \centering
   \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/large-language-models/llm_bert_masked_language_modeling.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~149; architecture panel: Vaswani et al., NeurIPS 2017, Fig.~1.}
 \end{frame}
 
 \begin{frame}{BERT -- Bidirectional Encoder Representations}
   \centering
   \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/large-language-models/llm_bert_next_sentence_prediction.png}
+
+  {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~150; architecture panel: Vaswani et al., NeurIPS 2017, Fig.~1.}
 \end{frame}
 
 \begin{frame}{BERT -- Bidirectional Encoder Representations}
@@ -87,7 +93,8 @@
         \item[] % extra space
         \item \textbf{\textit{Classification Tasks:}}
         \begin{itemize}
-          \item Add a feed-forward layer on top of the encoder output for the [CLS] token.
+          \item Every input starts with a special \texttt{[CLS]} token; its final encoder output acts as a summary of the whole sequence.
+          \item Add a feed-forward layer on top of that output to predict the class.
         \end{itemize}
         \item[] % extra space
         \item \textbf{\textit{Question Answering Tasks:}}
@@ -100,10 +107,11 @@
  
     \end{column}
     \begin{column}{0.38\textwidth}
-      % Placeholder for BERT architecture diagram
       \vspace{0.5em}
       \centering
       \includegraphics[width=0.8\linewidth]{images/large-language-models/llm_transformer_architecture.png}
+
+      {\scriptsize Diagram: Vaswani et al., NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -123,10 +131,11 @@
       \end{itemize} 
     \end{column}
     \begin{column}{0.38\textwidth}
-      % Placeholder for BERT architecture diagram
       \vspace{0.5em}
       \centering
       \includegraphics[width=0.8\linewidth]{images/large-language-models/llm_transformer_architecture.png}
+
+      {\scriptsize Diagram: Vaswani et al., NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -134,6 +143,8 @@
 \begin{frame}{BERT -- Bidirectional Encoder Representations}
   \centering
   \includegraphics[width=0.70\paperwidth,height=0.70\paperheight,keepaspectratio]{images/large-language-models/llm_bert_evaluation_glue_benchmark.png}
+
+  {\scriptsize Source: Devlin et al., ``BERT'', NAACL 2019, Tables 1--2; architecture panel: Vaswani et al., NeurIPS 2017, Fig.~1.}
 \end{frame}
 
 \begin{frame}[t]{BERT and GPT Concepts}
@@ -159,14 +170,15 @@
     \begin{column}{0.62\textwidth}
       \begin{itemize}
         \item Similarly motivated as BERT, though differently designed
-        \item Can we leverage large amounts of unlabeled data to pretrain an LM that understands general patterns?
+        \item Can we use large amounts of unlabeled data to pretrain an LM that understands general patterns?
       \end{itemize}
     \end{column}
     \begin{column}{0.38\textwidth}
-      % Placeholder for BERT architecture diagram
       \vspace{0.5em}
       \centering
       \includegraphics[width=0.8\linewidth]{images/large-language-models/llm_transformer_architecture_clean.png}
+
+      {\scriptsize Diagram: Vaswani et al., NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -178,12 +190,15 @@
       \vspace{0.5em}
       \centering
       \includegraphics[width=0.8\linewidth]{images/large-language-models/llm_gpt_fine_tuning_prompt_format.png}
+
+      {\scriptsize Source: CMU 11-785 (Spring 2024), Lecture 19: Transformers and Newer Architectures, slide~160.}
     \end{column}
     \begin{column}{0.38\textwidth}
-      % Placeholder for BERT architecture diagram
       \vspace{0.5em}
       \centering
       \includegraphics[width=0.60\linewidth, height=0.60\paperheight, keepaspectratio]{images/large-language-models/llm_transformer_architecture_clean.png}
+
+      {\scriptsize Diagram: Vaswani et al., NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}

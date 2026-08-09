@@ -1,27 +1,11 @@
 % --- Inference optimisation: KV caching and serving levers ---
-\begin{frame}{Inference Optimisation: Key-Value Caching}
-  \begin{columns}[T,onlytextwidth]
-    \column{0.48\textwidth}
-    \begin{itemize}\footnotesize
-      \item[\textcolor{red}{$\blacktriangleright$}] In \textbf{decode}, the model emits \textbf{one token per step}, but that token still depends on the \textbf{key and value} tensors for \textbf{all} earlier positions.
-      \item[\textcolor{red}{$\blacktriangleright$}] Those positions include the \textbf{prompt} (K/V from \textbf{prefill}) plus any \textbf{new} K/V computed up to the current step.
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{KV caching} keeps these tensors in GPU memory so they are \textbf{not recomputed} at every step; each iteration \textbf{appends} the newly computed K/V to the cache for the next step.
-      \item[\textcolor{red}{$\blacktriangleright$}] In many stacks there is \textbf{one KV cache per transformer layer}.
-    \end{itemize}
-
-    \column{0.5\textwidth}
-    \centering
-    \includegraphics[width=0.8\linewidth,height=0.78\textheight,keepaspectratio]{images/inference-optimisation/nvidia_blog_kv_caching_figure1.png}\\[-0.2em]
-    {\scriptsize Figure: illustration of the key-value caching mechanism. Reference: Verma \& Vaidya, ``Mastering LLM Techniques: Inference Optimization,'' NVIDIA Technical Blog (2023).}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{KV Cache Memory}
+\begin{frame}{Where the Serving Memory Goes}
   \begin{columns}[T,onlytextwidth]
     \column{0.52\textwidth}
     \begin{itemize}\footnotesize
-      \item[\textcolor{red}{$\blacktriangleright$}] With batching, each request needs its own KV cache, which can become a bottleneck even before model weights do.
-      \item[\textcolor{red}{$\blacktriangleright$}] Cost increases in proportion to batch size and sequence length, limiting throughput and ability to handle long inputs. This drives use of techniques like MQA/GQA, paging (PagedAttention), and KV quantization. 
+      \item[\textcolor{red}{$\blacktriangleright$}] As covered earlier, \textbf{KV caching} keeps the key and value tensors of past positions in GPU memory so decode does not recompute them, at the price of memory that grows with layers, batch size, and context length.
+      \item[\textcolor{red}{$\blacktriangleright$}] That memory is the binding constraint in serving: after the weights are loaded, whatever is left is what caps how many requests can run at once.
+      \item[\textcolor{red}{$\blacktriangleright$}] Attention variants such as MQA and GQA shrink the cache by sharing key and value heads. The rest of this section attacks the same budget from two other directions: \textbf{how the cache is allocated} (paging) and \textbf{how many bits each entry costs} (quantization).
       \end{itemize}
     \column{0.47\textwidth}
     \centering
@@ -34,7 +18,7 @@
   \begin{itemize}\itemsep0.5em
     \item[\textcolor{red}{$\blacktriangleright$}] A single decode stream is a matrix-vector workload that leaves most of the GPU idle; batching many requests turns it back into matrix-matrix work.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Static batching:} requests are grouped up front and the whole batch runs until its longest member finishes; short requests hold their slot while doing nothing.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Continuous batching:} scheduling happens per decode step; finished sequences leave the batch immediately and waiting requests join mid-flight (Yu et al., Orca, 2022).
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Continuous batching:} scheduling happens per decode step; finished sequences leave the batch immediately and waiting requests join mid-flight. Introduced as \textbf{iteration-level scheduling} by Orca (Yu et al., 2022) and later popularised under the name continuous batching.
     \item[\textcolor{red}{$\blacktriangleright$}] Standard in modern serving stacks (vLLM, TensorRT-LLM, TGI): large throughput gains with no change to model outputs.
   \end{itemize}
 \end{frame}
@@ -67,8 +51,22 @@
     \item[\textcolor{red}{$\blacktriangleright$}] A small \textbf{draft model} proposes $K$ tokens autoregressively; the large \textbf{target model} then evaluates all $K$ positions in parallel.
     \item[\textcolor{red}{$\blacktriangleright$}] Accept draft tokens while they are consistent with the target distribution; at the first rejection, resample that token from an adjusted distribution and discard the rest.
     \item[\textcolor{red}{$\blacktriangleright$}] The output distribution is provably identical to decoding with the target model alone; the speed comes from accepting several tokens per target pass.
-    \item[\textcolor{red}{$\blacktriangleright$}] Reported speedups of 2--3$\times$ with no quality change (Leviathan et al., 2023; Chen et al., 2023).
+    \item[\textcolor{red}{$\blacktriangleright$}] Reported speedups with no change to the output distribution: 2--3$\times$ on T5-XXL (Leviathan et al., 2023) and 2--2.5$\times$ on Chinchilla 70B (Chen et al., 2023).
   \end{itemize}
+\end{frame}
+
+\begin{frame}{Speculative Decoding: The Acceptance Rule}
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\blacktriangleright$}] Write $q$ for the target model's next-token distribution and $p$ for the draft model's. For each proposed token $\tilde{x}$, draw $r \sim U[0,1]$ and \textbf{accept} it when
+      \[
+        r < \min\!\left(1,\ \frac{q(\tilde{x} \mid x_{1:n})}{p(\tilde{x} \mid x_{1:n})}\right).
+      \]
+    \item[\textcolor{red}{$\blacktriangleright$}] So a token the target likes at least as much as the draft does is always accepted; one the draft over-proposed is accepted only in proportion $q/p$.
+    \item[\textcolor{red}{$\blacktriangleright$}] On the first rejection, the remaining proposals are discarded and that position is resampled from the \textbf{residual} distribution $\big(q(x \mid x_{1:n}) - p(x \mid x_{1:n})\big)_{+}$, renormalised, where $(f)_{+} = \max(0, f)$. This is what makes the accept/reject step exact rather than an approximation.
+    \item[\textcolor{red}{$\blacktriangleright$}] If all $K$ proposals are accepted, one extra token is sampled from the target's own distribution, so a single target pass can yield up to $K+1$ tokens.
+  \end{itemize}
+  \vspace{0.1em}
+  {\scriptsize Modified rejection sampling, Algorithm 2 and Theorem 1 of Chen et al., ``Accelerating Large Language Model Decoding with Speculative Sampling,'' \href{https://arxiv.org/abs/2302.01318}{arXiv:2302.01318}.}
 \end{frame}
 
 \begin{frame}{Speculative Decoding: Acceptance in Practice}

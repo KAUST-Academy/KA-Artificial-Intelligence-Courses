@@ -2,11 +2,12 @@
     \LARGE Normalizing Flow Models: \\[1.5ex] \textbf{Limitations}
 \end{frame}
 
-\begin{frame}{Limitations}
+\begin{frame}[allowframebreaks]{Limitations}
     \begin{itemize}
-        \item Need invertible functions (limits architecture choices)
-        \item Jacobian computation still costly in general
-        \item Not as expressive as autoregressive models in some cases
-        \item Large models can be slow
+        \item \textbf{Invertibility constrains the architecture}: every layer must be invertible, which rules out most standard building blocks.
+        \item \textbf{The determinant must stay cheap}: coupling layers make it $O(n)$, but only by restricting each layer to transform half its input at a time, so many layers are needed for expressiveness. These first two constraints apply to discrete-layer flows; flow matching drops both.
+        \item \textbf{No dimensionality reduction}: the change of variables formula needs $f:\mathbb{R}^n \rightarrow \mathbb{R}^n$, so the latent space is exactly as large as the data. Unlike a VAE, a flow has no bottleneck and cannot compress.
+        \item \textbf{Continuous data only}: the formula assumes continuous densities, so discrete values such as 8-bit pixels must first be dequantized by adding noise. RealNVP then applies a logit transform, $\mathrm{logit}(\alpha + (1-\alpha)x/256)$ with $\alpha = 0.05$, so that the density is not pushed against the boundaries of the pixel range.
+        \item In practice flows can trail autoregressive models on likelihood, and large ones are slow.
     \end{itemize}
 \end{frame}

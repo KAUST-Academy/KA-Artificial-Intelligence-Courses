@@ -19,7 +19,8 @@
 \begin{frame}[allowframebreaks]{VQ-VAE: Architecture}
 \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/vae/vqvae.PNG}
+        \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/vqvae.png}
+        \caption*{\scriptsize Source: van den Oord, Vinyals \& Kavukcuoglu, ``Neural Discrete Representation Learning,'' NeurIPS 2017, Fig.~1.}
 \end{figure}
 \end{frame}
 
@@ -76,7 +77,7 @@
     \item \textbf{Stage 1} trains encoder, decoder, and codebook with the loss above. The prior over codes is assumed \textbf{uniform}, so the KL term is constant and simply dropped.
     \item But sampling a uniformly random grid of tokens decodes to noise: real images use \textbf{structured} combinations of codes.
     \item \textbf{Stage 2:} freeze everything from stage 1 and fit an \textbf{autoregressive prior} over the discrete code grid: PixelCNN for images, WaveNet for audio. To generate: sample a code grid from the prior, then decode it.
-    \item \textbf{Why two stages?} It separates \textbf{perceptual compression} (stage 1) from \textbf{distribution modeling} (stage 2), and the prior works on a small token grid ($32 \times 32$) instead of $256^2$ pixels.
+    \item \textbf{Why two stages?} It separates \textbf{perceptual compression} (stage 1) from \textbf{distribution modeling} (stage 2), and the prior works on a small token grid ($32 \times 32$) instead of $128^2$ pixels.
     \item This blueprint outlived VQ-VAE: VQ-VAE-2, VQGAN with transformers, DALL·E 1, and the tokenizer-plus-generator pattern of modern latent generative models all follow it.
 \end{itemize}
 \end{frame}
@@ -87,12 +88,14 @@
    \begin{itemize}
        \item For speech, images, and videos one can extract 1D, 2D, and 3D latent feature spaces respectively
        \item  $32 \times 32$ latents for ImageNet, or $8 \times 8 \times 10$ for CIFAR10
-       \item 512-dimensional latents for VCTK and LibriSpeech
+       \item 1D sequences of latents drawn from a 512-entry codebook ($K=512$) for VCTK and LibriSpeech
    \end{itemize}
 \end{column}
-\begin{column}{0.6\textwidth}  %%<--- here
+\begin{column}{0.6\textwidth}
     \begin{center}
-     \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/vae/vqvae_b.PNG}
+     \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/vqvae_b.png}
+
+     {\scriptsize Source: A. van den Oord, ``Neural Discrete Representation Learning,'' SANE 2017 talk slides (DeepMind).}
      \end{center}
 \end{column}
 \end{columns}
@@ -101,21 +104,24 @@
 \begin{frame}[allowframebreaks]{VQ-VAE ImageNet Reconstruction}
 \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/vae/vq_vae_reconstructions.PNG}
+        \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/vq_vae_reconstructions.png}
+        \caption*{\scriptsize Source: A. van den Oord, ``Neural Discrete Representation Learning,'' SANE 2017 talk slides (DeepMind).}
 \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{VQ-VAE Sampling}
 \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/vae/vq_vae_sampling.PNG}
+        \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/vq_vae_sampling.png}
+        \caption*{\scriptsize Source: A. van den Oord, ``Neural Discrete Representation Learning,'' SANE 2017 talk slides (DeepMind).}
 \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{VQ-VAE ImageNet Samples}
 \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/vae/vq_vae_samples.PNG}
+        \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/vq_vae_samples.png}
+        \caption*{\scriptsize Source: van den Oord, Vinyals \& Kavukcuoglu, ``Neural Discrete Representation Learning,'' NeurIPS 2017, Fig.~3.}
 \end{figure}
 \end{frame}
 
@@ -123,7 +129,8 @@
 \begin{frame}[allowframebreaks]{VQ-VAE Voice Style Transfer}
 \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/vae/vq_vae_voice.PNG}
+        \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/vq_vae_voice.png}
+        \caption*{\scriptsize Source: A. van den Oord, ``Neural Discrete Representation Learning,'' SANE 2017 talk slides (DeepMind).}
 \end{figure}
 \end{frame}
 
@@ -135,9 +142,11 @@
        \item The decoder reconstructs the image from the two latent maps.
    \end{itemize}
 \end{column}
-\begin{column}{0.7\textwidth}  %%<--- here
+\begin{column}{0.7\textwidth}
     \begin{center}
-     \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/vae/vqvae2.PNG}
+     \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/vqvae2.png}
+
+     {\scriptsize Source: Razavi, van den Oord \& Vinyals, ``Generating Diverse High-Fidelity Images with VQ-VAE-2,'' NeurIPS 2019, Fig.~2a.}
      \end{center}
 \end{column}
 \end{columns}
@@ -146,13 +155,15 @@
 \begin{frame}[allowframebreaks]{VQ-VAE-2 Sampling}
 \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/vae/vqvae2_sampling.PNG}
+        \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/vqvae2_sampling.png}
+        \caption*{\scriptsize Source: Razavi, van den Oord \& Vinyals, ``Generating Diverse High-Fidelity Images with VQ-VAE-2,'' NeurIPS 2019, Fig.~2b.}
 \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{VQ-VAE-2 ImageNet Samples}
 \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/vae/vqvae2_samples.PNG}
+        \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/vae/vqvae2_samples.png}
+        \caption*{\scriptsize Samples from the three-level hierarchical model trained on FFHQ $1024 \times 1024$. Source: Razavi, van den Oord \& Vinyals, ``Generating Diverse High-Fidelity Images with VQ-VAE-2,'' NeurIPS 2019, Fig.~6.}
 \end{figure}
 \end{frame}

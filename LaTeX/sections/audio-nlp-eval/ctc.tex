@@ -11,12 +11,13 @@
         \item \textbf{Challenge:} $T \neq U$, unknown alignment
     \end{itemize}
 
-    \textbf{CTC introduces a special \emph{blank} token ($\varnothing$) and allows repeated labels. The final output is obtained by collapsing repeats and removing blanks.}
+    \textbf{CTC introduces a special \emph{blank} token ($\varnothing$) and allows repeated labels. The final output is obtained by collapsing repeats and removing blanks.} Note what the blank buys us: without it, a genuine double letter such as the ``ll'' in \emph{hello} would collapse to a single ``l''. A blank between the two repeats keeps them apart.
 
     \begin{figure}[h!]
         \centering
         \includegraphics[width=0.8\textwidth]{images/audio-nlp/ctc.png}
-        \caption*{CTC: Blank token insertion and collapsing.}
+        \caption*{CTC: Blank token insertion and collapsing (the blank is written $\epsilon$ here).\\
+        {\scriptsize Source: A.~Hannun, ``Sequence Modeling with CTC,'' \emph{Distill}, 2017. \url{https://distill.pub/2017/ctc}}}
     \end{figure}
 
     \textbf{CTC Loss Function:}
@@ -37,9 +38,12 @@
         \item Collapse repeated labels and remove blanks to get the final output.
     \end{enumerate}
 
+\framebreak
+
     \begin{figure}
         \centering
-        \includegraphics[width=0.9\textwidth]{images/audio-nlp/ctc-alignment.png}
-        \caption*{CTC alignment: mapping input frames to output tokens via blank and repeat insertion.}
+        \includegraphics[width=0.9\textwidth,height=0.56\textheight,keepaspectratio]{images/audio-nlp/ctc-alignment.png}
+        \caption*{CTC alignment for the target ``see'': the automaton of all valid paths (left) and one alignment through the lattice (right); the blank is written \texttt{<b>}.\\
+        {\scriptsize Source: R.~Prabhavalkar, T.~Hori, T.~N.~Sainath, R.~Schl\"uter and S.~Watanabe, ``End-to-End Speech Recognition: A Survey,'' \emph{IEEE/ACM Trans.\ Audio, Speech, Lang.\ Process.}, vol.~32, pp.~325--351, 2024, Fig.~1.}}
     \end{figure}
 \end{frame}

@@ -1,4 +1,5 @@
 \begin{frame}{From $n$-step Returns to GAE}
+\vspace{-2mm}
 \begin{itemize}
     \item Between 1-step TD and full Monte Carlo lies a whole family of \textbf{$n$-step advantage estimators}:
     $$\hat{A}^{(n)}_t = \underbrace{r_t + \gamma r_{t+1} + \dots + \gamma^{n-1} r_{t+n-1} + \gamma^{n} V_\phi(s_{t+n})}_{n\text{-step return}} \;-\; V_\phi(s_t)$$

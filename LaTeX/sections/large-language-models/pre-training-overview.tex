@@ -25,9 +25,11 @@
 \begin{frame}{Pre-training Overview}
   \centering
   \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/large-language-models/llm_pretraining_finetuning_stages.png}
+
+  {\scriptsize Source: S. Raschka, ``Build a Large Language Model (From Scratch)'', Manning, 2024.}
 \end{frame}
 
-\begin{frame}[t]{Training of Decoder-only LLMs --- Llama 2}
+\begin{frame}[t]{Training of Decoder-only LLMs -- Llama 2}
   \begin{itemize}
     \item \textbf{Auto-regressive Pre-training} \\
       \textcolor{blue}{Train to predict the next token on very large scale corpora ($\sim$2 trillion tokens)}
@@ -62,6 +64,8 @@
 \begin{frame}{Instruction Tuning (Wei et al. 2021)}
   \centering
   \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/large-language-models/llm_instruction_tuning_flan.png}
+
+  {\scriptsize Source: Wei et al., ``Finetuned Language Models Are Zero-Shot Learners'' (FLAN), ICLR 2022, Fig.~1.}
 \end{frame}
 
 \begin{frame}{Unsafe Outputs -- Alignment Problem}

@@ -10,12 +10,16 @@
       Gates & 3 (i, f, o) & 2 (z, r) \\
       Memory Cell & Yes & No \\
       Complexity & Higher & Lower \\
-      Training Speed & Slower & Faster \\
-      Performance & Great for long sequences & Similar or better on short tasks \\
+      Training Speed & Slower & Often faster \\
+      Performance & \multicolumn{2}{c|}{Comparable; which one wins depends on the task} \\
       \hline
     \end{tabular}
   \end{table}
-  \vspace{1em}
+  \vspace{0.5em}
+  Chung et al.\ (2014) compared the two units under matched parameter counts and could not
+  declare a winner: the better choice varied with the dataset and the task.
+  \vspace{0.5em}
+
   \textbf{\textcolor{blue}{Tip:}} Try GRU first for faster results; switch to LSTM if performance suffers.
 \end{frame}
 
@@ -44,8 +48,8 @@
 \begin{frame}{Limitations of GRU/LSTM}
   \small
   \begin{itemize}
-    \item \textcolor{red}{Sequential computation --- hard to parallelize}
-    \item \textcolor{red}{Forget long-term dependencies}
+    \item \textcolor{red}{Sequential computation: hard to parallelize across time steps}
+    \item \textcolor{red}{Gating mitigates but does not remove the problem; very long dependencies are still lost}
     \item \textcolor{red}{Slow training due to sequential nature}
     \item \textcolor{red}{Batching variable-length sequences requires padding and masking}
   \end{itemize}

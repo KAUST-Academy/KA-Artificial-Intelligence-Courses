@@ -18,11 +18,12 @@
     \item We want a \textbf{generative model}: given a latent $\mathbf{z}$ drawn from a prior, it outputs a new sample from the data distribution.
     \item To make the latent space $Z$ continuous, let's choose it to be Gaussian.
     \item So now, we want to estimate the true parameters $\theta^*$ of this generative model.
+\end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[height=0.5\textheight, width=\textwidth, keepaspectratio]{./images/vae/abstract_model.png}
+        \includegraphics[height=0.45\textheight, width=\textwidth, keepaspectratio]{./images/vae/abstract_model.png}
+        \caption*{\scriptsize Source: Stanford CS231n, Lecture 13 ``Generative Models'' (Fei-Fei Li, Justin Johnson, Serena Yeung), 2017.}
     \end{figure}
-\end{itemize}
 
 \framebreak
 
@@ -51,39 +52,12 @@
 
 \framebreak
 
-\textbf{Objectives and Training}: The training objective of a VAE is to maximize the \textbf{Evidence Lower Bound (ELBO)}:
-% \begin{itemize}
-%   \item \textbf{Training Objective:} The model is trained to maximize the Evidence Lower Bound (ELBO), which balances reconstruction accuracy and the complexity of the latent space.
-%   \[
-%   \mathcal{L} = \mathbb{E}_{q(z \mid x)}[\log p(x \mid z)] - D_{KL}(q(z \mid x) \| p(z))
-%   \]
-%   where \( D_{KL} \) is the Kullback-Leibler divergence between the learned distribution and a prior distribution \( p(z) \).
-
-%   \item \textbf{Reparameterization Trick:} To allow backpropagation through the stochastic sampling process, we use a reparameterization trick that expresses \( z \) as a deterministic function of \( x \) and a random variable \( \epsilon \):
-%   \[
-%   z = \mu(x) + \sigma(x) \odot \epsilon
-%   \]
-%   where \( \epsilon \sim N(0, I) \).
-%   \item \textbf{Generative Model:} After training, the VAE can generate new samples by sampling from the prior \( p(z) \) and passing the samples through the decoder.
-% \end{itemize}
-
-
-\[
-\log p(x) \geq \mathbb{E}_{q(z|x)}[\log p(x|z)] - D_{\mathrm{KL}}(q(z|x) \| p(z))
-\]
-
-\begin{itemize}
-  \item The first term, \( \mathbb{E}_{q(z|x)}[\log p(x|z)] \), encourages accurate reconstruction.
-  \item The second term, \( D_{\mathrm{KL}}(q(z|x) \| p(z)) \), regularizes the latent space by making the approximate posterior \( q(z|x) \) close to the prior \( p(z) \), usually \( \mathcal{N}(0, I) \).
-\end{itemize}
-
-\framebreak
-
 \textbf{Why Use VAEs?}
 \begin{itemize}
   \item Enable generative modeling: generate new samples by sampling from the latent distribution.
   \item Learn smooth, structured, and interpretable latent representations.
   \item Provide a principled probabilistic framework for inference and generation.
+  \item Trained by maximizing the \textbf{Evidence Lower Bound (ELBO)}, which we derive in the following sections.
 \end{itemize}
 
 \end{frame}

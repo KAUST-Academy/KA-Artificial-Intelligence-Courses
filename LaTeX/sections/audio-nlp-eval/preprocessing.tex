@@ -36,13 +36,17 @@
         where $N$ is the frame length.
     \end{itemize}
 
-    \vspace{1em}
 
-    \begin{figure}[h]
+    \framebreak
+
+    \begin{center}
+    \begin{minipage}{\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{images/audio-nlp/waveform-segment.png}
-        \caption*{Waveform segmented into overlapping frames and windowed (source: ResearchGate)}
-    \end{figure}
+        \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio]{images/audio-nlp/waveform-segment.png}\\[0.3em]
+        {\scriptsize The sliding-window scheme in general form: a fixed window length advanced by a fixed step. Framing an audio signal is the same construction, with a 25~ms window and a 10~ms hop.\\
+        Source: C.~Morbidoni, A.~Cucchiarelli, V.~Agostini, M.~Knaflitz, S.~Fioretti and F.~Di~Nardo, ``Machine-Learning-Based Prediction of Gait Events From EMG in Cerebral Palsy Children,'' \emph{IEEE Trans.\ Neural Syst.\ Rehabil.\ Eng.}, vol.~29, pp.~819--830, 2021, Fig.~2 (CC BY 4.0). The traces are EMG, not speech.}
+    \end{minipage}
+    \end{center}
 
     \framebreak
 

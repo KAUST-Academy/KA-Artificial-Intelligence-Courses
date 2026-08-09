@@ -6,28 +6,30 @@
 \begin{frame}{Comparative Overview}
     \begin{table}[]
         \centering
-        \begin{tabular}{|l|l|p{6cm}|}
+        \small
+        \begin{tabular}{|l|p{4.5cm}|p{5.5cm}|}
             \hline
-            \textbf{Advancement} & \textbf{Domain} & \textbf{Key Benefit} \\
+            \textbf{Advancement} & \textbf{What it removes} & \textbf{What it costs} \\
             \hline
-            LLaMA 3 & NLP & Open frontier-level models \\
-            BLT & NLP/LLM & Tokenizer-free byte-level modeling \\
-            LLDMs & NLP & Diffusion-based text generation \\
+            LLaMA 3 & Closed weights at the frontier & The 405B model does not fit on one 8-GPU machine in BF16 \\
+            \hline
+            BLT & The fixed subword vocabulary & A separately trained entropy model, and patch size as a new knob \\
+            \hline
+            LLaDA & Left-to-right decoding & No prefix to cache, and the answer length is fixed before sampling \\
             \hline
         \end{tabular}
     \end{table}
 \end{frame}
 
 \begin{frame}{Future Directions}
+    \textbf{Open problems the three papers leave behind:}
     \begin{itemize}
-        \item Multimodal Foundation Models
-        \item Efficient Training (QLoRA, MoE, FlashAttention)
-        \item LLMs with Memory, Tools, Agents
-        \item Transformer Alternatives (MLPs, State Space Models)
-        \item Unified Models: Language, Vision, Audio, Action
+        \item Scaling laws derived for byte-level models, instead of borrowing the compute-optimal schedule of subword transformers.
+        \item Patch boundaries learned end to end, rather than handed down by a separate entropy model.
+        \item Byte-ifying existing tokenizer-based checkpoints, so a byte-level model need not be trained from scratch.
+        \item Serving machinery for bidirectional models: caching without a prefix, and generation lengths the model chooses itself.
+        \item RL-based alignment for diffusion language models, which so far stop at supervised fine-tuning.
     \end{itemize}
-    \vspace{0.5cm}
-    \textbf{Integration of these advances will define AI agents, robotics, and autonomous systems.}
 \end{frame}
 
 \begin{frame}{Key Takeaways}

@@ -10,18 +10,24 @@
 
 \begin{figure}
     \centering
-    \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_2.png}
+    \includegraphics[height=0.78\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_2.png}
+    \caption*{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~1, slide~27; after Hung-yi Lee, ``Flow-based Generative Model'' (NTU)}
 \end{figure}
 
 \framebreak
 
 \begin{itemize}
     \item The expressiveness of $G$ is limited. To model more complex distributions, we need more expressive generators.
+    \item Composing $K$ invertible layers $G_1, \dots, G_K$, so that $z = G_1^{-1}(\cdots G_K^{-1}(x))$, gives
+    $$
+    \log p_K(x) = \log \pi(z) + \sum_{h=1}^{K} \log \left| \det \left( J_{G_h^{-1}} \right) \right|
+    $$
 \end{itemize}
 
 \begin{figure}
     \centering
-    \includegraphics[height=0.9\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_3.png}
+    \includegraphics[height=0.58\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_3.png}
+    \caption*{\scriptsize Corrections: the base density is $\pi(z)$, not $\pi(x)$, and the summand in the last line should read $\log|\det(J_{G_h^{-1}})|$, matching the index of the sum.\\{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~1, slide~28; after Hung-yi Lee, ``Flow-based Generative Model'' (NTU)}}
 \end{figure}
 
 \framebreak
@@ -33,6 +39,7 @@
 \begin{figure}
     \centering
     \includegraphics[height=0.5\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_1.png}
+    \caption*{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~1, slide~29; after Hung-yi Lee, ``Flow-based Generative Model'' (NTU)}
 \end{figure}
 
 \framebreak

@@ -6,7 +6,7 @@
     \textbf{Probability Matrix:} A matrix that calculates probabilities of word pairs based on counts.
     
     \vspace{1em}
-    \textbf{Example:} For the sentence "I love NLP. I love AI."
+    \textbf{Example:} For the sentence ``I love NLP. I love AI.''
     \begin{itemize}
         \item Count Matrix: Counts how many times each word appears with every other word.
         \item Probability Matrix: Calculates the probability of each word appearing given the previous word.
@@ -17,11 +17,12 @@
     \begin{figure}
         \centering
         \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/count-matrix.png}
+        \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
     \end{figure}
 \end{frame}
 
 \begin{frame}{Count Matrix Example}
-    \textbf{Text:} "I love NLP. I love AI."
+    \textbf{Text:} ``I love NLP. I love AI.''
     
     \vspace{1em}
     \textbf{Bigrams:}
@@ -44,6 +45,7 @@
     \begin{figure}
         \centering
         \includegraphics[height=0.8\textheight,width=1\textwidth,keepaspectratio]{images/nlp-intro/probability-matrix.png}
+        \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
     \end{figure}
 \end{frame}
 
@@ -63,4 +65,15 @@
         \item Columns: Words in the corpus
         \item Cells: Probability of each word given the previous word
     \end{itemize}
+\end{frame}
+
+\begin{frame}{From Probability Matrix to Language Model}
+    A \textbf{language model} assigns a probability to any sequence of words. The
+    probability matrix is one: read a row to predict the next word, multiply along a
+    path to score a whole sentence.
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.62\textheight,width=\textwidth,keepaspectratio]{images/nlp-intro/language-model.png}
+        \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
+    \end{figure}
 \end{frame}

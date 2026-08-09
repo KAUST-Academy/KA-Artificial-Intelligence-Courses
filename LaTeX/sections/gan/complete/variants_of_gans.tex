@@ -26,18 +26,22 @@
             \item \textbf{Variants:}
             \begin{itemize}
                 \item \textbf{WGAN-GP:} Uses gradient penalty instead of weight clipping for better stability.
-                \item \textbf{WGAN-LP:} Uses Lipschitz penalty as an alternative to gradient penalty.
             \end{itemize}
         \end{itemize}
 
 \framebreak
 
-        \item \textbf{Conditional GAN (cGAN):} 
+        \item \textbf{Conditional GAN (cGAN):}
         \begin{itemize}
             \item Conditions both the generator and discriminator on additional information (e.g., class labels).
             \item Useful for targeted generation.
         \end{itemize}
-        \item \textbf{CycleGAN:} 
+        \item \textbf{Pix2Pix:}
+        \begin{itemize}
+            \item cGAN framework for supervised, paired image-to-image translation.
+            \item U-Net generator with a PatchGAN discriminator.
+        \end{itemize}
+        \item \textbf{CycleGAN:}
         \begin{itemize}
             \item Enables unpaired image-to-image translation.
             \item Uses cycle consistency loss to ensure invertibility.

@@ -44,6 +44,8 @@
         \end{figure}
     \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 
     \framebreak
 
@@ -69,21 +71,24 @@
         \end{figure}
     \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Assigning Loadings to Genes}    
+\begin{frame}[allowframebreaks]{Assigning Loadings to Genes}
     \begin{columns}
     \begin{column}{0.5\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=0.8\textwidth,keepaspectratio]{images/dul/dim-reduce/line-fit-best.png}
+            \includegraphics[width=0.62\textwidth,height=0.44\textheight,keepaspectratio]{images/dul/dim-reduce/line-fit-best.png}
         \end{figure}
     \end{column}
     \begin{column}{0.5\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=0.8\textwidth,keepaspectratio]{images/dul/dim-reduce/line-eigenvector.png}
-            \caption{\textbf{Eigenvector} or Single Vector}
+            \includegraphics[width=0.62\textwidth,height=0.44\textheight,keepaspectratio]{images/dul/dim-reduce/line-eigenvector.png}
+            \caption{\textbf{Eigenvector} or Singular Vector
+            [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
         \end{figure}
     \end{column}
     \end{columns}
@@ -116,10 +121,12 @@
             \item The next principal component (PC2) is perpendicular to PC1 and rotates in the remaining $(n-2)$ dimensions.
             \item Each subsequent principal component is always perpendicular to the previous ones, capturing the next largest variance.
             \item The last principal component is the only remaining perpendicular direction.
-            \item The number of principal components always equals the number of original genes (features).
+            \item The number of principal components is at most $\min(\text{number of samples} - 1,\ \text{number of features})$.
         \end{itemize}
     \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 \end{frame}
 
 
@@ -130,11 +137,6 @@
         \item PC2 explains the next largest amount, and so on for subsequent PCs.
         \item Since we typically plot only 2 dimensions (PC1 and PC2), it's important to check how much of the total variance these two PCs explain.
         \item \textbf{How do we calculate this?}
-        % \begin{itemize}
-        %     \item For each PC, divide the variance explained by that PC by the total variance (sum of variances of all PCs).
-        %     \item This gives the proportion (or percentage) of variance explained by each PC.
-        %     \item Often visualized using a \textit{scree plot} or by reporting the cumulative variance explained.
-        % \end{itemize}
     \end{itemize}
 
     \framebreak
@@ -150,12 +152,14 @@
         \begin{itemize}
             \item Project each data point onto the principal component (PC).
             \item Calculate the distance of each projected point to the origin.
-            \item Compute the sum of squared differences (SSD) from the origin.
+            \item Compute the sum of squared distances (SSD) from the origin.
             \item This SSD is a measure of variance, called the \textit{eigenvalue}.
             \item Divide the SSD by $(\text{number of points} - 1)$ to obtain the actual variance explained by the PC.
         \end{itemize}
     \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 
     \framebreak
 
@@ -173,6 +177,8 @@
         \end{figure}
     \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 \end{frame}
 
 
@@ -194,6 +200,8 @@
     \end{columns}
     \begin{center}
         Non-linear separation of values
+
+        {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
     \end{center}
 
     \framebreak
@@ -215,5 +223,7 @@
     \end{columns}
     \begin{center}
         Not optimised for 2-dimensions
+
+        {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
     \end{center}
 \end{frame}

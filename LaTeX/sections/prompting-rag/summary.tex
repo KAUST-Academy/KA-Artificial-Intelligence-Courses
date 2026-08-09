@@ -1,21 +1,3 @@
-% Remaining topics after ReAct: Directional Stimulus, risks/adversarial, open problems, etc. (lines 753--1437).
-\begin{frame}{Directional Stimulus Prompting}
-  \begin{itemize}
-    \item Prompting technique to better guide the LLM in generating the desired summary.
-    \item A tuneable policy LM is trained to generate the hints that guide a black-box frozen LLM.
-  \end{itemize}
-  \vspace{1em}
-  \begin{center}
-    \includegraphics[width=0.8\textwidth,keepaspectratio]{images/prompting-rag/prompting_directional_stimulus_training.png}
-  \end{center}
-\end{frame}
-
-\begin{frame}[fragile]{Directional Stimulus Prompting Example}
-  \begin{center}
-    \includegraphics[width=0.9\textwidth, height=0.9\textheight, keepaspectratio]{images/prompting-rag/prompting_directional_stimulus_comparison.png}
-  \end{center}
-\end{frame}
-
 \begin{frame}{Risks}
   \begin{itemize}
     \item[] In this section, we discuss the following:
@@ -99,37 +81,30 @@ This\ is\ the\ text:\\
   
   \vspace{0.4em}
   {\footnotesize
-  \textbf{Note:} A better prompt explicitly instructs the model to ignore any attempt to change the instructions, even if the input tries to "jailbreak" the behavior.
+  \textbf{Note:} A better prompt explicitly instructs the model to ignore any attempt to change the instructions, even if the input tries to ``jailbreak'' the behavior.
   }
 \end{frame}
 
 \begin{frame}{Prompt Leaking}
-  \textbf{Prompt Leaking}
-  
-  \vspace{0.8em}
   \begin{itemize}
     \item Prompt leaking aims to force the model to spit out information about its own prompt.
     \item This can lead to leaking of either sensitive, private or information that's confidential.
   \end{itemize}
 
-  \vspace{1em}
+  \vspace{0.4em}
   \begin{center}
-    \includegraphics[width=0.82\textwidth,height=0.65\textheight,keepaspectratio]{images/prompting-rag/prompting_chatgpt_system_prompt_extraction.png}
+    \includegraphics[width=0.72\textwidth,height=0.46\textheight,keepaspectratio]{images/prompting-rag/prompting_chatgpt_system_prompt_extraction.png}
   \end{center}
   \vspace{0.2em}
 
-  {\footnotesize
-  \textbf{Example:} In this example, adversarial input prompts the model to disclose its initial instructions.
+  {\scriptsize
+  \textbf{Example:} adversarial input prompts the model to disclose its initial instructions.
 
-  \vspace{0.3em}
   \noindent\textbf{Reference:} \url{https://adversa.ai/blog/llm-red-teaming-gpts-prompt-leaking-api-leaking-documents-leaking/}
   }
 \end{frame}
 
 \begin{frame}{Jailbreaking}
-  \textbf{Jailbreaking}
-  
-  \vspace{0.8em}
   \begin{itemize}
     \item Jailbreaking is another form of prompt injection where the goal is to bypass safety and moderation features.
     \item LLMs provided via APIs might be coupled with safety features or content moderation which can be bypassed with harmful prompts/attacks.
@@ -139,8 +114,11 @@ This\ is\ the\ text:\\
 
 \begin{frame}{Jailbreaking Example}
   \begin{center}
-    \includegraphics[width=0.90\textwidth, height=0.90\textheight, keepaspectratio]{images/prompting-rag/prompting_jailbreak_hotwire_poem.png}
+    \includegraphics[width=0.90\textwidth, height=0.80\textheight, keepaspectratio]{images/prompting-rag/prompting_jailbreak_hotwire_poem.png}
   \end{center}
+  {\scriptsize
+    \textcolor{gray}{Source: @m1guelpf on Twitter/X (Dec.\ 2022), via DAIR.AI Prompt Engineering Guide, \url{https://www.promptingguide.ai/risks/adversarial}}
+  }
 \end{frame}
 
 \begin{frame}{Prompt Engineering Guide}
@@ -155,18 +133,24 @@ This\ is\ the\ text:\\
 
 \begin{frame}{Open problems – a quick (and incomplete) overview}
   \begin{center}
-    \includegraphics[width=0.98\textwidth]{images/prompting-rag/prompting_nlp_tasks_overview.png}
+    \includegraphics[width=0.98\textwidth,height=0.75\textheight,keepaspectratio]{images/prompting-rag/prompting_nlp_tasks_overview.png}
   \end{center}
+  {\scriptsize
+    \textcolor{gray}{Source: Stanford CS224N, Lecture 19 ``Open problems and discussion,'' T.~Hashimoto (Winter 2024).}
+  }
 \end{frame}
 
 \begin{frame}{Do our models understand our tasks?}
   \begin{center}
-    \includegraphics[width=0.90\textwidth]{images/prompting-rag/prompting_adversarial_examples_entailment.png}
+    \includegraphics[width=0.90\textwidth,height=0.52\textheight,keepaspectratio]{images/prompting-rag/prompting_adversarial_examples_entailment.png}
   \end{center}
-  \vspace{0.5em}
+  \vspace{0.3em}
   \begin{itemize}
     \item[] {\color{red}$\Rightarrow$} Many instances of models using shortcuts over deep understanding
   \end{itemize}
+  {\scriptsize
+    \textcolor{gray}{Source: Stanford CS224N, Lecture 19 (T.~Hashimoto); left panel from Jia \& Liang, ``Adversarial Examples for Evaluating Reading Comprehension Systems,'' EMNLP 2017, \url{https://arxiv.org/abs/1707.07328}.}
+  }
 \end{frame}
 
 \begin{frame}{How much do models really generalize (Generalization)}
@@ -177,10 +161,13 @@ This\ is\ the\ text:\\
   \begin{itemize}
     \item[] In-context learning with \textit{random labels} does just as well as ICL with real data (Min, 2022)
   \end{itemize}
-  \vspace{1em}
+  \vspace{0.3em}
   \begin{itemize}
-    \item[] {\color{red}$\Rightarrow$} Even modern LLMs seem to leverage surface cues -- are we just finding better shortcuts?
+    \item[] {\color{red}$\Rightarrow$} Even modern LLMs seem to exploit surface cues -- are we just finding better shortcuts?
   \end{itemize}
+  {\scriptsize
+    \textcolor{gray}{Source: Min et al., ``Rethinking the Role of Demonstrations,'' EMNLP 2022, \url{https://arxiv.org/abs/2202.12837}, Fig.~3.}
+  }
 \end{frame}
 
 \begin{frame}{How do we make models go beyond train data? (Generalization)}
@@ -222,12 +209,15 @@ This\ is\ the\ text:\\
 
 \begin{frame}{Is there much beyond optimizing IID error? (Generalization)}
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{images/prompting-rag/prompting_in_context_learning_squad_shift.png}
+    \includegraphics[width=0.5\textwidth,height=0.62\textheight,keepaspectratio]{images/prompting-rag/prompting_in_context_learning_squad_shift.png}
   \end{center}
-  \vspace{1em}
+  \vspace{0.4em}
   \begin{itemize}
     \item[] \textcolor{red}{\textbf{$\Rightarrow$}} Despite our best intuitions, the best models on average are also most robust
   \end{itemize}
+  {\scriptsize
+    \textcolor{gray}{Source: Awadalla et al., ``Exploring the Landscape of Distributional Robustness for Question Answering Models,'' Findings of EMNLP 2022, \url{https://arxiv.org/abs/2210.12517}, Fig.~1.}
+  }
 \end{frame}
 
 \begin{frame}{Analysis and interpretation -- What makes NLP systems work?}
@@ -296,32 +286,35 @@ This\ is\ the\ text:\\
 
 \begin{frame}{Can we build interpretable, but performant models? (Analysis)}
   \begin{center}
-    % Direct reference to the original paper's front page as in the screenshot
-    \includegraphics[width=0.92\textwidth, height=0.92\textheight, keepaspectratio]{images/prompting-rag/prompting_all_models_wrong_paper_title.png}
+    \includegraphics[width=0.86\textwidth, height=0.42\textheight, keepaspectratio]{images/prompting-rag/prompting_all_models_wrong_paper_title.png}
   \end{center}
 
-  \vspace{0.6em}
+  \vspace{0.3em}
 
   {\footnotesize
-    \textbf{Reference:} 
-    Fisher, A., Rudin, C., \& Dominici, F. "All Models are Wrong, but Many are Useful: Learning a Variable's Importance by Studying an Entire Class of Prediction Models Simultaneously."\\
-    J. Mach. Learn. Res. 20(177):1--81 (2019)
+    Rather than selecting one model, the authors study the whole set of models that reach
+    near-optimal accuracy, which they call a \textbf{Rashomon set}. Comparing models in that set
+    that place different importance on a variable shows how much the data itself constrains the
+    explanation, and how much is an artefact of picking one model.
   }
 
-  \vspace{0.75em}
+  \vspace{0.5em}
 
-  \footnotesize
-  \textbf{Extract (from abstract):}
-  \begin{quote}
-    To address these concerns, we analyze the set of prediction models that provide near-optimal accuracy, which we refer to as a Rashomon set. This approach stands in contrast to training to select a single prediction model, among a prescribed class of candidate models. Our motivation is that Rashomon sets (defined formally below) summarize the range of effective prediction strategies that an analyst might choose. Additionally, even if the candidate models do not contain the true data generating process, we may hope that some of these models function in similar ways to the data generating process. In particular, by studying the best well performing candidate models that place different levels of importance on a variable of interest, it may be possible to assess if well-performing models would allow us to deduce information about the data generating process.
-  \end{quote}
-
+  {\scriptsize
+    \textbf{Reference:}
+    Fisher, A., Rudin, C., \& Dominici, F. ``All Models are Wrong, but Many are Useful: Learning a
+    Variable's Importance by Studying an Entire Class of Prediction Models Simultaneously.''
+    J. Mach. Learn. Res. 20(177):1--81 (2019)
+  }
 \end{frame}
 
 \begin{frame}{Can we build interpretable, performant models?}
   \begin{center}
-    \includegraphics[width=0.95\textwidth, height=0.95\textheight, keepaspectratio]{images/prompting-rag/prompting_backpack_language_models.png}
+    \includegraphics[width=0.95\textwidth, height=0.80\textheight, keepaspectratio]{images/prompting-rag/prompting_backpack_language_models.png}
   \end{center}
+  {\scriptsize
+    \textcolor{gray}{Source: Hewitt et al., ``Backpack Language Models,'' ACL 2023, \url{https://arxiv.org/abs/2305.16765} (Fig.~1 and Table~2).}
+  }
 \end{frame}
 
 \begin{frame}{Can understanding help find the next transformer? (Analysis)}
@@ -339,7 +332,6 @@ This\ is\ the\ text:\\
     \draw[->,thick] (3.2+\i*0.8,2.3) -- ++(0,-0.6);
   }
 
-  % Title
   % (Handled in \frametitle)
 
   % Surrounding questions (keeping layout as image)
@@ -364,11 +356,14 @@ Questions that understanding and interpretability can help answer for the next g
 
 \begin{frame}{Multilingual}
   \begin{center}
-    \includegraphics[width=0.95\textwidth, height=0.95\textheight, keepaspectratio]{images/prompting-rag/prompting_gpt4_multilingual_mmlu_gaps.png}
+    \includegraphics[width=0.95\textwidth, height=0.80\textheight, keepaspectratio]{images/prompting-rag/prompting_gpt4_multilingual_mmlu_gaps.png}
   \end{center}
+  {\scriptsize
+    \textcolor{gray}{Sources: OpenAI, ``GPT-4 Technical Report'' (2023), \url{https://arxiv.org/abs/2303.08774}; Anil et al., ``PaLM 2 Technical Report'' (2023), \url{https://arxiv.org/abs/2305.10403}, Table~19.}
+  }
 \end{frame}
 
-\begin{frame}{Can we remove language resource gaps?\\(Multilingual)}
+\begin{frame}{Can we remove language resource gaps? (Multilingual)}
 
   \begin{columns}
     \begin{column}{0.6\textwidth}
@@ -386,7 +381,7 @@ Questions that understanding and interpretability can help answer for the next g
   \textcolor{gray}{Source: Forbes, Statista (2017). Estimated number of first language speakers and web content distribution.}
 \end{frame}
 
-\begin{frame}{Working with extremely low resource languages\\(Multilingual)}
+\begin{frame}{Working with extremely low resource languages (Multilingual)}
 
   \small
   It is well known that only a very limited proportion of the languages spoken in the world is covered by technology or by scientific knowledge. For technology, only normative productions of very few languages in very few situations are mastered. The technological divide is wide considering the languages spoken: we have a minimally adequate quantity of data for less than 1\% of the world's 7,000 languages. Most of the world's everyday life speech stems from languages which are essentially unwritten and we include in these languages; ethnolects as well as sociolects such as many regional varieties of Arabic, Shanghainese, slang \ldots\ There are thousands of endangered languages for which hardly any documentation exists and time is running out before they disappear: some linguists estimate that half of the presently living languages will become extinct in the course of this century\footnote{Adda et al 2016}.
@@ -409,9 +404,11 @@ Questions that understanding and interpretability can help answer for the next g
   \end{center}
 \end{frame}
 
-\begin{frame}{How can we get better, multilingual training data?\\(Multilingual)}
-\includegraphics[width=0.82\textwidth,height=0.92\textheight,keepaspectratio]{images/prompting-rag/prompting_aya_multilingual_dataset.png}  
-  \vspace{1em}
+\begin{frame}{How can we get better multilingual training data?}
+  \centering
+  \includegraphics[width=0.82\textwidth,height=0.62\textheight,keepaspectratio]{images/prompting-rag/prompting_aya_multilingual_dataset.png}
+  \vspace{0.6em}
+  \raggedright
   \begin{itemize}
     \item[] \textcolor{red}{$\bullet$} \textbf{Very difficult to scale things like machine translation or instruction tuning data}
     \begin{itemize}
@@ -422,39 +419,55 @@ Questions that understanding and interpretability can help answer for the next g
 \end{frame}
 
 \begin{frame}{Evaluation and comparison}
-\includegraphics[width=0.82\textwidth,height=0.92\textheight,keepaspectratio]{images/prompting-rag/prompting_nlp_benchmark_datasets.png}  
-\vspace{1em}
+\includegraphics[width=0.82\textwidth,height=0.78\textheight,keepaspectratio]{images/prompting-rag/prompting_nlp_benchmark_datasets.png}
+\vspace{0.5em}
+
 \textbf{Benchmarks and how we evaluate drive the progress of the field.}
+
+{\scriptsize
+  \textcolor{gray}{Source: Stanford CS224N, Lecture 19 ``Open problems and discussion,'' T.~Hashimoto (Winter 2024).}
+}
 \end{frame}
 
 \begin{frame}{Evaluating chatbots and open-domain systems (Evaluation)}
     \vspace{0.5em}
-    \includegraphics[width=0.82\textwidth,height=0.82\textheight,keepaspectratio]{images/prompting-rag/prompting_chatgpt_vs_alternative_output_length.png}  
+    \includegraphics[width=0.82\textwidth,height=0.72\textheight,keepaspectratio]{images/prompting-rag/prompting_chatgpt_vs_alternative_output_length.png}
     \vspace{0.5em}
+
     \footnotesize
     \textcolor{gray}{Benchmarks and how we evaluate drive the progress of the field.}
+
+    {\scriptsize
+      \textcolor{gray}{Source: Singhal et al., ``A Long Way to Go: Investigating Length Correlations in RLHF,'' COLM 2024, \url{https://arxiv.org/abs/2310.03716}, Fig.~1.}
+    }
 \end{frame}
 
 \begin{frame}{How do we evaluate things like interpretability (Evaluation)}
-\includegraphics[width=0.95\textwidth,height=0.95\textheight,keepaspectratio]{images/prompting-rag/prompting_attention_not_explanation_papers.png}
+\includegraphics[width=0.95\textwidth,height=0.75\textheight,keepaspectratio]{images/prompting-rag/prompting_attention_not_explanation_papers.png}
 \vspace{0.5em}
+
 \footnotesize
-\vspace{1em}
 \textcolor{gray}{Increasingly, many things in research are qualitative. How do we evaluate those?}
+
+{\scriptsize
+  \textcolor{gray}{Sources: Jain \& Wallace, ``Attention is not Explanation,'' NAACL 2019, \url{https://arxiv.org/abs/1902.10186}; V.~Chen \& A.~Talwalkar, ``Are Model Explanations Useful in Practice?'' ML@CMU Blog (2023).}
+}
 \end{frame}
 
 \begin{frame}{Making NLP work in high-impact domains}
   \textcolor{red}{\textbf{NLP systems (and LLMs) are going from the lab to the real world}}
   \begin{center}
-    \includegraphics[width=0.95\textwidth,height=0.95\textheight,keepaspectratio]{images/prompting-rag/prompting_llm_applications_domains.png}  
+    \includegraphics[width=0.95\textwidth,height=0.75\textheight,keepaspectratio]{images/prompting-rag/prompting_llm_applications_domains.png}
   \end{center}
-  \vspace{1em}
+  {\scriptsize
+    \textcolor{gray}{Source: Stanford CS224N, Lecture 19 ``Open problems and discussion,'' T.~Hashimoto (Winter 2024).}
+  }
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Bio / Clinical NLP (Domains)}
+\begin{frame}{Bio / Clinical NLP (Domains)}
   \begin{center}
-    \includegraphics[width=0.5\textwidth,height=0.62\textheight,keepaspectratio]{images/prompting-rag/prompting_gpt4_medicine_special_report.png}
-    \vspace{1em}
+    \includegraphics[width=0.5\textwidth,height=0.42\textheight,keepaspectratio]{images/prompting-rag/prompting_gpt4_medicine_special_report.png}
+    \vspace{0.1em}
   \end{center}
     \textbf{Enormous potential (and risks) in many medical (and more basic science) settings}
     \begin{itemize}
@@ -462,10 +475,12 @@ Questions that understanding and interpretability can help answer for the next g
         \item[] \textcolor{red}{$\bullet$} QA
         \item[] \textcolor{red}{$\bullet$} Curbside consult
     \end{itemize}
+    {\scriptsize
+      \textcolor{gray}{Source: Lee, Bubeck \& Petro, ``Benefits, Limits, and Risks of GPT-4 as an AI Chatbot for Medicine,'' NEJM 388:1233--1239 (2023).}
+    }
 \end{frame}
 
 \begin{frame}{Legal NLP (Domains)}
-    % PLACEHOLDER FOR IMAGE: insert image here if available
     \begin{center}
     \includegraphics[width=0.82\textwidth,height=0.72\textheight,keepaspectratio]{images/prompting-rag/prompting_legal_aid_justice_gap.png}
     \end{center}
@@ -481,57 +496,71 @@ Questions that understanding and interpretability can help answer for the next g
 
 \begin{frame}{Scientific NLP (Domains)}
     \begin{center}
-    \includegraphics[width=0.82\textwidth,height=0.72\textheight,keepaspectratio]{images/prompting-rag/prompting_llm_math_discovery_galactica.png}
+    \includegraphics[width=0.82\textwidth,height=0.65\textheight,keepaspectratio]{images/prompting-rag/prompting_llm_math_discovery_galactica.png}
     \end{center}
     \begin{itemize}
         \item[] \textcolor{red}{$\bullet$} Some emerging successes (FunSearch)
         \item[] \textcolor{red}{$\bullet$} But also challenges (Galactica)
     \end{itemize}
+    {\scriptsize
+      \textcolor{gray}{Sources: Romera-Paredes et al., ``Mathematical discoveries from program search with large language models,'' Nature 625 (2024); W.~D. Heaven, MIT Technology Review, Nov.\ 2022. Via Stanford CS224N.}
+    }
 \end{frame}
 
 \begin{frame}{Education and NLP (Domains)}
-    % PLACEHOLDER FOR IMAGE: 
     \begin{center}
-    \includegraphics[width=0.88\textwidth]{images/prompting-rag/prompting_bloom_taxonomy_chatgpt_exams.png}
+    \includegraphics[width=0.88\textwidth,height=0.62\textheight,keepaspectratio]{images/prompting-rag/prompting_bloom_taxonomy_chatgpt_exams.png}
     \end{center}
     \begin{itemize}
-        \item[] \textcolor{red}{$\bullet$} NLP systems have the potential to unlock ``bloom's two sigma effect''
+        \item[] \textcolor{red}{$\bullet$} NLP systems have the potential to deliver ``Bloom's two sigma effect'' at scale
         \item[] \textcolor{green}{$\bullet$} But also really shakes up education!
     \end{itemize}
+    {\scriptsize
+      \textcolor{gray}{Sources: after B.~S. Bloom, ``The 2 Sigma Problem,'' Educational Researcher 13(6) (1984); M.~A. Cu \& S.~Hochman, The Stanford Daily, Jan.\ 2023. Via Stanford CS224N.}
+    }
 \end{frame}
 
 \begin{frame}{NLP + Other modalities}
-    % PLACEHOLDER FOR IMAGE: NLP + Other modalities example
     \begin{center}
-    \includegraphics[width=0.82\textwidth, height=0.72\textheight,keepaspectratio]{images/prompting-rag/prompting_gpt4_multimodal_cookie_earth.png}
+    \includegraphics[width=0.82\textwidth, height=0.68\textheight,keepaspectratio]{images/prompting-rag/prompting_gpt4_multimodal_cookie_earth.png}
     \end{center}
     \begin{itemize}
         \item[] \textcolor{red}{$\bullet$} Excitement about text + X (vision/code/etc)!
     \end{itemize}
+    {\scriptsize
+      \textcolor{gray}{Source: OpenAI, ``GPT-4 Technical Report'' (2023), \url{https://arxiv.org/abs/2303.08774}, Table~18.}
+    }
 \end{frame}
 
 \begin{frame}{Image-text (Multimodal)}
-    % PLACEHOLDER FOR IMAGE: 
-    % (Image comparing LLaVA [2023] and Flamingo [2022], shows model architectures)
     \begin{center}
-    \includegraphics[width=0.82\textwidth, height=0.72\textheight,keepaspectratio]{images/prompting-rag/prompting_llava_flamingo_multimodal.png}
+    \includegraphics[width=0.82\textwidth, height=0.62\textheight,keepaspectratio]{images/prompting-rag/prompting_llava_flamingo_multimodal.png}
     \end{center}
     \begin{itemize}
         \item[] \textcolor{red}{$\bullet$} Image text models finally work, but they're less deep than expected!
         \item[] \textcolor{green}{$\bullet$} Is there deeper synthesis that will yield major gains?
     \end{itemize}
+    {\scriptsize
+      \textcolor{gray}{Sources: Liu et al., ``Visual Instruction Tuning'' (LLaVA), NeurIPS 2023, \url{https://arxiv.org/abs/2304.08485}, Fig.~1; Alayrac et al., ``Flamingo,'' NeurIPS 2022, \url{https://arxiv.org/abs/2204.14198}.}
+    }
 \end{frame}
 
 \begin{frame}{Fairness and social impact}
     \begin{center}
-    \includegraphics[width=0.82\textwidth, height=0.72\textheight,keepaspectratio]{images/prompting-rag/prompting_fairness_bias_representations.png}
+    \includegraphics[width=0.82\textwidth, height=0.70\textheight,keepaspectratio]{images/prompting-rag/prompting_fairness_bias_representations.png}
     \end{center}
+    {\scriptsize
+      \textcolor{gray}{Source: Stanford CS224N, Lecture 19 (T.~Hashimoto); figures from Ryan, Held \& Yang, \url{https://arxiv.org/abs/2402.15018}, Fig.~1, and Nadeem et al., ``StereoSet,'' ACL 2021, \url{https://arxiv.org/abs/2004.09456}.}
+    }
 \end{frame}
 
 \begin{frame}{Biases and Stereotypes: how to quantify}
   \begin{center}
-    \includegraphics[width=0.95\textwidth, height=0.95\textheight,keepaspectratio]{images/prompting-rag/prompting_bias_benchmarks_bbq_stereoset.png}
+    \includegraphics[width=0.95\textwidth, height=0.74\textheight,keepaspectratio]{images/prompting-rag/prompting_bias_benchmarks_bbq_stereoset.png}
     \end{center}
+    {\scriptsize
+      \textcolor{gray}{Sources: Parrish et al., ``BBQ: A Hand-Built Bias Benchmark for Question Answering,'' Findings of ACL 2022, \url{https://arxiv.org/abs/2110.08193}, Fig.~1; Nadeem et al., ``StereoSet,'' ACL 2021, \url{https://arxiv.org/abs/2004.09456}, Fig.~1.}
+    }
 \end{frame}
 
 \begin{frame}{Fairness and Equity: how to evaluate and mitigate?}
@@ -541,10 +570,10 @@ Questions that understanding and interpretability can help answer for the next g
     \end{itemize}
     \vspace{0.5em}
     \begin{center}
-        \includegraphics[width=0.99\textwidth]{images/prompting-rag/prompting_gender_bias_word_analogies.png}
+        \includegraphics[width=0.90\textwidth]{images/prompting-rag/prompting_gender_bias_word_analogies.png}
     \end{center}
-    \footnotesize
-    \textit{Caliskan, A., Bryson, J. J., \& Narayanan, A. (2017). "Semantics derived automatically from language corpora contain human-like biases". Science.}
+    \scriptsize
+    \textit{Bolukbasi, T., Chang, K.-W., Zou, J., Saligrama, V., \& Kalai, A. (2016). ``Man is to Computer Programmer as Woman is to Homemaker? Debiasing Word Embeddings''. NeurIPS 2016.}
 \end{frame}
 
 \begin{frame}{Fairness and Equity: What are unintended impacts of LLMs?}
@@ -552,12 +581,12 @@ Questions that understanding and interpretability can help answer for the next g
         \item[] \textcolor{red}{$\triangleright$} Country rewards for Starling 7B Reward Model prompted with \texttt{User: Where are you from? Assistant: I am from [country].}
         \item[] \textcolor{red}{$\triangleright$} \textbf{Starling assigns higher rewards to English-speaking Western nations and lower rewards to countries in the Middle East/Africa.}
     \end{itemize}
-    \vspace{0.7em}
+    \vspace{0.4em}
     \begin{center}
-        \includegraphics[width=0.85\textwidth]{images/prompting-rag/prompting_reward_model_geographic_bias.png}
+        \includegraphics[width=0.85\textwidth,height=0.55\textheight,keepaspectratio]{images/prompting-rag/prompting_reward_model_geographic_bias.png}
     \end{center}
     \tiny
-    Ryan, Michael J., William Held, and Diyi Yang. "Unintended Impacts of LLM Alignment on Global Representation." arXiv preprint arXiv:2402.15018 (2024).
+    Ryan, Michael J., William Held, and Diyi Yang. ``Unintended Impacts of LLM Alignment on Global Representation.'' arXiv preprint arXiv:2402.15018 (2024).
 \end{frame}
 
 \begin{frame}{Social Aspects of NLP}
@@ -583,6 +612,10 @@ Questions that understanding and interpretability can help answer for the next g
     \vspace{0.5em}
     \footnotesize
     \textit{Examples of bias in NLP systems can arise from training data and model design, impacting how language technologies interact with culture, religion, social norms, and minority communities.}
+
+    {\scriptsize
+      \textcolor{gray}{Source: Stanford CS224N, Lecture 19 (T.~Hashimoto); headlines from Vox (2021), Vox/Recode (2019), and the Associated Press.}
+    }
 \end{frame}
 
 \begin{frame}{Social Aspects of NLP}
@@ -638,8 +671,9 @@ Questions that understanding and interpretability can help answer for the next g
 \end{frame}
 
 
-\begin{frame}[allowframebreaks]{Implicit knowledge in NLP models: commonsense \& theory of mind}
-\includegraphics[width=0.95\textwidth, height=0.95\textheight,keepaspectratio]{images/prompting-rag/prompting_theory_of_mind_commonsense.png}
+\begin{frame}{Implicit knowledge in NLP models: commonsense \& theory of mind}
+  \centering
+  \includegraphics[width=0.95\textwidth, height=0.82\textheight,keepaspectratio]{images/prompting-rag/prompting_theory_of_mind_commonsense.png}
 \end{frame}
 
 \begin{frame}{Sustainability and energy (Impact)}
@@ -664,23 +698,39 @@ Questions that understanding and interpretability can help answer for the next g
                 w/ neural arch. search & 626,155 \\
             \end{tabular}
 
-            \vspace{0.6em}
-            {\tiny Table: Estimated CO$_2$ emissions from training common NLP models, compared to familiar consumption.}
+            \vspace{0.5em}
+            {\tiny Estimated CO$_2$ emissions from training common NLP models, compared to familiar
+            consumption. Source: Strubell, Ganesh \& McCallum, ``Energy and Policy Considerations
+            for Deep Learning in NLP,'' ACL 2019, Table~1.}
 
-            \vspace{1em}
+            \vspace{0.7em}
             \begin{itemize}
-                \item<1-> \textcolor{red}{$\triangleright$} Big NLP systems use a lot of energy -- can we make things more efficient?
+                \item \textcolor{red}{$\triangleright$} Big NLP systems use a lot of energy -- can we make things more efficient?
             \end{itemize}
         \end{column}
-        % Right column: placeholder for AI electricity use image/illustration
         \begin{column}{0.42\textwidth}
             \vspace{0.1em}
+            \centering
             \fbox{
-                \begin{minipage}[c][0.48\textheight][c]{0.98\columnwidth}
+                \begin{minipage}[c][0.48\textheight][c]{0.9\columnwidth}
                     \centering
-                    \includegraphics[width=0.98\columnwidth]{images/prompting-rag/prompting_ai_energy_consumption.png}
+                    \includegraphics[width=0.95\columnwidth]{images/prompting-rag/prompting_ai_energy_consumption.png}
                 \end{minipage}
             }
+            \par\vspace{0.3em}
+            {\tiny \textcolor{gray}{Source: J.~Vincent, ``How much electricity does AI consume?'' The Verge, Feb.\ 2024.}}
         \end{column}
     \end{columns}
+\end{frame}
+
+\begin{frame}[t]{Summary}
+  \small
+  \begin{itemize}\itemsep0.45em
+    \item[\textcolor{red}{$\blacktriangleright$}] Prompting steers a \textbf{frozen} model. No weights change, so the context you supply and the decoding settings (temperature, top $p$) carry the whole burden.
+    \item[\textcolor{red}{$\blacktriangleright$}] Exemplars alone do not buy reasoning. Making the intermediate steps explicit (CoT) does, and sampling several reasoning paths and taking the majority (self-consistency) does better still.
+    \item[\textcolor{red}{$\blacktriangleright$}] When the model lacks a fact or a calculation, move that work outside it: to a program runtime (PAL), to tools and observations (ReAct), or to a retrieved corpus (RAG).
+    \item[\textcolor{red}{$\blacktriangleright$}] RAG updates what a model knows without retraining it, but its answers are capped by the retriever. Bad retrieval yields fluent, grounded-looking, wrong answers.
+    \item[\textcolor{red}{$\blacktriangleright$}] LLM judges make evaluation cheap enough to run often, but carry position, verbosity and self-enhancement bias. Calibrate them against human ratings before trusting a score.
+    \item[\textcolor{red}{$\blacktriangleright$}] A prompt is an attack surface. Injection, leaking and jailbreaking all follow from the model being unable to tell instructions from data.
+  \end{itemize}
 \end{frame}

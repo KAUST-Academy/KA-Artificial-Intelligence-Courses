@@ -2,7 +2,6 @@
   \begin{columns}[T,onlytextwidth]
     \column{0.53\textwidth}
     \centering
-      % Placeholder for Genie-1 diagram image
       \includegraphics[width=0.85\linewidth,height=0.85\textheight,keepaspectratio]{images/video-generation/genie1_prompt_to_play_actions.png}\\[0.18em]
       {\scriptsize Source: CMU Lecture 26 \href{https://www.cs.cmu.edu/~mgormley/courses/10423/slides/lecture26-world-models.pdf}{World Models}}
     \column{0.47\textwidth}\footnotesize
@@ -26,9 +25,9 @@
         Super Mario World for SNES
     \column{0.46\textwidth}
         \centering
-        % Image placeholder: Space Panic, the first 2D platformer
         \includegraphics[width=0.98\linewidth,height=0.54\textheight,keepaspectratio]{images/video-generation/genie1_space_panic_first_2d_platformer.png}\\[-0.1em]
-        {\scriptsize Space Panic: The first 2D platformer}
+        {\scriptsize Space Panic: The first 2D platformer.\\
+        Source: CMU 10-423, Lecture 26 (World Models); screenshot of \emph{Space Panic} (Universal, 1980).}
   \end{columns}
 \end{frame}
 
@@ -93,7 +92,6 @@
   \vspace{0.6em}
 
   \begin{center}
-    % Placeholder for composite image illustrating Genie-1 application to robotics (see slide)
     \includegraphics[width=0.76\linewidth,height=0.47\textheight,keepaspectratio]{images/video-generation/genie1_robotics_application.png}\\[0.28em]
     {\scriptsize Source: CMU Lecture 26, World Models.}
   \end{center}
@@ -112,27 +110,24 @@
         \end{enumerate}
       \end{itemize}
     \column{0.46\textwidth}
-      % Placeholder for CoinRun image composite
       \includegraphics[width=\linewidth]{images/video-generation/genie1_coinrun_generated_levels.png}\\[0.15em]
-      {\scriptsize Figure: Four generated CoinRun levels with the coin at the right.}
+      {\scriptsize Figure: Four generated CoinRun levels with the coin at the right.\\
+      Source: CMU 10-423, Lecture 26 (World Models); CoinRun environment from Cobbe et al.,
+      \href{https://arxiv.org/abs/1812.02341}{arXiv:1812.02341}.}
   \end{columns}
 \end{frame}
 
-\begin{frame}[t]{Genie-1: Are the Latent Actions Transferable? (II)}
+\begin{frame}[t]{Genie-1: Are the Latent Actions Transferable? (Result)}
   \begin{columns}[T,onlytextwidth]
-    \column{0.56\textwidth}
-      \begin{itemize}\itemsep0.22em
-        \item CoinRun is a procedurally generated platformer.
-        \item \textbf{Models:}
-        \begin{enumerate}\itemsep0.12em
-          \item \textbf{Behavior Cloning:} train a policy given a dataset of each frame paired with the expert action (\emph{skyline}).
-          \item \textbf{Random Agent:} always take a random action (baseline).
-          \item \textbf{LAM-based Policy:} train a policy given a dataset of each frame paired with the Genie latent action; separately learn a mapping from latent actions to expert actions from a few examples.
-        \end{enumerate}
+    \column{0.50\textwidth}
+      \begin{itemize}\itemsep0.42em
+        \item \textbf{Yes.} The LAM-based policy reaches the same score as the expert-action skyline (plotted as \emph{Oracle}) given as few as \textbf{200} action-labelled samples to fit the latent-to-real mapping, in both the easy and hard settings.
+        \item Both stay far above the random agent.
+        \item Metric: mean percentage of levels solved out of 100 samples, averaged over 5 seeds.
+        \item So latent actions learned from unlabelled Internet video carry over to an environment the model never trained on, which is what makes them useful for control.
       \end{itemize}
-    \column{0.44\textwidth}
-      % Placeholder for Genie-1 transfer plot
-      \includegraphics[width=0.85\linewidth,height=0.85\textheight,keepaspectratio]{images/video-generation/genie1_latent_action_transfer_plot.png}\\[0.28em]
-      {\scriptsize Source: CMU Lecture 26, World Models.}
+    \column{0.48\textwidth}
+      \includegraphics[width=0.9\linewidth,height=0.72\textheight,keepaspectratio]{images/video-generation/genie1_latent_action_transfer_plot.png}\\[0.28em]
+      {\scriptsize Source: CMU Lecture 26, World Models; result per Bruce et al.\ (\href{https://arxiv.org/abs/2402.15391}{arXiv:2402.15391}), Fig.~15 (Easy).}
   \end{columns}
 \end{frame}

@@ -1,0 +1,90 @@
+\section{Smoothing}
+\begin{frame}{}
+    \LARGE N-gram Models: \textbf{Smoothing}
+\end{frame}
+
+\begin{frame}{Zero Counts Are Not Zero Probabilities}
+    \texttt{<UNK>} fixes words missing from $V$. It does nothing for a pair of words
+    that are both in $V$ but never appeared \emph{together}.
+
+    \vspace{1em}
+    For the corpus \texttt{I am happy because I am learning} we computed
+    \[
+        P(\text{happy} \mid \text{I}) = \frac{C(\text{I happy})}{C(\text{I})}
+        = \frac{0}{2} = 0
+    \]
+    even though ``I'' and ``happy'' are both perfectly ordinary words.
+
+    \vspace{1em}
+    \begin{itemize}
+        \item One zero factor drives the whole sentence probability to $0$.
+        \item $\log 0 = -\infty$, so perplexity is undefined rather than merely bad.
+        \item Longer contexts make this worse: most trigrams a model meets at test
+        time were never seen in training.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Add-One (Laplace) Smoothing}
+    \textbf{Idea:} pretend every possible n-gram was seen once more than it was.
+
+    \[
+        P_{\text{Laplace}}(w_i \mid w_{i-1})
+        = \frac{C(w_{i-1}, w_i) + 1}{C(w_{i-1}) + |V|}
+    \]
+
+    \begin{itemize}
+        \item The $+1$ in the numerator lifts unseen pairs off zero.
+        \item The $+|V|$ in the denominator is what keeps each row summing to $1$:
+        one unit is added for every word that could follow $w_{i-1}$.
+        \item \textbf{Add-$k$} is the same move with a smaller nudge, $k < 1$:
+        \[
+            P_{\text{add-}k}(w_i \mid w_{i-1})
+            = \frac{C(w_{i-1}, w_i) + k}{C(w_{i-1}) + k\,|V|}
+        \]
+    \end{itemize}
+
+\framebreak
+    \textbf{Worked example.} Same corpus, $V = \{$I, am, happy, because, learning$\}$,
+    so $|V| = 5$ and $C(\text{I}) = 2$.
+
+    \vspace{0.5em}
+    \begin{columns}[t]
+        \begin{column}{0.5\textwidth}
+            \textbf{Unsmoothed}
+            \[ P(\text{am} \mid \text{I}) = \frac{2}{2} = 1 \]
+            \[ P(\text{happy} \mid \text{I}) = \frac{0}{2} = 0 \]
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \textbf{Add-one}
+            \[ P(\text{am} \mid \text{I}) = \frac{2+1}{2+5} = \frac{3}{7} \]
+            \[ P(\text{happy} \mid \text{I}) = \frac{0+1}{2+5} = \frac{1}{7} \]
+        \end{column}
+    \end{columns}
+
+    \vspace{0.5em}
+    Nothing is zero any more, and the five smoothed probabilities still sum to $1$.
+    The mass came out of the one bigram we actually observed, whose estimate fell
+    from $1$ to $3/7$.
+
+\framebreak
+    \textbf{The trade-off:} that is a lot of mass to give away.
+
+    \begin{itemize}
+        \item Real vocabularies hold tens of thousands of words, so $|V|$ dwarfs
+        $C(w_{i-1})$ and add-one hands almost all the probability to n-grams that
+        were never seen.
+        \item Add-$k$ softens this but leaves the same flaw: every unseen n-gram gets
+        the \emph{same} estimate, whether it is plausible English or nonsense.
+        \item Practical models instead fall back on shorter contexts, which are
+        estimated from more data. If the trigram $(w_{i-2}, w_{i-1}, w_i)$ is unseen,
+        use the bigram $(w_{i-1}, w_i)$; if that is unseen too, use the unigram.
+        \begin{itemize}
+            \item \textbf{Backoff:} drop to the shorter context only when the longer
+            one has count zero.
+            \item \textbf{Interpolation:} always mix all orders,
+            $\hat{P} = \lambda_1 P(w_i) + \lambda_2 P(w_i \mid w_{i-1})
+            + \lambda_3 P(w_i \mid w_{i-2}, w_{i-1})$, with
+            $\sum_j \lambda_j = 1$ and the $\lambda_j$ tuned on held-out data.
+        \end{itemize}
+    \end{itemize}
+\end{frame}

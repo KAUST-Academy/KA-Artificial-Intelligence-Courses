@@ -2,18 +2,17 @@
 \section{Classical ASR}
 % ============================================================================
 
-% Classical ASR: noisy channel, HMM--GMM, WFST decoders
 \begin{frame}{Classical ASR: The Noisy Channel Model}
   \begin{itemize}
     \item \textbf{Search through space of all possible sentences.}
     \item \textbf{Pick the one that is most probable given the waveform.}
   \end{itemize}
   \begin{center}
-    \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_noisy_channel_model.png}
+    \includegraphics[width=\textwidth,height=0.70\textheight,keepaspectratio]{images/stt/stt_noisy_channel_model.png}
   \end{center}
+  \slideimgsource{Stanford CS224S, Lecture 9 (2025 Spring), slide 5.}
 \end{frame}
 
-% --- Stanford CS224S lec9, slide 6 ---
 \begin{frame}{The Noisy Channel Model}
   \begin{itemize}
     \item What is the most likely sentence out of all sentences in the language $L$ that generated some given
@@ -30,7 +29,6 @@
   \vfill
 \end{frame}
 
-% --- Stanford CS224S lec9, slide 7 ---
 \begin{frame}{The Noisy Channel Model}
   \begin{itemize}
     \item \textbf{Probabilistic implication:} Pick the highest probability word sequence $W$:
@@ -49,26 +47,26 @@
   \vfill
 \end{frame}
 
-% --- Stanford CS224S lec9, slide 9 ---
 \begin{frame}{The Noisy Channel Model}
   \centering
-\includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_noisy_channel_equation.png}
+  \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/stt/stt_noisy_channel_equation.png}
+  \slideimgsource{Stanford CS224S, Lecture 9 (2025 Spring), slide 9.}
 \end{frame}
 
-% --- Stanford CS224S lec9, slide 11 ---
 \begin{frame}{Word error rate (WER)}
 \centering
-\includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_word_error_rate.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/stt/stt_word_error_rate.png}
+  \slideimgsource{Alignment example after Jurafsky \& Martin, \textit{Speech and Language Processing}; via Stanford CS224S, Lecture 9 (2025 Spring), slide 11.}
 \end{frame}
 
 \begin{frame}{Speech Recognition Architecture}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_asr_architecture.png}
+  \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/stt/stt_asr_architecture.png}
+  \slideimgsource{Stanford CS224S, Lecture 9 (2025 Spring), slide 13.}
 \end{frame}
 
-% Classical ASR: HMM--GMM
-% --- Stanford CS224S lec9, slide 16 ---
-\begin{frame}{Classical ASR:HMM-GMM system}
+\begin{frame}{Classical ASR: HMM-GMM system}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_hmm_gmm_phones.png}
+  \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/stt/stt_hmm_gmm_phones.png}
+  \slideimgsource{Stanford CS224S, Lecture 9 (2025 Spring), slide 16.}
 \end{frame}

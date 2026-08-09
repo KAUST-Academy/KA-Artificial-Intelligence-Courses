@@ -3,24 +3,24 @@
     \large Following are some of the leading Large Reasoning Models (LRMs) as of 2024/2025:
     \vspace{0.5em}
     \begin{itemize}
-        \item \textbf{OpenAI O1/O3}
+        \item \textbf{OpenAI o1/o3}
         \begin{itemize}
-            \item \textbf{Architecture:} Dense Transformer, RLHF-optimized.
+            \item \textbf{Architecture:} Undisclosed; trained with reinforcement learning to reason before answering.
             \item \textbf{Training Data Transparency:} Proprietary, limited details.
             \item \textbf{Strengths:} High-quality reasoning, STEM, coding.
-            \item \textbf{Reasoning Approach:} Adjustable effort (Low/Med/High), step-by-step.
-            \item \textbf{Efficiency:} Adjustable reasoning mode, 200K context window.
+            \item \textbf{Reasoning Approach:} Hidden chain of thought, with the effort budget selectable as low, medium, or high.
+            \item \textbf{Efficiency:} 200K context window, 100K maximum output tokens.
             \item \textbf{Best Use Case:} General AI, STEM research, API function calling.
         \end{itemize}
     \framebreak
         \item \textbf{DeepSeek R1}
         \begin{itemize}
             \item \textbf{Architecture:} Mixture of Experts (MoE, 671B total, 37B active).
-            \item \textbf{Training Data Transparency:} Somewhat open (14.8T tokens).
-            \item \textbf{Strengths:} Expert coding \& debugging, efficient MoE.
-            \item \textbf{Reasoning Approach:} Multi-expert collaboration, self-improvement.
-            \item \textbf{Efficiency:} High token efficiency (MoE, 312 tokens/sec).
-            \item \textbf{Best Use Case:} Enterprise coding assistant, code debugging.
+            \item \textbf{Training Data Transparency:} Open weights (MIT licence); base model pretrained on 14.8T tokens and the RL recipe described in the paper.
+            \item \textbf{Strengths:} Math, coding, and STEM reasoning at open-weight cost.
+            \item \textbf{Reasoning Approach:} Large-scale RL on problems whose answers can be checked automatically, producing long explicit chains of thought.
+            \item \textbf{Efficiency:} Only 37B of 671B parameters are active per token, so each token costs a fraction of a dense model of the same size.
+            \item \textbf{Best Use Case:} Self-hosted reasoning assistant, coding and debugging.
         \end{itemize}
     \framebreak
         \item \textbf{Gemini 2.0 (Flash Thinking)}
@@ -33,34 +33,34 @@
             \item \textbf{Best Use Case:} AI assistant (multimodal, research, planning).
         \end{itemize}
     \framebreak
-        \item \textbf{Claude 3.5}
+        \item \textbf{Claude 3.7 Sonnet}
         \begin{itemize}
-            \item \textbf{Architecture:} Dense Transformer, fine-tuned for dialogue \& ethics.
-            \item \textbf{Training Data Transparency:} Partially open (some RLHF data available).
-            \item \textbf{Strengths:} Long-form dialogue, ethical AI, context memory.
-            \item \textbf{Reasoning Approach:} Contextual understanding, ethical guardrails.
-            \item \textbf{Efficiency:} Long context (200K), RLHF for alignment.
-            \item \textbf{Best Use Case:} Long-form assistant, decision-making support.
+            \item \textbf{Architecture:} Undisclosed; a single model that answers either immediately or after extended thinking.
+            \item \textbf{Training Data Transparency:} Proprietary; evaluations documented in a published system card.
+            \item \textbf{Strengths:} Coding, agentic tasks, long-form dialogue.
+            \item \textbf{Reasoning Approach:} Extended thinking, shown to the user rather than hidden.
+            \item \textbf{Efficiency:} 200K context; thinking can be switched off, and its token budget set per API call.
+            \item \textbf{Best Use Case:} One deployment covering both quick replies and hard problems.
         \end{itemize}
     \framebreak
-        \item \textbf{Codestral (Mistral)}
+        \item \textbf{Magistral (Mistral)}
         \begin{itemize}
-            \item \textbf{Architecture:} Dense Transformer, code-focused.
-            \item \textbf{Training Data Transparency:} Proprietary, open benchmarks used.
-            \item \textbf{Strengths:} Cost-effective code generation, small but optimized.
-            \item \textbf{Reasoning Approach:} Optimized for coding efficiency \& debugging.
-            \item \textbf{Efficiency:} High speed (small model, transformer optimized).
-            \item \textbf{Best Use Case:} Cost-effective coding LLM.
+            \item \textbf{Architecture:} Dense Transformer; Magistral Small at 24B, Magistral Medium for enterprise use.
+            \item \textbf{Training Data Transparency:} Magistral Small released open-weight under Apache 2.0, with the RL recipe published.
+            \item \textbf{Strengths:} Reasoning traces that stay in the user's own language across scripts and alphabets.
+            \item \textbf{Reasoning Approach:} RL-trained chains of thought, kept legible for review.
+            \item \textbf{Efficiency:} 24B open-weight variant, self-hostable.
+            \item \textbf{Best Use Case:} Regulated or multilingual settings where the trace must be auditable.
         \end{itemize}
     \framebreak
         \item \textbf{QwQ (Alibaba)}
         \begin{itemize}
-            \item \textbf{Architecture:} Dense Transformer, fine-tuned for reasoning.
-            \item \textbf{Training Data Transparency:} Limited transparency, strong math focus.
+            \item \textbf{Architecture:} Dense Transformer (32B), RL-trained for reasoning.
+            \item \textbf{Training Data Transparency:} Open weights under Apache 2.0; training corpus undisclosed.
             \item \textbf{Strengths:} Math, logical puzzles, chain-of-thought self-verification.
-            \item \textbf{Reasoning Approach:} Self-reflection, chain-of-thought.
-            \item \textbf{Efficiency:} Small model (32B), inference-efficient.
-            \item \textbf{Best Use Case:} Mathematical proofs, advanced reasoning.
+            \item \textbf{Reasoning Approach:} Outcome-reward RL scaled up from a cold-start checkpoint, plus self-reflection.
+            \item \textbf{Efficiency:} 32B parameters, yet comparable to DeepSeek-R1 on several reasoning benchmarks.
+            \item \textbf{Best Use Case:} Mathematical proofs, advanced reasoning on modest hardware.
         \end{itemize}
     \end{itemize}
 \end{frame}

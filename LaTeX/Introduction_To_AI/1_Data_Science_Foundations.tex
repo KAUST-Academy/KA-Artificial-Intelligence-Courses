@@ -17,8 +17,8 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{booktabs}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
+% Do not load algorithm/algpseudocode here: the shared preamble already loads
+% algorithm2e, and algorithm.sty redefines \listofalgorithms, which is a hard error.
 \usetikzlibrary{positioning}
 \usepackage[utf8]{inputenc}
 \usepackage{pifont}

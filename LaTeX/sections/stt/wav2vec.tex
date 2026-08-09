@@ -1,14 +1,15 @@
 \section{Self-Supervised Learning: Wav2Vec 2.0}
 
-\begin{frame}{}
-    \LARGE \textbf{Self-Supervised Learning: Wav2Vec 2.0}
+\begin{frame}[plain]
+  \centering
+  \vspace{0.10\textheight}
+  {\LARGE \textbf{Self-Supervised Learning: Wav2Vec 2.0}}
+
+  \vspace{0.08\textheight}
+  {\large Learning speech representations from unlabeled audio}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Wav2Vec 2.0: Overview}
-    \begin{figure}
-        \centering
-        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/audio-nlp/wav2vec-paper.png}
-    \end{figure}
     \begin{itemize}
         \item \textbf{Proposed by Baevski et al. (2020)}
         \item \textbf{Key Idea:} Self-supervised learning for speech representation.
@@ -21,9 +22,10 @@
     \end{itemize}
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp/wav2vec2-overview.png}
+        \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/audio-nlp/wav2vec2-overview.png}
         \caption*{Wav2Vec 2.0 architecture overview.}
     \end{figure}
+    \slideimgsource{Baevski et al., wav2vec 2.0, Fig.~1; \href{https://arxiv.org/abs/2006.11477}{arXiv:2006.11477}.}
 \end{frame}
 
 \begin{frame}{Wav2Vec 2.0: Feature Extraction}
@@ -32,11 +34,12 @@
         \item \textbf{Output:} Latent speech representations $z_t$.
     \end{itemize}
     \begin{center}
-        \includegraphics[width=\textwidth,height=0.6\textheight,keepaspectratio]{images/audio-nlp/wav2vec2-cnn.png}
+        \includegraphics[width=\textwidth,height=0.46\textheight,keepaspectratio]{images/audio-nlp/wav2vec2-cnn.png}
     \end{center}
     \[
         \text{Waveform} \xrightarrow{\text{CNN}} z_t
     \]
+    \slideimgsource{Kune\v{s}ov\'a et al., ``Comparison of wav2vec 2.0 models on three speech processing tasks,'' \textit{Int.\ J.\ Speech Technology} 27(4):847--859, 2024, Fig.~2; \href{https://doi.org/10.1007/s10772-024-10140-6}{doi:10.1007/s10772-024-10140-6}. Shown there as a fine-tuned frame classifier, not as the wav2vec 2.0 pre-training model.}
 \end{frame}
 
 \begin{frame}{Wav2Vec 2.0: Contextualization and Masking}
@@ -60,27 +63,32 @@
 \end{frame}
 
 \begin{frame}{Wav2Vec 2.0: Contrastive and Diversity Losses}
-    \begin{itemize}
-        \item \textbf{Contrastive Loss:} Distinguish true quantized vector $q_t^+$ from negatives $q^-$.
+    \begin{itemize}\footnotesize
+        \item \textbf{Contrastive loss.} At each masked step, identify the true quantized latent $q_t$ within a candidate set $Q_t$ holding $q_t$ itself plus $K = 100$ distractors sampled from other masked steps of the same utterance.
     \end{itemize}
     \[
-        L_t = -\log \frac{\exp(\mathrm{sim}(c_t, q_t^+))}{\sum_{q^-} \exp(\mathrm{sim}(c_t, q^-))}
+        \mathcal{L}_m = -\log \frac{\exp\!\big(\mathrm{sim}(c_t, q_t) / \kappa\big)}
+                                   {\sum_{\tilde{q} \in Q_t} \exp\!\big(\mathrm{sim}(c_t, \tilde{q}) / \kappa\big)}
     \]
-    \begin{itemize}
-        \item \textbf{Diversity Loss:} Encourages usage of all codebook entries.
+    \begin{itemize}\footnotesize
+        \item $\mathrm{sim}$ is cosine similarity and $\kappa = 0.1$ is a temperature. The sum runs over \emph{all} of $Q_t$, the positive included, so the ratio is a softmax over candidates.
+        \item \textbf{Diversity loss} $\mathcal{L}_d$ encourages use of every codebook entry, stopping the quantizer collapsing onto a handful of codes. Total objective: $\mathcal{L} = \mathcal{L}_m + \alpha \mathcal{L}_d$.
     \end{itemize}
+    \slideimgsource{Baevski et al., wav2vec 2.0, Eq.~3; \href{https://arxiv.org/abs/2006.11477}{arXiv:2006.11477}.}
 \end{frame}
 
 \begin{frame}{Wav2Vec 2.0: Performance}
-    \begin{itemize}
-        \item \textbf{State-of-the-art results:}
+    \begin{itemize}\footnotesize
+        \item LibriSpeech \textbf{test-clean} WER, LARGE model pre-trained on 53.2k hours of unlabeled LibriVox audio and decoded with a Transformer LM:
         \begin{itemize}
-            \item $\sim$1.8\% WER with 960h labeled data
-            \item $\sim$4.8\% WER with only 10 minutes labeled data
+            \item 1.8\% fine-tuned on the full 960 h of labeled data (3.3\% on test-other)
+            \item 4.8\% fine-tuned on only 10 minutes of labeled data (8.2\% on test-other)
         \end{itemize}
-        \item \textbf{Impact:} Enables efficient use of unlabeled speech data.
+        \item \textbf{The language model is doing real work.} Strip it out and that same 10-minute model lands near 40\% WER. Always quote self-supervised numbers with the decoding setup attached.
+        \item \textbf{Impact:} makes unlabeled audio usable, which matters most where labeled speech is scarce.
     \end{itemize}
     \begin{center}
-        \includegraphics[width=0.7\textwidth]{images/audio-nlp/wav2vec2-results.png}
+        \includegraphics[width=0.44\textwidth]{images/audio-nlp/wav2vec2-results.png}
     \end{center}
+    \slideimgsource{Baevski et al., wav2vec 2.0: the WERs above are LibriSpeech (Tables~1, 2 and 9); the table shown is Table~3, a \emph{separate} TIMIT phoneme-error-rate benchmark decoded without an LM. \href{https://arxiv.org/abs/2006.11477}{arXiv:2006.11477}.}
 \end{frame}

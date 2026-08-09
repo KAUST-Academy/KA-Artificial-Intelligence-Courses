@@ -27,6 +27,14 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{What the encoder is allowed to see}
+  \centering
+  \includegraphics[width=\textwidth,height=0.56\textheight,keepaspectratio]{images/stt/stt_streaming_attention_masks.png}
+
+  {\footnotesize Green marks the input positions each output position may attend to: (a) full attention, the offline case; (b) left-only attention, fully causal; (c) chunk attention, where every chunk sees itself and all previous chunks.}
+  \slideimgsource{Zhang et al., ``Unified Streaming and Non-streaming Two-pass End-to-end Model for Speech Recognition,'' Fig.~2; \href{https://arxiv.org/abs/2012.05481}{arXiv:2012.05481}.}
+\end{frame}
+
 \begin{frame}{Why RNN-T Dominates Streaming}
   \begin{itemize}
     \item The RNN-Transducer is \textbf{frame-synchronous}: at each audio frame it either emits a token or a blank and moves on, so partial transcripts appear as audio arrives.

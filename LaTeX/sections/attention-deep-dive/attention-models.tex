@@ -1,7 +1,9 @@
 \section{Recap: Attention in Seq2Seq}
 \begin{frame}{The Attention Mechanism (Recap)}
   \centering
-  \includegraphics[width=0.45\paperwidth, height=0.45\paperheight, keepaspectratio]{images/attention-deep-dive/attention_dynamic_weights_decoder.png}
+  \includegraphics[width=0.45\paperwidth, height=0.42\paperheight, keepaspectratio]{images/attention-deep-dive/attention_dynamic_weights_decoder.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~28.}
 
   \begin{itemize}
     \item The decoder builds a fresh context vector at every step: $c_t = \sum_i w_i(t)\, h_i$, a weighted sum of all encoder states, not the hidden state of any single input word.

@@ -10,14 +10,12 @@
 
 \institute{
     \vskip 20pt
-    \begin{figure}
-        \centering
-        \begin{subfigure}[t]{\textwidth}
-            \centering
-            \includegraphics[height=0.5in]{style_files/kaust_logo.png}
-            \includegraphics[height=0.5in]{style_files/LMHLogo.pdf}
-        \end{subfigure}
-    \end{figure}
+    % Plain \includegraphics, not figure+subfigure: a subfigure environment steps the
+    % figure counter, which would make the first numbered caption of every deck
+    % that inputs this cover read "Figure 2".
+    {\centering
+        \includegraphics[height=0.5in]{style_files/kaust_logo.png}
+        \includegraphics[height=0.5in]{style_files/LMHLogo.pdf}\par}
     \vskip 20pt
     % KAUST Academy \\
     % King Abdullah University of Science and Technology\\

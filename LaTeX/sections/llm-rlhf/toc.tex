@@ -1,7 +1,9 @@
-% Slides from Lecture-8 lines 37--84 (main already inputs sections/cover before this file).
 \begin{frame}[plain]
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.75\paperheight,keepaspectratio]{images/llm-rlhf/rlhf_ppo_overview_pipeline.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/llm-rlhf/rlhf_ppo_overview_pipeline.png}
+    \caption*{\scriptsize Lambert, Castricato, von Werra \& Havrilla, ``Illustrating Reinforcement Learning from Human Feedback (RLHF),'' Hugging Face Blog, 2022.}
+  \end{figure}
 \end{frame}
 
 \begin{frame}[t]{Table of Contents}
@@ -11,39 +13,45 @@
     \item Learning Outcomes
     \item \textcolor{red}{Fine-Tuning Methods for LLMs}
     \begin{enumerate}
+      \scriptsize
       \item Categories of Fine-Tuning
       \item \textcolor{red}{Full Fine-Tuning (FT)}
       \item \textcolor{red}{Parameter-Efficient Fine-Tuning (PEFT)}
     \end{enumerate}
     \item \textcolor{red}{Supervised Fine-Tuning (SFT)}
     \begin{enumerate}
+      \scriptsize
       \item What is SFT?
       \item Datasets for SFT
+      \item Domain-Specific SFT
       \item Limitations of SFT
     \end{enumerate}
     \item \textcolor{red}{RLHF --- Reinforcement Learning with Human Feedback}
     \begin{enumerate}
+      \scriptsize
       \item Why RLHF?
+      \item The RLHF Pipeline
     \end{enumerate}
   \end{enumerate}
 \end{frame}
 
-\begin{frame}[t]{Table of Contents (Detailed Outline)}
+\begin{frame}[t]{Table of Contents (cont.)}
   \scriptsize
   \begin{enumerate}
-    \item[\textcolor{red}{2.}] RLHF Pipeline
-    \item[\textcolor{red}{3.}] Reward Model (RM)
-    \item[\textcolor{red}{4.}] RLHF Training (with PPO)
-    \item[\textcolor{red}{5.}] Direct Preference Optimization (DPO)
-    \item[\textcolor{red}{6.}] LoRA and Quantized LoRA
+    \setcounter{enumi}{5}
+    \item \textcolor{red}{Reward Model (RM)}
+    \item \textcolor{red}{RLHF Training with PPO}
+    \item \textcolor{red}{Direct Preference Optimization (DPO)}
+    \item \textcolor{red}{LoRA and Quantized LoRA}
       \begin{enumerate}
-        \item[1.] What is LoRA?
-        \item[2.] Benefits of LoRA
-        \item[3.] What is QLoRA?
-        \item[4.] Applications of LoRA / QLoRA
+        \scriptsize
+        \item What is LoRA?
+        \item Benefits of LoRA
+        \item What is QLoRA?
+        \item Applications of LoRA / QLoRA
       \end{enumerate}
-    \item[\textcolor{red}{7.}] Limitations of Fine-Tuning and RLHF
-    \item[\textcolor{red}{8.}] Future Directions
-    \item[\textcolor{red}{9.}] Summary
+    \item \textcolor{red}{Limitations of Fine-Tuning and RLHF}
+    \item \textcolor{red}{Future Directions}
+    \item \textcolor{red}{Summary}
   \end{enumerate}
 \end{frame}

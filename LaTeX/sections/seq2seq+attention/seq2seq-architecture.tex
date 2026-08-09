@@ -20,15 +20,19 @@
   \end{itemize}
 \end{frame}
 
-% Slide 8
 \begin{frame}{Seq2Seq Architecture}
   \centering
   \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_overview_speech_translation.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~2.}
 \end{frame}
 
 \begin{frame}{Modeling the problem}
   \centering
   \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_many_to_many_rnn.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~3 (RNN-taxonomy panel after A. Karpathy, 2015).}
+
   \centering
   \textit{Delayed} sequence to sequence
 \end{frame}
@@ -36,28 +40,36 @@
 \begin{frame}{Modeling the problem}
   \centering
   \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_encoder_process_input.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~4 (RNN-taxonomy panel after A. Karpathy, 2015).}
+
   \centering
   \LARGE \textit{Delayed} sequence to sequence
 \end{frame}
 
-% Slide 11
 \begin{frame}{Modeling the problem}
   \centering
   \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_encoder_then_decoder.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~5 (RNN-taxonomy panel after A. Karpathy, 2015).}
+
   \LARGE \textit{Delayed} sequence to sequence
 \end{frame}
 
-% Slide 12
 \begin{frame}{Modeling the problem}
   \centering
   \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_encoder_decoder_split.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~6 (RNN-taxonomy panel after A. Karpathy, 2015).}
+
   \textit{Problem:} Each word that is output depends only on  current hidden state, and not on previous outputs
 \end{frame}
 
-% Slide 13
 \begin{frame}{Modeling the problem}
   \centering
   \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_rnn_to_recurrent_cell.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~7 (RNN-taxonomy panel after A. Karpathy, 2015).}
   \centering
   \begin{itemize}
     \item \textit{Delayed} Sequence to sequence
@@ -67,10 +79,11 @@
   \end{itemize}
 \end{frame}
 
-% Slide 14
 \begin{frame}{The “simple” translation model}
   \centering
   \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_encoder_unrolled_with_eos.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~8.}
   \begin{itemize}
     \item The input sequence feeds into a recurrent structure 
     \item The input sequence is terminated by an explicit \texttt{<eos>} symbol 
@@ -80,10 +93,11 @@
 \end{itemize}  
 \end{frame}
 
-% Slide 15
 \begin{frame}{The “simple” translation model}
   \centering
   \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_encoder_to_recurrent_cell.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~9.}
   \begin{itemize}
     \item The input sequence feeds into a recurrent structure 
     \item The input sequence is terminated by an explicit \texttt{<eos>} symbol 
@@ -98,10 +112,11 @@
 \end{itemize}  
 \end{frame}
 
-% Slide 16
 \begin{frame}{The “simple” translation model}
   \centering
-  \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_first_word.png}
+  \includegraphics[width=0.35\paperwidth,height=0.29\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_first_word.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~10.}
   \begin{itemize}
     \item The input sequence feeds into a recurrent structure
     \item The input sequence is terminated by an explicit \texttt{<eos>} symbol
@@ -116,10 +131,11 @@
 \end{itemize}  
 \end{frame}
 
-% Slide 17
 \begin{frame}{The “simple” translation model}
   \centering
-  \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_two_words.png}
+  \includegraphics[width=0.35\paperwidth,height=0.29\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_two_words.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~11.}
   \begin{itemize}
     \item The input sequence feeds into a recurrent structure
     \item The input sequence is terminated by an explicit \texttt{<eos>} symbol
@@ -134,10 +150,11 @@
 \end{itemize}  
 \end{frame}
 
-% Slide 18
 \begin{frame}{The “simple” translation model}
   \centering
-  \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_three_words.png}
+  \includegraphics[width=0.35\paperwidth,height=0.29\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_three_words.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~12.}
   \begin{itemize}
     \item The input sequence feeds into a recurrent structure 
     \item The input sequence is terminated by an explicit \texttt{<eos>} symbol 
@@ -152,10 +169,11 @@
 \end{itemize}
 \end{frame}
 
-% Slide 19
 \begin{frame}{The “simple” translation model}
   \centering
-  \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_full_output.png}
+  \includegraphics[width=0.35\paperwidth,height=0.29\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_decoder_full_output.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~13.}
   \begin{itemize}
     \item The input sequence feeds into a recurrent structure 
     \item The input sequence is terminated by an explicit \texttt{<eos>} symbol 
@@ -170,10 +188,11 @@
 \end{itemize}
 \end{frame}
 
-% Slide 20
 \begin{frame}{The “simple” translation model}
   \centering
   \includegraphics[width=0.35\paperwidth,height=0.35\paperheight,keepaspectratio]{images/seq2seq+attention/seq2seq_encoder_decoder_labeled.png}
+
+  {\scriptsize Source: after CMU 11-785 (Spring 2024), Lecture 18: Sequence to Sequence Models \& Attention, slide~14.}
   \begin{itemize}
     \item The recurrent structure that extracts the hidden representation from the input sequence is the \textbf{encoder} 
     \item The recurrent structure that utilizes this representation to produce the output sequence is the \textbf{decoder}

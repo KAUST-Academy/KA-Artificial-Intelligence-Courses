@@ -1,18 +1,19 @@
 \begin{frame}[allowframebreaks]{Cascaded Diffusion Models}
     \begin{figure}
         \centering
-        \includegraphics[width=1.06\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_102_1_img.png}
+        \includegraphics[width=1.0\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_102_1_img.png}
+        \caption*{\scriptsize Ho et al., ``Cascaded Diffusion Models for High Fidelity Image Generation,'' \textit{JMLR} 23(47), 2022, Fig.~1.}
     \end{figure}
     \begin{figure}
         \centering
         \includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_102_2_img.png}
-        \caption*{Ho, Jonathan, et al. "Cascaded diffusion models for high fidelity image generation." The Journal of Machine Learning Research 23.1 (2022): 2249-2281.}
+        \caption*{Ho, Jonathan, Chitwan Saharia, William Chan, David J. Fleet, Mohammad Norouzi, and Tim Salimans. ``Cascaded Diffusion Models for High Fidelity Image Generation.'' \textit{Journal of Machine Learning Research} 23(47):1-33, 2022.}
     \end{figure}
 
     \framebreak
 
     \begin{itemize}
-        \item Train one unconditional model; the remaining models are low-resolution conditional super-resolution models.
+        \item Train one base low-resolution model (class-conditional in CDM); the remaining models are super-resolution models conditioned on the previous stage's output.
         \item Condition on the low-resolution image, perform bilinear or bicubic upsampling, and concatenate the result to the noised input.
         \item Models can be trained independently.
         \item Hyperparameters can be tuned specifically for each resolution.
@@ -30,7 +31,7 @@
         \item Method 2: Non-truncated Conditioning Augmentation
         \begin{itemize}
             \item Train the super-resolution $p(x|z_0)$ model conditioned on samples from the prior $p(z_0)$ with added corruption from the forward process $q(z_s|z_0)$
-            \item $S$ (corruption / noise strength) is a hyperparameter
+            \item $s$ (corruption / noise strength) is a hyperparameter
             \item Effective for resolutions $< 128$
         \end{itemize}
     \end{itemize}
@@ -38,7 +39,8 @@
     \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1.06\linewidth,height=0.95\textheight,keepaspectratio]{images/adv-img-gen/slide_105_1_img.png}
+        \includegraphics[width=1.0\linewidth,height=0.85\textheight,keepaspectratio]{images/adv-img-gen/slide_105_1_img.png}
+        \caption*{\scriptsize Ho et al., ``Cascaded Diffusion Models for High Fidelity Image Generation,'' \textit{JMLR} 23(47), 2022, Fig.~9(a,b).}
     \end{figure}
 
     \framebreak
@@ -46,7 +48,8 @@
 
     \begin{figure}
         \centering
-        \includegraphics[width=1.06\linewidth,height=0.65\textheight,keepaspectratio]{images/adv-img-gen/slide_106_1_img.png}
+        \includegraphics[width=1.0\linewidth,height=0.65\textheight,keepaspectratio]{images/adv-img-gen/slide_106_1_img.png}
+        \caption*{\scriptsize Ho et al., ``Cascaded Diffusion Models for High Fidelity Image Generation,'' \textit{JMLR} 23(47), 2022, Table~2(b).}
     \end{figure}
     
 \end{frame}

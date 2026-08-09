@@ -29,6 +29,14 @@
 % geometry is loaded by beamer itself; loading it again with options caused
 % an "Option clash" error on every build (the margin option was never applied).
 \usepackage{pgfplots}
+% TikZ libraries the diagrams rely on. Without them pgf fails at the point of
+% use: arrows.meta for the Latex[...]/Stealth[...] tips ("Unknown arrow tip
+% kind"), calc for ($..!..!..$) coordinate arithmetic, shapes.geometric for the
+% star shape and its star points / star point height keys, shadows for
+% drop shadow. Individual decks may re-declare these; that is harmless.
+\usetikzlibrary{arrows.meta,calc,shapes.geometric,shadows}
+% \cancel is used to strike out terms in the worked derivations.
+\usepackage{cancel}
 \usepackage[acronym]{glossaries}
 \usepackage[style=ieee]{biblatex}
 % \lstset{basicstyle=\ttfamily\small} % optional settings

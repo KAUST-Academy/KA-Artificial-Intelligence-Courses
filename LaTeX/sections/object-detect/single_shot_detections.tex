@@ -11,7 +11,8 @@
 
 \begin{figure}
 \centering
-\includegraphics[width=1.0\textwidth,height=0.7\textheight,keepaspectratio]{images/object-detect/scale_1.png}
+\includegraphics[width=1.0\textwidth,height=0.6\textheight,keepaspectratio]{images/object-detect/scale_1.png}
+\caption*{\tiny Source: UMich EECS 498 (2022), Lecture 14: Object Detectors, slide 73}
 \end{figure}
     
 \end{frame}
@@ -51,6 +52,7 @@
 \centering
 \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/scale_6.png}
 \end{figure}
+\footnotetext{Correction: the venue printed inside these figures is wrong. Feature Pyramid Networks appeared at \textbf{CVPR} 2017, not ICCV 2017: Lin, Doll\'ar, Girshick, He, Hariharan \& Belongie, ``Feature Pyramid Networks for Object Detection''.}
 
 \framebreak
 
@@ -78,12 +80,11 @@
         \onslide<3->{
         \begin{enumerate}
             \item Select next highest-scoring box
-            \item Eliminate lower-scoring boxes 
-            \item with IoU $>$ threshold (e.g. 0.7)
+            \item Eliminate lower-scoring boxes with IoU $>$ threshold (e.g. 0.7)
             \item If any boxes remain, GOTO 1
         \end{enumerate}
         }
-        \item<5-> \textcolor{red}{\textbf{Problem:} NMS may eliminate "good" boxes when objects are highly overlapping… no good solution =( }
+        \item<5-> \textcolor{red}{\textbf{Problem:} NMS may eliminate ``good'' boxes when objects are highly overlapping… no good solution =( }
     \end{itemize}
     \end{column}
     
@@ -92,6 +93,7 @@
     \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/nms_1.png}
+    \caption*{\tiny Source: UMich EECS 498 (2022), Lecture 13: Object Detection, slide 78}
     \end{figure}
     }
 
@@ -99,6 +101,7 @@
     \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/nms_2.png}
+    \caption*{\tiny Source: UMich EECS 498 (2022), Lecture 13: Object Detection, slide 82}
     \end{figure}
     }
 
@@ -106,6 +109,7 @@
     \begin{figure}
     \centering
     \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/nms_3.png}
+    \caption*{\tiny Source: UMich EECS 498 (2022), Lecture 13: Object Detection, slide 83}
     \end{figure}
     }
         
@@ -114,9 +118,19 @@
     
 \end{frame}
 
+\begin{frame}{Two Stages or One?}
+    \begin{itemize}
+        \item \textbf{Two-stage} (the R-CNN family): stage one proposes a few thousand candidate regions, stage two runs a classifier and a box regressor \emph{once per region}. Every proposal gets a second look, and the cost of inference grows with the number of proposals.
+        \item \textbf{Single shot}: one network predicts a class score and a box offset for every location in a dense, fixed grid of cells or anchors, in a single forward pass. There is no proposal stage, so the runtime does not depend on how many objects are in the image.
+        \item The two families that established this design are \textbf{SSD} (Single Shot MultiBox Detector), which predicts from several feature maps at different scales, and \textbf{YOLO}, which we turn to next.
+        \item \textbf{The trade-off:} single-shot detectors are far faster, but they must score a huge number of locations of which nearly all are background, and they historically lag two-stage detectors in accuracy, particularly on small objects.
+    \end{itemize}
+\end{frame}
+
 \begin{frame}{Single Shot Object Detection}
     \begin{figure}
         \centering
         \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/yolo_1.png}
+        \caption*{\tiny Source: WAIC DL4CV, ``Object Detection and Segmentation'' (L. Yariv, 2022), slide 5}
     \end{figure}
 \end{frame}

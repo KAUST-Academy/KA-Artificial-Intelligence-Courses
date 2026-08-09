@@ -11,45 +11,29 @@
 \begin{figure}
     \centering
     \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/gan/cond_gan_1.png}
+    \caption*{\scriptsize [Source: Busayor, ``The Story of DCGANs, WGAN and CGANs,'' Analytics Vidhya, 2021]}
 \end{figure}
 
 \framebreak
 \begin{itemize}
     \item Discriminator Loss:
     \begin{align*}
-    \mathcal{L}^{(D)} \left( \theta^{(G)}, \theta^{(D)} \right) =\ & 
-    - \mathbb{E}_{x \sim p_{data}} \left[ \log D(x|y) \right] \\
-    & - \mathbb{E}_{z \sim p_z(z),\ y \sim p_{data}(y)} \left[ \log(1 - D(G(z|y))) \right]
+    \mathcal{L}^{(D)} \left( \theta^{(G)}, \theta^{(D)} \right) =\ &
+    - \mathbb{E}_{(x,y) \sim p_{data}} \left[ \log D(x|y) \right] \\
+    & - \mathbb{E}_{z \sim p_z(z),\ y \sim p_{data}(y)} \left[ \log(1 - D(G(z|y)\,|\,y)) \right]
     \end{align*}
     \item Generator Loss:
     $$
-    \mathcal{L}^{(G)} \left( \theta^{(G)}, \theta^{(D)} \right) = - \mathbb{E}_z \left[ \log D(G(z|y)) \right]
+    \mathcal{L}^{(G)} \left( \theta^{(G)}, \theta^{(D)} \right) = - \mathbb{E}_{z \sim p_z(z),\ y \sim p_{data}(y)} \left[ \log D(G(z|y)\,|\,y) \right]
     $$
 \end{itemize}
 
 \framebreak
 \begin{figure}
     \centering
-    \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/gan/cond_gan_2.png}
-    \caption*{A conditional GAN architecture for the MNIST digits dataset.}
+    \includegraphics[height=0.72\textheight, width=\textwidth, keepaspectratio]{images/gan/cond_gan_2.png}
+    \caption*{A conditional GAN architecture for the MNIST digits dataset. {\scriptsize [Source: Busayor, ``The Story of DCGANs, WGAN and CGANs,'' Analytics Vidhya, 2021]}}
 \end{figure}
 
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Condional GAN - Image to Image}
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.75\textheight, width=\textwidth, keepaspectratio]{images/gan/cond_gan_3.png}
-    \caption*{Using L1 loss in addition in GAN loss can help in image to image translation}
-\end{figure}
-
-\framebreak
-
-\begin{figure}
-    \centering
-    \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/gan/cond_gan_4.png}
-    \caption*{Image to Image translation with condional GANs}
-\end{figure}
-    
-\end{frame}

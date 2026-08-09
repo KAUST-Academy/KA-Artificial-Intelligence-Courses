@@ -1,7 +1,7 @@
 \begin{frame}[allowframebreaks]{Text-to-SVG}
     \begin{itemize}
         \item Text-to-SVG generation is a novel application of diffusion models, enabling the creation of vector graphics from textual descriptions.
-        \item The process involves training a diffusion model to learn the distribution of SVG images conditioned on text prompts.
+        \item No SVG training data is used: SVG path parameters are optimized through a differentiable rasterizer (DiffVG), guided by a pretrained text-to-image diffusion model.
         \item The model generates SVG paths, which are inherently vector-based and scalable without loss of quality.
     \end{itemize}
     \framebreak
@@ -12,13 +12,14 @@
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_160_1_img.png}
-        \caption*{Jain, Ajay, Amber Xie, and Pieter Abbeel. "Vectorfusion: Text-to-svg by abstracting pixel-based diffusion models." Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2023.}
+        \includegraphics[width=0.85\linewidth,height=0.40\textheight,keepaspectratio]{images/adv-img-gen/slide_160_1_img.png}
+        \caption*{Jain, Ajay, Amber Xie, and Pieter Abbeel. ``VectorFusion: Text-to-SVG by Abstracting Pixel-Based Diffusion Models.'' \textit{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition} (CVPR), pp. 1911-1920, 2023.}
     \end{figure}
 
     \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_161_1_img.png}
+        \includegraphics[width=1.0\linewidth,height=0.8\textheight,keepaspectratio]{images/adv-img-gen/slide_161_1_img.png}
+    \caption*{\scriptsize Jain, Xie and Abbeel, ``VectorFusion: Text-to-SVG by Abstracting Pixel-Based Diffusion Models,'' CVPR 2023, Fig.~2.}
     \end{figure}
 \end{frame}

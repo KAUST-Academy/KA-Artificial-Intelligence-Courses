@@ -9,7 +9,7 @@
   \begin{itemize}
     \item[\textcolor{red}{$\blacktriangleright$}] A useful split today: systems that prioritize high-fidelity pixels and instruction following (e.g.\ large text-to-video diffusion) versus systems that prioritize compact latent dynamics for control (e.g.\ JEPA-style prediction).
     \item[\textcolor{red}{$\blacktriangleright$}] Video remains expensive: long tensors and coherent motion are harder than sharp stills; evaluation must separate perceptual quality from physical plausibility.
-    \item[\textcolor{red}{$\blacktriangleright$}] The frontier is shifting from realistic-looking clips to models that approximate causal structure and action consequences---what curricula often bundle under \emph{world models}.    
+    \item[\textcolor{red}{$\blacktriangleright$}] The frontier is shifting from realistic-looking clips to models that approximate causal structure and action consequences, what curricula often bundle under \emph{world models}.
   \end{itemize}
 \end{frame}
 
@@ -24,13 +24,13 @@
     \midrule
     Structured 3D scenes & NeRF / Gaussian splatting; differentiable rendering & DreamFusion, GSGen, Marble (World Labs) & Multi-view--consistent 3D that routes through graphics pipelines \\
     \midrule
-    Interactive generative video & Action-conditioned diffusion or autoregressive transformers & Genie, GameNGen, GAIA & Interactive ``game-like'' rollouts from actions \\
+    Interactive generative video & Action-conditioned diffusion or autoregressive transformers & Genie, GameNGen, GAIA (Wayve) & Interactive ``game-like'' rollouts from actions \\
     \midrule
-    Latent predictive & Joint embedding predictive architectures (JEPA) & V-JEPA, PAN & Predict future \emph{representations} without full pixel generation \\
+    Latent predictive & Joint embedding predictive architectures (JEPA); latent dynamics, with a decoder only if pixels are wanted & V-JEPA, PAN & Predict future \emph{representations}; V-JEPA never decodes pixels, PAN adds a video diffusion decoder \\
     \midrule
     Text-to-video simulators & Large DiT / diffusion stacks at scale & Sora, Veo, Gen-3 & Maximize fidelity + prompt alignment; emergence as ``simulator'' \\
     \bottomrule
   \end{tabularx}
   \vspace{0.35em}
-  {\scriptsize Pedagogical splits echo materials such as CMU 10-423/10-723 generative-AI world-model lectures and CVPR-style world-model tutorials---see references.}
+  {\scriptsize Pedagogical splits echo materials such as CMU 10-423/10-723 generative-AI world-model lectures and CVPR-style world-model tutorials; see references.}
 \end{frame}

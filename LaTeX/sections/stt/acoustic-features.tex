@@ -21,7 +21,7 @@
       \begin{tcolorbox}[colback=gray!10, boxrule=0pt, arc=2mm, left=0.7em, right=0.7em, top=0.7em, bottom=0.7em]
       {\scriptsize
       \begin{description}
-        \item[$Q = q_1, \ldots, q_T$] a set of $N$ states
+        \item[$Q = q_1, \ldots, q_N$] a set of $N$ states
         \item[\textit{A} $= a_{ij}$:] \textbf{transition probability matrix} $A$, each $a_{ij}$ representing the probability of moving from state $i$ to state $j$. $\sum_j a_{ij} = 1\ \forall i$
         \item[$O = o_1, \ldots, o_T$] a sequence of $T$ observations, each one drawn from a vocabulary $V = v_1, \ldots, v_W$
         \item[$B = b_j(o_t)$] a sequence of \textbf{observation likelihoods}, also called \textit{emission probabilities}, each expressing the probability of an observation $o_t$ being generated from a state $j$
@@ -61,11 +61,10 @@
   \slideimgsource{Stanford CS224S, Lecture 9 (2025 Spring), slide 15 (adapted).}
 \end{frame}
 
-% --- Stanford CS224S lec9, slide 18 ---
 \begin{frame}{Simple HMM: Estimating climate from ice cream observations}
   \textbf{You are a climatologist in the year 2799 studying global warming trends}
   \begin{itemize}
-    \item You can’t find any records of the weather in Baltimore, MD for summer of 2008, but you find Jason Eisner’s diary! Which lists how many ice-creams Jason ate every date that summer
+    \item You can't find any records of the weather in Baltimore, MD for summer of 2008, but you find Jason Eisner's diary! Which lists how many ice-creams Jason ate every date that summer
   \end{itemize}
   \vspace{0.8em}
   \textbf{Our job: Infer the sequence of daily temperatures (HOT vs COLD)}
@@ -81,7 +80,8 @@
 
 \begin{frame}{Simple HMM: Estimating climate from ice cream observations}
   \centering
-  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/stt/stt_mel_scale_curve.png}
+  \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/stt/stt_icecream_hmm.png}
+  \slideimgsource{Jason Eisner's ice cream task, after Jurafsky \& Martin, \textit{Speech and Language Processing}; via Stanford CS224S, Lecture 9 (2025 Spring), slide 19.}
 \end{frame}
 
 
@@ -92,35 +92,36 @@
         \item Human hearing is not equally sensitive to all frequency bands
         \item Less sensitive at higher frequencies, $>$1000~Hz
         \item I.e.\ human perception of frequency is non-linear
+        \item The \textbf{mel scale} makes equal steps in mels correspond to equal steps in perceived pitch
       \end{itemize}
     \end{column}
     \begin{column}{0.48\textwidth}
       \centering
-      \includegraphics[width=0.95\textwidth]{images/stt/stt_mel_filterbank.png}
+      \includegraphics[width=0.95\textwidth]{images/stt/stt_mel_scale_curve.png}
+      \slideimgsource{Stanford CS224S, Lecture 9 (2025 Spring), slide 22.}
     \end{column}
   \end{columns}
 \end{frame}
 
-% --- Stanford CS224S lec9, slide 23 ---
 \begin{frame}{Mel Filter Bank Processing}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_mel_filterbank_spectrogram.png}
+  \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/stt/stt_mel_filterbank_spectrogram.png}
+  \slideimgsource{Stanford CS224S, Lecture 9 (2025 Spring), slide 23.}
 \end{frame}
 
 
-% GMM Acoustic Models and Phonetic States
 \begin{frame}{Gaussian Mixtures for Acoustic Modeling}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_gmm_gaussian_components.png}
+  \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/stt/stt_gmm_gaussian_components.png}
+  \slideimgsource{Stanford CS224S, Lecture 9 (2025 Spring), slide 27.}
 \end{frame}
 
-% --- Stanford CS224S lec9, slide 28 ---
 \begin{frame}{GMMs}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_gmm_likelihood_summary.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/stt/stt_gmm_likelihood_summary.png}
+  \slideimgsource{Mixture-of-Gaussians panel \copyright~2021 Carlos Guestrin, Stanford CS229; via Stanford CS224S, Lecture 9 (2025 Spring), slide 28.}
 \end{frame}
 
-% --- Stanford CS224S lec9, slide 40 ---
 \begin{frame}{Training an HMM system (Viterbi)}
   \begin{itemize}
     \item \textbf{Given our lexicon + HMM structure, and some acoustic model, we can:}

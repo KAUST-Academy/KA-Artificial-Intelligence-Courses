@@ -1,4 +1,4 @@
-% --- Background primers: RL vocabulary (CV cohort) and VAE (lecture 9 skipped) ---
+% --- Background primers: RL vocabulary (RL is not taught elsewhere in this course) and a VAE recap ---
 \begin{frame}{Minimal Reinforcement Learning Vocabulary}
   This is a computer vision course, so here is the RL vocabulary used today:
   \begin{itemize}\itemsep0.26em
@@ -7,10 +7,12 @@
     \item \textbf{Policy} $\pi(a \mid s)$: the agent's action rule. \textbf{Value function} $V(s)$: expected return from state $s$; a network estimating it is called a \textbf{critic}, and the policy network an \textbf{actor}.
     \item \textbf{Model-free RL:} learn the policy and value directly from real interactions; no model of the environment.
     \item \textbf{Model-based RL:} first learn a model of the environment (the \textbf{world model}), then plan or train the policy inside it. Typically needs far fewer real interactions.
+    \item \textbf{Replay buffer:} a store of past real interactions (observations, actions, rewards) that training keeps drawing from.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Background: Variational Autoencoders (VAE)}
+\begin{frame}{Recap: Variational Autoencoders (VAE)}
+  As covered earlier in the course, in brief:
   \begin{itemize}\itemsep0.24em
     \item An \textbf{autoencoder} compresses an input $x$ to a latent code $z$ (encoder) and reconstructs $x$ from $z$ (decoder).
     \item A \textbf{VAE} (Kingma \& Welling, 2014) makes the latent \emph{probabilistic}: the encoder outputs a distribution $q(z \mid x) = \mathcal{N}(\mu, \sigma^2)$ and $z$ is \textbf{sampled} from it before decoding.

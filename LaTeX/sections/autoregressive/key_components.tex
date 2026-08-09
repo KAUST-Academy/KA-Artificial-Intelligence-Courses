@@ -13,8 +13,9 @@
 
     \begin{figure}
     \centering
-    \includegraphics[height=0.5\textheight, width=\textwidth, keepaspectratio]{images/autoregressive/autoregressive.png}
-    \caption*{Graphical model for an autoregressive network}
+    \includegraphics[height=0.38\textheight, width=\textwidth, keepaspectratio]{images/autoregressive/autoregressive.png}
+    \caption*{Graphical model for an autoregressive network. \\
+    \scriptsize Source: A. Grover \& S. Ermon, ``Autoregressive Models'', Stanford CS236 Deep Generative Models course notes.}
 \end{figure}
 
 \framebreak
@@ -22,7 +23,7 @@
 \begin{itemize}
     \item In the MNIST dataset example, we can set an ordering for all the random variables from top-left $X_1$ to bottom-right $X_{784}$
     \item Without loss of generality, we can use chain rule for factorization
-    $$\mathcal{P}(x_1, \cdots, x_{784}) = \mathcal{P}(x_1) \mathcal{P}(x_2|x_1) \mathcal{P}(x_3|x_1, x_2) \cdots \mathcal{P}(x_{784}|x_1, x_2, \cdots, x_{784})$$
+    $$\mathcal{P}(x_1, \cdots, x_{784}) = \mathcal{P}(x_1) \mathcal{P}(x_2|x_1) \mathcal{P}(x_3|x_1, x_2) \cdots \mathcal{P}(x_{784}|x_1, x_2, \cdots, x_{783})$$
     \item Parameterizing the above and using the sigmoid function for binarization,
     \begin{itemize}
         \item $\mathcal{P}_{CPT}(X_1=1;\alpha^1) = \alpha^1, \mathcal{P}(X_1=0) = 1-\alpha^1$

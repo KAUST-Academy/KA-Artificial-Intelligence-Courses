@@ -1,7 +1,7 @@
 \section{Learning Outcomes}
 \begin{frame}{Learning Outcomes}
     \begin{itemize}
-        \setlength{\itemsep}{0.8em}
+        \setlength{\itemsep}{0.7em}
         \item Explain why you cannot take $\arg\max_a Q(s,a)$ over a continuous action space, and why that forces us to \emph{learn} a deterministic actor $\mu_\theta$
         \item Explain why the Days 3--4 policy gradient stops working for a deterministic actor, and state the rule that replaces it: the critic supplies a \emph{direction} $\nabla_a Q_\phi$ rather than a score
         \item Say what changes relative to Day 4's actor-critic: actor $\pi_\theta \to \mu_\theta$, critic $V_\phi(s) \to Q_\phi(s,a)$, on-policy rollouts $\to$ replay buffer

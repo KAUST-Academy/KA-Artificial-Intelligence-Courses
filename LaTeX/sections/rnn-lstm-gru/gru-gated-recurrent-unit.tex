@@ -1,12 +1,12 @@
 \section{GRU - Gated Recurrent Unit}
-\begin{frame}{GRU - Gated Recurrent Unit}
+\begin{frame}{}
   \LARGE GRU : \textbf{Gated Recurrent Unit}
 \end{frame}
 
 \begin{frame}{GRU - Gated Recurrent Unit}
   \small
-  \textbf{Introduced by Cho et al., 2014}\\[0.8em]
-  \textbf{Core Idea:} GRU uses \textbf{gates} to control what to keep, forget, and output.
+  \textbf{Introduced by Cho et al.\ (2014)}\\[0.8em]
+  \textbf{Core Idea:} GRU merges the cell state into the hidden state and uses two gates to control how much of the past to keep and how much of the new candidate to write.
 
   \vspace{1em}
   \textbf{Key Components:}
@@ -30,20 +30,29 @@
   \vspace{1.5em}
   
   {\color{blue} \textbf{Comparable performance to LSTM}} \\
-  {\color{blue} \textbf{Faster training, fewer parameters}}
+  {\color{blue} \textbf{Often faster to train, fewer parameters}}
 \end{frame}
 
 \begin{frame}{GRU - Gated Recurrent Units}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/gru_long_range_dependency_example.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/gru_long_range_dependency_example.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 2 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{GRU - Gated Recurrent Unit}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/gru_cell_diagram_equations.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\paperwidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/gru_cell_diagram_equations.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 2 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Vanilla RNN vs GRUs}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/gru_vs_vanilla_rnn_comparison.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\paperwidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/gru_vs_vanilla_rnn_comparison.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 2 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}

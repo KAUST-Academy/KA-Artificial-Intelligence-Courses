@@ -169,3 +169,23 @@ scripts/python/pptx
 
 # Lectures, comment it out after getting decent internet to push
 #/Lectures
+
+/.claude
+
+/Latex/*.aux
+/Latex/*.bcf
+/Latex/*.out
+/Latex/*.pdf
+/Latex/*.bbl
+/Latex/*.blg
+/Latex/*.ffs
+/Latex/*.nav
+/Latex/*.run.xml
+/Latex/*.toc
+/Latex/*.snm
+/Latex/*.fls
+/Latex/*.fdb_latexmk
+/Latex/*.vrb
+/reports
+CV Content.docx
+NLP_Outline_Temp.xlsx

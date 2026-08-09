@@ -6,45 +6,46 @@
 \begin{frame}[allowframebreaks]{Byte Latent Transformer (BLT)}
     \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/blt-paper.png}
+        \includegraphics[height=0.80\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/blt-paper.png}
+        \caption*{\scriptsize Source: Pagnoni et al., ``Byte Latent Transformer: Patches Scale Better Than Tokens,'' \href{https://arxiv.org/abs/2412.09871}{arXiv:2412.09871}, title page.}
     \end{figure}
 
 \framebreak
-    \textbf{BLT} is a compression-based approach for efficient LLMs:
+    \textbf{BLT} is a byte-level LLM with no tokenizer and no fixed vocabulary:
     \begin{itemize}
-        \item Compress input text into a smaller latent space
-        \item Run transformer on latent tokens
-        \item Decode with a decoder-only model
+        \item Raw bytes are grouped into \textbf{dynamically sized patches}; one patch, rather than one token, is one step of the large model.
+        \item Patch boundaries come from the entropy of the next byte under a small byte-level language model, so long patches form where the text is predictable and short ones where it is not.
+        \item Inference cost is inversely proportional to the average patch size, which turns patch size into a scaling axis of its own: the model can grow while the inference budget stays fixed.
     \end{itemize}
-    \vspace{1em}
+    \vspace{0.5em}
     \begin{itemize}
-        \item[\checkmark] Reduces memory \& compute
-        \item[\checkmark] Maintains quality (BLEU, perplexity)
-        \item[\checkmark] Works well with long context (128k+)
+        \item[\checkmark] Matches LLaMA 3 in a FLOP-controlled comparison up to 8B parameters and 4T training bytes
+        \item[\checkmark] Up to 50\% fewer inference FLOPs, by trading small losses on evaluation metrics
+        \item[\checkmark] Stronger character-level understanding and better robustness to noisy input
     \end{itemize}
-    \vspace{1em}
-    \textbf{Related:} VQ-VAE, tokenizer-free models, compression transformers
-    \vspace{1em}
-    \footnotesize{\textbf{Meta AI (2024)} \url{https://ai.meta.com/research/publications/byte-latent-transformer-patches-scale-better-than-tokens/}}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/blt-flops.png}
+        \includegraphics[height=0.76\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/blt-flops.png}
+        \caption*{\scriptsize Quality is measured in bits-per-byte, which stays comparable across models that segment text differently, unlike per-token perplexity. Source: Pagnoni et al., \href{https://arxiv.org/abs/2412.09871}{arXiv:2412.09871}, Figure~1.}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/blt-modules.png}
+        \includegraphics[height=0.76\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/blt-modules.png}
+        \caption*{\scriptsize ByT5, covered earlier, gave up patching altogether and paid for attention over every byte. Here the expensive module runs once per patch, and the byte-level work is confined to two small ones. Source: Pagnoni et al., \href{https://arxiv.org/abs/2412.09871}{arXiv:2412.09871}, Figure~2.}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/blt-patch-scheme.png}
+        \includegraphics[height=0.72\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/blt-patch-scheme.png}
+        \caption*{\scriptsize The same sentence under six patching schemes; the number of patches sets the compute the large model spends. Row 1 is MEGABYTE's fixed four-byte stride, row 2 the LLaMA 3 BPE tokenizer, rows 3--4 BLT's entropy patching, row 5 SpaceByte's split after space-like bytes. Source: Pagnoni et al., \href{https://arxiv.org/abs/2412.09871}{arXiv:2412.09871}, Figure~3.}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/blt-entropy.png}
+        \includegraphics[height=0.72\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/blt-entropy.png}
+        \caption*{\scriptsize Source: Pagnoni et al., \href{https://arxiv.org/abs/2412.09871}{arXiv:2412.09871}, Figure~4.}
     \end{figure}
 \end{frame}
 
@@ -67,7 +68,7 @@
         \item Cannot vary patch size.
     \end{itemize}
     \vspace{1em}
-    \textbf{Next:} A new patching method that leverages the difficulty of predicting initial bytes in words and enables control over patch size.
+    \textbf{Next:} A new patching method that uses the difficulty of predicting initial bytes in words and enables control over patch size.
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Entropy Patching}
@@ -123,7 +124,8 @@
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/blt-cross-attention.png}
+        \includegraphics[height=0.74\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/blt-cross-attention.png}
+        \caption*{\scriptsize Source: Pagnoni et al., \href{https://arxiv.org/abs/2412.09871}{arXiv:2412.09871}, Figure~5.}
     \end{figure}
 \end{frame}
 
@@ -157,18 +159,30 @@
 \begin{frame}[allowframebreaks]{BLT Performance}
     \textbf{BLT Performance:}
     \begin{itemize}
-        \item BLT achieves state-of-the-art performance on long-context benchmarks.
-        \item Outperforms existing LLMs in terms of perplexity and BLEU scores.
-        \item Efficiently handles long sequences (128k+ tokens) with reduced memory and compute requirements.
+        \item \textbf{Parity at scale:} an 8B BLT trained on 4T bytes matches an 8B LLaMA 3 under a FLOP-controlled comparison, and reaches up to 50\% fewer inference FLOPs when patch size is raised.
+        \item \textbf{Character-level tasks:} on the CUTE benchmark of orthographic and sequence-manipulation tasks, BLT beats both BPE LLaMA 3 baselines by more than 25 points and scores 99.9\% on both spelling tasks, despite seeing 16$\times$ less training data than LLaMA 3.1. Word deletion and insertion are the only two CUTE tasks where the tokenizer-based model wins.
+        \item \textbf{Low-resource translation:} on FLORES-101, BLT gains 2 BLEU points overall translating into English and 0.5 translating out of it. On the six widely used languages the two models trade places; the gains come from the twenty-one lower-resource languages.
     \end{itemize}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/blt-performance.png}
+        \includegraphics[height=0.78\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/blt-performance.png}
+        \caption*{\scriptsize SentencePiece BLEU on FLORES-101. Source: Pagnoni et al., \href{https://arxiv.org/abs/2412.09871}{arXiv:2412.09871}, Table~4.}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[height=0.9\textheight,width=1.05\textwidth,keepaspectratio]{images/recent-advance/blt-llama-3.png}
+        \includegraphics[height=0.74\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/blt-llama-3.png}
+        \caption*{\scriptsize Tasks a tokenizer hides from the model: a BPE model has no direct access to the characters inside its own tokens. Source: Pagnoni et al., \href{https://arxiv.org/abs/2412.09871}{arXiv:2412.09871}, Figure~7.}
     \end{figure}
+\end{frame}
+
+\begin{frame}{What BLT Costs}
+    \textbf{The tokenizer is removed, but not for free:}
+    \begin{itemize}
+        \item \textbf{An extra model in the pipeline.} Segmentation needs a separately trained byte-level entropy model, 100M parameters in the main experiments, and it is trained rather than learned jointly with BLT. Learning the patching end to end is left as future work.
+        \item \textbf{Scaling laws are borrowed.} Training lengths follow the compute-optimal schedule derived for BPE transformers, which may set the wrong data-to-parameter ratio for a byte-level model. Most architectural ablations were run at or below 1B parameters.
+        \item \textbf{Patch size is a new hyperparameter.} Larger patches buy inference FLOPs at some cost in accuracy, and the sequence length must be adjusted so that models with different patch sizes still see the same number of bytes.
+        \item \textbf{Word-level manipulation stays harder.} Building words up from bytes is easier than taking them apart, which is why BPE still wins on word insertion and deletion.
+    \end{itemize}
 \end{frame}

@@ -12,7 +12,7 @@
   \end{itemize}
   \vspace{0.5em}
   
-  \footnotesize\href{https://web.stanford.edu/class/cs224s/semesters/2025-spring/lecture-slides/switchboard_example.pdf}{Switchboard corpus} conversation example
+  \footnotesize\href{https://catalog.ldc.upenn.edu/LDC97S62}{Switchboard corpus} conversation example
 \end{frame}
 
 % --- Stanford CS224S lec9, slide 44 ---
@@ -36,13 +36,9 @@
 \begin{frame}{History: Foundational Insights 1900s--1950s}
   \textbf{Automaton:}
   \begin{itemize}
-    \item Markov 1911
+    \item Markov 1906 (chains), 1913 (letter sequences in \textit{Eugene Onegin})
     \item Turing 1936
     \item McCulloch-Pitts neuron (1943)
-    \begin{itemize}
-      \item \href{http://mar.bsee.swin.edu.au/cht/net204/lecture10/ann/node1.html}{mar.bsee.swin.edu.au/cht/net204/lecture10/ann/node1.html}
-      \item \href{http://www.epfl.ch/mtap/tutorial/english/mcpitts.html}{www.epfl.ch/mtap/tutorial/english/mcpitts.html}
-    \end{itemize}
     \item Shannon (1948) link between automata and Markov models
   \end{itemize}
   \textbf{Human speech processing}
@@ -62,7 +58,8 @@
     \centering
     \includegraphics[width=0.95\textwidth]{images/stt/stt_radio_rex_history.png} \\
     \vspace{0.5em}
-    \scriptsize\textit{Radio Rex toy and box (c. 1920s)}
+    {\scriptsize\textit{Radio Rex toy and box (c. 1920s)}}
+    \slideimgsource{Stanford CS224S, Lecture 9 (2025 Spring), slide 46.}
     \column{0.56\textwidth}
     \textbf{1920's Radio Rex}
     \begin{itemize}
@@ -70,6 +67,7 @@
       \item Current to magnet flowed through bridge which was sensitive to energy at 500 Hz
       \item 500 Hz energy caused bridge to vibrate, interrupting current, making dog spring forward
       \item The sound ``e'' (ARPAbet [eh]) in Rex has 500 Hz component
+      \item Any sound with enough energy near 500 Hz sets it off, so this is energy detection rather than word recognition
     \end{itemize}
   \end{columns}
 \end{frame}
@@ -83,8 +81,8 @@
       \item Built with analog electrical components
       \item 2\% error rate for single speaker, isolated digits
     \end{itemize}
-    \item \textbf{1958:} Dudley built classifier that used continuous spectrum rather than just formants
-    \item \textbf{1959:} Denes ASR combining grammar and acoustic probability
+    \item \textbf{1958:} Dudley \& Balashek built classifier that used continuous spectrum rather than just formants
+    \item \textbf{1959:} Fry \& Denes (UCL) ASR combining phoneme-sequence statistics and acoustic probability
   \end{itemize}
 \end{frame}
 
@@ -114,8 +112,8 @@
   \end{itemize}
 \end{frame}
 
-% --- Stanford CS224S lec9, slide 52 ---
 \begin{frame}{Recent ASR Improvements}
   \centering
-  \includegraphics[width=\textwidth,height=0.92\textheight,keepaspectratio]{images/stt/stt_asr_benchmark_results.png}
+  \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/stt/stt_asr_benchmark_results.png}
+  \slideimgsource{Excerpt of the WER progress tables at \href{https://github.com/syhw/wer_are_we}{github.com/syhw/wer\_are\_we} (Synnaeve); via Stanford CS224S, Lecture 9 (2025 Spring), slide 52.}
 \end{frame}

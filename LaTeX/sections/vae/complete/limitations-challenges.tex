@@ -17,7 +17,6 @@
 \textbf{Challenges:}
 \begin{itemize}
     \item \textbf{Training Instability:} VAEs can be difficult to train, especially with complex datasets.
-    \item \textbf{Mode Collapse:} The model may generate samples from only a subset of the latent space.
     \item \textbf{Balancing Reconstruction and Regularization:} Finding the right balance between reconstruction loss and KL divergence can be tricky.
     \item \textbf{Posterior Collapse:} In some cases, the model may ignore the latent variables, leading to poor representations.
     \item \textbf{Limited Expressiveness:} The Gaussian assumption for the latent space may not capture complex data distributions.
@@ -30,7 +29,7 @@
     \item \textbf{Improved Training Techniques:} Developing better optimization methods to stabilize training.
     \item \textbf{Advanced Architectures:} Exploring more complex latent variable models, such as Normalizing Flows or Hierarchical VAEs.
     \item \textbf{Better Regularization Techniques:} Investigating alternative regularization methods to improve disentanglement and representation quality.
-    \item \textbf{Hybrid Models:} Combining VAEs with other generative models (e.g., GANs) to leverage their strengths.
+    \item \textbf{Hybrid Models:} Combining VAEs with adversarial training to sharpen samples while keeping a structured latent space.
     \item \textbf{Application-Specific Variants:} Tailoring VAEs for specific applications, such as text or video generation.
 \end{itemize}
 \end{frame}

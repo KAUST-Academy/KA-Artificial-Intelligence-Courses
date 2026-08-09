@@ -2,43 +2,48 @@
     \large How can you use a pretrained text-image model to generate 3D objects?
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_151_1_img.png}
-        \caption*{Poole, Ben, et al. "Dreamfusion: Text-to-3d using 2d diffusion." arXiv preprint arXiv:2209.14988 (2022).}
+        \includegraphics[width=0.82\linewidth,height=0.55\textheight,keepaspectratio]{images/adv-img-gen/slide_151_1_img.png}
+        \caption*{Poole, Ben, Ajay Jain, Jonathan T. Barron, and Ben Mildenhall. ``DreamFusion: Text-to-3D using 2D Diffusion.'' \textit{International Conference on Learning Representations} (ICLR), 2023.}
     \end{figure}
 
     \framebreak
     \large Start with a randomly initialized parameterized 3D representation (NeRF)
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_152_1_img.png}
+        \includegraphics[width=1.0\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_152_1_img.png}
+    \caption*{\scriptsize Poole et al., ``DreamFusion: Text-to-3D using 2D Diffusion,'' ICLR 2023, Fig.~3 (annotated).}
     \end{figure}
 
     \framebreak
     \large Randomly sample camera angle and lighting
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_153_1_img.png}
+        \includegraphics[width=1.0\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_153_1_img.png}
+    \caption*{\scriptsize Poole et al., ``DreamFusion: Text-to-3D using 2D Diffusion,'' ICLR 2023, Fig.~3 (annotated).}
     \end{figure}
 
     \framebreak
-    \large Render the image $(64 x 64)$
+    \large Render the image $(64 \times 64)$
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_154_1_img.png}
+        \includegraphics[width=1.0\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_154_1_img.png}
+    \caption*{\scriptsize Poole et al., ``DreamFusion: Text-to-3D using 2D Diffusion,'' ICLR 2023, Fig.~3 (annotated).}
     \end{figure}
 
     \framebreak
-    \large Noise the image and feed it through the diffusion loss to predict the noise
+    \large Noise the image and feed it through the diffusion model to predict the noise
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_155_1_img.png}
+        \includegraphics[width=1.0\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_155_1_img.png}
+    \caption*{\scriptsize Poole et al., ``DreamFusion: Text-to-3D using 2D Diffusion,'' ICLR 2023, Fig.~3 (annotated).}
     \end{figure}
 
     \framebreak
-    \large Compute the SDS loss and backpropagate
+    \large Compute the Score Distillation Sampling (SDS) loss and backpropagate
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_156_1_img.png}
+        \includegraphics[width=1.0\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_156_1_img.png}
+    \caption*{\scriptsize Poole et al., ``DreamFusion: Text-to-3D using 2D Diffusion,'' ICLR 2023, Fig.~3 (annotated).}
     \end{figure}
 
     \framebreak
@@ -46,27 +51,32 @@
     Intuitively, we want the NeRF parameters to produce images that minimize the diffusion loss
     \begin{figure}
         \centering
-        \includegraphics[width=0.85\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_157_1_img.png}
+        \includegraphics[width=0.62\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_157_1_img.png}
+    \caption*{\scriptsize Poole et al., ``DreamFusion,'' ICLR 2023, Eq.~(1).}
     \end{figure}\begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_157_2_img.png}
+        \includegraphics[width=0.80\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_157_2_img.png}
+    \caption*{\scriptsize Poole et al., ``DreamFusion,'' ICLR 2023, Eq.~(2).}
     \end{figure}
-    But the objective is generally brittle / expensive (backprop through the UNet)
+    But the objective is generally brittle / expensive (backprop through the U-Net)
 
     \framebreak
-    It works better to just remove the U-Net jacobian
+    It works better to just remove the U-Net Jacobian
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_158_1_img.png}
+        \includegraphics[width=0.80\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_158_1_img.png}
+    \caption*{\scriptsize Poole et al., ``DreamFusion,'' ICLR 2023, Eq.~(2).}
     \end{figure}\begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_158_2_img.png}
+        \includegraphics[width=0.62\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_158_2_img.png}
+    \caption*{\scriptsize Poole et al., ``DreamFusion,'' ICLR 2023, Eq.~(3).}
     \end{figure}
     There is a theoretical motivation (see Appendix in \href{https://arxiv.org/abs/2209.14988}{paper})
 
     \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_159_1_img.png}
+        \includegraphics[width=1.0\linewidth,height=0.80\textheight,keepaspectratio]{images/adv-img-gen/slide_159_1_img.png}
+    \caption*{\scriptsize Poole et al., ``DreamFusion: Text-to-3D using 2D Diffusion,'' ICLR 2023, Fig.~1.}
     \end{figure}
 \end{frame}

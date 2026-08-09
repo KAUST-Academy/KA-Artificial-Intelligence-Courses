@@ -1,6 +1,6 @@
 \section{Summary}
 \begin{frame}{}
-    \LARGE Video Learning \& Generation: \textbf{Summary}
+    \LARGE Learning from Videos: \textbf{Summary}
 \end{frame}
 
 \begin{frame}{Key Takeaways}
@@ -8,7 +8,16 @@
     \begin{itemize}
         \item Video understanding evolves from single-frame analysis to capturing global context using convolution, recurrence, and attention mechanisms.
         \item Temporal modeling is essential for tasks like action recognition and future prediction.
-        % \item Self-supervised learning reduces the need for extensive manual annotation.
-        % \item CLIP connects vision and language; GANs and diffusion models enable generative video synthesis.
+        \item Self-supervised learning reduces the need for extensive manual annotation.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Limitations and Open Problems}
+    \begin{itemize}
+        \item \textbf{Computational cost:} 3D convolutions are expensive (C3D: 39.5 GFLOP per clip), and full spatio-temporal attention grows quadratically with sequence length.
+        \item \textbf{Short clips:} Most models see only 16--64 frames at a time; structure spanning minutes still relies on sparse sampling, recurrence, or external memory.
+        \item \textbf{Annotation cost:} Frame-level labels are expensive, and self-supervised pretext tasks do not transfer equally well to every downstream task.
+        \item \textbf{Appearance shortcuts:} Models can classify many actions from scene appearance alone while ignoring motion, which is why motion is evaluated separately.
+        \item \textbf{Open problems:} Efficient architectures for long videos, learning from egocentric and streaming video, and scaling self-supervision to unlabeled video at internet scale.
     \end{itemize}
 \end{frame}

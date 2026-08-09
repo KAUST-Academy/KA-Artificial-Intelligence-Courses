@@ -15,7 +15,7 @@
         \begin{figure}
             \centering
             \includegraphics[width=0.8\textwidth,keepaspectratio]{images/dul/hierarchical/breast-tumor-subtypes.jpg}
-            \caption{Sørlie, Therese, et al. (2003) "Repeated observation of breast  tumor subtypes in independent gene expression data sets," PNAS.}
+            \caption{Sørlie, Therese, et al. (2003) ``Repeated observation of breast tumor subtypes in independent gene expression data sets,'' PNAS.}
         \end{figure}
     \end{column}
 \end{columns}
@@ -38,8 +38,8 @@
     \begin{column}{0.55\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=0.95\textwidth,height=0.8\textheight,keepaspectratio]{images/dul/hierarchical/dendrograms.png}
-            \caption{ISL (8th printing 2017)}
+            \includegraphics[width=0.95\textwidth,height=0.62\textheight,keepaspectratio]{images/dul/hierarchical/dendrograms.png}
+            \caption{James, Witten, Hastie \& Tibshirani, \emph{An Introduction to Statistical Learning} (ISL), 8th printing 2017}
         \end{figure}
     \end{column}
 \end{columns}
@@ -53,7 +53,7 @@
 
     \begin{figure}
         \centering
-        \includegraphics[width=0.95\textwidth,height=0.7\textheight,keepaspectratio]{images/dul/hierarchical/dendograms-distance-metric.png}
+        \includegraphics[width=0.95\textwidth,height=0.55\textheight,keepaspectratio]{images/dul/hierarchical/dendograms-distance-metric.png}
         \caption{ISL (8th printing 2017)}
     \end{figure}
 \end{block}
@@ -70,7 +70,7 @@
     \begin{column}{0.55\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=1.05\textwidth,height=0.8\textheight,keepaspectratio]{images/dul/hierarchical/dendrograms-cluster.png}
+            \includegraphics[width=1.0\textwidth,height=0.62\textheight,keepaspectratio]{images/dul/hierarchical/dendrograms-cluster.png}
             \caption{ISL (8th printing 2017)}
         \end{figure}
     \end{column}
@@ -103,7 +103,7 @@
 
 \framebreak
 
-% Hierarchical clustering Algorithm - pseudo code
+\begingroup\setlength{\parfillskip}{0pt plus 1fil}%
 \begin{algorithm}[H]
 \caption{Hierarchical Clustering Algorithm}
 \KwIn{Dataset $D = \{x_1, x_2, \dots, x_n\}$}
@@ -120,13 +120,14 @@
 \textbf{Return:} Dendrogram representing the hierarchical structure of clusters\;
 \end{algorithm}
 
+\endgroup
 \href{https://www.w3schools.com/python/python_ml_hierarchial_clustering.asp}{w3schools: Codes and Playground}
 
 \framebreak
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.95\textwidth,height=0.85\textheight,keepaspectratio]{images/dul/hierarchical/dendrogram-interpretation.png}
+    \includegraphics[width=0.95\textwidth,height=0.7\textheight,keepaspectratio]{images/dul/hierarchical/dendrogram-interpretation.png}
     \caption{Dendrogram interpretation.}
 \end{figure}
 \end{frame}
@@ -138,7 +139,7 @@
     It’s easy to compute Euclidean distance between two observations.  What is the distance or similarity between two groups or clusters of  observations?
     
     \vspace{0.8em}
-    \textbf{Linkage}: defines the dissimilarity between two groups of observations.  Most common types are $complete$, $average$, $single$, and $centroid$.
+    \textbf{Linkage}: defines the dissimilarity between two groups of observations.  Most common types are \textit{complete}, \textit{average}, \textit{single}, and \textit{centroid}.
 \end{block}
 
 \framebreak
@@ -156,14 +157,17 @@
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.95\textwidth,height=0.85\textheight,keepaspectratio]{images/dul/hierarchical/linkage.png}
+    \includegraphics[width=0.95\textwidth,height=0.72\textheight,keepaspectratio]{images/dul/hierarchical/linkage.png}
     \caption{Linkage methods.}
 \end{figure}
 
+\framebreak
+
 \begin{figure}
     \centering
-    \includegraphics[width=0.95\textwidth,height=0.85\textheight,keepaspectratio]{images/dul/hierarchical/dendrogram-linkage-types.png}
-    \caption{Dendrogram with different linkage types.}
+    \includegraphics[width=0.95\textwidth,height=0.72\textheight,keepaspectratio]{images/dul/hierarchical/dendrogram-linkage-types.png}
+    \caption{Dendrogram with different linkage types. [ISL Fig.~10.12 (8th printing 2017),
+    via CME 250, S. Wang, Stanford]}
 \end{figure}
 \end{frame}
 
@@ -184,10 +188,9 @@
         \begin{itemize}
             \setlength{\itemsep}{1em}
             \item Computationally expensive for large datasets.
-            \item Do have to pick where to cut the dendrogram to obtain clusters
+            \item Must choose where to cut the dendrogram, and the cut height that gives the best clusters is not obvious.
             \item Sensitive to similarity measure and type of linkage used.
             \item Sensitive to noise and outliers.
-            \item Difficult to interpret and choose the optimal number of clusters.
         \end{itemize}
     \end{column}
 \end{columns}

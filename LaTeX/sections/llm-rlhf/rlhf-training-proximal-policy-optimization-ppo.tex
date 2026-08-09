@@ -1,32 +1,39 @@
-\begin{frame}{RLHF Training: Proximal Policy Optimization (PPO)}
-  \begin{itemize}
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Objective:} Maximize the reward given by the reward model (RM).
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Algorithm:} Proximal Policy Optimization (PPO) is used to update the language model.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{PPO Loss:}
-      \[
-        L_{\mathrm{PPO}} = \mathbb{E}\left[
-            \min\Big(r_t(\theta)\hat{A}_t,\,\,\,\, \text{clip}\big(r_t(\theta), 1 - \epsilon, 1 + \epsilon\big)\hat{A}_t\Big)
-          \right]
-      \]
-      where $r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_\text{old}(a_t|s_t)}$ is the probability ratio, and $\hat{A}_t$ is the advantage estimate.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{KL Penalty:} A KL-divergence penalty is added to keep the policy close to the base (SFT) model:
-      \[
-        L_{\mathrm{KL}} = \beta\, \mathrm{KL}\Big(\pi_\theta \;\|\; \pi_{\text{SFT}}\Big)
-      \]
+\begin{frame}[t]{PPO in the LLM Setting}
+  Text generation is cast as a sequential decision problem, one token at a time:
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Policy $\pi_\theta$:} the language model itself; $\pi_\theta(a_t \mid s_t)$ is its next-token distribution.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{State $s_t$:} the prompt plus every token generated so far.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Action $a_t$:} the next token, drawn from the vocabulary.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Rollout:} one complete sampled response to a prompt.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Reward:} the RM scores the \emph{finished} response, so one number has to be credited back across every token that produced it.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Advantage $\hat{A}_t$:} how much better action $a_t$ turned out than expected at $s_t$. A separate value model, trained alongside the policy, supplies that expectation.
   \end{itemize}
 \end{frame}
 
-
-\begin{frame}{RLHF Training: Proximal Policy Optimization (PPO)}
-  \centering
-  \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/llm-rlhf/rlhf_three_step_pipeline.png}
+\begin{frame}[t]{RLHF Training: Proximal Policy Optimization (PPO)}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Objective:} Maximize the reward given by the reward model (RM).
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Reward with KL penalty:} the RM score is shaped so the policy cannot drift far from the SFT model:
+      \[
+        R(x,y) = r_\phi(x,y) - \beta \log \frac{\pi_\theta(y \mid x)}{\pi_{\text{SFT}}(y \mid x)}
+      \]
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Clipped surrogate objective}, which PPO \emph{maximises}:
+      \[
+        L_{\mathrm{PPO}} = \hat{\mathbb{E}}_t\left[
+            \min\Big(\rho_t(\theta)\hat{A}_t,\,\,\,\, \text{clip}\big(\rho_t(\theta), 1 - \epsilon, 1 + \epsilon\big)\hat{A}_t\Big)
+          \right]
+      \]
+      where $\rho_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_\text{old}(a_t|s_t)}$ is the probability ratio (not a reward) and $\hat{A}_t$ is the advantage estimate.
+    \item[\textcolor{red}{$\blacktriangleright$}] Clipping caps how far a single update can move the policy, which is what keeps the optimization stable.
+  \end{itemize}
 \end{frame}
 
-\begin{frame}{PPO --- Pros and Cons}
-  \begin{itemize}
-    \item[\textcolor{red}{\checkmark}] Stable optimization
-    \item[\textcolor{red}{\checkmark}] Encourages exploration
-    \item[\textcolor{gray}{\texttimes}] Expensive (needs many rollouts)
-    \item[\textcolor{gray}{\texttimes}] Sensitive to reward model errors
+\begin{frame}[t]{PPO --- Pros and Cons}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{red}{\checkmark}] Stable optimization: the clip bounds every policy update.
+    \item[\textcolor{red}{\checkmark}] Learns from the model's own samples, so it can improve on behaviour never demonstrated in the SFT data.
+    \item[\textcolor{gray}{\texttimes}] Expensive: each step needs fresh rollouts, and four networks are in play at once, the policy, a frozen SFT copy for the KL term, the reward model, and the value model.
+    \item[\textcolor{gray}{\texttimes}] Sensitive to reward model errors: the policy optimizes the RM, not the humans behind it.
+    \item[\textcolor{gray}{\texttimes}] Many interacting hyperparameters ($\beta$, $\epsilon$, rollout size, value-loss weight).
   \end{itemize}
 \end{frame}

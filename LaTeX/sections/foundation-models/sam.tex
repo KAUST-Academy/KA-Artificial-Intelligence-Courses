@@ -1,12 +1,14 @@
 % --- SAM 1, SAM 2, and SAM 3 ---
 \begin{frame}{Segment Anything Model (SAM): Promptable Segmentation}
   \centering
-  \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/sam_promptable_segmentation_overview.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/foundation-models/sam_promptable_segmentation_overview.png}\\[0.1em]
+  {\scriptsize Stanford BIODS 276, Lecture 1 (S.\ Yeung-Levy); diagram from Kirillov et al., ``Segment Anything,'' ICCV 2023, Fig.~1.}
 \end{frame}
 
 \begin{frame}{SAM: Zero-Shot Segmentation Examples}
   \centering
-  \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/foundation-models/sam_zero_shot_segmentation_examples.png}
+  \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/foundation-models/sam_zero_shot_segmentation_examples.png}\\[0.1em]
+  {\scriptsize Stanford BIODS 276, Lecture 1 (S.\ Yeung-Levy); examples from \href{https://segment-anything.com/}{segment-anything.com}.}
 \end{frame}
 
 
@@ -19,7 +21,8 @@
     \item Produces high-quality object masks across a wide range of settings without fine-tuning; masks are class-agnostic (no labels attached).
   \end{itemize}
   \centering
-  \includegraphics[width=0.85\textwidth]{images/foundation-models/sam_schema.png}
+  \includegraphics[width=0.85\textwidth]{images/foundation-models/sam_schema.png}\\[0.1em]
+  {\scriptsize Kirillov et al., ``Segment Anything,'' ICCV 2023, Fig.~4.}
 \end{frame}
 
 % --- SAM 1: data engine and SA-1B ---
@@ -40,7 +43,7 @@
 \begin{frame}{SAM 2: Promptable Segmentation in Video}
   \begin{itemize}\itemsep0.3em
     \item Extends promptable segmentation to \textbf{video}: prompt on any frame, and the model propagates the object mask (a \emph{masklet}) through the clip.
-    \item \textbf{Streaming memory:} a memory bank stores features and object pointers from past frames; each new frame \textbf{cross-attends} to this memory before decoding its mask (the attention mechanism from the transformer lectures).
+    \item \textbf{Streaming memory:} a memory bank stores features and object pointers from past frames; each new frame \textbf{cross-attends} to this memory before decoding its mask.
     \item Corrections are interactive: extra clicks on any frame refine the whole track.
     \item Trained with its own data engine, producing the \textbf{SA-V} dataset ($\sim$51K videos, $\sim$600K masklets); also faster than SAM 1 on still images.
   \end{itemize}
@@ -68,7 +71,7 @@
     \begin{column}{0.32\textwidth}
       \textbf{SAM 3}
       \begin{itemize}\footnotesize
-        \item Detect, segment, and track every instance of any object category in image or video.
+        \item Detect, segment, and track every instance of any object category in an image or video.
         \item Uses text or examples as prompts.
         \item Segments and tracks objects from a click.
         \item Tracks segment predictions across frames.
@@ -83,7 +86,7 @@
 \begin{frame}{SAM 3 Architecture: Data Engine}
   \centering
   \includegraphics[width=0.82\textwidth, height=0.86\textheight, keepaspectratio]{images/foundation-models/sam3_data_engine.png}\\[0.1em]
-  {\scriptsize SAM 3 data-engine loop from Meta blog post.}
+  {\scriptsize SAM 3 data-engine loop from the Meta AI blog, ``SAM 3.1'' (\url{https://ai.meta.com/blog/segment-anything-model-3/}).}
   \vspace{0.2em}
   \begin{itemize}\footnotesize
     \item Getting masks \emph{with text labels} across many categories and domains is the hard part; SAM 3 scales the SAM data-engine pattern to concepts.
@@ -95,7 +98,7 @@
 \begin{frame}{SAM 3 Architecture: Core Model}
   \centering
   \includegraphics[width=0.82\textwidth, height=0.86\textheight, keepaspectratio]{images/foundation-models/sam3_page4_architecture_overview.png}\\[0.15em]
-  {\scriptsize SAM 3 model summary and detector/tracker architecture.}\\[0.2em]
+  {\scriptsize SAM 3 model summary and detector/tracker architecture. [Carion et al., ``SAM 3: Segment Anything with Concepts,'' 2025, Fig.~4]}\\[0.2em]
   \footnotesize
   A dual encoder-decoder transformer serves as the \textbf{detector} for image-level capabilities and is used together with a \textbf{tracker} and memory for video. Both receive vision-language features from an aligned Perception Encoder (PE) backbone.
 \end{frame}
@@ -104,7 +107,7 @@
 \begin{frame}{SAM 3.1 Inference Architecture: Object Multiplexing}
   \centering
   \includegraphics[width=0.68\textwidth, height=0.6\textheight, keepaspectratio]{images/foundation-models/sam3_vs_sam31_video_computation.png}\\[0.1em]
-  {\scriptsize SAM 3.1 multiplexed inference versus per-object computation.}
+  {\scriptsize SAM 3.1 multiplexed inference versus per-object computation. [Source: Meta AI blog, ``SAM 3.1,'' \url{https://ai.meta.com/blog/segment-anything-model-3/}]}
   \vspace{0.2em}
   \begin{itemize}\footnotesize
     \item Process multiple tracked objects in one forward pass (\emph{multiplexing}) instead of one pass per object.

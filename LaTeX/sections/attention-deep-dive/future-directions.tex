@@ -1,21 +1,26 @@
 \section{Future Directions}
 \begin{frame}{Future Directions in Attention Mechanisms}
+  \small
   \begin{itemize}
-    \item[$\blacktriangleright$] \textbf{Efficient Attention Variants:}
+    \item[$\blacktriangleright$] \textbf{Approximate and Sparse Attention:}
       \begin{itemize}
-        \item \textit{Linformer, Performer, Longformer, FlashAttention} -- Reduce memory and computation for long sequences.
+        \item \textit{Linformer, Performer, Longformer, Routing Transformer} -- Replace the dense score matrix with a low-rank, kernelized or sparse stand-in, trading exactness for sub-quadratic cost.
       \end{itemize}
-    \item[$\blacktriangleright$] \textbf{Structured Attention:}
+    \item[$\blacktriangleright$] \textbf{Exact but IO-Aware Attention:}
       \begin{itemize}
-        \item \textit{Sparsemax, Routing Attention} -- Impose structure or sparsity for interpretability and efficiency.
+        \item \textit{FlashAttention} -- Computes the same attention, tiled to cut traffic to GPU memory. It saves wall-clock time rather than arithmetic.
+      \end{itemize}
+    \item[$\blacktriangleright$] \textbf{Sparse Normalization:}
+      \begin{itemize}
+        \item \textit{Sparsemax} -- A softmax replacement that can assign exactly zero weight, giving sharper and more interpretable attention maps.
       \end{itemize}
     \item[$\blacktriangleright$] \textbf{Cross-modal Attention:}
       \begin{itemize}
-        \item \textit{Vision + Language (e.g., Flamingo, Gato)} -- Integrate information across different modalities.
+        \item \textit{Flamingo, BLIP-2} -- Cross-attention layers let a language model read the output of a vision encoder.
       \end{itemize}
     \item[$\blacktriangleright$] \textbf{Learnable Routing:}
       \begin{itemize}
-        \item \textit{Mixture-of-Experts, Dynamic Attention} -- Dynamically select computation paths for scalability.
+        \item \textit{Mixture-of-Experts, Mixture-of-Depths} -- A learned gate sends each token to a subset of the parameters or layers.
       \end{itemize}
   \end{itemize}
 \end{frame}

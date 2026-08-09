@@ -1,46 +1,58 @@
-\begin{frame}{Example of Reinforcement Learning for Reasoning Skill Refinement: DeepSeek-R1}
-  \centering
-  \includegraphics[width=\textwidth,height=0.90\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_nvidia_market_reaction.png}
-\end{frame}
+\section{DeepSeek-R1}
 
-\begin{frame}{Example of Reinforcement Learning for Reasoning Skill Refinement: DeepSeek-R1}
+\begin{frame}{DeepSeek-R1: Why It Made the News}
   \begin{figure}
     \centering
-    \includegraphics[width=\textwidth,height=0.90\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_pipeline_overview_highlighted.png}
-    \caption*{DeepSeek-R1 training pipeline overview, adapted from Stanford CS224N (Choi, 2026). Paper: \href{https://arxiv.org/abs/2501.12948}{arXiv:2501.12948}.}
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_nvidia_market_reaction.png}
+    \caption*{Source: Stanford CS224N, Lecture 12 (Choi, 2026); assembled from screenshots of CNBC (chart, data: FactSet) and The Times of India.}
   \end{figure}
 \end{frame}
 
-\begin{frame}{Example of Reinforcement Learning for Reasoning Skill Refinement: DeepSeek-R1}
+\begin{frame}{DeepSeek-R1: Training Pipeline Overview}
   \begin{figure}
     \centering
-    \includegraphics[width=\textwidth,height=0.90\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_zero_aha_moment_example.png}
+    \includegraphics[width=\textwidth,height=0.80\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_pipeline_overview_highlighted.png}
+    \caption*{The highlighted branch is R1-Zero: pure RL on the base model. Figure: DeepSeek-AI (2025), \href{https://arxiv.org/abs/2501.12948}{arXiv:2501.12948}, Fig.~2; red highlight added in Stanford CS224N, Lecture 12 (Choi, 2026).}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{DeepSeek-R1-Zero: The ``Aha Moment''}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_zero_aha_moment_example.png}
+    \caption*{Source: DeepSeek-AI (2025), \href{https://arxiv.org/abs/2501.12948}{arXiv:2501.12948}, Table~2; via Stanford CS224N, Lecture 12 (Choi, 2026).}
   \end{figure}
 \end{frame}
 
 \begin{frame}{Reward for R1-zero: keeping it simple}
+  \begin{figure}
     \centering
-    \includegraphics[width=\textwidth,height=0.90\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_zero_reward_design.png}
+    \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_zero_reward_design.png}
+    \caption*{Source: Stanford CS224N, Lecture 12 (Choi, 2026).}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Emergent reasoning capabilities}
   \begin{figure}
     \centering
-    \includegraphics[width=\textwidth,height=0.90\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_zero_emergent_capabilities.png}
+    \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_zero_emergent_capabilities.png}
+    \caption*{Source: Stanford CS224N, Lecture 12 (Choi, 2026).}
   \end{figure}
 \end{frame}
 
 \begin{frame}{Emergent undesirable characteristics of R1-Zero}
   \begin{figure}
     \centering
-    \includegraphics[width=\textwidth,height=0.90\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_zero_undesirable_characteristics.png}
+    \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_zero_undesirable_characteristics.png}
+    \caption*{Source: Stanford CS224N, Lecture 12 (Choi, 2026).}
   \end{figure}
 \end{frame}
 
-\begin{frame}{Example of Reinforcement Learning for Reasoning Skill Refinement: DeepSeek-R1}
+\begin{frame}{DeepSeek-R1: The Full Four-Stage Pipeline}
   \begin{figure}
     \centering
-    \includegraphics[width=\textwidth,height=0.90\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_full_training_pipeline.png}
+    \includegraphics[width=\textwidth,height=0.86\textheight,keepaspectratio]{images/lrm-grpo/deepseek_r1_full_training_pipeline.png}
+    \caption*{Source: DeepSeek-AI (2025), \href{https://arxiv.org/abs/2501.12948}{arXiv:2501.12948}, Fig.~2; via Stanford CS224N, Lecture 12 (Choi, 2026).}
   \end{figure}
 \end{frame}
 
@@ -54,6 +66,8 @@
       \item \textbf{Caveat 2}: doesn't apply to small (less capable) models
     \end{itemize}
   \end{itemize}
+  \vfill
+  {\scriptsize Findings 1--7 follow Stanford CS224N, Lecture 12 (Choi, 2026).}
 \end{frame}
 
 \begin{frame}{Key findings: DeepSeek-R1}
@@ -109,7 +123,7 @@
   \begin{itemize}
     \item<1-> \textcolor{KAred}{\textbf{Finding 7: Test-time compute is a learnable resource}}
     \begin{itemize}
-      \item \textbf{Findings}: R1’s models learn to allocate more thinking tokens to harder problems. This means test-time compute scaling is not just an inference trick (like beam search or majority voting)—it can be internalized by the model itself through training. The model learns when and how much to think.
+      \item \textbf{Findings}: R1's models learn to allocate more thinking tokens to harder problems. Test-time compute scaling is therefore more than an inference trick like beam search or majority voting; the model itself learns when and how much to think.
       \item \textbf{Caveat}: true to some degree; later studies reveal challenges to address.
     \end{itemize}
   \end{itemize}

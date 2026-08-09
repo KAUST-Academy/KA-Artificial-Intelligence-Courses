@@ -21,7 +21,8 @@
       \end{tikzpicture}
     \column{0.48\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/distillation_golden_retriever_teacher.png}\\[-0.4em]
+      \includegraphics[width=\linewidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/distillation_golden_retriever_teacher.png}\\[0.25em]
+      {\scriptsize Photo: Harvard IACS AC215, Lecture 11, \href{https://harvard-iacs.github.io/2024-AC215/assets/lectures/lecture11/L11_compression_techniques.pdf}{p.~14}.}
   \end{columns}
   \vspace{0.4em}
 \end{frame}
@@ -49,7 +50,8 @@
       \end{tikzpicture}
     \column{0.48\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/distillation_pomeranian_student.png}\\[-0.4em]
+      \includegraphics[width=\linewidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/distillation_pomeranian_student.png}\\[0.25em]
+      {\scriptsize Photo: Harvard IACS AC215, Lecture 11, \href{https://harvard-iacs.github.io/2024-AC215/assets/lectures/lecture11/L11_compression_techniques.pdf}{p.~15}.}
   \end{columns}
   \vspace{0.4em}
 \end{frame}
@@ -65,18 +67,20 @@
       \begin{tikzpicture}[baseline={(0,0)}]
         % Draw brace + label for one-hot
         \draw[decorate,decoration={brace,amplitude=6pt,mirror}] (0,-0.2) -- (0,1) node[midway,xshift=-0.5cm] {\scriptsize one-hot};
-        % One-hot vector
+        % One-hot vector. The 1 sits in the fourth slot: the class order used
+        % throughout this section is (cow, car, dog, cat), so a cat is not slot 3.
         \node[anchor=west] at (0.25,0.85) {\scriptsize 0};
         \node[anchor=west] at (0.25,0.60) {\scriptsize 0};
-        \node[anchor=west] at (0.25,0.35) {\scriptsize 1};
-        \node[anchor=west] at (0.25,0.10) {\scriptsize 0};
-        % Arrow to "Dog"
+        \node[anchor=west] at (0.25,0.35) {\scriptsize 0};
+        \node[anchor=west] at (0.25,0.10) {\scriptsize 1};
+        % Arrow to the active class
         \draw[->] (1.4,0.47) -- (2,0.47);
-        \node[anchor=west] at (2.05,0.47) {\footnotesize Dog};
+        \node[anchor=west] at (2.05,0.47) {\footnotesize Cat};
       \end{tikzpicture}
     \column{0.48\textwidth}
       \centering
-      \includegraphics[width=\linewidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/distillation_orange_cat_analogy.png}\\[-0.4em]
+      \includegraphics[width=\linewidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/distillation_orange_cat_analogy.png}\\[0.25em]
+      {\scriptsize Photo: Harvard IACS AC215, Lecture 11, \href{https://harvard-iacs.github.io/2024-AC215/assets/lectures/lecture11/L11_compression_techniques.pdf}{p.~17}.}
   \end{columns}
   \vspace{0.4em}
 \end{frame}
@@ -86,22 +90,22 @@
     \column{0.55\textwidth}
       \vspace{0.5em}
       \textbf{What about this example?}\\[1.2em]
-      % Table faithfully matching slide image: 3 classes + row labels + col labels
-      \setlength{\tabcolsep}{0.45em}
-      \renewcommand{\arraystretch}{1.22}
       \texttt{This is a \ldots}
+      % Mass is split across slots 3 and 4, i.e. dog and cat in the (cow, car,
+      % dog, cat) ordering used by the tables that follow.
       \[
         \begin{pmatrix}
           0 \\
-          0.5 \\
-          0.5 \\
           0 \\
+          0.5 \\
+          0.5 \\
         \end{pmatrix}
       \]
- 
+
     \column{0.44\textwidth}
       \centering
       \includegraphics[width=0.78\linewidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/distillation_brown_puppy_analogy.png}\\[0.2em]
+      {\scriptsize Photo: Harvard IACS AC215, Lecture 11, \href{https://harvard-iacs.github.io/2024-AC215/assets/lectures/lecture11/L11_compression_techniques.pdf}{p.~19}.}
   \end{columns}
   \vspace{0.3em}
 \end{frame}
@@ -113,10 +117,11 @@
       In the real world, the distinction is never that clear.
 
       Ideally, the \href{https://en.wikipedia.org/wiki/Soft_target}{training labels must be soft}, to learn about the nuanced relations across the elements of the dataset.
- 
+
     \column{0.44\textwidth}
       \centering
       \includegraphics[width=0.78\linewidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/distillation_brown_puppy_analogy.png}\\[0.2em]
+      {\scriptsize Photo: Harvard IACS AC215, Lecture 11, \href{https://harvard-iacs.github.io/2024-AC215/assets/lectures/lecture11/L11_compression_techniques.pdf}{p.~20}.}
   \end{columns}
   \vspace{0.3em}
 \end{frame}
@@ -131,7 +136,6 @@
 
     \column{0.46\textwidth}
       \centering
-      % Table displaying labels and probabilities, faithfully matching slide image
       \setlength{\tabcolsep}{0.45em}
       \renewcommand{\arraystretch}{1.22}
       \begin{tabular}{c|cccc}
@@ -162,20 +166,23 @@
         q_i = \frac{\exp\left(z_i / T\right)}{\sum\limits_j \exp\left(z_j / T\right)}
       \end{align*}
 
-      \vspace{0.7em}
-      \textit{“Soft” targets allow the student to learn the teacher's implicit knowledge about class similarities.}
+      \vspace{0.5em}
+      {\footnotesize The softened row is the same logits $z$ pushed through this softmax at $T = 5$; like any softmax output, it still sums to $1$.}
+
+      \vspace{0.5em}
+      ``Soft'' targets allow the student to learn the teacher's implicit knowledge about class similarities.
 
     \column{0.46\textwidth}
       \centering
-      % Table matching values from image, with original, softmax, and softened probabilities
-      \setlength{\tabcolsep}{0.4em}
+      % Tight columns: the three-row table has to fit a 0.46\textwidth column.
+      \setlength{\tabcolsep}{0.25em}
       \renewcommand{\arraystretch}{1.1}
       \begin{tabular}{c|cccc}
         & \footnotesize cow & \footnotesize car & \footnotesize dog & \footnotesize cat \\
         \hline
         \footnotesize Original labels & $0$ & $1$ & $0$ & $0$ \\
         \footnotesize Softmax probabilities & $10^{-6}$ & $0.9$ & $0.1$ & $10^{-9}$ \\
-        \footnotesize Softened probabilities & $0.05$ & $0.3$ & $0.2$ & $0.005$
+        \footnotesize Softened, $T{=}5$ & $0.04$ & $0.58$ & $0.37$ & $0.01$
       \end{tabular}
 
       \vspace{0.75em}
@@ -199,15 +206,15 @@
 
     \column{0.46\textwidth}
       \centering
-      % Table matching values from image, with original, softmax, and softened probabilities
-      \setlength{\tabcolsep}{0.4em}
+      % Tight columns: the three-row table has to fit a 0.46\textwidth column.
+      \setlength{\tabcolsep}{0.25em}
       \renewcommand{\arraystretch}{1.1}
       \begin{tabular}{c|cccc}
         & \footnotesize cow & \footnotesize car & \footnotesize dog & \footnotesize cat \\
         \hline
         \footnotesize Original labels & $0$ & $1$ & $0$ & $0$ \\
         \footnotesize Softmax probabilities & $10^{-6}$ & $0.9$ & $0.1$ & $10^{-9}$ \\
-        \footnotesize Softened probabilities & $0.05$ & $0.3$ & $0.2$ & $0.005$
+        \footnotesize Softened, $T{=}5$ & $0.04$ & $0.58$ & $0.37$ & $0.01$
       \end{tabular}
 
       \vspace{0.75em}
@@ -231,21 +238,17 @@
         \item This allows the student to learn not only the correct answer, but also the teacher's representation of class similarities.
       \end{itemize}
     \column{0.53\textwidth}
-      % Placeholder for image: Teacher-Student Distillation diagram
       \centering
       \fbox{
         \parbox[c][4.2cm][c]{0.92\linewidth}{
           \centering
           \includegraphics[width=0.78\linewidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/distillation_teacher_student_soft_hard_labels.png}\\[0.2em]
-          {\scriptsize Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Distilling the Knowledge in a Neural Network}}
+          {\scriptsize Figure: Harvard IACS AC215, Lecture 11, \href{https://harvard-iacs.github.io/2024-AC215/assets/lectures/lecture11/L11_compression_techniques.pdf}{p.~25}; credited there to Hinton, Vinyals \& Dean, \textit{Dark Knowledge}.}
      
         }
       }
       \vspace{0.5em}
 
-      % If desired, can also include something like:
-      % \includegraphics[width=\linewidth,keepaspectratio]{images/inference-optimisation/teacher_student_distillation.png}\\
-      % {\scriptsize Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Distilling the Knowledge in a Neural Network}}
   \end{columns}
 \end{frame}
 
@@ -262,39 +265,32 @@
     \item[] Train on a reduced dataset. This is usually done when you have the teacher model but not the original dataset or resources.
   \end{itemize}
   \vspace{1em}
-  % Optionally, add a horizontal line or adjust spacing for clarity
 \end{frame}
 
 \begin{frame}{Distillation: Teacher--Student Loss}
   \begin{columns}[T,onlytextwidth]
     \column{0.54\textwidth}
       It minimizes the sum of two different cross-entropy functions:
-      \begin{itemize}
+      \begin{itemize}\itemsep0.35em
         \item One involving the original hard labels obtained using a softmax with $T = 1$.
         \item One involving the softened probabilities with $T > 1$.
+        \item {\footnotesize The gradients of the soft-target term scale as $1/T^{2}$, so in practice that term is multiplied by $T^{2}$. Without it, raising $T$ would quietly shrink the distillation signal relative to the hard-label one.}
       \end{itemize}
     \column{0.42\textwidth}
       \centering
       \includegraphics[width=0.98\linewidth,height=0.5\textheight,keepaspectratio]{images/inference-optimisation/distillation_teacher_student_soft_hard_labels.png}\\[0.2em]
-      {\scriptsize Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Distilling the Knowledge in a Neural Network}}
+      {\scriptsize Figure: Harvard IACS AC215, Lecture 11, \href{https://harvard-iacs.github.io/2024-AC215/assets/lectures/lecture11/L11_compression_techniques.pdf}{p.~25}; credited there to Hinton, Vinyals \& Dean, \textit{Dark Knowledge}.}
   \end{columns}
 \end{frame}
 
 \begin{frame}{Distillation: Teacher--Student}
   \centering
-  % Use the referenced slide as a visual explanation for training process
-  \includegraphics[width=0.97\linewidth,height=0.8\textheight,keepaspectratio]{images/inference-optimisation/distillation_softmax_temperature_loss_diagram.png}\\[0.4em]
-  {\scriptsize Reference: Geoffrey Hinton, Oriol Vinyals \& Jeff Dean, \textit{Distilling the Knowledge in a Neural Network}.}
-  \vspace{1em}
-  
+  \includegraphics[width=0.97\linewidth,height=0.62\textheight,keepaspectratio]{images/inference-optimisation/distillation_softmax_temperature_loss_diagram.png}\\[0.3em]
+  {\scriptsize Figure: Harvard IACS AC215, Lecture 11, \href{https://harvard-iacs.github.io/2024-AC215/assets/lectures/lecture11/L11_compression_techniques.pdf}{p.~28}. Temperature and loss scheme: Hinton, Vinyals \& Dean, \textit{Distilling the Knowledge in a Neural Network}.}
+  \vspace{0.2em}
   \[
     L = \lambda L_{\mathrm{student}} + (1-\lambda) L_{\mathrm{distillation}}
   \]
-\end{frame}
-
-\begin{frame}{Distillation: Teacher--Student Training}
-  \centering
-  \includegraphics[width=0.97\linewidth,height=0.8\textheight,keepaspectratio]{images/inference-optimisation/distillation_teacher_student_training_loss_formula.png}\\[0.4em]
 \end{frame}
 
 \begin{frame}{Distillation: Teacher--Student}
@@ -306,7 +302,7 @@
 
   In our example, for the example $n$ in the dataset:
   \[
-    p_T(x, T) = [0.05,\ 0.3,\ 0.2,\ 0.005]
+    p_T(x, T) = [0.04,\ 0.58,\ 0.37,\ 0.01]
   \]
 
   And our predictions
@@ -316,16 +312,18 @@
 
   The resulting loss value for this example is:
   \[
-    -\Big[0.05 \cdot \log(0.1)\ +\ 0.3 \cdot \log(0.45)\ +\ 0.2 \cdot \log(0.30)\ +\ 0.005 \cdot \log(0.15)\Big]
+    -\Big[0.04 \log(0.1) + 0.58 \log(0.45) + 0.37 \log(0.30) + 0.01 \log(0.15)\Big] \approx 1.02
   \]
 \end{frame}
 
 \begin{frame}{Distilling Reasoning Traces}
-  \begin{itemize}\itemsep0.4em
+  \begin{itemize}\footnotesize\itemsep0.45em
     \item Classic distillation transfers the teacher's \textbf{output distribution}: the student matches softened logits, one prediction at a time.
     \item For reasoning models the valuable signal is the \textbf{trace}: the chain of intermediate steps the teacher produces before its answer.
-    \item \textbf{Recipe:} generate many problems' worth of full reasoning traces with a large reasoning model, filter for correct answers, then fine-tune the small model on the traces with plain supervised learning. No logits, no RL.
-    \item DeepSeek distilled R1 traces into Qwen and Llama models from 1.5B to 70B this way; the distilled students beat much larger non-reasoning baselines on math and code benchmarks.
+    \item \textbf{Recipe:} generate many problems' worth of full reasoning traces with a large reasoning model, filter for correct answers, then fine-tune the small model on the traces with plain supervised learning. No logits, no RL. The filter-on-correct-answers step is the idea behind STaR (Zelikman et al., 2022).
+    \item DeepSeek distilled R1 traces into Qwen and Llama models from 1.5B to 70B this way, using 800k curated samples and supervised fine-tuning only; the distilled students beat much larger non-reasoning baselines on math and code benchmarks.
     \item The trade: trace distillation is far cheaper than running RL on the small model, but the student inherits the teacher's reasoning style, including its mistakes.
   \end{itemize}
+  \vspace{0.2em}
+  {\scriptsize DeepSeek-AI, ``DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning,'' \href{https://arxiv.org/abs/2501.12948}{arXiv:2501.12948}.}
 \end{frame}

@@ -10,7 +10,7 @@
 
 \begin{frame}{Direct vs.\ Indirect Prompt Injection}
   \begin{itemize}\itemsep0.5em
-    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Prompt injection (Recap):} untrusted text overrides the developer's intended instructions and hijacks the model's output. We saw this for chatbots in the prompting lecture.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Prompt injection (Recap):} untrusted text overrides the developer's intended instructions and hijacks the model's output. We saw this for chatbots earlier in the course.
     \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Direct injection:} the attacker is the user, typing ``ignore your instructions'' into the prompt. The blast radius is the attacker's own session.
     \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Indirect injection:} the attacker plants instructions in content the agent reads while carrying out an honest user's task, such as a web page, an email, a calendar invite, a document, or a tool result.
     \item[\textcolor{KAred}{$\blacktriangleright$}] Indirect injection is the agentic threat. The victim asks for something legitimate, and the payload arrives inside the data the agent fetches to help them.

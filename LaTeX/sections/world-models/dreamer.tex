@@ -29,7 +29,7 @@
 \begin{frame}[t]{Dreamer: Learning Behaviors in Imagination}
   \begin{itemize}\itemsep0.28em
     \item Instead of planning at act time (PlaNet), Dreamer trains an \textbf{actor} and a \textbf{critic} on \textbf{imagined latent trajectories}.
-    \item Rollouts never touch pixels: start from latent states of replayed real experience, then unroll the RSSM \textbf{prior} for a short horizon.
+    \item Rollouts never touch pixels: start from latent states of real experience drawn from the replay buffer, then unroll the RSSM \textbf{prior} for a short horizon.
     \item The \textbf{critic} estimates value beyond the horizon; the \textbf{actor} is improved by backpropagating value gradients \textbf{through the learned dynamics}, which is possible because the world model is differentiable.
     \item Result: acting is a single forward pass (no per-step search), and the critic gives long-horizon credit assignment that CEM planning lacked.
   \end{itemize}
@@ -45,7 +45,7 @@
     \begin{itemize}\footnotesize
       \item \textbf{Key upgrade:} The world model now uses \textbf{discrete categorical latents} instead of continuous Gaussian variables. Each latent consists of 32 variables, each taking one of 32 categories, enabling a richer and more expressive latent space.
       \item Discrete latents are optimized using \textbf{straight-through gradients} for effective backpropagation despite non-differentiability. This allows for more precise representation and imagination.
-      \item \textbf{KL balancing} is introduced to stabilize training by balancing the KL divergence term across model components.
+      \item \textbf{KL balancing} weights the prior and posterior gradient paths of the KL term differently (the prior is trained faster), preventing the posterior from collapsing onto an untrained prior.
     \end{itemize}
   \end{columns}
 \end{frame} 
@@ -78,7 +78,7 @@
     \item \textbf{Symlog predictions:} inputs and regression targets pass through a signed-log transform, taming value scales that differ by orders of magnitude across domains.
     \item \textbf{Two-hot return targets:} the critic predicts a distribution over discretized returns instead of a single scalar, which is more robust to outliers.
     \item \textbf{KL balancing and free bits:} the world-model KL term is split and clipped so neither prior nor posterior collapses, and small KL values are not over-optimized.
-    \item \textbf{Percentile return normalization:} rewards are normalized by a running percentile range, so exploration behaves consistently across dense and sparse rewards.
+    \item \textbf{Percentile return normalization:} returns are divided by an EMA of their 5th--95th percentile range, so exploration behaves consistently across dense and sparse rewards.
     \item Published in \emph{Nature} (2025); the headline demo is collecting diamonds in Minecraft from scratch, without human data.
   \end{itemize}
 \end{frame}

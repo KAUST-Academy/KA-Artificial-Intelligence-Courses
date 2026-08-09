@@ -9,7 +9,9 @@
     \item Automatic Speech Recognition converts spoken language (audio) into written text.  
     \item Example:  
     \[
-        \text{Audio: "Hey computer, what's the weather?"} \rightarrow \text{Text: "hey computer what's the weather"}
+        \resizebox{\linewidth}{!}{$
+        \text{Audio: ``Hey computer, what's the weather?''} \rightarrow \text{Text: ``hey computer what's the weather''}
+        $}
     \]
 
     \item How it works (high-level pipeline):
@@ -31,8 +33,9 @@
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.08\textwidth,height=0.75\textheight,keepaspectratio]{images/audio-nlp-eval/asr-diagram.png}
-    \caption*{Statistical historical approach to ASR.}
+    \includegraphics[width=\textwidth,height=0.6\textheight,keepaspectratio]{images/audio-nlp-eval/asr-diagram.png}
+    \caption*{Statistical historical approach to ASR.\\
+    {\scriptsize Source: M.~Fabien, ``Introduction to Automatic Speech Recognition (ASR),'' \url{https://maelfabien.github.io/machinelearning/speech_reco/}}}
 \end{figure}
 
 \end{frame}
@@ -90,13 +93,9 @@
         \item Often achieves better accuracy when trained on large datasets.
     \end{itemize}
 
-    \item Mathematical intuition (CTC objective):
-    \[
-        P(W \mid X) = \sum_{\pi \in B^{-1}(W)} \prod_t P(\pi_t \mid X)
-    \]
-    where $\pi$ represents a possible alignment and $B$ is the collapse function that removes blanks and repeats.
+    \item Each approach solves the same problem, that the audio has far more frames than the transcript has tokens, in a different way. We take them one at a time in the sections that follow.
 
-    \item Reference: \url{https://distill.pub/2017/ctc/}
+    \item Reference: Hannun, ``Sequence Modeling With CTC'', Distill, 2017. \url{https://distill.pub/2017/ctc/}
 \end{itemize}
 
 \end{frame}
@@ -110,8 +109,8 @@
     \item Key architecture:
     \begin{itemize}
         \item Encoder-decoder transformer.
-        \item Trained on 680,000 hours of labeled and weakly-labeled audio.
-        \item Takes log-Mel spectrograms as input features.
+        \item Trained on 680,000 hours of \textbf{weakly supervised} audio: transcripts scraped from the web and paired with audio, not annotated for the task. 117,000 of those hours are non-English.
+        \item Takes 80-channel log-Mel spectrograms as input (25~ms window, 10~ms hop).
     \end{itemize}
 
     \item Advantages:
@@ -128,8 +127,8 @@
 
 \begin{figure}
     \centering
-    \includegraphics[width=1.08\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp-eval/whisper.png}
-    \caption*{Whisper architecture diagram. Image: OpenAI}
+    \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp-eval/whisper.png}
+    \caption*{\scriptsize Source: Radford et al., ``Robust Speech Recognition via Large-Scale Weak Supervision'', 2022, Fig.~1.}
 \end{figure}
 
 \end{frame}
@@ -148,21 +147,24 @@
 
     \item Achievements:
     \begin{itemize}
-        \item Achieves state-of-the-art performance on LibriSpeech ASR benchmarks.
-        \item Balances efficiency and accuracy better than pure transformer or CNN models alone.
+        \item Was state of the art on LibriSpeech when published: $2.1\%$ / $4.3\%$ WER on test-clean / test-other without a language model, and $1.9\%$ / $3.9\%$ with an external LM (Conformer~(L), 118.8M parameters).
+        \item Balances efficiency and accuracy better than pure transformer or CNN models alone: a 10.3M-parameter Conformer~(S) still reaches $2.7\%$ / $6.3\%$.
     \end{itemize}
 
-    \item Conceptual block equation:
-    \[
-        y = x + \text{MHSA}(\text{Norm}(x)) + \text{Conv}(\cdot) + \text{FFN}(\cdot)
-    \]
-    where MHSA = Multi-Head Self-Attention, Conv = convolutional module, FFN = feed-forward network.
+    \item Block equations: the four modules are applied \emph{in sequence}, each as a pre-norm residual, with the two feed-forward modules half-weighted and sandwiching the attention and convolution pair:
+    \begin{align*}
+        \tilde{x} &= x + \tfrac{1}{2}\text{FFN}(x) &
+        x' &= \tilde{x} + \text{MHSA}(\tilde{x}) \\
+        x'' &= x' + \text{Conv}(x') &
+        y &= \text{LayerNorm}\!\left(x'' + \tfrac{1}{2}\text{FFN}(x'')\right)
+    \end{align*}
+    where MHSA = multi-head self-attention (with relative positional encoding), Conv = convolutional module, FFN = feed-forward network.
 \end{itemize}
 
 \begin{figure}
     \centering
-    \includegraphics[width=1\textwidth,height=0.7\textheight,keepaspectratio]{images/audio-nlp-eval/conformer.png}
-    \caption*{Conformer block diagram. Source: Adversarial joint training with self-attention mechanism for robust end-to-end speech recognition}
+    \includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{images/audio-nlp-eval/conformer.png}
+    \caption*{\scriptsize Conformer encoder and its sub-modules, after Gulati et al., ``Conformer'', Interspeech 2020, Fig.~1. Redrawn version from Li et al., ``Adversarial joint training with self-attention mechanism for robust end-to-end speech recognition'', EURASIP J.\ Audio Speech Music Process., 2021.}
 \end{figure}
 
 \end{frame}
@@ -174,7 +176,7 @@
 
     \item \textbf{Whisper:}
     \begin{itemize}
-        \item Multilingual, trained on massive datasets.
+        \item Multilingual, trained on a massive weakly supervised dataset.
         \item Robust to accents, noise, and varied conditions.
         \item Open-sourced, general-purpose.
     \end{itemize}
@@ -189,7 +191,7 @@
     \item Trade-offs:
     \begin{itemize}
         \item Whisper is more general-purpose, handles diverse languages and noisy conditions.
-        \item Conformer achieves very low WER ($<$2\% on LibriSpeech test-clean) but may require task-specific tuning.
+        \item Conformer achieves very low WER on read English speech ($2.1\%$ on LibriSpeech test-clean without an LM) but may require task-specific tuning.
     \end{itemize}
 \end{itemize}
 

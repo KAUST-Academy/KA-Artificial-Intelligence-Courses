@@ -5,7 +5,7 @@
 
 \begin{frame}[allowframebreaks]{Kernels and Filters}
     \begin{itemize}
-        \item Kernels and filters are the same thing in CNNs.
+        \item The terms kernel and filter are often used interchangeably in CNNs; strictly, a filter stacks one 2D kernel per input channel.
         \item They are small matrices used to extract features from input data.
         \item The kernel \textbf{slides over} the input image, performing \textbf{element-wise} multiplication and summation.
         \item This process is known as \textbf{convolution}.
@@ -15,7 +15,8 @@
 
     \begin{figure}
         \centering
-        \includegraphics[width=1.0\textwidth,height=0.9\textheight,keepaspectratio]{images/cnn/conv_12.png}
+        \includegraphics[width=1.0\textwidth,height=0.8\textheight,keepaspectratio]{images/cnn/conv_12.png}
+        \caption*{\scriptsize [Source: \url{https://medium.com/analytics-vidhya/understanding-convolution-operations-in-cnn-1914045816d4}]}
     \end{figure}
 
     \framebreak
@@ -25,4 +26,29 @@
         \item Each kernel produces a feature map, which is a transformed version of the input image highlighting specific features.
         \item The number of filters (kernels) in a layer determines the depth of the output feature map.
     \end{itemize}
+\end{frame}
+
+\begin{frame}{Convolutions on RGB images}
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth,height=0.85\textheight,keepaspectratio]{images/cnn/rgb-convolution.png}
+    \caption*{\scriptsize [Source: Andrew Ng, \textit{Deep Learning Specialization}, Course 4: Convolutional Neural Networks (Coursera).]}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Multiple Channels \& Multiple Filters}
+    \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth,height=0.8\textheight,keepaspectratio]{images/cnn/mutiple-filters.png}
+    \caption*{\scriptsize [Source: Andrew Ng, \textit{Deep Learning Specialization}, Course 4: Convolutional Neural Networks (Coursera).]}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Number of Parameters?}
+    \LARGE If you have 10 filters of size $3 \times 3 \times 3$ in one layer of a neural network, how many parameters does that layer have?
+
+\framebreak
+    Each filter has size $3 \times 3 \times 3 = 27$ parameters (weights).  \\[2em]
+    With 10 filters: $10 \times 27 = 270$ weights.  \\[2em]
+    If each filter also has a bias term, add 10 more parameters: {\boldmath$270 + 10 = 280$} parameters in total.
 \end{frame}

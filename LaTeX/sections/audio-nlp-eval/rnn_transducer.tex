@@ -17,8 +17,8 @@
 
     \begin{figure}[h]
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp/rnnt_architecture.png}
-        \caption*{RNN‑T Architecture: Encoder, Prediction Network, and Joint Network.}
+        \includegraphics[width=0.62\textwidth,height=0.72\textheight,keepaspectratio]{images/audio-nlp/transducer.png}
+        \caption*{\scriptsize RNN‑T architecture. The prediction network and joint network are also called the \emph{predictor} and the \emph{joiner}. Source: L.~Lugosch, ``Sequence-to-sequence learning with Transducers,'' 2020. \url{https://lorenlugosch.github.io/posts/2020/11/transducer/}}
     \end{figure}
 
     \framebreak
@@ -65,7 +65,7 @@
 
     \textbf{Cons vs. CTC:}
     \begin{itemize}
-        \item More complex and computationally intensive.
+        \item More complex and computationally intensive: the loss is computed over a $T \times U$ lattice, so training memory grows with the product of input and output lengths.
         \item Harder to train and tune.
         \item Decoding is slower due to output dependencies.
     \end{itemize}

@@ -1,13 +1,50 @@
 \section{Limitations of LRMs}
 \begin{frame}{Limitations of Large Reasoning Models}
     \begin{itemize}
-        \item \textbf{Verbose outputs:} CoT (Chain-of-Thought) and ToT (Tree-of-Thought) methods generate long outputs.
-        \item May confuse end-users due to extensive reasoning traces.
-        \item \textbf{Prompt sensitivity:} Small changes in prompt wording lead to large changes in output.
-        \item Requires careful prompt engineering.
-        \item \textbf{Computation overhead:} Especially with self-consistency sampling or ToT trees.
-        \item Increases inference cost and time.
-        \item \textbf{Example:} CoT prompting works well on GSM8K (a math dataset), but fails without careful prompt tuning.
-        \item Shows sensitivity to specific prompt design.
+        \item \textbf{Verbose outputs:} Chain-of-Thought and Tree-of-Thought produce long outputs.
+        \begin{itemize}
+            \item Extensive reasoning traces can bury the answer the user actually asked for.
+        \end{itemize}
+        \item \textbf{Prompt sensitivity:} Small changes in wording lead to large changes in output.
+        \begin{itemize}
+            \item CoT lifts GSM8K accuracy substantially, but the size of the gain depends on how the exemplars are written.
+            \item Careful prompt design is therefore part of the method, not an optional extra.
+        \end{itemize}
+        \item \textbf{Computation overhead:} Worst with self-consistency sampling and Tree-of-Thought search.
+        \begin{itemize}
+            \item Cost grows with the number of sampled paths or expanded nodes, so accuracy is bought with inference time.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Can the Reasoning Trace Be Trusted?}
+    The techniques above were each introduced with the claim that visible reasoning makes a model easier to audit. That claim needs qualifying.
+    \vspace{0.5em}
+    \begin{itemize}
+        \setlength{\itemsep}{0.5em}
+        \item \textbf{A trace need not describe the computation.}
+        \begin{itemize}
+            \item \href{https://arxiv.org/abs/2305.04388}{Turpin et al.\ (2023)} added a biasing feature to the prompt, for example reordering multiple-choice options so the correct answer was always the same letter.
+            \item Models followed the bias, wrote fluent reasoning that never mentioned it, and lost up to 36 accuracy points across 13 BIG-Bench Hard tasks.
+            \item So a trace can rationalise an answer after the fact rather than explain how it was produced. It is evidence about what the model will say, not about what it did.
+        \end{itemize}
+    \framebreak
+        \item \textbf{Accuracy can collapse rather than degrade.}
+        \begin{itemize}
+            \item On puzzles whose difficulty can be dialled up smoothly, \href{https://arxiv.org/abs/2506.06941}{Shojaee et al.\ (2025)} report three regimes: plain LLMs win on the easiest instances, reasoning models win in the middle, and both fall to near zero past a threshold.
+            \item Past that threshold the models spend \emph{fewer} thinking tokens, not more, even with budget left over.
+            \item Read with care: \href{https://arxiv.org/abs/2506.09250}{Lawsen (2025)} attributes part of the collapse to output-token limits and to river-crossing instances that are mathematically unsolvable, so the ceiling is not purely a reasoning ceiling.
+        \end{itemize}
+        \item \textbf{Effort is not well matched to difficulty.}
+        \begin{itemize}
+            \item \href{https://arxiv.org/abs/2412.21187}{Chen et al.\ (2024)} show o1-style models spending long traces on questions like $2+3$, buying no accuracy for the extra tokens.
+            \item The pathology runs both ways: overthinking on the easy end, and giving up early on the hard end.
+        \end{itemize}
+        \item \textbf{What follows for practice}
+        \begin{itemize}
+            \item Check the answer, not the prose: where correctness matters, verify the output against something external such as a unit test, a solver, or a known result.
+            \item Do not present a trace to a user as an explanation of the model's decision unless it has been tested for faithfulness.
+            \item Automatic checking of answers is exactly what the reinforcement-learning approach covered later builds on, and it is the reason that approach is more reliable than prompting alone.
+        \end{itemize}
     \end{itemize}
 \end{frame}

@@ -1,7 +1,11 @@
-% Slides from Lecture-10 lines 31--82 (main already inputs sections/cover).
 \begin{frame}[plain]
-  \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/multimodal-nlp-agentic-ai/multimodal_agent_system_overview.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.8\paperwidth,height=0.74\paperheight,keepaspectratio]{images/multimodal-nlp-agentic-ai/multimodal_agent_system_overview.png}
+    \caption*{\scriptsize Redrawn after Nath et al., ``Generative AI and multi-modal agents in AWS: The key
+    to unlocking new value in financial markets'', AWS Machine Learning Blog, 2023 (``Architecture Pattern:
+    Multi-modal Agent'').}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Table of Contents}
@@ -11,8 +15,8 @@
     \item Vision-Language Models
       \begin{enumerate}
         \item CLIP: Contrastive Language-Image Pretraining
-        \item VisualBERT
-        \item FLAVA: Foundational Language And Vision Alignment
+        \item VisualBERT and the Visual BERT family
+        \item FLAVA, and on to multimodal LLMs
       \end{enumerate}
     \item Multimodal Architectures
       \begin{enumerate}
@@ -29,10 +33,9 @@
 
 \begin{frame}{Table of Contents (contd.)}
   \begin{enumerate}
-    \setcounter{enumi}{2}
-    \item \textcolor{red}{Agent Loop}
     \setcounter{enumi}{5}
-    \item \textcolor{red}{Open-Source Agentic Frameworks}
+    \item Agent Loop, Tool Use, and Agentic RAG
+    \item Open-Source Agentic Frameworks
       \begin{enumerate}
         \item Auto-GPT
         \item BabyAGI

@@ -2,36 +2,33 @@
 \begin{frame}[allowframebreaks]{Using CLIP for generative tasks}
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_62_1_img.jpg}
+        \includegraphics[width=1\textwidth,height=0.72\textheight,keepaspectratio]{images/video/slide_62_1_img.jpg}
     \end{figure}
+    {\footnotesize{[Composite slide figure; generated image from VQGAN-CLIP, Crowson et al., ECCV 2022, Fig.~2]}}
 \end{frame}
 
 
 \begin{frame}[allowframebreaks]{VQ-GAN + CLIP Editing}
-    \large VQ-GAN + CLIP Editing \\[1em]
-    \textbf{VQ-GAN + CLIP Editing} combines the strengths of VQ-GAN for image generation and CLIP for text-guided editing, enabling high-quality image synthesis and manipulation.
-
+    \large Editing needs no new machinery: only the starting point changes. \\[1em]
+    \normalsize
     \begin{itemize}
-        \item \textbf{VQ-GAN:} Generates images from discrete latent codes, allowing for efficient representation.
-        \item \textbf{CLIP:} Guides the editing process by understanding text prompts, enabling targeted modifications to generated images.
-        \item \textbf{Applications:} Image synthesis, style transfer, and content-aware editing.
+        \item \textbf{Initialization is the whole difference:} for generation the initial image is random pixel values; for editing it is the image we want to modify. The architecture and the loss are unchanged.
+        \item \textbf{The prompt is used identically:} the text describing the desired change enters the CLIP similarity loss exactly as a generation prompt would.
+        \item \textbf{Structure is retained} because the optimization starts from the source image. Where a region must be held fixed, the gradients on the corresponding parts of the latent vector can be zeroed out (masking).
+        \item \textbf{Applications:} recolouring, weather and texture changes, and style transfer on real photographs, not only synthesis from scratch.
     \end{itemize}
-\framebreak
-    \textbf{How They Work Together:}
-    \begin{itemize}
-        \item \textbf{Image Generation:} VQ-GAN generates images based on quantized latent codes, while CLIP provides text-based guidance for editing.
-        \item \textbf{Text Conditioning:} CLIP's text embeddings condition the VQ-GAN generator, allowing it to produce images that match specific textual descriptions.
-        \item \textbf{Loss Function:} The similarity between generated image embeddings and text embeddings from CLIP is used as a loss function to optimize the VQ-GAN generator, ensuring that the generated images align with the given text prompts.
-    \end{itemize}
+    \vspace{0.5em}
+    {\footnotesize{[VQGAN-CLIP, Crowson et al., ECCV 2022, Sections 2.5 and 4]}}
 \framebreak
     \begin{figure}
         \centering
         \includegraphics[width=1\textwidth,height=0.8\textheight,keepaspectratio]{images/video/slide_63_1_img.jpg}
     \end{figure}
-    {\footnotesize{[VQGAN-CLIP: Open Domain Image Generation and Editing with Natural Language Guidance, Crowson et al. ICCV 13 2021]}}
+    {\footnotesize{[VQGAN-CLIP: Open Domain Image Generation and Editing with Natural Language Guidance, Crowson et al., ECCV 2022]}}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_64_1_img.jpg}
+        \includegraphics[width=1\textwidth,height=0.72\textheight,keepaspectratio]{images/video/slide_64_1_img.jpg}
     \end{figure}
+    {\footnotesize{[VQGAN-CLIP: Open Domain Image Generation and Editing with Natural Language Guidance, Crowson et al., ECCV 2022, Fig.~7]}}
 \end{frame}

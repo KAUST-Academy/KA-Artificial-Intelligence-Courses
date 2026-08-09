@@ -8,7 +8,7 @@
                 \caption*{Visualization of a stack of causal convolutional layers.}
             \end{figure}
         \end{column}
-        \begin{column}{0.5\linewidth}
+        \begin{column}{0.4\linewidth}
             \begin{itemize}
                 \item \textbf{Causal convolution:} Each output depends only on current and previous inputs.
                 \item Easy to implement: masking part of the convolution kernel.
@@ -21,7 +21,7 @@
             \end{itemize}
         \end{column}
     \end{columns}
-    \small [WaveNet – Van den Oord et al, 2016]
+    \small [WaveNet, van den Oord et al., 2016]
 
     \framebreak
 
@@ -50,7 +50,7 @@
                 \caption*{Visualization of a stack of \textit{dilated} causal convolutional layers.}
             \end{figure}
         \end{column}
-        \begin{column}{0.5\linewidth}
+        \begin{column}{0.4\linewidth}
             \begin{itemize}
                 \item \textbf{Dilated convolution:} Expands receptive field exponentially with depth.
                 \item Dilation factor $d$:
@@ -61,7 +61,7 @@
             \end{itemize}
         \end{column}
     \end{columns}
-    \small [WaveNet – Van den Oord et al, 2016]
+    \small [WaveNet, van den Oord et al., 2016]
 
     \framebreak
 
@@ -94,7 +94,7 @@
                 \caption*{Overview of the residual block and the entire architecture.}
             \end{figure}
         \end{column}
-        \begin{column}{0.5\linewidth}
+        \begin{column}{0.4\linewidth}
             \begin{itemize}
                 \item \textbf{Residual connections:} Add input to output of each block.
                 \item \textbf{Skip connections:} Aggregate outputs from all blocks before final output.
@@ -102,6 +102,7 @@
             \end{itemize}
         \end{column}
     \end{columns}
+    \small [WaveNet, van den Oord et al., 2016]
 
     \framebreak
 
@@ -138,43 +139,45 @@
     \textbf{\large WaveNet on MNIST}
     \vspace{2em}
     \begin{columns}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/init.png}
             \end{figure}
         \end{column}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/epoch-0.png}
             \end{figure}
         \end{column}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/epoch-1.png}
             \end{figure}
         \end{column}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/epoch-2.png}
             \end{figure}
         \end{column}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/epoch-8.png}
             \end{figure}
         \end{column}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/epoch-19.png}
             \end{figure}
         \end{column}
     \end{columns}
+    \vspace{1em}
+    {\scriptsize [Source: Abbeel, Chen, Ho, Srinivas, Li \& Yan, CS294-158 Deep Unsupervised Learning, UC Berkeley (Spring 2020), L2 Autoregressive Models, slide 43]}
 
     \framebreak
 
@@ -183,43 +186,45 @@
     Append (x,y) coordinates of pixel in the image as input to WaveNet
     \vspace{1em}
     \begin{columns}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/init.png}
             \end{figure}
         \end{column}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/coord-epoch-0.png}
             \end{figure}
         \end{column}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/coord-epoch-1.png}
             \end{figure}
         \end{column}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/coord-epoch-2.png}
             \end{figure}
         \end{column}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/coord-epoch-8.png}
             \end{figure}
         \end{column}
-        \begin{column}{0.18\linewidth}
+        \begin{column}{0.15\linewidth}
             \begin{figure}
                 \centering
                 \includegraphics[width=1\linewidth]{images/autoregressive/mnist/coord-epoch-19.png}
             \end{figure}
         \end{column}
     \end{columns}
+    \vspace{1em}
+    {\scriptsize [Source: Abbeel, Chen, Ho, Srinivas, Li \& Yan, CS294-158 Deep Unsupervised Learning, UC Berkeley (Spring 2020), L2 Autoregressive Models, slide 44]}
 
     \framebreak
 

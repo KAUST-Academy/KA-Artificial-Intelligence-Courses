@@ -21,7 +21,8 @@
 \framebreak
     \begin{figure}
         \centering
-        \fetchconvertimage{https://www.qtravel.ai/wp-content/uploads/2023/12/what-is-natual-language-processsing-1024x884.png}{images/nlp-intro/nlp-about.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+        \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/nlp-intro/nlp-about.png}
+        \caption*{\scriptsize Source: Qtravel.ai, ``What is Natural Language Processing''.}
     \end{figure}
 \framebreak
     {\large \textbf{NLP = Computer Science + Linguistics + AI}}
@@ -47,7 +48,8 @@
 \begin{frame}[allowframebreaks]{Goal}
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/nlp-intro/goal.png}
+        \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/nlp-intro/goal.png}
+        \caption*{\scriptsize Cartoon: Gary Larson, \textit{The Far Side}.}
     \end{figure}
 \framebreak
     \large \textbf{Goal of NLP:}
@@ -98,7 +100,7 @@
         \item \textbf{Language Modeling}
         \vspace{-0.5em}
         \begin{itemize}
-            
+
             \item Predicting the next word or sequence in text.
         \end{itemize}
     \end{itemize}
@@ -112,8 +114,9 @@
     \vspace{1em}
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{images/nlp-intro/iceberg-1.png}
-    \end{figure}    
+        \includegraphics[width=\textwidth,height=0.58\textheight,keepaspectratio]{images/nlp-intro/iceberg-1.png}
+        \caption*{\scriptsize Source: Dan Klein, UC Berkeley NLP slides (via T.~Berg-Kirkpatrick, CMU).}
+    \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Text Data is Superficial}
@@ -127,70 +130,51 @@
         \begin{column}{0.5\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/nlp-intro/iceberg-2.png}
+                \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/nlp-intro/iceberg-2.png}
+                \caption*{\scriptsize Source: Dan Klein, UC Berkeley NLP slides.}
             \end{figure}
         \end{column}
     \end{columns}
 \end{frame}    
 
-\begin{frame}[allowframebreaks]{NLP Basics – What It’s All About}
-    \vspace{-1em}
-    Teaching machines to \textbf{understand and generate human language}
-    \begin{itemize}
-        \item \textbf{Text preprocessing}: \\
-        {\small Cleaning and preparing raw text data (removing noise, tokenization, normalization).}
-        \item \textbf{Understanding meaning}: \\
-        {\small Extracting meaning from text using techniques like part-of-speech tagging, named entity recognition, and sentiment analysis.}
-        \item \textbf{Language modeling}: \\
-        {\small Building models that can predict or generate text, such as autocomplete or next-word prediction.}
-        \item \textbf{Translation, summarization, etc.}: \\
-        {\small Enabling applications like machine translation, text summarization, question answering, and more.}
-    \end{itemize}
-
-    \textcolor{blue}{Text data is everywhere: tweets, reviews, articles, chats! NLP helps us make sense of this vast information.}
-
-\end{frame}
-
 \begin{frame}[allowframebreaks]{Core NLP Tasks}
 \begin{table}[ht]
     \centering
-    \renewcommand{\arraystretch}{1.8} % Increased row spacing
-    \begin{tabular}{@{} p{0.3\textwidth} p{0.3\textwidth} p{0.4\textwidth} @{}}
+    \renewcommand{\arraystretch}{1.5} % Increased row spacing
+    \begin{tabular}{@{} >{\raggedright\arraybackslash}p{0.29\textwidth}
+                        >{\raggedright\arraybackslash}p{0.23\textwidth}
+                        >{\raggedright\arraybackslash}p{0.40\textwidth} @{}}
         \toprule
         \textbf{Task} & \textbf{What It Does} & \textbf{Example} \\
         \midrule
-        \hline % Horizontal line after header row
         \textbf{Tokenization} & Split text into words & \texttt{"I love NLP"} $\rightarrow$ \texttt{["I", "love", "NLP"]} \\
         \textbf{POS Tagging} & Label grammar tags & \texttt{"Dogs bark"} $\rightarrow$ [Noun, Verb] \\
-        \textbf{Named Entity Recognition} & Find names, places, etc. & \texttt{"Christopher Nolan lives in Los Angeles"} \\
+        \textbf{Named Entity Recognition} & Find names, places, etc. & \texttt{"Christopher Nolan lives in Los Angeles"} $\rightarrow$ [Person, Location] \\
         \textbf{Sentiment Analysis} & Detect mood & \texttt{"This movie was amazing!"} $\rightarrow$ Positive \\
         \textbf{Machine Translation} & Language to language & English $\rightarrow$ French \\
         \bottomrule
     \end{tabular}
 \end{table}
+\vspace{0.3em}
+{\small Applications such as summarization and question answering chain several of these
+tasks together.}
 \end{frame}
 
 
 \begin{frame}{Text Preprocessing}
     \begin{itemize}
-        \item \textbf{Lowercase everything}: \\
-        {\small Example: \texttt{"NLP"} $\rightarrow$ \texttt{"nlp"}}
-        \item \textbf{Removing stop words}: \\
-        {\small Eliminate common words that carry little meaning (e.g., "is", "the", "and") to focus on important content.}
-        \item \textbf{Stemming/Lemmatization}: \\
-        {\small Reduce words to their root or base form. \\
-        Example: \texttt{"running"} $\rightarrow$ \texttt{"run"}}
-        \item \textbf{Language detection} (optional): \\
-        {\small Identify each document's language before applying language-specific steps or routing it to the right model.}
-        \item \textbf{Spellcheck / spelling correction} (optional): \\
-        {\small Normalize typos and misspellings so variants map to the same token.}
-        \item \textbf{Vectorization}: \\
-        {\small Transform words or documents into numerical representations for machine learning models:
-        \begin{itemize}
-            \item \textbf{Bag of Words}: Counts word occurrences in a document.
-            \item \textbf{TF-IDF (Term Frequency-Inverse Document Frequency)}: Weighs words by importance across documents.
-            \item \textbf{Word2Vec}: Learns dense vector representations capturing word meaning and context.
-        \end{itemize}}
+        \setlength{\itemsep}{0.7em}
+        \item \textbf{Lowercase everything}: \texttt{"NLP"} $\rightarrow$ \texttt{"nlp"}
+        \item \textbf{Removing stop words}: drop words that carry little meaning on their
+        own, such as ``is'', ``the'' and ``and''.
+        \item \textbf{Stemming / Lemmatization}: reduce a word to its root or base form,
+        \texttt{"running"} $\rightarrow$ \texttt{"run"}
+        \item \textbf{Language detection} (optional): identify each document's language
+        before applying language-specific steps.
+        \item \textbf{Spellcheck} (optional): normalize typos so variants map to the same
+        token.
+        \item \textbf{Vectorization}: turn the surviving tokens into numbers a model can
+        consume.
     \end{itemize}
 \end{frame}
 
@@ -200,7 +184,9 @@
         \begin{column}{0.4\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/nlp-intro/corpora.png}
+                \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/nlp-intro/corpora.png}
+                \caption*{\scriptsize The Rosetta Stone, British Museum: one text, three
+                parallel scripts. Source: Dan Klein, UC Berkeley NLP slides.}
             \end{figure}
         \end{column}
         \begin{column}{0.6\textwidth}
@@ -308,6 +294,11 @@
         \begin{itemize}
             \item Words like \texttt{"the"}, \texttt{"is"} are less important.
         \end{itemize}
-        \item \textbf{Word Embeddings (later)}: Add meaning and capture relationships between words (e.g., similarity, analogy).
+        \item \textbf{Word Embeddings} (Word2Vec and successors, covered later): learn dense
+        vectors that place related words near each other, so similarity and analogy become
+        geometry rather than string matching.
     \end{itemize}
+    \vspace{0.5em}
+    BoW and TF-IDF both throw word order away. That is enough for topic and sentiment,
+    but not for anything that depends on which word follows which.
 \end{frame}

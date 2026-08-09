@@ -6,13 +6,13 @@
         \begin{itemize}
             \setlength{\itemsep}{0.5em}
             \item Observations should share  common characteristics within the  same group, but differ across  groups.
-            \item Groupings are determined from  attributes of the data itself —  differs from classification.
+            \item Groupings are determined from  attributes of the data itself, which is what  differs from classification.
         \end{itemize}
     \end{column}
     \begin{column}{0.55\textwidth}
         \begin{figure}
             \centering
-            \fetchconvertimage{https://miro.medium.com/v2/resize:fit:720/format:webp/0*Jwm3mV92c3qRhqEl.}{images/dul/clustering-example.png}{width=0.95\textwidth,keepaspectratio}
+            \includegraphics[width=0.95\textwidth,keepaspectratio]{images/dul/clustering-example.png}
             \caption{Taking a 2 dimensional dataset and separating it into 3 distinct clusters. [\href{https://medium.com/square-corner-blog/so-you-have-some-clusters-now-what-abfd297a575b}{Source}]}
         \end{figure}
     \end{column}
@@ -20,8 +20,9 @@
 
 \framebreak
 
+\begingroup\setlength{\parfillskip}{0pt plus 1fil}%
 \begin{algorithm}[H]
-\caption{Generic Clustering Algorithm}
+\caption{Centroid-Based (K-means-style) Clustering}
 
 \KwIn{Dataset $D = \{x_1, x_2, \dots, x_n\}$, number of clusters $k$}
 \KwOut{Cluster assignments for each data point}
@@ -43,13 +44,15 @@
 \vspace{0.8em}
 
 \end{algorithm}
+
+\endgroup
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Clustering Vs Classification}
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth,keepaspectratio]{images/dul/sample-clustering-classification.png}
-    \caption{Sample data points.}
+    \caption{Sample data points. [Source: CME 250, S. Wang, Stanford]}
 \end{figure}
 
 \framebreak
@@ -62,10 +65,10 @@
             \item Assigning to known classes
             \item Supervised
         \end{itemize}
-        \vspace{1.8em}
+        \vspace{0.8em}
         \begin{figure}
             \centering
-            \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/sample-result-classification.png}
+            \includegraphics[width=0.92\textwidth,height=0.46\textheight,keepaspectratio]{images/dul/sample-result-classification.png}
             \caption{Classification result.}
         \end{figure}
     \end{column}
@@ -76,20 +79,23 @@
             \item Grouping based on similarity
             \item Unsupervised
         \end{itemize}
-        \vspace{1.8em}
+        \vspace{0.8em}
         \begin{figure}
             \centering
-            \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/sample-result-clustering.png}
+            \includegraphics[width=0.92\textwidth,height=0.46\textheight,keepaspectratio]{images/dul/sample-result-clustering.png}
             \caption{Clustering result.}
         \end{figure}
     \end{column}
 \end{columns}
+\centering
+{\scriptsize [Source: CME 250, S. Wang, Stanford]}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Clustering: Types}
     \begin{itemize}
         \item \textbf{Centroid-Based Clustering}: Groups data points based on their proximity to a central point, such as K-means or K-medoids.
         \item \textbf{Hierarchical Clustering}: Builds a hierarchy of clusters using either agglomerative (bottom-up) or divisive (top-down) approaches.
+        \item \textbf{Density-Based Clustering}: Grows clusters out of regions where points are packed closely together and labels sparse regions as noise, such as DBSCAN or OPTICS.
         \item \textbf{Model-Based Clustering}:
         \begin{itemize}
             \item Each cluster is represented by a parametric distribution.
@@ -100,13 +106,13 @@
         \begin{itemize}
             \item Each data point is assigned exclusively to exactly one cluster.
             \item \textbf{Example algorithms}: K-means, Hierarchical clustering.
-            \item \textbf{interpretation}: No ambiguity — clusters are crisp and non-overlapping.
+            \item \textbf{Interpretation}: No ambiguity; clusters are crisp and non-overlapping.
         \end{itemize}
         \item \textbf{Soft/Fuzzy Clustering}: 
         \begin{itemize}
             \item Each data point can belong to multiple clusters simultaneously with varying degrees of membership (probabilities or weights).
             \item \textbf{Example algorithms}: Gaussian Mixture Models (GMM), Fuzzy C-means.
-            \item \textbf{interpretation}: Reflects uncertainty or mixed membership — clusters can overlap.
+            \item \textbf{Interpretation}: Reflects uncertainty or mixed membership; clusters can overlap.
         \end{itemize}
     \end{itemize}
 \end{frame}

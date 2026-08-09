@@ -1,6 +1,6 @@
 % --- Limitations and critical perspective ---
 \begin{frame}{Limitations and a Critical Perspective}
-  \begin{itemize}\itemsep0.26em
+  \begin{itemize}\itemsep0.2em
     \item \textbf{Full fine-tuning gap:} JEPA's advantage shows in \textbf{frozen} and \textbf{low-shot} probes; with full fine-tuning, reconstruction methods like MAE remain highly competitive on many benchmarks.
     \item \textbf{Masking is a hand-tuned inductive bias:} block sizes, ratios, and spatio-temporal shapes must be re-designed per modality; the recipe still involves substantial engineering.
     \item \textbf{EMA fragility:} coupled teacher--student schedules add hyperparameters and instability; this is the issue SALT's frozen-teacher recipe targets.

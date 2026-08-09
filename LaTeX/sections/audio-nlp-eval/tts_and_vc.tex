@@ -3,13 +3,22 @@
 \begin{frame}[allowframebreaks]{Text-to-Speech Overview}
 \begin{itemize}
     \item Speech synthesis (Text-to-Speech, TTS) converts written text into spoken audio: the inverse problem of ASR.
-    \item \textbf{Pipeline:} text analysis $\rightarrow$ acoustic model (text to mel-spectrogram) $\rightarrow$ vocoder (mel-spectrogram to waveform).
-    \item \textbf{Three eras:} concatenative and statistical-parametric synthesis (HMM-based), autoregressive neural models (WaveNet, Tacotron 2), and parallel or diffusion-based models (FastSpeech 2, HiFi-GAN, Grad-TTS).
-    \item \textbf{Applications:} accessibility and screen readers, voice assistants, audiobooks, navigation, language learning.
+    \item \textbf{Pipeline:} text analysis $\rightarrow$ acoustic model (text to mel-spectrogram) $\rightarrow$ vocoder (mel-spectrogram to waveform). Almost every named system below is one of those two stages, not a whole system.
+    \item \textbf{Three eras:}
+    \begin{itemize}
+        \item concatenative / unit-selection and statistical-parametric (HMM-based) synthesis;
+        \item autoregressive neural: Tacotron~2 (acoustic model) driving a WaveNet vocoder;
+        \item parallel and diffusion neural: FastSpeech~2 (non-autoregressive acoustic model) or Grad-TTS (diffusion acoustic model), paired with a parallel vocoder such as HiFi-GAN.
+    \end{itemize}
+    \item These pair up rather than compete: Grad-TTS in fact uses HiFi-GAN as its vocoder. Fully end-to-end systems such as VITS collapse both stages into one model.
+\end{itemize}
     \framebreak
+\begin{itemize}
+    \item \textbf{Applications:} accessibility and screen readers, voice assistants, audiobooks, navigation, language learning.
 \end{itemize}
     \begin{center}
-        \includegraphics[width=0.7\textwidth,height=0.45\textheight,keepaspectratio]{images/audio-nlp/tts_pipeline.png}
+        \includegraphics[width=0.75\textwidth,height=0.5\textheight,keepaspectratio]{images/audio-nlp/tts_pipeline.png}\\
+        {\scriptsize Source: H.-T.~Luong, ``Deep learning based voice cloning framework for a unified system of text-to-speech and voice conversion,'' PhD thesis, SOKENDAI, 2020, Fig.~2.1.}
     \end{center}
 \end{frame}
 

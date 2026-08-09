@@ -2,11 +2,11 @@
     By the end of this lecture, you will be able to:
     \begin{itemize}
         \setlength{\itemsep}{-0.1em}
-        \item Trace the exciting journey of contrastive learning, understanding how innovations evolved from MoCo $\rightarrow$ SimCLR $\rightarrow$ BYOL $\rightarrow$ DINO $\rightarrow$ iBOT.
-        \item Spot the real-world trade-offs in model design—like balancing memory and compute, or choosing between negative sampling and avoiding Bayesian collapse.
-        \item Derive and visualize how batch size and temperature ($\tau$) shape the spread of learned embeddings.
-        \item Explain in simple terms why we drop the projection head when moving to downstream tasks—and why that’s a smart move!
-        \item Analyze the clever tricks BYOL uses to avoid representational collapse, keeping its features meaningful.
-        \item Illustrate why centering and sharpening the teacher’s outputs are essential for effective learning.
+        \item Trace how contrastive learning evolved from MoCo $\rightarrow$ SimCLR $\rightarrow$ BYOL $\rightarrow$ DINO $\rightarrow$ iBOT.
+        \item Identify the design trade-offs: memory vs.\ compute, and negative sampling vs.\ representational collapse.
+        \item Explain how batch size and temperature ($\tau$) shape the learned embeddings.
+        \item Explain why the projection head is dropped when moving to downstream tasks.
+        \item Analyze how BYOL avoids representational collapse without negative pairs.
+        \item Illustrate why centering and sharpening the teacher's outputs prevent collapse in DINO.
     \end{itemize}
 \end{frame}

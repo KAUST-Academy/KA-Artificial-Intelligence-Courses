@@ -1,5 +1,4 @@
 % --- Foundation models: definition, impact, types, and adaptation ---
-% --- What are Foundation Models? ---
 \begin{frame}{What are Foundation Models?}
   \begin{itemize}
     \item \textbf{Foundation models} are large, general AI models pretrained on massive, diverse datasets.
@@ -60,7 +59,7 @@
 % --- Adaptation methods in practice ---
 \begin{frame}{Adaptation in Practice: From Frozen Probes to LoRA}
   \begin{itemize}\itemsep0.28em
-    \item \textbf{Frozen probes:} keep the backbone fixed and train a small head on top (linear or attentive probe, as in the JEPA lecture). Cheapest option; also the standard way to \emph{evaluate} a foundation model.
+    \item \textbf{Frozen probes:} keep the backbone fixed and train a small head on top (linear or attentive probe, as covered earlier). Cheapest option; also the standard way to \emph{evaluate} a foundation model.
     \item \textbf{Full fine-tuning:} update all weights on the downstream task. Strongest task performance, highest cost, and the model can forget general capabilities.
     \item \textbf{Parameter-efficient fine-tuning (PEFT):} train small added modules while the backbone stays frozen. \textbf{LoRA} (Hu et al., 2022) learns a low-rank update $\Delta W = BA$ next to each frozen weight matrix $W$, typically well under 1\% of the parameters.
     \item \textbf{Prompting and in-context learning:} no weight updates at all; instructions or examples are given at inference time. TabPFN (later this lecture) classifies whole tabular datasets this way.

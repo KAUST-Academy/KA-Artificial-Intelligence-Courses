@@ -1,35 +1,7 @@
 % --- Generative simulators vs.\ JEPA ---
-% % % --- Part E: JEPA / V-JEPA ---
-% % \begin{frame}{JEPA: predict in embedding space, not pixels}
-% %   \begin{itemize}\itemsep0.28em
-% %     \item \textbf{Paradigm shift:} move from \textbf{generative reconstruction} (predict pixels) to \textbf{feature prediction}---learn latents by predicting \textbf{future or masked representations} while ignoring unpredictable nuisance variation (LeCun's JEPA blueprint).
-% %     \item \textbf{I-JEPA / V-JEPA} (Meta): context encoder + predictor match \textbf{target-encoder} embeddings of masked spatio(-temporal) tokens; training signal lives in \textbf{representation space}.
-% %     \item Connection to \textbf{world models}: both seek \textbf{abstract state} that supports forward prediction. Pure JEPA pretraining is often \textbf{representation SSL}; control stacks add \textbf{actions}, \textbf{rewards}, and \textbf{rollout-based RL} (Dreamer) or \textbf{action-conditioned} post-training (V-JEPA 2-AC, LeWM).
-% %   \end{itemize}
-% % \end{frame}
-
-% % \begin{frame}{V-JEPA 2 / 2.1: scale, dense prediction, and robotics hooks}
-% %   \begin{itemize}\itemsep0.28em
-% %     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{V-JEPA 2} scales masked latent video pretraining to internet-style data volumes and large encoders; \textbf{V-JEPA 2-AC} post-trains an \textbf{action-conditioned} head on small robot-trajectory corpora for \textbf{latent planning} and manipulation-style demos (see \href{https://arxiv.org/abs/2506.09985}{arXiv:2506.09985}).
-% %     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{V-JEPA 2.1} emphasizes \textbf{dense} self-supervision: masking objectives where \textbf{many tokens} (including visible context organization) shape the loss, plus deeper self-supervision across layers---aimed at finer spatial/temporal grounding (\href{https://arxiv.org/abs/2603.14482}{arXiv:2603.14482}).
-% %     \item[\textcolor{red}{$\blacktriangleright$}] Conceptually: still \textbf{not} the same object as an RSSM with pixel decoder + RL losses, but increasingly aligned with \textbf{robotics world-model} pipelines that need \textbf{geometry and contact} in the latent.
-% %   \end{itemize}
-% %   \centering
-% %   \includegraphics[width=\textwidth,height=0.40\textheight,keepaspectratio]{images/world-models/vjepa_sam2_architecture.png}\\
-% %   {\scriptsize Classic V-JEPA illustration; V-JEPA\,2/2.1 extend the same latent-prediction idea at scale.}
-% % \end{frame}
-
-% % \begin{frame}{Conceptual bridge: RSSM latents vs.\ JEPA embeddings}
-% %   \begin{itemize}
-% %     \item \textbf{RSSM} latents are trained for \textbf{reconstruction + RL} (reward, continuation); optimized to support \textbf{policy gradients through imagination}.
-% %     \item \textbf{JEPA} targets are \textbf{invariance / prediction in feature space}; may align better with \textbf{semantics}, less with pixel-perfect physics unless combined with additional losses or fine-tuning.
-% %     \item Active research: \textbf{action-conditioned JEPA}-style models for control (LeWM and successors push toward stable end-to-end training from pixels).
-% %   \end{itemize}
-% % \end{frame}
-% --- Generative simulators in text (cohort skipped the diffusion lecture) ---
 \begin{frame}{Generative Simulators: Video Generation as a World Model}
   \begin{itemize}\itemsep0.28em
-    \item Large video generators are increasingly pitched as world simulators; most build on diffusion or autoregressive generation (covered in the diffusion lecture of the full course).
+    \item Large video generators are increasingly pitched as world simulators; most build on diffusion or autoregressive generation (covered earlier in the course).
     \item \textbf{Sora} (OpenAI, 2024) frames video generation explicitly as ``world simulation''; \textbf{GAIA-1} and its successors (Wayve) generate driving scenarios for autonomous-vehicle development.
     \item \textbf{Genie} (Google DeepMind) makes \textbf{playable} worlds: the model predicts the next frames \emph{given user actions}, which is exactly the world-model interface, realized in pixel space. Genie 3 (2025) is reported to run interactive worlds in real time at 720p.
     \item The debate: photorealistic video is not the same as physically consistent prediction. Failures in object permanence and physics are common, and evaluating a simulator's ``correctness'' is an open problem.

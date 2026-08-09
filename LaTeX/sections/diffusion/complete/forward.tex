@@ -18,11 +18,12 @@
     \framebreak
     \begin{figure}
         \centering
-        \includegraphics[height=0.7\textheight, width=\textwidth, keepaspectratio]{images/diffusion/diff_2.png}
+        \includegraphics[height=0.58\textheight, width=\textwidth, keepaspectratio]{images/diffusion/diff_2.png}
+        \caption*{\scriptsize Kreis, Gao \& Vahdat, \href{https://cvpr2022-tutorial-diffusion-models.github.io/}{CVPR 2022 Tutorial: Denoising Diffusion-based Generative Modeling}}
     \end{figure}
     \begin{itemize}
         \item What if we want to go directly from $q_0$ to $q_t$?
-        \item Let $\overline{\alpha}_t = \prod^t_{s=1}(1-\beta_s)$, then
+        \item Let $\alpha_t := 1-\beta_t$ and $\overline{\alpha}_t = \prod^t_{s=1}\alpha_s = \prod^t_{s=1}(1-\beta_s)$, then
         $$q(\mathbf{x}_t | \mathbf{x}_0) = \mathcal{N}(\mathbf{x}_t; \sqrt{\overline{\alpha}_t} \mathbf{x}_0 , (1 - \overline{\alpha}_t) \mathbf{I})$$
         \item This allows us, during training, to optimize random terms of the loss function $L$ (i.e., randomly sample $t$ and optimize $L_t$).
     \end{itemize}

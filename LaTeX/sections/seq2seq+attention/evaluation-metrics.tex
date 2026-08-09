@@ -81,7 +81,7 @@
     Tends to correlate better with human judgment than BLEU.
 
     \item \textbf{TER (Translation Edit Rate):}
-    Counts the minimum number of edits (insertions, deletions, substitutions, and shifts) needed to match the reference text.
+    Takes the minimum number of edits (insertions, deletions, substitutions, and shifts of word sequences) needed to match the reference, divided by the average reference length.
     Lower TER indicates better performance.
 
     \item Why these metrics matter:

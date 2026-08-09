@@ -7,19 +7,31 @@
 
   \vspace{1em}
   \begin{itemize}
-      \item[$\blacktriangleright$] Simpler
-      \item[$\blacktriangleright$] Faster
-      \item[$\blacktriangleright$] Slightly better in large-scale settings (Zhang \& Sennrich, 2019)
+      \item[$\blacktriangleright$] Simpler: one statistic per token instead of two, and no learned bias
+      \item[$\blacktriangleright$] Faster: 7--64\% less running time depending on the model (Zhang \& Sennrich, 2019)
+      \item[$\blacktriangleright$] Accuracy is comparable: on WMT14 English-German a Transformer scores 26.8 BLEU with RMSNorm against 26.6 with LayerNorm, at a 7--9\% speedup
+      \item[$\blacktriangleright$] Adopted by LLaMA and the decoder-only models that followed it
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Layer Normalization vs RMSNorm}
+\begin{frame}{What Each Normalization Averages Over}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_layer_batch_group_instance_normalization_comparison.png}
+  \includegraphics[width=0.8\paperwidth,height=0.52\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_layer_batch_group_instance_normalization_comparison.png}
+
+  {\footnotesize Shaded cells share one mean and variance. RMSNorm pools the same elements as
+  LayerNorm and only drops the mean.}
+
+  {\scriptsize Source: after Wu \& He, ``Group Normalization,'' ECCV 2018, Fig.~2.}
 \end{frame}
 
 \begin{frame}{Layer Normalization vs RMSNorm}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_layer_norm_vs_rms_norm_bleu_curve.png}
+  \includegraphics[width=0.8\paperwidth,height=0.48\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_layer_norm_vs_rms_norm_bleu_curve.png}
+
+  {\footnotesize This is a robustness test: the centre of the weight initialization is shifted to
+  0.2, under which LayerNorm becomes unstable. With the standard initialization the two are within
+  0.2 BLEU.}
+
+  {\scriptsize Source: Zhang \& Sennrich, ``Root Mean Square Layer Normalization,'' NeurIPS 2019, Fig.~4.}
 \end{frame}
 

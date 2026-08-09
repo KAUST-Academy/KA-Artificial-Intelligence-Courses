@@ -17,12 +17,16 @@
 
 \begin{frame}{Positional Encodings}
   \centering
-  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_input_embedding_highlight_tokens_sequence.png}
+  \includegraphics[width=\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_input_embedding_highlight_tokens_sequence.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 13.}
 \end{frame}
 
 \begin{frame}{Positional Encodings}
   \centering
-  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_word_order_matters_scrambled_tokens.png}
+  \includegraphics[width=\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_word_order_matters_scrambled_tokens.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 14.}
 \end{frame}
 
 \begin{frame}{Position Encodings}
@@ -32,8 +36,9 @@
     \end{column}
     \begin{column}{0.4\textwidth}
       \centering
-      % Placeholder for positional encoding/input embedding diagram
       \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_input_embedding_block_diagram.png}
+
+      {\scriptsize Source: CMU 11-785, Lecture 19, Spring 2024.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -49,8 +54,9 @@
     \end{column}
     \begin{column}{0.4\textwidth}
       \centering
-      % Placeholder for positional encoding/input embedding diagram
       \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_input_embedding_block_diagram.png}
+
+      {\scriptsize Source: CMU 11-785, Lecture 19, Spring 2024.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -74,20 +80,25 @@
     \end{column}
     \begin{column}{0.4\textwidth}
       \centering
-      % Placeholder for positional encoding/input embedding diagram
       \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_input_embedding_block_diagram.png}
+
+      {\scriptsize Source: CMU 11-785, Lecture 19, Spring 2024.}
     \end{column}
   \end{columns}
 \end{frame}
 
 \begin{frame}{Positional Encodings}
   \centering
-  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_positional_encoding_requirements_candidate_functions.png}
+  \includegraphics[width=\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_positional_encoding_requirements_candidate_functions.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 18.}
 \end{frame}
 
 \begin{frame}{Positional Encodings}
   \centering
-  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_positional_encoding_candidates_rejected.png}
+  \includegraphics[width=\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_positional_encoding_candidates_rejected.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 19.}
 \end{frame}
 
 \begin{frame}{Position Encodings}
@@ -108,8 +119,9 @@
     \end{column}
     \begin{column}{0.4\textwidth}
       \centering
-      % Placeholder for positional encoding/input embedding diagram
       \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_input_embedding_block_diagram.png}
+
+      {\scriptsize Source: CMU 11-785, Lecture 19, Spring 2024.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -133,7 +145,7 @@
       {\color{blue}\textbf{M?}}
       \begin{enumerate}
         \item Should be a unitary matrix
-        \item Magnitudes of eigen value should be 1 $\,\rightarrow\,$ norm preserving
+        \item Magnitudes of eigenvalues should be 1 $\,\rightarrow\,$ norm preserving
         \item The matrix can be learnt
         \item Produces unique rotated embeddings each time
       \end{enumerate}
@@ -142,86 +154,20 @@
     \end{column}
     \begin{column}{0.4\textwidth}
       \centering
-      % Placeholder for positional encoding/input embedding diagram
       \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_input_embedding_block_diagram.png}
+
+      {\scriptsize Source: CMU 11-785, Lecture 19, Spring 2024.}
     \end{column}
   \end{columns}
 \end{frame}
 
 \begin{frame}{Positional Encodings}
   \centering
-  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_positional_encoding_bounded_matrix_property.png}
+  \includegraphics[width=\linewidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_positional_encoding_sine_cosine_candidates.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 23.}
 \end{frame}
 
-\begin{frame}{Positional Encodings}
-  \centering
-  \includegraphics[width=\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_positional_encoding_sine_cosine_candidates.png}
-\end{frame}
-
-
-% \begin{frame}{Position Encodings: Sine and Cosine Functions}
-%   \begin{columns}
-%     \begin{column}{0.56\textwidth}
-%       \textbf{Requirements for Position Encodings}
-%       \begin{itemize}
-%         \item Some representation of time? (like seq2seq)
-%         \item Should be unique for each position
-%         \item Bounded
-%       \end{itemize}
-
-%       \vspace{1em}
-%       \textbf{Actual Candidates}
-%       \begin{itemize}
-%         \item \textit{sin}(g(t))
-%         \item \textit{cos}(g(t))
-%       \end{itemize}
-      
-%       \vspace{1em}
-%       \textbf{Requirements for $g(t)$}
-%       \begin{itemize}
-%         \item Must have same dimensions as input embeddings
-%         \item Must produce overall unique encodings
-%       \end{itemize}
-%     \end{column}
-%     \begin{column}{0.42\textwidth}
-%       % Placeholder for illustration, plot, or diagram.
-%       \centering
-%       \begin{tikzpicture}[scale=0.85]
-%         \begin{axis}[
-%           width=5.7cm,
-%           height=3.8cm,
-%           grid=both,
-%           axis lines=middle,
-%           xlabel={$x$},
-%           ylabel={},
-%           xmin=0,xmax=2*pi,
-%           ymin=-1.2,ymax=1.2,
-%           xtick={0,1.5708,3.1416,4.7124,6.2832},
-%           xticklabels={$0$, $\frac{\pi}{2}$, $\pi$, $\frac{3\pi}{2}$, $2\pi$},
-%           ytick={-1,0,1},
-%           yticklabels={$-1$,$0$,$1$},
-%           legend style={draw=none, fill=none, at={(0.95,0.85)}, anchor=north east, font=\footnotesize},
-%         ]
-%           \addplot[domain=0:2*pi, samples=100, smooth, thick, blue] {sin(deg(x))};
-%           \addlegendentry{$\sin(x)$}
-%           \addplot[domain=0:2*pi, samples=100, smooth, thick, red, dashed] {cos(deg(x))};
-%           \addlegendentry{$\cos(x)$}
-%         \end{axis}
-%       \end{tikzpicture}
- 
-%     \end{column}
-%   \end{columns}
-  
-%   \vspace{1em}
-%   % Placeholder for transformer diagram and sine/cosine plot from slide
-%   \begin{minipage}{0.55\textwidth}
-%     % Text and bullet points (already provided)
-%   \end{minipage}%
-%   \begin{minipage}{0.4\textwidth}
-%     \centering
-%     \fbox{\parbox{0.95\linewidth}{\centering \textit{[Transformer diagram and sine/cosine plot here]}}}
-%   \end{minipage}
-% \end{frame}
 
 \begin{frame}{Position Encoding}
   \begin{columns}
@@ -235,33 +181,38 @@
         PE_{(pos,\,2i+1)} = \cos\left( pos / 10000^{2i/d_{\text{model}}} \right)
       \]
 
-      \vspace{1em}
+      \vspace{0.5em}
       \begin{description}
         \item[pos] idx of the token in input sentence
-        \item[i] $i^\text{th}$ dimension out of $d$
+        \item[i] $i^\text{th}$ dimension out of $d_\text{model}$
         \item[$d_\text{model}$] embedding dimension of each token
       \end{description}
       Different calculations for odd and even embedding indices.
- 
- 
+
+      {\footnotesize Each dimension is periodic; the full vector is not.}
 
     \end{column}
     \begin{column}{0.4\textwidth}
       \centering
-      % Placeholder for positional encoding/input embedding diagram
       \includegraphics[width=0.5\paperwidth,height=0.5\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_input_embedding_block_diagram.png}
+
+      {\scriptsize Source: CMU 11-785, Lecture 19, Spring 2024.}
     \end{column}
   \end{columns}
 \end{frame}
 
 \begin{frame}{Position Encoding}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_positional_encoding_matrix_dimension_curves.png}
+  \includegraphics[width=0.8\paperwidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_positional_encoding_matrix_dimension_curves.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 25.}
 \end{frame}
 
 \begin{frame}{Position Encoding}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_final_input_embeddings_tokenizer_pipeline.png}
+  \includegraphics[width=0.8\paperwidth,height=0.75\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_final_input_embeddings_tokenizer_pipeline.png}
+
+  {\scriptsize Source: CMU 11-785, Lecture 19 ``Transformers,'' Spring 2024, slide 26.}
 \end{frame}
 
 \begin{frame}{Alternatives to Positional Encoding}

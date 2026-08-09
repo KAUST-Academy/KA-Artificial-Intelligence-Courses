@@ -6,18 +6,22 @@
 
 \begin{frame}{Categories of Fine-Tuning}
   \begin{center}
-    \begin{tabular}{|l|p{3.3cm}|c|c|}
+    \small
+    \renewcommand{\arraystretch}{1.4}
+    \begin{tabular}{|l|>{\raggedright\arraybackslash}p{5.6cm}|c|c|}
       \hline
-      \textbf{Method} & \textbf{Description} & \textbf{Params} & \textbf{Efficiency} \\
+      \textbf{Method} & \textbf{Description} & \textbf{Trained params} & \textbf{Cost} \\
       \hline
       Full FT & Retrain all weights & All & Expensive \\
-      Adapter & Add small bottlenecks (Houlsby) & Few & Efficient \\
-      Prefix & Tune soft prompts & Few tokens & Efficient \\
-      LoRA/QLoRA & Low-rank weight deltas & Very few & Very Efficient \\
-      Instr. Tuning & Tune on instr. datasets & All/Part & - \\
+      Adapter & Insert small bottleneck layers (Houlsby et al., 2019) & Few & Efficient \\
+      Prefix / Prompt & Tune continuous prompt vectors, base model frozen & Few tokens & Efficient \\
+      LoRA / QLoRA & Low-rank weight deltas & Very few & Very efficient \\
+      Instruction tuning & Tune on instruction-response datasets & All or part & Varies \\
       \hline
     \end{tabular}
   \end{center}
+  \vspace{0.4em}
+  {\scriptsize Instruction tuning is an orthogonal axis: it describes \emph{what data} the model is tuned on, and can be done with any of the methods above.}
 \end{frame}
 
 \begin{frame}[t]{Full Fine-Tuning (FT)}
@@ -38,7 +42,11 @@
 \end{frame}
 
 \begin{frame}{Full Fine-Tuning Workflow}
-  \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/llm-rlhf/finetune_training_loop_batches.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.74\paperwidth,height=0.60\paperheight,keepaspectratio]{images/llm-rlhf/finetune_training_loop_batches.png}
+    \caption*{\scriptsize Source: IBM watsonx.ai documentation, ``Full fine tuning,'' \url{https://www.ibm.com/docs/en/watsonx/w-and-w/2.1.0?topic=tuning-full-fine}.}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Parameter-Efficient Fine-Tuning (PEFT)}
@@ -47,7 +55,7 @@
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Types:}
     \begin{itemize}
       \item Adapter Modules (Houlsby et al., 2019)
-      \item Prompt Tuning / Prefix Tuning
+      \item Prefix Tuning (Li \& Liang, 2021) and Prompt Tuning (Lester et al., 2021)
       \item LoRA / QLoRA
     \end{itemize}
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Benefits:}

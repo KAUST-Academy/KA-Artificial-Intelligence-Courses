@@ -1,6 +1,6 @@
-\section{ASR Evaluation}
+\section{Evaluation}
 \begin{frame}{}
-    \LARGE \textbf{ASR Evaluation}
+    \LARGE \textbf{Evaluation}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Word Error Rate (WER)}
@@ -31,6 +31,41 @@
     \item Why it matters:
     \begin{itemize}
         \item Provides an intuitive, widely-used measure of transcription accuracy for ASR systems.
+    \end{itemize}
+
+    \item Two things to keep in mind:
+    \begin{itemize}
+        \item The denominator counts \emph{reference} words, so insertions are unbounded and \textbf{WER can exceed 100\%}. A model that hallucinates a paragraph over a one-word utterance scores far above 1.
+        \item WER is computed after normalisation (case, punctuation, numbers), and different normalisers give different WERs on the same output. Comparisons across papers are only meaningful when the normaliser matches.
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Metrics for the Other Tasks: CER, DER, MOS}
+
+WER answers one question: did we get the words right. A diarization system with excellent WER can still be useless if it attributes every turn to the wrong speaker, and a synthesizer can be word-perfect and still sound wrong. Each task needs its own metric.
+
+\begin{itemize}
+    \item \textbf{CER (Character Error Rate)} is the same edit distance counted over characters instead of words:
+    \[
+        \text{CER} = \frac{S_c + D_c + I_c}{N_c}
+    \]
+    Used where word boundaries are not marked in the writing system (Chinese, Japanese, Thai), and for character-level output models, where a one-character slip should not cost a whole word.
+
+\framebreak
+    \item \textbf{DER (Diarization Error Rate)} scores ``who spoke when'':
+    \[
+        \text{DER} = \frac{T_{\text{false alarm}} + T_{\text{missed}} + T_{\text{confusion}}}{T_{\text{total speech}}}
+    \]
+    that is, non-speech scored as speech, plus speech scored as non-speech, plus speech given to the wrong speaker, over total reference speech time. Like WER it can exceed 100\%. Always state whether a forgiveness \emph{collar} (commonly 0.25~s) was applied around reference boundaries and whether overlapping speech was scored: DER is not comparable across those settings.
+
+\framebreak
+    \item \textbf{MOS (Mean Opinion Score)} is the reference metric for synthesis, and it is a \emph{human} measurement. Listeners rate each utterance in isolation on a five-point scale, 5 excellent, 4 good, 3 fair, 2 poor, 1 bad, and the score is the mean over ratings (ITU-T Rec.\ P.800). TTS work adapts the scale to ask about \textbf{naturalness} rather than transmission quality.
+    \begin{itemize}
+        \item MOS is not comparable across studies: report the number of listeners, the number of utterances, and confidence intervals.
+        \item Good systems now sit close to recorded speech, so plain MOS saturates. Side-by-side comparative MOS (CMOS) or AB preference tests separate them better.
+        \item Objective proxies exist but do not replace it: mel-cepstral distortion (MCD), which needs time-aligned ground-truth audio and so only works when reconstructing held-out recordings; ASR word error rate on synthesized speech as an intelligibility check; and learned MOS predictors.
     \end{itemize}
 \end{itemize}
 

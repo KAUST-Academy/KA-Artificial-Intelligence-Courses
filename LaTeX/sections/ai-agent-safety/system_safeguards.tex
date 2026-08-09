@@ -46,3 +46,13 @@
     \item[\textcolor{KAred}{$\blacktriangleright$}] Guardrails work as one layer among several. They sit on top of least privilege and sandboxing, which hold even when the classifier is bypassed.
   \end{itemize}
 \end{frame}
+
+\begin{frame}{Separating Control Flow From Untrusted Data}
+  \begin{itemize}\itemsep0.45em
+    \item[\textcolor{KAred}{$\blacktriangleright$}] Delimiters, privilege ordering, and classifiers can all be talked past. The stronger goal is to make it structurally impossible for untrusted content to choose an action, at the cost of a narrower agent.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Dual LLM:} a privileged model holds the tools and never reads untrusted content; a quarantined model reads it and returns values the privileged model only ever handles as opaque variables.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] \textbf{Plan-then-execute:} fix the sequence of tool calls from the trusted request alone, before any untrusted data is fetched, so retrieved text can fill in arguments but cannot add steps.
+    \item[\textcolor{KAred}{$\blacktriangleright$}] CaMeL implements this with an interpreter that tracks where every value came from and checks a policy before each tool call. It solves 77\% of AgentDojo tasks with provable security, against 84\% undefended.
+  \end{itemize}
+  \imgsrc{Beurer-Kellner et al., ``Design Patterns for Securing LLM Agents against Prompt Injections,'' \href{https://arxiv.org/abs/2506.08837}{arXiv:2506.08837}; Debenedetti et al., ``Defeating Prompt Injections by Design'' (CaMeL), \href{https://arxiv.org/abs/2503.18813}{arXiv:2503.18813}.}
+\end{frame}

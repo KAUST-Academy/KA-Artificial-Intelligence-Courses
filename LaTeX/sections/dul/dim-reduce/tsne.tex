@@ -1,10 +1,13 @@
 \begin{frame}[allowframebreaks]{tSNE to the rescue\dots}
     \begin{itemize}
-        \item T-Distributed Stochastic Neighbour Embedding
+        \item t-Distributed Stochastic Neighbour Embedding
         \item Aims to solve the problems of PCA
         \item Non-linear scaling to represent changes at different levels
         \item Optimal separation in 2-dimensions
     \end{itemize}
+    \vspace{1em}
+    \centering
+    [t-SNE, van der Maaten \& Hinton, JMLR 9, 2008; builds on SNE, Hinton \& Roweis, NIPS 2002]
 \end{frame}
 
 \begin{frame}[allowframebreaks]{tSNE: How does it work?}
@@ -18,28 +21,31 @@
         \begin{column}{0.33\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-points.png}
+                \includegraphics[width=0.85\textwidth,height=0.42\textheight,keepaspectratio]{images/dul/dim-reduce/tsne-points.png}
             \end{figure}
         \end{column}
         \begin{column}{0.33\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-graph.png}
+                \includegraphics[width=0.85\textwidth,height=0.42\textheight,keepaspectratio]{images/dul/dim-reduce/tsne-graph.png}
             \end{figure}
         \end{column}
         \begin{column}{0.33\textwidth}
             \begin{figure}
                 \centering
-                \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-matrix.png}
+                \includegraphics[width=0.85\textwidth,height=0.42\textheight,keepaspectratio]{images/dul/dim-reduce/tsne-matrix.png}
             \end{figure}
         \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{tSNE: Underlying idea}
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-high2low.jpg}
+        \caption*{\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
     \end{figure}
 \end{frame}
 
@@ -47,6 +53,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-stochastic.jpg}
+        \caption*{\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
     \end{figure}
 
     \framebreak
@@ -54,13 +61,14 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-stochastic-steps.jpg}
+        \caption*{\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
     \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{KL Divergence}
     \begin{columns}
     \begin{column}{0.4\textwidth}
-        Measures the similarity between two probability distributions & it is asymmetric.
+        Measures how one probability distribution diverges from another; it is asymmetric.
 
         \vspace{1em}
 
@@ -76,12 +84,15 @@
         \end{figure}
     \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{tSNE: Stochastic Neighbor Embedding}
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-gradient.jpg}
+        \caption*{\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
     \end{figure}
 
     \framebreak
@@ -97,7 +108,8 @@
     \begin{column}{0.6\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-result-1.png}
+            \includegraphics[width=1\textwidth,height=0.7\textheight,keepaspectratio]{images/dul/dim-reduce/tsne-result-1.png}
+            \caption{[Hinton \& Roweis, ``Stochastic Neighbor Embedding'', NIPS 2002, Fig.~1]}
         \end{figure}
     \end{column}
     \end{columns}
@@ -106,7 +118,8 @@
 \begin{frame}[allowframebreaks]{Symmetric SNE}
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/symmetric-sne.jpg}
+        \includegraphics[width=0.92\textwidth,height=0.62\textheight,keepaspectratio]{images/dul/dim-reduce/symmetric-sne.jpg}
+        \caption*{\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
     \end{figure}
 \end{frame}
 
@@ -114,6 +127,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/t-distribution.jpg}
+        \caption*{\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
     \end{figure}
 \end{frame}
 
@@ -137,25 +151,29 @@
         \end{figure}
     \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{t-Distributed Stochastic Neighbor Embedding}
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/t-distributed-stochastic.jpg}
+        \includegraphics[width=1\textwidth,height=0.78\textheight,keepaspectratio]{images/dul/dim-reduce/t-distributed-stochastic.jpg}
+        \caption*{\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
     \end{figure}
 
     \framebreak
 
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/t-distributed-stochastic-cost.jpg}
+        \includegraphics[width=1\textwidth,height=0.78\textheight,keepaspectratio]{images/dul/dim-reduce/t-distributed-stochastic-cost.jpg}
+        \caption*{\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
     \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Distance scaling and perplexity}
     \begin{itemize}
-        \item Perplexity = expected number of neighbours within a cluster
+        \item Perplexity = effective number of nearest neighbours each point is compared against
         \item Distances scaled relative to perplexity neighbours
     \end{itemize}
     \begin{columns}
@@ -172,6 +190,8 @@
         \end{figure}
     \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Perplexity Robustness}
@@ -195,6 +215,8 @@
         \end{figure}
     \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{tSNE Projection}
@@ -244,7 +266,7 @@
     \end{column}
     \end{columns}
 
-    \vspace{3em}
+    \vspace{1em}
     \begin{itemize}
         \item X and Y don’t mean anything (unlike PCA)
         \item Distance doesn’t mean anything (unlike PCA)
@@ -252,26 +274,34 @@
         \item Distant proximity isn’t very interesting
         \item Can’t rationalise distances, or add in more data
     \end{itemize}
+    \centering
+    {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{tSNE: Practical Examples}
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-perplexity-settings.png}
+        \includegraphics[width=0.92\textwidth,height=0.58\textheight,keepaspectratio]{images/dul/dim-reduce/tsne-perplexity-settings.png}
+        \caption*{\scriptsize [Wattenberg, Vi\'egas \& Johnson, ``How to Use t-SNE Effectively'', Distill 2016,
+        via S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
     \end{figure}
 
     \framebreak
 
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-perplexity-settings-2.png}
+        \includegraphics[width=0.92\textwidth,height=0.58\textheight,keepaspectratio]{images/dul/dim-reduce/tsne-perplexity-settings-2.png}
+        \caption*{\scriptsize [Wattenberg, Vi\'egas \& Johnson, ``How to Use t-SNE Effectively'', Distill 2016,
+        via S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
     \end{figure}
 
     \framebreak
 
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/tsne-perplexity-settings-3.png}
+        \includegraphics[width=0.92\textwidth,height=0.58\textheight,keepaspectratio]{images/dul/dim-reduce/tsne-perplexity-settings-3.png}
+        \caption*{\scriptsize [Wattenberg, Vi\'egas \& Johnson, ``How to Use t-SNE Effectively'', Distill 2016,
+        via S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
     \end{figure}
 \end{frame}
 
@@ -279,6 +309,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.5\textwidth,keepaspectratio]{images/dul/dim-reduce/slide_35_1_img.jpg}
+        \caption*{\scriptsize [Source: Z. Fataliyev, ``Dimensionality reduction with t-SNE'', Seoul AI]}
     \end{figure}
 \end{frame}
 
@@ -294,26 +325,26 @@
             \includegraphics[width=0.5\textwidth,keepaspectratio]{images/dul/dim-reduce/slide_36_1_img.png}
         \end{figure}
 
-        \vspace{1em}
+        \vspace{0.5em}
 
 Distance within cluster = low
 
-\vspace{1em}
-        
+\vspace{0.5em}
+
 Distance between clusters = high
     \end{column}
     \begin{column}{0.33\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=1\textwidth,keepaspectratio]{images/dul/dim-reduce/slide_36_2_img.png}
+            \includegraphics[width=1\textwidth,height=0.42\textheight,keepaspectratio]{images/dul/dim-reduce/slide_36_2_img.png}
         \end{figure}
-        
-        \vspace{1em}
+
+        \vspace{0.5em}
 
 Distance within cluster = higher
 
-\vspace{1em}
-        
+\vspace{0.5em}
+
 Distance between clusters = lower
     \end{column}
     \begin{column}{0.33\textwidth}
@@ -324,6 +355,8 @@ Distance between clusters = lower
         \end{itemize}
     \end{column}
     \end{columns}
+    \centering
+    {\scriptsize [Source: S. Andrews, ``Dimension Reduction'', Babraham Bioinformatics]}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{So there is no clear solution?}
@@ -389,7 +422,7 @@ Distance between clusters = lower
 \begin{frame}[allowframebreaks]{So PCA + tSNE is great then?}
     Kind of\dots
     \begin{itemize}
-        \item tSNE is slow—this is its biggest drawback.
+        \item tSNE is slow; this is its biggest drawback.
         \begin{itemize}
             \item tSNE does not scale well to large datasets (10,000+ samples).
         \end{itemize}

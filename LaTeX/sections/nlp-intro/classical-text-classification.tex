@@ -1,4 +1,3 @@
-% --- Classical text classification (ported from the retired GenAI NLP overview deck) ---
 \section{Classical Text Classification}
 \begin{frame}{}
     \LARGE NLP: \textbf{Classical Text Classification}
@@ -38,11 +37,11 @@
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Logistic Regression for Text Classification}
-    We're already familiar with probability-based classifiers, and have seen logistic regression applied in computer vision tasks.
+    Logistic regression is a probability-based classifier we have already met; only the features change here.
 
     \vspace{1em}
     \begin{itemize}
-        \item Here, logistic regression takes word features (from BoW or TF-IDF)
+        \item It takes word features (from BoW or TF-IDF)
         \item It learns weights to predict if text belongs to a certain class, such as:
         \begin{itemize}
             \item Positive or Negative
@@ -55,17 +54,14 @@
         \item Words like ``awesome'' get high weights for positive class
     \end{itemize}
 
-    \framebreak
-    \textcolor{blue}{\faBullseye\enspace \textbf{Intuition:}}
-    \begin{itemize}
-        \item Each word contributes a ``vote'' toward a class.
-        \item The model learns which words are most important for classification.
-    \end{itemize}
+    \vspace{0.5em}
+    \textcolor{blue}{\faBullseye\enspace \textbf{Intuition:}} each word casts a weighted ``vote'' toward a class, and training decides how loud each vote is.
 
     \framebreak
     \begin{figure}
         \centering
         \includegraphics[height=0.67\textheight, width=\textwidth, keepaspectratio]{images/nlp/training-lr.png}
-        \caption*{Training a Logistic Regression Model}
+        \caption*{\scriptsize Training a Logistic Regression Model. Source: DeepLearning.AI,
+        \textit{NLP with Classification and Vector Spaces}, Week 1 slides.}
     \end{figure}
 \end{frame}

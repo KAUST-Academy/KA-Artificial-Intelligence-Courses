@@ -1,7 +1,7 @@
 \section{Support Vector Machines}
 \begin{frame}{The ML Toolbox: Roadmap Update}
-    \centering \vspace*{\fill} \hspace*{-0.6cm}
-    \resizebox{1.1\linewidth}{!}{
+    \centering \vspace*{\fill}
+    \resizebox{\linewidth}{!}{
     \begin{tikzpicture}[node distance=0.5cm, box/.style={scale=1.25, rectangle, draw=gray!40, fill=gray!5, rounded corners, minimum width=2.8cm, minimum height=1.8cm, align=center, font=\small}, active/.style={draw=myblue, fill=blue!10, line width=1.5pt}, completed/.style={draw=mygreen, fill=green!10, line width=1pt, dashed}, arrow/.style={-latex, thick, gray!60}]
         \node[font=\bfseries\Large] (root) at (0, 3) {Machine Learning Models ($f_\theta$)};
         \node[box, completed] (linear) at (-6, 0) {\textbf{1. Linear Models}};
@@ -53,7 +53,7 @@
     % ----- Margin arrow (between the two dashed lines, along the normal) -----
     \draw[<->, thick, green!60!black]
         (2.2,1.44) -- (3.0,2.0)
-        node[(4.0,2.4), above, font=\scriptsize] {Margin};
+        node[above, font=\scriptsize] {Margin};
 
     % Tiny legend (optional, same as your style)
     \node[font=\scriptsize, align=left] at (3.55,3.75) {
@@ -198,7 +198,7 @@
             \item \small $K(\mathbf{x}, \mathbf{y}) = \mathbf{x}^T \mathbf{y}$
             \item \textbf{What it finds:} Straight lines/planes. 
         \end{itemize}
-        \vspace{0.5em}
+        \vspace{0.2em}
 
         % 2. Polynomial Kernel
         \item \textbf{2. Polynomial Kernel} \hfill \textcolor{gray}{}
@@ -206,7 +206,7 @@
             \item \small $K(\mathbf{x}, \mathbf{y}) = (\mathbf{x}^T \mathbf{y} + c)^d$
             \item \textbf{What it finds:} Curved boundaries and feature interactions.
         \end{itemize}
-        \vspace{0.5em}
+        \vspace{0.2em}
 
         % 3. RBF Kernel
         \item \textbf{3. Radial Basis Function (RBF)} \hfill \textcolor{myblue}{\small (The Default)}

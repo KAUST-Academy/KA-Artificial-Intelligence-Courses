@@ -3,7 +3,7 @@
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{How BPE works:}
     \begin{itemize}
       \item Start with characters.
-      \item Merge most frequent pair (e.g., ``t", ``h" $\rightarrow$ ``th").
+      \item Merge most frequent pair (e.g., ``t'', ``h'' $\rightarrow$ ``th'').
       \item Repeat until vocab size reached.
     \end{itemize}
     \vspace{1em}
@@ -24,4 +24,20 @@
 \begin{frame}{Byte-Pair Encoding (BPE)}
   \centering
   \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/large-language-models/llm_llm_tokenization_pipeline.png}
+
+  {\scriptsize Figure adapted from S. Raschka, ``Build a Large Language Model (From Scratch)'', Manning, 2024, Ch.~2.}
+\end{frame}
+
+\begin{frame}{Byte-Pair Encoding (BPE)}
+  \centering
+  \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/large-language-models/llm_unknown_words_subword_tokens.png}
+
+  {\scriptsize Source: S. Raschka, ``Build a Large Language Model (From Scratch)'', Manning, 2024, Ch.~2.}
+\end{frame}
+
+\begin{frame}{Byte-Pair Encoding (BPE)}
+  \centering
+  \includegraphics[width=0.60\paperwidth,height=0.60\paperheight,keepaspectratio]{images/large-language-models/llm_byte_pair_encoding_mindmap.png}
+
+  {\scriptsize Source: D. Alam and Vizuara AI, ``\href{https://vizuara.substack.com/p/understanding-byte-pair-encoding}{Understanding Byte Pair Encoding (BPE) in Large Language Models}'', Vizuara's Substack, 2024.}
 \end{frame}

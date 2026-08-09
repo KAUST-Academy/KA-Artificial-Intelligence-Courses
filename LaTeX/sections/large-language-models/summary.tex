@@ -1,3 +1,12 @@
+\begin{frame}{Summary}
+  \begin{itemize}\itemsep0.4em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The training objective shapes the architecture.} Masked prediction over both directions gives BERT representations to fine-tune; next-token prediction over the left context gives GPT a generator.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Scaling is useful because it is predictable.} Fit a power law on small runs, then commit the budget once. How that budget splits between parameters and data is an empirical question, and the first published answer was revised.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Tokenization is a modelling decision.} It fixes sequence length, cost per language, and which rare strings the model has barely trained on.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Context length is a capacity, and an expensive one.} Retrieval inside the window degrades before the token limit is reached, and the KV cache grows with every token.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Future Directions for LLMs}
   \begin{itemize}
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Long Context Handling:} Efficient token reuse, sparse attention, recurrence.

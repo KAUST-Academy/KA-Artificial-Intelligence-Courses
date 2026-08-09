@@ -3,7 +3,6 @@
     \LARGE CNN Architectures: \textbf{MobileNet}
 \end{frame}
 
-% MobileNet
 \begin{frame}{Motivation for MobileNets}
     \begin{itemize}
         \item \textbf{Why MobileNets?}
@@ -28,7 +27,8 @@
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=0.8\linewidth]{images/cnn/NormalConv_MobileNet.png} 
+        \includegraphics[width=0.8\linewidth]{images/cnn/NormalConv_MobileNet.png}
+        \caption*{\scriptsize Figure adapted from Andrew Ng, Deep Learning Specialization (deeplearning.ai).}
     \end{figure}
 \end{frame}
 
@@ -43,7 +43,8 @@
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=0.8\linewidth]{images/cnn/Depth_vs_Normal_Conv.png} 
+        \includegraphics[width=0.8\linewidth]{images/cnn/Depth_vs_Normal_Conv.png}
+        \caption*{\scriptsize Figure adapted from Andrew Ng, Deep Learning Specialization (deeplearning.ai).}
     \end{figure}
 \end{frame}
 
@@ -54,6 +55,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.8\linewidth]{images/cnn/Depthwise_conv.png}
+        \caption*{\scriptsize Figure adapted from Andrew Ng, Deep Learning Specialization (deeplearning.ai).}
     \end{figure}
 \end{frame}
 
@@ -65,12 +67,33 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.8\linewidth]{images/cnn/PointWise_conv.png}
+        \caption*{\scriptsize Figure adapted from Andrew Ng, Deep Learning Specialization (deeplearning.ai).}
     \end{figure}
+\end{frame}
+
+\begin{frame}{Cost of a Depthwise-Separable Convolution}
+    \begin{itemize}
+        \item Write \(D_K\) for the kernel size, \(D_F\) for the output feature-map size, \(M\) for the number of input channels and \(N\) for the number of output channels.
+    \end{itemize}
+    \begin{align*}
+        \text{Standard convolution:} \quad & D_K \cdot D_K \cdot M \cdot N \cdot D_F \cdot D_F \\
+        \text{Depthwise + pointwise:} \quad & D_K \cdot D_K \cdot M \cdot D_F \cdot D_F \;+\; M \cdot N \cdot D_F \cdot D_F
+    \end{align*}
+    \begin{itemize}
+        \item Dividing the second by the first gives the cost ratio
+        \(\;\dfrac{1}{N} + \dfrac{1}{D_K^{2}}\,\), so the saving grows with the number of output channels.
+        \item With \(3\times3\) kernels MobileNet needs 8 to 9 times less computation than a standard convolution, at a small cost in accuracy \emph{[Howard et al., 2017]}.
+    \end{itemize}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{MobileNet Architectures}
     \begin{itemize}
-        \item \textbf{MobileNet v2:}
+        \item \textbf{MobileNet v1} \emph{[Howard et al., 2017. MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications]}\textbf{:}
+        \begin{itemize}
+            \item Replaces the standard convolutions of a plain CNN with depthwise-separable blocks.
+            \item 4.2M parameters and 70.6\% top-1 accuracy on ImageNet.
+        \end{itemize}
+        \item \textbf{MobileNet v2} \emph{[Sandler et al., 2018. MobileNetV2: Inverted Residuals and Linear Bottlenecks]}\textbf{:}
         \begin{itemize}
             \item Adds \textbf{residual connections}.
             \item Introduces:
@@ -82,6 +105,7 @@
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=0.8\textwidth,height=.7\textheight,keepaspectratio]{images/cnn/MobileNet_1_and_2.png} 
+        \includegraphics[width=0.8\textwidth,height=.7\textheight,keepaspectratio]{images/cnn/MobileNet_1_and_2.png}
+        \caption*{\scriptsize Figure adapted from Andrew Ng, Deep Learning Specialization (deeplearning.ai).}
     \end{figure}
 \end{frame}

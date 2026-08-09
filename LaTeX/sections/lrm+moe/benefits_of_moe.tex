@@ -14,7 +14,8 @@
     \framebreak
         \item \textbf{Efficient Computation:}
         \begin{itemize}
-            \item Activates only 10–20\% of total parameters per token.
+            \item Activates only a small fraction of the total parameters per token: roughly $k$ out of $N$ experts, so the fraction shrinks as $N$ grows at fixed $k$.
+            \item Mixtral 8x7B activates about 13B of 47B parameters ($\sim$28\%); DeepSeek-V3 activates 37B of 671B ($\sim$5.5\%).
             \item Reduces computational cost per token.
             \item Sparse activation means fewer parameters are active at any time.
             \item Enables training on larger datasets with limited resources.
@@ -40,11 +41,11 @@
             \item Improves accuracy specifically for math problems.
             \item Outperforms generalist models on these tasks.
         \end{itemize}
-        \item \textbf{Example 2: MORE (Mixture of Reasoning Experts)}
+        \item \textbf{Example 2: MoRE (Mixture-of-Reasoning-Experts)}
         \begin{itemize}
-            \item Explicitly uses experts for types of reasoning (e.g., multihop, factual, analogical).
-            \item Boosts performance and provides greater interpretability.
-            \item Allows understanding which expert handles which reasoning step.
+            \item Specialises one backbone model into four reasoning experts by prompting: factual, multihop, mathematical, and commonsense.
+            \item Every expert answers every question and a trained selector picks the best answer, so this buys generality and interpretability rather than the compute saving a routed MoE gives.
+            \item Agreement between experts also tells the system when to abstain.
         \end{itemize}
     \framebreak
         \item \textbf{Performance:}

@@ -371,7 +371,7 @@ original RLHF back-end; \textbf{GRPO is now common for LLM RL.}}
 \end{frame}
 
 % ---------------------------------------------------------------- 3.5b GRPO objective
-\begin{frame}{GRPO, Written Out}
+\begin{frame}[allowframebreaks]{GRPO, Written Out}
 For each prompt, sample a \textbf{group} of $G$ responses
 $\{y_1, \dots, y_G\}\sim\pi_{\text{old}}$ ($\pi_{\text{old}}$ = the policy from the
 \emph{previous} update step, which we sample from, not the frozen
@@ -384,6 +384,8 @@ $\pi_{\text{ref}}$) and score each: $r_i = r_\phi(y_i)$ (or a verifiable check).
 ($\hat{A}_i$ = how much better response $i$ scored than the group average, in
 standard-deviation units: positive $\to$ reinforce it, negative $\to$ suppress it.)
 \vspace{0.2em}
+
+\framebreak
 
 Same clipped ratio as PPO (Day 4), now driven by $\hat{A}_i$ and leashed to
 $\pi_{\text{ref}}$:
@@ -521,7 +523,7 @@ is what ``solve for the policy'' means.
     \pi(y) &= \pi_{\text{ref}}(y)\; e^{\,r(y)/\beta}\cdot e^{\,c}
         && \text{\scriptsize(exponentiate both sides)}
 \end{align*}
-\vspace{-1.1em}
+\vspace{-1.6em}
 \begin{itemize}\itemsep0.1em\footnotesize
     \item \textbf{Nothing went missing.} $r(y)$ became $r(y)/\beta$ when we divided
           through by $\beta$, which is also why $\beta$ lands in a denominator; and
@@ -752,7 +754,7 @@ DPO's simplicity has a cost: you lose the control knobs the RL loop gave you.
 \end{itemize}
 \vfill
 \begin{center}
-\includegraphics[width=0.78\linewidth, height=0.42\textheight, keepaspectratio]{images/rl-real-world/figures/cai-pipeline.jpg}
+\includegraphics[width=0.78\linewidth, height=0.32\textheight, keepaspectratio]{images/rl-real-world/figures/cai-pipeline.jpg}
 \end{center}
 \srcnote{\scriptsize Bai et al. \href{https://arxiv.org/abs/2212.08073}{Constitutional AI: Harmlessness from AI Feedback}, 2022. In production, not a toy.}
 \end{frame}

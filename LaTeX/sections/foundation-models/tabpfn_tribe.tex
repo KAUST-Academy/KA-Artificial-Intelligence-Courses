@@ -1,5 +1,4 @@
 % --- TabPFN and TRIBE v2 ---
-% % --- Tabular Foundation Models: TabPFN ---
 \begin{frame}{TabPFN: Prior-Data Fitted Network}
   \begin{itemize}
     \item Trained to ``meta-learn'' classification solutions for tabular datasets; pretraining uses millions of \textbf{synthetic} datasets, never real data.
@@ -13,7 +12,7 @@
 \begin{frame}{TabPFN: Architecture and Capabilities}
   \centering
   \includegraphics[width=0.85\textwidth, height=0.56\textheight, keepaspectratio]{images/foundation-models/tabpfn_summary.png}\\[0.15em]
-  {\scriptsize Hollmann et al., ``TabPFN: A Transformer That Solves Small Tabular Classification Problems in a Second,'' ICLR 2023 (\href{https://arxiv.org/abs/2207.01848}{arXiv:2207.01848})}\\[0.15em]
+  {\scriptsize Hollmann et al., ``Accurate Predictions on Small Data with a Tabular Foundation Model,'' \emph{Nature}, 2025, Fig.~1 (\href{https://doi.org/10.1038/s41586-024-08328-6}{doi:10.1038/s41586-024-08328-6})}\\[0.15em]
   \begin{itemize}\footnotesize
     \item Learns a prior over tabular tasks by pretraining on large synthetic task distributions.
     \item Performs in-context learning on a new dataset in one forward pass.

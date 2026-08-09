@@ -11,7 +11,7 @@
     \column{0.44\textwidth}
     \begin{itemize}\itemsep0.26em
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Goal:} learn an abstract, compressed representation of each observed input frame.
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{VAE:} first stage of a two-stage sequence model; similar in spirit to modern tokenizers, but trained with the classic VAE objective (see the background slide).
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{VAE:} first stage of a two-stage sequence model; similar in spirit to modern tokenizers, but trained with the classic VAE objective (see the recap slide).
     \end{itemize}
     \column{0.54\textwidth}
     \centering
@@ -26,7 +26,7 @@
     \column{0.42\textwidth}
     \begin{itemize}\itemsep0.26em
       \item[\textcolor{red}{$\blacktriangleright$}] Model $p(z_{t+1} \mid z_t, a_t, h_t)$ where $z_t$ is the latent state at time $t$, $a_t$ is the action at time $t$, and $h_t$ is the hidden state at time $t$.
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{MDN-RNN:} an RNN (LSTM, from the RNN lecture) whose output parameterizes a \textbf{mixture of Gaussians} over the next latent $z_{t+1}$; a mixture can represent several plausible futures at once.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{MDN-RNN:} an RNN (an LSTM, covered earlier) whose output parameterizes a \textbf{mixture of Gaussians} over the next latent $z_{t+1}$; a mixture can represent several plausible futures at once.
       \item[\textcolor{red}{$\blacktriangleright$}] A temperature parameter $\tau$ scales the sampling uncertainty; it becomes important when training inside the dream.
     \end{itemize}
     \column{0.56\textwidth}
@@ -39,7 +39,7 @@
 
 
 \begin{frame}{Controller module: decision-making (C)}
-    \begin{itemize}\itemsep0.26em
+    \begin{itemize}\itemsep0.18em
       \item[\textcolor{red}{$\blacktriangleright$}] The \textbf{Controller (C)} selects actions to maximize expected cumulative reward during agent rollout.
       \item[\textcolor{red}{$\blacktriangleright$}] Designed to be as simple and small as possible; trained \textbf{separately} from the Vision (V) and Memory (M) modules.
       \item[\textcolor{red}{$\blacktriangleright$}] Most agent complexity is thus concentrated in the world model (V and M).
@@ -69,7 +69,7 @@
     \item In the VizDoom experiment, a policy trained purely in the dream \textbf{transfers back to the real game} (as reported in the paper).
     \item The failure mode: the controller learns to \textbf{exploit model errors}, steering into states the model predicts wrongly (for example, imagined worlds where enemies never fire).
     \item Countermeasure: raise the temperature $\tau$ so the dream is noisier and harder to exploit; the resulting policy is more robust in the real environment.
-    \item This exploit-the-model problem returns in Dreamer, handled there with KL constraints on the latent dynamics.
+    \item This exploit-the-model problem returns in Dreamer, mitigated there by short imagination horizons and continual retraining on fresh real experience.
   \end{itemize}
 \end{frame}
 

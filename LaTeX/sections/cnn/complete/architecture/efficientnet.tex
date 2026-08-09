@@ -3,7 +3,6 @@
     \LARGE CNN Architectures: \textbf{EfficientNet}
 \end{frame}
 
-% EfficientNet
 \begin{frame}{EfficientNet: Motivation}
     \begin{itemize}
         \item \textbf{Problem:} To improve accuracy, we can:
@@ -14,22 +13,21 @@
         \end{itemize}
         But finding the right balance of these three was largely based on trial and error.
         
-        \item \textbf{Solution:} EfficientNet introduced a \textbf{compound scaling} method—a mathematical formula to systematically find the optimal balance among \textbf{depth}, \textbf{width}, and \textbf{resolution}.
+        \item \textbf{Solution:} EfficientNet introduced \textbf{compound scaling}, a formula that systematically balances \textbf{depth}, \textbf{width}, and \textbf{resolution}.
     \end{itemize}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{EfficientNet}
     \begin{figure}
         \centering
-        % Replace with your own figure path
-        \includegraphics[width=1.05\linewidth]{images/cnn/ENet_1.png}
-        \caption*{EfficientNet Scaling.}
+        \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{images/cnn/ENet_1.png}
+        \caption*{\scriptsize EfficientNet Scaling. Source: Tan \& Le, 2019 (EfficientNet, ICML).}
     \end{figure}
 
 \framebreak
 
     \begin{itemize}
-        \item \textbf{Compound Scaling} Uses a single \textbf{scaling coefficient} (\(\phi\)) to control:
+        \item \textbf{Compound Scaling:} Uses a single \textbf{scaling coefficient} (\(\phi\)) to control:
         \begin{itemize}
         \item \textbf{Network Depth} (\(\alpha^\phi\)) → More layers
         \item \textbf{Network Width} (\(\beta^\phi\)) → More channels per layer
@@ -77,25 +75,26 @@
 
     \begin{table}[]
         \centering
-        \begin{tabular}{|c|c|c|c|}
+        \small
+        \begin{tabular}{|c|c|c|c|c|}
             \hline
-            \textbf{Model} & \(\phi\) & \textbf{Depth} (\(\alpha^\phi\)) & \textbf{Width} (\(\beta^\phi\)) \\ 
+            \textbf{Model} & \(\phi\) & \textbf{Depth} (\(\alpha^\phi\)) & \textbf{Width} (\(\beta^\phi\)) & \textbf{Resolution} (\(\gamma^\phi\)) \\
             \hline
-            B0 & 0 & \(1.2^0 = 1.0\) & \(1.1^0 = 1.0\)  \\ 
-            B1 & 1 & \(1.2^1 = 1.2\) & \(1.1^1 = 1.1\)  \\ 
-            B2 & 2 & \(1.2^2 = 1.44\) & \(1.1^2 = 1.21\)  \\ 
-            B3 & 3 & \(1.2^3 = 1.73\) & \(1.1^3 = 1.33\)  \\ 
-            B4 & 4 & \(1.2^4 = 2.07\) & \(1.1^4 = 1.46\)  \\ 
-            B5 & 5 & \(1.2^5 = 2.49\) & \(1.1^5 = 1.61\)  \\ 
-            B6 & 6 & \(1.2^6 = 2.99\) & \(1.1^6 = 1.77\)  \\ 
-            B7 & 7 & \(1.2^7 = 3.58\) & \(1.1^7 = 1.94\)  \\ 
+            B0 & 0 & \(1.2^0 = 1.0\) & \(1.1^0 = 1.0\) & \(1.15^0 = 1.0\) \\
+            B1 & 1 & \(1.2^1 = 1.2\) & \(1.1^1 = 1.1\) & \(1.15^1 = 1.15\) \\
+            B2 & 2 & \(1.2^2 = 1.44\) & \(1.1^2 = 1.21\) & \(1.15^2 = 1.32\) \\
+            B3 & 3 & \(1.2^3 = 1.73\) & \(1.1^3 = 1.33\) & \(1.15^3 = 1.52\) \\
+            B4 & 4 & \(1.2^4 = 2.07\) & \(1.1^4 = 1.46\) & \(1.15^4 = 1.75\) \\
+            B5 & 5 & \(1.2^5 = 2.49\) & \(1.1^5 = 1.61\) & \(1.15^5 = 2.01\) \\
+            B6 & 6 & \(1.2^6 = 2.99\) & \(1.1^6 = 1.77\) & \(1.15^6 = 2.31\) \\
+            B7 & 7 & \(1.2^7 = 3.58\) & \(1.1^7 = 1.95\) & \(1.15^7 = 2.66\) \\
             \hline
         \end{tabular}
         \caption*{Scaling EfficientNet from B0 to B7}
     \end{table}
 
     \begin{itemize}
-        \item We multiply these scaling factors by the baseline EfficientNet-B0 values and round to the nearest integer to get the new depth, width, and resolution for each model.
+        \item We multiply these scaling factors by the baseline EfficientNet-B0 values and round to get the depth, width, and input resolution of each model: B0 is trained at $224\times224$, B7 at $600\times600$.
     \end{itemize}
 \end{frame}
 
@@ -104,9 +103,9 @@
     \begin{itemize}
         \item EfficientNet models achieve state-of-the-art accuracy with significantly fewer parameters and FLOPs.        
         \pause
-        \item EfficientNet-B7 reaches 84.4\% Top-1 and 97.3\% Top-5 accuracy on ImageNet.
+        \item EfficientNet-B7 reaches 84.3\% Top-1 and 97.0\% Top-5 accuracy on ImageNet.
         \pause
-        \item More efficient than previous CNN models---8.4x smaller and 6.1x faster than competitors.
+        \item At that accuracy it is 8.4x smaller and 6.1x faster on inference than GPipe, the best ConvNet available at the time.
     \end{itemize}
 \end{frame}
 
@@ -115,6 +114,6 @@
     \begin{figure}
         \centering
         \includegraphics[width=\textwidth,height=.7\textheight,keepaspectratio]{images/cnn/ENet_2.png}
-        \caption*{EfficientNet Performance on Imagenet.}
+        \caption*{\scriptsize EfficientNet Performance on ImageNet. Source: Tan \& Le, 2019 (EfficientNet, ICML).}
     \end{figure}
 \end{frame}

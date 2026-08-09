@@ -1,6 +1,6 @@
 \section{LSTM - Long Short-Term Memory}
-\begin{frame}{LSTM - Long Short-Term Memory}
-  \LARGE LSTM : \textbf{Long short term memory unit}
+\begin{frame}{}
+  \LARGE LSTM : \textbf{Long Short-Term Memory}
 \end{frame}
 
 \begin{frame}{LSTM - Long Short-Term Memory}
@@ -16,11 +16,15 @@
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Cell State} $C_t$
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Output Gate} $o_t$
   \end{itemize}
+
+  \vspace{0.8em}
+  The 1997 architecture had only the input and output gates. The forget gate was added by
+  Gers, Schmidhuber \& Cummins (2000), and the three-gate unit below is what ``LSTM'' now means.
 \end{frame}
 
 \begin{frame}{LSTM - Long Short-Term Memory}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_vs_vanilla_rnn_equations.png}
+  \includegraphics[width=\linewidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_vs_vanilla_rnn_equations.png}
 \end{frame}
 
 \begin{frame}{LSTM - Long Short-Term Memory: Equations}
@@ -57,62 +61,77 @@
 
 \begin{frame}{Long Short-Term Memory}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_four_gates_weight_matrix.png}
+  \includegraphics[width=\linewidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_four_gates_weight_matrix.png}
 \end{frame}
 
 \begin{frame}{Long Short-Term Memory}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_gate_gate_write_to_cell.png}
+  \includegraphics[width=\linewidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_gate_gate_write_to_cell.png}
 \end{frame}
 
 \begin{frame}{Long Short-Term Memory}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_output_gate_reveal_cell.png}
+  \includegraphics[width=\linewidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_output_gate_reveal_cell.png}
 \end{frame}
 
 \begin{frame}{Long Short-Term Memory}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_cell_diagram_gates.png}
+  \includegraphics[width=\linewidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_cell_diagram_gates.png}
 \end{frame}
 
 \begin{frame}{Gates in LSTM}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_unit_block_gates_overview.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_unit_block_gates_overview.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 3 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Gates in LSTM}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_sigmoid_gate_open_closed.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\paperwidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_sigmoid_gate_open_closed.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 3 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Candidate Cell State}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_candidate_cell_state.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\paperwidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_candidate_cell_state.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 3 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{New Cell State}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_new_cell_state_forget_input.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\linewidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_new_cell_state_forget_input.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 3 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{New Hidden State}
-  \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_new_hidden_state_output_gate.png}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.9\paperwidth,height=0.66\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_new_hidden_state_output_gate.png}
+    \caption*{\tiny Source: DeepLearning.AI NLP Specialization, Course 3: Natural Language Processing with Sequence Models, Week 3 (Y. Bensouda Mourri \& L. Kaiser)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{LSTM: Gradient Flow}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_backprop_cell_state_flow.png}
+  \includegraphics[width=\linewidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_backprop_cell_state_flow.png}
 \end{frame}
 
 \begin{frame}{LSTM: Gradient Flow}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_uninterrupted_gradient_flow.png}
+  \includegraphics[width=\linewidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_uninterrupted_gradient_flow.png}
 \end{frame}
 
 \begin{frame}{LSTM: Gradient Flow}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_gradient_flow_resnet_highway.png}
+  \includegraphics[width=\linewidth,height=0.95\paperheight,keepaspectratio]{images/rnn-lstm-gru/lstm_gradient_flow_resnet_highway.png}
 \end{frame}
 
 \begin{frame}{Do LSTMs solve the vanishing gradient problem?}

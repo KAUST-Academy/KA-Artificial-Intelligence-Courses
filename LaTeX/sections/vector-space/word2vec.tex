@@ -59,7 +59,7 @@
             \item \textbf{Input:} Surrounding words (context)
             \item \textbf{Output:} Target word
         \end{itemize}
-        \item Fast and accurate for frequent words.
+        \item Faster to train than Skip-gram.
         \item \textbf{Example:}
         \begin{itemize}
             \item Context: ``the \_\_\_ sat on the mat'' $\rightarrow$ Predict ``cat''
@@ -68,29 +68,40 @@
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/vector-space/cbow-1.png}
+        \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{images/vector-space/cbow_architecture_mikolov.png}
         \caption{CBOW Architecture}
+        \caption*{\tiny Source: Mikolov et al., ``Efficient Estimation of Word Representations in Vector Space'', arXiv:1301.3781, Fig.~1 (left).}
+    \end{figure}
+\framebreak
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{images/vector-space/cbow-1.png}
+        \caption{CBOW in the embedding pipeline: the model fills in the missing centre word.}
+        \caption*{\tiny Source: DeepLearning.AI, \textit{NLP with Probabilistic Models} (Coursera), Week~4: Word Embeddings with Neural Networks.}
     \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Center word prediction: rationale}
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/vector-space/center-word-pred.png}
+        \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{images/vector-space/center-word-pred.png}
+        \caption*{\tiny Source: DeepLearning.AI, \textit{NLP with Probabilistic Models} (Coursera), Week~4: Word Embeddings with Neural Networks.}
     \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Creating a training example}
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/vector-space/training-example.png}
+        \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{images/vector-space/training-example.png}
+        \caption*{\tiny Source: DeepLearning.AI, \textit{NLP with Probabilistic Models} (Coursera), Week~4: Word Embeddings with Neural Networks.}
     \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{From corpus to training}
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/vector-space/corpus2training.png}
+        \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{images/vector-space/corpus2training.png}
+        \caption*{\tiny Source: DeepLearning.AI, \textit{NLP with Probabilistic Models} (Coursera), Week~4: Word Embeddings with Neural Networks.}
     \end{figure}
 \end{frame}
 
@@ -103,7 +114,7 @@
             \item \textbf{Input:} Target word
             \item \textbf{Output:} Surrounding words (context)
         \end{itemize}
-        \item Better for rare words.
+        \item Slower to train, but better for rare words.
         \item \textbf{Example:}
         \begin{itemize}
             \item Input: ``cat'' $\rightarrow$ Output: ``the'', ``sat'', ``on'', ``the'', ``mat''
@@ -112,20 +123,23 @@
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/vector-space/skipgram-1.png}
+        \includegraphics[width=\textwidth,height=0.75\textheight,keepaspectratio]{images/vector-space/skipgram_architecture_mikolov.png}
         \caption{Skip-Gram Architecture}
+        \caption*{\tiny Source: Mikolov et al., ``Efficient Estimation of Word Representations in Vector Space'', arXiv:1301.3781, Fig.~1 (right).}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1400/0*yxs3JKs5bKc4c_i8.png}{images/vector-space/skipgram-2.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/vector-space/skipgram-2.png}
+        \caption*{\tiny Source: K. Ezra, ``Word Embedding [Complete Guide]'', OpenGenus IQ (carries no credit there); panel (a) reproduces Mikolov et al., arXiv:1301.3781, Fig.~1 (right).}
     \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{CBOW vs Skip-Gram}
     \begin{figure}
         \centering
-        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1200/1*xC6wfTU_zpUlpRlXs5NZ4w.png}{images/vector-space/cbow-skipgram.png}{width=\textwidth,height=0.9\textheight,keepaspectratio}
+        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/vector-space/cbow-skipgram.png}
+        \caption*{\tiny Source: F. Omarzai, ``Word2Vec (CBOW, Skip-gram) In Depth'', Medium, 1 August 2024.}
     \end{figure}
 \end{frame}
 

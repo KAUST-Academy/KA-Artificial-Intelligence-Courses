@@ -7,8 +7,8 @@
     Over time, researchers built advanced CNN architectures to improve performance and efficiency. These architectures introduced key innovations:
     {\small
     \begin{itemize}
-        \item \textbf{LeNet \emph{[LeCun et al., 1998]}}: The first CNN architecture, designed for handwritten digit recognition.
-        \item \textbf{AlexNet \emph{[Krizhevsky et al. 2012]}}:  The first CNN to achieve breakthrough performance on image classification.
+        \item \textbf{LeNet \emph{[LeCun et al., 1998]}}: The first CNN trained end-to-end with backpropagation, designed for handwritten digit recognition.
+        \item \textbf{AlexNet \emph{[Krizhevsky et al., 2012]}}:  The first CNN to achieve breakthrough performance on image classification.
         \item \textbf{VGGNet \emph{[Simonyan and Zisserman, 2014]}}: Used very deep networks (up to 19 layers).
         \item \textbf{InceptionNet (GoogLeNet) \emph{[Szegedy et al., 2014]}}: Used multiple filter sizes per layer (Inception modules).
         \item \textbf{ResNet \emph{[He et al., 2015]}}: Introduced skip connections for training very deep networks.
@@ -27,9 +27,9 @@
 \input{sections/cnn/complete/architecture/mobilenet}
 
 \begin{frame}{Summary of CNN Architectures}
-    \begin{minipage}{0.8\linewidth}
     \centering
     \small
+    \setlength{\tabcolsep}{4pt}
     \begin{tabular}{|l|c|l|c|l|}
         \hline
         \textbf{Model} & \textbf{Year} & \textbf{Key Idea} & \textbf{\#Params} & \textbf{Strength} \\
@@ -43,5 +43,4 @@
         MobileNet & 2017 & Lightweight architecture & $\sim$4M & Mobile-ready \\
         \hline
     \end{tabular}
-    \end{minipage}
 \end{frame}

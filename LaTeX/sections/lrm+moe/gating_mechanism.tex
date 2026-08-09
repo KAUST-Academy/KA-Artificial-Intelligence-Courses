@@ -7,10 +7,9 @@
     \begin{itemize}
         \item \textbf{Gating Mechanism:}
         \begin{itemize}
-            \item A crucial component in Mixture of Experts (MoE) models determines which expert(s) to activate for a given input.
+            \item A small neural network that decides which expert(s) to activate for a given input.
             \item Uses a learned function to compute a score for each expert.
             \item The scores are used to select the top-$k$ experts.
-            \item (A small neural network that selects the top-k experts to use for a given input.)
         \end{itemize}
     \framebreak
         \item \textbf{How it works:}
@@ -77,10 +76,35 @@
     \framebreak
         \begin{figure}[h]
             \centering
-            \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/lrm+moe/gating-network.png}
-            \caption*{Source: \href{https://apxml.com/courses/mixture-of-experts/chapter-2-advanced-moe-architectures/designing-gating-networks}{Designing Effective Gating Networks}}
+            \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{images/lrm+moe/gating-network.png}
+
+            {\usebeamerfont{caption}\usebeamercolor[fg]{caption}Source: \href{https://apxml.com/courses/mixture-of-experts/chapter-2-advanced-moe-architectures/designing-gating-networks}{Designing Effective Gating Networks}}
         \end{figure}
     \end{itemize}
+    \framebreak
+        \begin{itemize}
+            \item \textbf{Noisy Top-$k$ Gating (Shazeer et al., 2017)}
+            \begin{itemize}
+                \item Adds learned noise to the gating scores before the top-$k$ cut is taken:
+                \[
+                    H(x)_i = (x W_g)_i + \varepsilon_i \cdot \mathrm{Softplus}\big((x W_{\text{noise}})_i\big),
+                    \qquad \varepsilon_i \sim \mathcal{N}(0,1)
+                \]
+                \[
+                    G(x) = \mathrm{softmax}\big(\mathrm{KeepTopK}(H(x), k)\big),
+                \]
+                \[
+                    \mathrm{KeepTopK}(v,k)_i =
+                    \begin{cases}
+                        v_i, & v_i \text{ among the } k \text{ largest} \\
+                        -\infty, & \text{otherwise}
+                    \end{cases}
+                \]
+                \item Both $W_g$ and $W_{\text{noise}}$ are trained, so the model learns how much noise each expert's score should carry.
+                \item Sending the discarded scores to $-\infty$ makes their softmax weights exactly zero, which is what turns a dense gate into a sparse one.
+                \item The noise exists for load balancing: an expert that starts slightly behind would otherwise never be selected, never train, and stay behind. Noise lets tokens that narrowly missed the cut reach it often enough to break that loop.
+            \end{itemize}
+        \end{itemize}
     \framebreak
         \begin{itemize}
             \item \textbf{Load-Balanced + Entropy-Regularized Gating}
@@ -90,7 +114,7 @@
                 \item \textbf{Load-Balanced:}
                 \begin{itemize}
                     \item Penalty in loss encourages even token distribution.
-                    \item Avoids "expert collapse."
+                    \item Avoids ``expert collapse.''
                 \end{itemize}
                 \item \textbf{Entropy-Regularized:}
                 \begin{itemize}
@@ -107,7 +131,7 @@
                     \item Incorporates \textbf{load balancing penalty}.
                     \item Ensures experts are actively learning and distributed.
                 \end{itemize}
-                \item \textbf{Example 2: MoE-LLaMA}
+                \item \textbf{Example 2: LLaMA-MoE}
                 \begin{itemize}
                     \item Employs \textbf{Top-2 gating}.
                     \item \textbf{Avoids token dropout}.

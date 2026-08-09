@@ -6,10 +6,11 @@
 \begin{frame}{What are N-grams?}
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/nlp-intro/ngram.png}
+        \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/nlp-intro/ngram.png}
+        \caption*{\scriptsize Source: DeepLearning.AI, \textit{NLP with Probabilistic Models}, Week 3 slides.}
     \end{figure}
-    \vspace{1em}
-    \begin{itemize} 
+    \vspace{0.3em}
+    \begin{itemize}
         \item Items are typically \textbf{words} or \textbf{characters}.
     \end{itemize}
 \end{frame}
@@ -18,13 +19,16 @@
     \begin{itemize}
         \item Tokenization is the process of breaking text into smaller units called \textbf{tokens}.
         \item Tokens can be words, characters, or subwords.
-        \item Example: "I love NLP" can be tokenized into:
+        \item Example: ``I love NLP'' can be tokenized into:
         \begin{itemize}
-            \item Words: ["I", "love", "NLP"]
-            \item Characters: ["I", " ", "l", "o", "v", "e", " ", "N", "L", "P"]
-            \item Subwords: ["I", " ", "lov", "e", " ", "N", "L", "P"]
+            \item Words: \texttt{["I", "love", "NLP"]}
+            \item Characters: \texttt{["I", " ", "l", "o", "v", "e", " ", "N", "L", "P"]}
         \end{itemize}
-        \item Tokenization is crucial for preparing text data for NLP tasks.
+        \item Subword tokenizers sit between the two: frequent words stay whole, rare
+        or long ones are split into pieces the model already knows, so
+        \texttt{"tokenization"} becomes \texttt{["token", "ization"]}.
+        \item Every later step counts tokens, so the choice of tokenizer fixes what
+        the model can and cannot see.
     \end{itemize}
 \end{frame}
 

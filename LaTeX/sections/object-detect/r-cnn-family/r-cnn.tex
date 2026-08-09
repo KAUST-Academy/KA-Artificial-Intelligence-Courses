@@ -21,7 +21,7 @@
 
     \begin{figure}
         \centering
-        \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/rcnn_1.png}
+        \includegraphics[width=1.0\textwidth,height=0.85\textheight,keepaspectratio]{images/object-detect/rcnn_1.png}
     \end{figure}
 
 \framebreak
@@ -33,10 +33,6 @@
                 \item Instead of using a brute-force sliding window approach, R-CNN applies \textbf{Selective Search}, an algorithm that identifies around \textbf{2000 candidate object regions} (called region proposals).
                 \item This significantly reduces the number of regions to process, making the model more efficient.
             \end{itemize}
-            \begin{figure}
-                \centering
-                \includegraphics[width=1.0\textwidth,height=0.4\textheight,keepaspectratio]{images/object-detect/r-cnn-region-proposal.png}
-            \end{figure}
 \framebreak
             \item \textbf{Feature Extraction with CNN}
             \begin{itemize}
@@ -44,52 +40,41 @@
                 \item The cropped regions are passed through a \textbf{pre-trained CNN} (like AlexNet or VGG16) to extract deep features.
                 \item These features are then stored for classification.
             \end{itemize}
-            \begin{figure}
-                \centering
-                \includegraphics[width=1.0\textwidth,height=0.4\textheight,keepaspectratio]{images/object-detect/r-cnn-region-proposal.png}
-            \end{figure}
 \framebreak
             \item \textbf{Object Classification \& Bounding Box Refinement}
             \begin{itemize}
                 \item The extracted features are passed through a \textbf{Support Vector Machine} (SVM) classifier to determine the object category.
                 \item A \textbf{bounding box regression} model is used to fine-tune the position of the detected objects.
             \end{itemize}
-            \begin{figure}
-                \centering
-                \includegraphics[width=1.0\textwidth,height=0.4\textheight,keepaspectratio]{images/object-detect/r-cnn-region-proposal.png}
-            \end{figure}
         \end{enumerate}
 
 \framebreak
 
         \begin{figure}
             \centering
-            \includegraphics[width=1.0\textwidth,height=0.9\textheight,keepaspectratio]{images/object-detect/r-cnn-pipeline.png}
+            \includegraphics[width=1.0\textwidth,height=0.8\textheight,keepaspectratio]{images/object-detect/r-cnn-region-proposal.png}
+            \caption*{\scriptsize Source: MathWorks, ``Getting Started with R-CNN, Fast R-CNN, and Faster R-CNN'', MATLAB Computer Vision Toolbox documentation.}
+        \end{figure}
+
+\framebreak
+
+        \begin{figure}
+            \centering
+            \includegraphics[width=1.0\textwidth,height=0.58\textheight,keepaspectratio]{images/object-detect/r-cnn-pipeline.png}
+            \caption*{\scriptsize Step 5 applies non-max suppression, which collapses the many overlapping boxes R-CNN produces down to one per object. We come back to it in detail later. Source: A. Rosebrock, ``R-CNN object detection with Keras, TensorFlow, and Deep Learning'', PyImageSearch, 2020.}
         \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{R-CNN: Problem}
     \begin{figure}
         \centering
-        \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/rcnn_2.png}
+        \includegraphics[width=1.0\textwidth,height=0.85\textheight,keepaspectratio]{images/object-detect/rcnn_2.png}
     \end{figure}
 
 \framebreak
 
     \begin{figure}
         \centering
-        \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/object-detect/rcnn_3.png}
+        \includegraphics[width=1.0\textwidth,height=0.85\textheight,keepaspectratio]{images/object-detect/rcnn_3.png}
     \end{figure}
-\end{frame}
-
-\begin{frame}{Evolution of R-CNN}
-    \begin{itemize}
-        \item \textbf{R-CNN} inspired a series of improved models:
-        \begin{itemize}
-            \item \textbf{Fast R-CNN}: Performs feature extraction for all region proposals in a single forward pass, greatly increasing speed and efficiency.
-            \item \textbf{Faster R-CNN}: Introduces a \textbf{Region Proposal Network (RPN)} to generate region proposals, making the process end-to-end and even faster.
-            \item \textbf{Mask R-CNN}: Extends Faster R-CNN by adding a branch for predicting segmentation masks, enabling instance segmentation.
-        \end{itemize}
-        \item These advancements have made deep learning-based object detection both faster and more accurate.
-    \end{itemize}
 \end{frame}

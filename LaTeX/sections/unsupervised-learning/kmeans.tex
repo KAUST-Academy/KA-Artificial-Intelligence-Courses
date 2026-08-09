@@ -134,10 +134,10 @@
 
 \textbf{Input:} Data $\{x_1, x_2, \ldots, x_n\}$ and number of clusters $K$
 
-\vspace{0.5em}
+\vspace{0.2em}
 \textbf{Initialize:} Randomly place $K$ cluster centers $\mu_1, \mu_2, \ldots, \mu_K$
 
-\vspace{0.5em}
+\vspace{0.2em}
 \textbf{Repeat until convergence:}
 
 \vspace{0.3em}
@@ -148,7 +148,7 @@ c_i = \arg\min_{k=1,\ldots,K} \|x_i - \mu_k\|^2
 \]
 \small (find which center is closest)
 
-\vspace{0.5em}
+\vspace{0.2em}
 \item \textbf{Update Step:} Move each center to mean of assigned points
 \[
 \mu_k = \frac{1}{|C_k|} \sum_{i \in C_k} x_i
@@ -156,7 +156,7 @@ c_i = \arg\min_{k=1,\ldots,K} \|x_i - \mu_k\|^2
 \small (average all points in cluster $k$)
 \end{enumerate}
 
-\vspace{0.5em}
+\vspace{0.2em}
 \textbf{Stop when:} Assignments don't change OR max iterations reached
 \end{tcolorbox}
 
@@ -325,7 +325,7 @@ Plot "within-cluster sum of squares" (WCSS) vs $K$
     \centering
     \begin{tikzpicture}
     \begin{axis}[
-        width=\linewidth, height=4.5cm,
+        width=0.97\linewidth, height=3.55cm,
         xlabel={\scriptsize Frequency},
         ylabel={\scriptsize Avg Spend (\$)},
         grid=major,
@@ -385,7 +385,7 @@ Plot "within-cluster sum of squares" (WCSS) vs $K$
             
             % Big Spender Box
             \begin{tcolorbox}[colback=purple!10, colframe=purple!55,
-              title=\centering\small\textbf{Big Spenders}, boxsep=2pt, left=2pt, right=2pt, top=2pt, bottom=2pt, height=2.8cm]
+              title=\centering\small\textbf{Big Spenders}, boxsep=2pt, left=2pt, right=2pt, top=2pt, bottom=2pt, height=2.55cm]
             \centering\small
             Low freq, \\high spend
             \vspace{0.3em}
@@ -410,7 +410,7 @@ Plot "within-cluster sum of squares" (WCSS) vs $K$
             
             % VIP Box
             \begin{tcolorbox}[colback=green!10, colframe=green!50!black,
-              title=\centering\small\textbf{VIP}, boxsep=2pt, left=2pt, right=2pt, top=2pt, bottom=2pt, height=2.8cm]
+              title=\centering\small\textbf{VIP}, boxsep=2pt, left=2pt, right=2pt, top=2pt, bottom=2pt, height=2.55cm]
             \centering\small
             High freq, \\high spend
             \vspace{0.3em}
@@ -430,7 +430,7 @@ Plot "within-cluster sum of squares" (WCSS) vs $K$
 
 % \vspace{1em}
 \centering
-\begin{tikzpicture}[scale=0.65]
+\begin{tikzpicture}[scale=0.65, transform shape]
     % --- Step 1: Raw Documents (Left) ---
     \node[font=\bfseries] at (1, 4.2) {1. Input};
     
@@ -499,7 +499,7 @@ Plot "within-cluster sum of squares" (WCSS) vs $K$
 \centering
 \begin{tikzpicture}[scale=0.7]
     \begin{axis}[
-        width=5.5cm, height=4cm,
+        width=5.0cm, height=3.6cm,
         grid=major,
         xmin=-3, xmax=3,
         ymin=-3, ymax=3,
@@ -526,7 +526,7 @@ Plot "within-cluster sum of squares" (WCSS) vs $K$
 \centering
 \begin{tikzpicture}[scale=0.7]
     \begin{axis}[
-        width=5.5cm, height=4cm,
+        width=5.0cm, height=3.6cm,
         grid=major,
         xmin=-3, xmax=5,
         ymin=-2, ymax=3,

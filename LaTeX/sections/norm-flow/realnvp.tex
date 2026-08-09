@@ -11,18 +11,22 @@
         \begin{itemize}
             \item Partition the variables $z$ into two disjoint subsets.
             \item $x_{1:d} = z_{1:d}$
-            \item $x_{d+1:n} = z_{d+1:n} \bigodot \exp\left(F(z_{1:d})\right) + H(z_{1:d})$, where $F$ and $H$ are neural networks.
+            \item $x_{d+1:n} = z_{d+1:n} \bigodot \exp\left(F(z_{1:d})\right) + H(z_{1:d})$, where $F$ and $H$ are neural networks. Writing the scale as $\beta = \exp(F(z_{1:d}))$ keeps it positive.
         \end{itemize}
-        \begin{figure}
-            \centering
-            \includegraphics[height=0.4\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_realnvp.png}
-        \end{figure}
         \item Allows modeling of volume changes, increasing flexibility.
     \end{itemize}
     \framebreak
+    \begin{minipage}{\linewidth}
+    \begin{figure}
+        \centering
+        \includegraphics[height=0.7\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_realnvp.png}
+        \caption*{\tiny Source: Hao Dong, ``Deep Generative Models'' (Peking University), Normalising Flow Models Part~2, slide~20}
+    \end{figure}
+    \end{minipage}
+    \framebreak
     \item \textbf{Benefits:}
     \begin{itemize}
-        \item Efficient computation of the Jacobian determinant due to the triangular structure.
+        \item Efficient computation of the Jacobian determinant due to the triangular structure: $\log \left| \det J_G \right| = \sum_{i=d+1}^{n} F_i(z_{1:d})$.
         \item Supports exact likelihood estimation and sampling.
     \end{itemize}
     \item \textbf{Implementation Details:}
@@ -38,6 +42,6 @@
 \begin{figure}
     \centering
     \includegraphics[height=0.8\textheight, width=\textwidth, keepaspectratio]{images/norm-flow/nfm_realnvp_results.png}
-    \caption*{Real NVP generated samples}
+    \caption*{Real NVP: dataset examples (left of each pair) vs. model samples (right). Rows: ImageNet 64x64, CelebA, LSUN bedroom (Dinh et al., 2016).}
 \end{figure}
 \end{frame}

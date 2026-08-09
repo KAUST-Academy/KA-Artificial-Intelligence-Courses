@@ -1,5 +1,4 @@
 % --- Quantization ---
-% ========== Part 3: Quantization ==========
 \begin{frame}[plain]
   \centering
   \vfill
@@ -7,7 +6,8 @@
   \vfill
 \end{frame}
 
-% --- Part 3 narrative from Wang \& Spindler, NVIDIA Technical Blog (2025): model quantization concepts ---
+% Narrative and Figures 1, 2, 4 in this section follow Wang \& Spindler,
+% "Model Quantization: Concepts, Methods, and Why It Matters", NVIDIA blog (2025).
 
 \begin{frame}{Quantization}
   Quantization is a \textbf{key} compression technique for \textbf{LLMs} and \textbf{large transformers} to fit on \textbf{constrained hardware}. \newline
@@ -32,13 +32,33 @@
     \column{0.46\textwidth}
     \begin{itemize}\footnotesize
       \item[\textcolor{red}{$\blacktriangleright$}] Floating point formats use their bits to store three parts: \textbf{sign} (positive/negative), \textbf{exponent} (size/range), and \textbf{mantissa} (precision of the value). For example, FP8 E4M3 uses 4 bits for the exponent and 3 bits for the mantissa.
-      \item[\textcolor{red}{$\blacktriangleright$}] These numbers are represented as $x = (-1)^{\mathrm{sign}} \cdot 2^{\mathrm{exponent}} \cdot \mathrm{mantissa}$.
+      \item[\textcolor{red}{$\blacktriangleright$}] With $e$ exponent bits and $m$ mantissa bits, a normal value is $x = (-1)^{s} \cdot 2^{E-\beta} \cdot \left(1 + M/2^{m}\right)$, where $E$ and $M$ are the stored exponent and mantissa fields and $\beta = 2^{e-1}-1$ is the \textbf{exponent bias}. The bias is what allows exponents below zero, and the leading $1$ is implicit rather than stored.
       \item[\textcolor{red}{$\blacktriangleright$}] Typical formats: FP32, FP16, BF16, FP8, and FP4. Main difference is how much range and precision you get: higher precision means more accurate numbers, but also more memory and compute.
     \end{itemize}
     \column{0.52\textwidth}
     \centering
     \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/inference-optimisation/nvidia_blog_quant_fig1_fp_formats.png}\\[-0.2em]
-    {\scriptsize Figure: FP16, BF16, FP8, FP4 layouts.}
+    {\scriptsize Figure: FP16, BF16, FP8 and FP4 layouts with their ranges. Reference: Wang \& Spindler, NVIDIA Technical Blog (2025), Figure 1.}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Affine vs.\ Symmetric Quantization}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.47\textwidth}
+    \begin{itemize}\footnotesize
+      \item[\textcolor{red}{$\blacktriangleright$}] Quantization maps $x \in [\alpha,\beta]$ to a low-precision $x_q \in [\alpha_q,\beta_q]$ using two parameters: the \textbf{scale} $s$, a positive float setting the step size, and the \textbf{zero-point} $z$, which fixes where real zero lands:
+        \[
+          x_q = \mathrm{clip}\big(\mathrm{round}(x/s + z),\, \alpha_q, \beta_q\big)
+        \]
+        and dequantizing gives $x \approx s\,(x_q - z)$.
+      \item[\textcolor{red}{$\blacktriangleright$}] Mapping zero \emph{exactly} matters because operators such as padding insert real zeros; a zero that drifts becomes a systematic error.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Symmetric} quantization fixes $z{=}0$, leaving $x_q = \mathrm{clip}(\mathrm{round}(x/s), \alpha_q, \beta_q)$ and $x \approx s\,x_q$: fewer additions at run time, and the scheme TensorRT and Model Optimizer use.
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Rounding} and \textbf{clipping} both lose information, and dequantizing does not recover it.
+    \end{itemize}
+    \column{0.51\textwidth}
+    \centering
+    \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/inference-optimisation/nvidia_blog_quant_fig2_affine_symmetric.png}\\[-0.2em]
+    {\scriptsize Figure: affine vs.\ symmetric quantization. Reference: Wang \& Spindler, NVIDIA Technical Blog (2025), Figure 2.}
   \end{columns}
 \end{frame}
 
@@ -46,40 +66,27 @@
   \begin{columns}[T,onlytextwidth]
     \column{0.42\textwidth}
     \begin{itemize}\footnotesize
+      \item[\textcolor{red}{$\blacktriangleright$}] How many $(s,z)$ pairs to keep, and over what span of the tensor each one applies:
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Per-tensor / per-layer:} one $(s,z)$ for the whole tensor: simplest, smallest metadata, can mis-handle heterogeneous ranges.
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Per-channel:} separate parameters per channel (e.g.\ conv channels): isolates \textbf{outliers} to their channel.
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Per-block / per-group:} parameters per sub-block: finer control when mass varies inside a tensor.
+      \item[\textcolor{red}{$\blacktriangleright$}] Finer granularity tracks the data better but stores more scales, so the choice is a memory-versus-accuracy trade like the bit-width itself.
     \end{itemize}
     \column{0.56\textwidth}
     \centering
     \includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{images/inference-optimisation/nvidia_blog_quant_fig4_granularity.png}\\[-0.2em]
-    {\scriptsize Figure: per-tensor, per-channel, per-block.}
+    {\scriptsize Figure: per-tensor, per-channel and per-block granularity. Reference: Wang \& Spindler, NVIDIA Technical Blog (2025), Figure 4.}
   \end{columns}
 \end{frame}
-
-% \begin{frame}{Affine vs.\ Symmetric Quantization}
-%   \begin{columns}[T,onlytextwidth]
-%     \column{0.44\textwidth}
-%     \begin{itemize}\itemsep0.28em
-%       \item[\textcolor{red}{$\blacktriangleright$}] Map $x \in [\alpha,\beta]$ to quantized $x_q \in [\alpha_q,\beta_q]$ using \textbf{scale} $s$ and (for affine) \textbf{zero-point} $z$ so real zero maps exactly---useful with zero-padded ops.
-%       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Symmetric:} $z{=}0$; simpler and fewer adds; \textbf{TensorRT} and \textbf{Model Optimizer} focus on symmetric schemes in practice.
-%       \item[\textcolor{red}{$\blacktriangleright$}] Rounding and \textbf{clipping} introduce error in both directions (quantize / dequantize).
-%     \end{itemize}
-%     \column{0.54\textwidth}
-%     \centering
-%     \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/inference-optimisation/nvidia_blog_quant_fig2_affine_symmetric.png}\\[-0.2em]
-%     {\scriptsize Figure~2: affine vs.\ symmetric (same blog).}
-%   \end{columns}
-% \end{frame}
 
 \begin{frame}{Quantization-Aware Training (QAT)}
   \begin{itemize}\itemsep0.32em
     \item[\textcolor{red}{$\blacktriangleright$}] Bake quantization into training: forward/backward see \textbf{fake-quant} (quantize then dequantize) while master weights stay high precision for optimiser steps.
     \item[\textcolor{red}{$\blacktriangleright$}] Weights adapt to \textbf{rounding/clipping} error; fake-quant modules often \textbf{frozen} while weights are fine-tuned.
+    \item[\textcolor{red}{$\blacktriangleright$}] One obstacle: $\mathrm{round}(\cdot)$ has zero gradient almost everywhere, so a naive backward pass would stop learning. QAT uses the \textbf{straight-through estimator}: the rounding step is treated as the identity on the backward pass, passing the incoming gradient through unchanged.
+    \item[\textcolor{red}{$\blacktriangleright$}] The result costs training compute that post-training methods do not, and is worth it mainly at the low bit-widths where post-training quantization starts to lose accuracy.
   \end{itemize}
 \end{frame}
-
-  % Two main approaches to post-training quantization (PTQ):
 
 \begin{frame}{PTQ: Weight-Only and Weight+Activation Quantization (Overview)}
   \begin{itemize}\itemsep0.32em

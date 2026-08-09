@@ -17,8 +17,8 @@
         \end{itemize}
         \item<4-> The full training objective is derived from ELBO:
 
-        $\mathcal{L}\text{ELBO} = \sum_t \mathbb{E}[D_{KL}(q(x_{t-1}|x_t, x_0) \| p_\theta(x_{t-1}|x_t))]$
+        {\small $\mathcal{L}_{\text{ELBO}} = \mathbb{E}[-\log p_\theta(\mathbf{x}_0|\mathbf{x}_1)] + \sum_{t>1} \mathbb{E}[D_{KL}(q(\mathbf{x}_{t-1}|\mathbf{x}_t, \mathbf{x}_0) \| p_\theta(\mathbf{x}_{t-1}|\mathbf{x}_t))] + D_{KL}(q(\mathbf{x}_T|\mathbf{x}_0) \| p(\mathbf{x}_T))$}
 
-        \item<5-> \textbf{Training:} Maximize the ELBO to train the model, which encourages both accurate reconstruction and regularization of the latent space.
+        \item<5-> \textbf{Training:} Minimize $\mathcal{L}_{\text{ELBO}}$ (equivalently, maximize the ELBO), which encourages both accurate reconstruction and regularization of the latent space.
     \end{itemize}
 \end{frame}

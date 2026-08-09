@@ -6,7 +6,8 @@
 \begin{frame}{What is Sound?}
     \begin{figure}
         \centering
-        \fetchconvertimage{https://letstalkscience.ca/sites/default/files/styles/x_large/public/2020-01/Sound_waves_and_particles.png}{images/audio-nlp/sound-waves.png}{width=\textwidth,height=0.6\textheight,keepaspectratio}
+        \includegraphics[width=\textwidth,height=0.48\textheight,keepaspectratio]{images/audio-nlp/sound-waves.png}
+        \caption*{\scriptsize Source: Let's Talk Science, ``What is Sound and How do we Hear it?''}
     \end{figure}
     \begin{itemize}
         % \setlength{\itemsep}{1.5em}
@@ -20,6 +21,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.6\textwidth]{images/audio-nlp/sound-props.png}
+        \caption*{\scriptsize Source: \href{https://openlab.citytech.cuny.edu/comd1112-fall2020-noriega/sound-and-audio/}{``Sound and Audio,'' COMD1112, OpenLab at City Tech, CUNY}}
     \end{figure}
     \begin{itemize}
         \item \textbf{Waveform} $x(t)$: The shape of the sound wave, representing how air pressure changes over time.
@@ -55,13 +57,15 @@
         \item \textbf{Quantization}: The process of mapping continuous amplitude values to a finite set of discrete levels. This process introduces \textbf{quantization noise}, which is a form of error.
     \end{itemize}
     \begin{center}
-        \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio]{images/audio-nlp-eval/nyquist.png}
+        \includegraphics[width=\textwidth,height=0.5\textheight,keepaspectratio]{images/audio-nlp-eval/nyquist.png}\\
+        {\scriptsize Source: Wikipedia, ``Nyquist rate''.}
     \end{center}
 \framebreak
     \begin{itemize}
         \item \textbf{Aliasing}: If the sampling rate is too low, higher frequencies are misrepresented as lower frequencies, causing distortion. 
         \begin{center}
-            \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/audio-nlp/aliasing.png}
+            \includegraphics[width=\textwidth,height=0.82\textheight,keepaspectratio]{images/audio-nlp/aliasing.png}\\
+            {\scriptsize Source: M. Waldrep (Dr.~AIX), ``Aliasing and Foldover: A Primer,'' Real HD-Audio, 2014.}
         \end{center}
     \end{itemize}
 \framebreak

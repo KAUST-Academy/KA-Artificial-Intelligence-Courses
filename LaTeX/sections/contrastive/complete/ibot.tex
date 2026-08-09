@@ -13,6 +13,7 @@
     \centering
     \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_91_1_img.png}
 \end{figure}
+{\footnotesize Source: Zhou et al., ``iBOT: Image BERT Pre-Training with Online Tokenizer,'' ICLR 2022, Fig.~3.}
 
 \framebreak
 
@@ -43,23 +44,24 @@
 \framebreak
 
 \begin{columns}[b]
-    \column{0.4\textwidth}
+    \column{0.35\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_92_2_img.png}
+            \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/contrastive/slide_92_2_img.png}
         \end{figure}
-    \column{0.7\textwidth}
+    \column{0.65\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_92_1_img.png}
+            \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/contrastive/slide_92_1_img.png}
         \end{figure}
 \end{columns}
+{\footnotesize Source: Zhou et al., ``iBOT: Image BERT Pre-Training with Online Tokenizer,'' ICLR 2022, Fig.~1 (left) and Table~6 (right).}
 
 \framebreak
 
 \textbf{Why is this cool?}
 \begin{itemize}
     \item Mixing MIM and distillation helps the model learn both big-picture (global) and detailed (local) features.
-    \item The model can do zero-shot classification—meaning it can recognize new things without extra training—by using prompts, just like CLIP!
+    \item iBOT gives strong linear-probe and fine-tuning results on ImageNet-1K (82.3\% linear, 87.8\% fine-tuned) and transfers well to dense tasks such as detection and segmentation.
 \end{itemize}
 \end{frame}

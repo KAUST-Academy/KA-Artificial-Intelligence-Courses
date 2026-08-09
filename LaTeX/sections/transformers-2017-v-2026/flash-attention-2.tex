@@ -1,12 +1,9 @@
 \section{FlashAttention}
-\begin{frame}{}
-    \LARGE \textbf{FlashAttention}
-\end{frame}
 
 \begin{frame}{FlashAttention: The Core Idea}
     \begin{itemize}\itemsep0.4em
         \item Standard attention writes the full $N \times N$ score matrix to GPU main memory (HBM), reads it back for the softmax, then reads it again to multiply with $V$: most of the time goes to memory traffic, not math.
-        \item On-chip SRAM is roughly an order of magnitude faster than HBM but only megabytes in size.
+        \item On-chip SRAM is roughly an order of magnitude faster than HBM but only megabytes in size (on an A100, about 19\,TB/s across $\sim$20\,MB of SRAM against 1.5--2.0\,TB/s across 40--80\,GB of HBM).
         \item FlashAttention (Dao et al., 2022) splits $Q$, $K$, $V$ into tiles that fit in SRAM and computes attention block by block with a running softmax, never materializing the $N \times N$ matrix.
         \item The output is exact (no approximation), memory grows linearly instead of quadratically with sequence length, and wall-clock time drops because IO shrinks.
     \end{itemize}
@@ -20,23 +17,22 @@
 
 \begin{frame}{FlashAttention-2: Overview}
     \begin{itemize}
-        \item \textbf{Paper:} Dao et al. (2023)
-        \item \textbf{Goal:} Memory-efficient and fast attention computation
+        \item \textbf{Paper:} Tri Dao (2023), \href{https://arxiv.org/abs/2307.08691}{arXiv:2307.08691}
         \item \textbf{Highlights:}
         \begin{itemize}
-            \item Up to 73\% of theoretical peak FLOPs (72\% model FLOPs utilization on A100)
-            \item 2--4$\times$ faster than standard attention
+            \item 50--73\% of theoretical peak FLOPs/s on A100, against 25--40\% for FlashAttention-1
+            \item Around 2$\times$ faster than FlashAttention-1, itself 2--4$\times$ faster than optimized standard attention
         \end{itemize}
         \item \textbf{Techniques:}
         \begin{itemize}
-            \item Multi-query and grouped-query attention
-            \item Hardware-aware scheduling
-            \item Supports long context windows (32k+ tokens)
+            \item Fewer non-matmul FLOPs
+            \item Parallelism over sequence length, not only batch and heads
+            \item Work partitioning across warps to cut shared-memory traffic
         \end{itemize}
         \item \textbf{Adoption:}
         \begin{itemize}
-            \item Used in OpenAI GPT-4, Mistral, LLaMA 3
-            \item Critical for scaling to trillion-parameter models efficiently
+            \item Widely used in open training and serving stacks (Mistral among them)
+            \item The payoff is context length: 16k-context training at the price of 8k
         \end{itemize}
     \end{itemize}
 \end{frame}
@@ -63,33 +59,23 @@
         \end{itemize}
         \item \textbf{New Features:}
         \begin{itemize}
-            \item Supports head dimensions up to 256.
-            \item Enables multi-query and grouped-query attention.
+            \item Supports head dimensions up to 256 (FlashAttention-1 stopped at 128).
+            \item Supports multi-query and grouped-query attention, so kernel speed and a smaller cache combine.
         \end{itemize}
     \end{itemize}
 \end{frame}
 
-\begin{frame}[allowframebreaks]{FlashAttention-2: Architecture}
+\begin{frame}[allowframebreaks]{FlashAttention-2: Tiling and Work Partitioning}
     \begin{figure}
         \centering
-        \includegraphics[height=0.88\textheight,width=1.08\textwidth,keepaspectratio]{images/recent-advance/flash-attention-2-arch.png}
+        \includegraphics[height=0.80\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/flash-attention-2-arch.png}
+        \caption*{\scriptsize Tiled forward pass: attention is computed against one $K$/$V$ block at a time and the output rescaled to the correct denominator, so the $N \times N$ matrix never reaches HBM. Dao, ``FlashAttention-2,'' \href{https://arxiv.org/abs/2307.08691}{arXiv:2307.08691}, Figure~1.}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[height=0.88\textheight,width=1.08\textwidth,keepaspectratio]{images/recent-advance/flash-attention-2.png}
-    \end{figure}
-\framebreak
-    \begin{itemize}
-        \item \textbf{MQA and GQA Support:} Works with the shared-KV attention variants from the previous section, combining kernel speed with a smaller cache.
-        \item \textbf{Hardware-Aware Scheduling:} Optimizes GPU scheduling to maximize throughput and minimize latency.
-        \item \textbf{Long Context Support:} Efficiently handles long sequences (32k+ tokens) with minimal memory overhead.
-    \end{itemize}
-\framebreak
-    \begin{figure}
-        \centering
-        \includegraphics[height=0.82\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/flash-attention-2-iterative-update.png}
-        \caption*{Iterative update of output in FlashAttention-2 with Cn = 3 iterations.}
+        \includegraphics[height=0.80\textheight,width=\textwidth,keepaspectratio]{images/recent-advance/flash-attention-2.png}
+        \caption*{\scriptsize Work partitioning between warps in the forward pass. FlashAttention-1 (a) splits $K$ and $V$ across warps and must combine partial results through shared memory; FlashAttention-2 (b) splits $Q$ instead, so no warp-to-warp communication is needed. Dao, ``FlashAttention-2,'' \href{https://arxiv.org/abs/2307.08691}{arXiv:2307.08691}, Figure~3.}
     \end{figure}
 \end{frame}
 
@@ -98,14 +84,14 @@
         \item \textbf{Speed:}
         \begin{itemize}
             \item Up to 2$\times$ faster than FlashAttention-1, 9$\times$ faster than standard PyTorch attention.
-            \item Achieves up to 335 TFLOPs/s on H100 GPUs.
+            \item Up to 230 TFLOPs/s on A100 and 335 TFLOPs/s on H100.
         \end{itemize}
         \item \textbf{End-to-End Training:}
         \begin{itemize}
-            \item 1.3$\times$ speedup over optimized FlashAttention models.
-            \item Up to 225 TFLOPs/s on A100 GPU (72\% model FLOPs utilization).
+            \item 1.3$\times$ speedup over an already FlashAttention-optimized model.
+            \item Up to 225 TFLOPs/s per A100 (72\% model FLOPs utilization).
         \end{itemize}
-        \item \textbf{Example Results:}
+        \item \textbf{Example Results} (training speed, TFLOPs/s per GPU on 8$\times$A100)\textbf{:}
             \begin{tabular}{lccc}
                 \toprule
                 Model & Baseline & FlashAttention & FlashAttention-2 \\
@@ -116,6 +102,6 @@
                 GPT3-2.7B 8k & 80 & 175 & 225 \\
                 \bottomrule
             \end{tabular}
-        \item \footnotesize{Baseline: Megatron-LM without FlashAttention.}
+        \item[] {\footnotesize Baseline: Megatron-LM without FlashAttention. Dao, \href{https://arxiv.org/abs/2307.08691}{arXiv:2307.08691}, Table 1.}
     \end{itemize}
 \end{frame}

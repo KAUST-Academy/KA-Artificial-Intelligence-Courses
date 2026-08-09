@@ -111,7 +111,7 @@
     \begin{columns}[T]
         % Left column: Text content
         \begin{column}{0.48\textwidth}
-            \item \textbf{Definition}: A differentiable function $J(\theta)$ that quantifies the \textit{cost} of the model's errors.
+            \textbf{Definition}: A differentiable function $J(\theta)$ that quantifies the \textit{cost} of the model's errors.
             \vspace{0.5em}
             
             \textbf{Goal:} Find model parameters $\theta$ that minimize $J(\theta)$.
@@ -305,7 +305,7 @@
                 % \node[above, orange] at (3.2, 1.7) {\footnotesize Slope = $\nabla J(\theta_t)$};
                 
                 % Arrow showing update direction
-                \draw[->, !60!black, line width=2pt]
+                \draw[->, orange!60!black, line width=2pt]
                 (current) -- ++(-0.6, -0.5)
                 node[left=15pt, above=8pt, font=\footnotesize] {$-\alpha \nabla J$};
 

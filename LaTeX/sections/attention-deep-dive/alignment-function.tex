@@ -1,19 +1,10 @@
 \section{Alignment Function}
 \begin{frame}{Alignment Function}
   \begin{itemize}
-    \item The alignment function is a crucial component of attention mechanisms, determining how much focus to place on different parts of the input sequence.
+    \item The alignment function is the component of attention that determines how much focus to place on different parts of the input sequence.
     \item It computes a score for each input token relative to the current output token being generated.
     \item The scores are then normalized (often using softmax) to create a probability distribution, indicating the relative importance of each input token.
   \end{itemize}
-\end{frame}
-
-\begin{frame}{Alignment Function}
-  \textbf{Common alignment functions include:}
-      \begin{itemize}
-        \item \textbf{Dot Product}: Computes the dot product between the query and key vectors.
-        \item \textbf{Scaled Dot Product}: Similar to dot product but scaled by the square root of the dimension of the key vectors to prevent large values that can saturate the softmax function.
-        \item \textbf{Additive Attention}: Combines the query and key vectors using a feed-forward neural network to compute the alignment scores.
-      \end{itemize}
 \end{frame}
 
 \begin{frame}{Importance of Alignment Function}
@@ -26,8 +17,9 @@
 \end{frame}
 
 \begin{frame}{Types of Alignment Functions}
+  Here $\mathbf{q}$ is the query formed from the decoder state and $\mathbf{k}$ the key formed from an encoder state; both are made explicit in the next section.
   \begin{itemize}
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Dot Product}: 
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Dot Product}:
       \begin{equation*}
         \text{score} = \mathbf{q}^\top \mathbf{k}
       \end{equation*}
@@ -35,16 +27,22 @@
       \begin{equation*}
         \text{score} = \frac{\mathbf{q}^\top \mathbf{k}}{\sqrt{d_k}}
       \end{equation*}
-      \textit{(used in Transformers to prevent softmax saturation)}
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Additive (Bahdanau) Attention}:
       \begin{equation*}
-        \text{score} = \mathbf{v}^\top \tanh(W_1 h_1 + W_2 s_t)
+        \text{score} = \mathbf{v}^\top \tanh(W_1 h_i + W_2 s_{t-1})
       \end{equation*}
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{General}:
       \begin{equation*}
-        \text{score} = \mathbf{q}^\top W_k \mathbf{k}
+        \text{score} = \mathbf{q}^\top W_a \mathbf{k}
       \end{equation*}
   \end{itemize}
-  \vspace{1em}
-  \textbf{Each function balances efficiency vs expressiveness.}
+\end{frame}
+
+\begin{frame}{Choosing an Alignment Function}
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Dot product} adds no parameters and reduces to a single matrix product, so it is the cheapest, but it requires $\mathbf{q}$ and $\mathbf{k}$ to have the same dimension.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Scaling by $\sqrt{d_k}$} matters because, for independent components with zero mean and unit variance, $\mathbf{q}^\top\mathbf{k}$ has variance $d_k$. Left unscaled, the scores grow with dimension and push the softmax into a region where its gradients are vanishingly small.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Additive attention} passes the pair through a hidden layer, so query and key need not share a dimension, at the cost of an extra weight matrix and a nonlinearity per score.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{General} sits between the two: one learned matrix $W_a$ bridges mismatched dimensions while keeping the score a single product.
+  \end{itemize}
 \end{frame}

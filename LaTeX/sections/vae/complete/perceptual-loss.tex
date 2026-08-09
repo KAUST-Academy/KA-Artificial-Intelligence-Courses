@@ -23,7 +23,7 @@
     \[
     \mathcal{L} \;=\; \mathcal{L}_{\mathrm{perc}}(x, \hat{x}) \;+\; D_{\mathrm{KL}}\!\left( q(z \mid x) \,\|\, p(z) \right)
     \]
-    \item \textbf{Modern practice:} the autoencoders behind large generative systems (VQGAN, Stable Diffusion's VAE) combine pixel, \textbf{perceptual (LPIPS)}, and \textbf{adversarial} losses to stay sharp at strong compression.
+    \item \textbf{Modern practice:} the autoencoders behind large generative systems (VQGAN, Stable Diffusion's VAE) combine pixel, \textbf{perceptual (LPIPS)}, and \textbf{adversarial} losses (a learned discriminator penalizes unrealistic reconstructions; covered later in the course) to stay sharp at strong compression.
     \item \textbf{Trade-offs:} the objective is no longer a clean likelihood bound, and the pretrained network's biases decide what counts as ``similar''; but for visual quality the gain is large.
 \end{itemize}
 \end{frame}

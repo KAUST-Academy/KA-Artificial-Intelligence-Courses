@@ -91,7 +91,7 @@
 \begin{itemize}
     \item \textbf{Classical flows (this lecture):} discrete invertible layers, exact likelihood, but constrained architectures and many layers for expressiveness.
     \item \textbf{CNF with maximum likelihood:} free architecture, but training requires ODE simulation.
-    \item \textbf{Diffusion models (covered in the diffusion lecture):} learn to reverse a gradual noising process; sampling follows a \textbf{curved} path and traditionally needs many steps.
+    \item \textbf{Diffusion models (covered later):} learn to reverse a gradual noising process; sampling follows a \textbf{curved} path and traditionally needs many steps.
     \item \textbf{Flow matching:} keeps the free architecture, trains by regression (no simulation), and samples with a deterministic ODE along \textbf{straighter} paths.
     \item The families are close relatives: the diffusion (variance-preserving) path is one particular choice of probability path in the flow-matching framework, and score-based training corresponds to a different parameterization of the same object.
 \end{itemize}
@@ -99,7 +99,7 @@
 
 \begin{frame}{Why Flow Matching Is the Current State of the Art}
 \begin{itemize}
-    \item \textbf{Stable Diffusion 3} (Esser et al., 2024): a rectified-flow transformer; the paper's ablations found that the linear flow-matching path outperforms diffusion-style objectives at scale for text-to-image generation.
+    \item \textbf{Stable Diffusion 3} (Esser et al., 2024): a rectified-flow transformer. Its large-scale ablation found that a rectified-flow path beats established diffusion formulations only once the timestep sampling is biased towards intermediate $t$ (logit-normal sampling); with uniform $t$ it does not.
     \item \textbf{FLUX.1} (Black Forest Labs, 2024): open-weight rectified-flow transformer, among the strongest open text-to-image models at release.
     \item \textbf{Meta Movie Gen} (2024): flow matching as the training objective for large-scale video generation.
     \item \textbf{Voicebox} (Meta, 2023): flow matching for speech generation and editing.

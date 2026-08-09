@@ -1,79 +1,42 @@
 \section{Reinforcement Learning for Reasoning Skill Refinement}
 \begin{frame}[allowframebreaks]{}
     \LARGE Reinforcement Learning for Reasoning Skill Refinement
-\framebreak
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Reinforcement Learning for Reasoning Skill Refinement}
-    \begin{itemize}
-        \item \textbf{What is Reinforcement Learning for Reasoning Skill Refinement?}
-        \begin{itemize}
-            \item A method to enhance reasoning skills in LLMs through reinforcement learning.
-            \item Focuses on refining the model's ability to perform reasoning tasks.
-        \end{itemize}
-        \item \textbf{How does it work?}
-        \begin{itemize}
-            \item Uses a reward signal to guide the model towards better reasoning performance.
-            \item Involves training the model on a variety of reasoning tasks with feedback.
-        \end{itemize}
+\begin{frame}{Reinforcement Learning with Verifiable Rewards}
+    \begin{itemize}\itemsep0.3em
+        \item Reasoning tasks have a property alignment tasks lack: correctness can be \emph{checked}. A final answer matches the key, unit tests pass, a proof term type-checks.
+        \item \textbf{RL with verifiable rewards (RLVR)} puts that checker where the learned reward model used to be: the reward is a program, not a network.
+        \item One step: sample a group of complete traces for a prompt, run the checker on each, then shift probability mass toward the traces that passed.
+        \item Upside: no reward model to train or hold in memory, nothing to hack short of the checker itself, and a reward that stays correct however far the policy drifts from the SFT model.
+        \item Downside: one bit per trace, and nothing until it finishes, so credit for a fifty-step derivation rests on the last line. The method also reaches only as far as checkers do, leaving open-ended writing and judgement calls to preference-based training.
     \end{itemize}
-    
-    \framebreak
-    \begin{itemize}
-        \item \textbf{Why is it important?}
-        \begin{itemize}
-            \item Enhances the model's reasoning capabilities, making it more effective for complex tasks.
-            \item Addresses the limitations of traditional training methods by focusing on skill refinement.
-        \end{itemize}
-        \item \textbf{Challenges}
-        \begin{itemize}
-            \item Requires a well-defined reward signal to effectively guide the learning process.
-            \item Balancing exploration and exploitation during training can be difficult.
-        \end{itemize}
-    \end{itemize}
+\end{frame}
 
-    \framebreak
+\begin{frame}[allowframebreaks]{RLVR with Very Few Training Examples}
         \begin{figure}[h]
             \centering
             \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/lrm+moe/paper-rl-for-reasoning-llm.png}
-            \caption*{Source: \href{https://arxiv.org/pdf/2504.20571}{Wang et al. (2025)}}
+            \caption*{Source: \href{https://arxiv.org/abs/2504.20571}{Wang et al. (2025)}}
         \end{figure}
     \framebreak
         \begin{figure}[h]
             \centering
             \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/lrm+moe/rlvr-dataset-result.png}
-            \caption*{Source: \href{https://arxiv.org/pdf/2504.20571}{Wang et al. (2025)}}
+            \caption*{Source: \href{https://arxiv.org/abs/2504.20571}{Wang et al. (2025)}, Fig.~1.}
         \end{figure}
     \framebreak
         \begin{figure}[h]
             \centering
             \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/lrm+moe/rlvr-result.png}
-            \caption*{Model's response to training example $\pi_1$ and a selected MATH500 problem. Green/Red are used for marking Correct/Wrong answers. Source: \href{https://arxiv.org/pdf/2504.20571}{Wang et al. (2025)}}
+            \caption*{Model's response to training example $\pi_1$ and a selected MATH500 problem. Green/Red are used for marking Correct/Wrong answers. Source: \href{https://arxiv.org/abs/2504.20571}{Wang et al. (2025)}, Fig.~3.}
         \end{figure}
     \framebreak
         \begin{figure}[h]
             \centering
-            \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/lrm+moe/rlvr-viability.png}
-            \caption*{1(few)-shot RLVR is viable for different models and RL algorithms. Source: \href{https://arxiv.org/pdf/2504.20571}{Wang et al. (2025)}}
+            \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{images/lrm+moe/rlvr-viability.png}
+            \caption*{1(few)-shot RLVR is viable for different models and RL algorithms. Source: \href{https://arxiv.org/abs/2504.20571}{Wang et al. (2025)}, Tab.~4.}
         \end{figure}
-    \framebreak
-    \begin{itemize}
-        \item \textbf{Applications}
-        \begin{itemize}
-            \item Can be applied to various reasoning tasks, such as logical reasoning, mathematical problem solving, and decision-making.
-            \item Useful in scenarios where reasoning skills are critical for task success.
-        \end{itemize}
-        \item \textbf{Advanced Techniques}
-        \begin{itemize}
-            \item Combining a reward model with a verifier model to ensure both performance and correctness.
-            \item Rewarding attributes such as truthfulness, logical soundness, or helpfulness during training.
-        \end{itemize}
-        \item \textbf{Future Directions}
-        \begin{itemize}
-            \item Further research is needed to improve the efficiency and effectiveness of reinforcement learning for reasoning skill refinement.
-            \item Exploring different reward structures and training paradigms to enhance model performance.
-        \end{itemize}
-    \end{itemize}
 \end{frame}
 
 \begin{frame}{Outcome Rewards vs Process Rewards}

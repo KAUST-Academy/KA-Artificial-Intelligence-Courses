@@ -12,13 +12,13 @@
 
   \vspace{0.5em}
   \begin{itemize}
-    \item[$\blacktriangleright$] The hidden width is typically $4 \times d_{\text{model}}$, so most of a Transformer's parameters sit in these blocks.
+    \item[$\blacktriangleright$] The hidden width is typically $4 \times d_{\text{model}}$, so these blocks hold the largest single share of a Transformer's parameters (about 40\% of the 65M base model, and roughly two thirds of the non-embedding parameters in modern decoder-only stacks).
     \item[$\blacktriangleright$] Attention mixes information across tokens; the feed-forward network transforms each token on its own, with the same weights at every position.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{2026: From ReLU to SwiGLU}
-  \textbf{Gated Linear Units} (Shazeer, 2020)\textbf{:} replace the single hidden activation with the product of a value path and a gate path.
+  \textbf{GLU variants} (Shazeer, 2020)\textbf{:} replace the single hidden activation with the product of a value path and a gate path, using the gated linear unit of Dauphin et al.\ (2016) inside the feed-forward block.
   \[
     \mathrm{FFN}_{\text{SwiGLU}}(x) = \big(\mathrm{SiLU}(x W_1) \odot x W_3\big)\, W_2,
     \qquad

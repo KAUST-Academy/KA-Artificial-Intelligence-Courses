@@ -38,8 +38,9 @@
     \begin{itemize}
         \item Transformers were introduced in 2017 for language tasks.
         \item They use self-attention to look at all parts of a sequence at once.
-        \item This makes them fast and good at handling long texts or sequences.
-        \item Famous models like GPT-3 and BERT use this idea.
+        \item Because every position is visible by default, an autoregressive Transformer needs a \textbf{causal mask} so that position $i$ can only attend to positions $< i$.
+        \item Training then parallelizes over all positions at once, unlike an RNN. Generation is still one token at a time.
+        \item The GPT family is the standard autoregressive example. Masked bidirectional encoders such as BERT are \emph{not} autoregressive: they predict masked tokens from both sides, so they cannot be sampled from left to right.
         \item Transformers can also be used for images and audio, not just text.
     \end{itemize}
 

@@ -8,6 +8,7 @@
       \midrule
       Stability & \checkmark\,More stable & \ding{55}\,Less stable \\
       Gradient flow & \checkmark\,Better & \ding{55}\,Can explode/vanish \\
+      LR warm-up & \checkmark\,Can be dropped & \ding{55}\,Needed at the start \\
       Used in & GPT-3, T5 & Original Transformer \\
       \bottomrule
     \end{tabular}
@@ -19,20 +20,33 @@
   \textbf{Pre-LN:} LayerNorm applied \textbf{before} sublayers
 
   \textbf{Post-LN:} LayerNorm applied \textbf{after} sublayers
+
+  \vspace{0.5em}
+  {\footnotesize With Post-LN the expected gradients near the output layer are large at initialization, which is why a learning-rate warm-up stage is needed; moving the norm inside the residual branch removes that problem (Xiong et al., 2020).}
 \end{frame}
 
 \begin{frame}{Pre-LayerNorm vs.\ Post-LayerNorm}
   \centering
-  \includegraphics[width=0.8\paperwidth,height=0.8\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_post_ln_vs_pre_ln_block_diagram.png}
+  \includegraphics[width=0.8\paperwidth,height=0.72\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_post_ln_vs_pre_ln_block_diagram.png}
+
+  {\scriptsize Source: after Xiong et al., ``On Layer Normalization in the Transformer Architecture,'' ICML 2020, Fig.~1.}
 \end{frame}
 
 \begin{frame}{Pre-LayerNorm vs.\ Post-LayerNorm}
   \centering
-  \includegraphics[width=0.9\paperwidth,height=0.9\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_post_ln_vs_pre_ln_gradient_explanation.png}
-\end{frame} 
+  \includegraphics[width=0.85\paperwidth,height=0.73\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_post_ln_vs_pre_ln_gradient_explanation.png}
+
+  {\scriptsize Source: architecture diagrams from Vaswani et al., ``Attention Is All You Need,''
+  NeurIPS 2017, Fig.~1; Pre-LN block at right from Xiong et al., ICML 2020, Fig.~1(b).}
+\end{frame}
 
 \begin{frame}{Pre-LayerNorm vs.\ Post-LayerNorm}
   \centering
-    \includegraphics[width=0.9\paperwidth,height=0.9\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_post_ln_vs_pre_ln_gradient_norm_plots.png}
+  \includegraphics[width=0.78\paperwidth,height=0.48\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_post_ln_vs_pre_ln_gradient_norm_plots.png}
+
+  {\footnotesize Post-LN keeps large gradient norms in the deeper layers but attenuates them early on;
+  Pre-LN does the reverse, leaving the deepest layers undertrained.}
+
+  {\scriptsize Source: Li, Yin \& Liu, ``Mix-LN,'' ICLR 2025, Figs.~3 and 4.}
 \end{frame}
 

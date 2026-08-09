@@ -16,7 +16,7 @@
 \begin{itemize}
     \item Learns useful features from images without any labels.
     \item Helps the model understand both the big picture and small details.
-    \item Combines the strengths of contrastive learning and clustering methods.
+    \item Shows that self-distillation alone, with no labels or negatives, produces strong features.
 \end{itemize}
 
 \framebreak
@@ -25,14 +25,15 @@
     \column{0.5\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_87_1_img.jpg}
+            \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/contrastive/slide_87_1_img.jpg}
         \end{figure}
     \column{0.5\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_87_2_img.jpg}
+            \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/contrastive/slide_87_2_img.jpg}
         \end{figure}
 \end{columns}
+{\footnotesize Source: Caron et al., ``Emerging Properties in Self-Supervised Vision Transformers,'' ICCV 2021, Fig.~2.}
 
 \framebreak
 
@@ -41,7 +42,7 @@
     \item \textbf{Student and Teacher Networks:} \\
     There are two networks with the same design. The teacher is just a slowly updated version of the student (using EMA).
     \item \textbf{Multi-crop Strategy:} \\
-    The model looks at the same image in different ways—two large views and several small crops—to learn features that work at different scales.
+    The model looks at the same image in different ways (two large views and several small crops) to learn features that work at different scales.
     \item \textbf{No Negatives Needed:} \\
     Instead of comparing with negative samples, DINO uses a cross-entropy loss on soft similarity scores between the student and teacher outputs.
     \item \textbf{Avoiding Collapse:} \\
@@ -52,8 +53,9 @@
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_88_1_img.jpg}
+    \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/contrastive/slide_88_1_img.jpg}
 \end{figure}
+{\footnotesize Source: Caron et al., ``Emerging Properties in Self-Supervised Vision Transformers,'' ICCV 2021, Algorithm~1.}
 
 \framebreak
 
@@ -61,21 +63,23 @@
     \column{0.5\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_89_1_img.png}
+            \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/contrastive/slide_89_1_img.png}
         \end{figure}
     \column{0.5\textwidth}
         \begin{figure}
             \centering
-            \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_89_2_img.png}
+            \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/contrastive/slide_89_2_img.png}
         \end{figure}
 \end{columns}
+{\footnotesize Source: Caron et al., ``Emerging Properties in Self-Supervised Vision Transformers,'' ICCV 2021, Table~2.}
 
 \framebreak
 
 \begin{figure}
     \centering
-    \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/slide_90_1_img.jpg}
+    \includegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio]{images/contrastive/slide_90_1_img.jpg}
 \end{figure}
+{\footnotesize Source: Caron et al., ``Emerging Properties in Self-Supervised Vision Transformers,'' ICCV 2021, Fig.~4.}
 
 \framebreak
 

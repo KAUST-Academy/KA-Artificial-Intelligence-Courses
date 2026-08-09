@@ -1,9 +1,11 @@
+\section{GRPO: Group Relative Policy Optimization}
+
 \begin{frame}{GRPO Overview}
-    \begin{itemize}
-        \item \textbf{GRPO}: Group Relative Policy Optimization, an evolution of PPO that is more stable, efficient, and converges faster
-        \item Combines reward and preference signals, using single model for both
-        \item \textcolor{blue}{Improves safety and alignment of open-weight models}
-        \item Introduced in DeepSeekMath, used in DeepSeek-V2, DeepSeek-V3, and DeepSeek-R1
+    \begin{itemize}\itemsep0.35em
+        \item \textbf{GRPO}: Group Relative Policy Optimization, a PPO-style clipped update with the critic removed.
+        \item PPO needs a learned value network to say how good a response was \emph{expected} to be. GRPO gets that baseline for free: sample several responses to the same prompt and score each against the group's mean reward.
+        \item So one fewer network to train and hold in memory, and a baseline that cannot lag behind the policy because it is recomputed from scratch at every step.
+        \item Introduced in DeepSeekMath (Shao et al., 2024), then used for the RL stages of DeepSeek-V2, DeepSeek-V3, and DeepSeek-R1.
     \end{itemize}
 \end{frame}
 
@@ -15,52 +17,65 @@
         \begin{equation}
         \begin{split}
             J_{\text{GRPO}}(\theta) =\; & \mathbb{E}_{q \sim P(Q),\, \{o_i\}_{i=1}^G \sim \pi_{\theta_{\text{old}}}(O|q)} \Bigg[
-            \frac{1}{G} \sum_{i=1}^G \Bigg(
+            \frac{1}{G} \sum_{i=1}^G \frac{1}{|o_i|} \sum_{t=1}^{|o_i|} \Bigg\{
                 \min \Bigg(
-                    \frac{\pi_\theta(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)} A_i, \\
+                    w_{i,t}(\theta)\, \hat{A}_{i,t}, \\
                 & \qquad\qquad
-                    \text{clip}\left(\frac{\pi_\theta(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)}, 1-\epsilon, 1+\epsilon\right) A_i
+                    \text{clip}\big(w_{i,t}(\theta),\, 1-\epsilon,\, 1+\epsilon\big) \hat{A}_{i,t}
                 \Bigg)
                 - \beta D_{\text{KL}}(\pi_\theta || \pi_{\text{ref}})
-            \Bigg)
+            \Bigg\}
             \Bigg]
         \end{split}
+        \end{equation}
+        \item The importance ratio is formed \textbf{one token at a time}:
+        \begin{equation}
+            w_{i,t}(\theta) = \frac{\pi_\theta(o_{i,t} \mid q, o_{i,<t})}{\pi_{\theta_{\text{old}}}(o_{i,t} \mid q, o_{i,<t})}
         \end{equation}
     \framebreak
         \item KL divergence term:
         \begin{equation}
             D_{\text{KL}}(\pi_\theta || \pi_{\text{ref}}) =
-            \frac{\pi_{\text{ref}}(o_i|q)}{\pi_\theta(o_i|q)} - \log \frac{\pi_{\text{ref}}(o_i|q)}{\pi_\theta(o_i|q)} - 1
+            \frac{\pi_{\text{ref}}(o_{i,t} \mid q, o_{i,<t})}{\pi_\theta(o_{i,t} \mid q, o_{i,<t})} -
+            \log \frac{\pi_{\text{ref}}(o_{i,t} \mid q, o_{i,<t})}{\pi_\theta(o_{i,t} \mid q, o_{i,<t})} - 1
         \end{equation}
-        \item Advantage $A_i$ is computed using group rewards $\{r_1, r_2, \ldots, r_G\}$:
+        \item Under outcome supervision the checker fires once per response, so every token of $o_i$ inherits the same advantage, computed from the group rewards $\{r_1, r_2, \ldots, r_G\}$:
         \begin{equation}
-            A_i = \frac{r_i - \text{mean}(\{r_1, r_2, \ldots, r_G\})}{\text{std}(\{r_1, r_2, \ldots, r_G\})}
+            \hat{A}_{i,t} = \frac{r_i - \text{mean}(\{r_1, r_2, \ldots, r_G\})}{\text{std}(\{r_1, r_2, \ldots, r_G\})}
         \end{equation}
         \item $\epsilon$ and $\beta$ are hyper-parameters.
+        \item The reward is granted once, for the whole response, while the ratio and the clip act on individual tokens. That mismatch is what GSPO attacks.
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Why GRPO Is Popular for Open Reasoning Models}
-  \begin{itemize}\itemsep0.4em
+  \begin{itemize}\itemsep0.3em
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Fewer models in memory:} policy + reference (no critic, no RM when rules suffice).
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Often faster to train} than PPO-style RLHF on comparable hardware.
     \item[\textcolor{red}{$\blacktriangleright$}] Powers DeepSeekMath, DeepSeek-R1-Zero, and many open reproductions.
-    \item[\textcolor{red}{$\blacktriangleright$}] With QLoRA / optimized kernels, 8B-scale GRPO fits consumer GPUs (order-of-magnitude below naive full fine-tune).
+    \item[\textcolor{red}{$\blacktriangleright$}] Cheap is relative: efficient kernels move an 8B long-context run from many GPUs to one node, while 4-bit QLoRA at roughly 1\,GB per billion parameters puts a 1.5B run in about 5\,GB.
   \end{itemize}
-  \vspace{0.35em}
+  \vspace{0.25em}
   \small
-  \begin{tabular}{@{}lccc@{}}
+  \begin{tabular}{@{}lrr@{}}
     \toprule
-    \textbf{Setup (Llama 8B, indicative)} & \textbf{Naive} & \textbf{Optimized} & \textbf{Save} \\
+    \textbf{Llama 3.1 8B, 20K context, 8 rollouts/prompt} & \textbf{Standard + FA2} & \textbf{Optimized} \\
     \midrule
-    GRPO (full) & $\sim$510\,GB & $\sim$160\,GB & $\sim$68\% \\
-    GRPO + QLoRA & --- & $<$10\,GB & $>$90\% \\
+    Training memory & 414\,GB & 42\,GB \\
+    GRPO memory & 78.3\,GB & 9.8\,GB \\
+    Inference + KV cache & 18.5\,GB & 2.5\,GB \\
+    \midrule
+    \textbf{Total VRAM} & \textbf{510.8\,GB} & \textbf{54.3\,GB} \\
     \bottomrule
   \end{tabular}
+  \vspace{0.15em}
+
+  {\scriptsize Source: Unsloth, \emph{Reinforcement Learning Guide}.}
 \end{frame}
 
 \begin{frame}{GRPO vs.\ PPO (Takeaways)}
   \small
+  \setlength{\tabcolsep}{5pt}%
   \begin{tabular}{@{}p{0.22\textwidth}p{0.36\textwidth}p{0.36\textwidth}@{}}
     \toprule
     & \textbf{PPO (RLHF)} & \textbf{GRPO (RLVR)} \\
@@ -77,12 +92,14 @@
   \end{itemize}
 \end{frame}
 
+\section{GSPO: Group Sequence Policy Optimization}
+
 \begin{frame}{Motivation: Why GRPO Breaks at Scale}
-    \begin{itemize}\itemsep0.35em
-      \item[\textcolor{red}{$\blacktriangleright$}] Long RL runs on huge models need stable updates; unstable RL leads to irreversible model collapse.
-      \item[\textcolor{red}{$\blacktriangleright$}] GRPO uses token-level importance ratios and per-token clipping on long reasoning chains.
-      \item[\textcolor{red}{$\blacktriangleright$}] Clipping can still leave many tokens with skewed weights; effects compound over training.
-      \item[\textcolor{red}{$\blacktriangleright$}] On MoE models, token-level updates amplify routing churn (experts change mid-training), often needing extra fixes such as Routing Replay.
+    \begin{itemize}\itemsep0.3em
+      \item[\textcolor{red}{$\blacktriangleright$}] Long RL runs on huge models need stable updates. Unstable RL ends in model collapse that reverting to an earlier checkpoint and retuning $\epsilon$ does not recover.
+      \item[\textcolor{red}{$\blacktriangleright$}] The diagnosis (Zheng et al., 2025): importance sampling corrects a distribution mismatch only when you average over many samples from the behaviour policy. GRPO applies $w_{i,t}(\theta)$ at each token position using the \emph{single} token that was sampled there, so it corrects nothing and injects variance instead.
+      \item[\textcolor{red}{$\blacktriangleright$}] That variance accumulates with response length and is amplified by per-token clipping, so the problem gets worse exactly as reasoning traces get longer.
+      \item[\textcolor{red}{$\blacktriangleright$}] MoE models are worse again: on a 48-layer Qwen3-30B-A3B model, about 10\% of the experts activated for the same rollout differ after one gradient update, so token-level ratios swing hard. GRPO needs a workaround, Routing Replay, which caches the old policy's routing and replays it, to converge at all.
     \end{itemize}
 \end{frame}
 
@@ -99,15 +116,34 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}[allowframebreaks]{GSPO: The Sequence-Level Objective}
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\blacktriangleright$}] One importance ratio per response, clipped once:
+      \begin{equation}
+        J_{\mathrm{GSPO}}(\theta) = \mathbb{E}_{x \sim \mathcal{D},\, \{y_i\}_{i=1}^G \sim \pi_{\theta_{\mathrm{old}}}(\cdot|x)}
+        \left[ \frac{1}{G} \sum_{i=1}^{G} \min\big(s_i(\theta)\hat{A}_i,\; \mathrm{clip}(s_i(\theta), 1-\epsilon, 1+\epsilon)\hat{A}_i\big) \right]
+      \end{equation}
+    \item[\textcolor{red}{$\blacktriangleright$}] The ratio is the \textbf{length-normalized sequence likelihood ratio}:
+      \begin{equation}
+        s_i(\theta) = \left( \frac{\pi_\theta(y_i \mid x)}{\pi_{\theta_{\mathrm{old}}}(y_i \mid x)} \right)^{1/|y_i|}
+        = \exp\!\left( \frac{1}{|y_i|} \sum_{t=1}^{|y_i|} \log \frac{\pi_\theta(y_{i,t} \mid x, y_{i,<t})}{\pi_{\theta_{\mathrm{old}}}(y_{i,t} \mid x, y_{i,<t})} \right)
+      \end{equation}
+    \framebreak
+    \item[\textcolor{red}{$\blacktriangleright$}] $\hat{A}_i$ is the same group-relative advantage as GRPO. Every token of $y_i$ now carries the same gradient weight $s_i(\theta)$ rather than its own $w_{i,t}(\theta)$, which is where the variance goes.
+    \item[\textcolor{red}{$\blacktriangleright$}] The $1/|y_i|$ exponent matters: without it the ratio swings with response length, and each length would need its own $\epsilon$.
+    \item[\textcolor{red}{$\blacktriangleright$}] Because $s_i$ and $w_{i,t}$ live on different numerical scales, $\epsilon$ does too. On Qwen3-30B-A3B the paper clips GSPO at $3\times10^{-4}$ and $4\times10^{-4}$ (left, right) against $0.2$ and $0.27$ for GRPO.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{GSPO: Algorithm Architecture (Training Loop)}
   \small
   \begin{enumerate}\itemsep0.35em
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Sample} a batch of prompts $x \sim \mathcal{D}$.
-    \item[\textcolor{red}{$\blacktriangleright$}] For each $x$, draw a \textbf{group} $\{y_i\}_{i=1}^G$ from the old policy $\pi_{\theta_{\mathrm{old}}}$.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Reward} each full response (verifier / rule checker) $\Rightarrow$ group-relative advantage $\hat{A}_i$ (same formula as GRPO).
-    \item[\textcolor{red}{$\blacktriangleright$}] Build a sequence-level importance weight $s_i(\theta)$ from $\pi_\theta(y_i|x)$ vs.\ $\pi_{\theta_{\mathrm{old}}}(y_i|x)$.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Clip and optimize once per sequence} (not token-by-token); optional KL to $\pi_{\mathrm{ref}}$ as in PPO/GRPO stacks.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Variant:} GSPO-token allows per-token advantages when needed (e.g.\ multi-turn RL).
+    \item \textbf{Sample} a batch of prompts $x \sim \mathcal{D}$.
+    \item For each $x$, draw a \textbf{group} $\{y_i\}_{i=1}^G$ from the old policy $\pi_{\theta_{\mathrm{old}}}$.
+    \item \textbf{Reward} each full response (verifier / rule checker) $\Rightarrow$ group-relative advantage $\hat{A}_i$ (same formula as GRPO).
+    \item Build the sequence-level importance weight $s_i(\theta)$ from $\pi_\theta(y_i|x)$ vs.\ $\pi_{\theta_{\mathrm{old}}}(y_i|x)$.
+    \item \textbf{Clip and optimize once per sequence} (not token-by-token); optional KL to $\pi_{\mathrm{ref}}$ as in PPO/GRPO stacks.
+    \item \textbf{Variant:} GSPO-token reintroduces per-token advantages when they are needed (e.g.\ multi-turn RL), while keeping $s_i(\theta)$ as the clipping signal.
   \end{enumerate}
 \end{frame}
 
@@ -117,16 +153,25 @@
     \toprule
     & \textbf{GRPO} & \textbf{GSPO} \\
     \midrule
-    Importance ratio & Per-token & Sequence-level $s_i(\theta)$ \\
+    Importance ratio & Per-token $w_{i,t}(\theta)$ & Sequence-level $s_i(\theta)$ \\
     Clipping & Token-by-token & Once per sequence \\
     Advantage & Group-relative & Group-relative (same) \\
     Reward alignment & Mismatch on long CoT & Matches sequence rewards \\
-    MoE RL & Often unstable & Stable in Qwen3-scale runs \\
+    MoE RL & Needs Routing Replay & Stable in Qwen3-scale runs \\
     Typical use & DeepSeek-R1, dense RL & Qwen3, large MoE RL \\
     \bottomrule
   \end{tabular}
   \vspace{0.45em}
   \begin{itemize}\itemsep0.3em
-    \item[\textcolor{red}{$\blacktriangleright$}] GSPO can clip more tokens in aggregate yet train more efficiently, thanks to a lower-variance signal.
+    \item[\textcolor{red}{$\blacktriangleright$}] GSPO clips two orders of magnitude more tokens than GRPO and still trains more efficiently, which says the discarded token-level gradients were mostly noise.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{After GSPO: Softer Gates, Other Aggregations}
+  \begin{itemize}\itemsep0.4em
+    \item[\textcolor{red}{$\blacktriangleright$}] GSPO's clip is still hard: a response contributes either its full gradient or none of it.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{SAPO} (Soft Adaptive Policy Optimization, Gao et al., 2025) replaces the clip with a smooth, temperature-controlled gate, so an off-policy token is attenuated rather than the whole sequence discarded.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{H\"olderPO} (Chen et al., 2026) reads GRPO and GSPO as two points in one family: aggregate the token ratios with the H\"older mean of order $p$, where $p=1$ (arithmetic) recovers GRPO and $p \to 0$ (geometric) recovers GSPO. Annealing $p$ downward over training trades early signal amplification for late variance control.
+    \item[\textcolor{red}{$\blacktriangleright$}] The shared lesson: what settles these algorithms is where the reward is granted and how much variance the estimator can absorb, not the shape of the loss.
   \end{itemize}
 \end{frame}

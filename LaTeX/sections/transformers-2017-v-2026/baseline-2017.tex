@@ -2,18 +2,16 @@
 
 \begin{frame}{The 2017 Transformer}
   \centering
-  \includegraphics[width=0.5\paperwidth,height=0.95\paperheight,keepaspectratio]{images/introduction-to-transformers/transformer_attention_overview_qkv_architecture.png}
+  \includegraphics[width=0.5\paperwidth,height=0.82\textheight,keepaspectratio]{images/introduction-to-transformers/transformer_attention_overview_qkv_architecture.png}\\[0.2em]
+  {\scriptsize Composite overview slide, source unidentified; the encoder--decoder stacks are after Vaswani et al., ``Attention Is All You Need,'' NeurIPS 2017, Fig.~1.}
 \end{frame}
 
-\begin{frame}{Why the Transformer?}
+\begin{frame}{What the 2017 Design Optimized For}
   \begin{itemize}
-    \item The original 2017 Transformer was designed to address key limitations of Recurrent Neural Networks (RNNs) and Long Short-Term Memory (LSTM) units:
-      \begin{itemize}
-        \item Lack of parallelization
-        \item Vanishing gradient problem inherent in sequential processing
-      \end{itemize}
-    \item Replaced recurrence with self-attention to allow all tokens in a sequence to be processed simultaneously during training\footnote{See Vaswani et al., ``Attention is All You Need,'' 2017.}
-    \item Enabled significant reductions in wall-clock time needed for model convergence
+    \item[$\blacktriangleright$] The 2017 target was \emph{training} throughput. Replacing recurrence with self-attention made every position computable at once, which cut the wall-clock time to convergence.
+    \item[$\blacktriangleright$] Nothing in that design was tuned for serving. Attention was written as three passes over an $N \times N$ score matrix in main memory, every head kept its own keys and values, and each generated token cost exactly one forward pass.
+    \item[$\blacktriangleright$] By 2026 the binding constraint has moved: a model is trained once and served billions of times, so memory traffic and cache size decide the cost per token.
+    \item[$\blacktriangleright$] Most of the changes in this lecture follow from that shift, and they leave the mathematics of attention largely intact.
   \end{itemize}
 \end{frame}
 
@@ -31,7 +29,9 @@
 \end{column}
     \begin{column}{0.47\textwidth}
       \centering
-      \includegraphics[width=0.9\linewidth,height=0.9\textheight,keepaspectratio]{images/introduction-to-transformers/transformer_vaswani_encoder_decoder_diagram.png}
+      \includegraphics[width=0.9\linewidth,height=0.82\textheight,keepaspectratio]{images/introduction-to-transformers/transformer_vaswani_encoder_decoder_diagram.png}
+
+      {\scriptsize Source: Vaswani et al., ``Attention Is All You Need,'' NeurIPS 2017, Fig.~1.}
     \end{column}
   \end{columns}
 \end{frame}
@@ -45,9 +45,10 @@
   \vspace{0.5em}
   \textbf{Multi-head attention:}
   \[
-    \mathrm{MultiHead}(Q, K, V) = \mathrm{Concat}(\text{head}_1, \ldots, \text{head}_h) W^O,
-    \quad
-    \text{head}_i = \mathrm{Attention}(Q W_i^Q, K W_i^K, V W_i^V)
+    \mathrm{MultiHead}(Q, K, V) = \mathrm{Concat}(\text{head}_1, \ldots, \text{head}_h)\, W^O
+  \]
+  \[
+    \text{head}_i = \mathrm{Attention}(Q W_i^Q,\; K W_i^K,\; V W_i^V)
   \]
 
   \vspace{0.5em}

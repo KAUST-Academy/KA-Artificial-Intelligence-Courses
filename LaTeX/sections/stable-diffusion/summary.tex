@@ -1,4 +1,3 @@
-% --- Summary (Stable Diffusion lecture) ---
 \section{Summary \& Limitations}
 \begin{frame}[plain]
     \centering
@@ -11,7 +10,7 @@
   \textbf{From diffusion to Stable Diffusion}
   \begin{itemize}\itemsep0.35em
     \item Diffusion models learn to reverse a gradual noising process; sampling remains iterative but training is stable and scalable.
-    \item \textbf{Latent Diffusion (LDM):} denoise in a VAE-compressed latent space ($\sim 8\times$ downsampling) rather than full pixel space---lower memory and faster training/inference.
+    \item \textbf{Latent Diffusion (LDM):} denoise in a VAE-compressed latent space ($\sim 8\times$ downsampling) rather than full pixel space: lower memory and faster training/inference.
   \end{itemize}
 
   \framebreak
@@ -37,18 +36,18 @@
   \textbf{Model evolution \& applications}
   \begin{itemize}\itemsep0.35em
     \item \textbf{SD 2.0:} OpenCLIP text encoder; native 512/768 T2I; upscaler ($\times 4$), depth2img, and updated inpainting.
-    \item \textbf{SDXL:} 3.5B U-Net, dual text encoders, native 1024$^2$, optional refiner.
-    \item \textbf{SD 3 / 3.5:} MM-DiT transformer backbone trained with rectified flow; Large 8.1B, Large Turbo, Medium 2.5B run on consumer GPUs; FLUX.1 continues the lineage.
-    \item Broader ecosystem: video (Stable Video Diffusion), inpainting/editing (GLIDE, DALL·E~2), and newer multimodal systems (e.g.\ Nano Banana~2).
+    \item \textbf{SDXL:} 2.6B U-Net (${\sim}$3.5B total), dual text encoders, native 1024$^2$, optional refiner.
+    \item \textbf{SD 3 / 3.5:} MM-DiT transformer backbone trained with rectified flow; Large and Large Turbo are both 8.1B, Medium is 2.5B and is the one that fits comfortably on a consumer GPU; FLUX.1 continues the lineage.
+    \item Around it: the pixel-cascade predecessors it replaced (GLIDE, DALL·E~2, Imagen), video built on its backbone (Stable Video Diffusion), and newer closed multimodal systems (e.g.\ Nano Banana~2).
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Limitations}
   \begin{itemize}\itemsep0.35em
-    \item \textbf{Slow sampling} --- many denoising steps (partially addressed by distilled models such as SD~3.5 Large Turbo).
-    \item \textbf{Data \& compute} --- high-quality open models still require large-scale curated data and substantial GPU resources to train.
-    \item \textbf{Prompt sensitivity} --- output quality and adherence depend on prompt wording; base models may vary across seeds.
-    \item \textbf{Distribution gaps} --- rare concepts, fine details, and compositional reasoning remain challenging.
-    \item \textbf{Safety \& misuse} --- text-to-image systems raise concerns around deepfakes, copyright, and misinformation.
+    \item \textbf{Slow sampling:} many denoising steps (partially addressed by distilled models such as SD~3.5 Large Turbo).
+    \item \textbf{Data \& compute:} high-quality open models still require large-scale curated data and substantial GPU resources to train.
+    \item \textbf{Prompt sensitivity:} output quality and adherence depend on prompt wording; base models may vary across seeds.
+    \item \textbf{Distribution gaps:} rare concepts, fine details, and compositional reasoning remain challenging.
+    \item \textbf{Safety \& misuse:} text-to-image systems raise concerns around deepfakes, copyright, and misinformation.
   \end{itemize}
 \end{frame}

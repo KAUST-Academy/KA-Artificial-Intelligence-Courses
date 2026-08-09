@@ -24,9 +24,9 @@
     \begin{itemize}\itemsep0.32em
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Problem:} large policy updates can collapse performance.
       \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Idea:} take the biggest safe improvement step on the current batch of data.
-      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Clipped objective} (widely used variant): with $r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_k}(a_t \mid s_t)}$,
+      \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Clipped objective} (widely used variant): with the probability ratio $\rho_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_{\mathrm{old}}}(a_t \mid s_t)}$,
         \[
-          \mathcal{L}^{\mathrm{CLIP}} = \mathbb{E}_t\Big[\min\big(r_t(\theta)\hat{A}_t,\; \mathrm{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon)\hat{A}_t\big)\Big]
+          \mathcal{L}^{\mathrm{CLIP}} = \mathbb{E}_t\Big[\min\big(\rho_t(\theta)\hat{A}_t,\; \mathrm{clip}(\rho_t(\theta), 1-\epsilon, 1+\epsilon)\hat{A}_t\big)\Big]
         \]
       \item[\textcolor{red}{$\blacktriangleright$}] $\epsilon$ is small (e.g., $0.2$), which limits how far the new policy can drift per update.
     \end{itemize}

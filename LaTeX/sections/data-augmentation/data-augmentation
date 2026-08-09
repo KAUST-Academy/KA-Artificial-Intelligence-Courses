@@ -71,7 +71,7 @@
         \end{enumerate}
 
         \column{0.4\textwidth}
-        \includegraphics[width=\linewidth]{images/data-augmentation/data-augmentation-5}
+        \includegraphics[height=0.9\textheight,keepaspectratio]{images/data-augmentation/data-augmentation-5}
     \end{columns}
 \end{frame}
 

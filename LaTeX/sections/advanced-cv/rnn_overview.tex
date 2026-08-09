@@ -25,13 +25,15 @@
             \begin{figure}
             \centering
             \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/rnn_1.png}
+            \caption*{\tiny Source: Stanford CS231n (2022), Lecture 10: Recurrent Neural Networks}
             \end{figure}
         \end{column}
         \begin{column}{0.6\textwidth}
             \begin{figure}
             \centering
             \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/rnn_2.png}
-            \end{figure}        
+            \caption*{\tiny Source: Stanford CS231n (2022), Lecture 10: Recurrent Neural Networks}
+            \end{figure}
         \end{column}
     \end{columns}
 
@@ -39,15 +41,17 @@
 
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/rnn_3.png}
-    \end{figure}  
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/rnn_3.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 10: Recurrent Neural Networks}
+    \end{figure}
 
 \framebreak
 
     \begin{figure}
     \centering
-    \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/advanced-cv/rnn_4.png}
-    \end{figure}  
+    \includegraphics[width=0.92\textwidth,height=0.78\textheight,keepaspectratio]{images/advanced-cv/rnn_4.png}
+    \caption*{\tiny Source: Stanford CS231n (2022), Lecture 10: Recurrent Neural Networks}
+    \end{figure}
 
 \framebreak
     
@@ -63,15 +67,8 @@
 
     \large RNN Disadvantages:
         \begin{itemize}
-            \item Recurrent computation is slow 
+            \item Recurrent computation is slow, and cannot be parallelized across time steps
             \item In practice, difficult to access information from many steps back
-        \end{itemize}
-    \vspace{0.5cm}
-    \large Limitations of RNNs:
-        \begin{itemize}
-            \item Vanishing/exploding gradients in long sequences.
-            \item Sequential computation --- slow to train.
-            \item Difficulty in capturing long-term dependencies.
-            \item Cannot parallelize easily due to recursive nature.
+            \item Vanishing and exploding gradients on long sequences
         \end{itemize}
 \end{frame}

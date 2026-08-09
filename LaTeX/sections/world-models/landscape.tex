@@ -1,12 +1,12 @@
 % --- The broader world-model landscape ---
 \begin{frame}{Zooming Out: The World-Model Landscape}
   We have followed two lineages in depth (RSSM/Dreamer and JEPA). The wider field sorts by two questions: \textbf{what does the model predict}, and \textbf{what is it for}?
-  \begin{itemize}\itemsep0.24em
-    \item \textbf{Latent dynamics for control:} PlaNet, Dreamer v1--v3, TD-MPC2. Predict compact latents plus reward; train policies in imagination.
+  \begin{itemize}\itemsep0.12em
+    \item \textbf{Latent dynamics for control:} PlaNet, Dreamer v1--v3, TD-MPC2. Predict compact latents plus reward; train policies in imagination (Dreamer) or plan at act time.
     \item \textbf{Value-equivalent planning:} MuZero. Predict only what planning needs (reward, value, policy), nothing about appearance.
     \item \textbf{Latent prediction (JEPA):} V-JEPA 2-AC, DINO-WM, PLDM, LeWM. Predict representations; plan by latent search.
     \item \textbf{Video simulators:} Sora, GAIA-1/2, NVIDIA Cosmos. Generate future video, often for data and evaluation.
-    \item \textbf{Interactive generative worlds:} Genie 1--3, GameNGen, Oasis. Generate the next frame \emph{conditioned on user actions}, in real time.
+    \item \textbf{Interactive generative worlds:} Genie 1--3, GameNGen, Oasis. Generate the next frame \emph{conditioned on user actions}; the latest systems run in real time.
     \item \textbf{Spatial intelligence / 3D worlds:} World Labs (Fei-Fei Li). Generate explicit, persistent 3D scenes rather than video streams.
   \end{itemize}
 \end{frame}
@@ -50,7 +50,7 @@
 \begin{frame}{Spatial Intelligence: Fei-Fei Li and World Labs}
   \begin{itemize}\itemsep0.26em
     \item \textbf{Thesis (Fei-Fei Li):} language is not enough; \textbf{spatial intelligence}, i.e.\ perceiving, reasoning about, and generating 3D space, is the next frontier for AI. World Labs (founded 2024) builds toward it.
-    \item \textbf{RTFM} (2025): a real-time frame model that renders explorable views of a scene interactively on modest hardware (as reported by World Labs).
+    \item \textbf{RTFM} (2025): a real-time frame model that renders explorable views of a scene interactively on a single GPU (as reported by World Labs).
     \item \textbf{Marble} (2025): generates \textbf{persistent, editable 3D worlds} (Gaussian-splat scenes) from text, images, or video; worlds can be exported into standard graphics and game pipelines.
     \item Key difference from video world models: the world is an \textbf{explicit 3D state}, so it does not drift or forget; geometry persists when you look away. The cost is that dynamics and agents must be added on top.
     \item For robotics and AR, this line argues the world model should \emph{be} a 3D scene, not a video stream.
@@ -65,7 +65,7 @@
       \hline
       \textbf{Family} & \textbf{Predicts} & \textbf{Representatives} & \textbf{Primary use} \\
       \hline
-      Latent dynamics (RSSM) & latents + reward (pixels optional; TD-MPC2 drops them) & PlaNet, Dreamer v1--v3, TD-MPC2 & policy learning in imagination \\
+      Latent dynamics (RSSM) & latents + reward (pixels optional; TD-MPC2 drops them) & PlaNet, Dreamer v1--v3, TD-MPC2 & imagination RL or online planning \\
       Value-equivalent & reward, value, policy only & MuZero & search-based planning \\
       Latent prediction (JEPA) & representations & V-JEPA 2-AC, DINO-WM, PLDM, LeWM & latent MPC, robotics \\
       Video simulators & future video & Sora, GAIA-1/2, Cosmos & synthetic data, evaluation \\

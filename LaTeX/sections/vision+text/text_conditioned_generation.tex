@@ -3,10 +3,6 @@
     \LARGE Text-Conditioned Generation
 \end{frame}
 
-% The "Text-to-Image Generation" intro frame that lived here duplicated the
-% opening frame of text_to_image.tex; its unique "key challenges" bullets were
-% merged there.
-
 \subsection{Overview of Text-Conditioned Generation}
 \begin{frame}[allowframebreaks]{Text Conditioning Strategies}
     \begin{itemize}
@@ -20,6 +16,14 @@
             \item Use cross-attention mechanisms to allow the model to focus on relevant parts of the text while generating images.
             \item Enables fine-grained alignment between text and image features.
         \end{itemize}
+    \end{itemize}
+\framebreak
+    \begin{itemize}
+        \item \textbf{FiLM (Feature-wise Linear Modulation; Perez et al., AAAI 2018):}
+        \begin{itemize}
+            \item The conditioning code predicts a per-channel scale and shift applied to the decoder's features.
+            \item Cheap, and it modulates existing channels instead of appending new ones.
+        \end{itemize}
         \item \textbf{Classifier-Free Conditioning:}
         \begin{itemize}
             \item Train the model with and without conditioning information.
@@ -29,8 +33,8 @@
 \framebreak
     \begin{figure}
         \centering
-        \fetchconvertimage{https://www.researchgate.net/publication/370338867/figure/fig2/AS:11431281154030538@1682653188871/A-visualization-of-our-conditioning-strategies-We-consider-three-conditioning-methods.png}{images/vision+text/text-conditioning-strategy.png}{width=1\textwidth,height=0.8\textheight,keepaspectratio}
-        \caption*{A visualization of text conditioning strategies in text-to-image generation.}
+        \fetchconvertimage{https://www.researchgate.net/publication/370338867/figure/fig2/AS:11431281154030538@1682653188871/A-visualization-of-our-conditioning-strategies-We-consider-three-conditioning-methods.png}{images/vision+text/text-conditioning-strategy.png}{width=1\textwidth,height=0.62\textheight,keepaspectratio}
+        \caption*{Three ways to inject a conditioning code into a decoder: concatenation, FiLM and cross-attention. Drawn for a code from an image encoder; a text embedding is injected the same three ways (Gromniak, Magg \& Wermter, ICANN 2023, Fig.~2).}
     \end{figure}
 \end{frame}
 
@@ -46,18 +50,13 @@
             \item \textbf{Layout:} Indicate spatial relationships (e.g., ``a cat sitting on a chair'').
         \end{itemize}
     \end{itemize}
-\framebreak
-    \begin{figure}
-        \centering
-        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1400/1*GG8LmLk1vgxYW4QkivDE1w.png}{images/vision+text/prompt-engg-technique.png}{width=1\textwidth,height=0.8\textheight,keepaspectratio}
-    \end{figure}
 \end{frame}
 
 \begin{frame}[allowframebreaks]{Prompt Engineering Examples}
     \begin{itemize}
-        \item \textbf{Midjourney:} \texttt{``A futuristic cityscape at sunset, vibrant colors, ultra-detailed, digital art''}
-        \item \textbf{DALL-E:} \texttt{``An armchair in the shape of an avocado''}
-        \item \textbf{SDXL:} \texttt{``A portrait of a medieval knight, oil painting, dramatic lighting''}
+        \item \textbf{Midjourney:} ``\texttt{A futuristic cityscape at sunset, vibrant colors, ultra-detailed, digital art}''
+        \item \textbf{DALL-E:} ``\texttt{An armchair in the shape of an avocado}''
+        \item \textbf{SDXL:} ``\texttt{A portrait of a medieval knight, oil painting, dramatic lighting}''
     \end{itemize}
     \vspace{1em}
     \begin{itemize}
@@ -66,8 +65,8 @@
 \framebreak
     \begin{figure}
         \centering
-        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1400/1*4NmpCBpI8N3p1oYiknVZGA.jpeg}{images/vision+text/midjourney-prompt-engg.png}{width=1\textwidth,height=0.8\textheight,keepaspectratio}
-        \caption*{An advanced guide to writing prompts for Midjourney.}
+        \fetchconvertimage{https://miro.medium.com/v2/resize:fit:1400/1*4NmpCBpI8N3p1oYiknVZGA.jpeg}{images/vision+text/midjourney-prompt-engg.png}{width=1\textwidth,height=0.66\textheight,keepaspectratio}
+        \caption*{An advanced guide to writing prompts for Midjourney. {\scriptsize [Source: \url{https://miro.medium.com/v2/resize:fit:1400/1*4NmpCBpI8N3p1oYiknVZGA.jpeg}]}}
     \end{figure}
 \end{frame}
 
@@ -78,10 +77,4 @@
         \item \textbf{Alignment with Low-Level Image Details:} Ensuring that fine-grained details in the image match the textual description remains a significant challenge.
         \item \textbf{Long Prompts and Hallucinations:} Handling lengthy or complex prompts can lead to hallucinated content or loss of important details in the generated images.
     \end{itemize}
-\framebreak
-    \begin{figure}
-        \centering
-        \fetchconvertimage{https://gsdcdata.s3.amazonaws.com/gsdc/image/challenges-occur-in-prompt-engineering.png}{images/vision+text/prompt-engg-challenge-solution.png}{width=1\textwidth,height=0.8\textheight,keepaspectratio}
-        \caption*{Some Prompt Engineering Challenges and Their Solutions.}
-    \end{figure}
 \end{frame}

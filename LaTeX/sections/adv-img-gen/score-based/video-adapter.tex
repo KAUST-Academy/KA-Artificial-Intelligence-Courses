@@ -3,12 +3,14 @@ DDPMs as Energy-Based Models (EBMs)
 \begin{figure}
     \centering
     \includegraphics[width=0.35\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_162_1_img.png}
+    \caption*{\scriptsize Yang, Mengjiao, Yilun Du, Bo Dai, Dale Schuurmans, Joshua B. Tenenbaum, and Pieter Abbeel. ``Probabilistic Adaptation of Black-Box Text-to-Video Models'' (Video Adapter), ICLR 2024, arXiv:2306.01872.}
 \end{figure}
 \vspace{1em}
 Since the denoising function ($\epsilon$) models the score, we have
 \begin{figure}
     \centering
     \includegraphics[width=0.4\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_162_2_img.png}
+\caption*{\scriptsize Yang et al., ``Probabilistic Adaptation of Black-Box Text-to-Video Models'' (Video Adapter), ICLR 2024, Sec.~2.}
 \end{figure}
 
 \framebreak
@@ -16,10 +18,12 @@ Learn a distribution as a product of a pretrained (large) model and domain speci
 \begin{figure}
     \centering
     \includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_163_1_img.png}
+\caption*{\scriptsize Yang et al., ``Probabilistic Adaptation of Black-Box Text-to-Video Models'' (Video Adapter), ICLR 2024, Eq.~(5).}
 \end{figure}
 \begin{figure}
     \centering
-    \includegraphics[width=1.05\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_163_2_img.png}
+    \includegraphics[width=0.85\linewidth,height=0.32\textheight,keepaspectratio]{images/adv-img-gen/slide_163_2_img.png}
+\caption*{\scriptsize Yang et al., ``Probabilistic Adaptation of Black-Box Text-to-Video Models'' (Video Adapter), ICLR 2024, Fig.~2.}
 \end{figure}
 
 \framebreak
@@ -28,23 +32,27 @@ Under the product assumption, we can use the EBM interpretation to combine the s
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_164_1_img.png}
+\caption*{\scriptsize After Yang et al., ``Probabilistic Adaptation of Black-Box Text-to-Video Models'' (Video Adapter), ICLR 2024, Sec.~2.}
 \end{figure}
 \vspace{1em}
 \begin{figure}
     \centering
     \includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_164_2_img.png}
+\caption*{\scriptsize After Yang et al., ``Probabilistic Adaptation of Black-Box Text-to-Video Models'' (Video Adapter), ICLR 2024, Sec.~2.}
 \end{figure}
 
 \framebreak
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_165_1_img.png}
+\caption*{\scriptsize Yang et al., ``Probabilistic Adaptation of Black-Box Text-to-Video Models'' (Video Adapter), ICLR 2024, Algorithm~1.}
 \end{figure}
 
 \framebreak
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_166_1_img.png}
+\caption*{\scriptsize Yang et al., ``Probabilistic Adaptation of Black-Box Text-to-Video Models'' (Video Adapter), ICLR 2024, Table~1.}
 \end{figure}
 
 \framebreak
@@ -54,13 +62,13 @@ Can adapt to different domains (robot trajectories, ego-centric camera)
     \begin{figure}
         \centering
         \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_167_1_img.png}
-        \caption*{\href{https://drive.google.com/file/d/1l3UCX-6TzMOqymeQwu3aYdPopSxV64cr/view?usp=sharing}{Link: GIFF}}
+        \caption*{\scriptsize Video Adapter sample, Bridge robot data (Yang et al., ICLR 2024). \href{https://drive.google.com/file/d/1l3UCX-6TzMOqymeQwu3aYdPopSxV64cr/view?usp=sharing}{Link: GIF}}
     \end{figure}
     \column{0.5\textwidth}
     \begin{figure}
         \centering
         \includegraphics[width=\linewidth,height=\textheight,keepaspectratio]{images/adv-img-gen/slide_167_2_img.png}
-        \caption*{\href{https://drive.google.com/file/d/15EoGTelZTxyMg6kLnoQc2PmlkRn1OTB8/view?usp=sharing}{Link: GIFF}}
+        \caption*{\scriptsize Video Adapter sample, Ego4D egocentric data (Yang et al., ICLR 2024). \href{https://drive.google.com/file/d/15EoGTelZTxyMg6kLnoQc2PmlkRn1OTB8/view?usp=sharing}{Link: GIF}}
     \end{figure}
 \end{columns}
 \end{frame}

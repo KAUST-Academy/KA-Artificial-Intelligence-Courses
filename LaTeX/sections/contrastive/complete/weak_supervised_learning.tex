@@ -1,20 +1,21 @@
-\section{Weak Supervised Learning (WSL)}
+\section{Weakly Supervised Learning (WSL)}
 \begin{frame}{}
-    \LARGE Weak Supervised Learning (WSL)
+    \LARGE Weakly Supervised Learning (WSL)
 \end{frame}
 
 \begin{frame}[allowframebreaks]{}
     \begin{figure}
         \centering
         \fetchconvertimage{https://ai.stanford.edu/blog/assets/img/posts/2019-03-03-weak_supervision/dp.png}{images/contrastive/wsl-architecture.png}{height=0.9\textheight,width=1\textwidth,keepaspectratio}
+        {\footnotesize Source: A. Ratner, P. Varma, B. Hancock, C. R\'e et al., ``Weak Supervision: A New Programming Paradigm for Machine Learning,'' Stanford AI Lab blog, 2019.}
     \end{figure}
 \end{frame}
 
-\begin{frame}[allowframebreaks]{What is Weak Supervised Learning?}
+\begin{frame}[allowframebreaks]{What is Weakly Supervised Learning?}
     \begin{itemize}
         \item Sometimes, we don't have perfect data or labels for training.
-        \item \textbf{Weak Supervised Learning (WSL)} helps us learn even when our labels are not ideal.
-        \item There are different ways labels can be "weak":
+        \item \textbf{Weakly Supervised Learning (WSL)} helps us learn even when our labels are not ideal.
+        \item There are different ways labels can be ``weak'':
         \begin{itemize}
             \item \textbf{Incomplete labels:} Only some data points have labels.
             \item \textbf{Inexact labels:} Labels are not very detailed (e.g., we know what’s in an image, but not where).
@@ -25,8 +26,9 @@
     \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1.05\linewidth,height=0.95\textheight,keepaspectratio]{images/contrastive/snorkel.png}
+        \includegraphics[width=\linewidth,height=0.76\textheight,keepaspectratio]{images/contrastive/snorkel.png}
     \end{figure}
+    {\footnotesize Source: K. Khvatova, ``Weakly Supervised Learning: Introduction and Best Practices,'' Data Science Milan, 2019 (slides).}
 
     \framebreak
     \textbf{Why do we use WSL?}
@@ -47,18 +49,19 @@
 \begin{frame}[allowframebreaks]{WSL Taxonomy \& Approaches}
     \begin{figure}
         \centering
-        \includegraphics[width=\linewidth,height=0.9\textheight,keepaspectratio]{images/contrastive/weak-supervised.png}
+        \includegraphics[width=\linewidth,height=0.78\textheight,keepaspectratio]{images/contrastive/weak-supervised.png}
     \end{figure}
+    {\footnotesize Adapted from Zhi-Hua Zhou, ``A Brief Introduction to Weakly Supervised Learning,'' \emph{National Science Review} 5(1), 2018, Fig.~1.}
 
     \framebreak
-    \textbf{How can we do Weak Supervised Learning?}
+    \textbf{How can we do Weakly Supervised Learning?}
     \begin{itemize}
         \item \textbf{Programmatic Labeling (Data Programming)}
         \begin{itemize}
             \item Write simple rules (labeling functions) to label data automatically.
             \item Use a tool like Snorkel to combine these noisy labels and clean them up.
             \item Steps: Unlabeled data $\rightarrow$ Rules $\rightarrow$ Cleaned labels $\rightarrow$ Train model.
-            \item (Snorkel: Ratner et al., 2016)
+            \item (Snorkel: Ratner et al., 2017)
         \end{itemize}
         \framebreak
         \item \textbf{Multiple Instance Learning (MIL)}
@@ -71,7 +74,7 @@
         \framebreak
         \item \textbf{Webly / Noisy Label Learning}
         \begin{itemize}
-            \item Get labels from the internet or crowdsourcing—they can be messy!
+            \item Get labels from the internet or crowdsourcing; they can be messy!
             \item Use special tricks to handle wrong or noisy labels (like Co-teaching).
         \end{itemize}
         \framebreak

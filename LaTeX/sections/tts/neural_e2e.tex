@@ -2,7 +2,7 @@
 \section{Neural end-to-end TTS}
 % ============================================================================
 
-\begin{frame}[allowframebreaks]{2016--2021 Era: The Neural Revolution (WaveNet)}
+\begin{frame}{2016--2021 Era: The Neural Revolution (WaveNet)}
     \begin{itemize}
         \item Deep generative model for raw audio
         \item Autoregressive: predicts next sample given previous samples
@@ -13,19 +13,21 @@
         \]
         \item Computationally expensive for real-time use
     \end{itemize}
-    \begin{center}
-        \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/audio-nlp/wavenet_architecture.png}
-    \slideimgsource{van den Oord et al., WaveNet, after \href{https://deepmind.google/discover/blog/wavenet-a-generative-model-for-raw-audio/}{DeepMind}.}
-    \end{center}
+\end{frame}
+
+\begin{frame}{2016--2021 Era: The Neural Revolution (WaveNet)}
+    \centering
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/audio-nlp/wavenet_architecture.png}
+    \slideimgsource{WaveNet architecture, redrawn by a third party (the paper's own Fig.~4 is a different, more compact drawing); architecture from van den Oord et al., ``WaveNet: A Generative Model for Raw Audio,'' \href{https://arxiv.org/abs/1609.03499}{arXiv:1609.03499}.}
 \end{frame}
 
 \begin{frame}{2016--2021 Era: Neural vocoders (WaveNet and beyond)}
   \begin{itemize}\footnotesize
     \item Mel-spectrograms show how frequencies change over time, but must be turned back into sound waveforms.
-    \item The Griffin-Lim algorithm was an early method for this, but the quality was limited.
+    \item Griffin-Lim was the early answer: recover the missing phase from a magnitude spectrogram by iterating between the time and frequency domains. Cheap, but the quality was limited.
     \item Neural vocoders like WaveNet can reach human-level speech quality.
-    \item WaveNet generates raw audio samples one by one, at up to 24,000 times per second.
-    \item It uses dilated causal convolutions, so it can “see” a lot of context efficiently.
+    \item WaveNet generates raw audio samples one at a time: 16,000 per second in the original paper, 24,000 in the Tacotron~2 vocoder.
+    \item It uses dilated causal convolutions, so it can ``see'' a lot of context efficiently.
     \item WaveNet models the conditional probability of each sample: \[
       p(\mathbf{x} \mid \mathbf{h}) = \prod_{t=1}^{T} p(x_t \mid x_1, \dots, x_{t-1}, \mathbf{h})
     \]
@@ -36,12 +38,11 @@
 
 \begin{frame}{2016--2021 Era: End-to-end Neural TTS (Tacotron)}
   \centering
-  \includegraphics[width=0.98\textwidth,keepaspectratio]{images/tts/tts_tacotron_architecture.png}
-  \slideimgsource{Tacotron (Wang et al, 2017); Model Architecture. The model takes characters as input and outputs the corresponding raw spectrogram, which is then fed to the Griffin-Lim reconstruction algorithm to synthesize speech.}
+  \includegraphics[width=0.95\textwidth,height=0.66\textheight,keepaspectratio]{images/tts/tts_tacotron_architecture.png}
+  \slideimgsource{Stanford CS224S, Lecture 1 (2024 Spring), slide 31, redrawing Wang et al., ``Tacotron: Towards End-to-End Speech Synthesis,'' \href{https://arxiv.org/abs/1703.10135}{arXiv:1703.10135}, Fig.~1. Characters in, raw spectrogram out, then Griffin-Lim to synthesize speech. The ``GBHG'' boxes are the slide's typo for CBHG (1-D convolution bank, highway network, bidirectional GRU).}
 \end{frame}
 
-
-\begin{frame}[allowframebreaks]{Tacotron 2}
+\begin{frame}{Tacotron 2}
     \begin{itemize}
         \item End-to-end TTS system
         \item Pipeline:
@@ -52,70 +53,18 @@
         \item Improved prosody and pronunciation
         \item Flexible for different voices and languages
     \end{itemize}
-    \begin{center}
-        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{images/audio-nlp/tacotron2_pipeline.png}
-        \slideimgsource{Tacotron 2, after \href{https://arxiv.org/abs/1712.05884}{Shen et al., 2018.}.}
-    \end{center}
 \end{frame}
 
-% --- Source: Shen et al.\ Tacotron~2 (Works cited 8); WaveNet (Works cited in report) ---
+\begin{frame}{Tacotron 2}
+    \centering
+    \includegraphics[width=\textwidth,height=0.72\textheight,keepaspectratio]{images/audio-nlp/tacotron2_pipeline.png}
+    \slideimgsource{Shen et al., ``Natural TTS Synthesis by Conditioning WaveNet on Mel Spectrogram Predictions'' (Tacotron~2), Fig.~1; \href{https://arxiv.org/abs/1712.05884}{arXiv:1712.05884}.}
+\end{frame}
 
 \begin{frame}{Autoregression: the deployment bottleneck}
-  \begin{itemize}
-    \item Tacotron~2 + WaveNet-class vocoders raised fidelity but blocked low-latency, on-device synthesis.
-    \item Motivated \textbf{non-autoregressive (NAR)} acoustic models and fast vocoders (FastSpeech, HiFi-GAN).
+  \begin{itemize}\footnotesize
+    \item \textbf{Latency:} Tacotron~2 with a WaveNet-class vocoder raised fidelity but blocked low-latency, on-device synthesis: one frame, then one sample, at a time.
+    \item \textbf{Robustness:} the soft attention linking text to frames can also break down, so hard inputs come out with \textbf{skipped or repeated words}. Predicting an explicit duration per phoneme instead nearly removes those failures, and it is why later models search for a hard monotonic alignment rather than learning a soft one.
+    \item Both problems point the same way: \textbf{non-autoregressive (NAR)} acoustic models and fast vocoders. FastSpeech reports mel generation $270\times$ faster and end-to-end synthesis $38\times$ faster than its autoregressive Transformer TTS teacher.
   \end{itemize}
 \end{frame}
-
-\begin{frame}[allowframebreaks]{Beyond Autoregression: FastSpeech, HiFi-GAN, Glow-TTS, Diffusion Models}
-  \begin{itemize}
-      \setlength{\itemsep}{1.5em}
-      \item Non-autoregressive models: faster inference
-      \item FastSpeech:
-      \begin{itemize}
-          \item Parallel generation of spectrograms
-          \item Duration prediction for alignment
-      \end{itemize}
-      \item HiFi-GAN:
-      \begin{itemize}
-          \item GAN-based vocoder
-          \item High-fidelity, real-time synthesis
-      \end{itemize}
-  \framebreak
-      \item Glow-TTS:
-      \begin{itemize}
-          \item Flow-based generative model
-          \item Efficient and expressive speech synthesis
-      \end{itemize}
-      \item Diffusion models:
-      \begin{itemize}
-          \item Iterative refinement of audio
-          \item State-of-the-art naturalness
-      \end{itemize}
-  \end{itemize}
-  \begin{center}
-      \includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{images/audio-nlp/fastspeech_hifigan.png}
-  \end{center}
-\end{frame}
-
-% --- Source: Jurafsky SLP3 Ch.16 (Works cited 25); Lecture-12 mel\_filterbanks ---
-% \begin{frame}{Mel spectrograms for acoustic modeling}
-%   \begin{itemize}
-%     \item STFT $\rightarrow$ mel filterbank (40--80 bands) $\rightarrow$ log magnitudes $\Rightarrow$ time $\times$ mel matrix.
-%     \item Mel scale matches human pitch perception; log compression stabilizes dynamic range for neural nets.
-%     \item Standard target for Tacotron-class models; shared feature family with modern ASR front ends.
-%   \end{itemize}
-%   \centering
-%   \includegraphics[width=0.90\textwidth,keepaspectratio]{images/tts/tts_mel_spectrogram.png}
-%   \slideimgsource{Illustrative log-mel spectrogram (teaching asset); representation family as in Shen et al., Tacotron~2.}
-% \end{frame}
-
-% % --- Source: CMU Alan Black / Festvox (Works cited 5--6); TTS Lecture Material Generation Request ---
-% \begin{frame}{Linguistic front end (CMU tradition)}
-%   \begin{itemize}
-%     \item \textbf{Text normalization:} numbers, dates, symbols, abbreviations---most production bugs start here.
-%     \item \textbf{G2P:} grapheme-to-phoneme rules, lexicons, or neural G2P for opaque orthographies.
-%     \item \textbf{Low-resource voices:} careful data collection (Festvox-style prompts), phonetic coverage, and prosody labels.
-%     \item SSML / markup in deployed systems for breaks, emphasis, and speaking rate.
-%   \end{itemize}
-% \end{frame}

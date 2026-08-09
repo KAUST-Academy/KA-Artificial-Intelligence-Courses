@@ -23,11 +23,15 @@
         \item Only compare perplexities of models that share the same vocabulary $V$.
     \end{itemize}
 
-    \item Example:
+    \item Example, scoring both models on the same held-out text with the same $V$:
     \begin{itemize}
-        \item Bigram model on a test set → PPL = 200 (poor).
-        \item Transformer LM → PPL = 20 (much better).
+        \item Bigram model → PPL $\approx$ 200: on average it is choosing between
+        roughly two hundred plausible next words.
+        \item Neural LM → PPL $\approx$ 20: the same choice, narrowed tenfold.
     \end{itemize}
+
+    \item Caveat: perplexity rewards fluency on held-out text, and nothing else. It
+    says nothing about whether the model is truthful, useful, or safe.
 \end{itemize}
 
 \end{frame}

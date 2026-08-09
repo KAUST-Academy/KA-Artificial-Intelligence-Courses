@@ -1,12 +1,12 @@
 % ============================================================================
-\section{Applications, frontier topics, and tooling}
+\section{Applications and frontier topics}
 % ============================================================================
 
 \begin{frame}{The 2026 TTS Landscape}
-  \begin{itemize}\itemsep0.5em
+  \begin{itemize}\itemsep0.4em\footnotesize
     \item \textbf{Flow matching won the acoustic model:} F5-TTS and CosyVoice-class systems generate speech features non-autoregressively in a few ODE steps, with zero-shot cloning from a short reference clip.
     \item \textbf{Codec language models power conversation:} end-to-end voice modes speak through speech tokens directly, with no separate TTS stage.
-    \item \textbf{Open weights closed much of the gap:} XTTS, F5-TTS, and Kokoro run locally; commercial systems (ElevenLabs, OpenAI, Google) still lead on expressiveness and robustness.
+    \item \textbf{Downloadable weights closed much of the gap:} XTTS, F5-TTS, and Kokoro all run locally, but check the licence before shipping: Kokoro is Apache-2.0, while the XTTS and F5-TTS checkpoints are non-commercial. Commercial systems (ElevenLabs, OpenAI, Google) still lead on expressiveness and robustness.
     \item Remaining hard problems: long-form consistency, fine-grained emotion control, low-resource languages, and singing.
   \end{itemize}
 \end{frame}
@@ -26,16 +26,6 @@
     \item A voice agent chains streaming ASR, an LLM, and TTS; the user hears silence until the first audio chunk arrives, so \textbf{time to first audio} matters more than total synthesis time.
     \item \textbf{Streaming synthesis:} start speaking while the LLM is still writing, chunking at sentence or phrase boundaries; codec-LM stacks can stream token by token.
     \item \textbf{Barge-in:} users interrupt mid-sentence; the stack must stop playback, flush queued audio, and hand the conversation back to the LLM.
-    \item Expressive control is moving from SSML markup toward natural-language style prompts (``speak warmly, a little slower'').
+    \item Expressive control is moving from Speech Synthesis Markup Language (SSML) tags toward natural-language style prompts (``speak warmly, a little slower'').
   \end{itemize}
 \end{frame}
-
-
-% --- Source: ESPnet (Works cited 18--19); TTS Lecture Material Generation Request ---
-% \begin{frame}{Engineering toolkit: ESPnet-TTS and friends}
-%   \begin{itemize}
-%     \item \textbf{ESPnet-TTS:} unified recipes for Tacotron~2, FastSpeech~2, FastSpeech2Conformer, VITS, JETS, and vocoders.
-%     \item Also: Coqui TTS, Fairseq speech, Hugging Face \texttt{transformers} checkpoints for reproducible baselines.
-%     \item Practice: fix data splits, text normalization, and decoding configs when comparing systems.
-%   \end{itemize}
-% \end{frame}

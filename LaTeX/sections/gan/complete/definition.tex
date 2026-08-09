@@ -5,7 +5,7 @@
 
 \begin{frame}{Definition and Core Components}
 \begin{itemize}
-    \item Let $S_1 = D = \{x \sim p_{\text{data}}\}$ and $S_2 = \{x \sim p_\theta\}$.
+    \item Let $S_1 = \{x \sim p_{\text{data}}\}$ and $S_2 = \{x \sim p_\theta\}$.
     \item \textbf{Idea}: Train the generative model to minimize a two-sample test objective between $S_1$ and $S_2$, i.e., the generator.
     \item<2-> \textbf{Question}: How do we obtain a two-sample test objective?
     \item<3-> \textbf{Another Idea}: Train another neural network to discriminate between the two samples, i.e., the discriminator.
@@ -36,6 +36,6 @@
 \begin{figure}
     \centering
     \includegraphics[height=0.7\textheight, width=\textwidth, keepaspectratio]{images/gan/gan_2.png}
-    \caption*{The generator transforms a simple distribution into samples resembling real data. The discriminator distinguishes between real and fake samples.}
+    \caption*{The generator transforms a simple distribution into samples resembling real data. The discriminator distinguishes between real and fake samples. {\scriptsize [Source: F. Fleuret, ``Deep Learning'' (EE-559), 11.1 Generative Adversarial Networks]}}
 \end{figure}
 \end{frame}

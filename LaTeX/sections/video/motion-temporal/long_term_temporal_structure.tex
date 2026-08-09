@@ -6,20 +6,6 @@
         \item \textbf{Temporal Segmentation:} Divides a video into meaningful segments based on changes in activity.
         \item \textbf{Temporal Action Proposals:} Identifies candidate time intervals where actions may occur.
     \end{itemize}
-
-    These techniques enable models to focus on relevant portions of the video and improve the recognition of complex, long-duration actions.
-\end{frame}
-
-\begin{frame}{Modelling Long-Term Structure}
-    Several approaches have been developed to effectively model long-term temporal dependencies in videos:
-
-    \begin{itemize}
-        \item \textbf{Hierarchical RNNs and LSTMs:} Stack multiple recurrent layers to capture both short-term and long-term dependencies at different temporal scales.
-        \item \textbf{Temporal Segment Networks (TSN):} Sample frames or segments sparsely across the entire video and aggregate their representations to model long-range structure.
-        \item \textbf{Memory Networks:} Utilize external memory modules to store and retrieve information across hundreds of frames, enabling reasoning over extended temporal contexts.
-    \end{itemize}
-
-    These methods help in recognizing actions that unfold over long durations and involve multiple stages.
 \end{frame}
 
 \begin{frame}{Modelling Long-Term Structure}
@@ -31,11 +17,12 @@
     \end{itemize}
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.5\textheight,keepaspectratio]{images/video/slide_25_1_img.png}
+        \includegraphics[width=0.88\textwidth,height=0.5\textheight,keepaspectratio]{images/video/slide_25_1_img.png}
+        \caption*{\tiny [Source: UMich EECS 498 (2022), Lecture 24: Videos, slide 47]}
     \end{figure}
 \end{frame}
 
-\begin{frame}{Modelling Long-Term Structure}
+\begin{frame}{Modelling Long-Term Structure with RNNs}
     \begin{itemize}
         \item Process local features using recurrent network (e.g. LSTM)
         \item Many to many: one output per video frame
@@ -43,6 +30,7 @@
     \begin{figure}
         \centering
         \includegraphics[width=1\textwidth,height=0.5\textheight,keepaspectratio]{images/video/slide_27_1_img.png}
+        \caption*{\tiny [Source: UMich EECS 498 (2022), Lecture 24: Videos, slide 52]}
     \end{figure}
 \end{frame}
 
@@ -54,23 +42,37 @@
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_29_1_img.png}
+        \includegraphics[width=1\textwidth,height=0.82\textheight,keepaspectratio]{images/video/slide_29_1_img.png}
+        \caption*{\tiny [Source: UMich EECS 498 (2022), Lecture 24: Videos, slide 58]}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_30_1_img.jpg}
+        \includegraphics[width=1\textwidth,height=0.82\textheight,keepaspectratio]{images/video/slide_30_1_img.jpg}
+        \caption*{\tiny [Source: UMich EECS 498 (2022), Lecture 24: Videos, slide 60]}
     \end{figure}
 \end{frame}
 
-\begin{frame}[allowframebreaks]{Modeling long-term temporal structure}
+\begin{frame}[allowframebreaks]{Modelling Long-Term Structure: RNNs vs. CNNs}
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_31_1_img.jpg}
+        \includegraphics[width=1\textwidth,height=0.82\textheight,keepaspectratio]{images/video/slide_31_1_img.jpg}
+        \caption*{\tiny [Source: UMich EECS 498 (2022), Lecture 24: Videos, slide 62]}
     \end{figure}
 \framebreak
     \begin{figure}
         \centering
-        \includegraphics[width=1\textwidth,height=0.9\textheight,keepaspectratio]{images/video/slide_32_1_img.jpg}
+        \includegraphics[width=1\textwidth,height=0.82\textheight,keepaspectratio]{images/video/slide_32_1_img.jpg}
+        \caption*{\tiny [Source: UMich EECS 498 (2022), Lecture 24: Videos, slide 63]}
     \end{figure}
+\end{frame}
+
+\begin{frame}{Approaches to Long-Term Temporal Modelling}
+    Several approaches have been developed to effectively model long-term temporal dependencies in videos:
+
+    \begin{itemize}
+        \item \textbf{Hierarchical RNNs and LSTMs:} Stack multiple recurrent layers to capture both short-term and long-term dependencies at different temporal scales.
+        \item \textbf{Temporal Segment Networks (TSN):} Sample frames or segments sparsely across the entire video and aggregate their representations to model long-range structure.
+        \item \textbf{Memory Networks:} Utilize external memory modules to store and retrieve information across hundreds of frames, enabling reasoning over extended temporal contexts.
+    \end{itemize}
 \end{frame}

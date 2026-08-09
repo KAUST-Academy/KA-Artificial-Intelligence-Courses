@@ -34,13 +34,13 @@
         \item But this might not be optimal for every layer!
         \item $\gamma$ and $\beta$ let each layer learn:
         \begin{itemize}
-            \item $\gamma$: "How much variance do I want?"
-            \item $\beta$: "What should my mean activation be?"
+            \item $\gamma$: ``How much variance do I want?''
+            \item $\beta$: ``What should my mean activation be?''
         \end{itemize}
         \item Two extremes the network can learn:
         \begin{itemize}
-            \item "Keep normalization": $\gamma \approx 1$, $\beta \approx 0$
-            \item "Undo normalization": $\gamma$ and $\beta$ restore original scale and shift
+            \item ``Keep normalization'': $\gamma \approx 1$, $\beta \approx 0$
+            \item ``Undo normalization'': $\gamma$ and $\beta$ restore original scale and shift
         \end{itemize}
         \item Network learns what's best for each layer!
     \end{itemize}
@@ -81,7 +81,7 @@
     \centering
     \includegraphics[width=1.0\textwidth,height=1.0\textheight,keepaspectratio]{images/cnn/BatchNorm1.png}
     \end{figure}
-    %\footnotetext{\href{https://towardsdatascience.com/batch-norm-explained-visually-how-it-works-and-why-neural-networks-need-it-b18919692739/}{Ketan Doshi}}
+    \footnotetext{Figure: Ketan Doshi, ``Batch Norm Explained Visually'' (towardsdatascience.com)}
 \end{frame}
 
 \begin{frame}{Batch Normalization}
@@ -89,18 +89,17 @@
 \centering
 \includegraphics[width=1.0\textwidth,height=0.9\textheight,keepaspectratio]{images/bn4.png}
 \end{figure}
-% \footnotetext{\href{https://towardsdatascience.com/batch-norm-explained-visually-how-it-works-and-why-neural-networks-need-it-b18919692739/}{Ioffe and Szegedy 2015}}
+\footnotetext{Figure: CS231n, Stanford University}
 \end{frame}
 
 \begin{frame}{Batch Normalization}
     \begin{itemize}
-        \item In Pytorch, batch normalization behavior is controlled by model's mode:
+        \item In PyTorch, batch normalization behavior is controlled by the model's mode:
             \begin{block}{}
         \texttt{\small
         \# Training Mode: Use batch statistics\\
         model.train() \\
-        output = model(input) \\
-        \\
+        output = model(input) \\[1em]
         \# Evaluation Mode: Use running statistics\\
         model.eval() \\
          output = model(input)
@@ -126,7 +125,7 @@
         \item Behaves differently during training and testing: this is a very common source of bugs!
     \end{itemize}
 \end{itemize}
-% \footnotetext{Slide based on CS231n by Fei-Fei Li, Yunzhu Li \& Ruohan Gao}
+\footnotetext{Slide based on \href{http://cs231n.stanford.edu/index.html}{Stanford CS231n} by Fei-Fei Li, Yunzhu Li \& Ruohan Gao}
 \end{frame}
 
 \begin{frame}{Batch Normalization}
@@ -134,5 +133,15 @@
 \centering
 \includegraphics[width=1.0\textwidth,height=0.9\textheight,keepaspectratio]{images/cnn/batch_norm_6.png}
 \end{figure}
-% \footnotetext{\href{https://arxiv.org/pdf/1502.03167v3.pdf}{Ioffe and Szegedy 2015}}
+\footnotetext{\href{https://arxiv.org/pdf/1502.03167v3.pdf}{Ioffe and Szegedy 2015}}
+\end{frame}
+
+\begin{frame}{Dropout and Batch Normalization Together}
+\begin{itemize}
+    \item Both reduce overfitting, so it is tempting to switch on both. They interfere.
+    \item Dropout changes the variance of a unit between training and test time. Batch normalization stores the variance it measured during training and reuses that stored value at test time, so the two disagree about the same quantity.
+    \item The disagreement compounds from layer to layer and shows up as a drop in test accuracy. It has been measured across a range of modern convolutional networks.
+    \item \textbf{Practical rule:} put dropout after all batch normalization layers, usually in the fully connected head, rather than between a convolution and its normalization. Many modern architectures get their best results from batch normalization with no dropout at all.
+\end{itemize}
+\footnotetext{Li, Chen, Hu \& Yang, \href{https://arxiv.org/abs/1801.05134}{``Understanding the Disharmony between Dropout and Batch Normalization by Variance Shift''}, CVPR 2019}
 \end{frame} 

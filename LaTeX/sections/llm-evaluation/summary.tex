@@ -1,0 +1,15 @@
+% --- Summary ---
+\begin{frame}[allowframebreaks]{Summary}
+  \begin{itemize}\scriptsize\itemsep0.28em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Benchmarks saturate and Goodhart's law applies to all of them.} The defence is a \textbf{portfolio} of measurements, not a better single metric.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Four families, four failure modes:} static benchmarks (contaminable), live arenas (style-confounded, irreproducible), human evaluation (the reference standard, expensive), LLM judges (scalable, biased).
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The scoring mode is the benchmark.} Multiple-choice likelihood, exact match, execution, model grading, and human preference measure different things. \textbf{pass@$k$} needs the unbiased estimator $1 - \binom{n-c}{k}/\binom{n}{k}$.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Arenas need a rating model.} Bradley--Terry by maximum likelihood replaced online Elo: order-independent, with confidence intervals. \textbf{Style control} puts length and formatting into the regression, and reorders the board.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Judges are within human noise but systematically biased:} position (GPT-4 consistent on 65\% of order swaps), verbosity (weaker judges fooled 91\% of the time), self-preference, and no ability to grade what they cannot do. Swap orders, supply references, use binary criteria, report precision and recall against humans.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{RAG evaluation separates retrieval from generation:} recall@$k$, MRR, context precision/recall upstream; faithfulness $|V|/|S|$, answer relevance, and citation checks downstream.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Assume contamination.} Canaries, substring overlap, and black-box tests catch only \textbf{verbatim} memorisation; a matched, unpublished replica (GSM1k-style) is the only assumption-free check.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Honesty and robustness are separate axes.} TruthfulQA scales \textit{inversely}; abstention must be scored apart from error; prompt format alone moved one model by \textbf{76 accuracy points}.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Report like a statistician:} $n$ and standard errors, clustered when questions share a source, \textbf{paired} differences between models, Wilson or Bayesian intervals at small $n$, and a power analysis stating what the eval can resolve.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Your own eval is the one that matters.} Build it from real failures, stratify it, write rubrics that define the \textit{failure}, align a judge to one domain expert, and keep a human slice forever.
+  \end{itemize}
+\end{frame}

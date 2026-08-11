@@ -44,12 +44,12 @@
 \small
 \begin{tabular}{|c|c|c|l|c|}
     \hline
-    \textbf{Run} & \textbf{Commit} & \textbf{Seed} & \textbf{Change from baseline} & \textbf{Val F1} \\
+    \textbf{Run} & \textbf{Commit} & \textbf{Seed} & \textbf{Change from baseline} & \textbf{Val acc} \\
     \hline
     001 & a3f19c & 42 & baseline, no augmentation & 0.812 \\
     002 & a3f19c & 43 & baseline, seed only & 0.807 \\
     003 & 7d2e40 & 42 & + random crop and flip & 0.841 \\
-    004 & 91b6aa & 42 & + dropout 0.3 in the head & 0.838 \\
+    004 & 91b6aa & 42 & + dropout 0.3 in the head & 0.815 \\
     \hline
 \end{tabular}
 \end{center}
@@ -57,7 +57,7 @@
 \begin{itemize}
     \item Run 002 is the one that makes the table worth keeping: reseeding alone moved the score by $0.005$, so run 004 is noise while run 003 is real.
     \item A spreadsheet is enough for a course project, as long as you fill it in as you go rather than from memory afterwards.
-    \item Tools such as TensorBoard, MLflow and Weights \& Biases automate this and version the artifacts too --- covered in the MLOps deck of the Introduction to AI course.
+    \item Tools such as TensorBoard, MLflow and Weights \& Biases automate this and version the artifacts too; the Introduction to AI course covers them under MLOps.
 \end{itemize}
 \end{frame}
 

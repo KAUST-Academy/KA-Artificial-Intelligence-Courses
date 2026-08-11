@@ -1,0 +1,284 @@
+% Reproducibility: the practical, PyTorch-specific "lab bench habits" version.
+% The full lifecycle treatment (experiment tracking, model registries, CI for
+% models) belongs to the Intro to AI MLOps Foundations deck. Keep this section
+% to what somebody training a model this afternoon actually has to type.
+
+\begin{frame}{Reproducibility}
+\begin{itemize}
+    \item You add an augmentation, retrain, and validation accuracy moves from $90.1\%$ to $90.6\%$. Did the augmentation help?
+    \item You cannot answer that until you know how much that number moves when you change \textbf{nothing at all}.
+    \item Three things break when runs are not reproducible:
+    \begin{itemize}
+        \item You cannot tell a real improvement from noise.
+        \item A colleague runs your code and gets a different number.
+        \item You come back in six months and cannot recover your own result.
+    \end{itemize}
+    \item The fix is cheap: a handful of lines at the top of the script, plus the discipline to record what you ran.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Where the Randomness Comes From}
+\begin{center}
+\begin{tikzpicture}[
+    every node/.style={font=\footnotesize},
+    src/.style={draw=KAUSTblue, fill=KAUSTblue!8, rounded corners=2pt,
+                minimum width=2.9cm, minimum height=0.6cm, align=center},
+    run/.style={draw=black!55, fill=black!5, rounded corners=2pt,
+                minimum width=1.9cm, minimum height=2.6cm, align=center},
+    % NOTE: do not name this style "out" -- /tikz/out is a reserved path key
+    % (to[out=..,in=..]) and redefining it errors out inside the picture.
+    score/.style={draw=KAUSTred, fill=KAUSTred!8, rounded corners=2pt,
+                minimum width=2.0cm, minimum height=0.6cm, align=center},
+    arr/.style={-{Latex[length=1.8mm]}, draw=black!55}
+]
+\node[src] (a) at (0, 1.8)  {Weight initialization};
+\node[src] (b) at (0, 1.0)  {Shuffling order};
+\node[src] (c) at (0, 0.2)  {Random augmentation};
+\node[src] (d) at (0,-0.6)  {Dropout masks};
+\node[src] (e) at (0,-1.4)  {Nondeterministic\\GPU kernels};
+
+\node[run] (r) at (3.9, 0.2) {Training\\run};
+
+\node[score] (o1) at (7.0, 0.8) {$90.1\%$};
+\node[score] (o2) at (7.0,-0.4) {$90.6\%$};
+
+\foreach \s in {a,b,c,d,e} \draw[arr] (\s.east) -- (r.west);
+\draw[arr] (r.east) -- (o1.west);
+\draw[arr] (r.east) -- (o2.west);
+\end{tikzpicture}
+\end{center}
+\begin{itemize}
+    \item The first four all draw from a random number generator, so seeding fixes them.
+    \item The last one does not: some GPU kernels sum partial results in whatever order the threads finish, and floating-point addition is not associative. It needs a separate switch.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Seeding: Three Generators, Not One}
+    \ttfamily\footnotesize{
+    import random \\
+    import numpy as np \\
+    import torch \\
+
+    def set\_seed(seed=42): \\
+    \hspace{1em}    random.seed(seed) \# Python's own RNG \\
+    \hspace{1em}    np.random.seed(seed) \# NumPy's RNG \\
+    \hspace{1em}    torch.manual\_seed(seed) \# CPU and every GPU \\
+
+    set\_seed(42) \# call this before you build the model
+    }
+\vspace{1em}
+\begin{itemize}
+    \item Three libraries, three independent generators. Your augmentation pipeline may use any of them, so seed all three.
+    \item \texttt{torch.manual\_seed} ``sets the seed for generating random numbers on all devices'', so a separate \texttt{torch.cuda.manual\_seed\_all} is redundant.
+    \item Seed \textbf{before} constructing the model: weight initialization is the first thing that consumes random numbers.
+\end{itemize}
+\footnotetext{Quotation and API from the \href{https://docs.pytorch.org/docs/stable/notes/randomness.html}{PyTorch Reproducibility notes} and \href{https://docs.pytorch.org/docs/stable/generated/torch.manual_seed.html}{\texttt{torch.manual\_seed}} documentation}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{The One Everybody Forgets: DataLoader Workers}
+\begin{itemize}
+    \item With \texttt{num\_workers > 0} the DataLoader forks background processes, and \textbf{each worker gets its own copy of the RNG state}.
+    \item Seeding the main process does not reach them, so your random crops and flips are unseeded even though everything else is.
+    \item Two arguments fix it: \texttt{worker\_init\_fn} reseeds each worker, and \texttt{generator} pins the shuffling order in the main process.
+\end{itemize}
+
+\framebreak
+    \ttfamily\footnotesize{
+    def seed\_worker(worker\_id): \\
+    \hspace{1em}    worker\_seed = torch.initial\_seed() \% 2**32 \\
+    \hspace{1em}    np.random.seed(worker\_seed) \\
+    \hspace{1em}    random.seed(worker\_seed) \\
+
+    g = torch.Generator() \\
+    g.manual\_seed(42) \\
+
+    train\_loader = DataLoader(train\_set, batch\_size=64, \\
+    \hspace{6em}      shuffle=True, num\_workers=4, \\
+    \hspace{6em}      worker\_init\_fn=seed\_worker, generator=g)
+    }
+\vspace{1em}
+\begin{itemize}
+    \item PyTorch already gives each worker a distinct \texttt{torch} seed derived from \texttt{g}; \texttt{seed\_worker} passes that same value on to NumPy and to Python's \texttt{random}.
+    \item This is the single most common reason a ``seeded'' training script still wanders.
+\end{itemize}
+\footnotetext{Code follows the \href{https://docs.pytorch.org/docs/stable/notes/randomness.html}{PyTorch Reproducibility notes}, \emph{DataLoader} section}
+\end{frame}
+
+\begin{frame}{Determinism Switches}
+    \ttfamily\footnotesize{
+    import os \\
+    os.environ["CUBLAS\_WORKSPACE\_CONFIG"] = ":4096:8" \\
+    import torch \# set the variable before torch loads cuBLAS \\
+
+    torch.use\_deterministic\_algorithms(True) \\
+    torch.backends.cudnn.deterministic = True \\
+    torch.backends.cudnn.benchmark = False
+    }
+\vspace{1em}
+\begin{itemize}
+    \item \texttt{use\_deterministic\_algorithms(True)} makes PyTorch pick a deterministic kernel wherever one exists.
+    \item \texttt{cudnn.benchmark = False} switches off the autotuner, which otherwise times several convolution algorithms and may choose a different one from run to run.
+    \item Several cuBLAS reductions are nondeterministic from CUDA 10.2 onwards unless \texttt{CUBLAS\_WORKSPACE\_CONFIG} is set to \texttt{:4096:8} or \texttt{:16:8}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Determinism Is Not Free}
+\begin{itemize}
+    \item Some operations have \textbf{no} deterministic implementation on CUDA: \texttt{AvgPool3d}, \texttt{AdaptiveAvgPool2d/3d}, \texttt{MaxUnpool}, reflection padding, \texttt{NLLLoss} and \texttt{CTCLoss} are among them.
+    \item Under \texttt{use\_deterministic\_algorithms(True)} they raise a \texttt{RuntimeError} instead of quietly staying random. That is a feature: it names the layer that is the source of the wobble.
+    \item Deterministic kernels are usually slower, and losing the cuDNN autotuner costs more still.
+\end{itemize}
+\vspace{0.5em}
+\begin{center}
+\small
+\begin{tabular}{|l|l|}
+    \hline
+    \textbf{Situation} & \textbf{Turn determinism on?} \\
+    \hline
+    Chasing a bug you cannot reproduce & Yes, fully \\
+    Numbers going into a report & Yes, plus a seed sweep \\
+    Comparing two ideas & Fix the seed in both arms \\
+    A long production run & No, keep \texttt{benchmark=True} \\
+    \hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}{Same Seed Does Not Mean Same Number}
+\begin{itemize}
+    \item The PyTorch documentation is blunt about this: ``Completely reproducible results are not guaranteed across PyTorch releases, individual commits, or different platforms. Furthermore, results may not be reproducible between CPU and GPU executions, even when using identical seeds.''
+    \item So a seeded run is reproducible on \emph{that} machine, with \emph{that} software stack. Change any of the following and the digits move:
+    \begin{itemize}
+        \item a different GPU architecture, driver, or cuDNN build;
+        \item a different PyTorch or CUDA version;
+        \item a different \texttt{num\_workers} --- the batches are the same, but a different worker draws the augmentation for each sample, so the images are not.
+    \end{itemize}
+    \item What you should aim for is \textbf{stochastic equivalence}: a run you can repeat exactly on your own machine, and a \emph{distribution} of results you can quote elsewhere --- not bit-equality.
+\end{itemize}
+\footnotetext{Quotation: \href{https://docs.pytorch.org/docs/stable/notes/randomness.html}{PyTorch Reproducibility notes}}
+\end{frame}
+
+\begin{frame}{How Much Can the Seed Alone Move a Score?}
+Picard trained the same CIFAR-10 network thousands of times, changing only \texttt{torch.manual\_seed}.
+\vspace{0.5em}
+
+\begin{center}
+\small
+\begin{tabular}{|l|c|c|c|c|}
+    \hline
+    \textbf{CIFAR-10, ResNet9} & \textbf{Seeds} & \textbf{Mean $\pm$ std} & \textbf{Min} & \textbf{Max} \\
+    \hline
+    Long training (converged) & 500 & $90.70 \pm 0.20$ & $90.14$ & $91.41$ \\
+    Short training & $10^4$ & $90.02 \pm 0.23$ & $89.01$ & $90.83$ \\
+    \hline
+\end{tabular}
+\end{center}
+
+\vspace{0.3em}
+\begin{itemize}
+    \item Across $10^4$ seeds the luckiest and unluckiest runs are $1.82$ points apart --- larger than plenty of published ``improvements''.
+    \item On ImageNet with a pretrained ResNet50 (50 seeds) the effect shrinks but does not vanish: mean around $75.5\%$, standard deviation about $0.1\%$, a min-to-max gap of roughly $0.5\%$.
+    \item \textbf{Practical rule:} if your improvement is smaller than the spread you get from reseeding, you have not measured an improvement yet. Run three to five seeds and compare the means.
+\end{itemize}
+\footnotetext{Numbers from Picard, \href{https://arxiv.org/abs/2109.08203v2}{``torch.manual\_seed(3407) is all you need''}, arXiv:2109.08203v2, 2023, Tables 1--2}
+\end{frame}
+
+\begin{frame}{Pin the Environment, Not Just the Seed}
+\begin{itemize}
+    \item A seed is worthless if the library that consumes it changed underneath you. Record the stack next to the result:
+    \begin{itemize}
+        \item the exact package versions (\texttt{pip freeze > requirements.txt}, a \texttt{uv.lock}, or \texttt{conda env export});
+        \item the git commit of the training code;
+        \item the GPU model, driver, CUDA and cuDNN versions.
+    \end{itemize}
+\end{itemize}
+\vspace{0.5em}
+    \ttfamily\footnotesize{
+    print(torch.\_\_version\_\_, torch.version.cuda) \\
+    print(torch.backends.cudnn.version()) \\
+    print(torch.cuda.get\_device\_name(0))
+    }
+\vspace{1em}
+\begin{itemize}
+    \item Three lines at the start of every run, written into the log. It costs nothing and it is the first thing you will want when a number stops replicating.
+    \item Containers, lockfile-driven CI, experiment trackers and model registries take this much further --- that is the subject of the MLOps deck in the Introduction to AI course, not this one.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Checkpoint Discipline}
+\begin{itemize}
+    \item A file containing only \texttt{model.state\_dict()} is enough for inference and useless for resuming: the optimizer's momentum buffers and the scheduler's step count are gone.
+    \item Save the whole training state, and the configuration that produced it, in one object.
+\end{itemize}
+
+\framebreak
+    \ttfamily\footnotesize{
+    torch.save(\{ \\
+    \hspace{1em}    "epoch": epoch, \\
+    \hspace{1em}    "model\_state\_dict": model.state\_dict(), \\
+    \hspace{1em}    "optim\_state\_dict": optimizer.state\_dict(), \\
+    \hspace{1em}    "sched\_state\_dict": scheduler.state\_dict(), \\
+    \hspace{1em}    "best\_val\_acc": best\_val\_acc, \\
+    \hspace{1em}    "seed": seed, \\
+    \hspace{1em}    "config": config, \# lr, batch size, augment \\
+    \hspace{1em}    "torch\_version": torch.\_\_version\_\_, \\
+    \}, "resnet9\_seed42\_ep12\_acc9071.pt")
+    }
+\vspace{1em}
+\begin{itemize}
+    \item The file name carries the metadata you will search on later: architecture, seed, epoch, score. \texttt{model\_final\_v2\_REAL.pt} does not.
+    \item Keep the payload to tensors and plain Python types --- \texttt{torch.load} now defaults to \texttt{weights\_only=True}, which refuses arbitrary pickled objects.
+\end{itemize}
+\footnotetext{Checkpoint keys follow the PyTorch \href{https://docs.pytorch.org/tutorials/beginner/saving_loading_models.html}{Saving and Loading Models} tutorial}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Resuming a Run Correctly}
+    \ttfamily\footnotesize{
+    ckpt = torch.load(path, weights\_only=True) \\
+    model.load\_state\_dict(ckpt["model\_state\_dict"]) \\
+    optimizer.load\_state\_dict(ckpt["optim\_state\_dict"]) \\
+    scheduler.load\_state\_dict(ckpt["sched\_state\_dict"]) \\
+    start\_epoch = ckpt["epoch"] + 1 \\
+    model.train() \# dropout and BN back into train mode
+    }
+\vspace{1em}
+\begin{itemize}
+    \item Forgetting \texttt{model.train()} after loading leaves dropout off and batch normalization on stored statistics --- training continues, badly, and nothing warns you.
+    \item Rebuild the model and optimizer objects first; \texttt{load\_state\_dict} fills an existing object, it does not construct one.
+\end{itemize}
+
+\framebreak
+\begin{itemize}
+    \item Resuming does \textbf{not} give you the run you would have had without interrupting it. Reseeding at startup rewinds the generators, so the data order for epoch 12 is the order you saw in epoch 0.
+    \item If the continued run has to match, save the generator states too:
+\end{itemize}
+\vspace{0.5em}
+    \ttfamily\footnotesize{
+    \# add to the checkpoint dictionary \\
+    "torch\_rng": torch.get\_rng\_state(), \\
+    "cuda\_rng": torch.cuda.get\_rng\_state\_all(), \\
+    "numpy\_rng": np.random.get\_state(), \\
+    "python\_rng": random.getstate(),
+    }
+\vspace{1em}
+\begin{itemize}
+    \item Restore them with the matching setters (\texttt{torch.set\_rng\_state}, \texttt{np.random.set\_state}, \texttt{random.setstate}) instead of calling \texttt{set\_seed} again.
+    \item For most coursework this is overkill --- but know that it is the reason a resumed run and an uninterrupted run rarely land on the same number.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Reproducibility Checklist}
+\begin{itemize}
+    \item[\cmark] Seed \texttt{random}, \texttt{numpy} and \texttt{torch} before building the model.
+    \item[\cmark] Pass \texttt{worker\_init\_fn} \emph{and} \texttt{generator} to every DataLoader.
+    \item[\cmark] Turn on \texttt{use\_deterministic\_algorithms} and the cuDNN flags while debugging; turn them off for long runs.
+    \item[\cmark] Log the package versions, git commit and GPU alongside every result.
+    \item[\cmark] Checkpoint model, optimizer, scheduler, epoch, seed and config together, with a name you can read.
+    \item[\cmark] Report more than one seed before you claim an improvement.
+\end{itemize}
+\vspace{0.5em}
+\begin{itemize}
+    \item The NeurIPS reproducibility checklist generalizes this to a whole paper: code, data splits, hyperparameter search ranges, number of runs, and error bars.
+\end{itemize}
+\footnotetext{Pineau et al., \href{https://www.jmlr.org/papers/v22/20-303.html}{``Improving Reproducibility in Machine Learning Research''}, JMLR 22(164):1--20, 2021}
+\end{frame}

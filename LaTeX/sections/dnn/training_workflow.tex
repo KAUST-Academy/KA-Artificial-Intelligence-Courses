@@ -26,6 +26,41 @@
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Measuring an Improvement Against the Baseline}
+\begin{itemize}
+    \item The baseline from Step 1 is the thing every later run is compared to. Freeze it and keep its checkpoint.
+    \item Change \textbf{one} thing at a time, and hold the seed fixed across both arms, so the difference you measure is the change and not the draw.
+    \item Before believing a gain, find out how big the noise is: rerun the baseline with a different seed and nothing else altered.
+    \item If the improvement is smaller than that seed-only spread, it is not an improvement yet. Rerun both arms on three to five seeds and compare the means.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Keep a Run Log}
+\begin{itemize}
+    \item Every run should leave a row behind: what you changed, what it scored, and enough information to reproduce it.
+\end{itemize}
+\vspace{0.5em}
+\begin{center}
+\small
+\begin{tabular}{|c|c|c|l|c|}
+    \hline
+    \textbf{Run} & \textbf{Commit} & \textbf{Seed} & \textbf{Change from baseline} & \textbf{Val F1} \\
+    \hline
+    001 & a3f19c & 42 & baseline, no augmentation & 0.812 \\
+    002 & a3f19c & 43 & baseline, seed only & 0.807 \\
+    003 & 7d2e40 & 42 & + random crop and flip & 0.841 \\
+    004 & 91b6aa & 42 & + dropout 0.3 in the head & 0.838 \\
+    \hline
+\end{tabular}
+\end{center}
+\vspace{0.5em}
+\begin{itemize}
+    \item Run 002 is the one that makes the table worth keeping: reseeding alone moved the score by $0.005$, so run 004 is noise while run 003 is real.
+    \item A spreadsheet is enough for a course project, as long as you fill it in as you go rather than from memory afterwards.
+    \item Tools such as TensorBoard, MLflow and Weights \& Biases automate this and version the artifacts too --- covered in the MLOps deck of the Introduction to AI course.
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Full Training Workflow}
 \begin{itemize}
     \item \textbf{Step 3: Finalization}

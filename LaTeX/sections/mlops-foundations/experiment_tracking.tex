@@ -91,12 +91,12 @@
         \midrule
         \textbf{Tracking}   & An API and UI for logging parameters, code versions, metrics and artifacts
                               when you run ML code, and for visualising the results afterwards. \\
-        \textbf{Projects}   & A standard format for packaging reusable data-science code so a run can be
-                              reproduced by someone else, with its entry points and environment declared. \\
+        \textbf{Projects}   & A standard format for packaging and sharing reproducible data-science code,
+                              with its entry points and environment declared, so someone else can rerun it. \\
         \textbf{Models}     & A standard packaging format with ``flavours''. Anything supporting the
                               \texttt{python\_function} flavour can be served as a REST endpoint, batch-scored
                               in Spark, or exported to a cloud serving platform. \\
-        \textbf{Model Registry} & A centralised model store with versioning, stage transitions and
+        \textbf{Model Registry} & A centralised model store with versioning, aliases, tags and
                               annotations, plus lineage back to the run that produced each version. \\
         \bottomrule
     \end{tabular}}
@@ -110,7 +110,7 @@
     \end{itemize}
 
     \vspace{0.09em}
-    {\scriptsize Source: MLflow documentation, ``Concepts,'' \href{https://mlflow.org/docs/latest/}{mlflow.org/docs}.
+    {\scriptsize Source: MLflow documentation, \href{https://mlflow.org/docs/latest/ml/}{mlflow.org/docs/latest/ml}.
     See also Zaharia et al., ``Accelerating the Machine Learning Lifecycle with MLflow,''
     \textit{IEEE Data Engineering Bulletin} 41(4), 2018.}
 
@@ -131,9 +131,9 @@ with mlflow.start_run(run_name="rf-depth-sweep"):
     model = RandomForestClassifier(n_estimators=500, max_depth=12,
                                    random_state=42).fit(X_tr, y_tr)
 
+    proba = model.predict_proba(X_va)[:, 1]
     mlflow.log_metric("val_f1",  f1_score(y_va, model.predict(X_va)))
-    mlflow.log_metric("val_auc", roc_auc_score(y_va, model.predict_proba(X_va)[:, 1]))
-
+    mlflow.log_metric("val_auc", roc_auc_score(y_va, proba))
     mlflow.log_artifact("confusion_matrix.png")
     mlflow.sklearn.log_model(model, name="model")
     \end{lstlisting}
@@ -199,8 +199,8 @@ with mlflow.start_run(run_name="rf-depth-sweep"):
         \toprule
                         & \textbf{MLflow} & \textbf{Weights \& Biases} \\
         \midrule
-        Model           & Open source (Apache~2.0), self-hosted or managed & Hosted SaaS; self-hosting on the
-                          higher tiers \\
+        Model           & Open source (Apache~2.0), self-hosted or managed & Hosted SaaS;
+                          self-hosting available \\
         Cost            & Free; you run the server & Free tier for personal use (corporate use excluded);
                           free Pro licences for academic research \\
         Setup           & \texttt{pip install mlflow} --- works offline & Account plus API key; logs to the cloud

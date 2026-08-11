@@ -3,9 +3,10 @@
 % --- SLIDE 1: WHERE WE LEFT OFF ---
 \begin{frame}{Where We Left Off}
 
-    \begin{block}{Already covered in Day~1 (Data Science Foundations)}
-        What a hyperparameter is; structural versus optimisation hyperparameters; \textbf{grid search} and
-        \textbf{random search} over a validation split. We will not repeat that here.
+    \begin{block}{Already covered earlier in the course}
+        What a hyperparameter is, and structural versus optimisation hyperparameters. Building on that:
+        \textbf{grid search} enumerates a discretised product of ranges, \textbf{random search} draws
+        configurations independently from them, and both score each candidate on a validation split.
     \end{block}
 
     \vspace{0.18em}
@@ -25,9 +26,9 @@
 
     \vspace{0.3em}
     \begin{alertblock}{The gap}
-        Both methods are \textbf{memoryless}: trial 90 knows nothing about trials 1--89, and a trial that is
-        obviously hopeless at epoch 2 still runs to epoch 50. This section fixes both --- with
-        \textbf{Bayesian search} and \textbf{pruning}.
+        Both are \textbf{memoryless}: trial 90 knows nothing about trials 1--89, and a trial that is
+        obviously hopeless at epoch 2 still runs to epoch 50. \textbf{Bayesian search} fixes the first,
+        \textbf{pruning} the second.
     \end{alertblock}
 
 \end{frame}

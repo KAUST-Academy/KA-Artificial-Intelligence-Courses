@@ -174,10 +174,10 @@ CMD ["uvicorn", "serve:app", \
 from fastapi import FastAPI
 from pydantic import BaseModel
 import pandas as pd, skops.io as sio
-app   = FastAPI()
-MODEL = sio.load("model.skops", trusted=EXPECTED_TYPES)  # the whole fitted Pipeline
-MODEL_VERSION = "churn-clf/7"                            # read from the registry at start-up
-
+app = FastAPI()
+UNKNOWN = sio.get_untrusted_types(file="model.skops") # inspect, then trust
+MODEL = sio.load("model.skops", trusted=UNKNOWN)      # the fitted Pipeline
+MODEL_VERSION = "churn-clf/7"      # read from the registry at start-up
 class Request(BaseModel):          # the schema IS the contract
     tenure_months: int
     monthly_charges: float
@@ -186,7 +186,7 @@ class Request(BaseModel):          # the schema IS the contract
 def healthz(): return {"status": "ok"}
 @app.post("/predict")
 def predict(req: Request):
-    X = pd.DataFrame([req.model_dump()])       # same column names as at training time
+    X = pd.DataFrame([req.model_dump()])   # same columns as at training time
     p = MODEL.predict_proba(X)[0, 1]
     return {"churn_probability": float(p), "model_version": MODEL_VERSION}
     \end{lstlisting}
@@ -275,8 +275,7 @@ def predict(req: Request):
         \item Before buying a GPU, try: fewer features, a smaller model, ONNX Runtime, or simply caching
               repeated inputs. These are usually larger wins than new hardware.
         \item \textit{Going deeper:} model compression for efficient inference (quantisation, pruning,
-              distillation) is covered in the NLP course's \textbf{Inference Optimisation} deck, and
-              multi-GPU/multi-node serving in its \textbf{Distributed Training \& Serving} deck. We stay
+              distillation) and multi-GPU/multi-node serving are both covered in the NLP course. We stay
               framework-level here.
     \end{itemize}
 

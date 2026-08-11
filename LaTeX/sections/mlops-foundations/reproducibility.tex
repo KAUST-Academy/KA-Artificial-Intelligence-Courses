@@ -110,13 +110,13 @@ RandomForestClassifier(n_estimators=500, random_state=42)
         \begin{column}{0.5\textwidth}
             \begin{alertblock}{What frameworks actually promise}
                 \small PyTorch: ``Completely reproducible results are not guaranteed across PyTorch
-                releases, individual commits, or different platforms'' --- and never between CPU and GPU,
-                even with the same seed.
+                releases, individual commits, or different platforms'' --- nor, it adds, between CPU and
+                GPU executions, even with identical seeds.
             \end{alertblock}
             \vspace{0.4em}
             \begin{block}{And what it costs}
                 \small ``Deterministic operations are often slower than nondeterministic operations, so
-                single-run performance may decrease.''
+                single-run performance may decrease for your model.''
             \end{block}
         \end{column}
         \begin{column}{0.46\textwidth}
@@ -139,7 +139,7 @@ RandomForestClassifier(n_estimators=500, random_state=42)
     \href{https://docs.pytorch.org/docs/stable/notes/randomness.html}{docs.pytorch.org/docs/stable/notes/randomness.html}.
     The deep-learning switches themselves (\texttt{use\_deterministic\_algorithms}, cuDNN flags,
     \texttt{DataLoader} worker seeding, checkpoint discipline) are covered hands-on in the
-    \textbf{Practical Deep Learning} deck (CV~02); this deck stays framework-agnostic.}
+    computer-vision course; here we stay framework-agnostic.}
 
 \end{frame}
 

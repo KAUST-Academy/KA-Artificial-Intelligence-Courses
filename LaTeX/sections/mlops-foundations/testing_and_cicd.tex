@@ -89,7 +89,7 @@ def validate(df: pd.DataFrame) -> None:
         \textbf{Test type} & \textbf{What it asserts} \\
         \midrule
         \textbf{Smoke / shape}   & The model loads, accepts one row, returns a probability in $[0,1]$. Catches
-                                   90\% of deployment breakage. \\
+                                   most deployment breakage. \\
         \textbf{Minimum functionality} & Cases so easy that failure is unambiguous: a customer who cancelled
                                    last month must score high risk. \\
         \textbf{Invariance}      & Perturbations that must \emph{not} change the prediction: reordering
@@ -120,9 +120,9 @@ def validate(df: pd.DataFrame) -> None:
 \begin{frame}{A Rubric to Audit Yourself: The ML Test Score}
 
     \begin{block}{Breck et al., IEEE Big Data 2017}
-        \textbf{28 actionable tests} for production readiness, grouped into four sections:
+        \textbf{28 actionable tests} for production readiness, seven in each of four sections:
         \textbf{Features and Data}, \textbf{Model Development}, \textbf{ML Infrastructure}, and
-        \textbf{Monitoring} (7 monitoring tests).
+        \textbf{Monitoring}.
     \end{block}
 
     \vspace{0.15em}

@@ -104,7 +104,7 @@
       \[
         \text{bytes per layer} \;=\; s\,b\,h\left(34 + \frac{5\,a\,s}{h}\right).
       \]
-    \item[\textcolor{red}{$\blacktriangleright$}] The $34$ collects the layer inputs, the QKV and projection inputs, the LayerNorm and GeLU inputs, and the dropout masks. The $5as/h$ term is the \textbf{materialised $s \times s$ attention matrix}: the only piece that is quadratic in sequence length.
+    \item[\textcolor{red}{$\blacktriangleright$}] The $34$ collects the LayerNorm, QKV, linear-layer and GeLU inputs, the stored $Q$, $K$ and $V$, and the dropout masks. The $5as/h$ term is the \textbf{materialised $s \times s$ attention matrix}: the only piece that is quadratic in sequence length.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Worked example}, a 7B-class model with $h = 4096$, $a = 32$, $L = 32$, $s = 2048$, micro-batch $b = 1$:
       \[
         \tfrac{5as}{h} = 80, \quad sbh(34+80) = 8.39\times10^{6} \cdot 114 \approx 0.96\ \text{GB/layer}, \quad \times\,32 \approx \mathbf{31\ GB}.
@@ -112,15 +112,15 @@
     \item[\textcolor{red}{$\blacktriangleright$}] Total for one step: $112 + 31 = \mathbf{143\ GB}$ on a card with 80\,GB. Even a micro-batch of \emph{one} does not fit.
   \end{itemize}
   \vspace{0.1em}
-  {\scriptsize Equation 1 of Korthikanti et al., \href{https://arxiv.org/abs/2205.05198v1}{arXiv:2205.05198v1}, Section 3 (Activation Memory).}
+  {\scriptsize Equation 1 of Korthikanti et al., \href{https://arxiv.org/abs/2205.05198v1}{arXiv:2205.05198v1}, Section 4.1.}
 \end{frame}
 
 \begin{frame}{Two Things That Make Activations Worse, and One That Helps}
   \begin{itemize}\itemsep0.4em
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Longer context is superlinear.} Take the same 7B model to $s = 8192$: the quadratic term becomes $5as/h = 320$, so each layer costs $sbh(34+320) \approx 11.9$\,GB and the stack costs $\approx 380$\,GB --- a $4\times$ longer sequence for a $12\times$ memory bill.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Bigger micro-batches are linear.} Activations scale exactly with $b$, which is why the first thing that fails when you raise the batch size is memory, not compute.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{IO-aware attention removes the quadratic term.} FlashAttention never materialises the $s \times s$ matrix, so the $5as/h$ term disappears and the per-layer cost drops to $34sbh$: $9.1$\,GB instead of $31$\,GB at $s = 2048$, and $36$\,GB instead of $380$\,GB at $s = 8192$.
-    \item[\textcolor{red}{$\blacktriangleright$}] Deck 16 covers FlashAttention and FlashAttention-2 in full; here we only need the consequence, which is that the \emph{linear} $34sbh$ term is what distributed training has to deal with, and it is still large.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{IO-aware attention removes the quadratic term.} FlashAttention never materialises the $s \times s$ matrix, so the $5as/h$ term disappears and the per-layer cost drops to $34sbh$. The stack then costs $9.1$\,GB instead of $31$\,GB at $s = 2048$, and $36$\,GB instead of $380$\,GB at $s = 8192$.
+    \item[\textcolor{red}{$\blacktriangleright$}] FlashAttention and FlashAttention-2 are covered earlier; here we only need the consequence, which is that the \emph{linear} $34sbh$ term is what distributed training has to deal with, and it is still large.
   \end{itemize}
 \end{frame}
 
@@ -130,7 +130,7 @@
       \begin{itemize}\footnotesize\itemsep0.35em
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The trade.} Do not store the intermediate activations. Store only the \emph{input} to each transformer layer, and recompute the interior with an extra forward pass when the backward pass reaches it.
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Full recomputation} at layer granularity reduces the whole activation term to $2 s b h L$ bytes. For our 7B example that is $2 \cdot 2048 \cdot 4096 \cdot 32 \approx 0.54$\,GB, down from 31\,GB --- a $57\times$ reduction.
-        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The price} is one extra forward pass. Chen et al.\ quote about 33\% extra compute; Megatron's authors measure \textbf{30--40\% execution-time overhead} on real training runs.
+        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The price} is one extra forward pass (Chen et al.): about 33\% more compute in theory, and Megatron's authors measure \textbf{30--40\% execution-time overhead} on real training runs.
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Selective recomputation} recomputes only the cheap-but-huge pieces (the attention softmax and dropout region) and stores the rest. It recovers over 90\% of the lost time while keeping most of the memory saving.
         \item[\textcolor{red}{$\blacktriangleright$}] In PyTorch this is \texttt{torch.utils.checkpoint}; in Hugging Face, \texttt{model.gradient\_checkpointing\_enable()}.
       \end{itemize}

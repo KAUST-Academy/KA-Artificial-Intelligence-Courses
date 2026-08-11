@@ -17,8 +17,8 @@
   \begin{columns}[T,onlytextwidth]
     \column{0.53\textwidth}
       \begin{itemize}\footnotesize\itemsep0.45em
-        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Model size} has grown by three orders of magnitude in six years; \textbf{GPU memory} per device by less than one. Rajbhandari et al.\ put the gap at ``over 1000$\times$'' against ``5$\times$''.
-        \item[\textcolor{red}{$\blacktriangleright$}] The scaling laws from deck 07 say the loss keeps falling with parameters and tokens. Nothing in them says the result fits in one device.
+        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Model size} has grown by three orders of magnitude in three years; \textbf{GPU memory} per device by less than one. Rajbhandari et al.\ put the gap at ``over 1000$\times$'' against ``5$\times$'' (16\,GB to 80\,GB).
+        \item[\textcolor{red}{$\blacktriangleright$}] The scaling laws covered earlier say the loss keeps falling with parameters and tokens. Nothing in them says the result fits in one device.
         \item[\textcolor{red}{$\blacktriangleright$}] Two consequences follow:
           \begin{itemize}\itemsep0.2em
             \item Training state must be \textbf{split} across devices, not replicated.
@@ -31,7 +31,7 @@
     \column{0.45\textwidth}
       \centering
       \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{images/distributed-training/korthikanti_fig1_activation_memory_vs_a100.jpg}\\[0.3em]
-      {\scriptsize Memory needed per GPU for four model sizes. The dashed red line is the 80\,GB capacity of an A100. Korthikanti et al., ``Reducing Activation Recomputation in Large Transformer Models,'' \href{https://arxiv.org/abs/2205.05198v1}{arXiv:2205.05198v1}, Figure 1.}
+      {\scriptsize Memory per GPU, baseline versus optimised, at four model sizes. The dashed line is the 80\,GB of an A100. Korthikanti et al., ``Reducing Activation Recomputation in Large Transformer Models,'' \href{https://arxiv.org/abs/2205.05198v1}{arXiv:2205.05198v1}, Figure 1.}
   \end{columns}
 \end{frame}
 

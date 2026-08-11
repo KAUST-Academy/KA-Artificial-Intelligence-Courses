@@ -49,7 +49,7 @@
       {\scriptsize Four all-reduces per transformer layer per iteration. Shoeybi et al., \href{https://arxiv.org/abs/1909.08053v4}{arXiv:1909.08053v4}, Figure 4.}
     \column{0.52\textwidth}
       \begin{itemize}\footnotesize\itemsep0.3em
-        \item[\textcolor{red}{$\blacktriangleright$}] Two all-reduces forward (one per block) and two backward: \textbf{four per layer, per iteration}, each on a tensor of $b \cdot s \cdot h$ elements. With activation recomputation it becomes six.
+        \item[\textcolor{red}{$\blacktriangleright$}] Two all-reduces forward (one per block) and two backward: \textbf{four per layer, per iteration}, each on a tensor of $b \cdot s \cdot h$ elements. Full activation recomputation reruns the forward pass, making it six.
         \item[\textcolor{red}{$\blacktriangleright$}] Since an all-reduce moves $\approx 2\times$ the message size per rank, the traffic per layer per iteration is about $8\,b\,s\,h$ elements. For a 7B-class model ($h = 4096$, $L = 32$) at $b = 4$, $s = 2048$ in \texttt{bf16}, that is $\approx 17$\,GB per GPU per step.
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The volume is not the problem --- the placement is.} Data-parallel traffic happens once, at the end of the backward pass, and DDP hides it behind computation. Tensor-parallel traffic sits \textbf{on the critical path}: the next operation literally cannot start until the all-reduce lands.
         \item[\textcolor{red}{$\blacktriangleright$}] The compensation is that tensor parallelism shards \emph{activations} too, so it reduces the memory term that ZeRO cannot touch.
@@ -63,7 +63,7 @@
     \item[\textcolor{red}{$\blacktriangleright$}] Now compare the two fabrics they might run over. An H100 SXM has \textbf{900\,GB/s} of NVLink bandwidth to its neighbours through NVSwitch. A single NDR InfiniBand port gives \textbf{50\,GB/s}. That is an \textbf{18$\times$} gap on traffic you cannot overlap.
     \item[\textcolor{red}{$\blacktriangleright$}] Hence the standard rule, stated as Takeaway \#1 by Narayanan et al.:
       \begin{itemize}
-        \item[] \footnotesize\textit{``Tensor model parallelism should generally be used up to degree $g$ when using $g$-GPU servers, and then pipeline model parallelism can be used to scale up to larger models across servers.''}
+        \item[] \footnotesize\textit{``When considering different forms of model parallelism, tensor model parallelism should generally be used up to degree $g$ when using $g$-GPU servers, and then pipeline model parallelism can be used to scale up to larger models across servers.''}
       \end{itemize}
     \item[\textcolor{red}{$\blacktriangleright$}] In practice this means \textbf{$t \leq 8$} on an 8-GPU HGX node, and the same rule reappears verbatim in inference serving: vLLM's guidance is to set tensor-parallel size to the GPUs per node and pipeline-parallel size to the number of nodes.
     \item[\textcolor{red}{$\blacktriangleright$}] Tensor parallelism also \emph{shrinks} the per-GPU batch, since the batch is replicated across the tensor-parallel group. Pushing $t$ too high starves the GEMMs and drops utilisation even if the bandwidth were free.
@@ -71,5 +71,5 @@
   \vspace{0.1em}
   {\scriptsize Narayanan et al., ``Efficient Large-Scale Language Model Training on GPU
   Clusters Using Megatron-LM,'' SC 2021.
-  \href{https://arxiv.org/abs/2104.04473v5}{arXiv:2104.04473v5}, Section 3.}
+  \href{https://arxiv.org/abs/2104.04473v5}{arXiv:2104.04473v5}, Section 3.2.}
 \end{frame}

@@ -28,7 +28,7 @@
     \item[\textcolor{red}{$\blacktriangleright$}] With \texttt{fp16}, the gradient distribution sits mostly in the underflow region of the format. Micikevicius et al.'s fix is disarmingly simple: multiply the \textbf{loss} by a constant $S$ before the backward pass.
     \item[\textcolor{red}{$\blacktriangleright$}] By the chain rule every gradient is scaled by the same $S$, shifting the whole distribution into the representable range. Divide the gradients by $S$ before the optimizer step and the update is mathematically unchanged.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Dynamic loss scaling} tunes $S$ automatically: raise it every few hundred healthy steps, and on any step that produces an \texttt{inf} or \texttt{NaN}, halve it and \emph{skip} that step. This is what \texttt{torch.amp.GradScaler} does.
-    \item[\textcolor{red}{$\blacktriangleright$}] The same paper introduced the other half of the recipe: \textbf{keep an \texttt{fp32} master copy of the weights} that accumulates the updates. Those four bytes are three of the sixteen in our memory budget.
+    \item[\textcolor{red}{$\blacktriangleright$}] The same paper introduced the other half of the recipe: \textbf{keep an \texttt{fp32} master copy of the weights} that accumulates the updates. Those four bytes are a quarter of the sixteen-byte budget.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{With \texttt{bf16} none of this is needed.} Its range matches \texttt{fp32}, so gradients do not underflow, no scaler is required, and no steps are skipped. On any Ampere-or-later GPU, use \texttt{bf16}. Know loss scaling because you will read it in every paper written before 2021 and meet it in older codebases.
   \end{itemize}
   \vspace{0.1em}
@@ -58,7 +58,7 @@
     \texttt{ReduceScatter}  & $\frac{d-1}{d}\Psi$  & ZeRO-2/3 and FSDP gradients; sequence-parallel exits \\
     \texttt{AllGather}      & $\frac{d-1}{d}\Psi$  & ZeRO-3 and FSDP parameters; sequence-parallel entries \\
     \texttt{Broadcast}      & $\Psi$               & synchronising initial weights from rank 0 \\
-    \texttt{AllToAll}       & varies               & MoE expert routing (deck 13); DeepSpeed-Ulysses \\
+    \texttt{AllToAll}       & varies               & MoE expert routing; DeepSpeed-Ulysses \\
     \texttt{Send}/\texttt{Recv} & one activation tensor & pipeline stage boundaries \\
     \bottomrule
   \end{tabular}

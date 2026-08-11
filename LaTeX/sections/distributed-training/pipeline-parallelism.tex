@@ -33,7 +33,7 @@
         t_{pb} = (p-1)(t_f + t_b), \qquad t_{id} = m\,(t_f + t_b),
         \qquad \frac{t_{pb}}{t_{id}} = \boxed{\frac{p-1}{m}}.
       \]
-    \item[\textcolor{red}{$\blacktriangleright$}] GPipe's own paper states the same quantity as a fraction of \emph{total} time, $\dfrac{p-1}{m+p-1}$, and reports the overhead ``negligible when $m \geq 4p$''. The two expressions are the same number with different denominators; quote whichever your audience expects.
+    \item[\textcolor{red}{$\blacktriangleright$}] GPipe's own paper (writing $K$ for stages and $M$ for micro-batches) states the same quantity as a fraction of \emph{total} time, $\dfrac{p-1}{m+p-1}$, and reports the overhead negligible when $m \geq 4p$. The two measure the same bubble against different baselines, ideal time and total time; quote whichever your audience expects.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Worked example.} $p = 8$ stages, $m = 64$ micro-batches: bubble $= 7/64 \approx 11\%$ of ideal time. Halve the micro-batches to $m = 32$ and it doubles to $22\%$.
     \item[\textcolor{red}{$\blacktriangleright$}] So you want $m \gg p$ --- and that is exactly where GPipe's memory problem appears. The all-forward-then-all-backward schedule keeps activations for \textbf{all $m$ micro-batches} alive at once, so shrinking the bubble inflates the activation memory linearly.
     \item[\textcolor{red}{$\blacktriangleright$}] Two constraints pulling in opposite directions through the same variable. Resolving that tension is what the next schedule does.
@@ -103,7 +103,7 @@
           $\text{GPUs} = t \times p \times d$.
         \item[\textcolor{red}{$\blacktriangleright$}] They are assigned to the hardware by \textbf{communication intensity}: tensor parallelism gets the fastest links (inside a node), pipeline parallelism the slowest (point-to-point across nodes), and data parallelism whatever is left, because DDP traffic can be overlapped.
         \item[\textcolor{red}{$\blacktriangleright$}] Sequence parallelism (next section) adds a fourth, and expert parallelism a fifth --- which is why practitioners now say ``4D'' or ``5D'' as often as ``3D''.
-        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Mixture-of-Experts routing} is its own parallel axis (each expert lives on its own device, connected by an all-to-all). Deck 13 owns that treatment; here it is enough to know that expert parallelism composes with the three axes above.
+        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Mixture-of-Experts routing} is its own parallel axis (each expert lives on its own device, connected by an all-to-all). Routing is covered earlier; here it is enough to know that expert parallelism composes with the three axes above.
       \end{itemize}
   \end{columns}
 \end{frame}
@@ -137,5 +137,5 @@
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Checkpointing at this scale} is itself a distributed problem: state must be saved from every rank, asynchronously, with enough metadata to restore under a \emph{different} parallel layout. PyTorch Distributed Checkpoint and Megatron's converters exist for exactly this.
   \end{itemize}
   \vspace{0.1em}
-  {\scriptsize Takeaways quoted from Narayanan et al., \href{https://arxiv.org/abs/2104.04473v5}{arXiv:2104.04473v5}, Section 3.}
+  {\scriptsize Takeaways paraphrased from Narayanan et al., \href{https://arxiv.org/abs/2104.04473v5}{arXiv:2104.04473v5}, Sections 3.2--3.4.}
 \end{frame}

@@ -61,9 +61,9 @@
 
 \begin{frame}{PyTorch FSDP: the Native Implementation}
   \begin{itemize}\footnotesize\itemsep0.3em
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Fully Sharded Data Parallel} is PyTorch's in-tree realisation of the ZeRO-3 idea. The model is decomposed into \textbf{FSDP units}; each unit's parameters are flattened and sharded across ranks.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Fully Sharded Data Parallel} is PyTorch's in-tree realisation of the ZeRO-3 idea. The model is decomposed into \textbf{FSDP units}; each unit $i$'s $\psi_i$ parameters are flattened and sharded across $F$ ranks.
     \item[\textcolor{red}{$\blacktriangleright$}] The runtime loop, per unit: \textbf{all-gather} the full parameters just before the unit runs, compute, \textbf{free} the peer shards immediately afterwards, and \textbf{reduce-scatter} the gradients on the way back.
-    \item[\textcolor{red}{$\blacktriangleright$}] Peak memory is therefore $\sum_i \psi_i / F + \max_i \psi_i$: the sharded whole, plus \emph{one} materialised unit. That $\max_i \psi_i$ term is the entire reason unit granularity matters.
+    \item[\textcolor{red}{$\blacktriangleright$}] Peak \emph{parameter} memory is therefore $\sum_i \psi_i / F + \max_i \psi_i$: the sharded whole, plus \emph{one} materialised unit. That $\max_i \psi_i$ term is the entire reason unit granularity matters.
   \end{itemize}
   \vspace{0.2em}
   \centering
@@ -84,7 +84,7 @@
         \item \textbf{Forward prefetch:} start the all-gather for unit $i+1$ while unit $i$ computes.
         \item \textbf{Backward prefetch:} same idea in reverse, which is where most of FSDP's speed comes from.
       \end{itemize}
-    \item[\textcolor{red}{$\blacktriangleright$}] Zhao et al.\ measured that collectives below roughly $33$M elements fall off the bandwidth curve --- concrete evidence for not wrapping every \texttt{nn.Linear} separately.
+    \item[\textcolor{red}{$\blacktriangleright$}] Zhao et al.\ measured all-gather time rising sharply once the message drops below $33$M elements --- concrete evidence for not wrapping every \texttt{nn.Linear} separately.
     \item[\textcolor{red}{$\blacktriangleright$}] Combine FSDP with activation checkpointing at the \emph{same} block boundary. The two are orthogonal: FSDP shards the model states, checkpointing shrinks the activations.
   \end{itemize}
 \end{frame}

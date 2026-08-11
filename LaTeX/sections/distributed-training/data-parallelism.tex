@@ -126,7 +126,7 @@
 \begin{frame}{The Wall Data Parallelism Cannot Climb}
   \begin{itemize}\itemsep0.5em
     \item[\textcolor{red}{$\blacktriangleright$}] Data parallelism gives you \textbf{throughput}, and nothing else. Every rank still stores the full $16\Psi$ bytes of model states.
-    \item[\textcolor{red}{$\blacktriangleright$}] Adding GPUs therefore does not help you fit a bigger model at all. On an 80\,GB card, $80\,\text{GB} / 16\,\text{bytes} = 5\times10^{9}$ parameters exactly exhausts memory with \emph{zero} activations; allowing for activations, buffers, and fragmentation the practical ceiling is around \textbf{2--3B parameters}. Rajbhandari et al.\ measured the same ceiling at ``less than 1.5 billion'' on 32\,GB V100s.
+    \item[\textcolor{red}{$\blacktriangleright$}] Adding GPUs therefore does not help you fit a bigger model at all. On an 80\,GB card, $80\,\text{GB} / 16\,\text{bytes} = 5\times10^{9}$ parameters exactly exhausts memory with \emph{zero} activations; allowing for activations, buffers, and fragmentation the practical ceiling is around \textbf{2--3B parameters}. Rajbhandari et al.\ report the analogous limit as \textbf{1.4B} parameters on 32\,GB cards.
     \item[\textcolor{red}{$\blacktriangleright$}] Worse, the replication is \emph{pure waste}: $d$ ranks store $d$ identical copies of the optimizer states, and each rank only ever needs $1/d$ of them at the moment of the optimizer step.
     \item[\textcolor{red}{$\blacktriangleright$}] That observation --- \emph{the redundancy is unnecessary} --- is the whole content of the next section.
   \end{itemize}

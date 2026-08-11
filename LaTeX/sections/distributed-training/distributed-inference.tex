@@ -8,7 +8,7 @@
         \item \textbf{A new state appears.} The KV cache grows with every generated token and is \emph{per request}, not per model.
         \item \textbf{The bottleneck moves.} Decode reads the whole weight matrix to produce one token, so it is memory-bandwidth-bound rather than compute-bound.
       \end{itemize}
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Scope.} Deck 17 owns the single-node story --- KV caching, continuous batching, PagedAttention, speculative decoding, quantization, distillation, and pruning. This section covers only what changes when the deployment spans \emph{several GPUs or several nodes}.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Scope.} The single-node story (KV caching, continuous batching, PagedAttention, speculative decoding, quantization, distillation, pruning) was covered earlier. This section covers only what changes when the deployment spans \emph{several GPUs or several nodes}.
     \item[\textcolor{red}{$\blacktriangleright$}] The multi-GPU question has exactly two answers, and real deployments use both at once: \textbf{replicate} the model, or \textbf{shard} it.
   \end{itemize}
 \end{frame}
@@ -77,7 +77,7 @@
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Route on state, not on count.} The useful signals are queue depth, the number of active sequences, and --- most importantly --- how much KV cache each replica has left. A replica with free HBM can absorb a new request; one at 95\% cache occupancy will start preempting.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Prefix-cache-aware routing} is the highest-value addition in practice. Requests that share a long system prompt or a document prefix should land on the \emph{same} replica, where that prefix is already in the KV cache. Hashing on the prompt prefix can turn a full prefill into a cache hit.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Prefill/decode disaggregation} takes this one step further. The two phases have opposite bottlenecks --- prefill is compute-bound, decode is memory-bandwidth-bound --- and colocating them makes each interfere with the other. DistServe assigns them to \emph{different} GPU pools with independently chosen parallelism, then ships the KV cache between them, reporting \textbf{7.4$\times$ more requests or 12.6$\times$ tighter latency targets}; Splitwise makes the same split across differently specified hardware.
-    \item[\textcolor{red}{$\blacktriangleright$}] Continuous batching and PagedAttention (deck 17) operate \emph{within} a replica; routing and disaggregation operate \emph{across} them. Both are needed, and neither substitutes for the other.
+    \item[\textcolor{red}{$\blacktriangleright$}] Continuous batching and PagedAttention (covered earlier) operate \emph{within} a replica; routing and disaggregation operate \emph{across} them. Both are needed, and neither substitutes for the other.
   \end{itemize}
   \vspace{0.1em}
   {\scriptsize Zhong et al., ``DistServe,'' OSDI 2024, \href{https://arxiv.org/abs/2401.09670v3}{arXiv:2401.09670v3}; Patel et al., ``Splitwise,'' ISCA 2024, \href{https://arxiv.org/abs/2311.18677v2}{arXiv:2311.18677v2}.}

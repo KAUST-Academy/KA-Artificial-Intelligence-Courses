@@ -117,7 +117,7 @@
     \column{0.44\textwidth}
       \centering
       \includegraphics[width=0.92\linewidth,height=0.54\textheight,keepaspectratio]{images/llm-evaluation/humaneval_fig13_passk_estimator.png}\\[0.1em]
-      {\scriptsize Bias and variance of the two pass@$k$ estimators: ``the gap doesn't fully close even when $n > 5k$.'' Chen et al., \href{https://arxiv.org/abs/2107.03374v2}{arXiv:2107.03374v2}, Figure 13.}
+      {\scriptsize Bias and variance of the two pass@$k$ estimators; ``the gap doesn't fully close even when $n > 5k$'' (Appendix~A). Chen et al., \href{https://arxiv.org/abs/2107.03374v2}{arXiv:2107.03374v2}, Figure 13.}
   \end{columns}
 \end{frame}
 
@@ -133,9 +133,9 @@
     \midrule
     Multiple-choice likelihood & Rank options by model probability; no free generation & MMLU, HellaSwag, ARC & Sensitive to option order, format, and calibration; unlike real usage \\
     \addlinespace[0.2em]
-    Generative exact match & Sample, parse, compare to a key & GSM8K, TriviaQA, IFEval & Parsing bugs; punishes correct answers in the wrong format \\
+    Generative exact match & Sample, parse, compare to a key & GSM8K, MATH, TriviaQA & Parsing bugs; punishes correct answers in the wrong format \\
     \addlinespace[0.2em]
-    Execution / verification & Run code or a checker against tests & HumanEval, SWE-bench, LiveCodeBench & Test suites can be incomplete; only applies to checkable domains \\
+    Execution / verification & Run code or a checker against tests & HumanEval, SWE-bench, IFEval & Test suites can be incomplete; only applies to checkable domains \\
     \addlinespace[0.2em]
     Model-graded (judge) & A strong LLM scores or ranks outputs & MT-Bench, AlpacaEval, RAGAS & Judge biases (position, verbosity, self-preference); needs calibration \\
     \addlinespace[0.2em]

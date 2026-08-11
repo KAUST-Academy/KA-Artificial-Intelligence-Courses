@@ -28,7 +28,7 @@
   \begin{itemize}\itemsep0.4em
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Capability evals} ask \textit{can the model do this at all?} Knowledge, reasoning, coding, tool use. Expect \textbf{low pass rates} --- a capability eval that everything passes has stopped carrying information.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Alignment / behaviour evals} ask \textit{does the model do what was asked, in the way that was asked?} Instruction following, format adherence, refusal calibration, tone. Expect \textbf{high pass rates}; these are regression tests, and a drop is a bug.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Safety evals} ask \textit{what happens under adversarial or high-stakes input?} Jailbreak resistance, harmful-content refusal, prompt-injection robustness for agents. Covered in depth in the AI Safety for Agents lecture; here we only note that they need their own held-out, private test sets.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Safety evals} ask \textit{what happens under adversarial or high-stakes input?} Jailbreak resistance, harmful-content refusal, prompt-injection robustness for agents. Covered in depth earlier in the course; here we only note that they need their own held-out, private test sets.
     \item[\textcolor{red}{$\blacktriangleright$}] The three families need different \textbf{sample sizes, graders, and refresh policies}. Mixing them into a single ``score'' destroys the information in all three.
   \end{itemize}
 \end{frame}
@@ -45,19 +45,14 @@
 \end{frame}
 
 \begin{frame}{HELM: Standardisation Is the Contribution}
-  \begin{columns}[T,onlytextwidth]
-    \column{0.5\textwidth}
-      \begin{itemize}\footnotesize\itemsep0.35em
-        \item[\textcolor{red}{$\blacktriangleright$}] HELM evaluates \textbf{30 models} from \textbf{12 organisations} on \textbf{42 scenarios} (16 core $+$ 26 targeted), for \textbf{4{,}939} total runs.
-        \item[\textcolor{red}{$\blacktriangleright$}] Seven metrics are measured for each core scenario wherever possible (87.5\% of the time): \textbf{accuracy, calibration, robustness, fairness, bias, toxicity, efficiency}.
-        \item[\textcolor{red}{$\blacktriangleright$}] The headline result is about \textbf{coverage}, not ranking: before HELM, models had been evaluated on only \textbf{17.9\%} of the core scenarios; afterwards, \textbf{96.0\%}.
-        \item[\textcolor{red}{$\blacktriangleright$}] The lesson for your own work: most of the value of an evaluation suite comes from running \textit{every} model through \textit{the same} pipeline. Numbers copied from different papers are usually not comparable.
-      \end{itemize}
-    \column{0.48\textwidth}
-      \centering
-      \includegraphics[width=\linewidth,height=0.72\textheight,keepaspectratio]{images/llm-evaluation/helm_fig4_standardizing_evaluation.png}\\[0.2em]
-      {\scriptsize ``Standardizing language model evaluation.'' Top: which models had been evaluated on which core scenarios before HELM. Bottom: after. Liang et al., \href{https://arxiv.org/abs/2211.09110v2}{arXiv:2211.09110v2}, Figure 4.}
-  \end{columns}
+  \begin{itemize}\footnotesize\itemsep0.45em
+    \item[\textcolor{red}{$\blacktriangleright$}] HELM evaluates \textbf{30 models} from \textbf{12 organisations} on \textbf{42 scenarios} (16 core $+$ 26 targeted), for \textbf{4{,}939} total runs.
+    \item[\textcolor{red}{$\blacktriangleright$}] Seven metrics are measured for each core scenario wherever possible (87.5\% of the time): \textbf{accuracy, calibration, robustness, fairness, bias, toxicity, efficiency}.
+    \item[\textcolor{red}{$\blacktriangleright$}] The headline result is about \textbf{coverage}, not ranking: before HELM, models had been evaluated on only \textbf{17.9\%} of the core scenarios; afterwards, \textbf{96.0\%}. Several core scenarios had \textbf{no} model evaluated on them at all.
+    \item[\textcolor{red}{$\blacktriangleright$}] The lesson for your own work: most of the value of an evaluation suite comes from running \textit{every} model through \textit{the same} pipeline. Numbers copied from different papers are usually not comparable.
+  \end{itemize}
+  \vspace{0.15em}
+  {\scriptsize Liang et al., ``Holistic Evaluation of Language Models,'' TMLR 2023, \href{https://arxiv.org/abs/2211.09110v2}{arXiv:2211.09110v2}, Figure 4.}
 \end{frame}
 
 \begin{frame}{The Eval-Driven Development Loop}

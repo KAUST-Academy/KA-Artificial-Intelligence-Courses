@@ -1,4 +1,4 @@
-% --- LLM-as-a-judge (deep treatment; deck 09 keeps the short introduction) ---
+% --- LLM-as-a-judge ---
 \begin{frame}{LLM-as-a-Judge: The Problem It Solves}
   \begin{columns}[T,onlytextwidth]
     \column{0.5\textwidth}
@@ -31,9 +31,9 @@
     \column{0.46\textwidth}
       \centering
       {\scriptsize \textbf{Pairwise comparison}}\\[0.15em]
-      \includegraphics[width=\linewidth,height=0.18\textheight,keepaspectratio]{images/llm-evaluation/mtbench_fig5_pairwise_prompt.png}\\[0.35em]
+      \includegraphics[width=\linewidth,height=0.30\textheight,keepaspectratio]{images/llm-evaluation/mtbench_fig5_pairwise_prompt.png}\\[0.35em]
       {\scriptsize \textbf{Single-answer grading}}\\[0.15em]
-      \includegraphics[width=\linewidth,height=0.16\textheight,keepaspectratio]{images/llm-evaluation/mtbench_fig6_single_grading_prompt.png}\\[0.15em]
+      \includegraphics[width=\linewidth,height=0.19\textheight,keepaspectratio]{images/llm-evaluation/mtbench_fig6_single_grading_prompt.png}\\[0.15em]
       {\scriptsize Zheng et al., \href{https://arxiv.org/abs/2306.05685v4}{arXiv:2306.05685v4}, Figures 5 and 6.}
     \column{0.52\textwidth}
       \begin{itemize}\scriptsize\itemsep0.05em
@@ -125,7 +125,7 @@
     \column{0.44\textwidth}
       \centering
       \includegraphics[width=\linewidth,height=0.32\textheight,keepaspectratio]{images/llm-evaluation/mtbench_fig2_judge_human_agreement.png}\\[0.15em]
-      {\scriptsize Judge--human agreement against the win-rate gap of the model pair: near chance for closely matched models, near perfect for clearly separated ones. Zheng et al., \href{https://arxiv.org/abs/2306.05685v4}{arXiv:2306.05685v4}, Figure 2.}
+      {\scriptsize Judge--human agreement against the win-rate gap of the model pair: about 70\% for closely matched models, near perfect for clearly separated ones. Zheng et al., \href{https://arxiv.org/abs/2306.05685v4}{arXiv:2306.05685v4}, Figure 2.}
       \begin{itemize}\scriptsize
         \item[\textcolor{red}{$\blacktriangleright$}] Judges are most trustworthy exactly where you need them least.
       \end{itemize}
@@ -150,7 +150,7 @@
       \begin{itemize}\footnotesize\itemsep0.24em
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{A verifier exists.} Unit tests, schema validation, a SQL execution check, or an IFEval-style predicate beat a judge on cost, speed, and correctness.
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The task exceeds the judge's competence.} Specialist medical, legal, or safety-critical content where the judge's own error rate is the dominant term.
-        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The distinction is subtle.} Judge--human agreement collapses toward chance exactly when two systems are close, which is the case a leaderboard is meant to resolve.
+        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The distinction is subtle.} Judge--human agreement is weakest exactly when two systems are close, which is the case a leaderboard is meant to resolve.
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The judgment is a value call.} Whether a refusal was appropriate, or whether a tone fits a brand, is a policy question that belongs to a human owner.
         \item[\textcolor{red}{$\blacktriangleright$}] \textbf{You have not calibrated it yet.} An uncalibrated judge is not a weak signal; it is an unknown one.
       \end{itemize}

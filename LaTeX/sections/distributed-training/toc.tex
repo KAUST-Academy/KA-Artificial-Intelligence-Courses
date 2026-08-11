@@ -1,0 +1,16 @@
+% --- Table of Contents ---
+\begin{frame}[allowframebreaks]{Table of Contents}
+  \begin{enumerate}\itemsep0.15em
+    \item Motivation: the memory wall --- why a 7B model does not fit on an 80\,GB GPU
+    \item Memory anatomy of training: parameters, gradients, optimizer states, activations; recomputation and gradient accumulation
+    \item Data parallelism: DDP, all-reduce, gradient bucketing, and large-batch learning rates
+    \item ZeRO and FSDP: sharding the model states across data-parallel ranks
+    \item Tensor parallelism: Megatron-style intra-layer splits and why they stay inside a node
+    \item Pipeline parallelism: GPipe, 1F1B, the bubble, and 3D parallelism
+    \item Sequence and context parallelism: training million-token contexts
+    \item Frameworks in practice: DeepSpeed, FSDP, Megatron-LM, and Accelerate
+    \item Precision and communication: bf16/fp8, NCCL collectives, and the interconnect hierarchy
+    \item Distributed inference: replication, tensor-parallel serving, routing, and failure handling
+    \item Summary and references
+  \end{enumerate}
+\end{frame}

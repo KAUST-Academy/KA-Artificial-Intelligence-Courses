@@ -1,0 +1,96 @@
+% --- Precision and communication ---
+\begin{frame}{Numeric Formats: Range Versus Resolution}
+  \centering
+  \scriptsize
+  \begin{tabular}{@{}lccclp{4.0cm}@{}}
+    \toprule
+    \textbf{Format} & \textbf{Sign} & \textbf{Exponent} & \textbf{Mantissa} & \textbf{Bytes} & \textbf{Character} \\
+    \midrule
+    \texttt{fp32}  & 1 & 8 & 23 & 4 & the reference \\
+    \texttt{tf32}  & 1 & 8 & 10 & 4$^{*}$ & \texttt{fp32} range, \texttt{fp16} precision; a tensor-core input format \\
+    \texttt{fp16}  & 1 & 5 & 10 & 2 & more precision, much less range \\
+    \texttt{bf16}  & 1 & 8 & 7  & 2 & \texttt{fp32}'s exponent, so \texttt{fp32}'s range \\
+    \texttt{fp8 E4M3} & 1 & 4 & 3 & 1 & forward pass: weights and activations \\
+    \texttt{fp8 E5M2} & 1 & 5 & 2 & 1 & backward pass: gradients need range \\
+    \bottomrule
+  \end{tabular}\\[0.25em]
+  {\scriptsize $^{*}$\texttt{tf32} occupies 32 bits in memory; only the multiplier inputs are truncated.}
+  \vspace{0.18em}
+  \begin{itemize}\scriptsize\itemsep0.05em
+    \item[\textcolor{red}{$\blacktriangleright$}] The exponent field is what matters for training stability. \texttt{fp16} has 5 exponent bits, so its smallest normal number is about $6 \times 10^{-5}$: deep-network gradients routinely fall below that and \textbf{flush to zero}.
+    \item[\textcolor{red}{$\blacktriangleright$}] \texttt{bf16} keeps all 8 exponent bits and simply throws away mantissa precision. It has the same range as \texttt{fp32} --- which is why it needs no rescaling tricks, and why it displaced \texttt{fp16} as the default for LLM training.
+    \item[\textcolor{red}{$\blacktriangleright$}] Whatever the compute format, the \textbf{master weights and the optimizer moments stay in \texttt{fp32}}: they accumulate tiny updates over hundreds of thousands of steps, and that is precisely where precision loss compounds.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Loss Scaling, and Why You May Never Need It}
+  \begin{itemize}\itemsep0.4em
+    \item[\textcolor{red}{$\blacktriangleright$}] With \texttt{fp16}, the gradient distribution sits mostly in the underflow region of the format. Micikevicius et al.'s fix is disarmingly simple: multiply the \textbf{loss} by a constant $S$ before the backward pass.
+    \item[\textcolor{red}{$\blacktriangleright$}] By the chain rule every gradient is scaled by the same $S$, shifting the whole distribution into the representable range. Divide the gradients by $S$ before the optimizer step and the update is mathematically unchanged.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Dynamic loss scaling} tunes $S$ automatically: raise it every few hundred healthy steps, and on any step that produces an \texttt{inf} or \texttt{NaN}, halve it and \emph{skip} that step. This is what \texttt{torch.amp.GradScaler} does.
+    \item[\textcolor{red}{$\blacktriangleright$}] The same paper introduced the other half of the recipe: \textbf{keep an \texttt{fp32} master copy of the weights} that accumulates the updates. Those four bytes are three of the sixteen in our memory budget.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{With \texttt{bf16} none of this is needed.} Its range matches \texttt{fp32}, so gradients do not underflow, no scaler is required, and no steps are skipped. On any Ampere-or-later GPU, use \texttt{bf16}. Know loss scaling because you will read it in every paper written before 2021 and meet it in older codebases.
+  \end{itemize}
+  \vspace{0.1em}
+  {\scriptsize Micikevicius et al., ``Mixed Precision Training,'' ICLR 2018. \href{https://arxiv.org/abs/1710.03740v3}{arXiv:1710.03740v3}}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{FP8: Halving the Bytes Again}
+  \begin{itemize}\itemsep0.35em
+    \item[\textcolor{red}{$\blacktriangleright$}] Hopper and Blackwell tensor cores execute matrix multiplies in \textbf{8-bit floating point}, roughly doubling throughput over \texttt{bf16} and halving activation and communication bytes.
+    \item[\textcolor{red}{$\blacktriangleright$}] Two encodings, because one cannot do both jobs: \textbf{E4M3} (max magnitude 448) for the forward pass, where precision matters more than range, and \textbf{E5M2} (max magnitude 57344) for gradients, which span a far wider range. E5M2 follows IEEE~754; E4M3 buys extra range by dropping infinities and keeping a single NaN pattern.
+    \item[\textcolor{red}{$\blacktriangleright$}] \texttt{fp8} is a \emph{compute} format, not a storage format for the whole model. In every working recipe, the master weights and optimizer states stay \texttt{fp32}, and the numerically delicate operators --- embeddings, the output head, normalisation, softmax, and any router --- stay in higher precision.
+    \item[\textcolor{red}{$\blacktriangleright$}] Making it stable at scale needs \textbf{fine-grained scaling}. DeepSeek-V3 quantises in $1 \times 128$ tiles or $128 \times 128$ blocks rather than per tensor, and promotes partial sums to CUDA cores for accumulation --- the first large public run to use E4M3 in the \emph{backward} pass as well as the forward.
+    \item[\textcolor{red}{$\blacktriangleright$}] Practically: enable \texttt{fp8} through Transformer Engine or TorchAO, verify against a \texttt{bf16} run on a short schedule, and keep the loss curves side by side. The failure mode is a slow divergence, not an immediate crash.
+  \end{itemize}
+  \vspace{0.1em}
+  {\scriptsize Micikevicius et al., ``FP8 Formats for Deep Learning,'' \href{https://arxiv.org/abs/2209.05433v2}{arXiv:2209.05433v2}; DeepSeek-AI, ``DeepSeek-V3 Technical Report,'' \href{https://arxiv.org/abs/2412.19437v2}{arXiv:2412.19437v2} (FP8 training framework).}
+\end{frame}
+
+\begin{frame}{NCCL Collectives at a Glance}
+  \centering
+  \scriptsize
+  \begin{tabular}{@{}llp{6.1cm}@{}}
+    \toprule
+    \textbf{Collective} & \textbf{Volume per rank} & \textbf{Where it appears in this lecture} \\
+    \midrule
+    \texttt{AllReduce}      & $2\frac{d-1}{d}\Psi$ & DDP gradient sync; tensor-parallel block outputs \\
+    \texttt{ReduceScatter}  & $\frac{d-1}{d}\Psi$  & ZeRO-2/3 and FSDP gradients; sequence-parallel exits \\
+    \texttt{AllGather}      & $\frac{d-1}{d}\Psi$  & ZeRO-3 and FSDP parameters; sequence-parallel entries \\
+    \texttt{Broadcast}      & $\Psi$               & synchronising initial weights from rank 0 \\
+    \texttt{AllToAll}       & varies               & MoE expert routing (deck 13); DeepSpeed-Ulysses \\
+    \texttt{Send}/\texttt{Recv} & one activation tensor & pipeline stage boundaries \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.21em}
+  \begin{itemize}\scriptsize\itemsep0.05em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{An all-reduce is exactly a reduce-scatter followed by an all-gather.} Almost every design in this lecture is a decision about \emph{where to cut that identity in half} and what to keep in between.
+    \item[\textcolor{red}{$\blacktriangleright$}] Every collective is a \textbf{barrier}. All ranks in the group must arrive, so the slowest determines the pace and a single hung rank stalls the job. Distinct process groups (one per parallel axis) let independent collectives proceed concurrently.
+    \item[\textcolor{red}{$\blacktriangleright$}] Bandwidth is only reached at \textbf{large message sizes}, which is why bucketing (DDP) and unit granularity (FSDP) exist at all.
+    \item[\textcolor{red}{$\blacktriangleright$}] Useful diagnostics: \texttt{nccl-tests} for a bandwidth floor, \texttt{NCCL\_DEBUG=INFO} to confirm the topology NCCL actually chose, and the PyTorch profiler to see whether communication really overlaps compute.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{The Interconnect Hierarchy Decides the Strategy}
+  \centering
+  \scriptsize
+  \begin{tabular}{@{}llrp{4.6cm}@{}}
+    \toprule
+    \textbf{Link} & \textbf{Scope} & \textbf{Bandwidth} & \textbf{Carries} \\
+    \midrule
+    HBM3 (H100 SXM)          & on package    & 3.35\,TB/s & everything the GPU touches \\
+    NVLink 4 (H100 SXM)      & within a node & 900\,GB/s  & tensor parallelism, sequence parallelism \\
+    NVLink 5 (B200)          & within a node & 1.8\,TB/s  & as above, with more headroom \\
+    PCIe Gen5 $\times$16     & host--device  & 128\,GB/s  & CPU/NVMe offload; GPUs without NVLink \\
+    InfiniBand NDR           & node--node    & 50\,GB/s   & pipeline stages, data-parallel all-reduce \\
+    100\,GbE                 & node--node    & 12.5\,GB/s & the same, on a commodity cluster \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.21em}
+  \begin{itemize}\scriptsize\itemsep0.05em
+    \item[\textcolor{red}{$\blacktriangleright$}] Read the table as a set of cliffs. HBM to NVLink is roughly $4\times$; NVLink to InfiniBand is roughly $18\times$; InfiniBand to Ethernet another $4\times$. \textbf{Every parallelism decision in this lecture is an attempt to keep the chattiest traffic above a cliff.}
+    \item[\textcolor{red}{$\blacktriangleright$}] That is the single rule behind all of it: tensor and sequence parallelism above the NVLink cliff; pipeline parallelism (point-to-point, low volume) below it; data parallelism below it too, because its traffic can be overlapped with the backward pass.
+    \item[\textcolor{red}{$\blacktriangleright$}] It also explains FSDP's \texttt{HYBRID\_SHARD}: shard within the node where all-gathers are cheap, replicate across nodes where they are not.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{On a cluster without NVLink or InfiniBand}, the honest advice is different: keep the model on one GPU, use gradient accumulation to reach the global batch you want, and reach for LoRA before reaching for tensor parallelism.
+  \end{itemize}
+\end{frame}

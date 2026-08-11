@@ -1,0 +1,15 @@
+% --- Learning outcomes ---
+\begin{frame}{Learning Outcomes}
+  By the end of this lecture you should be able to:
+  \begin{itemize}\itemsep0.4em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Compute} the memory footprint of a training run --- parameters, gradients, optimizer states, activations --- and predict when and why it will run out of memory.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Explain and choose between} data, tensor, pipeline, and sequence parallelism, and say what each one costs in communication.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Describe} ZeRO stages 1--3 and FSDP sharding, and configure them for a fine-tuning run.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Combine} strategies into a 3D-parallel plan for a large pre-training job on a given cluster.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Explain} how distributed \emph{inference} differs from distributed \emph{training}: replication versus sharding, routing, and failure handling.
+  \end{itemize}
+  \vspace{0.5em}
+  \begin{itemize}\footnotesize
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Assumed background:} the transformer block (deck 06), scaling laws (deck 07), and single-node inference optimisation --- KV caching, continuous batching, quantization (deck 17).
+  \end{itemize}
+\end{frame}

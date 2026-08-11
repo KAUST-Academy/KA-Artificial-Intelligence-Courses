@@ -166,9 +166,9 @@
     \begin{itemize}
         \setlength\itemsep{0.7em}
         \item \textbf{Aggregation bias.} One model for populations that genuinely behave
-              differently. The example Suresh and Guttag give is diabetes management: HbA1c levels
-              relate to blood glucose differently across ethnicities, so a single cut-off is wrong
-              for some groups.
+              differently. Suresh and Guttag point to medicine: patients of different sexes with
+              similar underlying conditions can present and progress differently, so one model is
+              optimal for neither.
 
         \item \textbf{Learning bias.} The modelling choice itself amplifies a disparity.
               Optimising average loss lets a large majority group dominate the gradient;
@@ -277,7 +277,7 @@
             {gender direction $\approx \overrightarrow{\text{he}} - \overrightarrow{\text{she}}$};
 
         \foreach \x/\w in {-4.2/homemaker, -2.8/nurse, -1.4/receptionist,
-                            1.4/architect, 2.8/philosopher, 4.2/financier} {
+                            1.4/financier, 2.8/architect, 4.2/philosopher} {
             \fill[raiBlue] (\x,0) circle (2.2pt);
             \node[text=raiBlue!80!black, font=\tiny, rotate=35, anchor=west, xshift=3pt] at (\x,0.06) {\w};
         }

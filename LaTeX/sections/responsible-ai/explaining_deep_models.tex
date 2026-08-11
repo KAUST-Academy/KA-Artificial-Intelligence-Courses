@@ -80,7 +80,7 @@
             \href{https://github.com/jacobgil/pytorch-grad-cam}{\texttt{pytorch-grad-cam}}
             library (ResNet-50). Method: R.~R.~Selvaraju, M.~Cogswell, A.~Das, R.~Vedantam,
             D.~Parikh and D.~Batra, ``Grad-CAM,'' ICCV 2017,
-            \href{https://arxiv.org/abs/1610.02391v4}{arXiv:1610.02391v4}.}
+            \href{https://arxiv.org/abs/1610.02391v3}{arXiv:1610.02391v3}.}
         \end{column}
     \end{columns}
 \end{frame}
@@ -117,6 +117,9 @@
 
 \begin{frame}{``Attention Is Not Explanation'' --- and the Reply}
 
+    {\scriptsize An \textbf{attention} layer assigns a weight to every input token, and those weights
+    are routinely displayed as ``what the model looked at.''}
+
     \begin{columns}[T]
         \begin{column}{0.48\textwidth}
             \begin{tcolorbox}[colback=raiRed!5, colframe=raiRed!70,
@@ -129,8 +132,7 @@
                     \item One can construct \textbf{very different} attention distributions that
                           give \textbf{the same} prediction.
                 \end{itemize}
-                Conclusion: standard attention modules do not provide meaningful explanations and
-                should not be treated as though they do.
+                Conclusion: standard attention modules do not provide meaningful explanations.
             \end{tcolorbox}
         \end{column}
         \begin{column}{0.48\textwidth}
@@ -142,22 +144,20 @@
                 weights --- and find that adversarial attention distributions, where they exist,
                 do poorly on the diagnostic.
 
-                \vspace{0.4em}
+                \vspace{0.3em}
                 Attention is not \emph{no} evidence; it is not \emph{sufficient} evidence.
             \end{tcolorbox}
         \end{column}
     \end{columns}
 
-    \vspace{0.9em}
-
     \begin{block}{What to do in practice}
         \centering
-        \scriptsize Use attention maps as a \textbf{debugging view}, not as a justification shown to a
-        user or a regulator. If you need an attribution for a transformer, use a method built for
-        it (Integrated Gradients, attention rollout, gradient\,$\times$\,input) and validate it.
+        \scriptsize Use attention maps as a \textbf{debugging view}, never as a justification for a
+        user or a regulator. For a transformer attribution, use a method built for it (Integrated
+        Gradients, attention rollout, gradient\,$\times$\,input) and validate it.
     \end{block}
 
-    \vspace{0.2em}
+    \vspace{0.1em}
     {\scriptsize S.~Jain and B.~C.~Wallace, ``Attention is not Explanation,'' NAACL 2019,
     \href{https://arxiv.org/abs/1902.10186v3}{arXiv:1902.10186v3}. S.~Wiegreffe and Y.~Pinter,
     ``Attention is not not Explanation,'' EMNLP 2019,

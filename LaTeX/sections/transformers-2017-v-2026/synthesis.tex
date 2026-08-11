@@ -24,6 +24,8 @@
       \hline
       Attention span & Every token attends to all positions & Hybrid stacks: sliding-window layers + occasional full-attention layers \\
       \hline
+      Sequence mixer & Softmax attention is the only mixer & Attention, with SSM / linear-recurrence layers as the cheap mixer in some hybrid stacks \\
+      \hline
       Inference compute & Fixed: one forward pass per token & Test-time scaling: thinking tokens on hard queries \\
       \hline
     \end{tabular}

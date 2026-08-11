@@ -13,6 +13,7 @@
       \hline
       \textbf{Method} & \textbf{What is trained} & \textbf{Trainable} & \textbf{Folds into $W$?} \\
       \hline
+      Full fine-tuning & Every weight in the model & 100\% & --- \\
       Adapters & Bottleneck MLPs inserted in each block & $\sim$3.6\% & No \\
       Prefix tuning & Key/value prefixes at every layer & $\sim$0.1\% & No \\
       Prompt tuning & A soft prompt at the input layer only & $<$0.01\% & No \\
@@ -23,7 +24,7 @@
     \end{tabular}
   \end{center}
   \vspace{0.5em}
-  {\scriptsize Each percentage is for the base model that method's own paper used (BERT-base, GPT-2, T5-XXL, T0-3B, LLaMA-7B) and at that paper's own rank or bottleneck size, so the column is indicative, not a controlled comparison.}
+  {\scriptsize Each percentage is for the base model that method's own paper used (BERT-base, GPT-2, T5-XXL, T0-3B, LLaMA-7B) and at that paper's own rank or bottleneck size, so the column is indicative, not a controlled comparison. In particular, DoRA's larger headline number is an artifact of its smaller base model: at matched rank on the same model, LoRA and DoRA train almost the same count (0.83\% vs 0.84\% on LLaMA-7B at $r=32$).}
 
   \vspace{0.3em}
   {\scriptsize \textbf{Folds into $W$} is the serving question: LoRA, DoRA and (IA)$^3$ are absorbed into the frozen weights after training, so inference costs nothing extra. Adapters and prefixes cannot be.}

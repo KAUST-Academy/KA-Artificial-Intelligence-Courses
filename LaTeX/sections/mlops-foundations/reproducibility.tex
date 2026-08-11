@@ -84,7 +84,7 @@ def set_seed(seed: int = 42):
 
 set_seed(42)
 
-# scikit-learn: pass random_state explicitly -- it does NOT read the global seed
+# scikit-learn: pass random_state explicitly -- never rely on the global seed
 train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 RandomForestClassifier(n_estimators=500, random_state=42)
     \end{lstlisting}
@@ -92,9 +92,9 @@ RandomForestClassifier(n_estimators=500, random_state=42)
     \vspace{0.3em}
     \begin{itemize}
         \small
-        \item \textbf{scikit-learn does not use the global NumPy seed} in modern code paths. Every estimator
-              and splitter that randomises takes \texttt{random\_state}. Set it, everywhere, or you have not
-              seeded anything.
+        \item \textbf{Never rely on the global NumPy seed for scikit-learn.} Anything left at
+              \texttt{random\_state=None} falls back to NumPy's \emph{global} RNG, so its result depends on
+              whatever consumed random numbers first. Pass \texttt{random\_state} explicitly, everywhere.
         \item Any subprocess gets a fresh interpreter and therefore a fresh RNG state --- PyTorch
               \texttt{DataLoader} workers, \texttt{joblib} parallel jobs, Spark executors. Each needs its
               own seeding hook.

@@ -1,10 +1,11 @@
 \section{Motivation}
 \begin{frame}[allowframebreaks]{Motivation}
 \noindent
-\textbf{Three departures from the standard recipe of an autoregressive transformer over subword tokens:}
+\textbf{Four departures from the standard recipe of an autoregressive transformer over subword tokens:}
 \vspace{0.5em}
 
 \begin{itemize}
+    \item \textbf{IO-aware kernels:} FlashAttention keeps exact attention but reorganizes its arithmetic around the GPU memory hierarchy, so the $N \times N$ attention matrix never touches slow memory.
     \item \textbf{Open-weight LLMs:} Releases like the LLaMA 3 herd bring frontier-level models into the open, widening access to research and deployment.
     \item \textbf{Tokenizer-free modeling:} the Byte Latent Transformer (BLT) replaces subword tokenization with learned byte patches.
     \item \textbf{Non-autoregressive generation:} Large Language Diffusion Models (LLDMs) generate text by iterative denoising instead of left-to-right prediction.

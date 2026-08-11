@@ -1,0 +1,230 @@
+\section{Code Generation}
+\begin{frame}{}
+  \LARGE Code Generation
+\end{frame}
+
+\begin{frame}{Code as the Agent's Interface}
+  \begin{itemize}\itemsep0.4em
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Generating executable code is how a model acts on the
+      world at full generality.} Function calling (covered earlier) offers a fixed menu of tools; written
+      code composes anything the runtime can do.
+    \item[\textcolor{red}{$\triangleright$}] The software-development agents seen earlier (OpenHands and its
+      sandboxed shell) are built entirely on this ability.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Inputs and outputs:} natural language $\rightarrow$ code,
+      surrounding code context $\rightarrow$ completion, even a screenshot of a page $\rightarrow$ the HTML
+      behind it. The output is always text --- but text a machine will run.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{The economics are real:} in GitHub's controlled
+      experiment, developers using Copilot finished the same implementation task 55.8\% faster than the
+      control group.
+  \end{itemize}
+  \vspace{0.3em}
+  {\scriptsize Peng et al., ``The Impact of AI on Developer Productivity: Evidence from GitHub Copilot,''
+  \href{https://arxiv.org/abs/2302.06590}{arXiv:2302.06590}.}
+\end{frame}
+
+\begin{frame}{Code Is Not Natural Language}
+  Four properties separate code from prose, and each one shapes the methods that follow:
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Strict grammar:} one wrong token is a syntax error, not
+      a stylistic wobble --- so sampling temperature is kept low, and decoding favours exactness over
+      diversity.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Known semantic flow:} code parses into syntax trees and
+      dataflow graphs --- so metrics can compare structure, not just words.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Executable:} there is a ground truth a test suite can
+      check --- so evaluation and feedback loops can \emph{run} the output instead of eyeballing it.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Written incrementally:} real programming edits the
+      middle of existing files --- so left-to-right completion alone is not enough.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{HumanEval and pass@\emph{k}}
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\triangleright$}] \textbf{HumanEval} (introduced with Codex): 164 hand-written
+      Python problems --- signature, docstring, examples --- each judged by hidden unit tests. Hand-written
+      precisely so the problems could not already sit in the training data.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{The metric asks the right question:} not ``does the
+      code look right'' but ``if we sample $k$ programs, does at least one pass the tests?''
+  \end{itemize}
+  \[
+    \text{pass@}k \;=\; \mathop{\mathbb{E}}_{\text{problems}}\!\left[\, 1 - \binom{n-c}{k}\Big/\binom{n}{k} \,\right]
+  \]
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\triangleright$}] Estimating from exactly $k$ samples has high variance, so
+      generate $n > k$ samples, count the $c$ correct ones, and compute the expectation in closed form ---
+      the unbiased estimator above.
+    \item[\textcolor{red}{$\triangleright$}] The same pass@$k$ later became the exploration diagnostic for
+      reasoning models (see the RL post-training lecture).
+  \end{itemize}
+  \vspace{0.2em}
+  {\scriptsize Chen et al., ``Evaluating Large Language Models Trained on Code,''
+  \href{https://arxiv.org/abs/2107.03374}{arXiv:2107.03374}.}
+\end{frame}
+
+\begin{frame}{Benchmarks Grew with the Ambition}
+  \centering
+  {\footnotesize
+  \begin{tabular}{llll}
+    \toprule
+    Benchmark & Year & Task & Judged by \\
+    \midrule
+    CoNaLa & 2018 & StackOverflow question $\rightarrow$ snippet & text match \\
+    HumanEval & 2021 & docstring $\rightarrow$ function & unit tests \\
+    ODEX & 2022 & open-domain libraries & execution \\
+    ARCADE & 2022 & next notebook cell, in context & execution \\
+    SWE-bench & 2023 & GitHub issue $\rightarrow$ repository patch & repo's own tests \\
+    Design2Code & 2024 & webpage screenshot $\rightarrow$ HTML/CSS & visual similarity \\
+    \bottomrule
+  \end{tabular}}\\[0.7em]
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\triangleright$}] The trajectory: isolated snippet $\rightarrow$ real libraries
+      $\rightarrow$ incremental context $\rightarrow$ whole repository $\rightarrow$ multimodal input.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{SWE-bench} is the one agent evaluations now lean on:
+      resolving a real issue takes navigation, long context, and precise edits --- the full loop, not one
+      completion.
+  \end{itemize}
+  \vspace{0.2em}
+  {\scriptsize Yin et al. \href{https://arxiv.org/abs/1805.08949}{arXiv:1805.08949}; Wang et al.
+  \href{https://arxiv.org/abs/2212.10481}{arXiv:2212.10481}; Yin et al.
+  \href{https://arxiv.org/abs/2212.09248}{arXiv:2212.09248}; Jimenez et al.
+  \href{https://arxiv.org/abs/2310.06770}{arXiv:2310.06770}; Si et al.
+  \href{https://arxiv.org/abs/2403.03163}{arXiv:2403.03163}.}
+\end{frame}
+
+\begin{frame}{The Leakage Problem}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{red}{$\triangleright$}] Code benchmarks live on GitHub; models train on GitHub. Sooner
+      or later the test set is in the training set.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{The symptom:} ARCADE found models noticeably weaker on
+      newly written notebooks than on notebooks mined from the web; several code LMs post strong HumanEval
+      numbers yet stumble on problems published after their training cutoff.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{The fix is a moving target:} LiveCodeBench harvests
+      fresh contest problems continuously and tags each with its release date, so a model is only scored on
+      problems newer than its training data.
+    \item[\textcolor{red}{$\triangleright$}] Same discipline as the train/test hygiene taught in the
+      preprocessing lectures --- applied to the whole internet.
+  \end{itemize}
+  \vspace{0.3em}
+  {\scriptsize Jain et al., ``LiveCodeBench: Holistic and Contamination Free Evaluation of Large Language
+  Models for Code,'' \href{https://arxiv.org/abs/2403.07974}{arXiv:2403.07974}.}
+\end{frame}
+
+\begin{frame}{Metrics When You Cannot Execute}
+  \begin{itemize}\itemsep0.4em
+    \item[\textcolor{red}{$\triangleright$}] Execution-based scoring needs unit tests and a safe sandbox ---
+      rarely available inside large codebases --- and it is blind to style and maintainability.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{BLEU} (from the sequence-to-sequence lecture) treats
+      code as text: $n$-gram overlap with a reference solution.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{CodeBLEU} adds what code uniquely offers: a syntax-tree
+      match and a dataflow match on top of the $n$-grams, so renaming a variable consistently is no longer
+      punished like a wrong word.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{CodeBERTScore} drops string matching entirely and
+      compares embeddings from a code-pretrained encoder --- the best correlation with both human judgement
+      and execution accuracy among the match-based metrics.
+  \end{itemize}
+  \vspace{0.3em}
+  {\scriptsize Ren et al., ``CodeBLEU,'' \href{https://arxiv.org/abs/2009.10297}{arXiv:2009.10297}; Zhou et
+  al., ``CodeBERTScore,'' \href{https://arxiv.org/abs/2302.05527}{arXiv:2302.05527}.}
+\end{frame}
+
+\begin{frame}{Method: Completion with Engineered Context}
+  \begin{itemize}\itemsep0.4em
+    \item[\textcolor{red}{$\triangleright$}] The base method is nothing exotic: feed the preceding code to a
+      language model and let it continue. Every serious LLM is now trained on code.
+    \item[\textcolor{red}{$\triangleright$}] What separates a demo from a product is \textbf{what goes into
+      the prompt}. Reverse-engineering GitHub Copilot showed a careful assembly line:
+    \begin{itemize}
+      \item language and relative path of the current file, as metadata;
+      \item the text before and after the cursor;
+      \item similar snippets pulled from the \textbf{20 most recently viewed files} in the same language;
+      \item imported files, when they fit.
+    \end{itemize}
+    \item[\textcolor{red}{$\triangleright$}] In other words: production code completion is prompt
+      engineering at industrial scale --- the same discipline as the prompting lecture, applied per keystroke.
+  \end{itemize}
+  \vspace{0.3em}
+  {\scriptsize P.~Thakkar, ``Copilot Internals,'' 2023,
+  \url{https://thakkarparth007.github.io/copilot-explorer/posts/copilot-internals}.}
+\end{frame}
+
+\begin{frame}{Method: Infilling}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{red}{$\triangleright$}] Autoregressive completion only appends --- but programmers
+      mostly edit the \emph{middle} of files: the cursor sits between a prefix and a suffix.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Fill-in-the-middle training:} cut a document into
+      (prefix, middle, suffix), move the middle to the end, and train the model to produce it from the
+      surrounding pieces --- causal training that yields bidirectional conditioning at inference.
+    \item[\textcolor{red}{$\triangleright$}] Introduced for code by InCoder; now a standard ingredient ---
+      StarCoder~2 and Code Llama both train with infilling objectives so the same checkpoint can complete
+      and repair.
+  \end{itemize}
+  \vspace{0.3em}
+  {\scriptsize Fried et al., ``InCoder: A Generative Model for Code Infilling and Synthesis,''
+  \href{https://arxiv.org/abs/2204.05999}{arXiv:2204.05999}.}
+\end{frame}
+
+\begin{frame}{Method: Retrieval and Execution Feedback}
+  \begin{itemize}\itemsep0.25em
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Retrieval-augmented generation, for code:} retrieve
+      similar snippets, or better, the \emph{documentation} of the library being used --- DocPrompting shows
+      retrieved docs let a model call libraries it never saw in training. Same RAG machinery as the
+      prompting lecture, different corpus.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Execution feedback:} code can be run, so run it ---
+      sample many candidates, execute them, and keep the ones that agree or pass the visible tests
+      (AlphaCode's filter, MBR-EXEC's agreement vote).
+    \item[\textcolor{red}{$\triangleright$}] \textbf{Repair from error messages:} feed the traceback back
+      in and let the model fix its own output; InterCode formalizes this as an interactive environment
+      where execution output is the observation.
+    \item[\textcolor{red}{$\triangleright$}] Observe $\rightarrow$ act $\rightarrow$ read the result
+      $\rightarrow$ act again: \textbf{the agent loop from earlier}, specialised to code.
+  \end{itemize}
+  \vspace{0.2em}
+  {\scriptsize Zhou et al., ``DocPrompting,'' \href{https://arxiv.org/abs/2207.05987}{arXiv:2207.05987};
+  Shi et al., \href{https://arxiv.org/abs/2204.11454}{arXiv:2204.11454}; Yang et al., ``InterCode,''
+  \href{https://arxiv.org/abs/2306.14898}{arXiv:2306.14898}.}
+\end{frame}
+
+\begin{frame}{The Code LM Lineage}
+  \centering
+  {\scriptsize
+  \begin{tabular}{lll}
+    \toprule
+    Model & Recipe & What it added \\
+    \midrule
+    Codex (2021) & GPT-3 continued on GitHub & powered the original Copilot; HumanEval \\
+    Code Llama (2023) & Llama 2 continued on code & long-context RoPE; infilling; synthetic instructions \\
+    StarCoder 2 (2024) & from scratch on The Stack v2 & license-aware data; issues, notebooks, IRs \\
+    DeepSeek Coder (2024) & from scratch, 87\% source code & repo-level, dependency-ordered training files \\
+    \bottomrule
+  \end{tabular}}\\[0.7em]
+  \begin{itemize}\itemsep0.3em
+    \item[\textcolor{red}{$\triangleright$}] Architecturally they are all Llama-style decoders; the
+      differences that matter are in the \textbf{data}: what code, how deduplicated, how ordered, and
+      whether licenses and opt-outs are honoured (The Stack v2's defining feature).
+    \item[\textcolor{red}{$\triangleright$}] Metadata tricks pay off: StarCoder prepends repository and file
+      names half the time, so at inference the same tags can steer the model.
+    \item[\textcolor{red}{$\triangleright$}] Since then the specialist/generalist line has blurred: every
+      frontier model trains heavily on code (recall LLaMA 3's HumanEval scores in the Recent Advancements
+      lecture).
+  \end{itemize}
+  \vspace{0.2em}
+  {\scriptsize Chen et al. \href{https://arxiv.org/abs/2107.03374}{arXiv:2107.03374}; Rozi\`ere et al.
+  \href{https://arxiv.org/abs/2308.12950}{arXiv:2308.12950}; Lozhkov et al.
+  \href{https://arxiv.org/abs/2402.19173}{arXiv:2402.19173}; Guo et al.
+  \href{https://arxiv.org/abs/2401.14196}{arXiv:2401.14196}.}
+\end{frame}
+
+\begin{frame}{Code Generation Meets the Agent Loop}
+  \begin{itemize}\itemsep0.5em
+    \item[\textcolor{red}{$\triangleright$}] \textbf{The benchmark moved to the agent:} SWE-bench hands the
+      model a live repository and a real issue; solving it takes the whole loop --- explore, edit, run the
+      tests, read the failures, edit again.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{The harness exists:} OpenHands (covered earlier) is
+      exactly this loop productised --- a sandboxed shell, editor, and browser behind an event stream.
+    \item[\textcolor{red}{$\triangleright$}] \textbf{The reward is verifiable:} a passing test suite is a
+      rule-based reward no human labeller has to provide --- which is why code sits beside math at the heart
+      of RL post-training (see the GRPO lecture).
+    \item[\textcolor{red}{$\triangleright$}] Code is the domain where feedback is cheapest, fastest, and
+      most trustworthy. That is why agents learned to program before they learned to do almost anything
+      else.
+  \end{itemize}
+\end{frame}

@@ -1,213 +1,328 @@
 # Artificial-Intelligence-Courses
-This is the base repo for all Artificial Intelligence courses for KAUST Academy.
 
+The source repository for all **KAUST Academy** Artificial Intelligence courses — LaTeX/Beamer
+lecture decks, their built PDFs, and the accompanying Jupyter lab notebooks, homeworks and exams.
 
-# LaTeX Project Build Script
-
-This repository contains a Bash script to compile LaTeX (`.tex`) files into PDFs using `latexmk`. It supports building either all LaTeX files in the project or a specific one, and moving the output to a designated directory.
-
-## 📁 Project Structure
-
-```
-
-project-root/
-│
-├── build.sh           # The build script
-├── Lectures/          # (Default) Output directory for generated PDFs
-└── LaTeX/             # LaTeX project
-    ├── Computer_Vision/   # Compilable main .tex, organized by topic
-    │   ├── 01_Introduction_to_Computer_Vision_and_CNNs.tex
-    │   └── ...
-    ├── Natural_Language_Processing/
-    ├── Generative_AI/
-    ├── Introduction_To_AI/
-    ├── Reinforcement_Learning/
-    ├── Review_needed/
-    ├── sections/      # Shared content \input{sections/...}
-    ├── preamble/      # Shared \input{preamble/...}
-    ├── images/        # Shared figures
-    ├── assets/        # Shared per-lecture assets
-    ├── style_files/   # Logos + .sty helpers
-    └── *.sty *.cls references.bib   # Shared beamer theme + bibliography
-
-```
-
-## 🛠️ Requirements
-
-- `latexmk`
-- A working LaTeX distribution (e.g., TeX Live or MiKTeX)
-- Bash shell
-
-## 🚀 Usage
-
-From the root directory, run the build script:
-
-### Compile All `.tex` Files
-
-```bash
-./build.sh
-````
-
-This compiles **all** `.tex` files across the topic subfolders in `LaTeX/` and moves the resulting PDFs to the `Lectures/` folder.
-
-### Compile a Specific File
-
-```bash
-./build.sh --file Computer_Vision/01_Introduction_to_Computer_Vision_and_CNNs.tex
-```
-
-Pass the path **relative to the `LaTeX/` directory**, i.e. `<Topic>/<filename>.tex` (the main `.tex` files live in topic subfolders such as `Computer_Vision/`, `Natural_Language_Processing/`, `Generative_AI/`, `Introduction_To_AI/`, `Reinforcement_Learning/`, `Review_needed/`).
-
-### Specify an Output Directory
-
-```bash
-./build.sh --output CustomOutputDir
-```
-
-You can combine this with the `--file` flag:
-
-```bash
-./build.sh --file filename.tex --output CustomOutputDir
-```
-
-## 🧹 Cleanup
-
-The script automatically cleans up auxiliary files generated during the build process, such as `.aux`, `.log`, `.toc`, etc.
-
-## ❗ Notes
-
-* Main LaTeX source files live in **topic subfolders under `LaTeX/`** (e.g. `LaTeX/CV/`, `LaTeX/NLP/`); shared content (`sections/`, `preamble/`, `images/`, themes) stays at the `LaTeX/` root so builds must run from there (the script handles this).
-* When using `--file`, give the path relative to `LaTeX/`, e.g. `--file Natural_Language_Processing/Lecture-9_Prompting+RAG.tex`.
-* If the specified file does not exist, the script will exit with an error.
-* If no `--file` is provided, the script will default to building all `.tex` files.
-
-## 📄 License
-
-This project is licensed under the GPL-3.0 License - see the LICENSE file for details. 
-
-
+| | |
+|---|---|
+| **Courses** | 5 |
+| **Lecture decks** | 64 (`.tex` sources + built PDFs) |
+| **Slides** | ~4,800 pages |
+| **Notebooks** | 289 (labs, homeworks, exams) |
+| **License** | GPL-3.0 |
 
 ---
-To ensure your commit messages are properly parsed by tools like `conventional-changelog` and accurately reflected in your changelog, it's essential to adhere to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. This structured format not only facilitates automated changelog generation but also aids in semantic versioning.
 
-### ✅ Conventional Commit Message Structure
+# For students and instructors
+
+## Courses
+
+Built PDFs live in `Lectures/<Course>/`; the LaTeX sources that produce them live in
+`LaTeX/<Course>/`. Notebooks for each course live in `Labs/<Course>/`.
+
+| Course | Decks | Pages | Slides | Notebooks |
+|---|---:|---:|---|---|
+| Computer Vision | 24 | 1,964 | [`Lectures/Computer_Vision`](Lectures/Computer_Vision) | [56](Labs/Computer_Vision) |
+| Natural Language Processing | 21 | 1,530 | [`Lectures/Natural_Language_Processing`](Lectures/Natural_Language_Processing) | [35](Labs/Natural_Language_Processing) |
+| Reinforcement Learning | 10 | 710 | [`Lectures/Reinforcement_Learning`](Lectures/Reinforcement_Learning) | [36](Labs/Reinforcement_Learning) |
+| Introduction to AI | 8 | 552 | [`Lectures/Introduction_To_AI`](Lectures/Introduction_To_AI) | [24](Labs/Introduction_To_AI) |
+| Generative AI | 1 | 92 | [`Lectures/Generative_AI`](Lectures/Generative_AI) | — |
+
+<details>
+<summary><b>Computer Vision</b> — 24 decks</summary>
+
+| # | Deck | Pages |
+|---|---|---:|
+| 01 | Introduction to Computer Vision & CNNs | 100 |
+| 02 | Practical Deep Learning | 64 |
+| 03 | Classic Deep CNN Architectures | 71 |
+| 04 | Object Detection | 141 |
+| 05 | Image Segmentation | 93 |
+| 06 | Recurrent Neural Networks | 53 |
+| 07 | Transformers | 42 |
+| 08 | Vision Transformers | 40 |
+| 09 | Deep Unsupervised Learning | 117 |
+| 10 | Autoencoders & Variational Autoencoders | 147 |
+| 11 | Autoregressive Models | 90 |
+| 12 | Normalizing Flow Models | 81 |
+| 13 | Generative Adversarial Networks (GANs) | 125 |
+| 14 | Diffusion Models | 94 |
+| 15 | Advanced Image Generation Models | 66 |
+| 16 | Stable Diffusion | 82 |
+| 17 | Learning from Videos | 112 |
+| 18 | Video Generation & World Models | 51 |
+| 19 | Self-Supervised Learning | 51 |
+| 20 | Contrastive Learning Methods | 71 |
+| 21 | Vision and Text Integration | 91 |
+| 22 | Advanced Self-Supervised Learning and JEPA Models | 54 |
+| 23 | Foundation Models: Modern Advances and Applications | 68 |
+| 24 | World Models | 60 |
+
+</details>
+
+<details>
+<summary><b>Natural Language Processing</b> — 21 decks</summary>
+
+| # | Deck | Pages |
+|---|---|---:|
+| 01 | Introduction to Natural Language Processing | 94 |
+| 02 | Vector Space Models & Word Embeddings | 81 |
+| 03 | Recurrent Neural Networks (RNNs) | 89 |
+| 04 | Sequence-to-Sequence Models: Intro to Attention | 76 |
+| 05 | Attention Mechanism Deep Dive | 50 |
+| 06 | Introduction to Transformers | 101 |
+| 07 | Large Language Models | 66 |
+| 08 | Fine-Tuning LLMs and RLHF | 48 |
+| 09 | Prompting & Retrieval-Augmented Generation (RAG) | 103 |
+| 10 | Multimodal NLP | 33 |
+| 11 | Agentic AI | 65 |
+| 12 | AI Safety for Agents | 59 |
+| 13 | Mixture of Experts Models | 74 |
+| 14 | Large Reasoning Models | 80 |
+| 15 | RL Post-Training for Reasoning (GRPO & GSPO) | 45 |
+| 16 | Transformers: 2017 vs 2026 | 47 |
+| 17 | Inference Optimisation for Large Models | 56 |
+| 18 | Recent Advancements in NLP | 73 |
+| 19 | Audio Processing in NLP | 161 |
+| 20 | Speech-to-Text (STT / ASR) | 79 |
+| 21 | Text-to-Speech (TTS) | 50 |
+
+</details>
+
+<details>
+<summary><b>Reinforcement Learning</b> — 10 decks</summary>
+
+| # | Deck | Pages |
+|---|---|---:|
+| 01 | RL Foundations: MDPs & Bellman Equations | 76 |
+| 02 | Value-Based Methods: Q-Learning to DQN | 40 |
+| 03 | Vanilla Policy Gradient & REINFORCE | 79 |
+| 04 | Policy Optimization: Actor-Critic to PPO | 89 |
+| 05 | Continuous Control I: Deterministic Policy Gradients & DDPG | 58 |
+| 06 | Continuous Control II: Max Entropy RL, SAC | 62 |
+| 07 | The Reward Problem: Exploration vs. Exploitation, Bandits, Inverse RL | 74 |
+| 08 | Data & Planning: Model-Based & Offline RL | 114 |
+| 09 | RL in the Real World: RLHF, Multi-Agent RL & Robotics | 54 |
+| 10 | RL Frontiers: Meta-RL, Multi-task RL, Hierarchical RL, Open Problems | 64 |
+
+</details>
+
+<details>
+<summary><b>Introduction to AI</b> — 8 decks</summary>
+
+| # | Deck | Pages |
+|---|---|---:|
+| 01 | Data Science Foundations | 70 |
+| 02 | Machine Learning Algorithms | 89 |
+| 03 | Fundamentals of Deep Learning | 59 |
+| 04 | Unsupervised Learning | 37 |
+| 05 | Data Preprocessing and Data Augmentation | 104 |
+| 06 | Decision Trees and their Variants | 60 |
+| 07 | Linear Regression | 83 |
+| 08 | Support Vector Machines (SVMs) | 50 |
+
+</details>
+
+<details>
+<summary><b>Generative AI</b> — 1 deck</summary>
+
+| # | Deck | Pages |
+|---|---|---:|
+| 01 | Generative AI for Science — Applications and Techniques | 92 |
+
+</details>
+
+## Labs
+
+289 Jupyter notebooks. Course folders mirror the lecture tracks; the rest are cross-cutting.
+
+| Folder | Notebooks | What it is |
+|---|---:|---|
+| [`Labs/Computer_Vision`](Labs/Computer_Vision) | 56 | CNNs through generative and foundation models |
+| [`Labs/Incomplete_Labs`](Labs/Incomplete_Labs) | 60 | Mixed — see the note below |
+| [`Labs/Homeworks`](Labs/Homeworks) | 54 | 27 assignment/solution pairs — CV 14, NLP 6, ML 5, RL 2 |
+| [`Labs/Reinforcement_Learning`](Labs/Reinforcement_Learning) | 36 | 15 exercise/solution pairs, in course order |
+| [`Labs/Natural_Language_Processing`](Labs/Natural_Language_Processing) | 35 | Classical text through agents and RAG |
+| [`Labs/Introduction_To_AI`](Labs/Introduction_To_AI) | 24 | Classical ML and DL foundations |
+| [`Labs/Exams`](Labs/Exams) | 20 | 10 question/solution pairs across 2025 and 2026 cohorts |
+| [`Labs/Archive`](Labs/Archive) | 4 | Superseded material |
+
+> **`Incomplete_Labs/` is a staging area, not an archive.** It holds labs that still need
+> testing or changes before they're finalised. Its `New_Labs/` subfolder in particular holds
+> 9 labs backing seven of the most recent decks — TTS, STT, Transformers 2017 vs 2026, Stable
+> Diffusion, Video Generation, Large Reasoning Models and Inference Optimisation.
+
+**Notebook naming.** A student version is `<Name>_Exercise.ipynb` and the worked version is
+`<Name>_Solution.ipynb` — the same rule in every folder, including `Exams/` and `Homeworks/`.
+A solution is always its counterpart's name plus the suffix, so pairs match by stem and can
+be found mechanically. Notebooks carry no numeric prefix; ordering comes from the course.
+
+---
+
+# For contributors
+
+## Requirements
+
+- A LaTeX distribution — TeX Live or MiKTeX
+- `latexmk` (drives the build)
+- `pdfinfo` (from poppler; used for the page-count report)
+- Bash
+
+Shared packages are declared in `LaTeX/preamble/packages.tex`. Builds pass `-shell-escape`
+because `preamble/commands.tex` defines figure-fetching macros (`\fetchimage`,
+`\convertimage`, …) that shell out to `curl` and ImageMagick's `convert`. Each is wrapped in
+`\IfFileExists`, so with the figures committed a normal build never invokes them — you only
+need `curl` and ImageMagick if you add a macro-fetched figure.
+
+## Building
+
+Run from the repository root.
+
+```bash
+./build.sh                                              # all 64 decks
+./build.sh --file Computer_Vision/04_Object_Detection.tex   # one deck
+./build.sh --prefix 01                                  # deck 01 of every course
+./build.sh --output some/dir                            # choose the destination
+./build.sh --keep-logs                                  # keep .aux/.log instead of cleaning up
+```
+
+`--file` takes a path **relative to `LaTeX/`**, i.e. `<Course>/<deck>.tex`. Those four flags,
+plus `-h`/`--help`, are the complete set; anything else exits with an error.
+
+Per deck you get either
 
 ```
-<type>[optional scope]: <description>
-
-[optional body]
-
-[optional footer(s)]
+ok  pages=141  overfull_vbox=0  missing_images=0
 ```
 
-* **`type`**: Indicates the nature of the change. Common types include:
+or a `FAILED` line, with the full log copied to `build/logs/<deck>.log`. The script exits
+non-zero if any deck failed.
 
-  * `feat`: A new feature
-  * `fix`: A bug fix
-  * `docs`: Documentation changes
-  * `style`: Code style changes (formatting, missing semi-colons, etc.)
-  * `refactor`: Code changes that neither fix a bug nor add a feature
-  * `perf`: Performance improvements
-  * `test`: Adding or correcting tests
-  * `chore`: Maintenance tasks (build process, auxiliary tools, libraries)
+> **`build.sh` writes PDFs flat into `Lectures/`, but the committed layout is
+> `Lectures/<Course>/`.** A plain `./build.sh` will leave 63 PDFs at the root of `Lectures/`
+> alongside the course folders, rather than updating them in place. Build into the right
+> folder explicitly:
+> ```bash
+> ./build.sh --file Computer_Vision/04_Object_Detection.tex --output Lectures/Computer_Vision
+> ```
 
-* **`scope`** *(optional)*: Provides additional contextual information, typically the name of the affected module or component, enclosed in parentheses.
-
-* **`description`**: A concise summary of the change, written in the imperative mood (e.g., "add", "fix", "update").
-
-* **`body`** *(optional)*: A more detailed explanation of the change, its rationale, and any relevant background information.
-
-* **`footer(s)`** *(optional)*: Additional metadata, such as issue references or notes about breaking changes.
-
-### 🛠 Examples
-
-#### 1. **Adding a New Feature**
+## Repository layout
 
 ```
-feat(auth): add OAuth2 login support
+.
+├── build.sh                  # the only build entry point
+├── update_version.sh         # semver bump, called by CI
+├── VERSION  CHANGELOG.md     # both maintained by CI, not by hand
+├── CONFIGURE.md              # environment setup notes
+├── Lectures/<Course>/        # built PDFs, committed
+├── Labs/                     # 289 notebooks
+└── LaTeX/
+    ├── Computer_Vision/            # 24 deck main files
+    ├── Natural_Language_Processing/#  20
+    ├── Reinforcement_Learning/     #  10
+    ├── Introduction_To_AI/         #   8
+    ├── Generative_AI/              #   1
+    ├── preamble/             # packages, commands, beamer_settings (4 files)
+    ├── sections/             # 65 topic dirs, ~950 .tex — all slide content
+    ├── images/               # 69 dirs, ~2,300 figures
+    ├── style_files/          # logos and .sty helpers
+    ├── beamerthemeStanford.sty + 2 more, antbrief.cls
+    └── references.bib
 ```
 
-*Adds a new feature to the authentication module.*
+**Naming conventions.** Decks are `NN_Title.tex`, zero-padded, in every course, and the built
+PDF keeps the same stem in `Lectures/<Course>/` — so a deck and its PDF always share a name.
+Notebooks carry no numeric prefix and use `<Name>_Exercise.ipynb` / `<Name>_Solution.ipynb`.
+No path anywhere in the repo contains a space.
 
-#### 2. **Fixing a Bug**
+## How a deck is assembled
 
-```
-fix(api): resolve null pointer exception on user creation
-```
+A deck main file is a thin shell — all content lives in `sections/`. Every one of the 63
+decks follows the same shape:
 
-*Fixes a bug in the API module related to user creation.*
-
-#### 3. **Documentation Update**
-
-```
-docs(readme): update installation instructions
-```
-
-*Updates the installation instructions in the README.*
-
-#### 4. **Code Refactoring**
-
-```
-refactor(database): optimize query performance
+```latex
+\documentclass[10pt, aspectratio=169]{beamer}
+\input{preamble/packages}          % all 63 decks
+\input{preamble/commands}          % all 63 decks
+\input{preamble/beamer_settings}   % all 63 decks
+\begin{document}
+\input{sections/cover}             % all 63 decks
+\input{sections/toc}               % 28 of 63
+\input{sections/<topic>/<file>}    % ~13 of these per deck
+\end{document}
 ```
 
-*Refactors database queries for improved performance.*
+So:
 
-#### 5. **Performance Improvement**
+- **New slide** → add or edit a file under `LaTeX/sections/<topic>/`, then `\input` it from
+  the deck. Don't put slide content in the deck main file.
+- **New figure** → `LaTeX/images/<topic>/`, referenced as
+  `\includegraphics[width=\linewidth]{images/<topic>/<file>.png}`. Image directory names
+  mostly mirror section names, but that's a convention, not a rule.
+- **New package** → `LaTeX/preamble/packages.tex`, so every deck picks it up. 12 decks
+  currently re-declare a package locally (mostly `tikz`); treat that as legacy rather than a
+  pattern to copy.
+
+Width note: use `\linewidth`, not `\textwidth` or `\paperwidth`. Inside a list `\linewidth`
+accounts for the indent; the others overflow the frame by exactly that amount.
+
+## Releases and versioning
+
+`.github/workflows/deploy.yml` is the only workflow. **It does not build LaTeX** — no PDF is
+compiled or published by CI. It bumps the version and regenerates the changelog:
+
+- Triggers on push to any branch **without a `/` in its name**, plus manual dispatch
+  (`workflow_dispatch` ignores the branch filter). There is no `pull_request` trigger. So a
+  flat branch like `nlp_review2` fires it on every push, while `user/topic` never does.
+- Keywords in the commit message drive it:
+
+| Keyword | Effect |
+|---|---|
+| `[major]` / `[minor]` / `[patch]` | Selects the semver bump. **Omitting it defaults to `patch`.** |
+| `[skip ci]` | Skips the workflow entirely |
+| `tag-release` | Cuts a GitHub Release — only on `main`, and not on a merge commit |
+| `tag-repo` | Tags the repo — only on `main`, and not on a merge commit |
+
+- **Merge commits are exempt from all of it.** The bump, the changelog, the tagging and the
+  release are each gated on the head commit having fewer than two parents, so a PR merge
+  landing on `main` produces nothing at all. The bump happens *earlier*, on the push to the
+  topic branch — which is why the bot commit appears as the branch-side parent of the merge.
+- The workflow commits `VERSION` and `CHANGELOG.md` back as
+  `chore: update changelog and version [skip ci]`. **Expect a bot commit on your branch and
+  to need a `git pull` before your next push.**
+- `CHANGELOG.md` is generated by `conventional-changelog` — commits whose subject doesn't
+  parse never appear in it.
+
+## Commit convention
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/):
+`<type>(<scope>): <description>`, imperative mood.
 
 ```
-perf(image-processing): reduce image loading time
+feat(slides): add GRPO derivation to RL post-training deck
+fix(cv): correct dead ATIS dataset link
+docs(readme): document the CI version keywords
 ```
 
-*Improves the performance of image loading in the image-processing module.*
+Types in use here: `feat`, `fix`, `docs`, `refactor`, `style`, `chore`. Add `[minor]` or
+`[major]` when the change warrants more than a patch bump.
 
-#### 6. **Test Addition**
+There is no commit linter, and a malformed prefix fails silently — `feat(slides):: …` and
+`feat(slides)L …` are both in the history and neither reached the changelog.
 
-```
-test(auth): add unit tests for login functionality
-```
+## Things that will catch you out
 
-*Adds unit tests for the login functionality in the authentication module.*
+- **`Lectures/` is build output but is committed.** Because a plain `./build.sh` writes flat
+  (see above), it does *not* update the committed PDFs — it drops 63 new files at the root of
+  `Lectures/`, next to the course folders. Build with `--output Lectures/<Course>` and you get
+  the opposite problem: hundreds of MB of binary diffs, most differing from `HEAD` only by an
+  embedded timestamp. Either way, don't reflexively `git add -A`; stage the decks you changed.
+- **The repo is large** — roughly 4.5 GB of git objects, ~720 MB of figures and 263 MB of
+  notebooks. A shallow clone (`--depth 1`) is much faster if you don't need history.
+- **`build.sh` skips a `SHARED_DIRS` list that names `assets`, which doesn't exist**, and does
+  *not* skip `LaTeX/build/`. That's harmless today (no `.tex` there), but a stray `.tex`
+  dropped in `LaTeX/build/` would be compiled as if it were a deck.
 
-#### 7. **Chore Task**
+## License
 
-```
-chore(deps): update dependency versions
-```
-
-*Updates project dependencies to their latest versions.*
-
-#### 8. **Breaking Change**
-
-If a commit introduces a breaking change, indicate it by adding an exclamation mark (`!`) after the type or scope, and include a `BREAKING CHANGE` footer:
-
-```
-feat(auth)!: remove legacy authentication methods
-
-BREAKING CHANGE: The legacy authentication methods have been removed. Users must now use OAuth2.
-```
-
-*Introduces a breaking change by removing legacy authentication methods.*
-
-### 🔗 Linking to Issues
-
-To associate commits with issues, include references in the footer:
-
-```
-fix(auth): correct password reset link
-
-Resolves: #123
-```
-
-*Fixes issue number 123 related to password reset links.*
-
-### 📌 Tips for Effective Commit Messages
-
-* **Use the imperative mood**: Write as if you're giving a command (e.g., "add feature", not "added feature").
-* **Be concise**: Keep the subject line under 50 characters if possible.
-* **Provide context**: Use the body to explain the "why" behind the change.
-* **Consistent formatting**: Maintain a consistent structure to facilitate automated tools.
-
-By following the Conventional Commits specification, you ensure that your commit messages are clear, consistent, and machine-readable, enabling efficient changelog generation and semantic versioning.
-
-If you need further assistance or examples tailored to your project's specific needs, feel free to ask!
+GPL-3.0 — see [LICENSE](LICENSE).

@@ -42,6 +42,22 @@
 
 \end{frame}
 
+\begin{frame}{Around WER: The Rest of the Metric Family}
+\begin{itemize}
+    \item \textbf{Sentence error rate:} the whole utterance is right or wrong. One substitution costs the
+      entire sentence, so it is too strict to steer development --- which is why WER's local credit won.
+    \item \textbf{Phoneme and frame error rates:} the same edit-distance idea at finer granularity; a
+      phoneme error rate needs a pronunciation dictionary, a frame error rate needs a time alignment.
+    \item \textbf{Real-time factor (RTF):} processing time divided by audio duration --- $\text{RTF} < 1$
+      means faster than real time. Together with latency, it decides whether a model can serve a live
+      interface at all.
+    \item \textbf{Downstream metrics:} when ASR feeds another system, score the pipeline end to end ---
+      e.g., BLEU after speech translation, task success for a voice assistant.
+    \item \textbf{Tooling:} NIST's SCTK (\texttt{sclite}) has standardized WER scoring --- alignment,
+      normalization, significance tests --- for decades; use it rather than reimplementing edit distance.
+\end{itemize}
+\end{frame}
+
 \begin{frame}[allowframebreaks]{Metrics for the Other Tasks: CER, DER, MOS}
 
 WER answers one question: did we get the words right. A diarization system with excellent WER can still be useless if it attributes every turn to the wrong speaker, and a synthesizer can be word-perfect and still sound wrong. Each task needs its own metric.

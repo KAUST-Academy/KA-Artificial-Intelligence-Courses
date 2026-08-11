@@ -6,11 +6,14 @@
 \begin{frame}[allowframebreaks]{References}
     \textbf{Papers covered:}
     \begin{itemize}
+        \item \textbf{FlashAttention}: Dao et al., NeurIPS 2022, \emph{FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness} (\href{https://arxiv.org/abs/2205.14135}{arXiv:2205.14135})
+        \item \textbf{Online softmax}: Milakov \& Gimelshein, 2018, \emph{Online normalizer calculation for softmax} (\href{https://arxiv.org/abs/1805.02867}{arXiv:1805.02867})
+        \item \textbf{Data movement}: Ivanov et al., MLSys 2021, \emph{Data Movement Is All You Need: A Case Study on Optimizing Transformers} (\href{https://arxiv.org/abs/2007.00072}{arXiv:2007.00072})
         \item \textbf{LLaMA 3}: Llama Team, AI @ Meta, 2024, \emph{The Llama 3 Herd of Models} (\href{https://arxiv.org/abs/2407.21783}{arXiv:2407.21783})
         \item \textbf{BLT}: Pagnoni et al., 2024, \emph{Byte Latent Transformer: Patches Scale Better Than Tokens} (\href{https://arxiv.org/abs/2412.09871}{arXiv:2412.09871})
         \item \textbf{LLaDA}: Nie et al., NeurIPS 2025, \emph{Large Language Diffusion Models} (\href{https://arxiv.org/abs/2502.09992}{arXiv:2502.09992})
     \end{itemize}
-    \vspace{0.5em}
+\framebreak
     \textbf{Patching schemes and architectures:}
     \begin{itemize}
         \item \textbf{MEGABYTE}: Yu et al., 2023, \emph{Predicting Million-byte Sequences with Multiscale Transformers} (\href{https://arxiv.org/abs/2305.07185}{arXiv:2305.07185})
@@ -18,6 +21,13 @@
         \item \textbf{Dynamic token pooling}: Nawrot et al., ACL 2023, \emph{Efficient Transformers with Dynamic Token Pooling} (\href{https://arxiv.org/abs/2211.09761}{arXiv:2211.09761})
         \item \textbf{Perceiver}: Jaegle et al., ICML 2021, \emph{General Perception with Iterative Attention} (\href{https://arxiv.org/abs/2103.03206}{arXiv:2103.03206})
         \item \textbf{Diffusion-LM}: Li et al., NeurIPS 2022, \emph{Diffusion-LM Improves Controllable Text Generation} (\href{https://arxiv.org/abs/2205.14217}{arXiv:2205.14217})
+    \end{itemize}
+
+\framebreak
+
+    \textbf{Covered in other lectures:}
+    \begin{itemize}
+        \item \textbf{FlashAttention-2}: Dao, 2023, \emph{Faster Attention with Better Parallelism and Work Partitioning} (\href{https://arxiv.org/abs/2307.08691}{arXiv:2307.08691}) --- see \emph{Transformers: 2017 vs 2026}
     \end{itemize}
 \framebreak
     \textbf{Benchmarks:}
@@ -28,6 +38,8 @@
     \vspace{0.5em}
     \textbf{Code and resources:}
     \begin{itemize}
+        \item FlashAttention kernels: \url{https://github.com/Dao-AILab/flash-attention}
+        \item Horace He, \emph{Making Deep Learning Go Brrrr From First Principles} (operator fusion): \url{https://horace.io/brrr_intro.html}
         \item BLT: \url{https://github.com/facebookresearch/blt}
         \item LLaDA: \url{https://ml-gsai.github.io/LLaDA-demo/}
         \item Open LLM Leaderboard: \url{https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard}

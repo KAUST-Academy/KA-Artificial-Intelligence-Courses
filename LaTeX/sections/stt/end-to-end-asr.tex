@@ -11,6 +11,19 @@
   {\large An alternative to hybrid HMM-DNN: map audio directly\\to transcript tokens (characters, phonemes, BPE)}
 \end{frame}
 
+\begin{frame}{What the Pipeline Bought --- and What End-to-End Gives Up}
+  \begin{itemize}
+    \item \textbf{Modularity was a real asset.} Porting a classical system to a new language means swapping
+      the lexicon (a dictionary) and retraining the language model (text-only data); the acoustic model,
+      mapping audio to phonemes, is largely language-independent.
+    \item \textbf{End-to-end models give that up:} mapping audio straight to text couples everything, so a
+      new language needs \emph{parallel} speech--text data --- exactly what low-resource languages lack.
+    \item In exchange, one network replaces four hand-tuned modules and their error propagation.
+    \item The field's answers to the data problem are the rest of this lecture: self-supervised pretraining
+      on unlabeled audio (wav2vec 2.0) and massive multilingual supervision (Whisper).
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{HMM-free recognition with CTC}
   \begin{itemize}
     \item DNN approximates $P(a \mid x)$ over output tokens; no separate HMM state topology for alignment.

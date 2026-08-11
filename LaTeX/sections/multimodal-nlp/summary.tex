@@ -1,0 +1,21 @@
+\begin{frame}{Summary}
+  \small
+  \begin{itemize}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Contrastive alignment} (CLIP, then SigLIP) gives
+      encoders that score and retrieve; conversation took a decoder LLM behind a projector plus visual
+      instruction tuning.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The open recipe scaled} through LLaVA's successors
+      into today's flagships (Qwen3-VL, InternVL3.5): native resolution, grounding, documents, video.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Frontier systems are natively multimodal:} one
+      network reads and writes text, images and audio (GPT-4o onward), reasons by acting on images (o3),
+      and generates images mid-conversation (Nano Banana).
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The same perception stack works beyond chat:}
+      retrieving page images, driving GUIs, controlling robots.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Where fusion happens} (early, middle, late) is
+      still the design axis; at scale, early fusion concedes nothing.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Benchmarks brush the human-expert ceiling}
+      (MMMU-Pro in the low-80s); hallucination, token cost, jailbreaks and fragile evaluation stay open.
+    \item[\textcolor{red}{$\blacktriangleright$}] The agentic systems built on these models, their loops,
+      tools and safety questions, are covered later in the course.
+  \end{itemize}
+\end{frame}

@@ -65,6 +65,54 @@
   \slideimgsource{Stanford CS224S, Lecture 9 (2025 Spring), slide 13.}
 \end{frame}
 
+\begin{frame}{Factorizing $P(O \mid W)$ Through Phonemes}
+  \begin{itemize}
+    \item Words are too coarse to model acoustics directly, so the classical pipeline routes through a
+      phoneme sequence $L$:
+      \[
+        P(O \mid W) \;\approx\; \sum_{L} P(O \mid L)\, P(L \mid W)
+      \]
+      (the sum rule over pronunciations, then the conditional-independence assumption
+      $P(O \mid L, W) \approx P(O \mid L)$: given the phonemes, the audio no longer cares which words they
+      spell).
+    \item This is exactly the architecture on the previous slide, as three learned objects:
+      \begin{itemize}
+        \item $P(O \mid L)$ --- the \textbf{acoustic model}: HMM states with GMM or DNN emissions (next frames);
+        \item $P(L \mid W)$ --- the \textbf{lexicon}: a pronunciation dictionary (CMUdict-style); probability
+          $1$ for a single pronunciation, $1/J$ when a word has $J$ of them, and a G2P model for
+          out-of-vocabulary words --- the same front end the TTS lecture teaches;
+        \item $P(W)$ --- the \textbf{language model} (next frame).
+      \end{itemize}
+    \item Every module is trained and tuned separately --- the strength, and the curse, of classical ASR.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{The Language Model Picks Among Homophones}
+  \begin{itemize}
+    \item The acoustic model and lexicon cannot separate \emph{``go to''}, \emph{``go two''}, and
+      \emph{``go too''} --- all three produce the same phoneme string \texttt{G OW T UW}. Only $P(W)$ can.
+    \item Counting in the WSJ text corpus (6.4M sentences):
+  \end{itemize}
+  \begin{center}
+    {\small
+    \begin{tabular}{lrl}
+      \toprule
+      Sequence & Count & Example \\
+      \midrule
+      ``go to'' & 2{,}710 & the default reading \\
+      ``go two'' & 2 & ``\ldots often go two hundred miles or more'' \\
+      ``go too'' & 41 & ``he could go too far'' \\
+      \bottomrule
+    \end{tabular}}
+  \end{center}
+  \begin{itemize}
+    \item An $n$-gram model stores exactly these statistics --- the counting machinery from the first NLP
+      lecture; neural language models (RNNLMs then, any LLM now) replace counts with learned context.
+    \item The LM is the pipeline's language-dependent text-side module --- and it trains on \emph{text
+      alone}, no audio required. Remember that property for the next section.
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Classical ASR: HMM-GMM system}
   \centering
   \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{images/stt/stt_hmm_gmm_phones.png}

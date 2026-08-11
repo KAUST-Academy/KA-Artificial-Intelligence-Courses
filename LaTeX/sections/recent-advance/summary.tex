@@ -11,6 +11,8 @@
             \hline
             \textbf{Advancement} & \textbf{What it removes} & \textbf{What it costs} \\
             \hline
+            FlashAttention & The $N \times N$ attention matrix in slow GPU memory & Extra FLOPs recomputing attention in the backward pass, and kernels rewritten per GPU generation \\
+            \hline
             LLaMA 3 & Closed weights at the frontier & The 405B model does not fit on one 8-GPU machine in BF16 \\
             \hline
             BLT & The fixed subword vocabulary & A separately trained entropy model, and patch size as a new knob \\
@@ -22,8 +24,9 @@
 \end{frame}
 
 \begin{frame}{Future Directions}
-    \textbf{Open problems the three papers leave behind:}
+    \textbf{Open problems the four papers leave behind:}
     \begin{itemize}
+        \item Attention kernels co-designed with the hardware, rather than rewritten by hand for every GPU generation.
         \item Scaling laws derived for byte-level models, instead of borrowing the compute-optimal schedule of subword transformers.
         \item Patch boundaries learned end to end, rather than handed down by a separate entropy model.
         \item Byte-ifying existing tokenizer-based checkpoints, so a byte-level model need not be trained from scratch.
@@ -34,9 +37,10 @@
 
 \begin{frame}{Key Takeaways}
     \begin{itemize}
+        \item \textbf{FlashAttention}: Exact attention got fast by cutting memory traffic, not arithmetic --- tiling and online softmax in the forward pass, recomputation in the backward.
         \item \textbf{LLaMA 3}: Open weights at frontier quality widen access to research and deployment.
         \item \textbf{BLT}: Learned byte patches remove the tokenizer, trading fixed vocabulary for dynamic, entropy-driven compute allocation.
         \item \textbf{LLDMs}: Diffusion-based generation is an alternative to left-to-right decoding, enabling parallel refinement of whole sequences.
-        \item Each paradigm removes a different fixed assumption of the standard transformer recipe.
+        \item Each advancement removes a different fixed assumption of the standard transformer recipe --- one of them inside the kernel, three at the modeling level.
     \end{itemize}
 \end{frame}

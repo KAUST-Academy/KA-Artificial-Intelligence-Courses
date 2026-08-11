@@ -1,0 +1,147 @@
+% --- Frameworks in practice ---
+\begin{frame}{The Landscape}
+  \centering
+  \scriptsize
+  \begin{tabular}{@{}p{2.5cm}p{4.1cm}p{5.2cm}@{}}
+    \toprule
+    \textbf{Framework} & \textbf{What it implements} & \textbf{Use it when} \\
+    \midrule
+    \textbf{PyTorch FSDP} &
+      ZeRO-3-style sharding, native and in-tree; \texttt{fully\_shard} (FSDP2) composes with TP/PP/EP &
+      Fine-tuning and mid-scale pre-training in plain PyTorch; the default choice for most people \\
+    \addlinespace[0.2em]
+    \textbf{DeepSpeed} &
+      ZeRO 1/2/3, CPU and NVMe offload, its own pipeline engine, fused kernels &
+      You need offload, or you want the whole run driven by one JSON file \\
+    \addlinespace[0.2em]
+    \textbf{Megatron-LM \newline / Megatron-Core} &
+      Tensor, pipeline, sequence, context and expert parallelism; selective recomputation &
+      Pre-training at 100B$+$, where TP and PP are unavoidable \\
+    \addlinespace[0.2em]
+    \textbf{TorchTitan} &
+      Reference PyTorch-native 4D-parallel pre-training stack built on FSDP2 &
+      You want Megatron-class parallelism without leaving PyTorch idioms \\
+    \addlinespace[0.2em]
+    \textbf{HF Accelerate, \newline TRL, axolotl} &
+      Config-driven wrappers over FSDP/DeepSpeed; the training loop is written for you &
+      Fine-tuning jobs where the science is in the data, not the parallelism \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.21em}
+  \begin{itemize}\scriptsize\itemsep0.05em
+    \item[\textcolor{red}{$\blacktriangleright$}] These are not exclusive. Accelerate \emph{launches} FSDP or DeepSpeed; NeMo wraps Megatron-Core; TorchTitan composes FSDP2 with tensor and pipeline parallelism from \texttt{torch.distributed}.
+    \item[\textcolor{red}{$\blacktriangleright$}] The real decision is not which library, but \textbf{which parallelism strategy} --- and that is decided by the arithmetic in the memory-anatomy section, not by the framework.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Config Anatomy: DeepSpeed}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.53\textwidth}
+      \begin{lstlisting}[basicstyle=\ttfamily\tiny, showstringspaces=false]
+{
+  "train_micro_batch_size_per_gpu": 4,
+  "gradient_accumulation_steps": 8,
+  "gradient_clipping": 1.0,
+  "bf16": { "enabled": true },
+  "zero_optimization": {
+    "stage": 3,
+    "overlap_comm": true,
+    "contiguous_gradients": true,
+    "offload_optimizer": {
+      "device": "cpu",
+      "pin_memory": true
+    },
+    "stage3_gather_16bit_weights_on_model_save": true
+  },
+  "activation_checkpointing": {
+    "partition_activations": true,
+    "cpu_checkpointing": false
+  }
+}
+      \end{lstlisting}
+      \begin{lstlisting}[basicstyle=\ttfamily\tiny, showstringspaces=false]
+deepspeed --num_gpus 8 train.py --deepspeed ds_config.json
+      \end{lstlisting}
+    \column{0.45\textwidth}
+      \begin{itemize}\footnotesize\itemsep0.3em
+        \item[\textcolor{red}{$\blacktriangleright$}] \texttt{stage} is the only line that changes the memory formula: 1, 2, or 3 selects $4\Psi + 12\Psi/d$, $2\Psi + 14\Psi/d$, or $16\Psi/d$.
+        \item[\textcolor{red}{$\blacktriangleright$}] \texttt{offload\_optimizer} moves the $12\Psi$ term to host memory and runs the Adam step on the CPU. It is the difference between ``does not fit'' and ``fits, slowly''.
+        \item[\textcolor{red}{$\blacktriangleright$}] The global batch is implied, not stated: $4 \times 8 \times 8 = 256$ sequences on 8 GPUs. Getting this wrong is the most common cause of ``why does my loss curve look different from the paper?''
+        \item[\textcolor{red}{$\blacktriangleright$}] The mouthful \texttt{stage3\_gather\_16bit\_\allowbreak weights\_on\_model\_save} matters more than it looks: without it your checkpoint is a pile of shards rather than a loadable model.
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Config Anatomy: FSDP2 and Accelerate}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.53\textwidth}
+      \textbf{PyTorch FSDP2, explicit:}
+      \begin{lstlisting}[language=Python, basicstyle=\ttfamily\tiny, showstringspaces=false]
+from torch.distributed.device_mesh import init_device_mesh
+from torch.distributed.fsdp import fully_shard, MixedPrecisionPolicy
+
+mesh = init_device_mesh("cuda", (world_size,))
+mp = MixedPrecisionPolicy(param_dtype=torch.bfloat16,
+                          reduce_dtype=torch.float32)
+
+# One FSDP unit per transformer block, then the root.
+for block in model.model.layers:
+    fully_shard(block, mesh=mesh, mp_policy=mp)
+fully_shard(model, mesh=mesh, mp_policy=mp)
+      \end{lstlisting}
+      \textbf{Accelerate, declarative:}
+      \begin{lstlisting}[basicstyle=\ttfamily\tiny, showstringspaces=false]
+distributed_type: FSDP
+fsdp_config:
+  fsdp_version: 2
+  fsdp_reshard_after_forward: true      # was FULL_SHARD
+  fsdp_auto_wrap_policy: TRANSFORMER_BASED_WRAP
+  fsdp_transformer_layer_cls_to_wrap: LlamaDecoderLayer
+  fsdp_state_dict_type: SHARDED_STATE_DICT
+  fsdp_cpu_ram_efficient_loading: true
+  fsdp_offload_params: false
+mixed_precision: bf16
+      \end{lstlisting}
+    \column{0.45\textwidth}
+      \begin{itemize}\footnotesize\itemsep0.3em
+        \item[\textcolor{red}{$\blacktriangleright$}] The wrapping loop is the whole design: \textbf{one unit per transformer block}. Wrap only the root and you gain nothing; wrap every linear layer and you drown in small collectives.
+        \item[\textcolor{red}{$\blacktriangleright$}] \texttt{reduce\_dtype=float32} keeps the gradient reduction in full precision even though the parameters are \texttt{bf16}. This is cheap insurance against summation error across hundreds of ranks.
+        \item[\textcolor{red}{$\blacktriangleright$}] \texttt{reshard\_after\_forward=False} is FSDP2's spelling of \texttt{SHARD\_GRAD\_OP} (ZeRO-2): keep the parameters gathered between forward and backward, trading memory for one fewer all-gather.
+        \item[\textcolor{red}{$\blacktriangleright$}] Launching is the same either way, via \texttt{torchrun}:
+      \end{itemize}
+      \begin{lstlisting}[basicstyle=\ttfamily\tiny, showstringspaces=false]
+torchrun --nnodes 4 --nproc_per_node 8 \
+         --rdzv_backend c10d train.py
+      \end{lstlisting}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Choosing by Scale}
+  \centering
+  \scriptsize
+  \begin{tabular}{@{}p{2.9cm}p{2.0cm}p{6.4cm}@{}}
+    \toprule
+    \textbf{Job} & \textbf{Hardware} & \textbf{Recipe} \\
+    \midrule
+    7B, LoRA / QLoRA fine-tune & 1 GPU, 24--80\,GB &
+      No distribution needed. Only the adapters carry gradients and optimizer states, so $16\Psi$ collapses to roughly $2\Psi$. \\
+    \addlinespace[0.25em]
+    7B, full fine-tune & 8$\times$80\,GB, 1 node &
+      FSDP \texttt{FULL\_SHARD} (or ZeRO-3) $+$ activation checkpointing $+$ \texttt{bf16}. Model states $112/8 = 14$\,GB per GPU. \\
+    \addlinespace[0.25em]
+    70B, full fine-tune & 32$\times$80\,GB, 4 nodes &
+      FSDP \texttt{HYBRID\_SHARD} $+$ checkpointing. Model states $1120/32 = 35$\,GB per GPU. On 8 or 16 GPUs the arithmetic does not close. \\
+    \addlinespace[0.25em]
+    70B, long context ($\geq 32$k) & 32--64 GPUs &
+      Add context parallelism; activations, not weights, are now the binding constraint. \\
+    \addlinespace[0.25em]
+    175B$+$, pre-train from scratch & 100s--1000s of GPUs &
+      Megatron-style $t \times p \times d$ $+$ sequence parallelism $+$ selective recomputation $+$ a ZeRO-1 distributed optimizer. \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.21em}
+  \begin{itemize}\scriptsize\itemsep0.05em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The escalation order is fixed, and it is worth memorising:} \texttt{bf16} $\rightarrow$ activation checkpointing $\rightarrow$ gradient accumulation $\rightarrow$ ZeRO-2 $\rightarrow$ ZeRO-3/FSDP $\rightarrow$ offload $\rightarrow$ tensor parallel $\rightarrow$ pipeline parallel. Each step costs more complexity than the last; stop as soon as the job fits.
+    \item[\textcolor{red}{$\blacktriangleright$}] Do the division \emph{before} you request the allocation. Most failed jobs at this scale are arithmetic errors, not bugs.
+  \end{itemize}
+\end{frame}

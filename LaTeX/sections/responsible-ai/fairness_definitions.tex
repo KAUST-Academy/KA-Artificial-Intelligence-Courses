@@ -1,0 +1,310 @@
+\section{Fairness Definitions}
+
+\begin{frame}{Turning ``Fair'' into Something You Can Measure}
+
+    \begin{block}{Notation for this section}
+        \begin{itemize}
+            \item $A$ --- the group attribute (e.g.\ $A \in \{\GrpA, \GrpB\}$).
+            \item $Y \in \{0,1\}$ --- the true outcome (repaid the loan, re-offended, was ill).
+            \item $R \in [0,1]$ --- the score the model outputs.
+            \item $\Yhat = \mathbf{1}[R > t]$ --- the decision after thresholding.
+        \end{itemize}
+    \end{block}
+
+    \vspace{0.8em}
+
+    Almost every group-fairness definition is one of three statements:
+
+    \vspace{0.4em}
+    \centering
+    \small
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Family} & \textbf{Statement} & \textbf{Plain reading} \\
+        \midrule
+        Independence & $\Yhat \perp A$ & the decision rate is the same for every group \\
+        Separation   & $\Yhat \perp A \mid Y$ & the error rates are the same for every group \\
+        Sufficiency  & $Y \perp A \mid R$ & a score means the same thing for every group \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{1em}
+    \raggedright
+    {\scriptsize Framing after S.~Barocas, M.~Hardt and A.~Narayanan, \emph{Fairness and Machine
+    Learning: Limitations and Opportunities}, MIT Press, 2023,
+    \href{https://fairmlbook.org/}{fairmlbook.org}, Chapter 3.}
+\end{frame}
+
+\begin{frame}{The Object Everything Is Computed From}
+
+    \centering
+    \textit{One confusion matrix per group. Every definition below is a constraint tying two cells
+    of these tables together across groups.}
+
+    \vspace{0.6em}
+
+    \begin{columns}[c]
+        \begin{column}{0.48\textwidth}
+            \centering \textbf{Group A}
+            \begin{tikzpicture}[scale=0.72]
+                \draw[fill=raiGreen!15, thick] (0,0)  rectangle (2.4,2.4);
+                \draw[fill=raiRed!15, thick]   (2.4,0) rectangle (4.8,2.4);
+                \draw[fill=raiRed!15, thick]   (0,-2.4) rectangle (2.4,0);
+                \draw[fill=raiGreen!15, thick] (2.4,-2.4) rectangle (4.8,0);
+                \node[font=\bfseries] at (1.2,1.2)  {TP};
+                \node[font=\bfseries] at (3.6,1.2)  {FN};
+                \node[font=\bfseries] at (1.2,-1.2) {FP};
+                \node[font=\bfseries] at (3.6,-1.2) {TN};
+                \node[font=\scriptsize\bfseries] at (1.2,2.8) {$\Yhat=1$};
+                \node[font=\scriptsize\bfseries] at (3.6,2.8) {$\Yhat=0$};
+                \node[font=\scriptsize\bfseries, rotate=90] at (-0.45,1.2)  {$Y=1$};
+                \node[font=\scriptsize\bfseries, rotate=90] at (-0.45,-1.2) {$Y=0$};
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \small
+            \begin{itemize}
+                \setlength\itemsep{0.45em}
+                \item \textbf{Selection rate} $= \Pr(\Yhat = 1)$
+                \item \textbf{TPR / recall} $= \Pr(\Yhat=1 \mid Y=1)$
+                \item \textbf{FPR} $= \Pr(\Yhat=1 \mid Y=0)$
+                \item \textbf{FNR} $= 1 - \text{TPR}$
+                \item \textbf{PPV / precision} $= \Pr(Y=1 \mid \Yhat=1)$
+                \item \textbf{Prevalence} $p = \Pr(Y=1)$
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.8em}
+    \begin{block}{}
+        \centering
+        \small A fairness \emph{audit} is: build this table per group, then compare a chosen cell
+        across groups. The hard part is choosing which cell.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Definition 1: Demographic Parity (Independence)}
+
+    \begin{block}{Demographic parity / statistical parity}
+        \[
+            \Pr(\Yhat = 1 \mid A = \GrpA) \;=\; \Pr(\Yhat = 1 \mid A = \GrpB)
+        \]
+        The model selects the same \emph{proportion} of each group.
+    \end{block}
+
+    \vspace{0.6em}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \textbf{When it is the right question}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item Allocating an opportunity where you do not trust the label
+                      (advertising, outreach, shortlisting).
+                \item You believe the historical outcome $Y$ is itself contaminated.
+                \item Legal context: the US ``four-fifths rule'' in employment screening flags a
+                      selection-rate ratio below $0.8$ as evidence worth investigating.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \textbf{Where it goes wrong}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item It ignores $Y$ entirely. A model can satisfy it by selecting qualified people
+                      from one group and arbitrary people from the other.
+                \item If the true base rates genuinely differ, enforcing it forces errors.
+                \item Measured as a \textbf{ratio} (disparate impact) or a \textbf{difference}
+                      --- report which.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Definition 2: Equalised Odds (Separation)}
+
+    \begin{block}{Equalised odds --- Hardt, Price and Srebro (2016)}
+        \[
+            \Pr(\Yhat = 1 \mid Y = y,\, A = \GrpA) \;=\; \Pr(\Yhat = 1 \mid Y = y,\, A = \GrpB)
+            \qquad \text{for } y \in \{0,1\}
+        \]
+        Equal \textbf{TPR} and equal \textbf{FPR} across groups.
+    \end{block}
+
+    \vspace{0.5em}
+
+    \begin{block}{Equal opportunity --- the one-sided version}
+        Only $\Pr(\Yhat = 1 \mid Y = 1)$ must match: among people who \emph{would} have succeeded,
+        each group has the same chance of being selected.
+    \end{block}
+
+    \vspace{0.6em}
+
+    \begin{itemize}\small
+        \setlength\itemsep{0.35em}
+        \item This is the ProPublica criterion: their complaint was unequal FPR and FNR.
+        \item Use it when the burden of a \textbf{mistake} is what matters --- a wrongly denied
+              loan, a wrongly flagged defendant, a missed diagnosis.
+        \item It conditions on $Y$, so it inherits whatever bias is in the label. If $Y$ is
+              ``was arrested,'' equalised odds equalises errors against a biased ground truth.
+    \end{itemize}
+
+    \vspace{0.3em}
+    {\scriptsize M.~Hardt, E.~Price and N.~Srebro, ``Equality of Opportunity in Supervised Learning,''
+    NeurIPS 2016, \href{https://arxiv.org/abs/1610.02413v1}{arXiv:1610.02413v1}.}
+\end{frame}
+
+\begin{frame}{Definition 3: Calibration and Predictive Parity (Sufficiency)}
+
+    \begin{block}{Calibration within groups}
+        \[
+            \Pr(Y = 1 \mid R = r,\, A = \GrpA) \;=\; \Pr(Y = 1 \mid R = r,\, A = \GrpB) \;=\; r
+        \]
+        A score of $0.7$ means a 70\% chance for everyone, whatever their group.
+        \textbf{Predictive parity} is the thresholded version: equal PPV across groups.
+    \end{block}
+
+    \vspace{0.8em}
+
+    \begin{itemize}
+        \setlength\itemsep{0.45em}
+        \item This is the criterion the COMPAS vendor pointed to, and it is a genuinely important
+              one: without it, a human reading the score is being misled about what it means.
+        \item Well-trained probabilistic models are often \emph{approximately} calibrated
+              within groups by default --- which is precisely why the conflict below is unavoidable
+              rather than exotic.
+        \item Check it with a \textbf{reliability diagram per group}, not with a single number.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{You Cannot Have All Three}
+
+    \begin{block}{Chouldechova (2017), Equation (2.6)}
+        \[
+            \text{FPR} \;=\; \frac{p}{1-p}\cdot\frac{1-\text{PPV}}{\text{PPV}}\cdot\bigl(1-\text{FNR}\bigr)
+        \]
+        with $p$ the prevalence $\Pr(Y=1)$ in that group.
+    \end{block}
+
+    \vspace{0.6em}
+
+    Fix PPV to be equal across two groups. If $p_\GrpA \neq p_\GrpB$, the right-hand side differs,
+    so FPR and FNR \textbf{cannot both} be equal. Predictive parity and error-rate balance are
+    incompatible whenever base rates differ.
+
+    \vspace{0.8em}
+
+    \begin{itemize}\small
+        \setlength\itemsep{0.35em}
+        \item Kleinberg, Mullainathan and Raghavan (2016) prove the same tension for calibrated
+              \emph{scores}: except in degenerate cases (equal base rates, or a perfect predictor),
+              calibration and balance for both classes cannot hold together.
+        \item Nothing about this depends on the model, the features, or the amount of data. It is
+              arithmetic.
+    \end{itemize}
+
+    \vspace{0.3em}
+    {\scriptsize A.~Chouldechova, ``Fair prediction with disparate impact,'' \emph{Big Data} 5(2), 2017,
+    \href{https://arxiv.org/abs/1703.00056v1}{arXiv:1703.00056v1}. J.~Kleinberg, S.~Mullainathan and
+    M.~Raghavan, ``Inherent Trade-Offs in the Fair Determination of Risk Scores,'' ITCS 2017,
+    \href{https://arxiv.org/abs/1609.05807v2}{arXiv:1609.05807v2}.}
+\end{frame}
+
+\begin{frame}{Seeing the Conflict on a Toy Example}
+
+    Two groups, 100 people each. Prevalence $\Pr(Y=1)$ in the population: $p_\GrpA = 0.5$,
+    $p_\GrpB = 0.3$. A model that is \textbf{equally accurate within each group}
+    (TPR $=0.8$, TNR $=0.8$ for both):
+
+    \vspace{0.6em}
+    \centering
+    \small
+    \begin{tabular}{lcccccc}
+        \toprule
+        & $Y=1$ & $Y=0$ & TP & FP & \textbf{PPV} & \textbf{FPR} \\
+        \midrule
+        Group A ($p=0.5$) & 50 & 50 & 40 & 10 & $40/50 = \mathbf{0.80}$ & $10/50 = \mathbf{0.20}$ \\
+        Group B ($p=0.3$) & 30 & 70 & 24 & 14 & $24/38 = \mathbf{0.63}$ & $14/70 = \mathbf{0.20}$ \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{1em}
+    \raggedright
+
+    \begin{itemize}\small
+        \setlength\itemsep{0.35em}
+        \item Error rates are balanced (equal TPR and FPR) --- but a positive prediction means
+              something different in each group (0.80 vs 0.63).
+        \item Push PPV to match and the error rates separate. There is no threshold that fixes both.
+        \item \textbf{Also note:} the selection rate is 50/100 vs 38/100, so demographic parity
+              fails as well.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Group Fairness Is Not the Only Framing}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \textbf{Individual fairness}
+            \vspace{0.3em}
+
+            ``Similar individuals should receive similar predictions'' (Dwork et al., 2012).
+
+            \vspace{0.5em}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item Attractive, and it catches cases group parity misses.
+                \item Requires a task-specific \textbf{similarity metric} --- which is the whole
+                      problem, moved somewhere else.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \textbf{Causal / counterfactual fairness}
+            \vspace{0.3em}
+
+            ``Would the decision change if this person had belonged to another group, holding
+            everything else fixed?'' (Kusner et al., 2017).
+
+            \vspace{0.5em}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item Directly expresses what most people mean by discrimination.
+                \item Needs a causal graph you are willing to defend, and the attribute is often
+                      not manipulable in the required sense.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \vspace{1em}
+    \begin{block}{}
+        \centering
+        \small For an introductory course: use group metrics because you can compute them, and
+        remember that they are a screening tool, not a certificate.
+    \end{block}
+\end{frame}
+
+\begin{frame}{So Which Definition Do You Use?}
+
+    This is a decision about \textbf{harms}, not a hyperparameter search. Four questions, in order:
+
+    \vspace{0.8em}
+
+    \begin{enumerate}
+        \setlength\itemsep{0.55em}
+        \item \textbf{Who is affected, and what is the harm?} Being wrongly \emph{denied}
+              something (allocative) or being wrongly \emph{flagged} (punitive) point to different
+              error rates.
+        \item \textbf{Do you trust the label $Y$?} If the label encodes past discrimination,
+              definitions that condition on $Y$ inherit it --- lean towards independence.
+        \item \textbf{Is the score read by a human?} If yes, calibration within groups is close to
+              mandatory, or you are misinforming the decision-maker.
+        \item \textbf{What does the law in your jurisdiction require?} Sometimes the answer is
+              fixed for you --- and per-group thresholds may be illegal (see the next section).
+    \end{enumerate}
+
+    \vspace{0.9em}
+    \begin{block}{}
+        \centering
+        Write the chosen criterion, and the criteria you consciously gave up, into the model card.
+        An unstated choice is still a choice.
+    \end{block}
+\end{frame}

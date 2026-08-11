@@ -1,0 +1,109 @@
+\section{Summary}
+
+% --- SLIDE 1: SUMMARY ---
+\begin{frame}[allowframebreaks]{Summary of the Lecture}
+
+    \begin{itemize}
+        \item \textbf{The ML code is the small box.} Most of the cost and most of the risk in a deployed
+              model live in the infrastructure around it (Sculley et al., 2015).
+
+        \item \textbf{The lifecycle is a loop}, not a line: experiment $\rightarrow$ validate $\rightarrow$
+              package $\rightarrow$ deploy $\rightarrow$ monitor $\rightarrow$ retrain. MLOps exists to make
+              that loop cheap enough to run often.
+
+        \item \textbf{Reproducibility} comes from seeds, pinned environments, versioned data and declared
+              configuration --- and it is what makes rollback possible.
+
+        \item \textbf{Experiment tracking} turns a run into a first-class, append-only object with
+              parameters, metrics and artifacts. MLflow: Tracking, Projects, Models, Model Registry.
+
+        \item \textbf{Hyperparameter optimisation} beyond grid and random means \emph{using} past trials
+              (TPE) and \emph{stopping} bad ones (successive halving / ASHA). Pruning is usually the bigger win.
+
+        \item \textbf{Serving} is a choice between batch, online and streaming --- default to batch.
+              Serialise the whole pipeline, and never load an untrusted pickle.
+
+        \item \textbf{Monitoring} distinguishes upstream breakage, data drift and concept drift. Labels lag,
+              so watch inputs and prediction distributions in the meantime.
+
+        \item \textbf{Testing, staged rollout and lineage} are what let you ship a change without betting the
+              product on it.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 2: THE MINIMUM VIABLE SETUP ---
+\begin{frame}{If You Do Only Eight Things}
+
+    \centering
+    \textit{A weekend of work that removes most of the pain, for any project, at any scale.}
+    \vspace{0.18em}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, colframe=green!50!black, title=\scriptsize This week]
+                \scriptsize
+                \begin{enumerate}
+                    \item Set every seed, and log it.
+                    \item Commit a \textbf{lockfile}; log its hash with each run.
+                    \item Write data to \textbf{immutable dated paths}; never overwrite.
+                    \item Start a local \textbf{MLflow} server and log every run, including the failures.
+                \end{enumerate}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=blue!5, colframe=blue!50, title=\scriptsize This month]
+                \scriptsize
+                \begin{enumerate}
+                    \setcounter{enumi}{4}
+                    \item Add a \textbf{schema check} at training \emph{and} serving input.
+                    \item Serialise the \textbf{whole pipeline} as one artifact and register it by version.
+                    \item \textbf{Log every prediction} with its model version.
+                    \item Add \textbf{one} alert: prediction distribution versus a fixed reference window.
+                \end{enumerate}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.24em}
+    \begin{block}{The point}
+        None of this requires a platform team, a cloud budget, or a new job title. It requires deciding that
+        the run, the data and the model are \textbf{artifacts with identities} --- and everything else follows.
+    \end{block}
+
+\end{frame}
+
+% --- SLIDE 3: LABS / NEXT ---
+\begin{frame}{Where to Practise This}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=gray!8, colframe=gray!60, title=\small Lab 1 --- Tracking and tuning]
+                \small
+                Wrap an existing training notebook in \textbf{MLflow} tracking; drive it with an
+                \textbf{Optuna} study using a pruner; compare the runs in the UI; register the best model.
+                \vspace{0.3em}
+                \\ \textit{Entirely local --- no accounts, no cloud, no cost.}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=gray!8, colframe=gray!60, title=\small Lab 2 --- Serving and drift]
+                \small
+                Export the trained pipeline, serve it with \textbf{FastAPI}, then simulate drift by shifting
+                and corrupting the inputs; build a simple drift detector and alert on the shift in the
+                prediction distribution.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.9em}
+    \begin{itemize}
+        \item \textbf{Then apply it to your own project.} Score yourself with the \textbf{ML Test Score}
+              rubric and fix whichever of the four sections is lowest.
+        \item \textbf{Where this continues:} governance, model cards and fairness auditing were covered
+              earlier in this course. The training-loop reproducibility mechanics are in the
+              computer-vision course; inference optimisation and distributed serving, for models too
+              large for a single CPU, in the NLP course.
+    \end{itemize}
+
+\end{frame}

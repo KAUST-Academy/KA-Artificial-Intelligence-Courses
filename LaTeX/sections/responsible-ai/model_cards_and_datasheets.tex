@@ -1,0 +1,202 @@
+\section{Model Cards and Datasheets}
+
+\begin{frame}{Documentation Is Part of the Model}
+
+    A model that ships without documentation forces every downstream user to rediscover its limits
+    --- usually in production.
+
+    \vspace{0.8em}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=raiBlue!5, colframe=raiBlue!60, title=Model card]
+                \small
+                Travels \textbf{with the trained model}. Answers: what is it for, who is it for,
+                where does it fail, and how well does it work \emph{per group}.
+
+                \vspace{0.4em}
+                Mitchell et al., FAT* 2019.
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=raiGreen!5, colframe=raiGreen!60, title=Datasheet]
+                \small
+                Travels \textbf{with the dataset}. Answers: why was it collected, from whom, with
+                what consent, how was it cleaned, and what should it not be used for.
+
+                \vspace{0.4em}
+                Gebru et al., CACM 2021.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{1em}
+
+    \begin{block}{Both are borrowed ideas}
+        \centering
+        \small A model card is a \textbf{datasheet for a component}, as in electronics; a dataset
+        datasheet is the same idea one step upstream. Neither is a research artefact --- they are
+        engineering hygiene, and the EU AI Act turns much of their content into a legal obligation
+        for high-risk systems.
+    \end{block}
+\end{frame}
+
+\begin{frame}{What Goes in a Model Card}
+
+    \centering
+    \scriptsize
+    \begin{tabular}{p{3.2cm} p{8.6cm}}
+        \toprule
+        \textbf{Section} & \textbf{Content} \\
+        \midrule
+        Model details      & Owner, date, version, model type, training algorithm, licence, citation, contact. \\
+        Intended use       & Primary intended uses and users; \textbf{out-of-scope} uses stated explicitly. \\
+        Factors            & Groups, instrumentation, and environments the performance is expected to vary over. \\
+        Metrics            & Which measures, which decision threshold, and how uncertainty was estimated. \\
+        Evaluation data    & Which datasets, why they were chosen, and how they were preprocessed. \\
+        Training data      & Distribution over the same factors, as far as it can be disclosed. \\
+        Quantitative analyses & Results \textbf{unitary} (per factor) and \textbf{intersectional} (per combination). \\
+        Ethical considerations & Sensitive data, risks to people, mitigations applied, known problematic uses. \\
+        Caveats \& recommendations & Untested groups, open concerns, what testing should happen next. \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{0.9em}
+    \raggedright
+    {\scriptsize M.~Mitchell, S.~Wu, A.~Zaldivar, P.~Barnes, L.~Vasserman, B.~Hutchinson, E.~Spitzer,
+    I.~D.~Raji and T.~Gebru, ``Model Cards for Model Reporting,'' FAT* 2019, Section 4,
+    \href{https://arxiv.org/abs/1810.03993v2}{arXiv:1810.03993v2}.}
+\end{frame}
+
+\begin{frame}{A Filled Example (1/2) --- Invented for Teaching}
+
+    \begin{tcolorbox}[colback=gray!4, colframe=raiBlue!60,
+                      title={Model card --- \texttt{loan-default-v3}}, fonttitle=\bfseries]
+        \scriptsize
+        \textbf{Model details.} Gradient-boosted trees (LightGBM, 400 trees, depth 6). Owner:
+        Credit Risk team. Version 3.1, trained 2026-05-14 on applications from 2021--2025.
+        Contact: \texttt{risk-ml@example.org}.
+
+        \vspace{0.35em}
+        \textbf{Intended use.} Produces a default-probability score used to \emph{prioritise manual
+        review} of personal-loan applications between \$1k and \$25k in Market X.
+        Primary users: underwriting analysts.
+
+        \vspace{0.35em}
+        \textbf{Out of scope.} Not for automatic decline without human review. Not for business
+        loans, mortgages, or other markets. Not for pricing. Not valid for applicants under 21
+        (fewer than 300 in training).
+
+        \vspace{0.35em}
+        \textbf{Factors.} Reported over: age band, gender, region, income decile, thin-file vs
+        thick-file credit history, and the region\,$\times$\,thin-file intersection.
+
+        \vspace{0.35em}
+        \textbf{Metrics.} AUC and recall at the operating threshold $0.31$, chosen to keep the
+        manual-review queue at 20\% of volume. 95\% intervals from 1{,}000 bootstrap resamples.
+
+        \vspace{0.35em}
+        \textbf{Fairness criterion adopted.} Equal opportunity on the review decision
+        (equal TPR across region and thin-file status). Demographic parity was
+        \textbf{not} targeted, because base default rates differ materially by region;
+        this trade-off was signed off by the Model Risk Committee on 2026-05-02.
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}{A Filled Example (2/2) --- Invented for Teaching}
+
+    \begin{tcolorbox}[colback=gray!4, colframe=raiBlue!60,
+                      title={Model card --- \texttt{loan-default-v3} (continued)}, fonttitle=\bfseries]
+        \scriptsize
+        \textbf{Quantitative analyses.}
+
+        \vspace{0.3em}
+        \centering
+        \begin{tabular}{lrrrr}
+            \toprule
+            \textbf{Slice} & \textbf{$n$} & \textbf{AUC} & \textbf{TPR @ 0.31} & \textbf{FPR @ 0.31} \\
+            \midrule
+            Overall              & 42{,}300 & 0.81 & 0.74 & 0.18 \\
+            Region North         & 31{,}500 & 0.82 & 0.76 & 0.17 \\
+            Region South         & 10{,}800 & 0.77 & 0.66 & 0.21 \\
+            Thin file            &  6{,}100 & 0.71 & 0.58 & 0.24 \\
+            \textbf{South $\times$ thin file} &  1{,}450 & \textbf{0.68} & \textbf{0.52} & \textbf{0.27} \\
+            \bottomrule
+        \end{tabular}
+
+        \vspace{0.5em}
+        \raggedright
+        \textbf{Ethical considerations.} Region correlates with an attribute protected in Market X.
+        Region is not an input, but postcode-derived features are; a proxy audit is run quarterly.
+        A wrongly high score delays access to credit, so recall on the worst slice is the primary
+        fairness metric.
+
+        \vspace{0.35em}
+        \textbf{Caveats and recommendations.} The worst slice is 3.4\% of volume and is
+        \textbf{materially worse} than overall --- route it to a specialist queue rather than the
+        standard one. Not validated after a policy change to income verification (2026-03).
+        Re-audit on 2026-11-14 or after any change to the acquisition channel.
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Datasheets for Datasets}
+
+    Seven groups of questions, answered by whoever created the dataset:
+
+    \vspace{0.18em}
+
+    \begin{columns}[T]
+        \begin{column}{0.49\textwidth}
+            \begin{enumerate}\scriptsize
+                \setlength\itemsep{0.1em}
+                \item \textbf{Motivation.} Why was it created, by whom, funded by whom?
+                \item \textbf{Composition.} What is an instance? How many? What is missing? Does it
+                      contain data about people, or confidential/sensitive content?
+                \item \textbf{Collection process.} How was it acquired, by whom, over what period?
+                      Were the people informed, and did they consent?
+                \item \textbf{Preprocessing / cleaning / labelling.} What was done, and is the raw
+                      version still available?
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \begin{enumerate}\scriptsize
+                \setlength\itemsep{0.1em}
+                \setcounter{enumi}{4}
+                \item \textbf{Uses.} What has it been used for; what should it \textbf{not} be used
+                      for?
+                \item \textbf{Distribution.} Who gets it, under what licence, with what
+                      restrictions?
+                \item \textbf{Maintenance.} Who maintains it, how are errors fixed, is there
+                      versioning, is there a retention limit?
+            \end{enumerate}
+
+            \vspace{0.15em}
+            \begin{tcolorbox}[colback=raiAmber!5, colframe=raiAmber!70, boxrule=0.6pt]
+                \scriptsize The questions are deliberately uncomfortable. ``We do not know'' is a
+                valid answer --- and is itself the finding.
+            \end{tcolorbox}
+
+            \vspace{0.12em}
+            \begin{tcolorbox}[colback=raiGreen!5, colframe=raiGreen!60, boxrule=0.6pt]
+                \scriptsize \textbf{Where these live.} Hugging Face model and dataset cards are
+                exactly this format. Keep the card in the \emph{same repository as the training
+                code}, generate its quantitative table \emph{from the evaluation script}, and make
+                it a merge requirement --- a hand-copied table is stale within a week.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.12em}
+    \begin{block}{Exercise (15 minutes)}
+        \centering
+        \scriptsize Take the last model you trained. Write its \textbf{intended use}, its
+        \textbf{out-of-scope uses}, and one \textbf{quantitative table with slices}.
+        Most people discover they cannot fill in the second one.
+    \end{block}
+
+    \vspace{0.09em}
+    {\scriptsize T.~Gebru, J.~Morgenstern, B.~Vecchione, J.~W.~Vaughan, H.~Wallach, H.~Daum\accent19 e~III
+    and K.~Crawford, ``Datasheets for Datasets,'' \emph{Communications of the ACM} 64(12):86--92,
+    2021, \href{https://arxiv.org/abs/1803.09010v8}{arXiv:1803.09010v8}.}
+\end{frame}
+

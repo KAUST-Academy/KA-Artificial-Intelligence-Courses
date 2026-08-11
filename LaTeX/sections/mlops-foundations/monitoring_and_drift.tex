@@ -1,0 +1,308 @@
+\section{Monitoring \& Drift}
+
+% --- SLIDE 1: FOUR WAYS TO GO WRONG ---
+\begin{frame}{Four Ways a Deployed Model Goes Wrong}
+
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    {\scriptsize
+    \begin{tabular}{p{2.9cm}|p{4.3cm}|p{4.3cm}}
+        \toprule
+        \textbf{What} & \textbf{Looks like} & \textbf{Timescale} \\
+        \midrule
+        \textbf{Upstream breakage} & A feature becomes all-null, all-zero, or wrongly typed &
+            Instant, catastrophic \\
+        \textbf{Data drift} & $P(X)$ moves: new customers, new devices, new regions &
+            Weeks to months \\
+        \textbf{Concept drift} & $P(Y \mid X)$ moves: the same inputs now imply a different answer &
+            Days to years \\
+        \textbf{Model staleness} & Nothing drifted much, but the model has not seen a year of new data &
+            Slow and boring \\
+        \bottomrule
+    \end{tabular}}
+
+    \vspace{0.3em}
+    \begin{itemize}
+        \item \textbf{Upstream breakage is the most common and the most fixable.} It is a data engineering
+              bug, and a schema check catches it in minutes rather than months.
+        \item The other three cannot be prevented --- only detected and answered with a retrain.
+        \item \textbf{Server uptime tells you none of this.} A model service returning 200s at 8\,ms with
+              catastrophically wrong predictions is a perfectly healthy service.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 2: THE FORMAL PICTURE ---
+\begin{frame}{Drift, Formally}
+
+    \begin{block}{The model learned a joint distribution}
+        Training gave you $P_{\text{train}}(X, Y) = P(X)\,P(Y \mid X)$. Deployment assumes
+        $P_{\text{serve}} = P_{\text{train}}$. Drift is any way that assumption fails.
+    \end{block}
+
+    \vspace{0.12em}
+    \centering
+    \begin{tikzpicture}[font=\scriptsize]
+        % Panel 1: covariate shift -- P(X) moves, the rule does not
+        \begin{scope}[shift={(0,0)}]
+            \node[font=\scriptsize\bfseries, anchor=south] at (2.0,1.7) {Covariate shift: $P(X)$ moves};
+            \draw[->] (0,0) -- (4.0,0) node[right, font=\tiny] {$x$};
+            \draw[->] (0,0) -- (0,1.6);
+            \draw[blue!70, thick, smooth, domain=0.2:2.4, samples=40]
+                plot (\x, {1.2*exp(-(\x-1.3)^2/0.28)});
+            \draw[red!70, thick, dashed, smooth, domain=1.3:3.9, samples=40]
+                plot (\x, {1.2*exp(-(\x-2.6)^2/0.28)});
+            \draw[green!50!black, very thick] (1.0,-0.15) -- (1.0,1.5);
+            \node[green!45!black, font=\tiny, anchor=north] at (1.0,-0.18) {boundary};
+            \node[blue!70, font=\tiny, anchor=south] at (1.3,1.2) {train};
+            \node[red!70, font=\tiny, anchor=south] at (2.6,1.2) {serve};
+        \end{scope}
+        % Panel 2: concept drift -- P(Y|X) moves, the inputs do not
+        \begin{scope}[shift={(5.6,0)}]
+            \node[font=\scriptsize\bfseries, anchor=south] at (2.0,1.7) {Concept drift: $P(Y\mid X)$ moves};
+            \draw[->] (0,0) -- (4.0,0) node[right, font=\tiny] {$x$};
+            \draw[->] (0,0) -- (0,1.6);
+            \draw[blue!70, thick, smooth, domain=0.2:2.4, samples=40]
+                plot (\x, {1.2*exp(-(\x-1.3)^2/0.28)});
+            \draw[green!50!black, very thick] (1.0,-0.15) -- (1.0,1.5);
+            \draw[red!70, very thick, dashed] (2.2,-0.15) -- (2.2,1.5);
+            \node[green!45!black, font=\tiny, anchor=north] at (1.0,-0.18) {old};
+            \node[red!70, font=\tiny, anchor=north] at (2.2,-0.18) {new boundary};
+        \end{scope}
+    \end{tikzpicture}
+
+    \vspace{0.18em}
+    \begin{itemize}
+        \scriptsize
+        \item \textbf{Left:} the inputs moved but the rule is unchanged. Your model may still be right ---
+              it is just being asked questions it was not trained on.
+        \item \textbf{Right:} the inputs look identical and the \emph{answer} changed. Nothing in the input
+              distribution will tell you. Only labels will.
+        \item \textbf{This is why input monitoring alone is not enough} --- and why it is still worth having,
+              because it is the only signal available immediately.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 3: EXAMPLES ---
+\begin{frame}{Which Kind Is It? Worked Examples}
+
+    \centering
+    \renewcommand{\arraystretch}{1.35}
+    {\small
+    \begin{tabular}{p{6.4cm}|p{5.0cm}}
+        \toprule
+        \textbf{Situation} & \textbf{Diagnosis} \\
+        \midrule
+        A demand forecaster trained pre-pandemic, run during a lockdown &
+            Both --- $P(X)$ and $P(Y\mid X)$ moved together \\
+        A fraud model: fraudsters read your rules and adapt &
+            Concept drift, \emph{adversarial} and fast \\
+        A churn model after marketing enters a new country &
+            Covariate shift --- new customer mix, same mechanism \\
+        A sensor is recalibrated and now reports Celsius, not Fahrenheit &
+            Upstream breakage disguised as drift \\
+        A recommender trained on its own logged clicks &
+            Feedback loop --- the model is shifting its own $P(X)$ \\
+        \bottomrule
+    \end{tabular}}
+
+    \vspace{0.9em}
+    \begin{alertblock}{Diagnose before you retrain}
+        Retraining on a broken pipeline bakes the breakage into the model. \textbf{Always check for upstream
+        breakage first} --- it is the cheapest hypothesis and the most common cause.
+    \end{alertblock}
+
+\end{frame}
+
+% --- SLIDE 4: DRIFT PATTERNS ---
+\begin{frame}{Drift Comes in Shapes}
+
+    \centering
+    \begin{tikzpicture}[font=\tiny]
+        \foreach \lbl/\dx in {{Sudden}/0, {Incremental}/3.2, {Gradual}/6.4, {Reoccurring}/9.6} {
+            \begin{scope}[shift={(\dx,0)}]
+                \node[font=\scriptsize\bfseries, anchor=south] at (1.35,1.55) {\lbl};
+                \draw[->, gray] (0,0) -- (2.8,0) node[right, font=\tiny] {$t$};
+                \draw[->, gray] (0,0) -- (0,1.4);
+            \end{scope}
+        }
+        % sudden
+        \draw[blue!70, very thick] (0.1,1.1) -- (1.3,1.1) -- (1.3,0.25) -- (2.6,0.25);
+        % incremental
+        \draw[blue!70, very thick] (3.3,1.1) -- (4.0,1.1) -- (5.4,0.25) -- (5.8,0.25);
+        % gradual (oscillates between old and new before settling)
+        \draw[blue!70, very thick] (6.5,1.1) -- (7.1,1.1) -- (7.1,0.25) -- (7.4,0.25)
+            -- (7.4,1.1) -- (7.8,1.1) -- (7.8,0.25) -- (9.0,0.25);
+        % recurring (seasonal)
+        \draw[blue!70, very thick] (9.7,1.1) -- (10.3,1.1) -- (10.3,0.25) -- (11.0,0.25)
+            -- (11.0,1.1) -- (12.2,1.1);
+    \end{tikzpicture}
+
+    \vspace{0.8em}
+    \begin{itemize}
+        \small
+        \item \textbf{Sudden} --- a policy change, a competitor's launch, a pipeline rewrite. Easy to detect,
+              hard to prevent.
+        \item \textbf{Incremental / gradual} --- the dangerous ones. Any single week looks fine; the year does
+              not. Detected only by comparing against a \emph{fixed} reference window.
+        \item \textbf{Reoccurring} --- seasonality. \textbf{Do not retrain on this.} Give the model the
+              calendar as a feature instead, or you will chase your own tail every December.
+        \item A single anomalous window is an \textbf{outlier}, not drift. Do not retrain on one bad Tuesday.
+    \end{itemize}
+
+    \vspace{0.4em}
+    {\scriptsize Taxonomy after Gama, Zliobaite, Bifet, Pechenizkiy \& Bouchachia,
+    ``A Survey on Concept Drift Adaptation,'' \textit{ACM Computing Surveys} 46(4), Article~44, 2014,
+    \href{https://dl.acm.org/doi/10.1145/2523813}{DOI:10.1145/2523813}, Figure~2.}
+
+\end{frame}
+
+% --- SLIDE 5: DETECTING WITHOUT LABELS ---
+\begin{frame}{Detecting Drift Before the Labels Arrive}
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \small
+            \textbf{What you can measure today}
+            \begin{itemize}
+                \item \textbf{Schema and range checks} --- type, nullability, allowed categories, min/max.
+                      Cheap, and catches the common case.
+                \item \textbf{Per-feature distribution distance} against a fixed reference window:
+                      Kolmogorov--Smirnov for continuous, chi-square or PSI for categorical.
+                \item \textbf{Prediction distribution.} If your model predicted ``churn'' for 4\% of users
+                      all year and today it says 19\%, something changed --- even if you cannot yet say
+                      whether it was right.
+                \item \textbf{Confidence / entropy} of predictions, and the rate of out-of-range inputs.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \begin{tcolorbox}[colback=gray!8, colframe=gray!60, title=\small Population Stability Index]
+                \small
+                \[ \mathrm{PSI} = \sum_{b} (p_b - q_b)\,\ln\!\frac{p_b}{q_b} \]
+                over bins $b$ of a feature; $p$ is the reference, $q$ the current window.
+                \vspace{0.3em}
+                \\ \scriptsize Credit-scoring rule of thumb: $<0.1$ stable, $0.1$--$0.25$ moderate shift,
+                $>0.25$ significant. A convention, not a theorem --- calibrate it on your own history.
+            \end{tcolorbox}
+            \vspace{0.4em}
+            \begin{alertblock}{\small The large-$n$ trap}
+                \small With a million rows per day, every statistical test rejects. Alert on
+                \textbf{effect size} and on a \textbf{trend}, not on a $p$-value.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+% --- SLIDE 6: LABEL LAG ---
+\begin{frame}{The Label-Lag Problem}
+
+    \centering
+    \begin{tikzpicture}[font=\scriptsize]
+        \draw[->, thick, gray] (0,0) -- (12.0,0) node[right, font=\tiny] {time};
+        \foreach \x/\lab in {0.6/{prediction made}, 4.2/{action taken}, 10.0/{truth known}} {
+            \draw[thick] (\x,-0.15) -- (\x,0.15);
+            \node[anchor=south, font=\tiny, align=center] at (\x,0.2) {\lab};
+        }
+        \draw[<->, very thick, red!70] (0.6,-0.7) -- node[below, font=\tiny, red!70!black]
+            {label lag: days for fraud, \emph{months} for churn or credit default} (10.0,-0.7);
+    \end{tikzpicture}
+
+    \vspace{1.0em}
+    \begin{itemize}
+        \item You cannot compute accuracy in production until the labels arrive. For a 12-month loan default
+              model, that is a \textbf{12-month} feedback delay.
+        \item \textbf{Proxies to use in the meantime:}
+              \begin{itemize}
+                  \item input and prediction distribution monitoring (previous slide);
+                  \item \textbf{business metrics} that respond faster --- click-through, override rate,
+                        complaint volume, manual-review queue length;
+                  \item \textbf{human spot-checks}: label a small random sample every week, deliberately.
+                        A hundred labels a week is a real accuracy estimate.
+              \end{itemize}
+        \item \textbf{Beware biased feedback:} if you only ever see the outcome for applicants you approved,
+              your production ``accuracy'' is measured on a censored sample.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 7: ALERTS AND TRIGGERS ---
+\begin{frame}{Alerts People Act On, and Retraining Triggers}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, colframe=red!50, title=\scriptsize Alerting rules that survive contact]
+                \scriptsize
+                \begin{itemize}
+                    \item Every alert names an \textbf{owner} and a \textbf{first action}. An alert with
+                          neither will be muted within a month.
+                    \item Page on \textbf{breakage}; e-mail a weekly digest for \textbf{drift}. They are
+                          different urgencies.
+                    \item Alert on a \textbf{sustained} threshold crossing (e.g.\ 3 days), not on one noisy
+                          window.
+                    \item Track how often each alert was actionable. Delete the ones that never were.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, colframe=green!50!black, title=\scriptsize When to retrain]
+                \scriptsize
+                \begin{itemize}
+                    \item \textbf{Scheduled} --- weekly or monthly. Boring, predictable, and correct far more
+                          often than people expect. Start here.
+                    \item \textbf{Volume-based} --- every $N$ new labelled examples.
+                    \item \textbf{Performance-based} --- metric falls below a floor. Requires labels.
+                    \item \textbf{Drift-based} --- input distance exceeds a threshold. Available immediately,
+                          but noisier.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.18em}
+    \begin{alertblock}{Automatic retraining needs a gate}
+        A retrain that ships without a \textbf{validation gate} is an automated way to deploy a worse model.
+        The new candidate must beat the incumbent on a held-out set before it is promoted --- and the
+        pipeline must be able to refuse.
+    \end{alertblock}
+
+\end{frame}
+
+% --- SLIDE 8: LOGGING FOR AUDIT ---
+\begin{frame}{Log Every Prediction You Serve}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \small
+            \textbf{Record, per request}
+            \begin{itemize}
+                \item A request ID and a timestamp
+                \item The \textbf{input features as the model saw them} (post-preprocessing)
+                \item The raw output and the final decision
+                \item The \textbf{model version} and config version
+                \item Latency, and any fallback that fired
+            \end{itemize}
+            \vspace{0.4em}
+            Join the label in later, on the request ID. That join is what makes every metric on the previous
+            slides computable at all.
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=blue!5, colframe=blue!50, title=\small What this buys you]
+                \small
+                \begin{itemize}
+                    \item \textbf{Debugging:} replay the exact input that produced the complaint.
+                    \item \textbf{Training data:} today's production log is next quarter's training set.
+                    \item \textbf{Audit:} answer ``why was this person declined, by which model, on what
+                          inputs?''
+                \end{itemize}
+            \end{tcolorbox}
+            \vspace{0.4em}
+            \begin{alertblock}{\small Privacy is a design input}
+                \small Prediction logs contain personal data. Decide retention, access and pseudonymisation
+                \emph{before} you switch logging on, not after.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+
+\end{frame}

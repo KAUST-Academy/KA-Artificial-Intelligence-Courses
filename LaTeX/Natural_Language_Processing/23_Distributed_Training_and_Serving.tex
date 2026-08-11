@@ -1,0 +1,37 @@
+% 90--120 minute graduate lecture: distributed training and serving.
+% Narrative thread: the memory wall sets the agenda. Every parallelism strategy in
+% this deck is introduced as an answer to "which of the four memory terms does it
+% shard, and what does that cost in communication?", which is why the memory
+% anatomy comes first and the interconnect table comes late enough to explain the
+% shape of every recipe that preceded it.
+\documentclass[10pt, aspectratio=169]{beamer}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, shapes.geometric}
+
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+\title[Distributed Training \& Serving]{Distributed Training and Serving}
+\subtitle{Memory Anatomy, Data/Tensor/Pipeline/Sequence Parallelism, ZeRO and FSDP, Multi-GPU Inference}
+
+\begin{document}
+
+\input{sections/cover}
+\input{sections/distributed-training/toc}
+\input{sections/distributed-training/motivation}
+\input{sections/distributed-training/learning-outcomes}
+\input{sections/distributed-training/memory-anatomy}
+\input{sections/distributed-training/data-parallelism}
+\input{sections/distributed-training/zero-and-fsdp}
+\input{sections/distributed-training/tensor-parallelism}
+\input{sections/distributed-training/pipeline-parallelism}
+\input{sections/distributed-training/sequence-and-context-parallelism}
+\input{sections/distributed-training/frameworks-in-practice}
+\input{sections/distributed-training/precision-and-communication}
+\input{sections/distributed-training/distributed-inference}
+\input{sections/distributed-training/summary}
+\input{sections/distributed-training/references}
+
+\end{document}

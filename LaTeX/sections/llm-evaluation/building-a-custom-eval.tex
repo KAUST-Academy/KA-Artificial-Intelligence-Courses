@@ -1,0 +1,83 @@
+% --- Building a custom eval ---
+\begin{frame}[allowframebreaks]{Public Benchmarks Do Not Answer Your Question}
+  \begin{itemize}\itemsep0.35em
+    \item[\textcolor{red}{$\blacktriangleright$}] MMLU tells you a model knows undergraduate biology. It tells you nothing about whether it can read \textit{your} maintenance manuals, answer in \textit{your} house style, and refuse the four things your legal team cares about.
+    \item[\textcolor{red}{$\blacktriangleright$}] Public benchmarks are for \textbf{model selection} --- a shortlist of two or three candidates. Everything after that decision needs an eval you built.
+    \item[\textcolor{red}{$\blacktriangleright$}] A domain eval also does something no benchmark can: it \textbf{encodes your definition of correct}. Writing it down is usually the point at which a team discovers it did not agree on what correct means.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The starting point is not a metric. It is reading outputs.} Almost every eval worth having began as an error someone noticed in a real trace. The discipline is turning each recurring failure into a permanent test case.
+    \item[\textcolor{red}{$\blacktriangleright$}] Practical guidance converges on this: build a \textbf{domain-specific trace viewer} and remove every click between you and the data. The published advice is blunt --- ``you can never stop looking at data'' --- and teams that skip this step build evals that measure the wrong thing precisely.
+  \end{itemize}
+  \vspace{0.15em}
+  {\scriptsize H.~Husain, ``Your AI Product Needs Evals,'' 29 Mar.\ 2024, \href{https://hamel.dev/blog/posts/evals/}{hamel.dev}.}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Constructing the Test Set}
+  \begin{itemize}\footnotesize\itemsep0.3em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Start from real failures, not imagination.} Twenty to fifty cases drawn from production traces beat several hundred invented ones, because the invented ones cluster on failures you already anticipated.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Do error analysis first.} Read a few dozen traces, label each failure with a short free-text description, then group those descriptions into recurring categories. The categories --- not your intuitions --- become the strata of the eval set.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Stratify deliberately.} Sample across user segments, input lengths, languages, document types, and difficulty. A uniform sample of production traffic will be dominated by easy cases and will not move when you fix a hard one.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Size it with the power analysis}, not with a round number. If you need to detect a 5-point change, compute the $n$ that resolves 5 points and build that many. If that is unaffordable, say what the eval \textit{can} resolve.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Separate capability from regression sets.} Capability sets should have low pass rates and stay hard; regression sets should sit near 100\% and alarm on any drop. Averaging them together hides both signals.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Volume over polish, within reason.} Vendor guidance is explicit that more questions with slightly noisier automated grading beats fewer questions with hand-graded perfection --- $n$ is in the denominator of every standard error on the previous slides.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Synthetic data is for coverage, not for ground truth.} Generate inputs to fill gaps in your strata; have a human confirm the expected outputs.
+  \end{itemize}
+  \vspace{0.1em}
+  {\scriptsize Anthropic, ``Define success criteria and build evaluations,'' \href{https://platform.claude.com/docs/en/test-and-evaluate/develop-tests}{platform.claude.com}; OpenAI, ``Evaluation best practices,'' \href{https://developers.openai.com/api/docs/guides/evaluation-best-practices}{developers.openai.com}.}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Writing Rubrics That Survive Contact With Reality}
+  \begin{itemize}\footnotesize\itemsep0.3em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Binary, not Likert.} The strongest recommendation in the practitioner literature is to drop 1--5 scales entirely: a ``3'' is not actionable, and nobody --- human or model --- applies the midpoint consistently. Force a pass/fail decision, which forces you to define the boundary.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{One criterion per judgment.} ``Is this answer good?'' silently averages correctness, tone, and format. Ask three separate questions and you learn which one regressed.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Write the failure, not the ideal.} Compare:
+      \begin{itemize}\itemsep0.12em
+        \item[\textcolor{red}{\xmark}] ``The response should be helpful and accurate.''
+        \item[\textcolor{KAUSTcyan}{\cmark}] ``\textbf{Fail} if the response states a procedure step that does not appear in the retrieved context, or cites a document identifier not present in the context.''
+      \end{itemize}
+      The second can be graded consistently by two people who have never met.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Attach a critique to every label.} When your domain expert marks an item fail, they should write \textit{why}, in enough detail that a new employee would understand. Those critiques become the few-shot examples for the judge, and they are where the rubric's real definition lives.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Expect criteria drift.} There is a genuine circularity here: you need criteria to grade outputs, but grading outputs is how you discover the criteria. Some criteria only become expressible \textit{after} you have seen the failures --- so plan to rewrite the rubric two or three times, and re-label earlier items when you do.
+  \end{itemize}
+  \vspace{0.1em}
+  {\scriptsize H.~Husain, ``Creating a LLM-as-a-Judge That Drives Business Results,'' 29 Oct.\ 2024, \href{https://hamel.dev/blog/posts/llm-judge/}{hamel.dev/llm-judge}; Shankar et al., ``Who Validates the Validators?'', UIST 2024, \href{https://arxiv.org/abs/2404.12272v1}{arXiv:2404.12272v1}.}
+\end{frame}
+
+\begin{frame}{Aligning a Judge to a Domain Expert}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+      \begin{itemize}\scriptsize\itemsep0.05em
+        \item[\textcolor{red}{$\blacktriangleright$}] The workflow that scales expert judgment without scaling expert hours --- sometimes called \textbf{critique shadowing}:
+          \begin{enumerate}\itemsep0.05em
+            \item Identify a \textbf{single} principal domain expert. Committees produce rubrics nobody can apply.
+            \item Assemble a dataset spanning your features, scenarios, and personas.
+            \item The expert labels each item \textbf{pass/fail with a written critique}.
+            \item Fix the bugs the review exposes --- many will be product bugs, not model bugs.
+            \item Build the judge iteratively, using the expert's critiques as few-shot examples.
+            \item Run error analysis on the judge's own mistakes.
+            \item Split into specialised judges only when one prompt cannot hold the criteria.
+          \end{enumerate}
+        \item[\textcolor{red}{$\blacktriangleright$}] Note step 3 does the heavy lifting. The judge is downstream of a human definition of quality; it does not create one.
+      \end{itemize}
+    \column{0.48\textwidth}
+      \begin{itemize}\scriptsize\itemsep0.05em
+        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Report precision and recall separately}, per failure class. Eval sets are imbalanced --- most outputs pass --- so raw agreement is dominated by the majority class and looks excellent while the judge misses every real failure.
+        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Decide which error you can tolerate.} A judge used to \textit{gate a release} needs high recall on failures; a judge used to \textit{triage} a queue for human review can trade recall for precision.
+        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Re-measure alignment when anything moves}: a new judge model version, a new product feature, a shift in the input distribution. Alignment is a property of a distribution, not of a prompt.
+        \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Keep a permanent human slice.} A small, regularly refreshed expert-labelled sample is the only thing that will tell you your automated suite has quietly drifted away from what users care about.
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{Living With an Eval Suite}
+  \begin{itemize}\footnotesize\itemsep0.3em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Cheapest grader that can fail, first.} Deterministic assertions (schema valid, citation exists, no forbidden phrase, latency budget met) catch a surprising share of real regressions for no cost and no ambiguity. Reach for a judge only for what is left, and for humans only where the judge is in question.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Grade outcomes, not trajectories.} For agents especially, asserting a specific sequence of tool calls locks in today's implementation and fails every time the model finds a better route. Assert the end state.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Distinguish pass@$k$ from pass\textasciicircum$k$.} For a product feature, ``succeeds at least once in $k$ tries'' is the wrong bar; \textbf{consistency} --- succeeding on all $k$ --- is what a user experiences.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Isolate trials.} Shared state between runs is contamination in miniature: one trial's side effects change the next trial's difficulty.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Retire saturated evals.} A suite sitting at 100\% has stopped carrying information. Move those cases into a regression set and build harder ones.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Know the limits of an automated suite.} A judge inherits the biases of this lecture's middle sections; $n$-gram and embedding-similarity metrics do not work for open-ended quality; and no offline number substitutes for a live A/B test on the outcome you actually sell.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The suite is infrastructure, not a report.} Its value is that it runs on every change, gates the release, and grows every time production surprises you.
+  \end{itemize}
+  \vspace{0.1em}
+  {\scriptsize Anthropic, ``Demystifying evals for AI agents,'' 9 Jan.\ 2026, \href{https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents}{anthropic.com}; E.~Yan, ``Task-Specific LLM Evals that Do \& Don't Work,'' \href{https://eugeneyan.com/writing/evals/}{eugeneyan.com}.}
+\end{frame}

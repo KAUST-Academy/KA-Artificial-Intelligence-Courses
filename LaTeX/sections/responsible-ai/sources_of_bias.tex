@@ -1,0 +1,309 @@
+\section{Sources of Bias}
+
+\begin{frame}{First: ``Bias'' Means Three Different Things}
+
+    \begin{columns}[T]
+        \begin{column}{0.32\textwidth}
+            \begin{tcolorbox}[colback=gray!8, colframe=gray!60, title=Statistical bias]
+                \small
+                $\mathbb{E}[\hat{\theta}] - \theta \neq 0$.
+
+                \vspace{0.4em}
+                The estimator is systematically off. Neutral term; half of the
+                bias--variance trade-off.
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \begin{tcolorbox}[colback=raiBlue!5, colframe=raiBlue!60, title=Inductive bias]
+                \small
+                The assumptions a model class makes.
+
+                \vspace{0.4em}
+                Convolutions assume locality; linear models assume additivity.
+                \textbf{Necessary} --- without it there is no generalisation.
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.32\textwidth}
+            \begin{tcolorbox}[colback=raiRed!5, colframe=raiRed!70, title=Societal / harmful bias]
+                \small
+                Systematically different quality of service or outcome across groups of people.
+
+                \vspace{0.4em}
+                \textbf{This lecture's subject.}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{1.2em}
+
+    \begin{block}{}
+        \centering
+        The three are unrelated. A model can be statistically unbiased and still harmful; a strong
+        inductive bias can either mask or expose a societal one.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Bias Enters at Every Stage, Not Just ``The Data''}
+
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[
+        node distance=0.55cm,
+        stage/.style={rectangle, draw, rounded corners, minimum height=0.95cm, text width=2.05cm,
+                      align=center, font=\scriptsize\bfseries, fill=raiBlue!10},
+        tag/.style={font=\scriptsize, align=center, text width=2.2cm, text=raiRed!80!black},
+        arr/.style={-{Latex[length=2mm]}, thick}
+    ]
+        \node[stage] (world) {The world};
+        \node[stage, right=of world] (collect) {Collect \& sample};
+        \node[stage, right=of collect] (label) {Define target \& label};
+        \node[stage, right=of label] (train) {Train};
+        \node[stage, right=of train] (eval) {Evaluate};
+        \node[stage, right=of eval] (deploy) {Deploy};
+
+        \foreach \a/\b in {world/collect, collect/label, label/train, train/eval, eval/deploy}
+            \draw[arr] (\a) -- (\b);
+
+        \node[tag, below=0.35cm of world]   {Historical bias};
+        \node[tag, below=0.35cm of collect] {Representation bias};
+        \node[tag, below=0.35cm of label]   {Measurement bias};
+        \node[tag, below=0.35cm of train]   {Aggregation \& learning bias};
+        \node[tag, below=0.35cm of eval]    {Evaluation bias};
+        \node[tag, below=0.35cm of deploy]  {Deployment bias};
+
+        \draw[arr, dashed, raiRed] (deploy.north) .. controls +(0,1.2) and +(0,1.2) .. (world.north)
+            node[midway, above, font=\scriptsize\itshape, text=raiRed] {feedback loop};
+    \end{tikzpicture}}
+
+    \vspace{1em}
+    {\scriptsize Taxonomy after H.~Suresh and J.~V.~Guttag, ``A Framework for Understanding Sources of
+    Harm throughout the Machine Learning Life Cycle,'' EAAMO 2021,
+    \href{https://arxiv.org/abs/1901.10002v5}{arXiv:1901.10002v5}.}
+\end{frame}
+
+\begin{frame}{Historical and Representation Bias}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \textbf{Historical bias}
+            \vspace{0.3em}
+
+            Present even with perfect sampling and perfect measurement, because the world the data
+            records is itself unequal.
+
+            \vspace{0.6em}
+            \begin{itemize}\small
+                \setlength\itemsep{0.35em}
+                \item An image search for ``CEO'' that reflects who currently holds the job.
+                \item A loan model trained on approvals from an era of discriminatory lending.
+            \end{itemize}
+
+            \vspace{0.6em}
+            \begin{tcolorbox}[colback=gray!8, boxrule=0pt]
+                \small More data does not fix this. It is a question about the objective, not
+                the sample.
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \textbf{Representation bias}
+            \vspace{0.3em}
+
+            The development sample under-represents part of the use population, so the model
+            generalises poorly there.
+
+            \vspace{0.6em}
+            \begin{itemize}\small
+                \setlength\itemsep{0.35em}
+                \item A dermatology model trained mostly on light skin.
+                \item A speech model trained on one accent.
+                \item Gender Shades: existing face benchmarks were 79.6\% and 86.2\%
+                      lighter-skinned subjects.
+            \end{itemize}
+
+            \vspace{0.6em}
+            \begin{tcolorbox}[colback=gray!8, boxrule=0pt]
+                \small More \emph{targeted} data does help --- but you must first know the
+                composition of your data.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Measurement Bias: The Label Is a Proxy}
+
+    You almost never observe the thing you care about. You observe something correlated with it.
+
+    \vspace{0.8em}
+    \centering
+    \small
+    \begin{tabular}{p{3.9cm} p{4.0cm} p{4.0cm}}
+        \toprule
+        \textbf{What you want} & \textbf{What you record} & \textbf{What the gap encodes} \\
+        \midrule
+        Health need & Health-care spending & Unequal access to care \\
+        \addlinespace
+        Committing a crime & Being arrested & Unequal policing intensity \\
+        \addlinespace
+        Job performance & Was hired / was promoted & Past hiring decisions \\
+        \addlinespace
+        Creditworthiness & Repaid a loan they were \emph{granted} & Who was offered credit \\
+        \addlinespace
+        Content quality & Clicks and watch time & Engagement, not quality \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{1em}
+    \raggedright
+    \begin{block}{The one question to ask on every project}
+        \centering
+        \textit{``My label is X. What exactly had to happen in the world for X to be recorded,
+        and does that differ by group?''}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Aggregation, Learning, Evaluation and Deployment Bias}
+
+    \begin{itemize}
+        \setlength\itemsep{0.7em}
+        \item \textbf{Aggregation bias.} One model for populations that genuinely behave
+              differently. Suresh and Guttag point to medicine: patients of different sexes with
+              similar underlying conditions can present and progress differently, so one model is
+              optimal for neither.
+
+        \item \textbf{Learning bias.} The modelling choice itself amplifies a disparity.
+              Optimising average loss lets a large majority group dominate the gradient;
+              aggressive compression or regularisation tends to cost the tails most.
+
+        \item \textbf{Evaluation bias.} The benchmark does not represent the use population,
+              so the reported number is not the number you will get. This is exactly the
+              Gender Shades finding about existing face benchmarks.
+
+        \item \textbf{Deployment bias.} The model is used differently from how it was framed.
+              A risk score built to \emph{rank} people for services becomes a
+              \emph{decision} about their liberty; a triage aid becomes an autopilot.
+    \end{itemize}
+
+    \vspace{0.4em}
+    \centering
+    \textit{Four of the seven sources arise \emph{after} the data has been collected.}
+\end{frame}
+
+\begin{frame}{Feedback Loops: The Model Changes Its Own Training Data}
+
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.7cm and 2.4cm,
+        box/.style={rectangle, draw, rounded corners, minimum height=1.0cm, text width=3.0cm,
+                    align=center, font=\small},
+        arr/.style={-{Latex[length=2.5mm]}, thick}
+    ]
+        \node[box, fill=raiBlue!12] (model)  {Model predicts high risk in area A};
+        \node[box, fill=gray!12, right=of model] (action) {More patrols sent to area A};
+        \node[box, fill=raiRed!12, below=of action] (record) {More arrests recorded in area A};
+        \node[box, fill=raiRed!20, below=of model]  (retrain) {Retraining confirms area A is high risk};
+
+        \draw[arr] (model)  -- (action);
+        \draw[arr] (action) -- (record);
+        \draw[arr] (record) -- (retrain);
+        \draw[arr] (retrain) -- (model);
+    \end{tikzpicture}
+
+    \vspace{0.8em}
+
+    \begin{itemize}\small
+        \setlength\itemsep{0.35em}
+        \item The loop is self-confirming: the prediction generates the evidence for itself.
+        \item Same shape in recommenders (you only observe clicks on what you showed),
+              in credit (you only observe repayment for approved applicants), and in hiring.
+        \item \textbf{Detection:} hold out a slice from the policy, or log what the model
+              \emph{suppressed}, not just what it surfaced.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{``Just Drop the Sensitive Attribute'' Does Not Work}
+
+    \textbf{Fairness through unawareness:} remove race, gender, age from the feature set and
+    declare the model neutral.
+
+    \vspace{0.8em}
+
+    \begin{columns}[T]
+        \begin{column}{0.55\textwidth}
+            \begin{itemize}\small
+                \setlength\itemsep{0.4em}
+                \item Real features are \textbf{correlated} with the removed attribute: postcode,
+                      first name, school, device type, browsing history, purchase categories.
+                \item A capable model \emph{reconstructs} the attribute from the proxies. Removing
+                      the column removes your ability to \textbf{measure} the disparity, not the
+                      disparity itself.
+                \item The Amazon reporting is exactly this: no gender field, gendered signal.
+                \item Corollary: you often need the sensitive attribute --- held securely and used
+                      only for auditing --- in order to check for harm.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.43\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.9,
+                n/.style={circle, draw, minimum size=0.85cm, font=\scriptsize, align=center},
+                arr/.style={-{Latex[length=2mm]}, thick}]
+                \node[n, fill=raiRed!15] (g)  at (0,2)     {$A$};
+                \node[n, fill=gray!12]   (z1) at (-1.6,0.6) {zip};
+                \node[n, fill=gray!12]   (z2) at (0,0.6)    {name};
+                \node[n, fill=gray!12]   (z3) at (1.6,0.6)  {club};
+                \node[n, fill=raiBlue!15](y)  at (0,-1.1)   {$\hat{Y}$};
+                \draw[arr] (g) -- (z1); \draw[arr] (g) -- (z2); \draw[arr] (g) -- (z3);
+                \draw[arr] (z1) -- (y); \draw[arr] (z2) -- (y); \draw[arr] (z3) -- (y);
+                \draw[arr, dashed, raiRed, thick] (g) to[bend right=60] node[left, font=\scriptsize]
+                    {removed} (y);
+            \end{tikzpicture}
+            \vspace{0.2em}
+            {\scriptsize Cutting the direct edge leaves every indirect path intact.}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Bias Lives in Learned Representations Too}
+
+    Word embeddings trained on news text place words in a space where a
+    \textbf{gender direction} is recoverable, and gender-neutral occupation words project onto it.
+
+    \vspace{0.12em}
+    \centering
+    \begin{tikzpicture}[scale=0.61, font=\scriptsize]
+        \draw[{Latex[length=2mm]}-{Latex[length=2mm]}, thick, raiRed] (-4.7,0) -- (4.7,0);
+        \node[font=\scriptsize\bfseries, text=raiRed, anchor=east] at (-4.85,0) {she};
+        \node[font=\scriptsize\bfseries, text=raiRed, anchor=west] at ( 4.85,0) {he};
+        \node[font=\scriptsize\itshape, text=raiRed] at (0,-0.95)
+            {gender direction $\approx \overrightarrow{\text{he}} - \overrightarrow{\text{she}}$};
+
+        \foreach \x/\w in {-4.2/homemaker, -2.8/nurse, -1.4/receptionist,
+                            1.4/financier, 2.8/architect, 4.2/philosopher} {
+            \fill[raiBlue] (\x,0) circle (2.2pt);
+            \node[text=raiBlue!80!black, font=\tiny, rotate=35, anchor=west, xshift=3pt] at (\x,0.06) {\w};
+        }
+        \fill[gray] (0,0) circle (1.8pt);
+        \node[text=gray, anchor=north] at (0,-0.15) {neutral};
+    \end{tikzpicture}
+
+    \vspace{0.27em}
+
+    \begin{itemize}\scriptsize
+        \setlength\itemsep{0.1em}
+        \item Bolukbasi et al.\ showed the analogy solver completes
+              \emph{man\,:\,computer programmer\,::\,woman\,:\,X} with ``homemaker,''
+              and proposed a projection-based debiasing method.
+        \item \textbf{Caveat worth teaching:} later work (Gonen \& Goldberg, 2019) showed such
+              projection mainly \emph{hides} the bias --- debiased vectors still cluster by
+              stereotype, so the association is recoverable.
+        \item Practical reading: a fix that makes a metric go down has not necessarily made the
+              system fair.
+    \end{itemize}
+
+    \vspace{0.09em}
+    {\scriptsize Schematic drawn for this slide; the gender direction, the analogy result and the
+    six occupation words (from the paper's extreme ``she''/``he'' lists) are from Bolukbasi, Chang,
+    Zou, Saligrama \& Kalai, ``Man is to Computer Programmer as Woman is to Homemaker? Debiasing
+    Word Embeddings,'' NeurIPS 2016, \href{https://arxiv.org/abs/1607.06520v1}{arXiv:1607.06520v1},
+    Figure 1. Follow-up: Gonen \& Goldberg, ``Lipstick on a Pig,'' NAACL 2019,
+    \href{https://arxiv.org/abs/1903.03862v2}{arXiv:1903.03862v2}.}
+\end{frame}

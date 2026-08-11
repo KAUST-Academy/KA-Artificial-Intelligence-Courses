@@ -1,0 +1,37 @@
+% --- References ---
+\begin{frame}[allowframebreaks]{References}
+  \footnotesize
+  \begin{enumerate}
+    \item Rajbhandari, Rasley, Ruwase, He, ``ZeRO: Memory Optimizations Toward Training Trillion Parameter Models,'' SC 2020. \href{https://arxiv.org/abs/1910.02054v3}{arXiv:1910.02054v3}
+    \item Shoeybi, Patwary, Puri, LeGresley, Casper, Catanzaro, ``Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism,'' 2019. \href{https://arxiv.org/abs/1909.08053v4}{arXiv:1909.08053v4}
+    \item Huang et al., ``GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism,'' NeurIPS 2019. \href{https://arxiv.org/abs/1811.06965v5}{arXiv:1811.06965v5}
+    \item Narayanan et al., ``Efficient Large-Scale Language Model Training on GPU Clusters Using Megatron-LM,'' SC 2021. \href{https://arxiv.org/abs/2104.04473v5}{arXiv:2104.04473v5}
+    \item Zhao et al., ``PyTorch FSDP: Experiences on Scaling Fully Sharded Data Parallel,'' VLDB 2023. \href{https://arxiv.org/abs/2304.11277v2}{arXiv:2304.11277v2}
+    \item Korthikanti, Casper, Lym, McAfee, Andersch, Shoeybi, Catanzaro, ``Reducing Activation Recomputation in Large Transformer Models,'' MLSys 2023. \href{https://arxiv.org/abs/2205.05198v1}{arXiv:2205.05198v1}
+    \item Liu, Zaharia, Abbeel, ``Ring Attention with Blockwise Transformers for Near-Infinite Context,'' ICLR 2024. \href{https://arxiv.org/abs/2310.01889v4}{arXiv:2310.01889v4}
+    \item Jacobs et al., ``DeepSpeed Ulysses: System Optimizations for Enabling Training of Extreme Long Sequence Transformer Models,'' 2023. \href{https://arxiv.org/abs/2309.14509v2}{arXiv:2309.14509v2}
+    \item Li et al., ``PyTorch Distributed: Experiences on Accelerating Data Parallel Training,'' VLDB 2020. \href{https://arxiv.org/abs/2006.15704v1}{arXiv:2006.15704v1}
+    \item Ren et al., ``ZeRO-Offload: Democratizing Billion-Scale Model Training,'' USENIX ATC 2021. \href{https://arxiv.org/abs/2101.06840v1}{arXiv:2101.06840v1}
+    \item Rajbhandari, Ruwase, Rasley, Smith, He, ``ZeRO-Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning,'' SC 2021. \href{https://arxiv.org/abs/2104.07857v1}{arXiv:2104.07857v1}
+    \item Micikevicius et al., ``Mixed Precision Training,'' ICLR 2018. \href{https://arxiv.org/abs/1710.03740v3}{arXiv:1710.03740v3}
+    \item Micikevicius et al., ``FP8 Formats for Deep Learning,'' 2022. \href{https://arxiv.org/abs/2209.05433v2}{arXiv:2209.05433v2}
+    \item Chen, Xu, Zhang, Guestrin, ``Training Deep Nets with Sublinear Memory Cost,'' 2016. \href{https://arxiv.org/abs/1604.06174v2}{arXiv:1604.06174v2} (activation recomputation)
+    \item Goyal et al., ``Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour,'' 2017. \href{https://arxiv.org/abs/1706.02677v2}{arXiv:1706.02677v2} (linear scaling rule, gradual warmup)
+    \item You et al., ``Large Batch Optimization for Deep Learning: Training BERT in 76 minutes,'' ICLR 2020. \href{https://arxiv.org/abs/1904.00962v5}{arXiv:1904.00962v5} (LARS, LAMB)
+    \item McCandlish, Kaplan, Amodei, OpenAI Dota Team, ``An Empirical Model of Large-Batch Training,'' 2018. \href{https://arxiv.org/abs/1812.06162v1}{arXiv:1812.06162v1} (gradient noise scale, critical batch size)
+    \item Dettmers, Lewis, Shleifer, Zettlemoyer, ``8-bit Optimizers via Block-wise Quantization,'' ICLR 2022. \href{https://arxiv.org/abs/2110.02861v2}{arXiv:2110.02861v2}
+    \item Narayanan et al., ``Memory-Efficient Pipeline-Parallel DNN Training,'' ICML 2021. \href{https://arxiv.org/abs/2006.09503v3}{arXiv:2006.09503v3} (PipeDream-2BW and the 1F1B flush schedule)
+    \item DeepSeek-AI, ``DeepSeek-V3 Technical Report,'' 2024. \href{https://arxiv.org/abs/2412.19437v2}{arXiv:2412.19437v2} (FP8 training at scale)
+    \item Llama Team, AI @ Meta, ``The Llama 3 Herd of Models,'' 2024. \href{https://arxiv.org/abs/2407.21783v3}{arXiv:2407.21783v3} (4D parallelism and cluster reliability at 16k GPUs)
+    \item Zhong et al., ``DistServe: Disaggregating Prefill and Decoding for Goodput-optimized Large Language Model Serving,'' OSDI 2024. \href{https://arxiv.org/abs/2401.09670v3}{arXiv:2401.09670v3}
+    \item Patel et al., ``Splitwise: Efficient generative LLM inference using phase splitting,'' ISCA 2024. \href{https://arxiv.org/abs/2311.18677v2}{arXiv:2311.18677v2}
+    \item Kwon et al., ``Efficient Memory Management for Large Language Model Serving with PagedAttention,'' SOSP 2023. \href{https://arxiv.org/abs/2309.06180v1}{arXiv:2309.06180v1} (vLLM)
+    \item Liang et al., ``TorchTitan: One-stop PyTorch native solution for production ready LLM pre-training,'' 2024. \href{https://arxiv.org/abs/2410.06511v3}{arXiv:2410.06511v3}
+    \item PyTorch documentation, \textit{FullyShardedDataParallel} and \textit{fully\_shard} (FSDP2). \href{https://docs.pytorch.org/docs/stable/fsdp.html}{FSDP1}, \href{https://docs.pytorch.org/docs/stable/distributed.fsdp.fully_shard.html}{FSDP2}
+    \item Hugging Face Accelerate documentation, \textit{Fully Sharded Data Parallel} and \textit{FSDP1 vs FSDP2}. \href{https://huggingface.co/docs/accelerate/en/usage_guides/fsdp}{Guide}, \href{https://huggingface.co/docs/accelerate/en/concept_guides/fsdp1_vs_fsdp2}{Comparison}
+    \item DeepSpeed documentation, \textit{ZeRO configuration}. \href{https://www.deepspeed.ai/docs/config-json/}{Configuration reference}
+    \item vLLM documentation, \textit{Parallelism and Scaling}. \href{https://docs.vllm.ai/en/stable/serving/parallelism_scaling/}{Guide}
+    \item NVIDIA, \textit{H100 Tensor Core GPU} and \textit{H200} product pages (HBM capacity, NVLink and PCIe bandwidths). \href{https://www.nvidia.com/en-us/data-center/h100/}{H100}, \href{https://www.nvidia.com/en-us/data-center/h200/}{H200}
+    \item NVIDIA, \textit{ConnectX-7 NDR 400G InfiniBand Adapter Card} datasheet. \href{https://www.nvidia.com/content/dam/en-zz/Solutions/networking/infiniband-adapters/infiniband-connectx7-data-sheet.pdf}{PDF}
+  \end{enumerate}
+\end{frame}

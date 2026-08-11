@@ -1,0 +1,264 @@
+\section{Reproducibility}
+
+% --- SLIDE 1: WHAT REPRODUCIBLE MEANS ---
+\begin{frame}{``It Worked Last Tuesday''}
+
+    \centering
+    \large
+    \textit{A result you cannot rebuild is a rumour, not a result.}
+    \vspace{0.3em}
+
+    \scriptsize
+    \begin{columns}[T]
+        \begin{column}{0.31\textwidth}
+            \begin{tcolorbox}[colback=green!6, colframe=green!50!black, title=\scriptsize 1. Repeatable]
+                \scriptsize
+                \textbf{You}, same machine, same code, same data, next week $\rightarrow$ same number.
+                \vspace{0.09em}
+                \\ \textit{This is the bar for this course.}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.31\textwidth}
+            \begin{tcolorbox}[colback=blue!6, colframe=blue!50!black, title=\scriptsize 2. Reproducible]
+                \scriptsize
+                \textbf{A colleague}, different machine, your code and data $\rightarrow$ the same number.
+                \vspace{0.09em}
+                \\ \textit{This is the bar for a team.}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.31\textwidth}
+            \begin{tcolorbox}[colback=orange!6, colframe=orange!60!black, title=\scriptsize 3. Replicable]
+                \scriptsize
+                \textbf{A stranger}, their own implementation $\rightarrow$ the same \emph{conclusion}.
+                \vspace{0.09em}
+                \\ \textit{This is the bar for science.}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.36em}
+    \begin{itemize}
+        \item Level 1 is almost free and almost nobody does it. Get level 1 before worrying about the rest.
+        \item Reproducibility is not a research nicety --- it is what lets you \textbf{roll back} when a
+              deployment goes wrong.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 2: SOURCES OF NONDETERMINISM ---
+\begin{frame}{Five Places Nondeterminism Hides}
+
+    \begin{enumerate}
+        \setlength\itemsep{0.45em}
+        \item \textbf{Random number generators.} Weight initialisation, shuffling, dropout, data
+              augmentation, train/test splits, bootstrap sampling in random forests.
+        \item \textbf{Parallelism.} Floating-point addition is not associative; sum the same numbers in a
+              different order on a different thread and you get a different last bit --- which compounds.
+        \item \textbf{Library and hardware versions.} A minor release changes a default; a different GPU
+              picks a different convolution kernel.
+        \item \textbf{The data itself.} A table that is updated in place has no version. ``The training
+              set'' is not a thing unless you make it one.
+        \item \textbf{Configuration.} The flag you changed by hand at 11pm and did not commit.
+    \end{enumerate}
+
+    \vspace{0.8em}
+    \begin{block}{Order of attack}
+        Seeds and data versioning buy you the most for the least effort. Bit-exact determinism on GPU is
+        the most expensive and usually the least valuable.
+    \end{block}
+
+\end{frame}
+
+% --- SLIDE 3: SEEDING ---
+\begin{frame}[fragile]{Seeding: Every Library, Every Time}
+
+    \begin{lstlisting}[language=Python, basicstyle=\ttfamily\scriptsize]
+# PYTHONHASHSEED must be set BEFORE the interpreter starts, so it goes in the
+# launcher, not in the script:   export PYTHONHASHSEED=42
+import random, numpy as np, torch
+
+def set_seed(seed: int = 42):
+    random.seed(seed)          # Python stdlib
+    np.random.seed(seed)       # NumPy legacy global RNG
+    torch.manual_seed(seed)    # CPU *and* all CUDA devices
+
+set_seed(42)
+
+# scikit-learn: pass random_state explicitly -- it does NOT read the global seed
+train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+RandomForestClassifier(n_estimators=500, random_state=42)
+    \end{lstlisting}
+
+    \vspace{0.3em}
+    \begin{itemize}
+        \small
+        \item \textbf{scikit-learn does not use the global NumPy seed} in modern code paths. Every estimator
+              and splitter that randomises takes \texttt{random\_state}. Set it, everywhere, or you have not
+              seeded anything.
+        \item Any subprocess gets a fresh interpreter and therefore a fresh RNG state --- PyTorch
+              \texttt{DataLoader} workers, \texttt{joblib} parallel jobs, Spark executors. Each needs its
+              own seeding hook.
+        \item \textbf{Log the seed as a tracked parameter.} A seed you cannot look up later is not a seed.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 4: DETERMINISM AND ITS COST ---
+\begin{frame}{The Limits of Determinism}
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{alertblock}{What frameworks actually promise}
+                \small PyTorch: ``Completely reproducible results are not guaranteed across PyTorch
+                releases, individual commits, or different platforms'' --- nor, it adds, between CPU and
+                GPU executions, even with identical seeds.
+            \end{alertblock}
+            \vspace{0.4em}
+            \begin{block}{And what it costs}
+                \small ``Deterministic operations are often slower than nondeterministic operations, so
+                single-run performance may decrease for your model.''
+            \end{block}
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \small
+            \textbf{The pragmatic policy}
+            \begin{itemize}
+                \item Turn strict determinism \textbf{on} while chasing a regression --- it turns a
+                      statistical question into a deterministic one.
+                \item Turn it \textbf{off} for long production training runs and instead report the
+                      \textbf{mean and spread over 3--5 seeds}.
+                \item \textbf{A result that only holds for one seed is not a result.} Before believing a
+                      $+0.5\%$ improvement, measure how much the score moves when you change nothing but
+                      the seed.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.6em}
+    {\scriptsize Source: PyTorch documentation, ``Reproducibility,''
+    \href{https://docs.pytorch.org/docs/stable/notes/randomness.html}{docs.pytorch.org/docs/stable/notes/randomness.html}.
+    The deep-learning switches themselves (\texttt{use\_deterministic\_algorithms}, cuDNN flags,
+    \texttt{DataLoader} worker seeding, checkpoint discipline) are covered hands-on in the
+    computer-vision course; here we stay framework-agnostic.}
+
+\end{frame}
+
+% --- SLIDE 5: ENVIRONMENT PINNING ---
+\begin{frame}[fragile]{Pinning the Environment}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \small
+            \textbf{The ladder, weakest to strongest}
+            \begin{enumerate}
+                \item \texttt{pip install pandas} --- no pin. Broken by definition.
+                \item \texttt{requirements.txt} with \texttt{==} --- pins your \emph{direct} dependencies only.
+                \item \textbf{A lockfile} (\texttt{uv.lock}, \texttt{poetry.lock}, \texttt{conda-lock.yml})
+                      --- pins the whole transitive graph, with hashes.
+                \item \textbf{A container image} referenced by digest --- pins the OS, the CUDA driver stack
+                      and the Python packages together.
+            \end{enumerate}
+            \vspace{0.4em}
+            Steps 3 and 4 are the ones that matter. Steps 1--2 fail six months later, quietly.
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+# resolve once, commit the lockfile
+uv lock
+uv sync --frozen
+
+# record what actually ran
+pip freeze > run_env.txt
+nvidia-smi --query-gpu=name,driver_version \
+           --format=csv > run_gpu.txt
+            \end{lstlisting}
+            \vspace{0.2em}
+            \begin{tcolorbox}[colback=blue!5, colframe=blue!40, boxrule=0.5pt]
+                \scriptsize \textbf{Minimum viable habit:} log the lockfile hash and the git commit as
+                parameters of every training run. Two lines of code; saves entire quarters.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+% --- SLIDE 6: DATA VERSIONING ---
+\begin{frame}{Versioning the Data}
+
+    \begin{block}{The problem}
+        Git is built for text files of a few kilobytes. Your training set is 40\,GB of Parquet, and someone
+        just overwrote it in place. The code from March still runs; it just trains on different data now.
+    \end{block}
+
+    \vspace{0.4em}
+    \centering
+    \begin{tikzpicture}[
+        b/.style={rectangle, draw, rounded corners=2pt, minimum height=0.85cm, text width=2.5cm,
+                  align=center, font=\scriptsize},
+        arr/.style={-{Latex[length=2mm]}, thick, gray!70!black}
+    ]
+        \node[b, fill=blue!10]   (repo)  at (0,0)   {git repository\\\texttt{train.py}, \texttt{data.dvc}};
+        \node[b, fill=gray!14]   (ptr)   at (3.6,0) {pointer file\\\texttt{md5: a91f\ldots}};
+        \node[b, fill=green!12]  (store) at (7.6,0) {content-addressed store\\(S3 / disk cache)};
+        \node[b, fill=orange!12] (data)  at (11.2,0) {the actual\\40\,GB of data};
+
+        \draw[arr] (repo) -- (ptr);
+        \draw[arr] (ptr)  -- node[above, font=\tiny] {resolves to} (store);
+        \draw[arr] (store) -- (data);
+    \end{tikzpicture}
+
+    \vspace{0.8em}
+    \begin{itemize}
+        \small
+        \item \textbf{The idea (DVC, git-lfs, lakeFS, Delta Lake all share it):} commit a small
+              \emph{pointer} that contains a content hash; keep the bytes somewhere cheap. Checking out an
+              old commit now checks out the matching data.
+        \item \textbf{The cheap version, if you adopt no tool at all:} write data to immutable, dated paths
+              (\texttt{s3://bucket/train/2026-03-14/}) and never overwrite. Log the path with the run.
+        \item \textbf{Never} version a mutable database table by referring to ``the customers table''. Refer
+              to a snapshot, or to a query plus an as-of timestamp.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 7: CONFIG + CHECKLIST ---
+\begin{frame}{Configuration, and a Checklist to Steal}
+
+    \begin{columns}[T]
+        \begin{column}{0.46\textwidth}
+            \textbf{Configuration as code}
+            \scriptsize
+            \begin{itemize}
+                \item Hyperparameters and paths belong in a \emph{declared} config file (YAML, or a
+                      framework such as Hydra), not in argparse defaults scattered across three scripts.
+                \item The config is committed, diffable and reviewable. ``What changed between run 41 and
+                      run 42?'' becomes a \texttt{diff}.
+                \item Validate the config on load --- a typo in a key name should crash, not silently fall
+                      back to a default.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{tcolorbox}[colback=green!5, colframe=green!50!black, title=\scriptsize Log with every run]
+                \scriptsize
+                \begin{itemize}
+                    \item git commit hash \textbf{and} whether the tree was dirty
+                    \item the full resolved config
+                    \item random seed(s)
+                    \item dataset identifier or content hash
+                    \item lockfile hash / image digest
+                    \item metrics, and the evaluation code version
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.18em}
+    {\scriptsize The community version of this list is the \textit{ML Reproducibility Checklist}: Pineau et al.,
+    ``Improving Reproducibility in Machine Learning Research (A Report from the NeurIPS 2019 Reproducibility Program),''
+    2020, \href{https://arxiv.org/abs/2003.12206v4}{arXiv:2003.12206v4}.}
+
+    \vspace{0.12em}
+    {\scriptsize \textbf{Good news:} once you adopt experiment tracking --- the next section --- five of these six
+    items are logged for you automatically.}
+
+\end{frame}

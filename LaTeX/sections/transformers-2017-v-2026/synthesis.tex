@@ -35,5 +35,6 @@
     \item The slowest part is often getting data in and out of memory, not just the math.
     \item New models (2024--2026) are designed together, optimizing attention, normalization, position encoding, sparsity (MoE), and serving (cache size, kernels).
     \item The main goals: cut down on moving data, adjust compute to the input's length and type, and add more parameters without needing a lot more computation per token.
+    \item One thread stayed outside the block: state-space models (S4 $\to$ Mamba $\to$ Mamba-2) swapped attention for a fixed-size recurrent state, and by 2026 survive mainly as the cheap layer type inside hybrid stacks that keep a few attention layers for exact recall.
   \end{itemize}
 \end{frame}

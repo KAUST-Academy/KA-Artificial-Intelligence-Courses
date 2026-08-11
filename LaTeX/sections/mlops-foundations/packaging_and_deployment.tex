@@ -1,0 +1,282 @@
+\section{Packaging \& Deployment}
+
+% --- SLIDE 1: WHAT IS THE MODEL ---
+\begin{frame}{``Ship the Model'' --- Ship \emph{What}, Exactly?}
+
+    \centering
+    \resizebox{0.98\textwidth}{!}{%
+    \begin{tikzpicture}[
+        b/.style={rectangle, draw, rounded corners=2pt, minimum height=1.3cm, text width=2.4cm,
+                  align=center, font=\scriptsize, inner sep=2pt}
+    ]
+        \node[b, fill=orange!14] (w)   at (0,0)    {\textbf{Learned parameters}\\weights, splits, support vectors};
+        \node[b, fill=green!12]  (pre) at (2.9,0)  {\textbf{Preprocessing}\\the \emph{fitted} scaler, encoder, imputer};
+        \node[b, fill=blue!12]   (code)at (5.8,0)  {\textbf{Inference code}\\predict, threshold, post-processing};
+        \node[b, fill=gray!14]   (env) at (8.7,0)  {\textbf{Environment}\\library versions, runtime};
+        \node[b, fill=red!10]    (meta)at (11.6,0) {\textbf{Metadata}\\schema, metrics, lineage, owner};
+    \end{tikzpicture}}
+
+    \vspace{1.0em}
+    \begin{itemize}
+        \item Forgetting the \textbf{fitted} preprocessing is the classic production bug: a scaler refitted
+              on the serving batch silently rescales everything and the model quietly degrades.
+        \item Forgetting the \textbf{input schema} means you discover a renamed column at 3am rather than
+              at deploy time.
+        \item Forgetting the \textbf{owner} means nobody is paged when it breaks.
+    \end{itemize}
+
+    \vspace{0.6em}
+    \begin{block}{Rule}
+        Serialise the \textbf{whole pipeline} --- \texttt{Pipeline([("scale", ...), ("clf", ...)])} --- never
+        the estimator alone. One artifact, one \texttt{predict}, no room for skew.
+    \end{block}
+
+\end{frame}
+
+% --- SLIDE 2: SERIALISATION FORMATS ---
+\begin{frame}{Serialisation Formats: What to Save It As}
+
+    \centering
+    \renewcommand{\arraystretch}{1.25}
+    {\scriptsize
+    \begin{tabular}{p{2.0cm}|p{3.2cm}|p{3.0cm}|p{3.0cm}}
+        \toprule
+        \textbf{Format} & \textbf{Stores} & \textbf{Good} & \textbf{Bad} \\
+        \midrule
+        \texttt{pickle} / \texttt{joblib} & Arbitrary Python objects &
+            Works for anything; zero friction & \textbf{Executes code on load}; breaks across library versions \\
+        \texttt{skops} & scikit-learn estimators &
+            Contents inspectable before loading; safer than pickle & scikit-learn ecosystem only \\
+        \texttt{safetensors} & Tensors + a JSON header &
+            No code execution; fast zero-copy load & Tensors only --- no pipeline logic \\
+        \texttt{ONNX} & A computation graph &
+            Serve without Python; portable across runtimes & Not every estimator or op converts \\
+        Framework native & \texttt{.pt}, \texttt{SavedModel}, \texttt{.ubj} &
+            Full fidelity; official support & Ties you to that framework's version \\
+        \bottomrule
+    \end{tabular}}
+
+    \vspace{0.7em}
+    \begin{alertblock}{The pickle warning, in scikit-learn's own words}
+        \small ``\texttt{pickle} (and \texttt{joblib} and \texttt{cloudpickle} by extension) has many
+        documented security vulnerabilities by design and should only be used if the artifact \ldots\ is
+        coming from a trusted and verified source. You should never load a pickle file from an untrusted
+        source, similarly to how you should never execute code from an untrusted source.''
+    \end{alertblock}
+
+    \vspace{0.3em}
+    {\scriptsize Source: scikit-learn documentation, ``Model persistence,''
+    \href{https://scikit-learn.org/stable/model_persistence.html}{scikit-learn.org/stable/model\_persistence.html}.}
+
+\end{frame}
+
+% --- SLIDE 3: CONTAINERS ---
+\begin{frame}[fragile]{Containers, in One Slide}
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+FROM python:3.12-slim
+
+WORKDIR /app
+COPY requirements.lock .
+RUN pip install --no-cache-dir \
+        --require-hashes -r requirements.lock
+
+COPY serve.py model.skops ./
+EXPOSE 8000
+CMD ["uvicorn", "serve:app", \
+     "--host", "0.0.0.0", "--port", "8000"]
+            \end{lstlisting}
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \small
+            \begin{itemize}
+                \setlength\itemsep{0.4em}
+                \item A container freezes the OS libraries, the Python version and the packages
+                      \textbf{together}. That is the part a lockfile alone cannot do.
+                \item Refer to images by \textbf{digest} (\texttt{@sha256:\ldots}), not by the tag
+                      \texttt{latest}. Tags move; digests do not.
+                \item \textbf{Do not bake giant model files into the image} if they change often --- pull them
+                      from the registry at start-up, by version.
+                \item GPU serving adds a CUDA-matched base image; the driver on the host must be new enough.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.6em}
+    \begin{block}{What a container does \emph{not} give you}
+        Reproducible \emph{training}. Same image, unseeded run, different model. Containers pin the
+        environment; seeds and data versions pin the result.
+    \end{block}
+
+\end{frame}
+
+\subsection{Serving Patterns}
+
+% --- SLIDE 4: BATCH VS ONLINE VS STREAMING ---
+\begin{frame}{Batch, Online, Streaming}
+
+    \centering
+    \begin{tikzpicture}[
+        b/.style={rectangle, draw, rounded corners=2pt, minimum height=0.55cm, text width=2.6cm,
+                  align=center, font=\tiny, inner sep=2pt},
+        hd/.style={font=\scriptsize\bfseries},
+        arr/.style={-{Latex[length=1.6mm]}, thick, gray!70!black}
+    ]
+        % Batch
+        \node[hd] at (0,0.7) {Batch};
+        \node[b, fill=green!12]  (bd) at (0,0)     {warehouse table};
+        \node[b, fill=blue!12]   (bm) at (0,-0.9)  {scoring job (nightly)};
+        \node[b, fill=orange!12] (bo) at (0,-1.8)  {table of predictions};
+        \draw[arr] (bd) -- (bm); \draw[arr] (bm) -- (bo);
+
+        % Online
+        \node[hd] at (4.3,0.7) {Online};
+        \node[b, fill=green!12]  (od) at (4.3,0)    {user request};
+        \node[b, fill=blue!12]   (om) at (4.3,-0.9) {model service (API)};
+        \node[b, fill=orange!12] (oo) at (4.3,-1.8) {response in ms};
+        \draw[arr] (od) -- (om); \draw[arr] (om) -- (oo);
+
+        % Streaming
+        \node[hd] at (8.6,0.7) {Streaming};
+        \node[b, fill=green!12]  (sd) at (8.6,0)    {event stream};
+        \node[b, fill=blue!12]   (sm) at (8.6,-0.9) {consumer scores events};
+        \node[b, fill=orange!12] (so) at (8.6,-1.8) {output topic / alert};
+        \draw[arr] (sd) -- (sm); \draw[arr] (sm) -- (so);
+    \end{tikzpicture}
+
+    \vspace{0.6em}
+    \renewcommand{\arraystretch}{1.15}
+    {\scriptsize
+    \begin{tabular}{p{1.5cm}|p{2.9cm}|p{3.1cm}|p{3.1cm}}
+        \toprule
+                 & \textbf{Batch} & \textbf{Online} & \textbf{Streaming} \\
+        \midrule
+        Latency  & Hours & Milliseconds & Seconds \\
+        Cost     & Lowest --- one big job & Highest --- always-on capacity & In between \\
+        Failure  & Rerun the job & Users see errors & Backlog grows \\
+        Use when & The input exists before the question & The input arrives with the question &
+                   Continuous events, bounded delay \\
+        \bottomrule
+    \end{tabular}}
+
+    \vspace{0.6em}
+    {\small \textbf{Default to batch.} If a nightly table of predictions solves the problem, build that:
+    an order of magnitude cheaper to run and to operate, and it fails without waking anyone.}
+
+\end{frame}
+
+% --- SLIDE 5: A MINIMAL SERVICE ---
+\begin{frame}[fragile]{A Minimal Online Service}
+
+    \begin{lstlisting}[language=Python, basicstyle=\ttfamily\scriptsize]
+from fastapi import FastAPI
+from pydantic import BaseModel
+import pandas as pd, skops.io as sio
+app = FastAPI()
+UNKNOWN = sio.get_untrusted_types(file="model.skops") # inspect, then trust
+MODEL = sio.load("model.skops", trusted=UNKNOWN)      # the fitted Pipeline
+MODEL_VERSION = "churn-clf/7"      # read from the registry at start-up
+class Request(BaseModel):          # the schema IS the contract
+    tenure_months: int
+    monthly_charges: float
+    contract_type: str
+@app.get("/healthz")               # liveness: is the process up?
+def healthz(): return {"status": "ok"}
+@app.post("/predict")
+def predict(req: Request):
+    X = pd.DataFrame([req.model_dump()])   # same columns as at training time
+    p = MODEL.predict_proba(X)[0, 1]
+    return {"churn_probability": float(p), "model_version": MODEL_VERSION}
+    \end{lstlisting}
+
+    \vspace{0.09em}
+    \begin{itemize}
+        \scriptsize
+        \item \textbf{Return the model version with every prediction.} Without it you cannot attribute a bad
+              outcome to a model later.
+        \item \textbf{Load the model once at start-up}, never per request. \textbf{Validate the input
+              schema} --- a typed request body rejects the renamed column at the door.
+        \item \texttt{/healthz} tells the orchestrator the process is alive, not that the model is any
+              good --- that is monitoring's job.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 6: REST VS GRPC + LATENCY ---
+\begin{frame}{Protocols and Latency Budgets}
+
+    \begin{columns}[T]
+        \begin{column}{0.46\textwidth}
+            \small
+            \textbf{REST/JSON vs gRPC}
+            \begin{itemize}
+                \item \textbf{REST + JSON:} human-readable, debuggable with \texttt{curl}, works with every
+                      client. Verbose; parsing costs real time on large payloads.
+                \item \textbf{gRPC + protobuf:} compact binary, schema-checked, streaming, faster for
+                      high-volume internal traffic. Harder to inspect.
+                \item \textbf{Pick REST first.} Move to gRPC when profiling says serialisation is your
+                      bottleneck --- rarely true for a scikit-learn model.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{tcolorbox}[colback=blue!5, colframe=blue!50, title=\small Budget the whole request]
+                \scriptsize
+                \begin{tabular}{lr}
+                    Network in/out        & 5--20\,ms \\
+                    Feature lookup (DB / feature store) & 5--50\,ms \\
+                    Preprocessing         & 1--5\,ms \\
+                    \textbf{Model forward pass} & \textbf{1--10\,ms} \\
+                    Post-processing, logging & 1--5\,ms \\
+                \end{tabular}
+                \vspace{0.4em}
+                \\ The model is often the \emph{smallest} term. Optimise what you measured, not what you
+                assumed.
+            \end{tcolorbox}
+            \vspace{0.4em}
+            \small \textbf{Quote p95 and p99, never the mean.} The tail is what users experience and what
+            times out upstream.
+        \end{column}
+    \end{columns}
+
+    \vspace{0.5em}
+    \begin{block}{Throughput vs latency}
+        \small Batching requests on the server raises throughput and \emph{raises} latency. Pick which one
+        the product actually needs, then set the batch window accordingly.
+    \end{block}
+
+\end{frame}
+
+% --- SLIDE 7: CPU VS GPU ---
+\begin{frame}{CPU or GPU? The Serving Economics}
+
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    {\scriptsize
+    \begin{tabular}{p{3.4cm}|p{4.2cm}|p{4.2cm}}
+        \toprule
+                          & \textbf{CPU serving} & \textbf{GPU serving} \\
+        \midrule
+        Fits              & Trees, linear models, small nets, most tabular ML & Large nets, transformers,
+                            image and audio models \\
+        Cost profile      & Cheap, scales horizontally, scale-to-zero is easy & Expensive per hour;
+                            idle time is pure waste \\
+        Wins when         & Requests are small and sporadic & Requests are large or can be \emph{batched} \\
+        Watch out for     & Thread oversubscription inside the container & Low utilisation --- a GPU at 5\%
+                            is a very costly CPU \\
+        \bottomrule
+    \end{tabular}}
+
+    \vspace{0.27em}
+    \begin{itemize}
+        \item \textbf{For the classical ML in this course, CPU is almost always right.} A gradient-boosted
+              tree does not benefit from a GPU at inference.
+        \item Before buying a GPU, try: fewer features, a smaller model, ONNX Runtime, or simply caching
+              repeated inputs. These are usually larger wins than new hardware.
+        \item \textit{Going deeper:} model compression for efficient inference (quantisation, pruning,
+              distillation) and multi-GPU/multi-node serving are both covered in the NLP course. We stay
+              framework-level here.
+    \end{itemize}
+
+\end{frame}

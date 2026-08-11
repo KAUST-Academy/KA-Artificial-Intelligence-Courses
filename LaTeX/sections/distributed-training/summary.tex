@@ -1,0 +1,27 @@
+% --- Summary ---
+\begin{frame}[allowframebreaks]{Summary}
+  \begin{itemize}\footnotesize\itemsep0.25em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Memory anatomy first.} Mixed-precision Adam costs \textbf{16 bytes per parameter} ($2+2+4+4+4$), so a 7B model needs 112\,GB before a single activation. Activations add $sbh(34 + 5as/h)$ per layer. Every strategy below shards one of those terms.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Data parallelism} shards nothing: it replicates the model and splits the batch, buying throughput at one all-reduce ($2\Psi$) per step, hidden behind the backward pass by bucketing. It cannot make a model fit.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{ZeRO / FSDP} shards the model states across data-parallel ranks --- $4\Psi + 12\Psi/d$, then $2\Psi + 14\Psi/d$, then $16\Psi/d$. Stages 1 and 2 are free; stage 3 costs $1.5\times$ the traffic. \texttt{HYBRID\_SHARD} keeps the expensive collectives inside a node.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Tensor parallelism} splits weight matrices inside a layer (column-parallel, then row-parallel). Four all-reduces per layer per iteration, on the critical path --- so it stays inside an NVLink domain, $t \leq 8$.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Pipeline parallelism} splits the layer stack and pays a bubble of $(p-1)/m$, or $\frac{1}{v}\cdot\frac{p-1}{m}$ with interleaving. 1F1B keeps that bubble while bounding stashed activations to $p$ rather than $m$. Its traffic is point-to-point, so this is the axis that crosses nodes.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Sequence parallelism} shards the LayerNorm/dropout regions at no extra communication ($5\times$ less activation memory with selective recomputation). \textbf{Context parallelism} (Ring Attention, Ulysses) is a different thing with a similar name: it shards attention itself, scaling context length with device count.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{3D parallelism} composes them by communication intensity: $\text{GPUs} = t \times p \times d$, tensor inside the node, pipeline across nodes, data parallelism wherever it overlaps.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Serving inverts the problem.} $16\Psi$ collapses to $2\Psi$, the KV cache becomes binding, and availability beats depth: replicate first, shard only for capacity or latency, route on cache state.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{The One Slide to Keep}
+  \begin{itemize}\itemsep0.45em
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Before you request an allocation, do this arithmetic:}
+      \begin{enumerate}\itemsep0.2em\footnotesize
+        \item Model states: $16\Psi$ bytes. Divide by the GPU count. Does it leave headroom?
+        \item Activations: $\approx 34sbhL$ bytes per micro-batch with IO-aware attention, or $2sbhL$ with full recomputation. Add it.
+        \item If the total still exceeds device memory, walk the escalation ladder --- \texttt{bf16}, checkpointing, accumulation, ZeRO-2, ZeRO-3, offload, tensor parallel, pipeline parallel --- and stop at the first rung that fits.
+        \item Then, and only then, ask about speed.
+      \end{enumerate}
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{And keep the cliffs in mind:} HBM 3.35\,TB/s $\rightarrow$ NVLink 900\,GB/s $\rightarrow$ InfiniBand 50\,GB/s $\rightarrow$ Ethernet 12.5\,GB/s. Unhideable traffic belongs above a cliff; overlappable traffic can live below one.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Companion labs:} measure the 16-bytes-per-parameter rule on a real model, then repeat it under FSDP and compare the maximum batch size against DDP.
+  \end{itemize}
+\end{frame}

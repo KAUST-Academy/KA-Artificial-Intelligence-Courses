@@ -1,0 +1,166 @@
+\section{Versioning \& Governance}
+
+% --- SLIDE 1: REGISTRY LIFECYCLE ---
+\begin{frame}{The Model Registry: A Lifecycle, Not a Folder}
+
+    \centering
+    \begin{tikzpicture}[
+        b/.style={rectangle, draw, rounded corners=3pt, minimum height=0.95cm, text width=2.1cm,
+                  align=center, font=\scriptsize},
+        arr/.style={-{Latex[length=2mm]}, thick, gray!60!black}
+    ]
+        \node[b, fill=gray!12]    (cand) at (0,0)    {\textbf{Candidate}\\version $n$ registered from a run};
+        \node[b, fill=blue!12]    (stg)  at (3.2,0)  {\textbf{Staging}\\shadow \& integration tests};
+        \node[b, fill=green!14]   (prod) at (6.4,0)  {\textbf{Production}\\serving live traffic};
+        \node[b, fill=orange!12]  (arch) at (9.6,0)  {\textbf{Archived}\\retained, not served};
+
+        \draw[arr] (cand) -- node[above, font=\tiny] {gate} (stg);
+        \draw[arr] (stg)  -- node[above, font=\tiny] {approve} (prod);
+        \draw[arr] (prod) -- node[above, font=\tiny] {superseded} (arch);
+        \draw[arr, red!70!black] (arch.south) -- ++(0,-0.8) -| (prod.south);
+        \node[font=\tiny, red!70!black, fill=white, inner sep=1pt] at (8.0,-1.28)
+            {rollback: repoint the alias};
+    \end{tikzpicture}
+
+    \vspace{0.9em}
+    \begin{itemize}
+        \small
+        \item A registry stores \textbf{named models} with \textbf{numbered versions}, each carrying tags,
+              metrics and a pointer back to the run that produced it.
+        \item Deployments should reference a \textbf{mutable alias} (``\texttt{champion}'', ``\texttt{challenger}'')
+              that points at an \textbf{immutable version}. Promotion is then a metadata change, not a redeploy
+              --- and rollback is repointing the alias.
+        \item MLflow implements exactly this with registered models, versions, aliases and tags. (Older
+              material describes fixed ``stages''; aliases and tags are the current mechanism.)
+        \item \textbf{Never delete the previous production version.} It is your rollback target and your audit
+              record.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 2: LINEAGE ---
+\begin{frame}{Lineage: Answering ``Where Did This Number Come From?''}
+
+    \centering
+    \resizebox{0.97\textwidth}{!}{%
+    \begin{tikzpicture}[
+        b/.style={rectangle, draw, rounded corners=2pt, minimum height=1.0cm, text width=2.0cm,
+                  align=center, font=\scriptsize, inner sep=2pt},
+        arr/.style={-{Latex[length=2mm]}, thick, gray!60!black}
+    ]
+        \node[b, fill=green!12]  (raw)  at (0,0)    {raw source\\+ as-of date};
+        \node[b, fill=green!14]  (ds)   at (2.5,0)  {dataset\\version / hash};
+        \node[b, fill=blue!12]   (run)  at (5.0,0)  {training run\\+ commit + config};
+        \node[b, fill=orange!12] (art)  at (7.5,0)  {model version\\in the registry};
+        \node[b, fill=red!10]    (dep)  at (10.0,0) {deployment\\image digest};
+        \node[b, fill=gray!14]   (pred) at (12.5,0) {logged\\prediction};
+
+        \draw[arr] (raw) -- (ds); \draw[arr] (ds) -- (run); \draw[arr] (run) -- (art);
+        \draw[arr] (art) -- (dep); \draw[arr] (dep) -- (pred);
+        \draw[arr, dashed, red!70!black] (pred.south) -- ++(0,-0.8) -| (raw.south);
+        \node[font=\scriptsize, red!70!black, fill=white, inner sep=2pt] at (6.25,-1.3)
+            {you must be able to walk this chain backwards};
+    \end{tikzpicture}}
+
+    \vspace{0.9em}
+    \begin{itemize}
+        \item The chain is only as strong as its weakest link. One un-versioned step --- ``we pulled the
+              customers table'' --- breaks the whole trace.
+        \item \textbf{Two questions a regulator, a customer or your own on-call will ask:} which model
+              produced \emph{this} decision, and what data was it trained on? Both must be answerable in
+              minutes, from a log, without a person's memory.
+        \item Nothing exotic is required: an ID at each hop, stored with the next hop. Experiment tracking
+              plus a registry plus prediction logs gives you the whole chain.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 3: A ROLLBACK STORY ---
+\begin{frame}{An Incident, Start to Finish}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, colframe=red!50, title=\scriptsize What happened]
+                \scriptsize
+                \begin{enumerate}
+                    \item Tuesday 09:14 --- the manual-review queue triples. No alert fires; the service is
+                          healthy.
+                    \item 11:40 --- an analyst notices. Predicted-positive rate went from 4\% to 19\%
+                          overnight.
+                    \item 12:20 --- the prediction log shows \texttt{tenure\_months} is $0$ for 80\% of
+                          requests since 02:00.
+                    \item 12:35 --- an upstream job began writing nulls; the serving code imputed them to
+                          zero, silently.
+                \end{enumerate}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!5, colframe=green!50!black, title=\scriptsize What made it survivable]
+                \scriptsize
+                \begin{itemize}
+                    \item \textbf{Prediction logs} contained the post-preprocessing features --- so the cause
+                          was found in minutes, not weeks.
+                    \item \textbf{Model version} was on every record, ruling the model out immediately.
+                    \item \textbf{The previous version was still in the registry}, so a rollback was one
+                          alias change.
+                \end{itemize}
+                \vspace{0.09em}
+                \textbf{What was missing:} a null-rate check on serving inputs, and an alert on prediction
+                distribution. Both were one-day fixes.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.18em}
+    \begin{alertblock}{The lesson}
+        The model was never wrong. \textbf{Rolling back the model would not have fixed anything} --- which is
+        exactly why you need the lineage to tell you where to look.
+    \end{alertblock}
+
+\end{frame}
+
+% --- SLIDE 4: DOCUMENTATION AND GOVERNANCE ---
+\begin{frame}{Documentation and the Hand-off to Governance}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \scriptsize
+            \textbf{Ship documentation as an artifact}
+            \begin{itemize}
+                \item A \textbf{model card} --- intended use, training data, disaggregated performance,
+                      known limitations, owner --- registered alongside the model version, not written in
+                      a wiki that rots.
+                \item A \textbf{datasheet} --- the same discipline for the dataset it was trained on.
+                \item Generate what you can \textbf{automatically} from the tracking run: metrics, data
+                      version, config, commit. Only the judgement calls need a human.
+            \end{itemize}
+            \vspace{0.09em}
+            {\scriptsize The content and ethics of these documents were covered in depth earlier in the
+            course; here we only care that the pipeline \emph{produces and versions} them.}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=blue!5, colframe=blue!50, title=\scriptsize A minimal governance checklist]
+                \scriptsize
+                \begin{itemize}
+                    \item Every production model has a named \textbf{owner} and a documented purpose.
+                    \item Every model has a \textbf{review date}; unreviewed models get retired.
+                    \item Decisions affecting people are \textbf{logged and explainable}.
+                    \item There is a written \textbf{escalation path} for a contested prediction.
+                    \item Retraining and promotion require a recorded \textbf{approval}.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.18em}
+    {\scriptsize Mitchell et al., ``Model Cards for Model Reporting,'' FAT* 2019,
+    \href{https://arxiv.org/abs/1810.03993v2}{arXiv:1810.03993v2};
+    Gebru et al., ``Datasheets for Datasets,'' \textit{Communications of the ACM} 64(12), 2021,
+    \href{https://arxiv.org/abs/1803.09010v8}{arXiv:1803.09010v8}.}
+
+    \vspace{0.12em}
+    {\scriptsize \textbf{Hand-off:} bias auditing, fairness definitions, interpretability and regulation belong
+    to the responsible-AI material seen earlier. MLOps supplies the \emph{mechanisms} --- lineage,
+    prediction logs, versioned artifacts --- that make those obligations enforceable rather than aspirational.}
+
+\end{frame}

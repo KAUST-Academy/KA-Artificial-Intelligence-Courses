@@ -5,6 +5,13 @@
 
 * add new lab ([8e7ba73](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/8e7ba738aa1a499237fdb81cef9bf76e3dbee177))
 * added new labs (YASREF CV) ([1345b79](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1345b79d6af798e0e9804e128418f423bd1257ea))
+* **Course:** add Intro 09 Responsible AI and Model Interpretability [minor] ([daed98e](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/daed98ea978ac850c8cd12692aa3dfae4aad1939))
+* **Course:** add Intro 10 MLOps Foundations deck [minor] ([01b0f69](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/01b0f696ba5273c32e47a00cdcd83c69c2f0037d))
+* **Course:** add NLP 22 LLM Evaluation deck [minor] ([cf0cfb3](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/cf0cfb3e7adfc38a9550789e4c228821c7350042))
+* **Course:** add NLP 23 Distributed Training and Serving deck [minor] ([b3540cf](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/b3540cf81fb1fbcab4155d02e8cb1bd4fa550e78))
+* **Course:** add PEFT, merging, ORPO/KTO and RLAIF sections to NLP 08 ([7aa297f](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/7aa297f948015ff81a54e6208413e016cb540286))
+* **Course:** add reproducibility section to CV 02 Practical Deep Learning ([e5fc7d5](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/e5fc7d5074d6fbf6b9ed444efe1f647c47636e17))
+* **Course:** add state-space models section to NLP 16 ([8cad64e](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/8cad64e1d9f2055cca632353c6c525600c57cfcb))
 * **Course:** Full rebuild of almost everything [minor] ([d943475](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d943475cded22dc6740c5aa133c67ef9031a5b14))
 * **Course:** rename files and split an NLP deck ([342f985](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/342f98555e40c6ee49b6508331ab0c03a072dd5c))
 * **Homeworks:** All ML Homeworks done ([b853257](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/b853257c5eb1ad82def3b713b6c54300deea3482))
@@ -85,6 +92,14 @@
 
 ### Bug Fixes
 
+* **Course:** apply deck review to CV 02 reproducibility section ([cd81bca](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/cd81bca3e5d607a8ef18a40d512a3adbb7ad7d19))
+* **Course:** apply deck review to Intro 09 Responsible AI ([7b064b1](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/7b064b182c2bd56d8f5ce000251dc8bfe9a3cd19))
+* **Course:** apply deck review to Intro 10 MLOps Foundations ([7d3265b](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/7d3265b487246a2a692ef54ac7929a5b6b80427c))
+* **Course:** apply deck review to NLP 08 PEFT and alignment sections ([f927146](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/f9271466a56757983aeb9122175b4869a59594aa))
+* **Course:** apply deck review to NLP 16 state-space models section ([a588fbc](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/a588fbcd314dcddee3bb53270dc39b3c05ea9bd4))
+* **Course:** apply deck review to NLP 22 LLM Evaluation ([946c9a3](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/946c9a3338a9800fb3beeba328c82b1ac17274e1))
+* **Course:** apply deck review to NLP 23 distributed training ([3a98c85](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/3a98c8505833a87fe8d88487732139c1e84e2d21)), closes [#1](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/issues/1)
+* **Course:** apply verification fixes to the seven gap-buildout decks ([95c4a3c](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/95c4a3c12c18483fc8c6c5cb7ab2d6b168c95930))
 * Modify and correct labs as per recommendations. ([57c1e99](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/57c1e99ab8d66a361408f50f5fc3784926cdcd10))
 * **path:** AutoEncoders images fix ([31594f2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/31594f2028908046772418e91cb38e1e79a2d932))
 * **path:** fixed a path for one of the images in the cifar lab ([c876999](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/c876999da623b8e7d6bf12b3c8e88d62cbeeaef7))

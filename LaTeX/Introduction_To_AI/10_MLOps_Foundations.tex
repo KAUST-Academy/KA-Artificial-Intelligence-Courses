@@ -1,0 +1,44 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+% Deck-specific packages and macros
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+% Do not load algorithm/algpseudocode here: the shared preamble already loads
+% algorithm2e, and algorithm.sty redefines \listofalgorithms, which is a hard error.
+\usetikzlibrary{positioning,arrows.meta,calc,fit,backgrounds}
+\usepackage[utf8]{inputenc}
+\usepackage{pifont}
+\usepackage{newunicodechar}
+\newunicodechar{✓}{\ding{51}}
+\newunicodechar{✗}{\ding{55}}
+
+\title[MLOps Foundations]{MLOps Foundations: From Notebook to Production}
+
+\begin{document}
+
+% Include sections
+\input{sections/cover}
+
+\input{sections/mlops-foundations/learning_outcomes}
+\input{sections/mlops-foundations/motivation}
+\input{sections/mlops-foundations/ml_lifecycle}
+\input{sections/mlops-foundations/reproducibility}
+\input{sections/mlops-foundations/experiment_tracking}
+\input{sections/mlops-foundations/hyperparameter_optimization}
+\input{sections/mlops-foundations/packaging_and_deployment}
+\input{sections/mlops-foundations/monitoring_and_drift}
+\input{sections/mlops-foundations/testing_and_cicd}
+\input{sections/mlops-foundations/versioning_and_governance}
+\input{sections/mlops-foundations/summary}
+\input{sections/mlops-foundations/references}
+
+\end{document}

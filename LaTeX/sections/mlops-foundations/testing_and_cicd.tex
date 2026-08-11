@@ -1,0 +1,243 @@
+\section{Testing \& Continuous Delivery}
+
+% --- SLIDE 1: WHY ML TESTING IS DIFFERENT ---
+\begin{frame}{Why You Cannot Just Write Unit Tests}
+
+    \centering
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=blue!5, colframe=blue!50, title=\small Ordinary software]
+                \small
+                \begin{itemize}
+                    \item The correct output is \textbf{specified in advance}.
+                    \item \texttt{assert add(2,2) == 4}
+                    \item A test failing means the code is wrong.
+                    \item Behaviour changes only when code changes.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=red!5, colframe=red!50, title=\small Machine learning]
+                \small
+                \begin{itemize}
+                    \item The correct output is \textbf{learned}, and only known statistically.
+                    \item \texttt{assert model.predict(x) == ?}
+                    \item A metric dropping might mean the code is wrong, the data changed, or the seed
+                          differed.
+                    \item Behaviour changes when \emph{data} changes, with no commit at all.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.9em}
+    \begin{block}{So you test three separate things}
+        \textbf{(1)} the \emph{code} around the model, with ordinary unit tests;
+        \textbf{(2)} the \emph{data} going in, with schema and quality checks;
+        \textbf{(3)} the \emph{model's behaviour}, with properties and thresholds rather than exact values.
+    \end{block}
+
+\end{frame}
+
+% --- SLIDE 2: TESTING DATA ---
+\begin{frame}[fragile]{Testing the Data}
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \small
+            \textbf{Two layers}
+            \begin{itemize}
+                \item \textbf{Schema:} columns present, types correct, categories in the allowed set,
+                      nullability as declared. This is a hard failure --- stop the pipeline.
+                \item \textbf{Quality / statistics:} distributions within expected bounds, null rate below a
+                      ceiling, no duplicate keys, freshness within an SLA. This is usually a warning, and a
+                      gate on retraining.
+            \end{itemize}
+            \vspace{0.4em}
+            \textbf{Write the schema once} and reuse it at three points: training input, retraining input,
+            and serving input. That single artifact is your best defence against training/serving skew.
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \begin{lstlisting}[language=Python, basicstyle=\ttfamily\tiny]
+def validate(df: pd.DataFrame) -> None:
+    assert set(SCHEMA) <= set(df.columns), "missing column"
+    assert df["age"].between(18, 120).all()
+    assert df["contract"].isin(CONTRACTS).all()
+    assert df["monthly_charges"].isna().mean() < 0.01
+    assert df["id"].is_unique
+    assert (NOW - df["event_ts"].max()).days < 2   # freshness
+            \end{lstlisting}
+            \vspace{0.3em}
+            \begin{tcolorbox}[colback=gray!8, colframe=gray!60, boxrule=0.5pt]
+                \scriptsize Tools that formalise this: Great Expectations, Pandera, TensorFlow Data
+                Validation, \texttt{dbt} tests. Twenty lines of \texttt{assert} statements already capture
+                most of the value.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+% --- SLIDE 3: TESTING MODELS ---
+\begin{frame}{Testing the Model}
+
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    {\scriptsize
+    \begin{tabular}{p{3.0cm}|p{8.4cm}}
+        \toprule
+        \textbf{Test type} & \textbf{What it asserts} \\
+        \midrule
+        \textbf{Smoke / shape}   & The model loads, accepts one row, returns a probability in $[0,1]$. Catches
+                                   90\% of deployment breakage. \\
+        \textbf{Minimum functionality} & Cases so easy that failure is unambiguous: a customer who cancelled
+                                   last month must score high risk. \\
+        \textbf{Invariance}      & Perturbations that must \emph{not} change the prediction: reordering
+                                   columns, changing a customer ID, whitespace in a category. \\
+        \textbf{Directional}     & Perturbations with a known sign: raising the price should not \emph{lower}
+                                   predicted churn. \\
+        \textbf{Golden set}      & A fixed, curated set of examples with expected outputs, reviewed by a human
+                                   and version-controlled. \\
+        \textbf{Regression / slice} & Overall metric above a floor \emph{and} no important segment worse than
+                                   the incumbent by more than $\delta$. \\
+        \bottomrule
+    \end{tabular}}
+
+    \vspace{0.21em}
+    \begin{itemize}
+        \scriptsize
+        \item \textbf{Slice tests matter more than the headline metric.} An overall $+1\%$ that hides
+              $-8\%$ for one region is a regression, not an improvement.
+        \item {\scriptsize The invariance/directional/minimum-functionality vocabulary is from Ribeiro et al.,
+              ``Beyond Accuracy: Behavioral Testing of NLP Models with CheckList,'' ACL 2020,
+              \href{https://arxiv.org/abs/2005.04118v1}{arXiv:2005.04118v1} --- the idea transfers directly to
+              tabular models.}
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 4: ML TEST SCORE ---
+\begin{frame}{A Rubric to Audit Yourself: The ML Test Score}
+
+    \begin{block}{Breck et al., IEEE Big Data 2017}
+        \textbf{28 actionable tests} for production readiness, grouped into four sections:
+        \textbf{Features and Data}, \textbf{Model Development}, \textbf{ML Infrastructure}, and
+        \textbf{Monitoring} (7 monitoring tests).
+    \end{block}
+
+    \vspace{0.15em}
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \begin{tcolorbox}[colback=green!5, colframe=green!50!black, title=\scriptsize How it is scored]
+                \scriptsize
+                \begin{itemize}
+                    \item \textbf{Half a point} per test executed manually, with the result documented and
+                          distributed.
+                    \item \textbf{A full point} if a system runs that test automatically and repeatedly.
+                    \item Sum within each of the four sections.
+                    \item \textbf{The final score is the \emph{minimum} of the four section scores.}
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \scriptsize
+            \textbf{Why the minimum?}
+            \begin{itemize}
+                \item Because all four areas are necessary. Beautiful model development with zero monitoring
+                      scores zero.
+                \item It is deliberately hard to game by doing more of what you already enjoy.
+            \end{itemize}
+            \vspace{0.12em}
+            \begin{tcolorbox}[colback=yellow!8, colframe=yellow!50!black, boxrule=0.5pt]
+                \scriptsize Run this on your own project this week. Most teams score well under 1 --- and the
+                exercise tells you exactly which section to invest in next.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.12em}
+    {\scriptsize Source: Breck, Cai, Nielsen, Salib \& Sculley, ``The ML Test Score: A Rubric for ML Production
+    Readiness and Technical Debt Reduction,'' \textit{Proc.\ IEEE Big Data}, 2017.
+    \href{https://research.google/pubs/the-ml-test-score-a-rubric-for-ml-production-readiness-and-technical-debt-reduction/}{Paper}.}
+
+\end{frame}
+
+% --- SLIDE 5: CI/CD ---
+\begin{frame}{CI/CD for ML: What Runs When}
+
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    {\small
+    \begin{tabular}{p{3.0cm}|p{4.2cm}|p{4.2cm}}
+        \toprule
+        \textbf{Trigger} & \textbf{What runs} & \textbf{Gate} \\
+        \midrule
+        Every commit / PR & Linting, unit tests, a training run on a \emph{tiny} sample &
+            Must be green to merge; must finish in minutes \\
+        Merge to main     & Build the container, publish it by digest &
+            Image builds and the smoke test passes \\
+        New data or a schedule & Full training pipeline, with data validation first &
+            Candidate beats the incumbent on the frozen evaluation set \\
+        Manual promotion  & Register the model version, then staged rollout &
+            A human approves --- or an automated policy does, with a rollback plan \\
+        \bottomrule
+    \end{tabular}}
+
+    \vspace{0.9em}
+    \begin{itemize}
+        \item \textbf{Keep the per-commit job fast.} A CI job that trains the real model for six hours is a
+              CI job people learn to skip.
+        \item \textbf{Continuous training} (retraining on fresh data) and \textbf{continuous delivery}
+              (shipping new pipeline code) are different loops running at different cadences. Do not
+              entangle them.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 6: STAGED ROLLOUT ---
+\begin{frame}{Never Flip the Switch: Shadow, Canary, A/B}
+
+    \centering
+    \begin{tikzpicture}[
+        b/.style={rectangle, draw, rounded corners=2pt, minimum height=0.7cm, text width=1.7cm,
+                  align=center, font=\tiny, inner sep=2pt},
+        arr/.style={-{Latex[length=1.6mm]}, thick, gray!70!black}
+    ]
+        % Shadow
+        \node[font=\scriptsize\bfseries, anchor=south] at (1.8,1.5) {1. Shadow};
+        \node[b, fill=gray!14]  (s0) at (0,0.6)  {traffic};
+        \node[b, fill=blue!12]  (s1) at (2.4,1.1) {old model\\\textbf{serves}};
+        \node[b, fill=orange!12](s2) at (2.4,0.1) {new model\\\emph{logs only}};
+        \draw[arr] (s0) -- (s1); \draw[arr, dashed] (s0) -- (s2);
+
+        % Canary
+        \node[font=\scriptsize\bfseries, anchor=south] at (6.0,1.5) {2. Canary};
+        \node[b, fill=gray!14]  (c0) at (4.2,0.6)  {traffic};
+        \node[b, fill=blue!12]  (c1) at (6.6,1.1)  {old model\\99\%};
+        \node[b, fill=orange!12](c2) at (6.6,0.1)  {new model\\1\%};
+        \draw[arr] (c0) -- (c1); \draw[arr] (c0) -- (c2);
+
+        % A/B
+        \node[font=\scriptsize\bfseries, anchor=south] at (10.2,1.5) {3. A/B test};
+        \node[b, fill=gray!14]  (a0) at (8.4,0.6)  {traffic};
+        \node[b, fill=blue!12]  (a1) at (10.8,1.1) {A: 50\%};
+        \node[b, fill=orange!12](a2) at (10.8,0.1) {B: 50\%};
+        \draw[arr] (a0) -- (a1); \draw[arr] (a0) -- (a2);
+    \end{tikzpicture}
+
+    \vspace{0.7em}
+    \begin{itemize}
+        \small
+        \item \textbf{Shadow:} the new model sees real traffic and its predictions are logged and compared,
+              but never returned. Catches crashes, latency blow-ups and wild disagreement at \textbf{zero user
+              risk}. Do this first, always.
+        \item \textbf{Canary:} a small slice of real traffic gets the new model. Watch error rate, latency
+              and the business metric; ramp $1\% \rightarrow 10\% \rightarrow 50\%$, with an automatic
+              rollback rule written down \emph{before} you start.
+        \item \textbf{A/B test:} a designed experiment to measure whether the new model actually improves the
+              \emph{business} outcome --- which is not the same question as whether its F1 is higher.
+        \item \textbf{Rollback must be one command and it must be rehearsed.} The previous image digest and
+              the previous model version are both still in the registry: that is what they are for.
+    \end{itemize}
+
+\end{frame}

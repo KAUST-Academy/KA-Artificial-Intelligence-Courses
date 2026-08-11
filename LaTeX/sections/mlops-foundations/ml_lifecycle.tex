@@ -1,0 +1,285 @@
+\section{The ML Lifecycle}
+
+% --- SLIDE 1: THE NINE STAGES ---
+\begin{frame}{The Lifecycle, Stage by Stage}
+
+    \centering
+    \resizebox{0.97\textwidth}{!}{%
+    \begin{tikzpicture}[
+        stage/.style={rectangle, draw, rounded corners=2pt, minimum height=0.95cm, text width=1.75cm,
+                      align=center, font=\scriptsize, inner sep=2pt},
+        arr/.style={-{Latex[length=2mm]}, thick, gray!70!black}
+    ]
+        % Row 1: requirements + data work
+        \node[stage, fill=gray!12]   (req)   at (0,0)      {Model\\Requirements};
+        \node[stage, fill=green!12]  (coll)  at (2.4,0)    {Data\\Collection};
+        \node[stage, fill=green!12]  (clean) at (4.8,0)    {Data\\Cleaning};
+        \node[stage, fill=green!12]  (label) at (7.2,0)    {Data\\Labeling};
+        \node[stage, fill=green!12]  (feat)  at (9.6,0)    {Feature\\Engineering};
+
+        % Row 2 (right to left): model work + operations
+        \node[stage, fill=blue!12]   (train) at (9.6,-1.9) {Model\\Training};
+        \node[stage, fill=blue!12]   (eval)  at (7.2,-1.9) {Model\\Evaluation};
+        \node[stage, fill=orange!14] (depl)  at (4.8,-1.9) {Model\\Deployment};
+        \node[stage, fill=orange!14] (mon)   at (2.4,-1.9) {Model\\Monitoring};
+
+        \draw[arr] (req)   -- (coll);
+        \draw[arr] (coll)  -- (clean);
+        \draw[arr] (clean) -- (label);
+        \draw[arr] (label) -- (feat);
+        \draw[arr] (feat)  -- (train);
+        \draw[arr] (train) -- (eval);
+        \draw[arr] (eval)  -- (depl);
+        \draw[arr] (depl)  -- (mon);
+
+        % Small feedback: training can loop back to feature engineering
+        \draw[arr, dashed, blue!60!black]
+            (train.east) -- (11.4,-1.9) -- (11.4,0) -- (feat.east);
+        \node[font=\tiny, blue!60!black, align=center, anchor=west] at (11.5,-0.95)
+            {representation\\learning};
+
+        % Large feedback: monitoring loops back to any earlier stage
+        \draw[arr, dashed, red!70!black]
+            (mon.west) -- (-1.9,-1.9) -- (-1.9,0) -- (req.west);
+        \node[font=\tiny, red!70!black, align=center] at (0.2,-1.1)
+            {evaluation and monitoring loop back\\to \emph{any} earlier stage};
+    \end{tikzpicture}}
+
+    \vspace{0.5em}
+    {\scriptsize Stages after Amershi et al., ``Software Engineering for Machine Learning: A Case Study,''
+    ICSE-SEIP 2019, Figure~1.
+    \href{https://www.microsoft.com/en-us/research/publication/software-engineering-for-machine-learning-a-case-study/}{Paper}.}
+
+    \vspace{0.5em}
+    \begin{itemize}
+        \item \textbf{Green} is data work, \textbf{blue} is model work, \textbf{orange} is operations.
+        \item The dashed arrows are why a linear project plan always slips.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 2: THE OPERATING LOOP ---
+\begin{frame}{The Part This Deck Is About: The Operating Loop}
+
+    \centering
+    \begin{tikzpicture}[
+        st/.style={rectangle, draw, rounded corners=3pt, minimum height=1.0cm, text width=1.9cm,
+                   align=center, font=\small},
+        arr/.style={-{Latex[length=2.2mm]}, very thick, gray!60!black}
+    ]
+        \node[st, fill=blue!12]   (exp)  at (0,0)      {Experiment};
+        \node[st, fill=blue!12]   (val)  at (3.0,0)    {Validate};
+        \node[st, fill=green!12]  (pack) at (6.0,0)    {Package};
+        \node[st, fill=orange!14] (depl) at (9.0,0)    {Deploy};
+        \node[st, fill=red!12]    (mon)  at (9.0,-1.9) {Monitor};
+        \node[st, fill=gray!16]   (ret)  at (3.0,-1.9) {Retrain};
+
+        \draw[arr] (exp)  -- (val);
+        \draw[arr] (val)  -- (pack);
+        \draw[arr] (pack) -- (depl);
+        \draw[arr] (depl) -- (mon);
+        \draw[arr] (mon)  -- node[above, font=\scriptsize] {drift or decay triggers} (ret);
+        \draw[arr] (ret)  -- (exp);
+    \end{tikzpicture}
+
+    \vspace{1.0em}
+    \begin{itemize}
+        \item Each arrow is a place work gets lost. Each box is a place something can silently break.
+        \item \textbf{The goal of MLOps is to shorten this loop}, not to add ceremony to it.
+        \item Rule of thumb: if one lap takes a week of manual effort, you will do it twice a year ---
+              and your model will spend most of its life stale.
+    \end{itemize}
+
+\end{frame}
+
+% --- SLIDE 3: FAILURE MODES ---
+\begin{frame}{One Failure Mode per Stage}
+
+    \centering
+    \renewcommand{\arraystretch}{1.3}
+    {\scriptsize
+    \begin{tabular}{p{2.0cm}|p{4.4cm}|p{4.6cm}}
+        \toprule
+        \textbf{Stage} & \textbf{Characteristic failure} & \textbf{Cheapest defence} \\
+        \midrule
+        Experiment & Results not attributable to any run & Experiment tracking \\
+        Validate   & Leakage; tuned on the test set      & Frozen holdout, nested CV \\
+        Package    & Environment mismatch; unsafe artifact & Lockfile + container; safe format \\
+        Deploy     & Training/serving skew in preprocessing & One shared transform, tested \\
+        Monitor    & Silent degradation, nobody notices  & Input and prediction distribution alerts \\
+        Retrain    & Retrained on drifted, unvalidated data & Data validation before training \\
+        \bottomrule
+    \end{tabular}}
+
+    \vspace{0.3em}
+    \begin{block}{Training/serving skew}
+        The single most common production bug in classical ML: the notebook computed a feature one way,
+        the service computes it another way. The model is fine; the inputs are not.
+    \end{block}
+
+\end{frame}
+
+% --- SLIDE 4: WHO DOES WHAT ---
+\begin{frame}{Who Does What}
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \small
+            \begin{itemize}
+                \setlength\itemsep{0.45em}
+                \item \textbf{Data engineer} --- pipelines, warehouses, schemas. Owns whether the data
+                      \emph{arrives} and is well-formed.
+                \item \textbf{Data scientist} --- framing, features, models, evaluation. Owns whether the
+                      model is \emph{right}.
+                \item \textbf{ML engineer} --- packaging, serving, retraining. Owns whether the model
+                      \emph{runs}.
+                \item \textbf{Platform / SRE} --- infrastructure, capacity, on-call. Owns whether the service
+                      \emph{stays up}.
+                \item \textbf{Product owner} --- the decision the prediction supports. Owns whether the model
+                      is \emph{worth} running.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \begin{tcolorbox}[colback=yellow!8, colframe=yellow!50!black, boxrule=0.5pt]
+                \small In a small team one person wears all five hats. That is fine --- but the
+                \emph{handoffs} still exist, and they still need to be written down.
+            \end{tcolorbox}
+            \vspace{0.6em}
+            \begin{alertblock}{The handoff that kills projects}
+                \small ``The data scientist throws a notebook over the wall to the engineer.'' The engineer
+                rewrites the preprocessing, the numbers change, and nobody can say which version is correct.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+\subsection{MLOps Maturity}
+
+% --- SLIDE 5: MATURITY OVERVIEW ---
+\begin{frame}{MLOps Maturity: Three Levels}
+
+    \centering
+    \textit{Google's framing. Useful mostly because it names what you are allowed to \emph{not} have yet.}
+    \vspace{0.21em}
+
+    \begin{tikzpicture}[
+        lvl/.style={rectangle, draw, rounded corners=3pt, text width=3.0cm, align=center,
+                    minimum height=1.6cm, font=\scriptsize},
+        arr/.style={-{Latex[length=2.2mm]}, very thick, gray!60!black}
+    ]
+        \node[lvl, fill=red!10]    (l0) at (0,0)   {\textbf{Level 0}\\Manual process};
+        \node[lvl, fill=orange!12] (l1) at (4.6,0) {\textbf{Level 1}\\ML pipeline\\automation};
+        \node[lvl, fill=green!12]  (l2) at (9.2,0) {\textbf{Level 2}\\CI/CD pipeline\\automation};
+
+        \draw[arr] (l0) -- (l1);
+        \draw[arr] (l1) -- (l2);
+        \node[font=\scriptsize, align=center] at (2.3,-1.15) {automate\\\emph{training}};
+        \node[font=\scriptsize, align=center] at (6.9,-1.15) {automate\\\emph{the pipeline}};
+    \end{tikzpicture}
+
+    \vspace{0.21em}
+    \begin{itemize}
+        \scriptsize
+        \item \textbf{Level 0} deploys a \emph{model}. \textbf{Level 1} deploys a \emph{training pipeline}.
+              \textbf{Level 2} deploys \emph{changes to that pipeline}, automatically and tested.
+        \item Most organisations that believe they are at level 2 are at level 0 with a scheduled job.
+        \item \textbf{Maturity is a cost, not a virtue.} Buy the level your problem justifies: how often must
+              the answer change, what does a wrong prediction cost, and how many people must be able to
+              reproduce the result?
+    \end{itemize}
+
+    \vspace{0.12em}
+    {\scriptsize Source: Google Cloud, ``MLOps: Continuous delivery and automation pipelines in machine learning,''
+    \href{https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning}{Cloud Architecture Center}, 2020.}
+
+\end{frame}
+
+% --- SLIDE 6: LEVEL 0 ---
+\begin{frame}{Level 0: Manual Process}
+
+    \begin{columns}[T]
+        \begin{column}{0.53\textwidth}
+            \textbf{What it looks like}
+            \small
+            \begin{itemize}
+                \item Every step is manual, script-driven and interactive --- data prep, training and
+                      validation all live in a notebook.
+                \item A hard split between the people who \emph{build} the model and the people who
+                      \emph{serve} it: only the artifact is handed over.
+                \item Infrequent release iterations --- a handful of model changes a year.
+                \item No CI/CD: a model change is not a code change that anyone tests.
+                \item No active performance monitoring in production.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.43\textwidth}
+            \begin{tcolorbox}[colback=red!5, colframe=red!50, title=\small When level 0 is the right answer]
+                \small
+                \begin{itemize}
+                    \item The model is retrained rarely, or never.
+                    \item The world underneath it changes slowly.
+                    \item One person owns it end to end.
+                \end{itemize}
+                \vspace{0.3em}
+                \textit{Most pilots and proofs of concept should stay here.}
+            \end{tcolorbox}
+            \vspace{0.6em}
+            \begin{alertblock}{The trap}
+                \small Level 0 fails the moment the world moves faster than your release cadence --- and you
+                have no instrument that tells you it has.
+            \end{alertblock}
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+% --- SLIDE 7: LEVELS 1 AND 2 ---
+\begin{frame}{Level 1: Pipeline Automation $\rightarrow$ Level 2: CI/CD}
+
+    \begin{columns}[T]
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=orange!6, colframe=orange!60!black, title=\scriptsize Level 1: ML pipeline automation]
+                \tiny
+                \textbf{Goal:} \emph{continuous training} --- the model retrains in production on fresh data.
+                \begin{itemize}
+                    \item Orchestrated, modular, containerised pipeline steps.
+                    \item \textbf{Data validation} and \textbf{model validation} steps inside the pipeline.
+                    \item \textbf{Experimental--operational symmetry}: the pipeline you develop with is the
+                          pipeline that runs in production.
+                    \item A metadata store; optionally a feature store.
+                    \item Triggers: on a schedule, on new data, on demand, or on measured degradation.
+                \end{itemize}
+                \textbf{Still manual:} deploying a \emph{new} pipeline.
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \begin{tcolorbox}[colback=green!6, colframe=green!50!black, title=\scriptsize Level 2: CI/CD pipeline automation]
+                \tiny
+                \textbf{Goal:} rapidly and safely explore new features, architectures and hyperparameters.
+                \begin{itemize}
+                    \item Source control triggers an automated \textbf{build and test} of pipeline components.
+                    \item \textbf{Continuous delivery} pushes the new pipeline to production.
+                    \item The deployed pipeline then performs continuous training on its own.
+                    \item Model registry and end-to-end lineage as first-class infrastructure.
+                \end{itemize}
+                \textbf{The unit of delivery is the pipeline}, not the model.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.04em}
+    \begin{itemize}
+        \scriptsize
+        \item \textbf{Quarterly retrain, one owner, low stakes} $\rightarrow$ level 0 plus experiment tracking
+              is enough.
+        \item \textbf{Weekly retrain, several owners} $\rightarrow$ level 1, or you will spend your life
+              running notebooks by hand.
+        \item \textbf{Daily retrain, regulated or revenue-critical} $\rightarrow$ level 2, or you will not be
+              able to prove what shipped.
+    \end{itemize}
+
+    \vspace{0.03em}
+    {\scriptsize Level definitions from Google Cloud, ``MLOps: Continuous delivery and automation pipelines in machine learning,''
+    \href{https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning}{Cloud Architecture Center}, 2020.}
+
+\end{frame}

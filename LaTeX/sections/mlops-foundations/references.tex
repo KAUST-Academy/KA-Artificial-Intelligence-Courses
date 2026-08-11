@@ -1,0 +1,97 @@
+\section{References}
+
+\begin{frame}[allowframebreaks]{References}
+  \footnotesize
+  \begin{enumerate}
+    \item Sculley, Holt, Golovin, Davydov, Phillips, Ebner, Chaudhary, Young, Crespo \& Dennison,
+          ``Hidden Technical Debt in Machine Learning Systems,'' \textit{Advances in Neural Information
+          Processing Systems 28} (NIPS 2015).
+          \href{https://proceedings.neurips.cc/paper_files/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html}{Paper}
+          (Figure~1 --- the ``small box'').
+    \item Sculley et al., ``Machine Learning: The High-Interest Credit Card of Technical Debt,''
+          SE4ML Workshop, NIPS 2014.
+          \href{https://research.google/pubs/machine-learning-the-high-interest-credit-card-of-technical-debt/}{Paper}
+          (the earlier, longer version of the same argument).
+    \item Breck, Cai, Nielsen, Salib \& Sculley, ``The ML Test Score: A Rubric for ML Production Readiness
+          and Technical Debt Reduction,'' \textit{Proc.\ IEEE Big Data}, 2017.
+          \href{https://research.google/pubs/the-ml-test-score-a-rubric-for-ml-production-readiness-and-technical-debt-reduction/}{Paper}.
+    \item Google Cloud, ``MLOps: Continuous delivery and automation pipelines in machine learning,''
+          Cloud Architecture Center, 2020.
+          \href{https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning}{Article}
+          (maturity levels 0/1/2; source of the ``elements of ML'' figure).
+    \item Amershi, Begel, Bird, DeLine, Gall, Kamar, Nagappan, Nushi \& Zimmermann, ``Software Engineering
+          for Machine Learning: A Case Study,'' ICSE-SEIP 2019.
+          \href{https://www.microsoft.com/en-us/research/publication/software-engineering-for-machine-learning-a-case-study/}{Paper}
+          (the nine-stage workflow).
+    \item Paleyes, Urma \& Lawrence, ``Challenges in Deploying Machine Learning: a Survey of Case Studies,''
+          \textit{ACM Computing Surveys}, 2022. \href{https://arxiv.org/abs/2011.09926v3}{arXiv:2011.09926v3}.
+    \item Zinkevich, ``Rules of Machine Learning: Best Practices for ML Engineering,'' Google.
+          \href{https://developers.google.com/machine-learning/guides/rules-of-ml}{Guide}
+          (43 rules; the best single practitioner document on this topic).
+
+    \item Zaharia, Chen, Davidson, Ghodsi, Hong, Konwinski, Murching, Nykodym, Ogilvie, Parkhe, Xie \& Zumar,
+          ``Accelerating the Machine Learning Lifecycle with MLflow,'' \textit{IEEE Data Engineering Bulletin}
+          41(4), 2018, pp.~39--45. \href{http://sites.computer.org/debull/A18dec/p39.pdf}{PDF}.
+    \item MLflow documentation --- ``Concepts,'' ``MLflow Tracking'' and ``Model Registry.''
+          \href{https://mlflow.org/docs/latest/}{mlflow.org/docs} (source of the tracking-setup and
+          tracking-UI figures).
+    \item Weights \& Biases documentation and pricing. \href{https://docs.wandb.ai/guides/}{Docs},
+          \href{https://wandb.ai/site/pricing/}{Pricing} (accessed 2026).
+
+    \item Bergstra, Bardenet, Bengio \& K\accent19 egl, ``Algorithms for Hyper-Parameter Optimization,''
+          NIPS 2011.
+          \href{https://papers.nips.cc/paper_files/paper/2011/hash/86e8f7ab32cfd12577bc2619bc635690-Abstract.html}{Paper}
+          (the original TPE).
+    \item Bergstra \& Bengio, ``Random Search for Hyper-Parameter Optimization,'' \textit{JMLR} 13, 2012,
+          pp.~281--305. \href{https://jmlr.org/papers/v13/bergstra12a.html}{Paper}.
+    \item Akiba, Sano, Yanase, Ohta \& Koyama, ``Optuna: A Next-generation Hyperparameter Optimization
+          Framework,'' KDD 2019. \href{https://arxiv.org/abs/1907.10902v1}{arXiv:1907.10902v1}
+          (source of the pruning figure, Figure~11(a)).
+    \item Optuna documentation ---
+          \href{https://optuna.readthedocs.io/en/stable/reference/samplers/generated/optuna.samplers.TPESampler.html}{\texttt{TPESampler}},
+          \href{https://optuna.readthedocs.io/en/stable/reference/generated/optuna.pruners.SuccessiveHalvingPruner.html}{\texttt{SuccessiveHalvingPruner}},
+          \href{https://optuna.readthedocs.io/en/stable/reference/generated/optuna.study.create_study.html}{\texttt{create\_study}}.
+    \item Li, Jamieson, DeSalvo, Rostamizadeh \& Talwalkar, ``Hyperband: A Novel Bandit-Based Approach to
+          Hyperparameter Optimization,'' \textit{JMLR} 18, 2018.
+          \href{https://arxiv.org/abs/1603.06560v4}{arXiv:1603.06560v4}.
+    \item Li et al., ``A System for Massively Parallel Hyperparameter Tuning,'' MLSys 2020.
+          \href{https://arxiv.org/abs/1810.05934v5}{arXiv:1810.05934v5} (ASHA).
+
+    \item Pineau, Vincent-Lamarre, Sinha, Lariviere, Beygelzimer, d'Alch\accent19 e-Buc, Fox \& Larochelle,
+          ``Improving Reproducibility in Machine Learning Research (A Report from the NeurIPS 2019
+          Reproducibility Program),'' 2020. \href{https://arxiv.org/abs/2003.12206v4}{arXiv:2003.12206v4}
+          (the ML Reproducibility Checklist).
+    \item PyTorch documentation, ``Reproducibility.''
+          \href{https://docs.pytorch.org/docs/stable/notes/randomness.html}{docs.pytorch.org}.
+    \item scikit-learn documentation, ``Model persistence.''
+          \href{https://scikit-learn.org/stable/model_persistence.html}{scikit-learn.org}
+          (the pickle security warning; \texttt{skops} and ONNX alternatives).
+    \item DVC --- Data Version Control. \href{https://dvc.org/doc}{Documentation}.
+    \item ONNX --- Open Neural Network Exchange. \href{https://onnx.ai/}{onnx.ai}.
+          Hugging Face, \texttt{safetensors}. \href{https://huggingface.co/docs/safetensors}{Documentation}.
+
+    \item Gama, Zliobaite, Bifet, Pechenizkiy \& Bouchachia, ``A Survey on Concept Drift Adaptation,''
+          \textit{ACM Computing Surveys} 46(4), Article~44, 2014.
+          \href{https://dl.acm.org/doi/10.1145/2523813}{DOI:10.1145/2523813}
+          (Figure~2 --- patterns of change over time).
+    \item Quinonero-Candela, Sugiyama, Schwaighofer \& Lawrence (eds.), \textit{Dataset Shift in Machine
+          Learning}, MIT Press, 2009.
+          \href{https://mitpress.mit.edu/9780262545877/dataset-shift-in-machine-learning/}{Book}.
+    \item Ribeiro, Wu, Guestrin \& Singh, ``Beyond Accuracy: Behavioral Testing of NLP Models with
+          CheckList,'' ACL 2020. \href{https://arxiv.org/abs/2005.04118v1}{arXiv:2005.04118v1}
+          (minimum functionality, invariance and directional tests).
+
+    \item Mitchell, Wu, Zaldivar, Barnes, Vasserman, Hutchinson, Spitzer, Raji \& Gebru,
+          ``Model Cards for Model Reporting,'' FAT* 2019.
+          \href{https://arxiv.org/abs/1810.03993v2}{arXiv:1810.03993v2}.
+    \item Gebru, Morgenstern, Vecchione, Vaughan, Wallach, Daum\accent19 e III \& Crawford,
+          ``Datasheets for Datasets,'' \textit{Communications of the ACM} 64(12), 2021, pp.~86--92.
+          \href{https://arxiv.org/abs/1803.09010v8}{arXiv:1803.09010v8}.
+
+    \item C.~Huyen, \textit{Designing Machine Learning Systems}, O'Reilly, 2022 --- the recommended
+          book-length treatment of everything in this deck.
+    \item A.~G\accent19 eron, \textit{Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow},
+          3rd ed., O'Reilly, 2022, Chapter~2 and Chapter~19 (end-to-end project; training and deploying at
+          scale).
+  \end{enumerate}
+\end{frame}

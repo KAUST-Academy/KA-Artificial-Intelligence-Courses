@@ -1,4 +1,4 @@
-##  (2026-08-09)
+##  (2026-08-11)
 
 
 ### Features
@@ -6,6 +6,7 @@
 * add new lab ([8e7ba73](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/8e7ba738aa1a499237fdb81cef9bf76e3dbee177))
 * added new labs (YASREF CV) ([1345b79](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/1345b79d6af798e0e9804e128418f423bd1257ea))
 * **Course:** Full rebuild of almost everything [minor] ([d943475](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/d943475cded22dc6740c5aa133c67ef9031a5b14))
+* **Course:** rename files and split an NLP deck ([342f985](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/342f98555e40c6ee49b6508331ab0c03a072dd5c))
 * **Homeworks:** All ML Homeworks done ([b853257](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/b853257c5eb1ad82def3b713b6c54300deea3482))
 * **Homeworks:** Asthma_Detection_with_WaveNet_Homework_Assignment ([518b6be](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/518b6be87a7efe901b67bfb032710ad843639185))
 * **Homeworks:** CLIP from Scratch. ([0857159](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/0857159bb999d347c70d1b46e1ff86d65d66ec17))

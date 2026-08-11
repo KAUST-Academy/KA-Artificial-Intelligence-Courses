@@ -1,0 +1,269 @@
+\section{Why Responsible AI}
+
+\begin{frame}{Where This Lecture Sits}
+
+    So far the course has optimised a single number: accuracy, F1, RMSE. That number is computed
+    \textbf{over the whole test set}.
+
+    \vspace{1em}
+
+    \begin{block}{The gap this lecture closes}
+        A model that is accurate \emph{on average} can still be systematically wrong for a
+        particular group of people, and can be right for reasons you would not accept if you
+        could see them.
+    \end{block}
+
+    \vspace{1em}
+
+    \begin{itemize}
+        \setlength\itemsep{0.5em}
+        \item \textbf{Part 1 --- Fairness:} how to find and reduce systematic error across groups.
+        \item \textbf{Part 2 --- Interpretability:} how to find out what a model is actually using.
+        \item \textbf{Part 3 --- Documentation and governance:} how to write it down and who checks it.
+    \end{itemize}
+
+    \vspace{0.5em}
+    \centering
+    \small
+    \textit{Not covered here:} agent- and LLM-specific safety --- prompt injection, tool misuse,
+    excessive agency --- which is the subject of \textbf{Lecture 12 of the NLP course}.
+
+    \vspace{0.6em}
+    \normalsize
+    \textit{We start with four documented cases. Each one failed in a different place in the pipeline.}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+% Case 1: COMPAS
+% ---------------------------------------------------------------------------
+\begin{frame}{Case 1: COMPAS Recidivism Scores (2016)}
+
+    \textbf{The system.} COMPAS is a commercial risk-assessment tool (Northpointe, now Equivant)
+    that scores a criminal defendant's likelihood of re-offending on a 1--10 scale. US courts have
+    used such scores to inform bail, sentencing, and parole decisions.
+
+    \vspace{0.8em}
+
+    \textbf{The analysis.} ProPublica journalists obtained scores for more than 7{,}000 people
+    arrested in Broward County, Florida in 2013--2014 and checked, two years later, who actually
+    re-offended.
+
+    \vspace{0.8em}
+
+    \begin{columns}[T]
+        \begin{column}{0.52\textwidth}
+            \centering
+            \small
+            \begin{tabular}{p{3.5cm}cc}
+                \toprule
+                & \textbf{White} & \textbf{Black} \\
+                \midrule
+                Labelled higher risk, but did \emph{not} re-offend & 23.5\% & 44.9\% \\
+                \addlinespace
+                Labelled lower risk, yet \emph{did} re-offend & 47.7\% & 28.0\% \\
+                \bottomrule
+            \end{tabular}
+        \end{column}
+        \begin{column}{0.44\textwidth}
+            \begin{itemize}\small
+                \item Overall, 61\% of those scored likely to re-offend were arrested for some
+                      crime within two years.
+                \item Of those predicted to commit a \emph{violent} crime, 20\% did.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.5em}
+    {\scriptsize J.~Angwin, J.~Larson, S.~Mattu and L.~Kirchner, ``Machine Bias,'' \emph{ProPublica},
+    23 May 2016, \href{https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing}{propublica.org}.}
+\end{frame}
+
+\begin{frame}{Case 1: The Disagreement That Followed}
+
+    Northpointe replied that its score was \textbf{equally accurate for both groups}: among
+    defendants given the same score, roughly the same fraction re-offended regardless of race.
+
+    \vspace{0.8em}
+
+    \begin{block}{Both sides were reporting true numbers}
+        ProPublica measured \textbf{error rates} conditioned on the true outcome
+        (who got wrongly flagged). Northpointe measured \textbf{calibration} conditioned on the
+        score (what a score means). These are different quantities.
+    \end{block}
+
+    \vspace{0.8em}
+
+    \begin{itemize}
+        \setlength\itemsep{0.4em}
+        \item Chouldechova (2017) and Kleinberg, Mullainathan and Raghavan (2016) showed
+              independently that when the two groups have \textbf{different base rates} of the
+              outcome, a score cannot satisfy both criteria at once, except in degenerate cases.
+        \item So this was not a bug that better engineering would fix. It was a
+              \textbf{choice between incompatible definitions of fair} --- and nobody had made it
+              explicitly.
+    \end{itemize}
+
+    \vspace{0.5em}
+    \centering
+    \textit{We return to this result in Section 4.}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+% Case 2: Amazon hiring tool
+% ---------------------------------------------------------------------------
+\begin{frame}[allowframebreaks]{Case 2: A Resume-Screening Tool (Reuters reporting, 2018)}
+
+    \begin{tcolorbox}[colback=raiAmber!5, colframe=raiAmber!70, title=Note on evidence]
+        \small This case comes from \textbf{news reporting based on anonymous sources}, not from a
+        published study. Treat the mechanism as illustrative and the details as journalistic.
+    \end{tcolorbox}
+
+    \vspace{0.6em}
+
+    According to Reuters, a team at Amazon built experimental tools from 2014 that scored job
+    applicants one to five stars. By 2015 the team found the system was not rating candidates for
+    software-developer roles in a gender-neutral way.
+
+    \vspace{0.6em}
+
+    \begin{itemize}
+        \setlength\itemsep{0.4em}
+        \item The models were trained on resumes submitted to the company over roughly a decade ---
+              a pool that was predominantly male in technical roles.
+        \item The reporting states the system penalised resumes containing the word
+              ``women's'' and downgraded graduates of two all-women's colleges.
+        \item Amazon said the tool was never used by recruiters to evaluate candidates, and the
+              project was abandoned.
+    \end{itemize}
+
+    \vspace{0.5em}
+
+    \begin{block}{The mechanism, stated plainly}
+        \small The label was not ``a good engineer.'' It was ``a person this company hired
+        before.'' Removing the gender field does not help, because the model finds
+        \textbf{proxies}. The learning worked; the \textbf{target definition} was the defect.
+    \end{block}
+
+    \vspace{0.3em}
+    {\scriptsize J.~Dastin, ``Amazon scraps secret AI recruiting tool that showed bias against
+    women,'' \emph{Reuters}, 10 October 2018.}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+% Case 3: Gender Shades
+% ---------------------------------------------------------------------------
+\begin{frame}{Case 3: Gender Shades --- Disaggregated Error Rates (2018)}
+
+    Buolamwini and Gebru audited three \textbf{commercial} gender-classification APIs on the
+    \emph{Pilot Parliaments Benchmark} (PPB): 1{,}270 parliamentarians from three African and three
+    European countries, labelled by Fitzpatrick skin type and by binary gender.
+
+    \vspace{0.18em}
+    \centering
+    \scriptsize
+    \begin{tabular}{lccccc}
+        \toprule
+        \textbf{Classifier} & \textbf{All} & \textbf{Darker female} & \textbf{Darker male}
+        & \textbf{Lighter female} & \textbf{Lighter male} \\
+        \midrule
+        Microsoft & 6.3\%  & 20.8\% & 6.0\%  & 1.7\% & 0.0\% \\
+        Face++    & 10.0\% & 34.5\% & 0.7\%  & 9.8\% & 0.8\% \\
+        IBM       & 12.1\% & 34.7\% & 12.0\% & 7.1\% & 0.3\% \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{0.12em}
+    {\scriptsize Error rate $=1-$ true positive rate, evaluated April--May 2017.}
+
+    \vspace{0.18em}
+    \raggedright
+    \begin{columns}[T]
+        \begin{column}{0.51\textwidth}
+            \begin{itemize}\scriptsize
+                \setlength\itemsep{0.1em}
+                \item The aggregate column looks acceptable. The intersectional columns do not.
+                \item Marginal slices hide it: an 8.1\%--20.6\% gap by gender alone, 11.8\%--19.2\%
+                      by skin type alone.
+                \item Maximum reported error-rate gap between the best- and worst-classified
+                      subgroups: \textbf{34.4\%}.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.47\textwidth}
+            \begin{tcolorbox}[colback=raiBlue!5, colframe=raiBlue!60, boxrule=0.6pt]
+                \scriptsize
+                \textbf{Two lessons.} (1) Slice by every group \emph{and by combinations}, and
+                report the worst slice with its sample size. (2) Quote the study for what it
+                measured --- binary gender classification, one benchmark, three APIs, one point in
+                time --- not as ``face recognition does not work.''
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.12em}
+    {\scriptsize J.~Buolamwini and T.~Gebru, ``Gender Shades: Intersectional Accuracy Disparities in
+    Commercial Gender Classification,'' \emph{PMLR} 81:77--91, FAT* 2018, Table 4 and Section 4.1.}
+\end{frame}
+
+% ---------------------------------------------------------------------------
+% Case 4: Obermeyer
+% ---------------------------------------------------------------------------
+\begin{frame}[allowframebreaks]{Case 4: A Health Risk Algorithm and Its Proxy Label (2019)}
+
+    \textbf{The system.} A widely deployed algorithm identified patients who should be enrolled in
+    high-intensity care-management programmes. It predicted \textbf{future health-care costs} as a
+    stand-in for \textbf{future health needs}.
+
+    \vspace{0.8em}
+
+    \begin{block}{The defect}
+        Less money is spent on Black patients at the same level of illness. Predicting cost
+        therefore predicts \emph{spending}, not \emph{sickness} --- and the algorithm concluded that
+        equally sick Black patients were healthier.
+    \end{block}
+
+    \vspace{0.8em}
+
+    \begin{itemize}
+        \setlength\itemsep{0.4em}
+        \item At a given risk score, Black patients were measurably sicker (more uncontrolled
+              chronic conditions).
+        \item Reformulating the label removed most of the disparity: the share of Black patients
+              flagged for extra help rose from \textbf{17.7\% to 46.5\%}.
+        \item The sensitive attribute was \textbf{not} an input. The \textbf{label} carried the bias.
+    \end{itemize}
+
+    \vspace{0.4em}
+    {\scriptsize Z.~Obermeyer, B.~Powers, C.~Vogeli and S.~Mullainathan, ``Dissecting racial bias in
+    an algorithm used to manage the health of populations,'' \emph{Science} 366(6464):447--453, 2019.}
+\end{frame}
+
+\begin{frame}{What the Four Cases Have in Common}
+
+    \centering
+    \small
+    \begin{tabular}{p{2.6cm} p{4.4cm} p{4.6cm}}
+        \toprule
+        \textbf{Case} & \textbf{Where it broke} & \textbf{What would have caught it} \\
+        \midrule
+        COMPAS & Conflicting fairness criteria, never chosen explicitly
+               & Naming the fairness criterion before deployment \\
+        \addlinespace
+        Resume screening & Target definition (``past hires'') and proxies
+               & Asking what the label actually measures \\
+        \addlinespace
+        Gender Shades & Benchmark composition and unreported slices
+               & Disaggregated, intersectional evaluation \\
+        \addlinespace
+        Health risk score & Proxy label (cost for need)
+               & Auditing the label against the real outcome \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{1.2em}
+
+    \begin{block}{}
+        \centering
+        None of these were caused by a bad optimiser or a small test set. All four were
+        \textbf{specification} problems that a standard evaluation report would not surface.
+    \end{block}
+\end{frame}

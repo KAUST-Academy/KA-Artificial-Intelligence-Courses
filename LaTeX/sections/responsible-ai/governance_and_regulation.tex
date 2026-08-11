@@ -1,0 +1,227 @@
+\section{Governance and Regulation}
+
+\begin{frame}{The EU AI Act: Risk Tiers}
+
+    {\small Good practice becomes a \textbf{requirement} once a system falls into a regulated tier.
+    Orientation, not legal advice.}
+
+    \vspace{0.2em}
+    \centering
+    \begin{tikzpicture}
+        % Pyramid
+        \fill[raiRed!70]   (0,2.6)  -- (-0.8,1.5)  -- (0.8,1.5)  -- cycle;
+        \fill[raiAmber!60] (-0.8,1.5) -- (0.8,1.5) -- (1.6,0.4) -- (-1.6,0.4) -- cycle;
+        \fill[raiBlue!45]  (-1.6,0.4) -- (1.6,0.4) -- (2.4,-0.7) -- (-2.4,-0.7) -- cycle;
+        \fill[raiGreen!35] (-2.4,-0.7) -- (2.4,-0.7) -- (3.2,-1.8) -- (-3.2,-1.8) -- cycle;
+        \draw[thick] (0,2.6) -- (3.2,-1.8) -- (-3.2,-1.8) -- cycle;
+
+        \node[font=\tiny\bfseries, white] at (0,1.95) {Unacceptable};
+        \node[font=\tiny\bfseries] at (0,0.95)  {High risk};
+        \node[font=\tiny\bfseries] at (0,-0.15) {Limited risk};
+        \node[font=\tiny\bfseries] at (0,-1.25) {Minimal risk};
+
+        % Annotations
+        \node[right, font=\scriptsize, text width=6.4cm, align=left] at (3.5,2.0)
+            {\textbf{Prohibited (Art.~5).} Social scoring; untargeted scraping of facial images to
+             build recognition databases; emotion inference at work or school; manipulative or
+             exploitative systems.};
+        \node[right, font=\scriptsize, text width=6.4cm, align=left] at (3.5,0.75)
+            {\textbf{Permitted with obligations.} Employment, credit, education, essential
+             services, law enforcement, biometrics, and safety components of regulated products
+             (Annexes I and III).};
+        \node[right, font=\scriptsize, text width=6.4cm, align=left] at (3.5,-0.4)
+            {\textbf{Transparency duties (Art.~50).} Tell people they are interacting with an AI
+             system; label synthetic media.};
+        \node[right, font=\scriptsize, text width=6.4cm, align=left] at (3.5,-1.5)
+            {\textbf{No specific obligations.} Spam filters, low-stakes recommendation, most
+             internal tooling --- where most course projects sit.};
+    \end{tikzpicture}
+
+    \vspace{0.4em}
+    {\scriptsize Source: Regulation (EU) 2024/1689 (Artificial Intelligence Act),
+    \href{https://artificialintelligenceact.eu/}{artificialintelligenceact.eu}.}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{The EU AI Act: What a High-Risk Provider Must Produce}
+
+    \begin{columns}[T]
+        \begin{column}{0.52\textwidth}
+            \begin{itemize}\scriptsize
+                \setlength\itemsep{0.1em}
+                \item A \textbf{risk management system} maintained across the lifecycle.
+                \item \textbf{Data governance}: relevant, representative, and examined for bias.
+                \item \textbf{Technical documentation} and automatic \textbf{logging}.
+                \item \textbf{Instructions for use} that state accuracy, limitations, and intended
+                      conditions.
+                \item Effective \textbf{human oversight} by design.
+                \item Appropriate \textbf{accuracy, robustness and cybersecurity}.
+                \item \textbf{Post-market monitoring} and \textbf{serious-incident reporting}.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \begin{tcolorbox}[colback=raiGreen!5, colframe=raiGreen!60,
+                              title=Recognise anything?]
+                \scriptsize
+                Disaggregated bias evaluation, documented intended use, stated limitations,
+                logged decisions, monitoring.
+
+                \vspace{0.12em}
+                \textbf{That is the model card and the audit from the last two sections}, made
+                mandatory. The work does not change; the audience does.
+            \end{tcolorbox}
+
+            \vspace{0.18em}
+            \begin{tcolorbox}[colback=raiRed!5, colframe=raiRed!70, title=Penalties (Article 99)]
+                \scriptsize
+                Up to \textbf{EUR 35M or 7\%} of worldwide annual turnover for prohibited
+                practices; \textbf{EUR 15M or 3\%} for most other operator obligations;
+                \textbf{EUR 7.5M or 1\%} for supplying incorrect information (whichever is higher,
+                with lower caps for SMEs).
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.15em}
+    {\scriptsize Regulation (EU) 2024/1689, Chapter III and Article 99. Entered into force 1 August
+    2024; prohibitions and AI-literacy duties applicable from 2 February 2025; general-purpose AI
+    model obligations from 2 August 2025. The 2026 ``Digital Omnibus'' amendment deferred the
+    high-risk obligations (Annex III to 2 December 2027; Annex I to 2 August 2028) --- check the
+    consolidated text, as these dates have already moved once.}
+\end{frame}
+
+\begin{frame}{NIST AI Risk Management Framework}
+
+    \begin{columns}[c]
+        \begin{column}{0.44\textwidth}
+            \centering
+            \begin{tikzpicture}[font=\scriptsize]
+                \node[circle, draw, thick, fill=raiAmber!25, minimum size=1.6cm, align=center]
+                    (gov) at (0,0) {\textbf{GOVERN}};
+                \node[rectangle, draw, rounded corners, fill=raiBlue!15, minimum width=1.7cm,
+                      minimum height=0.7cm] (map) at (0,1.8) {\textbf{MAP}};
+                \node[rectangle, draw, rounded corners, fill=raiBlue!15, minimum width=1.7cm,
+                      minimum height=0.7cm] (meas) at (2.0,-1.1) {\textbf{MEASURE}};
+                \node[rectangle, draw, rounded corners, fill=raiBlue!15, minimum width=1.7cm,
+                      minimum height=0.7cm] (man) at (-2.0,-1.1) {\textbf{MANAGE}};
+                \draw[-{Latex[length=2mm]}, thick] (map) -- (meas);
+                \draw[-{Latex[length=2mm]}, thick] (meas) -- (man);
+                \draw[-{Latex[length=2mm]}, thick] (man) -- (map);
+                \draw[gray, dashed] (gov) -- (map);
+                \draw[gray, dashed] (gov) -- (meas);
+                \draw[gray, dashed] (gov) -- (man);
+            \end{tikzpicture}
+        \end{column}
+        \begin{column}{0.54\textwidth}
+            \begin{itemize}\scriptsize
+                \setlength\itemsep{0.4em}
+                \item \textbf{Govern} --- policies, roles, accountability. Cuts across the other
+                      three rather than sitting in sequence with them.
+                \item \textbf{Map} --- establish the context: who is affected, what could go wrong,
+                      what is the system actually for.
+                \item \textbf{Measure} --- test it: metrics, disaggregated evaluation, red-teaming,
+                      documented uncertainty.
+                \item \textbf{Manage} --- prioritise, mitigate, monitor, and decide when to stop.
+            \end{itemize}
+            \vspace{0.5em}
+            {\scriptsize \textbf{Voluntary}, sector-neutral, and widely used as the internal
+            scaffolding for an AI governance programme --- it tells you \emph{how} to organise risk
+            management, where the AI Act tells you \emph{what} you must do. ISO/IEC 42001:2023 plays
+            a similar role as a certifiable management-system standard. A Generative AI Profile
+            (NIST-AI-600-1, 2024) adapts the framework to generative systems.}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.6em}
+    {\scriptsize Source: NIST, ``Artificial Intelligence Risk Management Framework (AI RMF 1.0),''
+    NIST AI 100-1, January 2023,
+    \href{https://www.nist.gov/itl/ai-risk-management-framework}{nist.gov}.}
+\end{frame}
+
+\begin{frame}{Organisational Practice}
+
+    \begin{columns}[T]
+        \begin{column}{0.49\textwidth}
+            \textbf{Review before release}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item A named reviewer who is \textbf{not} the model's author signs off the card
+                      and the disaggregated results.
+                \item Scale the review to the stakes: a recommender for internal search does not
+                      need a committee; a credit model does.
+                \item Record the decision \emph{and the trade-off accepted}, so it can be revisited.
+            \end{itemize}
+
+            \vspace{0.7em}
+            \textbf{Red-teaming}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item Deliberately try to make the system fail for a specific group or input type,
+                      before users do.
+                \item Give the red team the failure taxonomy from this lecture as a starting
+                      checklist.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \textbf{After release}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item \textbf{Incident reporting.} A defined path for ``the model did something
+                      harmful,'' with an owner and a deadline --- not a support ticket queue.
+                \item \textbf{Contestability.} A person affected by a decision can ask for it to be
+                      reviewed by a human, and the request is logged.
+                \item \textbf{Scheduled re-audit.} Put the date in the model card and treat it like
+                      a certificate expiry.
+                \item \textbf{A kill switch.} Know in advance how you turn the model off and what
+                      the fallback is.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.8em}
+    \begin{block}{}
+        \centering
+        \small The common failure is not the absence of a policy. It is a policy with no owner and
+        no date.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Agents and LLMs: Covered in the NLP Course}
+
+    Everything in this lecture applies to a model that maps an input to a prediction. Systems that
+    \textbf{take actions} --- call tools, browse, write files, spend money --- add a distinct threat
+    model that this deck deliberately does not duplicate.
+
+    \vspace{0.9em}
+
+    \begin{columns}[T]
+        \begin{column}{0.49\textwidth}
+            \begin{tcolorbox}[colback=gray!8, colframe=gray!60,
+                              title={NLP course, Lecture 12: AI Safety for Agents}]
+                \scriptsize
+                \begin{itemize}
+                    \item Prompt injection, direct and indirect.
+                    \item Excessive agency and tool misuse.
+                    \item Sandboxing, least privilege, and human-in-the-loop gates.
+                    \item Agent-specific benchmarks and red-teaming.
+                    \item OWASP Top 10 for LLM Applications.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \begin{tcolorbox}[colback=raiBlue!5, colframe=raiBlue!60, title=What carries over]
+                \scriptsize
+                \begin{itemize}
+                    \item Disaggregated evaluation --- an agent can fail more often for some users
+                          or some languages.
+                    \item Documentation of intended and out-of-scope use.
+                    \item The same governance frameworks: the EU AI Act and NIST AI RMF cover both,
+                          and the AI Act adds obligations for general-purpose AI models.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.7em}
+    \centering
+    \textit{If you are shipping an agent, take both lectures. Neither is a substitute for the other.}
+\end{frame}

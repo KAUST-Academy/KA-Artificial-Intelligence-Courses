@@ -1,0 +1,76 @@
+\section{Summary}
+
+\begin{frame}{What to Take Away}
+
+    \begin{itemize}
+        \setlength\itemsep{0.1em}
+        \item \textbf{Aggregate metrics hide subgroup failure.} The single most valuable habit from
+              this lecture is the disaggregated evaluation table, with sample sizes, including
+              intersections.
+
+        \item \textbf{Bias is mostly a specification problem.} It enters through the target
+              definition, the label, the sampling frame, and the deployment context --- not only
+              through ``the data.'' Dropping the sensitive attribute does not remove it.
+
+        \item \textbf{The fairness definitions genuinely conflict.} When base rates differ,
+              calibration and error-rate balance cannot both hold. Choose the criterion that
+              matches the harm, and write down what you gave up.
+
+        \item \textbf{Explanations describe the model, not the world.} SHAP and LIME are excellent
+              for debugging, sensitive to correlated features and to the background distribution,
+              and not causal. Validate a hypothesis before acting on it.
+
+        \item \textbf{Documentation is the deliverable.} The model card and the audit are what a
+              reviewer, a customer, or a regulator will actually read --- and under the EU AI Act,
+              much of their content is now required for high-risk systems.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{A Checklist You Can Use on Monday}
+
+    \begin{columns}[T]
+        \begin{column}{0.49\textwidth}
+            \textbf{Before training}
+            \begin{enumerate}\scriptsize
+                \setlength\itemsep{0.28em}
+                \item Write one sentence: who is affected, and how could they be harmed?
+                \item Ask what your label \emph{actually} measures, and whether that differs by
+                      group.
+                \item Check the composition of your data against the intended use population.
+                \item Fit an interpretable baseline and record its score.
+            \end{enumerate}
+
+            \vspace{0.6em}
+            \textbf{Before shipping}
+            \begin{enumerate}\scriptsize
+                \setlength\itemsep{0.28em}
+                \setcounter{enumi}{4}
+                \item Produce the disaggregated table with $n$ and intervals.
+                \item Name the fairness criterion and what you traded away.
+                \item Run SHAP or permutation importance and look for a shortcut feature.
+            \end{enumerate}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \textbf{At release}
+            \begin{enumerate}\scriptsize
+                \setlength\itemsep{0.28em}
+                \setcounter{enumi}{7}
+                \item Write the model card, including out-of-scope uses and the worst slice.
+                \item Get a review from someone who did not build it.
+                \item Set the re-audit date and the monitoring alert on disparity.
+            \end{enumerate}
+
+            \vspace{1.0em}
+            \begin{tcolorbox}[colback=raiGreen!5, colframe=raiGreen!60, boxrule=0.7pt]
+                \scriptsize
+                Items 1, 2 and 5 catch most of what goes wrong, and none of them require a new
+                library.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.8em}
+    \centering
+    \scriptsize \textbf{Labs:} \texttt{Model\_Interpretability\_SHAP\_LIME.ipynb} and
+    \texttt{Fairness\_Audit.ipynb}.
+\end{frame}

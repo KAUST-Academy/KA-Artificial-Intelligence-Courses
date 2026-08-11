@@ -1,0 +1,265 @@
+\section{Auditing and Mitigation}
+
+\begin{frame}{The Audit Loop}
+
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tikzpicture}[
+        node distance=0.65cm,
+        auditstep/.style={rectangle, draw, rounded corners, minimum height=1.15cm, text width=2.35cm,
+                     align=center, font=\scriptsize\bfseries, fill=raiBlue!10},
+        arr/.style={-{Latex[length=2.2mm]}, thick}
+    ]
+        \node[auditstep] (a) {1. Name the harm and the affected groups};
+        \node[auditstep, right=of a] (b) {2. Choose the metric(s) and the criterion};
+        \node[auditstep, right=of b] (c) {3. Measure per slice, with sample sizes};
+        \node[auditstep, right=of c] (d) {4. Diagnose \emph{why} the gap exists};
+        \node[auditstep, right=of d] (e) {5. Mitigate and re-measure};
+        \node[auditstep, right=of e, fill=raiGreen!12] (f) {6. Document and monitor};
+
+        \foreach \x/\y in {a/b, b/c, c/d, d/e, e/f} \draw[arr] (\x) -- (\y);
+        \draw[arr, dashed] (f.south) .. controls +(0,-1.0) and +(0,-1.0) .. (c.south);
+    \end{tikzpicture}}
+
+    \vspace{1.2em}
+
+    \raggedright
+    \begin{itemize}
+        \setlength\itemsep{0.45em}
+        \item Step 4 is the one people skip. A gap caused by \textbf{too few samples} needs data;
+              a gap caused by a \textbf{proxy label} needs a new label; a gap caused by a
+              \textbf{threshold} needs a threshold. The fixes are not interchangeable.
+        \item Step 6 is not optional: distributions move, and a model that was audited in March is
+              not audited in December.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Disaggregated Evaluation: The Core Technique}
+
+    \textit{One number for the test set, then the same number for every slice you can define.}
+
+    \vspace{0.7em}
+    \centering
+    \scriptsize
+    \begin{tabular}{lrrrrr}
+        \toprule
+        \textbf{Slice} & \textbf{$n$} & \textbf{Selection rate} & \textbf{TPR} & \textbf{FPR} & \textbf{PPV} \\
+        \midrule
+        Overall            & 10{,}000 & 0.24 & 0.78 & 0.11 & 0.71 \\
+        \midrule
+        Group A            &  8{,}200 & 0.26 & 0.81 & 0.10 & 0.73 \\
+        Group B            &  1{,}800 & 0.14 & 0.62 & 0.13 & 0.58 \\
+        \midrule
+        Group B, age $<30$ &    420   & 0.11 & 0.49 & 0.14 & 0.51 \\
+        Group B, age $\geq 60$ &  180 & 0.09 & 0.44 & 0.12 & 0.47 \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{0.5em}
+    {\scriptsize Illustrative numbers, constructed for this slide.}
+
+    \vspace{0.8em}
+    \raggedright
+    \begin{itemize}\scriptsize
+        \setlength\itemsep{0.35em}
+        \item The overall row is fine. Group B is not, and the intersectional rows are worse ---
+              the pattern from Gender Shades, reproduced in miniature.
+        \item Always print \textbf{$n$} beside the metric. Always print the \textbf{worst slice}
+              in the summary, not just the mean.
+        \item In \texttt{scikit-learn}, this is a \texttt{groupby} plus
+              \texttt{classification\_report}; in \texttt{fairlearn} it is \texttt{MetricFrame}.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Four Things That Go Wrong in Practice}
+
+    \begin{itemize}
+        \setlength\itemsep{0.65em}
+        \item \textbf{Small slices are noisy.} A TPR of $0.44$ estimated from 180 positive cases
+              carries a 95\% interval of about $\pm 0.07$; from 40 cases, about $\pm 0.15$. Report
+              intervals, or you will chase noise and ``fix'' gaps that were never there.
+              A bootstrap is fine here.
+
+        \item \textbf{Multiple comparisons.} Slice by 8 attributes and some slice will look bad by
+              chance. Pre-register the slices you care about; treat the rest as exploratory.
+
+        \item \textbf{You may not have the group labels.} They are often unavailable by law or by
+              policy. Options: a consented subset for audit only, an
+              independently collected audit set, or proxy-based estimates --- each with its own
+              error, which must be stated.
+
+        \item \textbf{Intersections multiply.} Four binary attributes give 16 cells and most will
+              be tiny. Choose the intersections that correspond to a plausible harm, rather than
+              enumerating everything.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Where Mitigation Can Be Applied}
+
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.0cm,
+        stage/.style={rectangle, draw, rounded corners, minimum height=1.0cm, text width=2.4cm,
+                      align=center, font=\small\bfseries},
+        note/.style={align=center, font=\scriptsize, text width=3.1cm},
+        arr/.style={-{Latex[length=2.5mm]}, thick}
+    ]
+        \node[stage, fill=raiBlue!12]  (data)  {Data};
+        \node[stage, fill=raiAmber!15, right=of data] (train) {Training};
+        \node[stage, fill=raiGreen!12, right=of train] (out)  {Outputs};
+
+        \draw[arr] (data) -- (train);
+        \draw[arr] (train) -- (out);
+
+        \node[note, below=0.45cm of data]  {\textbf{Pre-processing}\\ reweigh, resample, transform features};
+        \node[note, below=0.45cm of train] {\textbf{In-processing}\\ fairness constraint or penalty in the objective};
+        \node[note, below=0.45cm of out]   {\textbf{Post-processing}\\ adjust thresholds or scores per group};
+    \end{tikzpicture}
+
+    \vspace{1.4em}
+
+    \raggedright
+    \begin{itemize}\small
+        \setlength\itemsep{0.35em}
+        \item \textbf{Access decides the option.} Third-party model behind an API: post-processing
+              only. Your own training loop: all three.
+        \item \textbf{None of them repair a bad label or a missing population.} Those are data
+              problems, and mitigation applied on top will only redistribute the error.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Pre-processing and In-processing}
+
+    \begin{columns}[T]
+        \begin{column}{0.49\textwidth}
+            \textbf{Pre-processing} --- change the data so the disparity is not there to be learned.
+            \vspace{0.4em}
+            \begin{itemize}\scriptsize
+                \setlength\itemsep{0.32em}
+                \item \textbf{Reweighing} (Kamiran \& Calders, 2012): weight each
+                      $(\text{group},\text{label})$ cell so group and label become independent in
+                      the weighted sample. Works with any estimator taking
+                      \texttt{sample\_weight}.
+                \item \textbf{Resampling}: same effect, but duplicates or discards rows.
+                \item \textbf{Targeted data collection}: usually the highest-value intervention,
+                      and the one most often skipped because it costs money rather than code.
+                \item \textbf{Representation transforms}: learn an encoding from which $A$ cannot
+                      be predicted.
+            \end{itemize}
+            \vspace{0.4em}
+            {\scriptsize Model-agnostic and done once --- but you optimise a proxy, and the
+            downstream model can partly undo it.}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \textbf{In-processing} --- put the requirement into the training objective.
+            \vspace{0.4em}
+            \begin{itemize}\scriptsize
+                \setlength\itemsep{0.32em}
+                \item \textbf{Constrained optimisation}: minimise loss subject to
+                      $|\text{TPR}_\GrpA - \text{TPR}_\GrpB| \leq \varepsilon$. Agarwal et al.\ (2018)
+                      reduce this to a sequence of ordinary cost-sensitive fits, so any learner
+                      works --- this is \texttt{fairlearn}'s \texttt{ExponentiatedGradient}.
+                \item \textbf{Regularisation}: add $\lambda \cdot (\text{disparity})$ to the loss;
+                      $\lambda$ is an explicit dial on the trade-off.
+                \item \textbf{Adversarial debiasing}: train the predictor against an adversary
+                      trying to recover $A$ from the prediction or representation.
+            \end{itemize}
+            \vspace{0.4em}
+            {\scriptsize Enforced where the model is fitted --- but needs training access, adds
+            tuning, and holds on the \emph{training} distribution.}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.4em}
+    {\scriptsize F.~Kamiran and T.~Calders, \emph{Knowledge and Information Systems} 33(1), 2012.
+    A.~Agarwal, A.~Beygelzimer, M.~Dud\accent19 ik, J.~Langford and H.~Wallach, ``A Reductions
+    Approach to Fair Classification,'' ICML 2018,
+    \href{https://arxiv.org/abs/1803.02453v3}{arXiv:1803.02453v3}.}
+\end{frame}
+
+\begin{frame}{Post-processing: Group-Specific Thresholds}
+
+    \begin{columns}[T]
+        \begin{column}{0.52\textwidth}
+            Hardt et al.\ (2016) show that if you keep the score $R$ and choose a
+            \textbf{separate threshold per group}, you can achieve equalised odds --- and they give
+            the optimal choice.
+
+            \vspace{0.6em}
+            \begin{itemize}\scriptsize
+                \setlength\itemsep{0.3em}
+                \item Each group's ROC curve gives the achievable (FPR, TPR) pairs.
+                \item Equalised odds requires landing on the \textbf{same point} for both groups,
+                      so the feasible set is the intersection.
+                \item The best you can do is the intersection point that maximises utility ---
+                      which is generally \emph{worse} than either group's own optimum.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.46\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=2.6]
+                \draw[->] (0,0) -- (1.12,0) node[right, font=\scriptsize] {FPR};
+                \draw[->] (0,0) -- (0,1.12) node[above, font=\scriptsize] {TPR};
+                \draw[gray!50, dashed] (0,0) -- (1,1);
+                \draw[raiBlue, very thick] (0,0) .. controls (0.08,0.72) and (0.42,0.98) .. (1,1)
+                    node[pos=0.55, above left, font=\scriptsize, text=raiBlue] {Group A};
+                \draw[raiRed, very thick]  (0,0) .. controls (0.28,0.46) and (0.66,0.86) .. (1,1)
+                    node[pos=0.62, below right, font=\scriptsize, text=raiRed] {Group B};
+                \fill[black] (0.478,0.62) circle (0.018)
+                    node[right=2pt, font=\scriptsize] {reachable by both};
+            \end{tikzpicture}
+            \vspace{0.2em}
+            {\scriptsize Schematic drawn for this slide, after the construction in Hardt et al.\ (2016).}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.6em}
+    \begin{tcolorbox}[colback=raiAmber!5, colframe=raiAmber!70, title=Legal caveat]
+        \scriptsize Applying a different threshold by protected group can itself be unlawful in some
+        jurisdictions and domains --- for example, adjusting employment-test scores by race is
+        prohibited in the United States under the Civil Rights Act of 1991. Check before you ship;
+        the statistically optimal fix is not always the permitted one.
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}{Trade-offs, Monitoring, and Tooling}
+
+    \begin{columns}[T]
+        \begin{column}{0.5\textwidth}
+            \textbf{Expect to give something up}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item Constraining a metric usually costs some accuracy. Report the curve
+                      (disparity vs accuracy), not one point --- it turns an argument into a
+                      decision.
+                \item Sometimes the cost is near zero, which is worth discovering.
+                \item ``Levelling down'' --- degrading the strong group to close the gap ---
+                      satisfies the metric and helps nobody. Say explicitly whether it is acceptable.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.48\textwidth}
+            \textbf{After deployment}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item Re-run the disaggregated report on production traffic on a schedule.
+                \item Alert on disparity, not only on accuracy drift.
+                \item Keep a channel for people to contest a decision, and log contested cases ---
+                      they are your best source of failure modes.
+            \end{itemize}
+            \vspace{0.5em}
+            \textbf{Libraries}
+            \begin{itemize}\small
+                \item \texttt{fairlearn} (metrics, reductions, threshold optimiser)
+                \item \texttt{AIF360} (a wide catalogue of algorithms)
+                \item \texttt{aequitas} (audit reports)
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.7em}
+    \begin{block}{}
+        \centering
+        \small \textbf{Lab:} \texttt{Fairness\_Audit.ipynb} --- disaggregate on UCI Adult, show the
+        parity/odds tension, apply threshold post-processing, and measure what it cost.
+    \end{block}
+\end{frame}

@@ -1,0 +1,56 @@
+\documentclass[10pt,aspectratio=169]{beamer}
+
+% Include preamble files
+\input{preamble/packages}
+\input{preamble/commands}
+\input{preamble/beamer_settings}
+
+% Deck-specific packages and macros
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{tcolorbox}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+% Do not load algorithm/algpseudocode here: the shared preamble already loads
+% algorithm2e, and algorithm.sty redefines \listofalgorithms, which is a hard error.
+\usetikzlibrary{positioning,arrows.meta}
+\usepackage[utf8]{inputenc}
+\usepackage{pifont}
+\usepackage{newunicodechar}
+\newunicodechar{✓}{\ding{51}}
+\newunicodechar{✗}{\ding{55}}
+
+% Local palette. Colours are defined here rather than relied upon from the theme,
+% because the Stanford colour theme does not define a plain "darkred".
+\definecolor{raiRed}{RGB}{160,32,40}
+\definecolor{raiBlue}{RGB}{0,96,158}
+\definecolor{raiGreen}{RGB}{0,120,90}
+\definecolor{raiAmber}{RGB}{168,101,12}
+
+% Group A / group B shorthand used throughout the fairness section
+\newcommand{\Yhat}{\hat{Y}}
+\newcommand{\GrpA}{\text{A}}
+\newcommand{\GrpB}{\text{B}}
+
+\title[Responsible AI \& Interpretability]{Responsible AI and Model Interpretability}
+
+\begin{document}
+
+% Include sections
+\input{sections/cover}
+
+\input{sections/responsible-ai/learning_outcomes}
+\input{sections/responsible-ai/motivation}
+\input{sections/responsible-ai/sources_of_bias}
+\input{sections/responsible-ai/fairness_definitions}
+\input{sections/responsible-ai/auditing_and_mitigation}
+\input{sections/responsible-ai/interpretability_landscape}
+\input{sections/responsible-ai/feature_attribution_shap_lime}
+\input{sections/responsible-ai/explaining_deep_models}
+\input{sections/responsible-ai/model_cards_and_datasheets}
+\input{sections/responsible-ai/governance_and_regulation}
+\input{sections/responsible-ai/summary}
+\input{sections/responsible-ai/references}
+
+\end{document}

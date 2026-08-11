@@ -1,0 +1,98 @@
+\section{The Interpretability Landscape}
+
+\begin{frame}{Why Explain a Model At All?}
+
+    \begin{columns}[T]
+        \begin{column}{0.49\textwidth}
+            \begin{itemize}
+                \setlength\itemsep{0.55em}
+                \item \textbf{Debugging.} By far the most common real use. Explanations expose
+                      leakage, shortcut features, and broken preprocessing that accuracy alone
+                      hides.
+                \item \textbf{Trust and adoption.} A clinician or underwriter who cannot see the
+                      reasoning will not use the tool --- or will over-trust it.
+                \item \textbf{Recourse.} Telling a rejected applicant \emph{what to change} is a
+                      different requirement from telling an engineer what the model used.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \begin{itemize}
+                \setlength\itemsep{0.55em}
+                \item \textbf{Regulation.} The EU AI Act gives affected persons a right to an
+                      explanation of individual decisions from certain high-risk systems
+                      (Article 86); GDPR Article 22 constrains solely automated decisions.
+                \item \textbf{Science.} In a scientific application the model \emph{is} the
+                      hypothesis, and what it uses is the result you wanted.
+            \end{itemize}
+            \vspace{0.5em}
+            \begin{tcolorbox}[colback=gray!8, boxrule=0pt]
+                \small Each purpose demands a different artefact. Decide the purpose \textbf{before}
+                choosing the method.
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Three Axes for Sorting Every Method}
+
+    \centering
+    \small
+    \begin{tabular}{p{2.9cm} p{4.4cm} p{4.4cm}}
+        \toprule
+        \textbf{Axis} & & \\
+        \midrule
+        \textbf{Intrinsic} vs \textbf{post-hoc}
+        & The model is readable as it stands: linear/logistic regression, a shallow tree, a
+          rule list, a GAM.
+        & An external procedure explains a fitted black box: permutation importance, SHAP, LIME,
+          Grad-CAM. \\
+        \addlinespace
+        \textbf{Global} vs \textbf{local}
+        & What does the model do \emph{in general}? Feature importances, partial dependence.
+        & Why \emph{this} prediction for \emph{this} row? SHAP values, LIME, counterfactuals. \\
+        \addlinespace
+        \textbf{Model-specific} vs \textbf{model-agnostic}
+        & Uses the internals: tree paths, gradients, attention, TreeSHAP.
+        & Only needs \texttt{predict()}: permutation importance, KernelSHAP, LIME. \\
+        \bottomrule
+    \end{tabular}
+
+    \vspace{1.1em}
+
+    \raggedright
+    \begin{block}{}
+        \centering
+        \small Model-agnostic buys generality at the price of speed and, often, fidelity.
+        Model-specific is faster and usually more faithful, but locks you to a model family.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Try an Interpretable Model First}
+
+    \begin{block}{Rudin (2019)}
+        For high-stakes decisions, prefer a model that is interpretable by construction over a
+        black box plus a post-hoc explanation --- because the explanation is an
+        \textbf{approximation} of the model, and an approximation can be wrong in exactly the cases
+        you care about.
+    \end{block}
+
+    \vspace{0.8em}
+
+    \begin{itemize}
+        \setlength\itemsep{0.45em}
+        \item On many tabular problems, a well-regularised logistic regression, a depth-4 tree, or
+              a generalised additive model is within a point or two of a gradient-boosted ensemble.
+              \textbf{Measure the gap before assuming you need the black box.}
+        \item If the gap is real and worth it, take the black box --- but then the explanation
+              needs its own validation, exactly as the model does.
+        \item Interpretability is not a property of the model alone. A linear model with 4{,}000
+              engineered features is not interpretable; a depth-3 tree over four meaningful
+              features is.
+    \end{itemize}
+
+    \vspace{0.3em}
+    {\scriptsize C.~Rudin, ``Stop explaining black box machine learning models for high stakes
+    decisions and use interpretable models instead,'' \emph{Nature Machine Intelligence} 1:206--215,
+    2019, \href{https://arxiv.org/abs/1811.10154v3}{arXiv:1811.10154v3}.}
+\end{frame}
+

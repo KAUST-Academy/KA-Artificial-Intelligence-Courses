@@ -7,7 +7,7 @@
 
 \begin{frame}[t]{ORPO: One Stage, No Reference Model}
   \begin{itemize}
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Key idea:} DPO removed the reward model but kept two things --- a separate SFT stage and a frozen reference policy. ORPO removes both (Hong et al., 2024).
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Key idea:} DPO removed the reward model but kept two things: a separate SFT stage and a frozen reference policy. ORPO removes both (Hong et al., 2024).
   \end{itemize}
 
   \vspace{0.3em}
@@ -30,7 +30,7 @@
 \begin{frame}[t,allowframebreaks]{Why an Odds Ratio}
   \begin{itemize}\itemsep0.4em
     \item[\textcolor{red}{$\blacktriangleright$}] SFT has no mechanism for pushing anything \emph{down}. It raises the likelihood of good answers and is indifferent to bad ones, which is why a second alignment stage was needed at all.
-    \item[\textcolor{red}{$\blacktriangleright$}] The odds ratio supplies that missing downward pressure --- but gently. Hong et al.\ compare it against the plain probability ratio and find the latter ``leads to more extreme discrimination of the disfavored responses,'' suppressing token logits harder than a model still learning the task can absorb.
+    \item[\textcolor{red}{$\blacktriangleright$}] The odds ratio supplies that missing downward pressure, but gently. Hong et al.\ compare it to the plain probability ratio and find the latter ``leads to more extreme discrimination of the disfavored responses,'' suppressing token logits harder than a model still learning the task can absorb.
     \item[\textcolor{red}{$\blacktriangleright$}] The asymmetry is the whole design: \emph{strong adaptation} toward the chosen response, \emph{weak penalty} on the rejected one. That is what lets alignment share a stage with SFT instead of following it.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{What it buys:} one model in memory instead of two or four, and one training run instead of two or three. Mistral-ORPO-$\beta$, trained on UltraFeedback alone, reports 12.20\% on AlpacaEval 2.0 and 7.32 on MT-Bench.
     \item[\textcolor{red}{$\blacktriangleright$}] \textbf{What it costs:} the reference policy was also a leash. Without $\pi_{\text{ref}}$ there is no KL term holding the model near its starting point, so $\lambda$ and the learning rate carry more weight than they do in DPO.
@@ -47,8 +47,8 @@
 
 \begin{frame}[t]{KTO: Thumbs Up and Thumbs Down}
   \begin{itemize}
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The data problem:} PPO, DPO and ORPO all need \emph{pairs} --- two responses to the same prompt, ranked. Production systems collect something else: one response, with a thumbs up or down.
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{KTO} (Ethayarajh et al., 2024) learns from that unpaired signal using the value function from Kahneman and Tversky's prospect theory --- concave in gains, convex in losses, and measured against a reference point rather than in absolute terms:
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The data problem:} PPO, DPO and ORPO all need \emph{pairs}: two responses to the same prompt, ranked. Production systems collect something else: one response, with a thumbs up or down.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{KTO} (Ethayarajh et al., 2024) learns from that unpaired signal using the value function from Kahneman and Tversky's prospect theory, which is concave in gains, convex in losses, and measured against a reference point rather than in absolute terms:
   \end{itemize}
   \[
     r_\theta(x,y) = \log \frac{\pi_\theta(y \mid x)}{\pi_{\text{ref}}(y \mid x)},
@@ -66,7 +66,7 @@
   \]
 
   \footnotesize
-  $z_0$ is the model's own average KL from $\pi_{\text{ref}}$, estimated cheaply from mismatched pairs inside the microbatch. $\lambda_D$ and $\lambda_U$ are loss-aversion weights: keep $\lambda_D n_D / \lambda_U n_U$ in $[1, 3/2]$, so at a 1:10 desirable-to-undesirable ratio set $\lambda_U = 1$ and $\lambda_D \in [10,15]$. Note that $r_\theta$ still references $\pi_{\text{ref}}$ --- KTO drops the pairing, not the reference model.
+  $z_0$ is the model's KL from $\pi_{\text{ref}}$, estimated cheaply from mismatched pairs in the microbatch. $\lambda_y$ is $\lambda_D$ or $\lambda_U$ as $y$ requires; these loss-aversion weights keep $\lambda_D n_D / \lambda_U n_U$ in $[1, 3/2]$, so at a 1:10 desirable-to-undesirable ratio set $\lambda_U = 1$ and $\lambda_D \in [10,15]$. $r_\theta$ still references $\pi_{\text{ref}}$: KTO drops the pairing, not the reference model.
 \end{frame}
 
 \begin{frame}[t]{Choosing a Preference Method}
@@ -86,7 +86,7 @@
   \end{center}
   \vspace{0.4em}
   \begin{itemize}
-    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{The data you already have decides this, not the leaderboard.} Unpaired feedback points at KTO, which tolerates skew paired methods cannot --- discarding 90\% of the desirable data still beat DPO on Llama-7B. Curated pairs on a tight budget point at ORPO; pairs plus an existing SFT model point at DPO.
-    \item[\textcolor{red}{$\blacktriangleright$}] PPO stays the most expressive of the four --- it optimises against a reward model, not a fixed dataset --- and the hardest to get right.
+    \item[\textcolor{red}{$\blacktriangleright$}] \textbf{Start from the data you already have, not the leaderboard.} Unpaired feedback points at KTO, which tolerates skew paired methods cannot: discarding 90\% of the desirable data still beat DPO on Llama-7B. Curated pairs on a tight budget point at ORPO; pairs plus an existing SFT model point at DPO.
+    \item[\textcolor{red}{$\blacktriangleright$}] PPO stays the most expressive of the four, since it optimises against a reward model rather than a fixed dataset, and the hardest to get right.
   \end{itemize}
 \end{frame}

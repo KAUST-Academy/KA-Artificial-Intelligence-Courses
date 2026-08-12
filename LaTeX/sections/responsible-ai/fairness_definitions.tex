@@ -102,8 +102,9 @@
                 \item Allocating an opportunity where you do not trust the label
                       (advertising, outreach, shortlisting).
                 \item You believe the historical outcome $Y$ is itself contaminated.
-                \item Legal context: the US ``four-fifths rule'' in employment screening flags a
-                      selection-rate ratio below $0.8$ as evidence worth investigating.
+                \item A widely used convention: a selection-rate ratio below $0.8$ between groups
+                      is treated as a gap worth investigating. Most audit tooling flags it by
+                      default.
             \end{itemize}
         \end{column}
         \begin{column}{0.48\textwidth}
@@ -297,8 +298,8 @@
               definitions that condition on $Y$ inherit it --- lean towards independence.
         \item \textbf{Is the score read by a human?} If yes, calibration within groups is close to
               mandatory, or you are misinforming the decision-maker.
-        \item \textbf{What does the law in your jurisdiction require?} Sometimes the answer is
-              fixed for you --- and per-group thresholds may be illegal (see the next section).
+        \item \textbf{Can you measure it?} A criterion you cannot estimate --- no group labels, or
+              slices too small --- is a wish, not a criterion (see the next section).
     \end{enumerate}
 
     \vspace{0.9em}

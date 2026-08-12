@@ -83,8 +83,8 @@
         \item \textbf{Multiple comparisons.} Slice by 8 attributes and some slice will look bad by
               chance. Pre-register the slices you care about; treat the rest as exploratory.
 
-        \item \textbf{You may not have the group labels.} They are often unavailable by law or by
-              policy. Options: a consented subset for audit only, an
+        \item \textbf{You may not have the group labels.} They are often unavailable --- never
+              collected, or deliberately not stored. Options: a consented subset for audit only, an
               independently collected audit set, or proxy-based estimates --- each with its own
               error, which must be stated.
 
@@ -214,11 +214,12 @@
     \end{columns}
 
     \vspace{0.6em}
-    \begin{tcolorbox}[colback=raiAmber!5, colframe=raiAmber!70, title=Legal caveat]
-        \scriptsize Applying a different threshold by protected group can itself be unlawful in some
-        jurisdictions and domains --- for example, adjusting employment-test scores by race is
-        prohibited in the United States under the Civil Rights Act of 1991. Check before you ship;
-        the statistically optimal fix is not always the permitted one.
+    \begin{tcolorbox}[colback=raiAmber!5, colframe=raiAmber!70, title=Before you reach for this]
+        \scriptsize Per-group thresholds are the most \textbf{visible} intervention in this section:
+        two people with the same score get different outcomes, and you will have to say so out loud.
+        In many settings that alone rules it out. Treat it as a decision to be agreed and recorded,
+        not as a parameter to be tuned --- the statistically optimal fix is not always the
+        acceptable one.
     \end{tcolorbox}
 \end{frame}
 
@@ -259,7 +260,7 @@
     \vspace{0.7em}
     \begin{block}{}
         \centering
-        \small \textbf{Exercise} (companion notebook in preparation): disaggregate on UCI Adult,
-        show the parity/odds tension, apply threshold post-processing, and measure what it cost.
+        \small \textbf{Exercise:} disaggregate on UCI Adult, show the parity/odds tension, apply
+        threshold post-processing, and measure what it cost.
     \end{block}
 \end{frame}

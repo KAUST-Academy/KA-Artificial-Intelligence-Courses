@@ -1,0 +1,91 @@
+\section{Governance in Practice}
+
+\begin{frame}{Organisational Practice}
+
+    \begin{columns}[T]
+        \begin{column}{0.49\textwidth}
+            \textbf{Review before release}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item A named reviewer who is \textbf{not} the model's author signs off the card
+                      and the disaggregated results.
+                \item Scale the review to the stakes: a recommender for internal search does not
+                      need a committee; a credit model does.
+                \item Record the decision \emph{and the trade-off accepted}, so it can be revisited.
+            \end{itemize}
+
+            \vspace{0.7em}
+            \textbf{Red-teaming}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item Deliberately try to make the system fail for a specific group or input type,
+                      before users do.
+                \item Give the red team the failure taxonomy from this lecture as a starting
+                      checklist.
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \textbf{After release}
+            \begin{itemize}\small
+                \setlength\itemsep{0.3em}
+                \item \textbf{Incident reporting.} A defined path for ``the model did something
+                      harmful,'' with an owner and a deadline --- not a support ticket queue.
+                \item \textbf{Contestability.} A person affected by a decision can ask for it to be
+                      reviewed by a human, and the request is logged.
+                \item \textbf{Scheduled re-audit.} Put the date in the model card and treat it like
+                      a certificate expiry.
+                \item \textbf{A kill switch.} Know in advance how you turn the model off and what
+                      the fallback is.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.8em}
+    \begin{block}{}
+        \centering
+        \small The common failure is not the absence of a policy. It is a policy with no owner and
+        no date.
+    \end{block}
+\end{frame}
+
+\begin{frame}{Agents and LLMs: Covered in the NLP Course}
+
+    Everything in this lecture applies to a model that maps an input to a prediction. Systems that
+    \textbf{take actions} --- call tools, browse, write files, spend money --- add a distinct threat
+    model that this deck deliberately does not duplicate.
+
+    \vspace{0.9em}
+
+    \begin{columns}[T]
+        \begin{column}{0.49\textwidth}
+            \begin{tcolorbox}[colback=gray!8, colframe=gray!60,
+                              title={NLP course: AI Safety for Agents}]
+                \scriptsize
+                \begin{itemize}
+                    \item Prompt injection, direct and indirect.
+                    \item Excessive agency and tool misuse.
+                    \item Sandboxing, least privilege, and human-in-the-loop gates.
+                    \item Agent-specific benchmarks and red-teaming.
+                    \item OWASP Top 10 for LLM Applications.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+        \begin{column}{0.49\textwidth}
+            \begin{tcolorbox}[colback=raiBlue!5, colframe=raiBlue!60, title=What carries over]
+                \scriptsize
+                \begin{itemize}
+                    \item Disaggregated evaluation --- an agent can fail more often for some users
+                          or some languages.
+                    \item Documentation of intended and out-of-scope use.
+                    \item The same habits either way: a named reviewer, a stated scope, incident
+                          reporting, and a re-audit date apply to an agent exactly as they do to a
+                          classifier.
+                \end{itemize}
+            \end{tcolorbox}
+        \end{column}
+    \end{columns}
+
+    \vspace{0.7em}
+    \centering
+    \textit{If you are shipping an agent, take both lectures. Neither is a substitute for the other.}
+\end{frame}

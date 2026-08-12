@@ -1,4 +1,4 @@
-##  (2026-08-11)
+##  (2026-08-12)
 
 
 ### Features
@@ -100,6 +100,7 @@
 * **Course:** apply deck review to NLP 22 LLM Evaluation ([946c9a3](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/946c9a3338a9800fb3beeba328c82b1ac17274e1))
 * **Course:** apply deck review to NLP 23 distributed training ([3a98c85](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/3a98c8505833a87fe8d88487732139c1e84e2d21)), closes [#1](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/issues/1)
 * **Course:** apply verification fixes to the seven gap-buildout decks ([95c4a3c](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/95c4a3c12c18483fc8c6c5cb7ab2d6b168c95930))
+* **Course:** Fixed incorrect references ([b998f4a](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/b998f4af3e9bc68ff6d1ee939d921aceea23718f))
 * Modify and correct labs as per recommendations. ([57c1e99](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/57c1e99ab8d66a361408f50f5fc3784926cdcd10))
 * **path:** AutoEncoders images fix ([31594f2](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/31594f2028908046772418e91cb38e1e79a2d932))
 * **path:** fixed a path for one of the images in the cifar lab ([c876999](https://github.com/KAUST-Academy/Artificial-Intelligence-Courses/commit/c876999da623b8e7d6bf12b3c8e88d62cbeeaef7))
